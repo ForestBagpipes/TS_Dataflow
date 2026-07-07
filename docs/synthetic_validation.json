@@ -1,0 +1,21 @@
+{
+  "N": 200,
+  "K": 20,
+  "calibrated": {
+    "spearman_quality": 0.75932798319958,
+    "p_quality": 8.346754462365608e-39,
+    "spearman_difficulty": 0.2610965274131854,
+    "p_difficulty": 0.00018823634835004767
+  },
+  "uncalibrated": {
+    "spearman_quality": 0.7915622890572265,
+    "p_quality": 3.1761556452643e-44,
+    "spearman_difficulty": 0.5949253731343284,
+    "p_difficulty": 1.5559080177531204e-20
+  },
+  "strata": {
+    "top_count": 50,
+    "mid_count": 100,
+    "bottom_count": 50
+  }
+}
