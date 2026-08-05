@@ -26,15 +26,10 @@ from corpus import CorpusSpec, build_corpus  # noqa: E402
 from metrics import summarise  # noqa: E402
 
 from introact_ts.agent import AgentConfig, IntroActAgent  # noqa: E402
+from introact_ts.backends import PRESETS, make_pool, probe_signature  # noqa: E402
 from introact_ts.policy import PolicyConfig  # noqa: E402
 from introact_ts.probe import ProbeConfig  # noqa: E402
-from introact_ts.tsfm import make_model_pool  # noqa: E402
 from introact_ts.verify import VerifyConfig  # noqa: E402
-
-#: Curation is judged by models 0-2; models 3-4 never take part and are used
-#: only to test whether the benefit transfers.
-CURATION_SEEDS = (0, 1, 2)
-TRANSFER_SEEDS = (7, 11)
 
 SCALES = {
     "small": CorpusSpec(
@@ -77,12 +72,21 @@ def ablation_configs() -> dict:
     }
 
 
-def run_all(spec: CorpusSpec, source: str, verbose: bool = True) -> dict:
+def run_all(
+    spec: CorpusSpec,
+    source: str,
+    preset: str = "offline",
+    device: str = "cpu",
+    verbose: bool = True,
+) -> dict:
     windows = build_corpus(spec, source=source)
-    curation_models = make_model_pool(CURATION_SEEDS)
-    transfer_models = make_model_pool(TRANSFER_SEEDS)
+    pools = PRESETS[preset]
+    curation_models = make_pool(pools["curation"], device=device)
+    transfer_models = make_pool(pools["transfer"], device=device)
     if verbose:
         print(f"corpus: {len(windows)} windows from {source}")
+        print(f"curation: {[probe_signature(m)['name'] for m in curation_models]}")
+        print(f"transfer: {[probe_signature(m)['name'] for m in transfer_models]}")
 
     results, traces_by_method = {}, {}
 
@@ -124,8 +128,9 @@ def run_all(spec: CorpusSpec, source: str, verbose: bool = True) -> dict:
     return {
         "spec": vars(spec),
         "source": source,
-        "curation_seeds": list(CURATION_SEEDS),
-        "transfer_seeds": list(TRANSFER_SEEDS),
+        "preset": preset,
+        "curation_models": [probe_signature(m) for m in curation_models],
+        "transfer_models": [probe_signature(m) for m in transfer_models],
         "results": results,
         "corpus": {
             "n": len(windows),
@@ -148,11 +153,17 @@ def render_report(payload: dict) -> str:
     """Markdown summary of the headline table plus per-family detail."""
     res = payload["results"]
     lines = ["# IntroAct-TS results", ""]
+    cur = ", ".join(f"`{m['name']}`" for m in payload["curation_models"])
+    tra = ", ".join(f"`{m['name']}`" for m in payload["transfer_models"])
     lines.append(
-        f"Corpus: {payload['corpus']['n']} windows, source `{payload['source']}`. "
-        f"Curation models {payload['curation_seeds']}, "
-        f"transfer models {payload['transfer_seeds']} (never consulted during curation)."
+        f"Corpus: {payload['corpus']['n']} windows, source `{payload['source']}`, "
+        f"backend preset `{payload['preset']}`."
     )
+    lines.append("")
+    lines.append(f"- Curation (judge + disagreement pool): {cur}")
+    lines.append(f"- Transfer (never consulted during curation): {tra}")
+    caps = {m["name"]: m["capabilities"] for m in payload["curation_models"]}
+    lines.append(f"- Capabilities: {caps}")
     lines.append("")
     lines.append("## Headline")
     lines.append("")
@@ -220,6 +231,9 @@ def main():
     ap.add_argument("--scale", choices=list(SCALES), default="small")
     ap.add_argument("--source", choices=["ett", "synthetic"], default="ett")
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--preset", choices=list(PRESETS), default="offline",
+                    help="which frozen backends to use; see introact_ts.backends.PRESETS")
+    ap.add_argument("--device", default="cpu", help="cpu or cuda")
     ap.add_argument("--out", type=str, default=str(ROOT / "results"))
     args = ap.parse_args()
 
@@ -229,10 +243,12 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
 
     t0 = time.time()
-    payload, traces = run_all(spec, args.source)
+    payload, traces = run_all(
+        spec, args.source, preset=args.preset, device=args.device
+    )
     payload["wall_time_s"] = time.time() - t0
 
-    stem = f"{args.scale}_{args.source}_seed{args.seed}"
+    stem = f"{args.scale}_{args.source}_{args.preset}_seed{args.seed}"
     (out_dir / f"{stem}.json").write_text(
         json.dumps(payload, indent=2, default=float), encoding="utf-8"
     )

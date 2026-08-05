@@ -1,0 +1,70 @@
+[
+  {
+    "spec": "surrogate:0",
+    "loaded": true,
+    "checks": {
+      "forecast": {
+        "ok": true,
+        "mse": 0.383,
+        "vs_seasonal_naive": 0.921
+      },
+      "forecast_batch": {
+        "ok": true
+      },
+      "reconstruct": {
+        "ok": true,
+        "mse": 2.7709
+      },
+      "encode": {
+        "ok": true,
+        "n_layers": 6,
+        "dim": 64
+      }
+    },
+    "error": null,
+    "name": "surrogate-s0",
+    "n_layers": 6,
+    "capabilities": [
+      "encode",
+      "forecast",
+      "reconstruct"
+    ]
+  },
+  {
+    "spec": "surrogate:7",
+    "loaded": true,
+    "checks": {
+      "forecast": {
+        "ok": true,
+        "mse": 0.3439,
+        "vs_seasonal_naive": 0.827
+      },
+      "forecast_batch": {
+        "ok": true
+      },
+      "reconstruct": {
+        "ok": true,
+        "mse": 2.3663
+      },
+      "encode": {
+        "ok": true,
+        "n_layers": 6,
+        "dim": 64
+      }
+    },
+    "error": null,
+    "name": "surrogate-s7",
+    "n_layers": 6,
+    "capabilities": [
+      "encode",
+      "forecast",
+      "reconstruct"
+    ]
+  },
+  {
+    "spec": "chronos:amazon/chronos-bolt-base",
+    "loaded": false,
+    "checks": {},
+    "error": "ImportError: ChronosTSFM needs `pip install chronos-forecasting`."
+  }
+]

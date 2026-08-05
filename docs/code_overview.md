@@ -12,7 +12,9 @@ agent rolls back, tries another action, or refuses to act.
 ```
 src/introact_ts/     pure method layer, zero file IO
   types.py           Action / Verdict / TSWindow / ActionRecord / GovernanceTrace
-  tsfm.py            frozen backends: SurrogateTSFM (offline), ChronosTSFM (optional)
+  backends/          frozen backend registry: base protocol + surrogate,
+                     chronos, moment, timesfm adapters
+  tsfm.py            backwards-compatible facade over backends/
   probe.py           six families of behavioural signals -> 14-dim vector + utility
   profiling.py       12-dim statistical profile (defines the peer group)
   calibration.py     profile-conditioned peer calibration; re-calibration after an edit
@@ -31,6 +33,9 @@ experiments/         thin IO shells
   run_agent.py       main experiment: baselines + ablations, JSON + Markdown output
 
 tests/               67 tests over operators, structure, probe, risk, and the loop
+scripts/
+  setup_remote.sh    per-family install for a rented GPU box
+  verify_backends.py loads each backend and exercises the probe surface
 ```
 
 ## Running
@@ -48,21 +53,53 @@ Results land in `results/<scale>_<source>_seed<n>.{json,md}` plus a
 swaps the ETT base for generated series, which is useful when the CSVs are
 unavailable.
 
-## The frozen model
+## Frozen backends
 
-`SurrogateTSFM` is the default backend: a fixed random residual encoder with a
-ridge read-out head fitted once on a synthetic reference corpus (seed 1234,
-disjoint from every experiment seed) and frozen thereafter. It needs no network
-and no GPU, is reproducible from its seed, and exposes real per-layer hidden
-states, so every probe signal is genuinely computed rather than simulated. It
-forecasts roughly 24x better than a last-value baseline on seasonal data.
+Backends live in `src/introact_ts/backends/` and are named `family:checkpoint`.
+Only `forecast_batch` is mandatory; `base.ForecastOnlyMixin` derives backcasting
+and masked reconstruction from it, and a backend declares what else it can do
+through `capabilities` rather than silently returning zeros. Batching is in the
+contract because the probe issues ~30 forward passes per window — served one at
+a time that is nearly all launch overhead.
 
-`ChronosTSFM` wraps a real pretrained checkpoint behind the same protocol and is
-what the headline experiments should use once `chronos-forecasting` and weights
-are available; the surrogate keeps the whole pipeline runnable offline.
+| family | checkpoint | capabilities | notes |
+|---|---|---|---|
+| `surrogate` | seed | forecast, encode, reconstruct | offline default, 39K params |
+| `chronos` | `amazon/chronos-bolt-*`, `amazon/chronos-t5-*` | forecast, reconstruct (+encode on T5) | Bolt exposes no embeddings |
+| `moment` | `AutonLab/MOMENT-1-large` | all three | reconstruction is its pretraining task |
+| `timesfm` | `google/timesfm-2.5-200m-pytorch` | forecast, reconstruct | no hidden states exposed |
 
-Curation is judged by models with seeds `(0, 1, 2)`. Transfer is measured on
-seeds `(7, 11)`, which take no part in curation.
+Presets in `backends.PRESETS` pair a curation pool (judge + disagreement) with a
+transfer pool that never takes part in curation: `offline`, `chronos-only`,
+`multi-family`.
+
+**MOMENT is used through its reconstruction head, not its forecasting head.**
+Masked reconstruction is what it was pretrained on and is genuinely zero-shot;
+the forecasting head ships randomly initialised and expects fine-tuning, so
+calling it zero-shot would measure noise. Forecasts are obtained by masking the
+horizon and letting the pretrained head fill it in.
+
+**The surrogate is not a pretrained foundation model.** A fixed random residual
+encoder (37,248 frozen params) with a ridge head (2,080 params) fitted once on a
+synthetic corpus (seed 1234, disjoint from every experiment seed). It forecasts
+~24x better than last-value on seasonal data and supports every mechanism, which
+makes it right for development, tests and offline reproduction — and wrong for
+any claim about what real TSFM behaviour looks like.
+
+### Running on a rented GPU
+
+```bash
+bash scripts/setup_remote.sh                       # installs each family separately
+python scripts/verify_backends.py --device cuda    # run this BEFORE any long job
+python experiments/run_agent.py --scale full --source ett \
+    --preset multi-family --device cuda
+```
+
+`verify_backends.py` exists because the real adapters were written against
+published APIs and **have never been executed** — no checkpoint is available in
+the development environment. It loads each backend, exercises the full probe
+surface, and scores the forecast against a seasonal-naive reference, so a
+mis-wired input axis shows up in seconds instead of after an hour of curation.
 
 ## Design decisions worth knowing before changing anything
 
@@ -116,6 +153,12 @@ tracks the contamination rate rather than the corpus.
   4 spikes or 4 missing points in a 512-point window — is not detected. The
   spike floor was deliberately raised to suppress false positives on
   weakly-structured ETT windows.
-- **The surrogate backend is not a pretrained foundation model.** It supports
-  every mechanism and makes the pipeline reproducible offline, but claims about
-  what real TSFM behaviour looks like need `ChronosTSFM` and a GPU.
+- **The real backends are unverified.** Chronos, MOMENT and TimesFM adapters
+  were written against published APIs but have never been run: the development
+  environment has no `transformers`, no checkpoints and no GPU. Every reported
+  number comes from the surrogate. `scripts/verify_backends.py` is the gate that
+  must pass before those adapters can be trusted.
+- **Representation signals are backend-dependent.** Four of the fourteen probe
+  dimensions need hidden states. Backends without `encode` leave them at zero,
+  which is harmless within a run — peer calibration is always inside one backend
+  — but means the behaviour vector is not comparable across families.

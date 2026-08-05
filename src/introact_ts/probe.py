@@ -31,6 +31,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
+from .backends.base import CAP_ENCODE
 from .types import ProbeResult
 
 #: Names of the behaviour vector dimensions, in fixed order.
@@ -174,7 +175,7 @@ def probe_window(
 
     # 1. Holdout forecast error and residual structure -----------------------
     ctx, tgt = x[:split], x[split:]
-    pred = judge.forecast(ctx, H)
+    pred = judge.forecast_batch([ctx], H)[0]
     resid = tgt - pred
     parts["forecast_nrmse"] = float(np.sqrt(np.mean(resid**2)) / scale)
     parts["resid_acf1"] = abs(_acf1(resid))
@@ -182,14 +183,19 @@ def probe_window(
 
     # 2. Masked reconstruction stability -------------------------------------
     mask_len = int(min(cfg.mask_len, max(4, T // 10)))
-    recon_errs = []
     lo_choices = np.linspace(T // 8, split - mask_len - 1, cfg.n_masks).astype(int)
+    spans = []
     for lo in lo_choices:
         lo = int(max(mask_len, min(lo, T - mask_len - 1)))
-        hi = lo + mask_len
-        rec = judge.reconstruct(x, lo, hi)
-        recon_errs.append(float(np.sqrt(np.mean((x[lo:hi] - rec) ** 2)) / scale))
-    recon_errs = np.asarray(recon_errs, dtype=np.float64)
+        spans.append((lo, lo + mask_len))
+    recs = judge.reconstruct_batch(x, spans)
+    recon_errs = np.asarray(
+        [
+            float(np.sqrt(np.mean((x[lo:hi] - r) ** 2)) / scale)
+            for (lo, hi), r in zip(spans, recs)
+        ],
+        dtype=np.float64,
+    )
     parts["recon_nrmse_med"] = float(np.median(recon_errs))
     q75, q25 = np.percentile(recon_errs, [75, 25])
     parts["recon_nrmse_iqr"] = float(q75 - q25)
@@ -200,53 +206,68 @@ def probe_window(
     # utility gain at all.
     parts["recon_nrmse_max"] = float(np.max(recon_errs))
 
-    # 3. Multi-view forecast consistency -------------------------------------
-    views, view_errs = [], []
-    for frac in cfg.view_fractions:
-        n_ctx = int(max(32, frac * split))
-        v_pred = judge.forecast(ctx[-n_ctx:], H)
-        views.append(v_pred)
-        view_errs.append(float(np.sqrt(np.mean((tgt - v_pred) ** 2)) / scale))
-    views = np.asarray(views, dtype=np.float64)
+    # 3, 4. Multi-view consistency and perturbation sensitivity, in one batch.
+    view_ctxs = [ctx[-int(max(32, f * split)) :] for f in cfg.view_fractions]
+    deltas = [
+        rng.randn(len(ctx)) * cfg.perturb_eps * scale for _ in range(cfg.n_perturb)
+    ]
+    perturbed = [ctx + d for d in deltas]
+    batched = judge.forecast_batch(view_ctxs + perturbed, H)
+    views = np.asarray(batched[: len(view_ctxs)], dtype=np.float64)
+    p_preds = batched[len(view_ctxs) :]
+
+    view_errs = [float(np.sqrt(np.mean((tgt - v) ** 2)) / scale) for v in views]
     parts["multiview_disagree"] = float(np.mean(np.std(views, axis=0)) / scale)
     parts["multiview_err_spread"] = float(np.std(view_errs))
-
-    # 4. Perturbation sensitivity --------------------------------------------
-    base_states = judge.encode(ctx)
-    base_h = base_states[-1]
-    out_sens, repr_sens = [], []
-    for _ in range(cfg.n_perturb):
-        delta = rng.randn(len(ctx)) * cfg.perturb_eps * scale
-        p_ctx = ctx + delta
-        d_in = float(np.linalg.norm(delta)) + 1e-12
-        p_pred = judge.forecast(p_ctx, H)
-        out_sens.append(float(np.linalg.norm(p_pred - pred) / d_in))
-        p_h = judge.encode(p_ctx)[-1]
-        repr_sens.append(
-            float(np.linalg.norm(p_h - base_h) / (np.linalg.norm(base_h) + 1e-12))
+    parts["perturb_output_sens"] = float(
+        np.mean(
+            [
+                np.linalg.norm(p - pred) / (np.linalg.norm(d) + 1e-12)
+                for p, d in zip(p_preds, deltas)
+            ]
         )
-    parts["perturb_output_sens"] = float(np.mean(out_sens))
-    parts["perturb_repr_sens"] = float(np.mean(repr_sens))
+    )
 
     # 5. Inter-layer representation dynamics ---------------------------------
-    jumps = []
-    for l in range(len(base_states) - 1):
-        a, b = base_states[l], base_states[l + 1]
-        na, nb = np.linalg.norm(a), np.linalg.norm(b)
-        cos = float(a @ b / (na * nb + 1e-12)) if na > 1e-12 and nb > 1e-12 else 1.0
-        jumps.append(1.0 - cos)
-    jumps = np.asarray(jumps, dtype=np.float64)
-    parts["repr_jump_mean"] = float(np.mean(jumps))
-    parts["repr_jump_max"] = float(np.max(jumps))
-    n_first = float(np.linalg.norm(base_states[0]))
-    parts["repr_norm_drift"] = float(
-        abs(np.linalg.norm(base_states[-1]) - n_first) / (n_first + 1e-12)
-    )
+    # Only for backends that expose hidden states. The rest leave these four
+    # dimensions at zero, which is honest: peer calibration is always within a
+    # single backend, so a constant column simply carries no information rather
+    # than distorting the comparison.
+    if CAP_ENCODE in getattr(judge, "capabilities", frozenset()):
+        base_states = judge.encode(ctx)
+        base_h = np.ravel(base_states[-1])
+        repr_sens = []
+        for p_ctx in perturbed:
+            p_h = np.ravel(judge.encode(p_ctx)[-1])
+            repr_sens.append(
+                float(np.linalg.norm(p_h - base_h) / (np.linalg.norm(base_h) + 1e-12))
+            )
+        parts["perturb_repr_sens"] = float(np.mean(repr_sens))
+
+        jumps = []
+        for l in range(len(base_states) - 1):
+            a, b = np.ravel(base_states[l]), np.ravel(base_states[l + 1])
+            na, nb = np.linalg.norm(a), np.linalg.norm(b)
+            cos = float(a @ b / (na * nb + 1e-12)) if na > 1e-12 and nb > 1e-12 else 1.0
+            jumps.append(1.0 - cos)
+        jumps = np.asarray(jumps, dtype=np.float64)
+        parts["repr_jump_mean"] = float(np.mean(jumps))
+        parts["repr_jump_max"] = float(np.max(jumps))
+        n_first = float(np.linalg.norm(np.ravel(base_states[0])))
+        parts["repr_norm_drift"] = float(
+            abs(np.linalg.norm(base_states[-1]) - n_first) / (n_first + 1e-12)
+        )
+    else:
+        parts["perturb_repr_sens"] = 0.0
+        parts["repr_jump_mean"] = 0.0
+        parts["repr_jump_max"] = 0.0
+        parts["repr_norm_drift"] = 0.0
 
     # 6. Cross-model disagreement --------------------------------------------
     if len(models) > 1:
-        peer_preds = [m.forecast(ctx, H) for m in models]
-        peer_preds = np.asarray(peer_preds, dtype=np.float64)
+        peer_preds = np.asarray(
+            [m.forecast_batch([ctx], H)[0] for m in models], dtype=np.float64
+        )
         parts["model_disagree"] = float(np.mean(np.std(peer_preds, axis=0)) / scale)
     else:
         parts["model_disagree"] = 0.0
