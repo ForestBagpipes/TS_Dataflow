@@ -1,12 +1,17 @@
 """Statistical profiling: extract a 12-dimensional feature vector from a univariate time series.
 
+The profile describes the *external* properties of a window (trend, seasonality,
+stationarity, complexity, changepoints, tails). It never looks at the model. It
+serves two purposes in IntroAct-TS: it defines the peer group a window is
+calibrated against, and it feeds the risk state that drives action choice.
+
 All features are computed without any file IO. Input: numpy array (T,).
 Output: numpy array (12,). Order is documented and MUST NOT change.
 """
 
 import numpy as np
 from scipy import fft
-from scipy.stats import linregress, iqr as scipy_iqr
+from scipy.stats import linregress
 from statsmodels.tsa.seasonal import STL
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.stats.diagnostic import acorr_ljungbox

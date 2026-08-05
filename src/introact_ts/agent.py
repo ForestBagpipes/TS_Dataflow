@@ -1,0 +1,288 @@
+"""IntroAct-TS: the perceive - act - verify - rollback loop.
+
+Perception is corpus-level, because peer calibration needs neighbours: every
+window is profiled and probed once, then each behaviour signature is scored
+against structurally similar windows. Curation is per-window and sequential:
+the policy proposes candidates, each is applied to a sandbox copy, the frozen
+TSFM is re-probed on that copy, and the candidate is committed only if it
+passes the dual verification. A rejected candidate leaves the working copy
+untouched and the agent falls through to the next proposal.
+
+Two invariants hold throughout and are what make the trace auditable:
+
+  * the working copy is only ever replaced by a candidate that was accepted,
+    so any prefix of the trace can be replayed to reconstruct the data;
+  * every probe of a given window uses the same fixed reference scale and the
+    same frozen peer statistics, so utilities and risks are comparable across
+    the whole episode rather than drifting with the edits.
+"""
+
+from dataclasses import dataclass, field
+
+import numpy as np
+
+from .actions import apply_action
+from .calibration import RISK_WEIGHTS, calibrate, ood_scores, recalibrate_one
+from .policy import PolicyConfig, propose_actions
+from .probe import ProbeConfig, SIGNAL_NAMES, probe_window, reference_scale
+from .profiling import extract_statistical_profile
+from .risk import (
+    CorpusReference,
+    RiskState,
+    build_risk_state,
+    corpus_reference,
+    infer_hypothesis,
+    statistical_evidence,
+)
+from .structure import structure_distortion
+from .types import (
+    Action,
+    ActionRecord,
+    GovernanceTrace,
+    TERMINAL_ACTIONS,
+    Verdict,
+)
+from .verify import VerifyConfig, action_risk, improvement_consistency, verify
+
+
+@dataclass
+class AgentConfig:
+    probe: ProbeConfig = field(default_factory=ProbeConfig)
+    policy: PolicyConfig = field(default_factory=PolicyConfig)
+    verification: VerifyConfig = field(default_factory=VerifyConfig)
+    K_peers: int = 40
+    max_probe_calls: int = 10
+    seed: int = 42
+    #: When False the peer group becomes the whole corpus, which is exactly the
+    #: uncalibrated baseline: behaviour is then z-scored globally and a volatile
+    #: window looks defective simply for being volatile.
+    peer_calibration: bool = True
+
+
+class IntroActAgent:
+    """A curation agent that must justify every edit it commits."""
+
+    def __init__(self, models: list, cfg: AgentConfig = None):
+        if not models:
+            raise ValueError("at least one frozen backend is required")
+        self.models = models
+        self.judge = models[0]
+        self.cfg = cfg or AgentConfig()
+        self._calib = None
+        self._ood = None
+        self._reference = CorpusReference()
+
+    # -- perception ---------------------------------------------------------
+
+    def perceive(self, windows: list) -> list:
+        """Profile, probe and peer-calibrate the whole corpus once."""
+        profiles, behaviors, probes, evidences = [], [], [], []
+        for w in windows:
+            series = np.asarray(w.series, dtype=np.float64)
+            profiles.append(extract_statistical_profile(_finite(series)))
+            pr = probe_window(series, self.models, reference_scale(series), self.cfg.probe)
+            probes.append(pr)
+            behaviors.append(pr.vector)
+            evidences.append(statistical_evidence(series))
+
+        P = np.stack(profiles)
+        B = np.stack(behaviors)
+        K = self.cfg.K_peers if self.cfg.peer_calibration else len(windows) - 1
+        self._calib = calibrate(B, P, SIGNAL_NAMES, K=max(K, 2))
+        self._ood = ood_scores(P, K=min(20, max(2, len(windows) - 1)))
+        self._reference = corpus_reference(evidences, self._calib.risk, self._ood)
+
+        states = []
+        for i, w in enumerate(windows):
+            states.append(
+                build_risk_state(
+                    window_id=w.window_id,
+                    series=w.series,
+                    profile=P[i],
+                    probe_result=probes[i],
+                    z_row=self._calib.z[i],
+                    behav_risk=float(self._calib.risk[i]),
+                    ood=float(self._ood[i]),
+                    reference=self._reference,
+                    signal_names=SIGNAL_NAMES,
+                    evidence=evidences[i],
+                )
+            )
+        return states
+
+    # -- curation -----------------------------------------------------------
+
+    def curate_window(self, window, state: RiskState, peer_idx: int) -> GovernanceTrace:
+        """Run the closed loop on one window and return its governance trace."""
+        cfg = self.cfg
+        original = np.asarray(window.series, dtype=np.float64).copy()
+        scale = reference_scale(original)
+        center = self._calib.centers[peer_idx]
+        spread = self._calib.spreads[peer_idx]
+
+        work = original.copy()
+        utility = state.utility
+        z_now = state.z
+        live = state
+        records = []
+        probe_calls = 1
+        final_state = "KEEP"
+        step = 0
+        crop_offset = 0
+
+        while step < cfg.policy.max_steps and probe_calls < cfg.max_probe_calls:
+            candidates = propose_actions(live, records, cfg.policy)
+            committed = False
+
+            for action, params in candidates:
+                if action in TERMINAL_ACTIONS:
+                    records.append(
+                        ActionRecord(
+                            step=step, action=action, params=dict(params),
+                            verdict=Verdict.NO_OP, delta_utility=0.0,
+                            struct_distortion=0.0, risk=0.0,
+                            utility_before=utility, utility_after=utility,
+                            note="terminal",
+                        )
+                    )
+                    final_state = _terminal_label(action, records)
+                    step = cfg.policy.max_steps
+                    committed = True
+                    break
+
+                outcome = apply_action(work, action, **params)
+                if not outcome.applicable:
+                    records.append(
+                        ActionRecord(
+                            step=step, action=action, params=dict(params),
+                            verdict=Verdict.NO_OP, delta_utility=0.0,
+                            struct_distortion=0.0, risk=0.0,
+                            utility_before=utility, utility_after=utility,
+                            cost=outcome.cost, note=outcome.note,
+                        )
+                    )
+                    continue
+
+                # Post-intervention re-probe on the sandbox copy.
+                after = probe_window(outcome.series, self.models, scale, cfg.probe)
+                probe_calls += 1
+                delta_u = after.utility - utility
+                z_after, _ = recalibrate_one(
+                    after.vector, center, spread, SIGNAL_NAMES, RISK_WEIGHTS
+                )
+                report = structure_distortion(
+                    work, outcome.series, action, outcome.params, touched=outcome.touched
+                )
+                consistency = improvement_consistency(z_now, z_after)
+                risk = action_risk(live.confidence, outcome.cost, consistency)
+                verdict = verify(delta_u, report.distortion, risk, cfg.verification)
+
+                records.append(
+                    ActionRecord(
+                        step=step, action=action, params=dict(outcome.params),
+                        verdict=verdict, delta_utility=float(delta_u),
+                        struct_distortion=float(report.distortion), risk=float(risk),
+                        utility_before=float(utility), utility_after=float(after.utility),
+                        struct_parts=report.parts, cost=float(outcome.cost),
+                        note=outcome.note,
+                    )
+                )
+
+                if verdict is Verdict.ACCEPTED:
+                    if action is Action.RESEGMENT:
+                        crop_offset += int(outcome.params.get("lo", 0))
+                    work = outcome.series
+                    utility = after.utility
+                    z_now = z_after
+                    live = self._refresh(live, work, after, z_after, center, spread)
+                    final_state = "REPAIRED"
+                    committed = True
+                    break
+                # Rejected: the sandbox copy is discarded, `work` is untouched.
+
+            if not committed:
+                break
+            step += 1
+
+        return GovernanceTrace(
+            window_id=window.window_id,
+            stratum=window.stratum,
+            contamination=window.contamination,
+            initial_series=original,
+            final_series=work,
+            records=records,
+            final_state=final_state,
+            initial_utility=float(state.utility),
+            final_utility=float(utility),
+            risk_state={
+                "hypothesis": state.hypothesis,
+                "confidence": state.confidence,
+                "behav_risk": state.behav_risk,
+                "ood": state.ood,
+                "dominant_defect": state.dominant_defect,
+                "defect_strength": state.defect_strength,
+                "posterior": state.posterior,
+            },
+            probe_calls=probe_calls,
+            crop_offset=crop_offset,
+        )
+
+    def _refresh(self, state, series, probe_result, z_after, center, spread) -> RiskState:
+        """Re-derive the risk state after a committed edit."""
+        _, risk_after = recalibrate_one(
+            probe_result.vector, center, spread, SIGNAL_NAMES, RISK_WEIGHTS
+        )
+        evidence = statistical_evidence(series)
+        z_named = {n: float(z_after[i]) for i, n in enumerate(SIGNAL_NAMES)}
+        label, conf, posterior = infer_hypothesis(
+            evidence, risk_after, state.ood, self._reference, z_named
+        )
+        evidence["z"] = z_named
+        return RiskState(
+            window_id=state.window_id,
+            profile=state.profile,
+            behavior=probe_result.vector,
+            z=z_after,
+            utility=probe_result.utility,
+            behav_risk=risk_after,
+            ood=state.ood,
+            evidence=evidence,
+            posterior=posterior,
+            hypothesis=label,
+            confidence=conf,
+            reference=self._reference,
+        )
+
+    # -- driver -------------------------------------------------------------
+
+    def run(self, windows: list, verbose: bool = False) -> list:
+        """Perceive the corpus, then curate every window."""
+        states = self.perceive(windows)
+        traces = []
+        for i, (w, s) in enumerate(zip(windows, states)):
+            traces.append(self.curate_window(w, s, peer_idx=i))
+            if verbose and (i + 1) % 50 == 0:
+                print(f"  curated {i + 1}/{len(windows)}")
+        return traces
+
+
+def _terminal_label(action: Action, records: list) -> str:
+    if action is Action.QUARANTINE:
+        return "QUARANTINE"
+    if action is Action.ABSTAIN:
+        return "ABSTAIN"
+    return "REPAIRED" if any(r.accepted for r in records) else "KEEP"
+
+
+def _finite(series: np.ndarray) -> np.ndarray:
+    """Profiling needs finite input; the agent still sees the raw NaNs."""
+    x = np.asarray(series, dtype=np.float64)
+    if np.isfinite(x).all():
+        return x
+    good = np.isfinite(x)
+    if not good.any():
+        return np.zeros_like(x)
+    idx = np.arange(len(x))
+    out = x.copy()
+    out[~good] = np.interp(idx[~good], idx[good], x[good])
+    return out
