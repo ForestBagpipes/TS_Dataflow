@@ -132,6 +132,24 @@ degraded data. Scoring raw values reports a correct RESEGMENT as catastrophic.
 Otherwise the metric rewards whichever method smoothed hardest — a flattened
 series is trivially easy to predict from itself.
 
+**Downstream transfer trains on curated data and tests on pristine data.**
+`experiments/downstream.py` splits windows *before* curation, trains ordinary
+supervised forecasters (ridge-AR, DLinear, optionally PatchTST) from scratch on
+each method's output, and scores them on the untouched reference series of
+held-out windows. This is the question curation exists to answer, and it is
+strictly harder than zero-shot transfer: a pipeline that smooths everything
+produces training data that predicts its own smoothed future beautifully and
+the real one badly.
+
+Two details keep the number honest. Ridge strength is chosen on a held-out
+slice of the *training* pairs, because the right amount of regularisation
+depends on how much usable data a method left behind and a fixed constant would
+quietly favour whichever method happened to suit it. And pairs whose context
+spread has collapsed relative to their own series are dropped for every method
+alike — the instance-normalisation fallback would otherwise leave their targets
+at raw scale and derail gradient training. Aggressive smoothing produces almost
+all of them, so the exclusion is generous to the pipelines that flatten hardest.
+
 **Evidence thresholds are corpus-adaptive above a floor.** Fixed thresholds
 calibrated on synthetic data fail on real ETT windows, which carry natural
 flatlines, level changes and high-frequency energy. Adaptation may only raise a
@@ -153,6 +171,23 @@ tracks the contamination rate rather than the corpus.
   4 spikes or 4 missing points in a 512-point window — is not detected. The
   spike floor was deliberately raised to suppress false positives on
   weakly-structured ETT windows.
+- **The PatchTST downstream column is not trustworthy at this scale, and must
+  not be reported as evidence.** Fixing a numerical-stability bug in the pair
+  construction moved `introact_full` from +5.0% to +0.0% and `stat_only` from
+  +3.0% to +13.3% — the ranking inverted. The closed-form models were unmoved
+  by the same fix (`always_clean` −4.6%/−8.8% both times, everything else
+  within ±0.4%), so the instability is the trained transformer, not the
+  protocol: ~3k training pairs and 30 epochs leave run-to-run variance larger
+  than the effect being measured, and averaging three seeds does not close the
+  gap. Either train it properly (more data, early stopping, ≥10 seeds with a
+  reported spread) or leave the column out.
+- **Downstream transfer barely separates conservative methods.** Even at 67%
+  contamination, ridge-AR and DLinear move by ±0.4% across every method except
+  `always_clean`. Under instance normalisation these models are simply robust
+  to localised corruption in their training set, so the measurable benefit of
+  curation here is *avoided damage* rather than improved accuracy — which is a
+  real finding, but a weaker headline than the framing in the paper plan
+  assumes.
 - **The real backends are unverified.** Chronos, MOMENT and TimesFM adapters
   were written against published APIs but have never been run: the development
   environment has no `transformers`, no checkpoints and no GPU. Every reported

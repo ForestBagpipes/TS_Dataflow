@@ -23,6 +23,9 @@ sys.path.insert(0, str(ROOT / "experiments"))
 
 from baselines import BASELINES  # noqa: E402
 from corpus import CorpusSpec, build_corpus  # noqa: E402
+from downstream import compare as downstream_compare  # noqa: E402
+from downstream import evaluate as downstream_evaluate  # noqa: E402
+from downstream import split_windows  # noqa: E402
 from metrics import summarise  # noqa: E402
 
 from introact_ts.agent import AgentConfig, IntroActAgent  # noqa: E402
@@ -41,6 +44,14 @@ SCALES = {
         n_changepoint=20, n_clean_ood=20,
     ),
     "full": CorpusSpec(),
+    # A heavily contaminated corpus. Downstream transfer is insensitive to a
+    # conservative method at low contamination -- a handful of repaired windows
+    # is diluted across thousands of training pairs -- so the regime where
+    # curation can actually move the number has to be tested explicitly.
+    "heavy": CorpusSpec(
+        n_contaminated=140, n_clean=20, n_hard=10, n_rare_valid=20,
+        n_changepoint=10, n_clean_ood=10,
+    ),
 }
 
 
@@ -77,6 +88,8 @@ def run_all(
     source: str,
     preset: str = "offline",
     device: str = "cpu",
+    downstream: bool = True,
+    downstream_deep: bool = False,
     verbose: bool = True,
 ) -> dict:
     windows = build_corpus(spec, source=source)
@@ -125,10 +138,37 @@ def run_all(
         if verbose:
             print(f"  {name:28s} {time.time() - t0:6.1f}s")
 
+    downstream_results = {}
+    if downstream:
+        # Split before curation so no test window can influence a model that is
+        # later scored on it, and use the same split for every method.
+        train_ids, test_ids = split_windows(windows, seed=spec.seed)
+        if verbose:
+            deep = " (+patchtst)" if downstream_deep else ""
+            print(
+                f"\ndownstream: {len(train_ids)} train / "
+                f"{len(test_ids)} test windows{deep}"
+            )
+        for name, traces in traces_by_method.items():
+            t0 = time.time()
+            downstream_results[name] = downstream_evaluate(
+                traces, windows, train_ids, test_ids,
+                include_deep=downstream_deep, seed=spec.seed,
+            )
+            if verbose:
+                print(f"  {name:28s} {time.time() - t0:6.1f}s")
+        downstream_results = {
+            "absolute": downstream_results,
+            "relative_to_no_action": downstream_compare(downstream_results),
+            "n_train_windows": len(train_ids),
+            "n_test_windows": len(test_ids),
+        }
+
     return {
         "spec": vars(spec),
         "source": source,
         "preset": preset,
+        "downstream": downstream_results,
         "curation_models": [probe_signature(m) for m in curation_models],
         "transfer_models": [probe_signature(m) for m in transfer_models],
         "results": results,
@@ -192,6 +232,46 @@ def render_report(payload: dict) -> str:
         ]
         lines.append(f"| {name} | " + " | ".join(cells) + " |")
 
+    down = payload.get("downstream") or {}
+    if down.get("absolute"):
+        lines += [
+            "",
+            "## Downstream transfer: train on curated data, test on pristine data",
+            "",
+            f"Models are trained from scratch on each method's output "
+            f"({down['n_train_windows']} windows) and scored on the untouched "
+            f"reference series of {down['n_test_windows']} held-out windows. "
+            f"Values are test MSE; the arrow is the change against `no_action`.",
+            "",
+        ]
+        ref_scores = down["absolute"]["no_action"]
+        model_names = [
+            k for k, v in ref_scores.items()
+            if isinstance(v, dict) and v.get("trainable", True)
+        ]
+        untrained = [
+            (k, v) for k, v in ref_scores.items()
+            if isinstance(v, dict) and not v.get("trainable", True)
+        ]
+        for k, v in untrained:
+            lines.append(
+                f"Training-independent reference on the same test split: "
+                f"`{k}` MSE {v['mse']:.4f}."
+            )
+            lines.append("")
+        lines.append("| method | " + " | ".join(model_names) + " |")
+        lines.append("|---" * (len(model_names) + 1) + "|")
+        for name, scores in down["absolute"].items():
+            rel = down["relative_to_no_action"].get(name, {})
+            cells = []
+            for m in model_names:
+                if m not in scores or "error" in scores:
+                    cells.append("n/a")
+                    continue
+                imp = rel.get(m, {}).get("improvement", 0.0)
+                cells.append(f"{scores[m]['mse']:.4f} ({imp:+.1%})")
+            lines.append(f"| {name} | " + " | ".join(cells) + " |")
+
     lines += ["", "## Repair by contamination type (IntroAct-TS full)", ""]
     per = res["introact_full"]["repair"].get("per_contamination", {})
     lines.append("| contamination | NMSE before | NMSE after | reduction | action acc |")
@@ -234,6 +314,10 @@ def main():
     ap.add_argument("--preset", choices=list(PRESETS), default="offline",
                     help="which frozen backends to use; see introact_ts.backends.PRESETS")
     ap.add_argument("--device", default="cpu", help="cpu or cuda")
+    ap.add_argument("--no-downstream", action="store_true",
+                    help="skip train-on-curated / test-on-clean evaluation")
+    ap.add_argument("--downstream-deep", action="store_true",
+                    help="also train a PatchTST per method (slower)")
     ap.add_argument("--out", type=str, default=str(ROOT / "results"))
     args = ap.parse_args()
 
@@ -244,7 +328,8 @@ def main():
 
     t0 = time.time()
     payload, traces = run_all(
-        spec, args.source, preset=args.preset, device=args.device
+        spec, args.source, preset=args.preset, device=args.device,
+        downstream=not args.no_downstream, downstream_deep=args.downstream_deep,
     )
     payload["wall_time_s"] = time.time() - t0
 

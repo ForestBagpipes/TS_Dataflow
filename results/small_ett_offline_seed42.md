@@ -36,6 +36,23 @@ Corpus: 95 windows, source `ett`, backend preset `offline`.
 | ablate_no_peer_calibration | +0.0144 | +0.0152 |
 | ablate_no_protection | +0.0192 | +0.0157 |
 
+## Downstream transfer: train on curated data, test on pristine data
+
+Models are trained from scratch on each method's output (66 windows) and scored on the untouched reference series of 29 held-out windows. Values are test MSE; the arrow is the change against `no_action`.
+
+| method | seasonal_naive | ridge_ar | dlinear |
+|---|---|---|---|
+| no_action | 2.3997 (+0.0%) | 1.6181 (+0.0%) | 1.6248 (+0.0%) |
+| always_clean | 2.3997 (+0.0%) | 2.4192 (-49.5%) | 2.5013 (-53.9%) |
+| stat_only | 2.3997 (+0.0%) | 1.6153 (+0.2%) | 1.6282 (-0.2%) |
+| quality_rank | 2.3997 (+0.0%) | 1.6428 (-1.5%) | 1.6605 (-2.2%) |
+| introact_full | 2.3997 (+0.0%) | 1.6192 (-0.1%) | 1.6235 (+0.1%) |
+| ablate_no_structure | 2.3997 (+0.0%) | 1.6228 (-0.3%) | 1.6301 (-0.3%) |
+| ablate_no_reprobe | 2.3997 (+0.0%) | 1.6138 (+0.3%) | 1.6211 (+0.2%) |
+| ablate_no_verify | 2.3997 (+0.0%) | 1.6242 (-0.4%) | 1.6332 (-0.5%) |
+| ablate_no_peer_calibration | 2.3997 (+0.0%) | 1.6192 (-0.1%) | 1.6235 (+0.1%) |
+| ablate_no_protection | 2.3997 (+0.0%) | 1.6177 (+0.0%) | 1.6220 (+0.2%) |
+
 ## Repair by contamination type (IntroAct-TS full)
 
 | contamination | NMSE before | NMSE after | reduction | action acc |
