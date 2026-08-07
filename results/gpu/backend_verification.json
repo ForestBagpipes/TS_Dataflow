@@ -1,0 +1,33 @@
+[
+  {
+    "spec": "moment:AutonLab/MOMENT-1-large",
+    "loaded": true,
+    "checks": {
+      "forecast": {
+        "ok": true,
+        "mse": 8.4267,
+        "vs_seasonal_naive": 20.265
+      },
+      "forecast_batch": {
+        "ok": true
+      },
+      "reconstruct": {
+        "ok": true,
+        "mse": 0.3776
+      },
+      "encode": {
+        "ok": true,
+        "n_layers": 24,
+        "dim": 1024
+      }
+    },
+    "error": null,
+    "name": "AutonLab/MOMENT-1-large",
+    "n_layers": 24,
+    "capabilities": [
+      "encode",
+      "forecast",
+      "reconstruct"
+    ]
+  }
+]
