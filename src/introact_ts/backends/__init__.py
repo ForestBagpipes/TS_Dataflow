@@ -46,13 +46,23 @@ PRESETS = {
         ],
         "transfer": ["chronos:amazon/chronos-t5-base", "surrogate:7"],
     },
+    # Verified on an RTX 5090 against a seasonal-naive reference: bolt-base
+    # 0.29x, bolt-small 0.27x, timesfm 0.27x, t5-small 0.91x. MOMENT is
+    # deliberately excluded -- its zero-shot forecast is 20x naive (see
+    # `backends/moment.py`), and the judge's forecast error dominates utility.
     "multi-family": {
         "curation": [
             "chronos:amazon/chronos-bolt-base",
-            "moment:AutonLab/MOMENT-1-large",
             "timesfm:google/timesfm-2.5-200m-pytorch",
+            "chronos:amazon/chronos-bolt-small",
         ],
         "transfer": ["chronos:amazon/chronos-t5-small", "surrogate:7"],
+    },
+    # MOMENT's genuine strengths, for the reconstruction/representation study.
+    # Not for headline curation runs.
+    "moment-recon": {
+        "curation": ["moment:AutonLab/MOMENT-1-large"],
+        "transfer": ["chronos:amazon/chronos-bolt-small"],
     },
 }
 

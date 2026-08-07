@@ -1,13 +1,17 @@
 """Chronos and Chronos-Bolt adapters.
 
 Chronos treats forecasting as language modelling over quantised series, so its
-native surface is exactly one thing: sample futures given a context. Everything
-else the probe needs is derived.
+native surface is exactly one thing: predict futures given a context.
+Everything else the probe needs is derived.
 
-The two families differ in what they expose. The original T5 pipeline has an
-``embed`` method returning encoder states, so it can serve the representation
-signals; Bolt is a direct multi-step regressor with no documented embedding
-API, so it declares fewer capabilities rather than pretending.
+Both families expose ``embed``, so both can serve the representation signals --
+the published Bolt documentation does not mention it, but the installed
+pipeline has it, which is the sort of thing only running the code reveals.
+Capabilities are therefore probed at construction rather than assumed.
+
+The prediction entry point is called positionally on purpose. Bolt names its
+first parameter ``inputs`` and the T5 pipelines name theirs ``context``;
+passing by position works against both and survives the next rename.
 """
 
 import numpy as np
@@ -58,7 +62,7 @@ class ChronosTSFM(ForecastOnlyMixin):
 
         self.is_bolt = "bolt" in model_name.lower()
         caps = {CAP_FORECAST, CAP_RECONSTRUCT}
-        if not self.is_bolt and hasattr(self.pipeline, "embed"):
+        if hasattr(self.pipeline, "embed"):
             caps.add(CAP_ENCODE)
         self.capabilities = frozenset(caps)
         self.n_layers = self._count_layers()
@@ -84,9 +88,11 @@ class ChronosTSFM(ForecastOnlyMixin):
         for i in range(0, len(tensors), self.batch_size):
             chunk = tensors[i : i + self.batch_size]
             with torch.no_grad():
-                # Bolt returns quantiles, T5 returns samples; the median of the
-                # sample axis is the point forecast in both layouts.
-                preds = self.pipeline.predict(context=chunk, prediction_length=horizon)
+                # Positional: Bolt calls it `inputs`, T5 calls it `context`.
+                # Bolt returns (batch, quantile, horizon), T5 returns
+                # (batch, sample, horizon); taking the median of the middle
+                # axis is the point forecast under both layouts.
+                preds = self.pipeline.predict(chunk, horizon)
             for p in preds:
                 arr = p.float().cpu().numpy()
                 if arr.ndim == 2:
@@ -102,6 +108,8 @@ class ChronosTSFM(ForecastOnlyMixin):
         with torch.no_grad():
             embeddings, _ = self.pipeline.embed(ctx)
         emb = embeddings[0].float().cpu().numpy().astype(np.float64)
+        if emb.ndim == 1:
+            emb = emb[None, :]
         # Encoder states arrive as one tensor over tokens. Splitting the token
         # axis into n_layers blocks and mean-pooling each gives a depth-like
         # trajectory: not true per-layer states, but a stable, ordered summary
