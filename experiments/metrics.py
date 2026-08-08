@@ -192,6 +192,57 @@ def protection_metrics(traces: list, windows: list) -> dict:
     }
 
 
+def corpus_effect(traces: list, windows: list) -> dict:
+    """Net effect on the whole corpus, repairs and damage on one scale.
+
+    Repair and protection are reported separately because they are different
+    questions, but separate reporting cannot settle the trade-off between them:
+    at a high contamination rate an indiscriminate cleaner posts a large repair
+    number *and* a large damage number, and nothing in either column says
+    whether the corpus ended up better or worse overall.
+
+    This averages the normalised distance to truth across every window that has
+    a pristine reference -- contaminated and protected alike, weighted as the
+    corpus weights them. It is the number that answers "should I have run this
+    pipeline at all".
+    """
+    byid = {w.window_id: w for w in windows}
+    before, after, per_stratum = [], [], {}
+    for t in traces:
+        w = byid.get(t.window_id)
+        if w is None or w.clean_series is None:
+            continue
+        ref_var = float(np.var(w.clean_series - np.median(w.clean_series)))
+        b = _mse_to_clean(t.initial_series, w.clean_series, ref_var)
+        a = _mse_to_clean(t.final_series, w.clean_series[t.crop_offset :], ref_var)
+        before.append(b)
+        after.append(a)
+        d = per_stratum.setdefault(t.stratum, {"before": [], "after": []})
+        d["before"].append(b)
+        d["after"].append(a)
+
+    if not before:
+        return {"n": 0}
+    b_m, a_m = float(np.mean(before)), float(np.mean(after))
+    before_arr, after_arr = np.asarray(before), np.asarray(after)
+    return {
+        "n": len(before),
+        "nmse_before": b_m,
+        "nmse_after": a_m,
+        "net_reduction": 1.0 - a_m / max(b_m, 1e-12),
+        "windows_improved": int(np.sum(after_arr < before_arr - 1e-9)),
+        "windows_worsened": int(np.sum(after_arr > before_arr + 1e-9)),
+        "per_stratum": {
+            k: {
+                "n": len(v["before"]),
+                "before": float(np.mean(v["before"])),
+                "after": float(np.mean(v["after"])),
+            }
+            for k, v in sorted(per_stratum.items())
+        },
+    }
+
+
 def rollback_metrics(traces: list) -> dict:
     """Rollback and refusal behaviour."""
     from introact_ts.types import ROLLBACK_VERDICTS
@@ -306,6 +357,7 @@ def summarise(traces: list, windows: list, models: list = None) -> dict:
         "detection": detection_metrics(traces),
         "action": action_metrics(traces),
         "repair": repair_metrics(traces, windows),
+        "corpus_effect": corpus_effect(traces, windows),
         "protection": protection_metrics(traces, windows),
         "rollback": rollback_metrics(traces),
         "utility": utility_metrics(traces),

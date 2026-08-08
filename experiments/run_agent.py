@@ -208,18 +208,37 @@ def render_report(payload: dict) -> str:
     lines.append("## Headline")
     lines.append("")
     lines.append(
-        "| method | detect F1 | action acc | repair NMSE red. | over-clean rate | "
-        "damage to protected | rollbacks | abstain |"
+        "| method | **net corpus** | repair (contaminated) | over-clean rate | "
+        "damage to protected | detect F1 | action acc | rollbacks | abstain |"
     )
-    lines.append("|---|---|---|---|---|---|---|---|")
+    lines.append("|---|---|---|---|---|---|---|---|---|")
     for name, r in res.items():
+        ce = r.get("corpus_effect", {})
         lines.append(
-            f"| {name} | {r['detection']['f1']:.3f} | {r['action']['action_accuracy']:.3f} "
+            f"| {name} | **{ce.get('net_reduction', 0.0):+.3f}** "
             f"| {r['repair'].get('reduction', 0.0):.3f} "
             f"| {r['protection']['over_clean_rate']:.3f} "
             f"| {r['protection']['mean_damage']:.4f} "
+            f"| {r['detection']['f1']:.3f} | {r['action']['action_accuracy']:.3f} "
             f"| {r['rollback']['n_rolled_back']} "
             f"| {r['rollback']['abstain_rate']:.3f} |"
+        )
+    lines += [
+        "",
+        "`net corpus` is the reduction in mean normalised distance-to-truth over "
+        "*every* window with a pristine reference, contaminated and protected "
+        "alike. Repair and damage are trade-offs against each other and neither "
+        "column alone can say whether running the pipeline was worth it; this "
+        "one can.",
+        "",
+        "| method | windows improved | windows worsened |",
+        "|---|---|---|",
+    ]
+    for name, r in res.items():
+        ce = r.get("corpus_effect", {})
+        lines.append(
+            f"| {name} | {ce.get('windows_improved', 0)} "
+            f"| {ce.get('windows_worsened', 0)} |"
         )
 
     lines += ["", "## Transfer to models that took no part in curation", ""]

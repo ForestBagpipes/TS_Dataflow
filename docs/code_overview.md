@@ -160,6 +160,18 @@ tracks the contamination rate rather than the corpus.
 
 ## Known limitations
 
+- **Additive noise is not repaired when real TSFMs judge.** Action accuracy is
+  0.00 against +0.182 under the surrogate, and the cause is two independent
+  walls rather than a tunable threshold. Statistically, ETT's genuinely
+  low-structure windows (the `hard` stratum) carry a noise ratio of 0.464
+  against 0.509 for the injected-noise stratum — adding white noise to a window
+  that is already close to white is not separable from a window that was simply
+  noisier to begin with, and neither spectral flatness (0.507 vs 0.541) nor
+  differenced autocorrelation (-0.464 vs -0.499) tells them apart either.
+  Behaviourally, strong forecasters are largely unbothered by additive noise, so
+  the second evidence stream stays quiet too. Separating these would need
+  evidence from outside the window — the noise level of neighbouring windows in
+  the same series, or a domain prior.
 - **Duplicated segments are not detected.** A repeated stretch is statistically
   almost invisible; the corpus includes the contamination and the results report
   the miss rather than hiding it.
