@@ -26,7 +26,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
-from .actions import changepoints, dominant_period
+from .actions import changepoints, dominant_period, robust_scale
 from .types import Action
 
 #: Local operators (IMPUTE, DESPIKE, RESEGMENT) declare which points they
@@ -91,11 +91,8 @@ def _clean(x: np.ndarray) -> np.ndarray:
 
 
 def _scale(x: np.ndarray) -> float:
-    q75, q25 = np.percentile(x, [75, 25])
-    s = float(q75 - q25)
-    if s < 1e-8:
-        s = float(np.std(x))
-    return max(s, 1e-8)
+    """Local spread, robust to level displacement. See ``actions.robust_scale``."""
+    return robust_scale(x)
 
 
 def _bounded(v: float, k: float = 1.0) -> float:

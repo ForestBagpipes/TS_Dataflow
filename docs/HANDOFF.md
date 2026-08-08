@@ -56,45 +56,54 @@ excluded from the default presets because the judge's forecast error dominates
 the probe's utility; a `moment-recon` preset exists for the reconstruction
 study.
 
-## The open question — read this first next time
+## The open question — RESOLVED
 
-Swapping the surrogate for real TSFMs **inverted the repair result**, on the
-same corpus, same seed, same code:
+The repair inversion under real TSFMs was a scale bug, not a threshold or a
+weighting problem, and it was in the denominator of nearly every indicator in
+the method.
 
-| | surrogate | real TSFM (multi-family) |
+`reference_scale` was the interquartile range of the whole window. A
+`level_shift` contamination displaces one segment, which inflates that global
+IQR **3.0x** (measured: 2.36-3.48 across the stratum; every other contamination
+sits at 1.00). Since that quantity divides the forecast error, the
+reconstruction error, the jump magnitude and the noise ratio, the contamination
+was dividing away its own evidence: level-shifted windows scored *below* the
+corpus median on behavioural risk, were filed as clean, and never had a
+RESEGMENT proposed. Confirmed in the traces -- of five level_shift windows,
+three were left alone outright and two were offered only IMPUTE.
+
+The fix is `actions.robust_scale`: the median of per-block IQRs instead of the
+global IQR. A displaced segment corrupts only the block spanning the break, and
+the median discards it. Inflation for `level_shift` drops from 3.04x to 1.00x.
+The same scale now serves `probe`, `risk` and `structure`, which had each
+carried their own copy of the bug.
+
+Effect on the real-TSFM run (small/ETT/multi-family, same corpus and seed):
+
+| | before fix | after fix |
 |---|---|---|
-| introact_full repair | **+0.248** | **−0.050** |
-| stat_only repair | +0.168 | +0.168 |
-| introact_full over-clean | 0.100 | 0.100 |
-| introact_full damage | 0.0192 | **0.0121** |
+| repair | **-0.050** | **+0.367** |
+| over-clean | 0.100 | **0.083** |
+| damage to protected | 0.0121 | 0.0121 |
+| level_shift repair | -0.122 (action acc 0.00) | **+0.466** (acc 0.40) |
+| missing_scattered | +0.022 | +0.255 |
 
-The protection story got *better* — damage 0.0121, seventeen times lower than
-`always_clean` at 0.207, and the lowest in the table. But repair went negative
-while the statistical baseline stayed at +0.168.
+The ablations are now much sharper on real models than they ever were on the
+surrogate. Removing the structural veto collapses repair from 0.367 to 0.141,
+where under the surrogate the same ablation was indistinguishable from the full
+method (0.395 vs 0.403). The verification machinery earns its place only when
+the judge is a model good enough for its opinion to matter.
 
-Note what did *not* change: `stat_only` scores +0.168 under both backends,
-because it never consults the model. So the inversion is entirely in the
-verification signal — the real models' notion of "this edit helped" agrees less
-with "this edit moved the data toward the truth" than the surrogate's did.
+Full table, real TSFM after the fix:
 
-This is the central claim of the paper (ΔU from a frozen TSFM is a usable proxy
-for data quality), so it has to be understood before anything else is built on
-top. Three things to check, cheapest first:
-
-1. **Is it the acceptance threshold?** `epsilon=0.005` was calibrated on
-   surrogate utilities. Real-model utilities have a different scale and spread;
-   print the ΔU distribution per contamination type and recalibrate.
-2. **Is it a specific contamination?** Read the per-contamination table in
-   `results/gpu/small_ett_multi-family_seed42.md`. Under the surrogate, spike
-   repair was +0.667 and carried the average — check whether that survived.
-3. **Is the utility rewarding predictability over fidelity?** Real TSFMs are far
-   better forecasters (0.27x vs 0.92x naive), so they may prefer edits that
-   make a window *easier* rather than *truer*. If so, the structural term is
-   doing more work than the utility term, and the weighting in
-   `probe.DEFAULT_UTILITY_WEIGHTS` needs revisiting.
-
-Diagnose before tuning. An epsilon fitted to make the number look right would
-be exactly the kind of result that does not survive review.
+| method | repair | over-clean | damage |
+|---|---|---|---|
+| **introact_full** | **0.367** | **0.083** | **0.0121** |
+| ablate_no_reprobe | 0.391 | 0.200 | 0.0268 |
+| ablate_no_verify | 0.382 | 0.283 | 0.0568 |
+| ablate_no_structure | 0.141 | 0.167 | 0.0222 |
+| stat_only | 0.168 | 0.417 | 0.0888 |
+| always_clean | -0.027 | 1.000 | 0.2071 |
 
 ## Also still open
 

@@ -46,6 +46,39 @@ class ActionOutcome:
 # -- detection helpers ------------------------------------------------------
 
 
+def robust_scale(series: np.ndarray, n_blocks: int = 8) -> float:
+    """Typical local spread of a window, immune to level displacement.
+
+    The median of per-block interquartile ranges, not the IQR of the whole
+    window. The distinction is not cosmetic: a displaced segment inflates the
+    global IQR roughly threefold on this corpus, and since that quantity is the
+    denominator of every scale-free indicator here -- forecast error, jump
+    magnitude, noise ratio -- the contamination ends up dividing away its own
+    evidence and reads as an easier-than-average window. Blockwise, only the
+    block spanning the break is affected and the median discards it.
+    """
+    series = np.asarray(series, dtype=np.float64)
+    finite = series[np.isfinite(series)]
+    if finite.size == 0:
+        return 1e-8
+
+    def iqr(x):
+        q75, q25 = np.percentile(x, [75, 25])
+        return float(q75 - q25)
+
+    scale = 0.0
+    if finite.size >= 4 * n_blocks:
+        spreads = [iqr(b) for b in np.array_split(finite, n_blocks) if len(b) >= 4]
+        positive = [v for v in spreads if v > 1e-12]
+        if positive:
+            scale = float(np.median(positive))
+    if scale < 1e-8:
+        scale = iqr(finite)
+    if scale < 1e-8:
+        scale = float(np.std(finite))
+    return max(scale, 1e-8)
+
+
 def missing_mask(
     series: np.ndarray,
     min_run: int = MIN_FLATLINE_RUN,

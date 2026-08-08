@@ -31,6 +31,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
+from .actions import robust_scale
 from .backends.base import CAP_ENCODE
 from .types import ProbeResult
 
@@ -80,17 +81,13 @@ class ProbeConfig:
     seed: int = 42
 
 
-def reference_scale(series: np.ndarray) -> float:
-    """Robust spread of a window, used to make every error scale-free."""
-    series = np.asarray(series, dtype=np.float64)
-    finite = series[np.isfinite(series)]
-    if finite.size == 0:
-        return 1.0
-    q75, q25 = np.percentile(finite, [75, 25])
-    scale = float(q75 - q25)
-    if scale < 1e-8:
-        scale = float(np.std(finite))
-    return max(scale, 1e-6)
+def reference_scale(series: np.ndarray, n_blocks: int = 8) -> float:
+    """Fixed reference spread for a window's error normalisation.
+
+    Delegates to :func:`introact_ts.actions.robust_scale`, which explains why
+    this is a blockwise median rather than a global IQR.
+    """
+    return max(robust_scale(series, n_blocks=n_blocks), 1e-6)
 
 
 def _naive_fill(series: np.ndarray) -> np.ndarray:

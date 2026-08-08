@@ -26,6 +26,7 @@ from scipy.signal import medfilt, savgol_filter
 
 from .actions import (
     changepoints,
+    robust_scale,
     dominant_period,
     hampel_outliers,
     isolated_spikes,
@@ -276,8 +277,7 @@ def statistical_evidence(series: np.ndarray) -> dict:
         if win % 2 == 0:
             win += 1
         hf = filled - savgol_filter(filled, window_length=win, polyorder=2)
-        q75, q25 = np.percentile(filled, [75, 25])
-        spread = max(float(q75 - q25), 1e-8)
+        spread = robust_scale(filled)
         hf_mad = 1.4826 * float(np.median(np.abs(hf - np.median(hf))))
         ev["noise_ratio"] = float(hf_mad / spread)
     else:
@@ -285,8 +285,7 @@ def statistical_evidence(series: np.ndarray) -> dict:
 
     cps = changepoints(filled)
     ev["n_changepoints"] = int(len(cps))
-    q75, q25 = np.percentile(filled, [75, 25])
-    spread = max(float(q75 - q25), 1e-8)
+    spread = robust_scale(filled)
 
     # A permanent level shift and a transient excursion both produce
     # changepoints, but they are opposite cases: the first is a misalignment
@@ -332,8 +331,6 @@ def statistical_evidence(series: np.ndarray) -> dict:
     ev["shift_strength"] = float(max(0.0, jump - transient) * purity)
 
     med = np.median(filled)
-    q75, q25 = np.percentile(filled, [75, 25])
-    spread = max(float(q75 - q25), 1e-8)
     ev["extreme_frac"] = float(np.mean(np.abs(filled - med) / spread > 3.0))
     return ev
 
