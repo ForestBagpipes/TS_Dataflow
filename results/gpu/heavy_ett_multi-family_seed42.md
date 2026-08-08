@@ -8,33 +8,48 @@ Corpus: 210 windows, source `ett`, backend preset `multi-family`.
 
 ## Headline
 
-| method | detect F1 | action acc | repair NMSE red. | over-clean rate | damage to protected | rollbacks | abstain |
-|---|---|---|---|---|---|---|---|
-| no_action | 0.729 | 0.000 | 0.000 | 0.000 | 0.0000 | 0 | 0.000 |
-| always_clean | 0.729 | 0.707 | 0.042 | 1.000 | 0.2085 | 0 | 0.000 |
-| stat_only | 0.729 | 0.643 | 0.766 | 0.500 | 0.0961 | 0 | 0.000 |
-| quality_rank | 0.729 | 0.114 | 0.019 | 0.400 | 0.0947 | 0 | 0.000 |
-| introact_full | 0.729 | 0.257 | 0.320 | 0.200 | 0.0254 | 153 | 0.033 |
-| ablate_no_structure | 0.729 | 0.343 | 0.304 | 0.257 | 0.0282 | 92 | 0.033 |
-| ablate_no_reprobe | 0.729 | 0.443 | 0.516 | 0.257 | 0.0583 | 99 | 0.048 |
-| ablate_no_verify | 0.729 | 0.550 | 0.484 | 0.400 | 0.1181 | 0 | 0.052 |
-| ablate_no_peer_calibration | 0.738 | 0.250 | 0.323 | 0.200 | 0.0254 | 152 | 0.043 |
-| ablate_no_protection | 0.729 | 0.314 | 0.503 | 0.271 | 0.0297 | 160 | 0.119 |
+| method | **net corpus** | repair (contaminated) | over-clean rate | damage to protected | detect F1 | action acc | rollbacks | abstain |
+|---|---|---|---|---|---|---|---|---|
+| no_action | **+0.000** | 0.000 | 0.000 | 0.0000 | 0.729 | 0.000 | 0 | 0.000 |
+| always_clean | **-0.032** | 0.042 | 1.000 | 0.2085 | 0.729 | 0.707 | 0 | 0.000 |
+| stat_only | **+0.731** | 0.766 | 0.500 | 0.0961 | 0.729 | 0.643 | 0 | 0.000 |
+| quality_rank | **-0.015** | 0.019 | 0.400 | 0.0947 | 0.729 | 0.114 | 0 | 0.000 |
+| introact_full | **+0.311** | 0.320 | 0.200 | 0.0254 | 0.729 | 0.257 | 153 | 0.033 |
+| ablate_no_structure | **+0.294** | 0.304 | 0.257 | 0.0282 | 0.729 | 0.343 | 92 | 0.033 |
+| ablate_no_reprobe | **+0.495** | 0.516 | 0.257 | 0.0583 | 0.729 | 0.443 | 99 | 0.048 |
+| ablate_no_verify | **+0.442** | 0.484 | 0.400 | 0.1181 | 0.729 | 0.550 | 0 | 0.052 |
+| ablate_no_peer_calibration | **+0.314** | 0.323 | 0.200 | 0.0254 | 0.738 | 0.250 | 152 | 0.043 |
+| ablate_no_protection | **+0.493** | 0.503 | 0.271 | 0.0297 | 0.729 | 0.314 | 160 | 0.119 |
+
+`net corpus` is the reduction in mean normalised distance-to-truth over *every* window with a pristine reference, contaminated and protected alike. Repair and damage are trade-offs against each other and neither column alone can say whether running the pipeline was worth it; this one can.
+
+| method | windows improved | windows worsened |
+|---|---|---|
+| no_action | 0 | 0 |
+| always_clean | 57 | 153 |
+| stat_only | 76 | 68 |
+| quality_rank | 10 | 43 |
+| introact_full | 33 | 20 |
+| ablate_no_structure | 37 | 35 |
+| ablate_no_reprobe | 50 | 35 |
+| ablate_no_verify | 56 | 59 |
+| ablate_no_peer_calibration | 33 | 20 |
+| ablate_no_protection | 41 | 25 |
 
 ## Transfer to models that took no part in curation
 
 | method | amazon/chronos-t5-small | surrogate-s7 |
 |---|---|---|
-| no_action | -0.0029 | +0.0000 |
-| always_clean | +0.0633 | +0.0293 |
-| stat_only | +0.2754 | +0.3025 |
-| quality_rank | +0.0671 | +0.0130 |
-| introact_full | +0.0718 | +0.0882 |
-| ablate_no_structure | +0.0740 | +0.0936 |
-| ablate_no_reprobe | +0.1437 | +0.1834 |
-| ablate_no_verify | +0.1142 | +0.1899 |
-| ablate_no_peer_calibration | +0.0806 | +0.0887 |
-| ablate_no_protection | +0.1281 | +0.1600 |
+| no_action | +0.0105 | +0.0000 |
+| always_clean | +0.0700 | +0.0293 |
+| stat_only | +0.2724 | +0.3025 |
+| quality_rank | +0.0687 | +0.0130 |
+| introact_full | +0.0723 | +0.0882 |
+| ablate_no_structure | +0.0697 | +0.0936 |
+| ablate_no_reprobe | +0.1476 | +0.1834 |
+| ablate_no_verify | +0.1360 | +0.1899 |
+| ablate_no_peer_calibration | +0.0705 | +0.0887 |
+| ablate_no_protection | +0.1304 | +0.1600 |
 
 ## Downstream transfer: train on curated data, test on pristine data
 

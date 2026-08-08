@@ -1,4 +1,4 @@
-# Handoff — state as of 2026-08-08
+# Handoff — state as of 2026-08-08 (session 2)
 
 Everything is committed. Both machines can be powered off; nothing is left
 running that needs to finish.
@@ -104,6 +104,49 @@ Full table, real TSFM after the fix:
 | ablate_no_structure | 0.141 | 0.167 | 0.0222 |
 | stat_only | 0.168 | 0.417 | 0.0888 |
 | always_clean | -0.027 | 1.000 | 0.2071 |
+
+## The trade-off the paper has to argue, not hide
+
+Heavy corpus (210 windows, 67% contaminated), real TSFMs, after the scale fix:
+
+| method | net corpus | repair | over-clean | damage | improved | worsened | edit precision |
+|---|---|---|---|---|---|---|---|
+| stat_only | **+0.731** | 0.766 | 0.500 | 0.0961 | 76 | 68 | 53% |
+| ablate_no_reprobe | +0.495 | 0.516 | 0.257 | 0.0583 | 50 | 35 | 59% |
+| ablate_no_protection | +0.493 | 0.503 | 0.271 | 0.0297 | 41 | 25 | 62% |
+| ablate_no_verify | +0.442 | 0.484 | 0.400 | 0.1181 | 56 | 59 | 49% |
+| **introact_full** | +0.311 | 0.320 | **0.200** | **0.0254** | 33 | **20** | **62%** |
+| always_clean | -0.032 | 0.042 | 1.000 | 0.2085 | 57 | 153 | 27% |
+
+At this contamination rate the plain statistical baseline more than doubles our
+net effect. It is not an artefact: with two thirds of the corpus dirty,
+repairing indiscriminately pays, and the windows that pay most are the
+`level_shift` ones whose NMSE sits at 4.76 while every other contamination is
+below 0.9. One stratum dominates the average.
+
+What IntroAct-TS buys is on the other side of the ledger: it damages 20 windows
+where stat_only damages 68, at a 62% edit precision against 53%, with a fifth
+of the over-cleaning and a quarter of the damage. It edits 53 windows where
+stat_only edits 144 — and that is also the weakness, because plenty of the 91 it
+declined were genuinely repairable.
+
+Two honest options, and they are not exclusive:
+
+1. **Argue the operating point.** Verified curation trades recall for precision.
+   That is the right trade when data is irreplaceable and a wrong edit is
+   expensive, and the wrong one when the corpus is mostly rubbish and anything
+   is better than nothing. Report both regimes (`small` at 37% contamination has
+   IntroAct-TS ahead on net; `heavy` at 67% does not) and say which the method
+   is for.
+2. **Recover recall without giving up precision.** 103 of the 153 rollbacks were
+   ROLLED_BACK_UTILITY. Before touching `epsilon`, find out how many of those
+   were edits that would in fact have moved the window toward the truth --
+   the ground truth is available offline, so this is directly measurable.
+   If a large share were, the utility term is too strict; if few were, the
+   agent is behaving correctly and option 1 is the whole story.
+
+Do the measurement in option 2 first. It costs one run and it decides whether
+there is a bug or a position to defend.
 
 ## Also still open
 

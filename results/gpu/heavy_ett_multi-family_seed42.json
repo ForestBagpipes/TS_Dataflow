@@ -505,6 +505,46 @@
           }
         }
       },
+      "corpus_effect": {
+        "n": 210,
+        "nmse_before": 0.9355958407984509,
+        "nmse_after": 0.9355958407984509,
+        "net_reduction": 0.0,
+        "windows_improved": 0,
+        "windows_worsened": 0,
+        "per_stratum": {
+          "changepoint": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "clean": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "clean_ood": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "contaminated": {
+            "n": 140,
+            "before": 1.4033937611976763,
+            "after": 1.4033937611976763
+          },
+          "hard": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "rare_valid": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.0
+          }
+        }
+      },
       "protection": {
         "n_protected": 70,
         "over_clean_rate": 0.0,
@@ -560,9 +600,9 @@
       },
       "transfer": {
         "amazon/chronos-t5-small": {
-          "nrmse_before": 1.389582406249951,
-          "nrmse_after": 1.3935510070129424,
-          "improvement": -0.002855966472475213,
+          "nrmse_before": 1.3992615508093678,
+          "nrmse_after": 1.3845768754770773,
+          "improvement": 0.01049458932377334,
           "n": 210
         },
         "surrogate-s7": {
@@ -670,6 +710,46 @@
           }
         }
       },
+      "corpus_effect": {
+        "n": 210,
+        "nmse_before": 0.9355958407984509,
+        "nmse_after": 0.9658654236303372,
+        "net_reduction": -0.032353267844856815,
+        "windows_improved": 57,
+        "windows_worsened": 153,
+        "per_stratum": {
+          "changepoint": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.11995181904859872
+          },
+          "clean": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.18811775858965907
+          },
+          "clean_ood": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.14641755674879436
+          },
+          "contaminated": {
+            "n": 140,
+            "before": 1.4033937611976763,
+            "after": 1.3445556107852152
+          },
+          "hard": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.5263091605945464
+          },
+          "rare_valid": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.14524064583640484
+          }
+        }
+      },
       "protection": {
         "n_protected": 70,
         "over_clean_rate": 1.0,
@@ -725,9 +805,9 @@
       },
       "transfer": {
         "amazon/chronos-t5-small": {
-          "nrmse_before": 1.3912310841001776,
-          "nrmse_after": 1.3031951149166552,
-          "improvement": 0.06327918502515517,
+          "nrmse_before": 1.3914657293695736,
+          "nrmse_after": 1.2940801920903708,
+          "improvement": 0.06998773683296167,
           "n": 210
         },
         "surrogate-s7": {
@@ -835,6 +915,46 @@
           }
         }
       },
+      "corpus_effect": {
+        "n": 210,
+        "nmse_before": 0.9355958407984509,
+        "nmse_after": 0.25139123948843256,
+        "net_reduction": 0.7313035944303774,
+        "windows_improved": 76,
+        "windows_worsened": 68,
+        "per_stratum": {
+          "changepoint": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.05381949374243704
+          },
+          "clean": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.062855355553245
+          },
+          "clean_ood": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.12418133496637036
+          },
+          "contaminated": {
+            "n": 140,
+            "before": 1.4033937611976763,
+            "after": 0.3290447529472571
+          },
+          "hard": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.21036073487174348
+          },
+          "rare_valid": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.07925860665422194
+          }
+        }
+      },
       "protection": {
         "n_protected": 70,
         "over_clean_rate": 0.5,
@@ -890,9 +1010,9 @@
       },
       "transfer": {
         "amazon/chronos-t5-small": {
-          "nrmse_before": 1.3840510006317426,
-          "nrmse_after": 1.002830813096949,
-          "improvement": 0.2754379624455946,
+          "nrmse_before": 1.392728375284119,
+          "nrmse_after": 1.0133013299298919,
+          "improvement": 0.2724343469176632,
           "n": 210
         },
         "surrogate-s7": {
@@ -1000,6 +1120,46 @@
           }
         }
       },
+      "corpus_effect": {
+        "n": 210,
+        "nmse_before": 0.9355958407984509,
+        "nmse_after": 0.949380267751495,
+        "net_reduction": -0.014733313629611944,
+        "windows_improved": 10,
+        "windows_worsened": 43,
+        "per_stratum": {
+          "changepoint": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.008524874723042867
+          },
+          "clean": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.026515695450950838
+          },
+          "clean_ood": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.12886879541164345
+          },
+          "contaminated": {
+            "n": 140,
+            "before": 1.4033937611976763,
+            "after": 1.3767315459939256
+          },
+          "hard": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.36057579155139274
+          },
+          "rare_valid": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.05587156313922838
+          }
+        }
+      },
       "protection": {
         "n_protected": 70,
         "over_clean_rate": 0.4,
@@ -1055,9 +1215,9 @@
       },
       "transfer": {
         "amazon/chronos-t5-small": {
-          "nrmse_before": 1.3939404926905952,
-          "nrmse_after": 1.3003474135792799,
-          "improvement": 0.0671428081773141,
+          "nrmse_before": 1.3890529230106914,
+          "nrmse_after": 1.2936563529327525,
+          "improvement": 0.06867741933919436,
           "n": 210
         },
         "surrogate-s7": {
@@ -1165,6 +1325,46 @@
           }
         }
       },
+      "corpus_effect": {
+        "n": 210,
+        "nmse_before": 0.9355958407984509,
+        "nmse_after": 0.644438144101758,
+        "net_reduction": 0.3112002896979691,
+        "windows_improved": 33,
+        "windows_worsened": 20,
+        "per_stratum": {
+          "changepoint": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.005275572192247111
+          },
+          "clean": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.014162241949607569
+          },
+          "clean_ood": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.1097953998725552
+          },
+          "contaminated": {
+            "n": 140,
+            "before": 1.4033937611976763,
+            "after": 0.9539579216960977
+          },
+          "hard": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.019692220541002493
+          },
+          "rare_valid": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.007351222943265606
+          }
+        }
+      },
       "protection": {
         "n_protected": 70,
         "over_clean_rate": 0.2,
@@ -1223,9 +1423,9 @@
       },
       "transfer": {
         "amazon/chronos-t5-small": {
-          "nrmse_before": 1.3889299759880303,
-          "nrmse_after": 1.2891977931762142,
-          "improvement": 0.0718050474365135,
+          "nrmse_before": 1.3873216010793057,
+          "nrmse_after": 1.2869658813013702,
+          "improvement": 0.07233774757047029,
           "n": 210
         },
         "surrogate-s7": {
@@ -1333,6 +1533,46 @@
           }
         }
       },
+      "corpus_effect": {
+        "n": 210,
+        "nmse_before": 0.9355958407984509,
+        "nmse_after": 0.660724249049695,
+        "net_reduction": 0.2937930885992146,
+        "windows_improved": 37,
+        "windows_worsened": 35,
+        "per_stratum": {
+          "changepoint": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.007120265340419166
+          },
+          "clean": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.01509129182847754
+          },
+          "clean_ood": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.11535310660059847
+          },
+          "contaminated": {
+            "n": 140,
+            "before": 1.4033937611976763,
+            "after": 0.9769860924158528
+          },
+          "hard": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.031210031420796487
+          },
+          "rare_valid": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.006768974601443723
+          }
+        }
+      },
       "protection": {
         "n_protected": 70,
         "over_clean_rate": 0.2571428571428571,
@@ -1390,9 +1630,9 @@
       },
       "transfer": {
         "amazon/chronos-t5-small": {
-          "nrmse_before": 1.3940272954254171,
-          "nrmse_after": 1.2908482416771228,
-          "improvement": 0.07401508857601469,
+          "nrmse_before": 1.3776133760812113,
+          "nrmse_after": 1.2816306846923438,
+          "improvement": 0.0696731703214889,
           "n": 210
         },
         "surrogate-s7": {
@@ -1500,6 +1740,46 @@
           }
         }
       },
+      "corpus_effect": {
+        "n": 210,
+        "nmse_before": 0.9355958407984509,
+        "nmse_after": 0.4725808673693979,
+        "net_reduction": 0.4948878065061826,
+        "windows_improved": 50,
+        "windows_worsened": 35,
+        "per_stratum": {
+          "changepoint": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.03956687990859092
+          },
+          "clean": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.041121648253818144
+          },
+          "clean_ood": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.1097953998725552
+          },
+          "contaminated": {
+            "n": 140,
+            "before": 1.4033937611976763,
+            "after": 0.6797098253188594
+          },
+          "hard": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.05109423674269289
+          },
+          "rare_valid": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.06278042363092541
+          }
+        }
+      },
       "protection": {
         "n_protected": 70,
         "over_clean_rate": 0.2571428571428571,
@@ -1557,9 +1837,9 @@
       },
       "transfer": {
         "amazon/chronos-t5-small": {
-          "nrmse_before": 1.3832846177425056,
-          "nrmse_after": 1.1845541384990663,
-          "improvement": 0.1436656467472064,
+          "nrmse_before": 1.3910475339776998,
+          "nrmse_after": 1.1857029687873408,
+          "improvement": 0.14761865441303523,
           "n": 210
         },
         "surrogate-s7": {
@@ -1667,6 +1947,46 @@
           }
         }
       },
+      "corpus_effect": {
+        "n": 210,
+        "nmse_before": 0.9355958407984509,
+        "nmse_after": 0.5218430450167812,
+        "net_reduction": 0.4422345394658521,
+        "windows_improved": 56,
+        "windows_worsened": 59,
+        "per_stratum": {
+          "changepoint": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.023135842659450158
+          },
+          "clean": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.01856870304883109
+          },
+          "clean_ood": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.11535310660059847
+          },
+          "contaminated": {
+            "n": 140,
+            "before": 1.4033937611976763,
+            "after": 0.7237046288772641
+          },
+          "hard": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.5658028328043364
+          },
+          "rare_valid": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.04270497645433179
+          }
+        }
+      },
       "protection": {
         "n_protected": 70,
         "over_clean_rate": 0.4,
@@ -1722,9 +2042,9 @@
       },
       "transfer": {
         "amazon/chronos-t5-small": {
-          "nrmse_before": 1.380290352727138,
-          "nrmse_after": 1.2226062226726504,
-          "improvement": 0.11423982623868945,
+          "nrmse_before": 1.3954110148296217,
+          "nrmse_after": 1.2056887631569466,
+          "improvement": 0.13596155516648256,
           "n": 210
         },
         "surrogate-s7": {
@@ -1832,6 +2152,46 @@
           }
         }
       },
+      "corpus_effect": {
+        "n": 210,
+        "nmse_before": 0.9355958407984509,
+        "nmse_after": 0.6416300137668808,
+        "net_reduction": 0.31420172494642074,
+        "windows_improved": 33,
+        "windows_worsened": 20,
+        "per_stratum": {
+          "changepoint": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.005275572192247111
+          },
+          "clean": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.014162241949607569
+          },
+          "clean_ood": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.1097953998725552
+          },
+          "contaminated": {
+            "n": 140,
+            "before": 1.4033937611976763,
+            "after": 0.949745726193782
+          },
+          "hard": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.019692220541002493
+          },
+          "rare_valid": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.007351222943265606
+          }
+        }
+      },
       "protection": {
         "n_protected": 70,
         "over_clean_rate": 0.2,
@@ -1890,9 +2250,9 @@
       },
       "transfer": {
         "amazon/chronos-t5-small": {
-          "nrmse_before": 1.3907126575974054,
-          "nrmse_after": 1.2785570187544906,
-          "improvement": 0.08064616240473055,
+          "nrmse_before": 1.3867414481180678,
+          "nrmse_after": 1.2889245487059913,
+          "improvement": 0.07053722923247352,
           "n": 210
         },
         "surrogate-s7": {
@@ -2000,6 +2360,46 @@
           }
         }
       },
+      "corpus_effect": {
+        "n": 210,
+        "nmse_before": 0.9355958407984509,
+        "nmse_after": 0.47475843125143097,
+        "net_reduction": 0.49256034438303475,
+        "windows_improved": 41,
+        "windows_worsened": 25,
+        "per_stratum": {
+          "changepoint": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.005275572192247111
+          },
+          "clean": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.019182342754307687
+          },
+          "clean_ood": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.10988890790349364
+          },
+          "contaminated": {
+            "n": 140,
+            "before": 1.4033937611976763,
+            "after": 0.697311533636939
+          },
+          "hard": {
+            "n": 10,
+            "before": 0.0,
+            "after": 0.02965928692624901
+          },
+          "rare_valid": {
+            "n": 20,
+            "before": 0.0,
+            "after": 0.012188566416150983
+          }
+        }
+      },
       "protection": {
         "n_protected": 70,
         "over_clean_rate": 0.2714285714285714,
@@ -2058,9 +2458,9 @@
       },
       "transfer": {
         "amazon/chronos-t5-small": {
-          "nrmse_before": 1.3930044231497496,
-          "nrmse_after": 1.2144994715035222,
-          "improvement": 0.12814385128986616,
+          "nrmse_before": 1.3877242963851644,
+          "nrmse_after": 1.2068121011592319,
+          "improvement": 0.13036609339274707,
           "n": 210
         },
         "surrogate-s7": {
@@ -2092,5 +2492,5 @@
       "spike": 20
     }
   },
-  "wall_time_s": 1130.6512656211853
+  "wall_time_s": 1068.853340625763
 }
