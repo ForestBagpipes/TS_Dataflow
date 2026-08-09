@@ -17,6 +17,8 @@ Two invariants hold throughout and are what make the trace auditable:
     the whole episode rather than drifting with the edits.
 """
 
+import os
+from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -53,6 +55,11 @@ class AgentConfig:
     K_peers: int = 40
     max_probe_calls: int = 10
     seed: int = 42
+    #: Worker processes for the statistical half of perception. None means all
+    #: cores but two. Set to 1 to disable, which tests rely on for determinism
+    #: of failure messages rather than of results, since the computation itself
+    #: is deterministic either way.
+    n_jobs: int = None
     #: When False the peer group becomes the whole corpus, which is exactly the
     #: uncalibrated baseline: behaviour is then z-scored globally and a volatile
     #: window looks defective simply for being volatile.
@@ -75,15 +82,44 @@ class IntroActAgent:
     # -- perception ---------------------------------------------------------
 
     def perceive(self, windows: list) -> list:
-        """Profile, probe and peer-calibrate the whole corpus once."""
-        profiles, behaviors, probes, evidences = [], [], [], []
-        for w in windows:
-            series = np.asarray(w.series, dtype=np.float64)
-            profiles.append(extract_statistical_profile(_finite(series)))
+        """Profile, probe and peer-calibrate the whole corpus once.
+
+        The statistical half of perception, the 12 dimensional profile and the
+        defect evidence, is pure numpy and by far the slower half: STL, PELT,
+        ADF and a sample entropy per window add up to roughly half a second
+        each, against a few milliseconds for a batched GPU probe. Run serially
+        it pins one core at 100 percent while the accelerator idles. It is also
+        embarrassingly parallel, so it is farmed out to processes when the
+        corpus is large enough to pay for the fork.
+        """
+        series_list = [np.asarray(w.series, dtype=np.float64) for w in windows]
+        finite_list = [_finite(s) for s in series_list]
+
+        n_jobs = self.cfg.n_jobs
+        if n_jobs is None:
+            n_jobs = max(1, (os.cpu_count() or 2) - 2)
+        use_pool = n_jobs > 1 and len(windows) >= 64
+
+        if use_pool:
+            # Workers touch numpy only. The parent holds the CUDA context and
+            # the children never enter it, which is what makes a fork safe here.
+            chunk = max(1, len(windows) // (n_jobs * 4))
+            with ProcessPoolExecutor(max_workers=n_jobs) as pool:
+                profiles = list(
+                    pool.map(extract_statistical_profile, finite_list, chunksize=chunk)
+                )
+                evidences = list(
+                    pool.map(statistical_evidence, series_list, chunksize=chunk)
+                )
+        else:
+            profiles = [extract_statistical_profile(x) for x in finite_list]
+            evidences = [statistical_evidence(x) for x in series_list]
+
+        behaviors, probes = [], []
+        for series in series_list:
             pr = probe_window(series, self.models, reference_scale(series), self.cfg.probe)
             probes.append(pr)
             behaviors.append(pr.vector)
-            evidences.append(statistical_evidence(series))
 
         P = np.stack(profiles)
         B = np.stack(behaviors)

@@ -201,6 +201,14 @@ class GovernanceTrace:
             "delta_utility": self.final_utility - self.initial_utility,
             "probe_calls": self.probe_calls,
             "crop_offset": self.crop_offset,
+            # The state the policy conditioned on. Without it an offline audit
+            # cannot ask whether the agent knew when it was unsure, which is
+            # what a risk coverage curve measures.
+            "hypothesis": self.risk_state.get("hypothesis"),
+            "confidence": self.risk_state.get("confidence"),
+            "behav_risk": self.risk_state.get("behav_risk"),
+            "dominant_defect": self.risk_state.get("dominant_defect"),
+            "defect_strength": self.risk_state.get("defect_strength"),
             "steps": [
                 {
                     "action": r.action.value,
