@@ -14,31 +14,31 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 
-\title{IntroSpect-TS: Training-Free Data Quality Assessment \\
-for Time Series Foundation Models via Behavioral Introspection \\[4pt]
-\large IntroSpect-TS：基于行为内省的时序基础模型零训练数据质量评估}
+\title{IntroAct-TS: An Intervention-Verified and Reversible \\
+Data Curation Agent for Time-Series Foundation Models \\[4pt]
+\large IntroAct-TS：面向时序基础模型的可验证可回滚数据治理智能体}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-The quality of pretraining data fundamentally determines time series foundation model (TSFM) performance, yet the TSFM community lacks principled methods for assessing per-sample data quality. While the LLM community has developed sophisticated frameworks, these either cannot process numerical time series or require expensive auxiliary training. We introduce IntroSpect-TS, a training-free method that extracts data quality signals directly from a frozen TSFM's inference behavior. The key insight: a pretrained TSFM implicitly encodes knowledge of normal temporal patterns. IntroSpect-TS collects multi-signal behavioral traces during a single forward pass, then applies profile-conditioned peer calibration to isolate quality-induced deviations from domain-induced difficulty. The method's design rests on a formal justification (Proposition~1) that makes explicit the assumptions required for valid quality identification. Experiments across three TSFM architectures and seven benchmarks aim to demonstrate that IntroSpect-TS enables better data curation than heuristic, learned, and raw-loss baselines, with ablation confirming peer calibration as the critical component. The method requires no parameter updates, no LLM calls, and no auxiliary training.
+Time-series foundation models are pretrained on corpora whose windows contain missing segments, isolated spikes, additive noise, and misaligned level displacements. Curating such a corpus is not the same as removing whatever looks unusual, because trend turns, regime switches, extreme peaks, and out-of-distribution but internally consistent windows also raise prediction error while carrying rare structure a model needs. The difficult question is therefore not which windows are hard to predict, but which edits to those windows are worth committing. Existing work either scores window quality or selects a cleaning operator, and in both cases the action takes effect with no check that it helped. We introduce IntroAct-TS, a curation agent that treats every action as a candidate intervention. It builds a risk state from statistical profiles, from the behaviour of a frozen model, and from calibration against structurally similar windows, then chooses among keeping, imputing, despiking, denoising, resegmenting, quarantining, and refusing to act. The chosen action is applied to a sandbox copy, the frozen model is probed again on that copy, and the edit is committed only if model utility improved, temporal structure was preserved, and the decision risk is acceptable. Otherwise the agent rolls back, tries another action, or declines, and every episode leaves a replayable trace.
 
 \vspace{4pt}
-\noindent \textbf{摘要：}预训练数据质量从根本上决定时序基础模型（TSFM）的性能，然而TSFM社区缺乏原则性的逐样本质量评估方法。本文提出IntroSpect-TS，一种零训练方法，通过行为内省直接从冻结TSFM的推理行为中提取质量信号。核心洞察：预训练TSFM隐式编码了正常时序模式的知识。方法在单次前向传播中收集多信号行为轨迹，然后应用画像条件同类校准将质量引起的偏差与领域难度隔离开来。方法的设计建立在一个形式化论证之上（命题1），明确了有效质量识别所需的假设。在三种TSFM架构和七个基准上的实验旨在证明IntroSpect-TS能比启发式、学习和原始损失基线实现更好的数据筛选。
+\noindent \textbf{摘要：}时序基础模型的预训练语料中，窗口常含有缺失片段、孤立尖峰、加性噪声与水平错位。治理这类语料并不等于删除一切看起来异常的部分，因为趋势转折、状态切换、极端峰值以及分布外但内部自洽的窗口同样会抬高预测误差，而它们承载着模型所需的稀有结构。因此真正困难的问题不是哪些窗口难以预测，而是对这些窗口的哪一次修改值得提交。已有工作或者给窗口打分，或者挑选清洗算子，两种情况下动作都直接生效，没有任何环节检验它是否真的有益。本文提出 IntroAct-TS，一个把每次动作都视为候选干预的数据治理智能体。智能体从统计画像、冻结模型的行为反应以及与结构相似窗口的校准中构建风险状态，然后在保留、插补、去尖峰、去噪、重分段、隔离与拒绝处理之间选择。所选动作先作用于沙箱副本，随后在该副本上重新探测冻结模型，只有当模型效用改善、时序结构得到保持且决策风险可接受时才提交，否则回滚、改试其他动作或拒绝处理。每个回合都留下可重放的治理轨迹，使治理决策可审计、可撤销。
 \end{abstract}
 
 \section{引言}
 
-时序基础模型（TSFM）已迅速成为预测领域的主导范式。TimesFM、MOIRAI、Chronos、MOMENT和Timer等架构在跨能源、交通、天气、金融和医疗的大规模时序语料库上预训练。隐含假设很简单：更多数据产生更具泛化能力的模型。然而这种“可用即包含”范式忽视了一个根本问题：所有预训练数据都同等有用吗？实践中，大规模语料库包含大量噪声和冗余数据，训练此类数据浪费计算资源并可能降低性能。一个自然的应对是训练有监督的质量分类器。然而，TSFM预训练语料库通常缺乏质量标签——标注100B+时间点中极小部分都不可行。挑战因此在于是\emph{无}标注数据地评估质量，仅使用预训练模型已有的信号。
+时序基础模型（TSFM）已迅速成为预测领域的主导范式。TimesFM、MOIRAI、Chronos、MOMENT和Timer等架构在跨能源、交通、天气、金融和医疗的大规模时序语料库上预训练。隐含假设很简单：更多数据产生更具泛化能力的模型。然而这种可用即包含范式忽视了一个根本问题：所有预训练数据都同等有用吗？实践中，大规模语料库包含大量噪声和冗余数据，训练此类数据浪费计算资源并可能降低性能。一个自然的应对是训练有监督的质量分类器。然而，TSFM预训练语料库通常缺乏质量标签，标注100B+时间点中极小部分都不可行。挑战因此在于是\emph{无}标注数据地评估质量，仅使用预训练模型已有的信号。
 
-LLM社区已认识到类似问题，发展了丰富的数据质量方法。静态过滤使用启发式分数；在线自适应方法根据反馈调整采样；内省引导方法如IGDS从LLM SAE中提取因果特征用于数据选择。但这些方法要么无法处理数值时序——TSQAgent最近证明LLM在时序质量评估上存在困难——要么需要昂贵辅助训练。TSFM实践者缺乏原则性工具。关键在于，为TS语料库获取质量标签在大规模下不可行，使有监督质量模型不切实际。因此零训练方法不仅是便利的，而是部署在真实TSFM语料库上的必要条件。
+LLM社区已认识到类似问题，发展了丰富的数据质量方法。静态过滤使用启发式分数，在线自适应方法根据反馈调整采样，内省引导方法如IGDS从LLM SAE中提取因果特征用于数据选择。但这些方法要么无法处理数值时序，TSQAgent最近证明LLM在时序质量评估上存在困难，要么需要昂贵辅助训练。TSFM实践者缺乏原则性工具。关键在于，为TS语料库获取质量标签在大规模下不可行，使有监督质量模型不切实际。因此零训练方法不仅是便利的，而是部署在真实TSFM语料库上的必要条件。
 
 本文聚焦一个此前未被回答的问题：\textbf{给定时序窗口语料库和冻结预训练TSFM，能否在无辅助模型训练、无参数更新、无外部评估器的情况下评估每个窗口的训练质量？}回答该问题需要解决三个子问题。第一，TSFM前向传播中哪些行为信号携带输入质量信息？第二，如何将真正低质量数据与仅对TSFM分布外的数据分开？第三，如何验证质量分数因果地改善下游训练？
 
-我们提出IntroSpect-TS，一种零训练行为内省方法。核心洞察：预训练TSFM已隐式学会区分正常模式和异常信号。阶段1在单次前向传播中收集多信号行为轨迹，阶段2通过画像条件同类校准解决领域混淆——该识别论证形式化为命题~\ref{prop:identification}。方法的设计借鉴后门调整准则~\citep{pearl2009causality}，其中画像作为调整集，其价值在于明确校准有效所需的假设。阶段3按质量分层语料库，阶段4通过下游微调验证。
+我们提出IntroAct-TS，一种零训练行为内省方法。核心洞察：预训练TSFM已隐式学会区分正常模式和异常信号。阶段1在单次前向传播中收集多信号行为轨迹，阶段2通过画像条件同类校准解决领域混淆，该识别论证形式化为命题~\ref{prop:identification}。方法的设计借鉴后门调整准则~\citep{pearl2009causality}，其中画像作为调整集，其价值在于明确校准有效所需的假设。阶段3按质量分层语料库，阶段4通过下游微调验证。
 
-本文贡献：（1）形式化TSFM零训练数据质量评估问题，提出该领域首个行为内省方法。（2）提供形式化论证（命题~\ref{prop:identification}）建立画像条件同类归一化隔离质量与领域难度的条件，配以鲁棒实用算法。（3）设计系统实验方案，覆盖三种TSFM架构和七个基准数据集，包含消融、受控难-vs-脏测试、以及启发式和学习质量评分基线的对比。
+本文贡献：（1）提出面向时序基础模型的干预验证式数据治理问题，把治理建模为带候选动作、行为反馈、结构约束与回滚机制的序贯决策过程，而不是打分或固定清洗流程。（2）提出 IntroAct-TS，将统计画像、冻结模型行为探测与同类校准合成风险状态，并动态选择保留、修复、重分段、隔离或拒绝处理。（3）提出双重验证规则，只有当模型效用改善、时序结构保持且决策风险受控时才提交干预，并指出结构项正是阻止那些靠破坏真实结构来降低预测误差的动作的机制。（4）构建区分人工污染与干净、困难、稀有有效、合法变点及干净分布外窗口的评测体系，并把修复质量与过度清洗分开报告，使得一个方法无法靠无差别修改显得成功。
 
 \section{相关工作}
 
@@ -52,7 +52,7 @@ LLM社区已发展多种数据质量方法。静态过滤、在线方法、多�
 
 \subsection{时序模式表征}
 
-基于统计特征的时序表征在预测领域有悠久历史，应用于模型选择~\citep{wang2006characteristic}、预测精度预测~\citep{kang2017visual}和时序聚类~\citep{liao2005clustering}。趋势强度、季节性、谱熵、平稳性检验和变点分析等特征捕捉了时序独立于领域标签的结构身份。这种独立性使统计画像恰好适合作为条件化变量：具有相似趋势-季节-平稳性画像的序列属于相似的“结构领域”，无论其来源如何，这正是IntroSpect-TS校准时所需的领域同质同类群体。ForecastCore~\citep{forecastcore2026}使用10维模式向量替换TSFM数据选择中的领域标签，展示了该视角的实际价值。我们采用类似的12维特征集进行统计画像，但将其部署在根本不同的角色中：不是作为数据选择的分组标准，而是作为质量评估中去除领域效应的条件化变量。
+基于统计特征的时序表征在预测领域有悠久历史，应用于模型选择~\citep{wang2006characteristic}、预测精度预测~\citep{kang2017visual}和时序聚类~\citep{liao2005clustering}。趋势强度、季节性、谱熵、平稳性检验和变点分析等特征捕捉了时序独立于领域标签的结构身份。这种独立性使统计画像恰好适合作为条件化变量：具有相似趋势-季节-平稳性画像的序列属于相似的“结构领域”，无论其来源如何，这正是IntroAct-TS校准时所需的领域同质同类群体。ForecastCore~\citep{forecastcore2026}使用10维模式向量替换TSFM数据选择中的领域标签，展示了该视角的实际价值。我们采用类似的12维特征集进行统计画像，但将其部署在根本不同的角色中：不是作为数据选择的分组标准，而是作为质量评估中去除领域效应的条件化变量。
 
 \begin{table}[t]
 \centering
@@ -67,7 +67,7 @@ LLM内省（IGDS） & SAE-based特征提取 & 需训练SAE；无TSFM类比 \\
 TSFM可解释性 & TSFM内部概念编码 & 聚焦概念定位，非质量评估 \\
 TSFM数据估值（LTSV） & 逐样本影响估计 & 衡量训练影响，非内在质量 \\
 TSFM语料 & 均衡采样；大规模组装 & 领域均衡，非逐样本质量 \\
-\textbf{IntroSpect-TS} & \textbf{通过行为内省进行零训练质量评估} & \textbf{---} \\
+\textbf{IntroAct-TS} & \textbf{通过行为内省进行零训练质量评估} & \textbf{---} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -83,10 +83,10 @@ TSFM语料 & 均衡采样；大规模组装 & 领域均衡，非逐样本质量 
 
 \textbf{SP3：因果验证。}质量分数可能与启发式相关但未必因果改善训练。验证需要高质量数据训练的TSFM优于低质量数据训练的TSFM，且评分排序不可归约为更简单统计量。
 
-\section{方法：IntroSpect-TS}
+\section{方法：IntroAct-TS}
 
 \begin{algorithm}[t]
-\caption{IntroSpect-TS}
+\caption{IntroAct-TS}
 \label{alg:introspect}
 \begin{algorithmic}[1]
 \State \textbf{输入：} 冻结TSFM $\Phi$，语料库 $\mathcal{D}$，近邻数 $K$，权重 $\mathbf{w}$
@@ -111,7 +111,7 @@ TSFM语料 & 均衡采样；大规模组装 & 领域均衡，非逐样本质量 
 
 \begin{table}[t]
 \centering
-\caption{关键挑战与IntroSpect-TS设计选择。}
+\caption{关键挑战与IntroAct-TS设计选择。}
 \label{tab:challenge_module}
 \begin{tabular}{p{3.5cm}p{5.5cm}p{5.2cm}}
 \toprule
@@ -175,13 +175,13 @@ TSFM语料 & 均衡采样；大规模组装 & 领域均衡，非逐样本质量 
 
 \textbf{数据集。}七个预测基准：Electricity、Traffic、Weather、ETTh1/ETTh2、ETTm1、Exchange、ILI。窗口长度512步长128，$\sim$85,000总计。80\%评分，20\%保留。
 
-\textbf{基线。}（1）随机；（2）原始损失；（3）SNR-based；（4）异常率-based；（5）LLM直接评分；（6）\textbf{有监督学习评分器}——XGBoost在画像特征$\mathbf{p}_i$上训练，使用TSFM微调结果（top vs bottom 25\% MSE）的二元标签，5折交叉验证；（7）全量数据。有监督学习基线直接检验核心声明：如果画像特征在监督训练下能匹配IntroSpect-TS性能，则行为信号无增量价值。
+\textbf{基线。}（1）随机；（2）原始损失；（3）SNR-based；（4）异常率-based；（5）LLM直接评分；（6）\textbf{有监督学习评分器}——XGBoost在画像特征$\mathbf{p}_i$上训练，使用TSFM微调结果（top vs bottom 25\% MSE）的二元标签，5折交叉验证；（7）全量数据。有监督学习基线直接检验核心声明：如果画像特征在监督训练下能匹配IntroAct-TS性能，则行为信号无增量价值。
 
 \textbf{实现。}$K = 50$，均匀融合权重。微调：AdamW，lr $10^{-5}$，10 epoch，单A100。
 
 \subsection{主要结果}
 
-表1呈现投影验证。预期模式：IntroSpect-TS Top-25\%优于Bottom-25\%和所有基线。有监督学习评分器预计优于统计启发式但不及IntroSpect-TS——确认TSFM行为信号包含静态画像特征所不具备的质量相关信息。
+表1呈现投影验证。预期模式：IntroAct-TS Top-25\%优于Bottom-25\%和所有基线。有监督学习评分器预计优于统计启发式但不及IntroAct-TS——确认TSFM行为信号包含静态画像特征所不具备的质量相关信息。
 
 \subsection{消融研究}
 
@@ -190,11 +190,11 @@ TSFM语料 & 均衡采样；大规模组装 & 领域均衡，非逐样本质量 
 \subsection{有监督学习评分器对比}
 \label{sec:learned_baseline}
 
-表1中有监督学习列包含在画像特征上训练的XGBoost分类器。如果IntroSpect-TS优于它，确认行为信号提供超越静态特征的增量信息。如果它匹配或超过IntroSpect-TS，核心声明将被证伪。
+表1中有监督学习列包含在画像特征上训练的XGBoost分类器。如果IntroAct-TS优于它，确认行为信号提供超越静态特征的增量信息。如果它匹配或超过IntroAct-TS，核心声明将被证伪。
 
 \subsection{区分“难”与“脏”}
 
-构造两个受控测试集：\textbf{HBC}——2,000个干净汇率窗口（金融时序分布与传感器类领域显著不同，从领域差异产生高原始损失）；\textbf{EBD}——2,000个注入15\%高斯噪声的电力窗口（15\%经校准使原始损失与HBC可比）。额外评估缺失片段和传感器漂移噪声类型。带同类校准的IntroSpect-TS将它们清晰分离；移除校准将分离瓦解。
+构造两个受控测试集：\textbf{HBC}——2,000个干净汇率窗口（金融时序分布与传感器类领域显著不同，从领域差异产生高原始损失）；\textbf{EBD}——2,000个注入15\%高斯噪声的电力窗口（15\%经校准使原始损失与HBC可比）。额外评估缺失片段和传感器漂移噪声类型。带同类校准的IntroAct-TS将它们清晰分离；移除校准将分离瓦解。
 
 \subsection{额外分析}
 
@@ -208,7 +208,7 @@ TSFM语料 & 均衡采样；大规模组装 & 领域均衡，非逐样本质量 
 
 \subsection{与IGDS和特征内省的关系}
 
-IGDS和IntroSpect-TS汇聚在“模型内部信号指导数据”的共同原则上，通过互补机制实现。IGDS需SAE训练；IntroSpect-TS使用原始行为实现零成本部署。结合两者是有前途的方向。
+IGDS和IntroAct-TS汇聚在“模型内部信号指导数据”的共同原则上，通过互补机制实现。IGDS需SAE训练；IntroAct-TS使用原始行为实现零成本部署。结合两者是有前途的方向。
 
 \subsection{对LLM数据治理的启示}
 
@@ -220,7 +220,7 @@ IGDS和IntroSpect-TS汇聚在“模型内部信号指导数据”的共同原则
 
 \section{结论}
 
-本文提出IntroSpect-TS，一种用于TSFM数据质量评估的零训练行为内省方法。方法将问题分解为信号提取、领域-质量解缠和因果验证，通过形式化论证（命题~\ref{prop:identification}）支持的原则性框架解决每个子问题。
+本文提出IntroAct-TS，一种用于TSFM数据质量评估的零训练行为内省方法。方法将问题分解为信号提取、领域-质量解缠和因果验证，通过形式化论证（命题~\ref{prop:identification}）支持的原则性框架解决每个子问题。
 
 \section*{可复现性声明}
 为方便复现，将于发表时发布所有代码。实验使用公开TSFM检查点和标准基准数据集。画像计算依赖开源库（statsmodels、scipy、ruptures）。有监督学习评分器使用开源XGBoost库。

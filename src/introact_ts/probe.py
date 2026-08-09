@@ -143,6 +143,7 @@ def probe_window(
     models: list,
     scale: float,
     cfg: ProbeConfig = None,
+    region: tuple = None,
 ) -> ProbeResult:
     """Run the full behavioural probe on one window.
 
@@ -154,10 +155,23 @@ def probe_window(
         scale: fixed reference spread (see :func:`reference_scale`). Pass the
             scale of the *original* window for every probe of that window.
         cfg: probe configuration.
+        region: optional half open span of ``series`` to score. Defaults to the
+            whole window. Every probe anchors inside it, while the forecasting
+            context is still allowed to draw on data to its left.
 
     Returns:
-        A :class:`~introact_ts.types.ProbeResult` holding the 13-dim behaviour
-        vector, the scalar utility, and the named parts.
+        A :class:`~introact_ts.types.ProbeResult` holding the behaviour vector,
+        the scalar utility, and the named parts.
+
+    On comparing two utilities
+    --------------------------
+    A utility is only meaningful against another utility computed over the same
+    span. Scoring the last H points of whatever series is passed in satisfies
+    that for every operator except RESEGMENT, which is the one that changes the
+    length: a 512 point window cropped to 265 moves the scored segment from
+    absolute index 480 to 512 down to 233 to 265, so the before and after
+    numbers describe two different forecasting problems and their difference
+    means nothing. ``region`` exists to pin both measurements to one segment.
     """
     cfg = cfg or ProbeConfig()
     judge = models[0]
@@ -166,12 +180,20 @@ def probe_window(
     scale = max(float(scale), 1e-6)
     rng = np.random.RandomState(cfg.seed)
 
-    H = int(min(cfg.horizon, max(8, T // 4)))
-    split = T - H
+    lo, hi = (0, T) if region is None else (int(region[0]), int(region[1]))
+    lo = max(0, min(lo, T - 1))
+    hi = max(lo + 1, min(hi, T))
+    span = hi - lo
+
+    H = int(min(cfg.horizon, max(8, span // 4)))
+    split = hi - H
     parts = {}
 
     # 1. Holdout forecast error and residual structure -----------------------
-    ctx, tgt = x[:split], x[split:]
+    # The context may reach left of the region. That is deliberate: for a crop
+    # it is exactly the difference under test, the same segment predicted with
+    # and without the discarded stretch in front of it.
+    ctx, tgt = x[:split], x[split:hi]
     pred = judge.forecast_batch([ctx], H)[0]
     resid = tgt - pred
     parts["forecast_nrmse"] = float(np.sqrt(np.mean(resid**2)) / scale)
@@ -179,12 +201,13 @@ def probe_window(
     parts["resid_skew"] = abs(_skew(resid))
 
     # 2. Masked reconstruction stability -------------------------------------
-    mask_len = int(min(cfg.mask_len, max(4, T // 10)))
-    lo_choices = np.linspace(T // 8, split - mask_len - 1, cfg.n_masks).astype(int)
+    mask_len = int(min(cfg.mask_len, max(4, span // 10)))
+    first = lo + max(mask_len, span // 8)
+    last = max(first, split - mask_len - 1)
     spans = []
-    for lo in lo_choices:
-        lo = int(max(mask_len, min(lo, T - mask_len - 1)))
-        spans.append((lo, lo + mask_len))
+    for start in np.linspace(first, last, cfg.n_masks).astype(int):
+        start = int(max(lo + mask_len, min(start, hi - mask_len - 1)))
+        spans.append((start, start + mask_len))
     recs = judge.reconstruct_batch(x, spans)
     recon_errs = np.asarray(
         [
@@ -204,7 +227,8 @@ def probe_window(
     parts["recon_nrmse_max"] = float(np.max(recon_errs))
 
     # 3, 4. Multi-view consistency and perturbation sensitivity, in one batch.
-    view_ctxs = [ctx[-int(max(32, f * split)) :] for f in cfg.view_fractions]
+    ctx_len = len(ctx)
+    view_ctxs = [ctx[-int(max(32, f * ctx_len)) :] for f in cfg.view_fractions]
     deltas = [
         rng.randn(len(ctx)) * cfg.perturb_eps * scale for _ in range(cfg.n_perturb)
     ]

@@ -177,6 +177,14 @@ class GovernanceTrace:
         return any(r.accepted and r.action in MUTATING_ACTIONS for r in self.records)
 
     def summary(self) -> dict:
+        """Flat, JSON friendly record of the episode.
+
+        ``steps`` carries the per candidate quantities the acceptance rule
+        actually saw. Without them an offline audit can tell that a candidate
+        was refused but not by how much it missed, so it cannot separate a
+        decision that was close from one that was not, and it has to
+        reconstruct operator parameters by inference rather than reading them.
+        """
         return {
             "window_id": self.window_id,
             "stratum": self.stratum,
@@ -192,4 +200,22 @@ class GovernanceTrace:
             "final_utility": self.final_utility,
             "delta_utility": self.final_utility - self.initial_utility,
             "probe_calls": self.probe_calls,
+            "crop_offset": self.crop_offset,
+            "steps": [
+                {
+                    "action": r.action.value,
+                    "params": {
+                        k: v for k, v in r.params.items()
+                        if isinstance(v, (int, float, str, bool))
+                    },
+                    "verdict": r.verdict.value,
+                    "delta_utility": r.delta_utility,
+                    "struct_distortion": r.struct_distortion,
+                    "risk": r.risk,
+                    "utility_before": r.utility_before,
+                    "utility_after": r.utility_after,
+                    "cost": r.cost,
+                }
+                for r in self.records
+            ],
         }
