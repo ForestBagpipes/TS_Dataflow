@@ -1,7 +1,79 @@
-# Handoff — state as of 2026-08-08 (session 2)
+# Handoff, state as of 2026-08-10, GPU session
 
-Everything is committed. Both machines can be powered off; nothing is left
-running that needs to finish.
+Everything is committed. The GPU queue was stopped cleanly, nothing is running.
+
+## What this session produced
+
+Step 0 and step 1 of the GPU queue are done. Steps 2 to 5 are not started.
+
+**Step 0, preflight.** chronos-bolt-base loads in 8.8s with all three
+capabilities. GovernanceTrace.summary was verified against a real trace on
+disk, not assumed: per step delta_utility, struct_distortion, risk, and
+operator parameters are all recorded.
+
+**Step 1, corpus scaled to 2000 windows**, real TSFMs, 37 percent contaminated,
+`results/xl/`. The protected strata now hold 210 to 420 windows each, against
+ten before.
+
+| method | net | repair | over clean | damage | improved | worsened | edit precision |
+|---|---|---|---|---|---|---|---|
+| stat_only | +0.449 | 0.585 | 0.451 | 0.0931 | 374 | 653 | 36 percent |
+| ablate_no_reprobe | +0.345 | 0.388 | 0.196 | 0.0295 | 241 | 295 | 45 percent |
+| ablate_no_protection | +0.340 | 0.379 | 0.198 | 0.0268 | 190 | 258 | 42 percent |
+| ablate_no_verify | +0.292 | 0.387 | 0.308 | 0.0655 | 314 | 479 | 40 percent |
+| **introact_full** | +0.242 | 0.272 | **0.132** | **0.0205** | 141 | **183** | **44 percent** |
+| quality_rank | -0.042 | 0.022 | 0.267 | 0.0442 | 70 | 430 | 14 percent |
+| always_clean | **-0.216** | 0.078 | 1.000 | 0.2015 | 299 | 1701 | 15 percent |
+
+At scale, unconditional cleaning is now clearly net negative, -0.216, damaging
+1701 of 2000 windows. The full agent keeps the lowest over-cleaning and the
+lowest damage of any method that edits, and the fewest windows worsened.
+
+Protection by stratum, full agent: rare_valid 0.090 edited with damage 0.0028,
+changepoint 0.100 with 0.0132, clean_ood 0.095 with 0.0522, clean 0.138 with
+0.0120, hard 0.229 with 0.0309. The hard stratum is the weakest, which is
+consistent with everything else: hard windows look defective to a statistical
+profile and a strong model is not obviously hurt by them.
+
+## The deferred question is answered, and epsilon is exonerated
+
+Of 184 RESEGMENT candidates judged at this scale, 127 were accepted and 57 were
+rejected on utility. Every one of those 57 had a **genuinely negative**
+delta_utility, median -0.2830, range -10.39 to -0.0015. **None was merely below
+the 0.005 threshold.** Widening epsilon would have changed nothing.
+
+The earlier picture of 0 accepted out of 12 came from a 210 window corpus. At
+2000 windows RESEGMENT is accepted 69 percent of the time. That earlier number
+was sampling noise, and the audit conclusion built on it, that one operator
+accounted for the entire deficit, does not survive the larger corpus. The
+mechanism finding from the span check still stands: those refusals are correct
+readings of a real absence of utility gain.
+
+## Where the queue stopped
+
+`scripts/_queue.sh` chains the remaining jobs and was killed mid step 2. To
+resume, relaunch it. It waits for any xl job then runs the sweep and the
+ablations in order.
+
+    source /root/autodl-tmp/work2/scripts/env_autodl.sh
+    cd /root/autodl-tmp/work2
+    (nohup ./scripts/_queue.sh > logs/queue.log 2>&1 </dev/null &)
+
+Remaining, in order: contamination sweep at 5 10 20 35 50 67 with both rulers,
+the eight rung ablation ladder including the two new rungs plus the tau sweep,
+downstream fine tuning transfer, and the competitor baselines.
+
+## Two efficiency fixes worth knowing about
+
+Both were found by watching the meter rather than by reading the code.
+
+Perception pinned one core while the GPU sat at 22 percent. The statistical
+half is pure numpy and embarrassingly parallel, so it now goes to a process
+pool. On 2000 windows it fell from an estimated 1000 seconds to 302.
+
+transfer_metrics issued one forecast per window per model, so scoring a method
+that edits nothing cost 567 seconds, and it was paid ten times per run. Batched
+by horizon it is 21.7 seconds.
 
 ## Where things live
 
