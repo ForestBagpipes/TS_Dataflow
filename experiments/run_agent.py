@@ -48,6 +48,12 @@ SCALES = {
     # conservative method at low contamination -- a handful of repaired windows
     # is diluted across thousands of training pairs -- so the regime where
     # curation can actually move the number has to be tested explicitly.
+    # Publication scale. 210 windows cannot carry a claim, and the strata that
+    # matter most for the protection argument had only ten members each.
+    "xl": CorpusSpec(
+        n_contaminated=740, n_clean=420, n_hard=210,
+        n_rare_valid=210, n_changepoint=210, n_clean_ood=210,
+    ),
     "heavy": CorpusSpec(
         n_contaminated=140, n_clean=20, n_hard=10, n_rare_valid=20,
         n_changepoint=10, n_clean_ood=10,
