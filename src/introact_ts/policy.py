@@ -32,6 +32,12 @@ class PolicyConfig:
     quarantine_risk: float = 3.0
     protect: tuple = PROTECTED
     allow_impute_when_protected: bool = True
+    #: How many mutating candidates the policy may offer in one step. The
+    #: default is unlimited, which is what makes a rejection recoverable: the
+    #: agent falls through to the next proposal instead of giving up. Setting
+    #: it to 1 turns the loop into propose once and accept or abandon, which
+    #: isolates the value of retrying from the value of vetoing.
+    max_candidates: int = 0
     denoise_ladder: tuple = ("light", "medium")
     #: Ordered conservative-first. Linear interpolation is the safe fill;
     #: seasonal donation reconstructs more shape but goes badly wrong where
@@ -84,6 +90,8 @@ def propose_actions(
         # gap evidence is unambiguous.
         if cfg.allow_impute_when_protected and defect == "missing":
             fills = fresh(_impute_candidates(cfg))
+            if cfg.max_candidates > 0:
+                fills = fills[: cfg.max_candidates]
             if fills:
                 return fills + [(Action.KEEP, {})]
         return [(Action.KEEP, {})]
@@ -111,6 +119,8 @@ def propose_actions(
         }[secondary]
 
     candidates = fresh(candidates)
+    if cfg.max_candidates > 0:
+        candidates = candidates[: cfg.max_candidates]
     if not candidates:
         return [(Action.ABSTAIN, {})] if defect == "none" else [(Action.KEEP, {})]
 

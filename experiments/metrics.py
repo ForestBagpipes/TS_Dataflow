@@ -305,30 +305,60 @@ def transfer_metrics(
     from introact_ts.probe import reference_scale
 
     byid = {w.window_id: w for w in windows}
+
+    # Build every forecasting problem first, then issue them in batches grouped
+    # by horizon. Called one window at a time this dominated the whole run: on
+    # 2000 windows with two transfer models it cost 567 seconds per method, more
+    # than the curation it was evaluating.
+    jobs = []
+    for t in traces:
+        w = byid.get(t.window_id)
+        if w is None or w.clean_series is None:
+            continue
+        scale = reference_scale(t.initial_series)
+        for side, series, offset in (
+            ("before", t.initial_series, 0),
+            ("after", t.final_series, t.crop_offset),
+        ):
+            prepared = _prepare_truth_job(series, w.clean_series, offset, horizon, scale)
+            if prepared is not None:
+                jobs.append((side, *prepared))
+
     results = {}
     for model in models:
-        before, after = [], []
-        for t in traces:
-            w = byid.get(t.window_id)
-            if w is None or w.clean_series is None:
-                continue
-            scale = reference_scale(t.initial_series)
-            b = _truth_nrmse(model, t.initial_series, w.clean_series, 0, horizon, scale)
-            a = _truth_nrmse(
-                model, t.final_series, w.clean_series, t.crop_offset, horizon, scale
-            )
-            if b is None or a is None:
-                continue
-            before.append(b)
-            after.append(a)
-        b, a = float(np.mean(before)), float(np.mean(after))
+        sums = {"before": [], "after": []}
+        by_h = {}
+        for i, (side, ctx, tgt, H, scale) in enumerate(jobs):
+            by_h.setdefault(H, []).append(i)
+        for H, idx in by_h.items():
+            preds = model.forecast_batch([jobs[i][1] for i in idx], H)
+            for i, pred in zip(idx, preds):
+                side, _, tgt, _, scale = jobs[i]
+                sums[side].append(
+                    float(np.sqrt(np.mean((tgt - pred) ** 2)) / max(scale, 1e-9))
+                )
+        b = float(np.mean(sums["before"])) if sums["before"] else float("nan")
+        a = float(np.mean(sums["after"])) if sums["after"] else float("nan")
         results[getattr(model, "name", "model")] = {
             "nrmse_before": b,
             "nrmse_after": a,
             "improvement": 1.0 - a / max(b, 1e-12),
-            "n": len(before),
+            "n": len(sums["before"]),
         }
     return results
+
+
+def _prepare_truth_job(curated, clean, offset, horizon, scale):
+    """Context and pristine target for one transfer forecast, or None."""
+    from introact_ts.probe import _nan_safe
+
+    x = _nan_safe(curated)
+    n = len(x)
+    truth = np.asarray(clean, dtype=np.float64)[offset : offset + n]
+    if len(truth) < n or n < 32:
+        return None
+    H = int(min(horizon, max(8, n // 4)))
+    return x[: n - H], truth[n - H :], H, scale
 
 
 def _truth_nrmse(
