@@ -40,6 +40,15 @@ from introact_ts.backends import PRESETS, make_pool  # noqa: E402
 
 #: Windows per sweep point. Smaller than the xl run because a sweep needs the
 #: trend across rates, not the tightest possible estimate at any one of them.
+#:
+#: Known limitation of this design. Holding the total fixed means the count per
+#: contamination type falls with the rate: at 5 percent there are 40
+#: contaminated windows split across seven types, so roughly six each, which is
+#: enough to place the aggregate trend and not enough to rank types against
+#: each other. Per type conclusions should be drawn from the high rate points
+#: and from the 2000 window run, where each type has around 105 members. Fixing
+#: this properly means holding the contaminated count fixed and varying the
+#: clean count, which at 5 percent would need a 14000 window corpus.
 N_TOTAL = 800
 
 #: Baselines plus the full agent. The ablation ladder runs separately.
