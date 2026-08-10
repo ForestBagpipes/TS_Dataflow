@@ -26,12 +26,22 @@ of them is inverted and the other is silent.
 | hard | +0.044 | auc 0.497, p 0.89 |
 | clean | +0.020 | auc 0.460, p 0.023 |
 
-Behavioural risk is inverted. Clean out of distribution windows alarm a frozen
-forecaster more than injected contamination does, by a factor of seven at the
-median, and it is the only stratum where that inversion is significant. The
-mechanism is not subtle: a random walk or a staircase is unlike anything in the
-pretraining mixture, so reconstruction is bad everywhere, whereas a spike in an
-ETT window is bad in one place.
+Behavioural risk is inverted. These windows alarm a frozen forecaster more than
+injected contamination does, by a factor of seven at the median, and this is
+the only stratum where that inversion is significant. The other three protected
+strata have higher medians than contaminated and none of them clears the test,
+so nothing should be read into that ordering.
+
+The mechanism is not unfamiliarity, which was the first explanation and is
+wrong. A separate run with real cross domain windows, daily exchange rates and
+ten minute solar power, puts them at a median of -0.017 and auc 0.426, the
+calmest stratum in that corpus, while the synthetic shapes reproduce at 0.706
+alongside them. What the synthetic shapes have and the real ones do not is
+unpredictability: a random walk cannot be forecast as a matter of mathematics,
+and a staircase has transition points nothing can anticipate, whereas a slow
+trend and a daily cycle are what a TSFM sees most of. So the failure documented
+here is triggered by unpredictable structure rather than by unfamiliar domains.
+See `docs/predictability_hypothesis.md`.
 
 The statistical profile, which exists to catch exactly this, is silent. Against
 contaminated windows it scores auc 0.482 with p 0.42, indistinguishable from a

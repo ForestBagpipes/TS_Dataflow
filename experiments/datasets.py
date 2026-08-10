@@ -104,14 +104,23 @@ def sample_ett_windows(
     return windows
 
 
-# -- cross domain sources, used only for the real out of distribution stratum --
+# -- cross domain sources, used for the real_ood stratum --
 #
-# The synthetic clean_ood stratum is four generated shapes, and it now carries a
-# central finding, so the finding has to be checked against data that was not
-# constructed for it. These two are real recordings from domains far from
-# electricity transformer temperature: daily exchange rates and ten minute solar
-# power. Both files were copied read only from the work1 tree, which had already
-# downloaded them, and neither is written back.
+# Naming caveat, important. The stratum identifier is real_ood and the code
+# keeps that name so existing result files stay comparable, but these windows
+# are cross domain, not verifiably out of distribution. Exchange rate and solar
+# power are standard public benchmarks that appear in the Monash repository and
+# in Time-Series-Library, so they may well sit inside the pretraining corpus of
+# the frozen backends. We could not verify membership either way. Everything
+# built on this stratum should say cross domain and should not be offered as
+# strict out of distribution evidence.
+#
+# What they still establish is the practical case: real corpora are stitched
+# together from many domains, and this measures whether the method misfires on
+# that. Daily exchange rates and ten minute solar power are far from electricity
+# transformer temperature whatever their pretraining status. Both files were
+# copied read only from the work1 tree, which had already downloaded them, and
+# neither is written back.
 
 CROSS_DOMAIN = {
     "exchange": "exchange.txt.gz",

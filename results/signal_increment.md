@@ -33,35 +33,50 @@ questions, and separating them locates the failure exactly.
 | **clean_ood** | 210 | **0.274** | 0.518 |
 | all protected | 1260 | 0.468 | 0.672 |
 
-The mechanism is one column of medians:
+The mechanism is one column of medians, and one of the six rows survives a
+significance test:
 
-| stratum | median behavioural risk |
-|---|---|
-| **clean_ood** | **+0.473** |
-| rare_valid | +0.108 |
-| changepoint | +0.071 |
-| **contaminated** | **+0.063** |
-| hard | +0.044 |
-| clean | +0.020 |
+| stratum | median behavioural risk | rank sum vs contaminated |
+|---|---|---|
+| **clean_ood** | **+0.473** | **auc 0.726, p 1.3e-23** |
+| rare_valid | +0.108 | auc 0.534, p 0.13, not significant |
+| changepoint | +0.071 | auc 0.515, p 0.51, not significant |
+| **contaminated** | **+0.063** | reference |
+| hard | +0.044 | auc 0.497, p 0.89, not significant |
+| clean | +0.020 | auc 0.460, p 0.023 |
 
 **Clean out of distribution windows carry a behavioural risk seven times that
-of the contaminated stratum.** A random walk, a staircase, a pulse train and a
-sawtooth are internally consistent and undamaged, and a frozen forecaster is
-far worse on them than on a window with an injected spike. Rare valid and
-changepoint sit above contaminated too, by smaller margins.
+of the contaminated stratum.** An earlier version of this document read the
+column above as an ordering and said that rare valid and changepoint sit above
+contaminated as well. That statement is withdrawn. Their medians are higher and
+neither difference clears significance, so the ordering was noise. Only the
+clean_ood inversion is real.
 
 So the behavioural signal separates dirty from clean at 0.540, which is weak
-but real, and then inverts to 0.274 against clean but unfamiliar data. Pooling
-the strata averages a weak positive against a strong negative and lands at
-0.468.
+but real, and then inverts to 0.274 against one specific stratum. Pooling the
+strata averages a weak positive against a strong negative and lands at 0.468.
 
-## This is the paper's premise, measured
+## What that stratum actually has in common, measured later
 
-The problem statement says that trend turns, regime switches, extreme peaks and
-out of distribution samples raise prediction error without being contamination,
-and that separating those from real defects is the hard part. The table above is
-that claim with numbers on it: ordered by how alarmed the model gets, the most
-alarming windows in the corpus are the ones that are perfectly fine.
+The first reading of this was that unfamiliarity drives the inversion, and a
+follow up experiment with real cross domain windows shows that reading was
+wrong. Windows drawn from daily exchange rates and ten minute solar power are
+just as far outside the pretraining mixture and score a median behavioural risk
+of -0.017, the lowest in the corpus, at auc 0.426 against contaminated. The
+synthetic stratum in the same run reproduces at 0.706.
+
+Both are clean, both are out of distribution, and they sit at opposite ends of
+the behavioural risk range. The variable that separates them is predictability.
+Exchange rates are slow trends and solar power is a strong daily cycle, which
+is the structure a TSFM sees most of in pretraining. A random walk is
+unpredictable as a matter of mathematics, and a staircase or a sawtooth has
+transition points that cannot be anticipated.
+
+The claim this document should support is therefore narrower and better
+controlled than the one it originally made. The behavioural signal measures
+predictability. It is not a contamination detector and it is not an out of
+distribution detector, and the two strata above are a two sided control that
+separates those three things. See `docs/predictability_hypothesis.md`.
 
 It also explains the clean_ood finding recorded separately. 96 of 210 clean_ood
 windows were labelled contaminated, and now it is clear why: they have the
