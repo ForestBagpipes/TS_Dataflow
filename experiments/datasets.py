@@ -102,3 +102,75 @@ def sample_ett_windows(
             f"only found {len(windows)}/{n_windows} usable ETT windows"
         )
     return windows
+
+
+# -- cross domain sources, used only for the real out of distribution stratum --
+#
+# The synthetic clean_ood stratum is four generated shapes, and it now carries a
+# central finding, so the finding has to be checked against data that was not
+# constructed for it. These two are real recordings from domains far from
+# electricity transformer temperature: daily exchange rates and ten minute solar
+# power. Both files were copied read only from the work1 tree, which had already
+# downloaded them, and neither is written back.
+
+CROSS_DOMAIN = {
+    "exchange": "exchange.txt.gz",
+    "solar": "solar.txt.gz",
+}
+
+
+def load_cross_domain(name: str):
+    """Return the raw matrix of one cross domain source, time by channel."""
+    import gzip
+
+    path = DATA_DIR / CROSS_DOMAIN[name]
+    if not path.exists():
+        raise FileNotFoundError(f"{path} not present, see CROSS_DOMAIN")
+    with gzip.open(path, "rt") as fh:
+        return np.loadtxt(fh, delimiter=",")
+
+
+def sample_cross_domain_windows(
+    n_windows: int,
+    window_len: int = 512,
+    sources: tuple = ("exchange", "solar"),
+    seed: int = 42,
+    min_std_ratio: float = 0.05,
+) -> list:
+    """Draw defect free windows from domains unlike the base corpus.
+
+    Windows that are nearly constant are skipped. Solar in particular is zero
+    every night across many channels, and a flat window would be filtered as a
+    stuck sensor rather than recognised as unfamiliar, which is a different
+    phenomenon from the one under test.
+    """
+    rng = np.random.RandomState(seed)
+    pools = []
+    for name in sources:
+        mat = load_cross_domain(name)
+        for ci in range(mat.shape[1]):
+            pools.append((name, ci, mat[:, ci]))
+
+    out, attempts = [], 0
+    while len(out) < n_windows and attempts < n_windows * 200:
+        attempts += 1
+        name, ci, col = pools[rng.randint(len(pools))]
+        if len(col) <= window_len:
+            continue
+        start = int(rng.randint(0, len(col) - window_len))
+        seg = col[start : start + window_len].astype(np.float64)
+        if not np.isfinite(seg).all():
+            continue
+        spread = float(np.std(seg))
+        if spread < min_std_ratio * max(float(np.std(col)), 1e-9) or spread < 1e-8:
+            continue
+        out.append({
+            "series": seg.copy(),
+            "dataset": f"ood:{name}",
+            "channel": str(ci),
+            "freq": "D" if name == "exchange" else "10T",
+            "start": start,
+        })
+    if len(out) < n_windows:
+        raise RuntimeError(f"only found {len(out)}/{n_windows} cross domain windows")
+    return out

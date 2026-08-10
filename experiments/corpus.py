@@ -46,6 +46,7 @@ STRATA = (
     "rare_valid",
     "changepoint",
     "clean_ood",
+    "real_ood",
 )
 
 #: Which operator is the intended repair for each contamination. Used to score
@@ -208,6 +209,10 @@ class CorpusSpec:
     n_rare_valid: int = 40
     n_changepoint: int = 40
     n_clean_ood: int = 40
+    #: Real out of distribution windows, drawn from domains unlike the base
+    #: corpus rather than generated. Zero by default so existing runs are
+    #: unchanged.
+    n_real_ood: int = 0
     window_len: int = 512
     seed: int = 42
 
@@ -216,6 +221,7 @@ class CorpusSpec:
         return (
             self.n_contaminated + self.n_clean + self.n_hard
             + self.n_rare_valid + self.n_changepoint + self.n_clean_ood
+            + self.n_real_ood
         )
 
 
@@ -380,6 +386,23 @@ def build_corpus(spec: CorpusSpec = None, source: str = "ett") -> list:
                 stratum="clean_ood", clean_series=s.copy(), seed=spec.seed,
             )
         )
+
+    # real_ood, drawn from other domains rather than generated
+    if spec.n_real_ood:
+        from datasets import sample_cross_domain_windows
+
+        for item in sample_cross_domain_windows(
+            spec.n_real_ood, window_len=T, seed=spec.seed
+        ):
+            s = item["series"]
+            wid += 1
+            windows.append(
+                TSWindow(
+                    window_id=wid, series=s.copy(), freq=item["freq"],
+                    dataset=item["dataset"], stratum="real_ood",
+                    clean_series=s.copy(), seed=spec.seed,
+                )
+            )
 
     rng.shuffle(windows)
     return windows
