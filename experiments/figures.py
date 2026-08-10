@@ -83,8 +83,11 @@ def risk_coverage(traces: list, windows: list, method: str) -> dict:
         if not edited:
             continue
         rows.append({
-            "confidence": float(t.get("risk_state", {}).get("confidence", 0.0))
-            if isinstance(t.get("risk_state"), dict) else 0.0,
+            "confidence": float(
+                t.get("confidence")
+                if t.get("confidence") is not None
+                else (t.get("risk_state") or {}).get("confidence", 0.0)
+            ),
             "error": bool(after > before + 1e-9),
         })
     if not rows:
@@ -104,6 +107,9 @@ def risk_coverage(traces: list, windows: list, method: str) -> dict:
 
 def main():
     runs = {
+        "xl": ("results/xl/xl_ett_multi-family_seed42",
+               CorpusSpec(n_contaminated=740, n_clean=420, n_hard=210,
+                          n_rare_valid=210, n_changepoint=210, n_clean_ood=210)),
         "heavy": ("results/gpu/heavy_ett_multi-family_seed42",
                   CorpusSpec(n_contaminated=140, n_clean=20, n_hard=10,
                              n_rare_valid=20, n_changepoint=10, n_clean_ood=10)),

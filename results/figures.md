@@ -1,5 +1,32 @@
 # Figures from cached runs
 
+## xl pareto, gain against damage
+
+| method | net gain | windows worsened | over clean | damage | on frontier |
+|---|---|---|---|---|---|
+| stat_only | +0.449 | 653 | 0.451 | 0.0931 | yes |
+| ablate_no_reprobe | +0.345 | 295 | 0.196 | 0.0295 | yes |
+| ablate_no_protection | +0.340 | 258 | 0.198 | 0.0268 | yes |
+| ablate_no_verify | +0.292 | 479 | 0.308 | 0.0655 |  |
+| ablate_no_peer_calibration | +0.242 | 181 | 0.129 | 0.0203 | yes |
+| introact_full | +0.242 | 183 | 0.132 | 0.0205 |  |
+| ablate_no_structure | +0.215 | 318 | 0.212 | 0.0370 |  |
+| no_action | +0.000 | 0 | 0.000 | 0.0000 | yes |
+| quality_rank | -0.042 | 430 | 0.267 | 0.0442 |  |
+| always_clean | -0.216 | 1701 | 1.000 | 0.2015 |  |
+
+## xl risk coverage, introact_full
+
+378 edited windows ordered by risk state confidence. Confidence spread across them 0.542.
+
+| coverage | error rate among edits |
+|---|---|
+| 0.10 | 0.595 |
+| 0.25 | 0.649 |
+| 0.50 | 0.608 |
+| 0.75 | 0.583 |
+| 1.00 | 0.484 |
+
 ## heavy pareto, gain against damage
 
 | method | net gain | windows worsened | over clean | damage | on frontier |
