@@ -70,10 +70,17 @@ def score(traces, windows):
     }
 
 
-def sweep(windows, states, models, taus):
+def sweep(agent, windows, states, taus):
+    """Re curate at each tau, reusing the calibration built during perceive.
+
+    The agent must be the one that perceived these windows. Building a fresh
+    agent per tau loses the peer calibration, which lives on the instance and
+    is populated by perceive, and every curate call then fails on a null
+    calibration. Only the threshold changes between runs.
+    """
     out = {}
     for tau in taus:
-        agent = IntroActAgent(models, AgentConfig(verification=VerifyConfig(tau=tau)))
+        agent.cfg.verification.tau = tau
         t0 = time.time()
         traces = [agent.curate_window(w, s, peer_idx=i)
                   for i, (w, s) in enumerate(zip(windows, states))]
@@ -118,7 +125,7 @@ def main():
     t0 = time.time()
     hs = agent.perceive(hw)
     print(f"  perceive {time.time() - t0:.0f}s on {len(hw)} windows", flush=True)
-    holdout = sweep(hw, hs, models, TAUS)
+    holdout = sweep(agent, hw, hs, TAUS)
 
     tau_star = choose(holdout)
     print(f"\nselected tau {tau_star:.2f} by the pre committed rule", flush=True)
@@ -128,7 +135,8 @@ def main():
     t0 = time.time()
     rs = agent.perceive(rw)
     print(f"  perceive {time.time() - t0:.0f}s on {len(rw)} windows", flush=True)
-    report = sweep(rw, rs, models, sorted({0.12, tau_star}))
+    agent.cfg.verification.tau = 0.12
+    report = sweep(agent, rw, rs, sorted({0.12, tau_star}))
 
     payload = {"holdout_seed": HOLDOUT_SEED, "report_seed": REPORT_SEED,
                "taus": TAUS, "holdout": holdout, "selected": tau_star,
