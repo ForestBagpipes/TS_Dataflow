@@ -33,6 +33,10 @@ from .actions import (
     missing_mask,
 )
 
+#: Repair switch, see experiments/fix_compare.py. True uses the scale free
+#: degenerate test, False restores the unreachable absolute floor of 1e-3.
+OOD_SCALE_FREE = True
+
 HYPOTHESES = ("contaminated", "clean", "hard", "rare_valid", "clean_ood")
 
 #: Defect indicators, and the floor below which a deviation is never treated as
@@ -147,8 +151,27 @@ def corpus_reference(
         ood_ref=ood_ref,
         # A degenerate OOD distribution (every window equally typical) must
         # yield zero OOD evidence, not the 0.5 a zero-scale sigmoid would give.
-        # Cosine distances this small mean the profiles are indistinguishable.
-        ood_scale=ood_spread if (ood_spread > 1e-9 and ood_ref > 1e-3) else 0.0,
+        #
+        # The test for degenerate has to be scale free. It used to be an
+        # absolute floor, ood_ref > 1e-3, and that floor is unreachable: these
+        # are mean cosine distances between L2 normalised profiles and on a
+        # real ETT corpus the 85th percentile lands at 1.5e-04, six times below
+        # the floor, so the OOD hypothesis was admitted zero times in 210
+        # clean_ood windows. The scores were not the problem. Within the same
+        # corpus the clean_ood stratum reaches 1.35e-03 at its own 85th
+        # percentile against 7.3e-05 for clean windows, an 18 fold separation
+        # that the floor discarded wholesale.
+        #
+        # Degenerate now means what it says: the spread is negligible relative
+        # to the typical score, so no window is distinguishable from any other.
+        ood_scale=(
+            (ood_spread
+             if (ood_spread > 1e-12
+                 and ood_spread >= 0.05 * max(float(np.median(oods)), 1e-12))
+             else 0.0)
+            if OOD_SCALE_FREE else
+            (ood_spread if (ood_spread > 1e-9 and ood_ref > 1e-3) else 0.0)
+        ),
     )
 
 

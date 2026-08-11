@@ -1,0 +1,73 @@
+{
+ "holdout_seed": 123,
+ "report_seed": 42,
+ "taus": [
+  0.02,
+  0.03,
+  0.04,
+  0.06,
+  0.08,
+  0.12,
+  0.2
+ ],
+ "holdout": {
+  "0.02": {
+   "mean_damage": 0.0024005825978077595,
+   "repair_reduction": 0.24773955609824982,
+   "n_modified": 80,
+   "seconds": 85.4158546924591
+  },
+  "0.03": {
+   "mean_damage": 0.0026841272232696533,
+   "repair_reduction": 0.2500676265602091,
+   "n_modified": 93,
+   "seconds": 91.08454751968384
+  },
+  "0.04": {
+   "mean_damage": 0.005546891216759535,
+   "repair_reduction": 0.24928618111673084,
+   "n_modified": 105,
+   "seconds": 89.6192409992218
+  },
+  "0.06": {
+   "mean_damage": 0.012286501020399946,
+   "repair_reduction": 0.25034076312811726,
+   "n_modified": 122,
+   "seconds": 85.15377378463745
+  },
+  "0.08": {
+   "mean_damage": 0.01503463167961915,
+   "repair_reduction": 0.2492954935969468,
+   "n_modified": 137,
+   "seconds": 85.23566484451294
+  },
+  "0.12": {
+   "mean_damage": 0.018332753554961972,
+   "repair_reduction": 0.24596662280631143,
+   "n_modified": 149,
+   "seconds": 84.71714997291565
+  },
+  "0.20": {
+   "mean_damage": 0.026054326845628504,
+   "repair_reduction": 0.24340509041238223,
+   "n_modified": 188,
+   "seconds": 78.41396403312683
+  }
+ },
+ "selected": 0.02,
+ "report": {
+  "0.02": {
+   "mean_damage": 0.0032426684796741613,
+   "repair_reduction": 0.21738912292501245,
+   "n_modified": 90,
+   "seconds": 87.05614161491394
+  },
+  "0.12": {
+   "mean_damage": 0.012948045889268903,
+   "repair_reduction": 0.22957654223287505,
+   "n_modified": 161,
+   "seconds": 86.89187955856323
+  }
+ },
+ "rule": "largest tau with damage within 1.10x the minimum"
+}

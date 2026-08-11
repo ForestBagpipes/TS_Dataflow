@@ -38,7 +38,13 @@ from introact_ts.agent import AgentConfig, IntroActAgent  # noqa: E402
 from introact_ts.verify import VerifyConfig  # noqa: E402
 from introact_ts.backends import PRESETS, make_pool  # noqa: E402
 
-TAUS = [0.02, 0.03, 0.04, 0.06, 0.08, 0.12, 0.20]
+#: Extended left in the second pass. The first pass selected 0.02, the leftmost
+#: point, which means the rule found no plateau inside the range and the
+#: obvious question is whether 0.02 is on the frontier or merely the edge of
+#: where anyone looked. A knee must exist somewhere below, since tau at zero
+#: rejects every edit and repair must collapse, so these two points either find
+#: it or show 0.02 is already on the flat part.
+TAUS = [0.005, 0.01, 0.02, 0.03, 0.04, 0.06, 0.08, 0.12, 0.20]
 PROTECTED = ("clean", "hard", "rare_valid", "changepoint", "clean_ood")
 
 #: Seeds. The holdout seed is the only corpus consulted while choosing tau.

@@ -40,11 +40,21 @@ from .types import Action
 #: is broadband energy, so removing it -- correctly -- shifts the normalised
 #: power spectrum enormously, and a spectral term vetoes exactly the repairs
 #: that should be accepted.
+#: ``spread`` is the exception to the paragraph above and it exists because of
+#: a measured failure. Judging a local operator outside its own footprint lets
+#: it delete whatever it declares. Ten clean windows were edited at nine
+#: percent of their points, lost ninety six percent of their variance, and
+#: scored a structural distance of 0.037 against a threshold of 0.12, because
+#: outside the declared footprint nothing had moved. A whole window spread
+#: ratio is the one quantity the exemption cannot hide, and it separates that
+#: population, ratios 0.032 to 0.5, from benign spike removal, ratios 0.99 to
+#: 1.00, with nothing in between on the run that motivated it.
 LOCAL_WEIGHTS = {
-    "shape": 0.35,
-    "extremes": 0.25,
-    "patch": 0.25,
-    "footprint": 0.15,
+    "shape": 0.30,
+    "extremes": 0.20,
+    "patch": 0.20,
+    "footprint": 0.12,
+    "spread": 0.18,
 }
 
 #: Global operators (DENOISE) rewrite every point by construction, so
@@ -298,6 +308,7 @@ def structure_distortion(
             }
         parts["patch"] = _patch_distortion(b, touched)
         parts["footprint"] = _footprint(touched, params, len(a))
+        parts["spread"] = _spread_distortion(a, b)
     else:
         parts = {
             "trend": _trend_distortion(a, b),
@@ -314,6 +325,32 @@ def structure_distortion(
     worst_term = max(parts.values())
     distortion = float(0.7 * mean_term + 0.3 * worst_term)
     return StructureReport(distortion=distortion, parts=parts)
+
+
+def _spread_distortion(a: np.ndarray, b: np.ndarray) -> float:
+    """How much of the window's spread the edit removed, or added.
+
+    Measured on the whole window, which is the point: the footprint exemption
+    that lets a local operator be judged outside its declared region cannot
+    hide a change in total spread.
+
+    Uses the blockwise robust scale rather than a plain standard deviation, for
+    the same reason the probe does. A global spread estimate is inflated by a
+    level displacement, so a repair that removes one would look like it shrank
+    the window when it did not.
+
+    Symmetric: inflating the spread is a distortion too, and an operator that
+    doubles the variance has changed the data just as surely.
+    """
+    sa, sb = robust_scale(a), robust_scale(b)
+    if sa <= 1e-12:
+        return 0.0 if sb <= 1e-12 else 1.0
+    ratio = sb / sa
+    if ratio <= 0.0:
+        return 1.0
+    # Log ratio so halving and doubling cost the same, scaled so that removing
+    # half the spread lands at 0.5 and the tenfold cases saturate.
+    return float(np.clip(abs(np.log(ratio)) / np.log(4.0), 0.0, 1.0))
 
 
 def _patch_distortion(candidate: np.ndarray, touched: np.ndarray,

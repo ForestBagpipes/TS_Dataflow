@@ -44,7 +44,13 @@ from .types import (
     TERMINAL_ACTIONS,
     Verdict,
 )
-from .verify import VerifyConfig, action_risk, improvement_consistency, verify
+from .verify import (VerifyConfig, action_risk, improvement_consistency,
+                     improvement_depth, verify)
+
+#: Repair switch, see experiments/fix_compare.py. True feeds action_risk the
+#: improvement depth of the edit under test, False restores the class posterior
+#: it used to consume. Only the comparison harness sets it to False.
+USE_DEPTH = True
 
 
 @dataclass
@@ -210,7 +216,11 @@ class IntroActAgent:
                     work, outcome.series, action, outcome.params, touched=outcome.touched
                 )
                 consistency = improvement_consistency(z_now, z_after)
-                risk = action_risk(live.confidence, outcome.cost, consistency)
+                depth = improvement_depth(z_now, z_after)
+                risk = action_risk(
+                    depth if USE_DEPTH else live.confidence,
+                    outcome.cost, consistency,
+                )
                 verdict = verify(delta_u, report.distortion, risk, cfg.verification)
 
                 records.append(
