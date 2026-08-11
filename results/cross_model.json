@@ -1,0 +1,85 @@
+{
+ "note": "single model pools, model_disagree is identically zero",
+ "backends": {
+  "chronos-bolt-base": {
+   "normalisation": "unconfirmed",
+   "seconds": 54.037026166915894,
+   "medians": {
+    "sine_anchored": -0.050194634754619175,
+    "noise_anchored": 0.003486648784125474,
+    "sine_on_walk": 0.12196427223615393,
+    "walk_only": 0.5007893965024894,
+    "sine_on_ramp": -0.11009010059588449,
+    "ett_real": 0.1799558594929247
+   },
+   "walk_minus_anchored": 0.1721589069907731,
+   "walk_vs_ramp": {
+    "n1": 100,
+    "n2": 100,
+    "auc": 0.7849,
+    "z": 6.9612149394222715,
+    "p": 3.373506060142258e-12
+   }
+  },
+  "chronos-bolt-small": {
+   "normalisation": "unconfirmed",
+   "seconds": 42.18140363693237,
+   "medians": {
+    "sine_anchored": -0.08872257724764829,
+    "noise_anchored": 0.03297008957276169,
+    "sine_on_walk": 0.1784984113595719,
+    "walk_only": 0.4967333327399647,
+    "sine_on_ramp": -0.1932005018806605,
+    "ett_real": 0.18733347805373002
+   },
+   "walk_minus_anchored": 0.2672209886072202,
+   "walk_vs_ramp": {
+    "n1": 100,
+    "n2": 100,
+    "auc": 0.8896,
+    "z": 9.519443104243303,
+    "p": 1.741095786780957e-21
+   }
+  },
+  "timesfm-2.5-200m": {
+   "normalisation": "confirmed at call site",
+   "seconds": 547.2905111312866,
+   "medians": {
+    "sine_anchored": -0.2517402752725667,
+    "noise_anchored": 0.08543582622816308,
+    "sine_on_walk": 0.2375150131261529,
+    "walk_only": 0.5058954841668966,
+    "sine_on_ramp": -0.223853230496681,
+    "ett_real": 0.3249914323040808
+   },
+   "walk_minus_anchored": 0.48925528839871957,
+   "walk_vs_ramp": {
+    "n1": 100,
+    "n2": 100,
+    "auc": 0.9015,
+    "z": 9.810206381811309,
+    "p": 1.017602225427467e-22
+   }
+  },
+  "surrogate": {
+   "normalisation": "confirmed, explicit instance_norm",
+   "seconds": 23.633913278579712,
+   "medians": {
+    "sine_anchored": -0.03145129878221937,
+    "noise_anchored": 0.062357784424962454,
+    "sine_on_walk": 0.0656343254325209,
+    "walk_only": 0.4384719110408505,
+    "sine_on_ramp": -0.058844353969712174,
+    "ett_real": -0.0037669943748190066
+   },
+   "walk_minus_anchored": 0.09708562421474026,
+   "walk_vs_ramp": {
+    "n1": 100,
+    "n2": 100,
+    "auc": 0.6565,
+    "z": 3.8239036083523534,
+    "p": 0.0001313552855367402
+   }
+  }
+ }
+}
