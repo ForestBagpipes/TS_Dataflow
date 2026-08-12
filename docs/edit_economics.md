@@ -13,15 +13,37 @@ which is the case for `missing_block` and `missing_scattered`, so 45 of the 124
 contaminated edits are excluded from the variance columns and none of the
 protected ones are.
 
-| stratum | edited | ΔU mean | ΔU median | ΔU vs contaminated | variance ratio mean | min | edits removing over half the variance |
-|---|---|---|---|---|---|---|---|
-| contaminated | 124 | 0.54 | 0.25 | 1.0x | 0.697 | 0.211 | 21 of 79 |
-| **clean_ood** | **20** | **25.81** | **16.97** | **48.1x** | **0.177** | **0.032** | **19 of 20** |
-| clean | 31 | 2.91 | 0.40 | 5.4x | 0.749 | 0.000 | 6 of 31 |
-| hard | 26 | 0.22 | 0.09 | 0.4x | 0.962 | 0.853 | 0 of 26 |
-| rare_valid | 10 | 0.38 | 0.11 | 0.7x | 0.906 | 0.285 | 1 of 10 |
-| changepoint | 9 | 0.57 | 0.20 | 1.1x | 0.787 | 0.347 | 2 of 9 |
-| **real_ood** | **0** | | | | | | **0** |
+Quartiles rather than means. The mean is reported in the last column and it
+should not be the headline for this stratum: the 20 clean_ood edits run from
++0.14 to +64.61, two orders of magnitude, and a mean over that is not a
+description of anything.
+
+| stratum | edits | ΔU p25 | ΔU median | ΔU p75 | IQR | (mean) | variance ratio mean | min | over half the variance |
+|---|---|---|---|---|---|---|---|---|---|
+| contaminated | 124 | 0.04 | **0.25** | 0.80 | 0.76 | 0.54 | 0.697 | 0.211 | 21 of 79 |
+| **clean_ood** | **20** | 3.45 | **16.97** | 48.02 | 44.57 | 25.81 | **0.177** | **0.032** | **19 of 20** |
+| clean | 31 | 0.20 | 0.40 | 0.76 | 0.55 | 2.91 | 0.749 | 0.000 | 6 of 31 |
+| hard | 26 | 0.04 | 0.09 | 0.20 | 0.17 | 0.22 | 0.962 | 0.853 | 0 of 26 |
+| rare_valid | 10 | 0.06 | 0.11 | 0.39 | 0.33 | 0.38 | 0.906 | 0.285 | 1 of 10 |
+| changepoint | 9 | 0.04 | 0.20 | 0.21 | 0.17 | 0.57 | 0.787 | 0.347 | 2 of 9 |
+| **real_ood** | **0** | | | | | | | | **0** |
+
+All twenty clean_ood edits, sorted:
+
+    0.14  0.15  0.53  0.96  1.88  3.97  6.81  6.88  8.21  14.89
+    19.04 42.14 46.20 46.44 47.30 50.17 50.96 52.18 52.81 64.61
+
+The distribution is bimodal. Ten edits under +20 and ten above +42, with a gap
+between 19.04 and 42.14 containing nothing. The upper cluster is the flattening
+population documented in `docs/triple_failure_analysis.md`, which lands at a
+common post edit utility near -2.0 regardless of where it started. Reporting a
+median of 16.97 lands inside the empty gap and describes neither cluster, so
+the honest summary of this stratum is that it holds two populations and the
+figure should show both.
+
+On the comparison that matters, the median clean_ood edit still collects 68
+times the median contaminated edit, 16.97 against 0.25, and the upper cluster
+collects around 200 times.
 
 ## The exchange rate
 

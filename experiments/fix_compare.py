@@ -33,6 +33,7 @@ import introact_ts.agent as A  # noqa: E402
 import introact_ts.risk as R  # noqa: E402
 import introact_ts.structure as S  # noqa: E402
 from introact_ts.agent import AgentConfig, IntroActAgent  # noqa: E402
+from introact_ts.verify import VerifyConfig  # noqa: E402
 from introact_ts.backends import PRESETS, make_pool  # noqa: E402
 
 PROTECTED = ("clean", "hard", "rare_valid", "changepoint", "clean_ood")
@@ -61,8 +62,18 @@ def score(traces, windows, states):
         d["n"] += 1
         if t.modified:
             d["mod"] += 1
+            # Spread ratio only means "was signal destroyed" for operators that
+            # rewrite in place. RESEGMENT keeps a sub segment, and a calm
+            # segment of a volatile window has a lower spread than the whole
+            # window by definition, which is a correct crop rather than a
+            # flattening. Measuring it the naive way reported five destructive
+            # edits on clean_ood that were all RESEGMENT with a spread part of
+            # exactly 0.000, so the ratio is now taken against the same span
+            # the operator kept.
             if np.isfinite(w.series).all():
-                r = float(np.std(t.final_series)) / max(float(np.std(w.series)), 1e-9)
+                src = w.series[t.crop_offset:t.crop_offset + len(t.final_series)]
+                denom = float(np.std(src)) if len(src) >= 8 else float(np.std(w.series))
+                r = float(np.std(t.final_series)) / max(denom, 1e-9)
                 var_ratios.setdefault(w.stratum, []).append(r)
         if w.clean_series is None:
             continue
@@ -99,6 +110,11 @@ def main():
     ap.add_argument("--preset", default="multi-family")
     ap.add_argument("--n", type=int, default=800)
     ap.add_argument("--seed", type=int, default=42)
+    #: The repairs and the holdout tau selection were developed separately and
+    #: the first comparison ran the repairs at the old default of 0.12. The
+    #: spread term is designed to be decisive just above the selected 0.02, so
+    #: that comparison could not show what it was built to show.
+    ap.add_argument("--tau", type=float, default=0.02)
     args = ap.parse_args()
 
     n = args.n
@@ -110,12 +126,13 @@ def main():
     )
     windows = build_corpus(spec, source="ett")
     models = make_pool(PRESETS[args.preset]["curation"], device=args.device)
-    print(f"{len(windows)} windows, seed {args.seed}", flush=True)
+    print(f"{len(windows)} windows, seed {args.seed}, tau {args.tau}", flush=True)
 
     out = {}
     for label, enabled in [("before", False), ("after", True)]:
         set_arm(enabled)
-        agent = IntroActAgent(models, AgentConfig())
+        agent = IntroActAgent(
+            models, AgentConfig(verification=VerifyConfig(tau=args.tau)))
         t0 = time.time()
         states = agent.perceive(windows)
         traces = [agent.curate_window(w, s, peer_idx=i)

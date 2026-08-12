@@ -11,14 +11,24 @@ Damage introduced on protected data, summed over the clean, hard, rare valid,
 changepoint and clean out of distribution strata. Lower is better and zero is
 what a method that never edits anything achieves.
 
-| rate | no_action | always_clean | stat_only | quality_rank | **introact_full** |
-|---|---|---|---|---|---|
-| 5 | 0.0000 | 1.0011 | 0.4569 | 0.2470 | **0.0970** |
-| 10 | 0.0000 | 1.0025 | 0.4339 | 0.2488 | **0.0881** |
-| 20 | 0.0000 | 0.9791 | 0.3880 | 0.2604 | **0.1028** |
-| 35 | 0.0000 | 1.3480 | 0.7793 | 0.2771 | **0.1288** |
-| 50 | 0.0000 | 1.0992 | 0.4998 | 0.3110 | **0.0906** |
-| 67 | 0.0000 | 0.9497 | 0.3542 | 0.3077 | **0.0846** |
+The reference bound is listed apart from the competitors, because it is not
+one. `no_action` achieves zero damage by declining to curate, so it is the axis
+every acting method is placed against rather than a method any of them beats.
+
+| | 5 | 10 | 20 | 35 | 50 | 67 |
+|---|---|---|---|---|---|---|
+| *reference bound, no_action* | *0.0000* | *0.0000* | *0.0000* | *0.0000* | *0.0000* | *0.0000* |
+
+Methods that actually edit:
+
+| rate | always_clean | stat_only | quality_rank | **introact_full** |
+|---|---|---|---|---|
+| 5 | 1.0011 | 0.4569 | 0.2470 | **0.0970** |
+| 10 | 1.0025 | 0.4339 | 0.2488 | **0.0881** |
+| 20 | 0.9791 | 0.3880 | 0.2604 | **0.1028** |
+| 35 | 1.3480 | 0.7793 | 0.2771 | **0.1288** |
+| 50 | 1.0992 | 0.4998 | 0.3110 | **0.0906** |
+| 67 | 0.9497 | 0.3542 | 0.3077 | **0.0846** |
 
 At every rate the ordering is the same and the margins are large. Against
 unconditional cleaning the reduction is roughly tenfold, against a statistical
@@ -29,8 +39,10 @@ Protection here does not degrade as contamination rises, which is the property
 that matters for a curation tool, since the corpora that need curating most are
 the dirty ones.
 
-`no_action` sitting at exactly zero is not a competitor, it is the axis. It
-buys perfect protection by declining to do the job.
+Reading the two tables together is the point. The question is not whether a
+method beats an opponent whose damage is identically zero, it is how close to
+that bound a method stays while still doing the job. IntroAct sits at roughly
+a tenth of the distance between the bound and unconditional cleaning.
 
 ## The flattening trap, and who walks into it
 
