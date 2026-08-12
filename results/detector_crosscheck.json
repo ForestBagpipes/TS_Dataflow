@@ -1,0 +1,129 @@
+{
+ "flag_fraction": 0.01,
+ "window_flag_rates": {
+  "isolation_forest": {
+   "clean": 1.0,
+   "hard": 0.9428571428571428,
+   "ood:random_walk": 1.0,
+   "ood:pulse_train": 1.0,
+   "ood:staircase": 1.0,
+   "ood:sawtooth": 1.0,
+   "contaminated": 1.0
+  },
+  "local_outlier_factor": {
+   "clean": 0.8857142857142857,
+   "hard": 0.9142857142857143,
+   "ood:random_walk": 0.6981132075471698,
+   "ood:pulse_train": 0.75,
+   "ood:staircase": 0.8113207547169812,
+   "ood:sawtooth": 0.8076923076923077,
+   "contaminated": 0.9351351351351351
+  },
+  "one_class_svm": {
+   "clean": 0.9976190476190476,
+   "hard": 0.9904761904761905,
+   "ood:random_walk": 1.0,
+   "ood:pulse_train": 1.0,
+   "ood:staircase": 1.0,
+   "ood:sawtooth": 1.0,
+   "contaminated": 1.0
+  },
+  "hampel": {
+   "clean": 0.9785714285714285,
+   "hard": 0.9047619047619048,
+   "ood:random_walk": 0.9433962264150944,
+   "ood:pulse_train": 0.8461538461538461,
+   "ood:staircase": 0.7924528301886793,
+   "ood:sawtooth": 0.9423076923076923,
+   "contaminated": 0.9054054054054054
+  },
+  "zscore_detrended": {
+   "clean": 0.15714285714285714,
+   "hard": 0.3,
+   "ood:random_walk": 0.2830188679245283,
+   "ood:pulse_train": 0.28846153846153844,
+   "ood:staircase": 0.3018867924528302,
+   "ood:sawtooth": 0.28846153846153844,
+   "contaminated": 0.1810810810810811
+  }
+ },
+ "point_rates": {
+  "isolation_forest": {
+   "clean": 0.28125,
+   "hard": 0.2119140625,
+   "ood:random_walk": 0.349609375,
+   "ood:pulse_train": 0.3291015625,
+   "ood:staircase": 0.3203125,
+   "ood:sawtooth": 0.33203125,
+   "contaminated": 0.263671875
+  },
+  "local_outlier_factor": {
+   "clean": 0.041015625,
+   "hard": 0.0478515625,
+   "ood:random_walk": 0.017578125,
+   "ood:pulse_train": 0.0263671875,
+   "ood:staircase": 0.033203125,
+   "ood:sawtooth": 0.021484375,
+   "contaminated": 0.041115187771149676
+  },
+  "one_class_svm": {
+   "clean": 0.103515625,
+   "hard": 0.1728515625,
+   "ood:random_walk": 0.052734375,
+   "ood:pulse_train": 0.052734375,
+   "ood:staircase": 0.052734375,
+   "ood:sawtooth": 0.052734375,
+   "contaminated": 0.09431998072819878
+  },
+  "hampel": {
+   "clean": 0.0849609375,
+   "hard": 0.0498046875,
+   "ood:random_walk": 0.05078125,
+   "ood:pulse_train": 0.037109375,
+   "ood:staircase": 0.03125,
+   "ood:sawtooth": 0.0400390625,
+   "contaminated": 0.0703125
+  },
+  "zscore_detrended": {
+   "clean": 0.0009765625,
+   "hard": 0.005859375,
+   "ood:random_walk": 0.0,
+   "ood:pulse_train": 0.0,
+   "ood:staircase": 0.0,
+   "ood:sawtooth": 0.0,
+   "contaminated": 0.001953125
+  }
+ },
+ "lifts": {
+  "isolation_forest": {
+   "rw_lift": 1.2430555555555556,
+   "pulse_lift": 1.1701388888888888,
+   "contam_lift": 0.9375,
+   "usable": false
+  },
+  "local_outlier_factor": {
+   "rw_lift": 0.42857142857142855,
+   "pulse_lift": 0.6428571428571429,
+   "contam_lift": 1.002427435182316,
+   "usable": false
+  },
+  "one_class_svm": {
+   "rw_lift": 0.5094339622641509,
+   "pulse_lift": 0.5094339622641509,
+   "contam_lift": 0.911166606279958,
+   "usable": false
+  },
+  "hampel": {
+   "rw_lift": 0.5977011494252874,
+   "pulse_lift": 0.4367816091954023,
+   "contam_lift": 0.8275862068965517,
+   "usable": false
+  },
+  "zscore_detrended": {
+   "rw_lift": 0.0,
+   "pulse_lift": 0.0,
+   "contam_lift": 2.0,
+   "usable": true
+  }
+ }
+}
