@@ -53,7 +53,15 @@ TAU_GRID = [0.005, 0.01, 0.015, 0.02, 0.03, 0.04, 0.06, 0.08,
             0.10, 0.12, 0.16, 0.20, 0.25, 0.30]
 ALPHAS = [0.001, 0.002, 0.005, 0.01, 0.015, 0.02, 0.03, 0.04, 0.05]
 RATES = [5, 10, 20, 35, 50, 67]
-CAL_SEED, REPORT_SEED = 123, 42
+#: Same pool split, pre registered in docs/conformal_threshold.md before this
+#: code was written. The first design calibrated on one corpus and reported on
+#: another, which breaks exchangeability: two independent samples of ETT windows
+#: differ in difficulty, and the realised risk overshot the target by 20 to 50
+#: percent as a result. Splitting one pool at random makes the assumption hold
+#: by construction.
+POOL_SEED = 42
+SPLIT_SEED = 7
+POOL_N = 1600
 
 
 def spec_for(rate_pct: int, seed: int, n: int = 800) -> CorpusSpec:
@@ -64,6 +72,14 @@ def spec_for(rate_pct: int, seed: int, n: int = 800) -> CorpusSpec:
         n_contaminated=n_contam, n_clean=rest - 4 * per, n_hard=per,
         n_rare_valid=per, n_changepoint=per, n_clean_ood=per, seed=seed,
     )
+
+
+def split_pool(n, seed=SPLIT_SEED):
+    """One random split of the pool into calibration and reporting halves."""
+    rng = np.random.RandomState(seed)
+    order = rng.permutation(n)
+    cut = n // 2
+    return order[:cut], order[cut:]
 
 
 def losses_over_grid(windows, models, seed, label, deltas=(DELTA,)):
@@ -107,13 +123,20 @@ def main():
 
     print(f"loss: nmse_after > nmse_before + {DELTA:g}, bounded in [0,1]",
           flush=True)
-    print(f"calibration seed {CAL_SEED}, reporting seed {REPORT_SEED}, "
-          f"disjoint by construction\n", flush=True)
+    print(f"same pool split, seed {SPLIT_SEED}, exchangeable by construction\n",
+          flush=True)
 
-    cal_w = build_corpus(spec_for(35, CAL_SEED, args.n), source="ett")
-    rep_w = build_corpus(spec_for(35, REPORT_SEED, args.n), source="ett")
-    cal = losses_over_grid(cal_w, models, CAL_SEED, "calib", deltas)
-    rep = losses_over_grid(rep_w, models, REPORT_SEED, "report", deltas)
+    pool = build_corpus(spec_for(35, POOL_SEED, POOL_N), source="ett")
+    cal_idx, rep_idx = split_pool(len(pool))
+    print(f"pool {len(pool)} windows, split seed {SPLIT_SEED}: "
+          f"{len(cal_idx)} calibration, {len(rep_idx)} reporting", flush=True)
+    # One perception pass and one curate pass per threshold over the whole
+    # pool, then the halves are read off. Curating each half separately would
+    # change the peer calibration each window sees and make the two halves
+    # incomparable for a reason unrelated to the split.
+    allo = losses_over_grid(pool, models, POOL_SEED, "pool", deltas)
+    cal = {d: {t: v[cal_idx] for t, v in allo[d].items()} for d in deltas}
+    rep = {d: {t: v[rep_idx] for t, v in allo[d].items()} for d in deltas}
 
     grid, cal_curve = risk_curve(cal[DELTA])
     _, rep_curve = risk_curve(rep[DELTA])
@@ -171,7 +194,7 @@ def main():
 
     payload = {
         "delta": DELTA, "tau_grid": TAU_GRID, "alphas": ALPHAS,
-        "calibration_seed": CAL_SEED, "reporting_seed": REPORT_SEED,
+        "pool_seed": POOL_SEED, "split_seed": SPLIT_SEED, "pool_n": POOL_N,
         "risk_curve_calibration": dict(zip(map(str, grid), cal_curve)),
         "risk_curve_reporting": dict(zip(map(str, grid), rep_curve)),
         "monotone": {"calibration": mono_cal, "reporting": mono_rep},
@@ -191,9 +214,12 @@ def main():
     print(f"{'rate':>6s}{'realised':>11s}{'holds':>7s}")
     stab = []
     for rate in RATES:
-        w = build_corpus(spec_for(rate, REPORT_SEED, args.n), source="ett")
-        losses = losses_over_grid(w, models, REPORT_SEED, f"rate{rate}")
-        realised = float(losses[DELTA][ct.lambda_star].mean())
+        # Same pool split per rate, so the stability table uses the same
+        # protocol as the calibration curve rather than the cross corpus one.
+        w = build_corpus(spec_for(rate, POOL_SEED, args.n), source="ett")
+        losses = losses_over_grid(w, models, POOL_SEED, f"rate{rate}")
+        _, ridx = split_pool(len(w))
+        realised = float(losses[DELTA][ct.lambda_star][ridx].mean())
         stab.append({"rate": rate, "realised": realised,
                      "holds": bool(realised <= 0.02)})
         print(f"{rate:6d}{realised:11.4f}{str(realised <= 0.02):>7s}", flush=True)

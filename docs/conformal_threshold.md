@@ -36,9 +36,19 @@ hand.
 ## Failure boundary, measured rather than assumed
 
 The first attempt is retained, because a negative result about the assumption
-is worth more than a discarded experiment. Calibrating on a corpus built from
-seed 123 and reporting on one built from seed 42, the guarantee held at 2 of 9
-alpha levels.
+is worth more than a discarded experiment. Its outputs are preserved at
+`results/conformal_crosscorpus.json` and `logs/conformal_crosscorpus.log` so
+the two designs can be read side by side.
+
+One thing it does not contain. Its stability table across contamination rates
+was still running when the design error was identified, and it was stopped
+rather than allowed to finish, because it would have spent two and a half GPU
+hours measuring stability under a protocol already known to be wrong. **The
+cross corpus stability table is therefore not available and is marked
+deferred.** The same pool version supersedes it and is produced by the rerun.
+
+Calibrating on a corpus built from seed 123 and reporting on one built from
+seed 42, the guarantee held at 2 of 9 alpha levels.
 
 | alpha | lambda star | calibration risk | realised on reporting | holds |
 |---|---|---|---|---|
