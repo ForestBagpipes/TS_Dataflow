@@ -1,0 +1,31 @@
+{
+ "tau": 0.12,
+ "epsilon": 0.005,
+ "eta": 0.62,
+ "soundness": {
+  "admitted": 404,
+  "violations": 0,
+  "rate": 1.0
+ },
+ "minimal_interference": {
+  "blocked": 1157,
+  "checked": 1154,
+  "helpful": 304,
+  "forgone_rate": 0.2634315424610052,
+  "by_reason": {
+   "ROLLED_BACK_UTILITY": {
+    "blocked": 768,
+    "helpful": 228
+   },
+   "ROLLED_BACK_STRUCTURE": {
+    "blocked": 386,
+    "helpful": 76
+   }
+  }
+ },
+ "non_blocking": {
+  "argument": "KEEP is admissible in every state",
+  "keep_steps": 1930,
+  "empty_traces": 0
+ }
+}
