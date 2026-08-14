@@ -45,7 +45,8 @@ from corpus import CorpusSpec, build_corpus  # noqa: E402
 
 from introact_ts.agent import AgentConfig, IntroActAgent  # noqa: E402
 from introact_ts.backends import PRESETS, make_pool  # noqa: E402
-from introact_ts.conformal import calibrate, check_monotone, risk_curve  # noqa: E402
+from introact_ts.conformal import (calibrate, check_monotone,  # noqa: E402
+                                   fixed_sequence_select, risk_curve)
 from introact_ts.verify import VerifyConfig  # noqa: E402
 
 DELTA = 1e-9
@@ -138,6 +139,17 @@ def main():
     cal = {d: {t: v[cal_idx] for t, v in allo[d].items()} for d in deltas}
     rep = {d: {t: v[rep_idx] for t, v in allo[d].items()} for d in deltas}
 
+    # Persist the raw per window losses. Every selection rule, any alpha and
+    # any future correction can then be evaluated without touching the GPU
+    # again, which is the expensive half of this experiment.
+    np.savez_compressed(
+        ROOT / "results" / "conformal_losses.npz",
+        cal_idx=cal_idx, rep_idx=rep_idx,
+        **{f"d{di}_t{t}": allo[d][t]
+           for di, d in enumerate(deltas) for t in TAU_GRID},
+        deltas=np.array(deltas), tau_grid=np.array(TAU_GRID))
+    print(f"  raw losses saved to results/conformal_losses.npz", flush=True)
+
     grid, cal_curve = risk_curve(cal[DELTA])
     _, rep_curve = risk_curve(rep[DELTA])
     mono_cal = check_monotone(cal_curve)
@@ -155,10 +167,27 @@ def main():
     print(f"\ncalibration curve, target against realised on held out data")
     print(f"{'alpha':>8s}{'lambda*':>10s}{'cal risk':>10s}{'corrected':>11s}"
           f"{'realised':>10s}{'holds':>7s}{'edits':>8s}")
+    # If the risk curve is not monotone the nested family assumption behind
+    # the single parameter calibration fails, so the run falls back to fixed
+    # sequence testing rather than reporting a number the derivation does not
+    # license. The fallback is chosen by the data, not by preference.
+    use_ltt = not mono_cal
+    if use_ltt:
+        print("  falling back to fixed sequence testing with Bentkus p values",
+              flush=True)
+
     rows = []
     violations = 0
     for a in ALPHAS:
-        ct = calibrate(cal[DELTA], a)
+        if use_ltt:
+            sel = fixed_sequence_select(cal[DELTA], a)
+            lam = sel["lambda_star"]
+            emp = float(cal[DELTA][lam].mean())
+            corrected = float("nan")
+            ct = type("T", (), {"lambda_star": lam, "empirical_risk": emp,
+                                "corrected_risk": corrected})()
+        else:
+            ct = calibrate(cal[DELTA], a)
         realised = float(rep[DELTA][ct.lambda_star].mean())
         holds = realised <= a
         violations += 0 if holds else 1
@@ -193,6 +222,8 @@ def main():
               f"{str(realised <= 0.02):>7s}")
 
     payload = {
+        "selection_method": ("fixed_sequence_testing" if use_ltt
+                             else "conformal_risk_control"),
         "delta": DELTA, "tau_grid": TAU_GRID, "alphas": ALPHAS,
         "pool_seed": POOL_SEED, "split_seed": SPLIT_SEED, "pool_n": POOL_N,
         "risk_curve_calibration": dict(zip(map(str, grid), cal_curve)),
@@ -209,8 +240,12 @@ def main():
         return
 
     print(f"\nstability across contamination rates, alpha fixed at 0.02")
-    ct = calibrate(cal[DELTA], 0.02)
-    print(f"lambda* {ct.lambda_star:.3f} selected once on the calibration corpus")
+    if use_ltt:
+        ct = type("T", (), {"lambda_star":
+                            fixed_sequence_select(cal[DELTA], 0.02)["lambda_star"]})()
+    else:
+        ct = calibrate(cal[DELTA], 0.02)
+    print(f"lambda* {ct.lambda_star:.3f} selected once on the calibration half")
     print(f"{'rate':>6s}{'realised':>11s}{'holds':>7s}")
     stab = []
     for rate in RATES:

@@ -119,3 +119,64 @@ def damage_loss(nmse_before: np.ndarray, nmse_after: np.ndarray,
     a = np.asarray(nmse_after, dtype=np.float64)
     b = np.asarray(nmse_before, dtype=np.float64)
     return (a > b + tol).astype(np.float64)
+
+
+# -- fallback for a non monotone risk curve ---------------------------------
+#
+# The single parameter calibration above assumes the thresholds form a nested
+# family, which shows up empirically as a monotone risk curve. When that fails,
+# selecting the largest admissible threshold is no longer justified by the
+# derivation and a multiplicity correction is required.
+#
+# Fixed sequence testing is the right correction here rather than Bonferroni.
+# The thresholds are ordered by construction, so the family of hypotheses
+#
+#     H_lambda : R(lambda) > alpha
+#
+# can be tested from the most conservative threshold upward, stopping at the
+# first one that cannot be rejected. That controls the family wise error rate
+# at level delta without splitting it across the grid, which Bonferroni would
+# do and which costs power in proportion to the grid size. It also does not
+# require monotonicity: it only requires that the ordering be fixed in advance,
+# which it is.
+
+
+def bentkus_p_value(risk_hat: float, alpha: float, n: int) -> float:
+    """p value for H: R > alpha, from Bentkus' inequality for a bounded loss.
+
+    Valid for any loss in [0, 1] with no distributional assumption. Returns 1
+    when the empirical risk is at or above alpha, since there is then no
+    evidence against the hypothesis.
+    """
+    from scipy.stats import binom
+
+    if not np.isfinite(risk_hat) or risk_hat >= alpha:
+        return 1.0
+    k = int(np.ceil(n * risk_hat))
+    return float(min(1.0, np.e * binom.cdf(k, n, alpha)))
+
+
+def fixed_sequence_select(losses_by_lambda: dict, alpha: float,
+                          delta: float = 0.05) -> dict:
+    """Largest threshold reachable by testing the ordered family in sequence.
+
+    Walks the thresholds from most to least conservative, testing each at level
+    delta, and stops at the first one it cannot reject. The last rejected
+    threshold is returned. If none is rejected the most conservative threshold
+    in the grid is returned, since declining to act is always available.
+    """
+    grid = tuple(sorted(losses_by_lambda))
+    n = len(next(iter(losses_by_lambda.values())))
+    selected, tested = grid[0], []
+    for g in grid:
+        r = float(np.mean(losses_by_lambda[g]))
+        p = bentkus_p_value(r, alpha, n)
+        tested.append({"lambda": float(g), "risk": r, "p": p,
+                       "rejected": bool(p <= delta)})
+        if p <= delta:
+            selected = g
+        else:
+            break
+    return {"lambda_star": float(selected), "alpha": float(alpha),
+            "delta": float(delta), "n": int(n), "tested": tested,
+            "method": "fixed sequence testing with Bentkus p values"}
