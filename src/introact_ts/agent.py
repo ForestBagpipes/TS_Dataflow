@@ -133,6 +133,13 @@ class IntroActAgent:
         self._calib = calibrate(B, P, SIGNAL_NAMES, K=max(K, 2))
         self._ood = ood_scores(P, K=min(20, max(2, len(windows) - 1)))
         self._reference = corpus_reference(evidences, self._calib.risk, self._ood)
+        #: Read only cache of the perception inputs. Nothing in the loop reads
+        #: these; they exist so an experiment can rebuild the risk states with a
+        #: substituted behavioural score without re running the probe, which is
+        #: the expensive part. Adding them changes no computation.
+        self._evidences = evidences
+        self._probes = probes
+        self._profiles = P
 
         states = []
         for i, w in enumerate(windows):
