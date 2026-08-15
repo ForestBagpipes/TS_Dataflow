@@ -1,132 +1,197 @@
-# Handoff, state as of 2026-08-11
+# Handoff, end of the experimental phase
 
-Everything below is committed. One job is still running on the GPU box, see the
-last section before shutting anything down.
+State as of 2026-08-15. Everything below is committed. The transition this
+document marks is from running experiments to writing the paper: the evidence
+for the central claims is in hand, three experiments are still queued, and
+what is missing is known and bounded.
 
-## The one thing to read first
+## The claim, as the evidence now supports it
 
-This session changed what the paper claims. The old contribution one was that
-clean out of distribution data alarms a frozen forecaster more than
-contamination does. **That claim is withdrawn.** It was tested against real
-cross domain data and against generated ladders and it does not survive either.
+Acceptance of a data edit cannot rest on model utility alone, because utility
+rises when data is flattened as well as when it is repaired. The contribution
+is an execution time acceptance layer that requires a utility improvement and
+structural preservation together and rolls back on failure, and that is
+independent of the strategy proposing the edits.
 
-What replaced it is stronger, because it comes from controlled experiments
-rather than from a stratum that happened to be in the corpus. Behavioural risk
-measures how hard a window is for a frozen forecaster to locate and continue,
-and it decomposes into two separable, roughly additive factors: level
-positioning uncertainty, worth +0.203, and local shape unpredictability, worth
-+0.141. See `docs/behavior_variable_identification.md` for the full argument.
+Our own agent is one instance of proposer plus layer, not the subject of the
+claim. That reordering is forced by the measurement in the next section.
 
-## What ran this session
+## Established, with the number and where it lives
 
-All on the GPU box, real TSFM backends, multi-family preset unless stated.
+**The acceptance layer works on proposers that are not ours.**
+`docs/gating_modularity.md`, `results/gating.json`. On a statistical rule,
+damage falls from 0.0715 to 0.0016 and repair is retained at 70 percent. On an
+unconditional cleaner, repair moves from -0.014 to +0.044, so a pipeline doing
+net harm becomes net beneficial without one line of it changing, while damage
+falls 97.0 percent. Of that cleaner's 1398 proposals, 725 were rejected on
+structural distance against 452 on utility, so the structural term is the
+principal gatekeeper.
 
-| job | scale | wall clock | result file |
-|---|---|---|---|
-| contamination sweep, 6 rates | 800 windows each | 4600s | `results/sweep/sweep.json` |
-| ablation ladder, 8 rungs plus tau sweep | 210 windows | 800s | `results/ablations/ablations.json` |
-| real cross domain perception | 1150 windows | 299s | `results/ood_check.json` |
-| real cross domain curation | 1150 windows | 315s | `results/ood_curate.json` |
-| controlled ladder, 12 rungs | 1200 windows | 181s | `results/ladder.json` |
-| level 2x2 plus phi sweep | 1300 windows | 369s | `results/level_2x2.json` |
-| cross model comparison | 600 windows | in progress | `results/cross_model.json` |
+**The gated statistical rule beats our own system on damage**, 0.0016 against
+0.0020, at repair +0.255 against +0.181. This is why the claim is about the
+layer rather than about our search.
 
-## The results that matter
+**Protection holds across contamination rates.** `docs/protection_sweep.md`,
+`results/sweep/sweep.json`. Damage on protected data is 0.085 to 0.129 for the
+full method against 0.95 to 1.35 for unconditional cleaning, 0.35 to 0.78 for
+a statistical rule and 0.25 to 0.31 for quality ranking, at every rate from 5
+to 67 percent, with a flat curve while the baselines move by a factor of two.
 
-**Protection, six contamination rates, `docs/protection_sweep.md`.** Damage on
-protected data is 0.085 to 0.129 for the full method against 0.95 to 1.35 for
-unconditional cleaning, 0.35 to 0.78 for the statistical rule and 0.25 to 0.31
-for quality ranking. Same ordering at every rate, and the curve is flat while
-the baselines move by a factor of two. This is the main table.
+**The behavioural signal measures predictability, not data quality.**
+`docs/behavior_variable_identification.md`, `results/level_2x2.json`,
+`results/ladder.json`. It decomposes into level positioning uncertainty at
++0.203 and local shape unpredictability at +0.141, roughly additive, isolated
+by a 2x2 whose decisive pair holds local shape fixed at auc 0.716, p 1.4e-07.
+Two competing explanations were tested and refuted: classical predictability,
+since white noise scores below the real data anchor and AR(0.95) above
+AR(0.30); and structural familiarity, since three of four deterministic
+irregular forms score below the anchor.
 
-**Verification is the component, `docs/ablation_ladder.md`.** Removing it
-multiplies damage by 4.6 and doubles the edits, for fifty percent more repair.
-Peer calibration and abstention show no measurable effect and are written down
-that way.
+**The false alarm on clean unpredictable data survives dropping half the
+evidence.** `docs/ood_form_split.md`. Four generator forms are elevated
+independently at auc 0.705 to 0.760. Dropping the two whose structure resembles
+an injected defect leaves auc 0.715 at p 9.5e-13 over 105 windows.
 
-**Real cross domain windows are never edited.** 150 of them, zero accepted
-edits, against 20 of 150 on the synthetic shapes with a minimum variance ratio
-of 0.032. The practical argument holds: on multi domain corpora the method
-neither misfires nor mis-edits.
+**It replicates across four frozen backends.** `docs/cross_model_check.md`,
+`results/cross_model.json`. Weakest at p 1.3e-04.
 
-**The flattening failure, `docs/triple_failure_analysis.md`.** Ten synthetic
-clean windows had nine percent of their points edited and ninety six percent of
-their variance removed, all landing on the same final utility near -2.0. The
-structural guard missed them at a distance of 0.037 against a threshold of
-0.12, because a local operator is judged outside the footprint it declares and
-the damage happens inside it.
+**Verification is the component that matters.** `docs/ablation_ladder.md`.
+Removing it multiplies damage by 4.6 and doubles the edits for fifty percent
+more repair. Peer calibration and abstention show no measurable effect and are
+reported as such.
 
-## What is still open, in priority order
+**The threshold can be calibrated with a guarantee.**
+`docs/conformal_threshold.md`, `results/conformal_samepool_stage1.json`. Under
+a same pool split the guarantee holds at every reachable target: three alphas
+lie below a 0.0088 floor set by the action space and grid, five hold, and one
+isolated violation at alpha 0.040 overshoots by 0.0025 with both neighbours
+holding. Hand set thresholds realise 0.0200, 0.1025 and 0.1562 with no
+guarantee attached to any of them.
 
-1. **cross_model, running now.** Two of four backends reported. Both chronos
-   variants show the level effect more strongly than the multi backend pool,
-   walk against ramp auc 0.785 and 0.890. timesfm and surrogate are pending.
-   The surrogate is the one with confirmed explicit instance normalisation, so
-   it is the informative one for the mechanism.
+**Downstream, defensively.** `docs/downstream.md`. Without the acceptance step
+an aggressive pipeline degrades downstream MSE by two to eleven fold, patchtst
+per seed -233, -1051 and -423 percent; with it, the same pipeline returns to
+within a few percent of not curating. Three independently trained models agree
+in direction.
 
-2. **tau is off the efficient frontier and has not been moved.** The sweep
-   shows damage rising sixfold from tau 0.04 to 0.12 while repair moves 0.004.
-   Not changed, because the value would be chosen after seeing the failure it
-   prevents, which is tuning against the test corpus. Needs held out selection.
+**Two shield properties.** `docs/shield_properties.md`. Non blocking is proved:
+KEEP has zero utility delta, zero structural distance and zero cost, so it is
+admissible in every state. Minimal interference is partially satisfied at a
+forgone rate of 0.263.
 
-3. **Two prepared repairs, neither applied.** A variance preservation term in
-   the structural distance for local operators, which separates the ten
-   destructive edits at ratio 0.03 from the three benign ones at 0.99 to 1.00.
-   And a reachable OOD threshold, since 1e-3 on the 85th percentile of a
-   normalised profile cosine distance admits nothing and fired 0 times in 210.
-   Both change the acceptance rule and invalidate every run above.
+## Not established, or established negatively
 
-4. **clean_ood edit economics not yet written up.** The numbers are in hand:
-   20 edits at mean delta utility +25.81 against contaminated at +0.54, a
-   factor of 48, with a minimum variance ratio of 0.032. This is the E3 figure.
+**M4 predictability decorrelation is partial.**
+`docs/predictability_decorrelation.md`. It raises corpus AUROC from 0.468 to
+0.551, paired difference +0.083 CI [+0.060, +0.108], and removes the false
+alarm on all four OOD forms, 0.705 to 0.760 down to 0.504 to 0.527. It costs
+level_shift, flatline and duplicate detection, -0.119, -0.113 and -0.072. Both
+directions are the same root cause: unpredictability from a displaced level and
+from the structure itself are one quantity to this signal. Fully corrected it
+still reaches only 0.551. Whether it enters the acceptance path is decided by
+the queued integration test.
 
-5. **Posterior probabilities still not exported**, so a like for like AUROC of
-   the combined signal against the profile remains deferred.
+**Minimal interference is violated 26.3 percent of the time.** 304 of 1154
+replayable vetoes would have improved the window. The utility condition
+misfires on 29.7 percent of what it blocks and the structural condition on 19.7
+percent, which is a fourth line of evidence that the model consulting condition
+is the weaker one.
 
-6. **Do not put the risk coverage curve in the paper** until `action_risk`
-   stops consuming the class posterior, which is anti correlated with edit
-   success and carries weight 0.45.
+**No positive downstream gain from conservative curation.** Every effect for
+stat_only, stat_only_gated and introact_full sits at or below its own model's
+paired noise floor of 0.27 to 2.99 percent. The cause is mechanical:
+introact_full edits 71 of 800 windows and leaves 91 percent of the corpus byte
+identical. Dilution was ruled out, not assumed, by evaluating on the 515 edited
+windows only.
 
-## Withdrawn claims, do not reintroduce
+**TSFM fine tuning skipped, by a pre committed criterion.** The criterion
+required a paired noise floor under 3 percent and a decidable direction on the
+affected subset. The first held, the second did not. A frozen TSFM is the
+verifier in this method, not the object being curated, and that role division
+is what the paper states.
 
-- Clean out of distribution data alarms the model more than contamination.
-  Real cross domain windows score -0.017 against contaminated at +0.090.
-- rare_valid and changepoint sit above contaminated. Their medians are higher
-  and neither clears significance, p 0.13 and p 0.51.
-- The behavioural signal measures predictability. White noise scores below the
-  real data anchor and AR(0.95) scores above AR(0.30).
-- The behavioural signal measures structural familiarity. Three of four
-  deterministic irregular shapes score below the anchor.
-- Pulse trains were the windows being flattened. They were edited 0 times of
-  52. It was sawtooth, staircase and random walk.
+**The profile misfire is not shown to generalise.** `docs/detector_crossval.md`.
+Four of five standard detectors cannot separate contaminated from clean windows
+on this corpus, contaminated lift 0.83 to 1.00, so they are not a valid control.
+The fifth is silent on the stratum in question. Confirmed for our
+implementation only.
 
-## Naming and comparability, both deliberate
+**AegisTS cannot be run as published.** Its repository is missing the
+`Datasets` module that all four core modules import, and `.gitignore` excludes
+it. Request text is ready at `researched_papers/aegists/ISSUE_TO_SEND.md` and
+**has not been sent**; sending it is a manual step. The modularity claim does
+not depend on it, since two external proposers already support it.
 
-`real_ood` keeps its identifier in code so existing result files stay readable,
-but every description now says cross domain. Exchange rate and solar power are
-public benchmarks that may sit inside the backends' pretraining corpora and
-membership could not be verified, so they are not strict out of distribution
-evidence. See the comment block in `experiments/datasets.py`.
+**M3 invariant specification not done.** Deferred. The structural distance
+weights remain hand set, and that must appear in the limitations section as
+stated rather than as a detail.
 
-Behavioural risk is a within corpus quantity because peer calibration is
-relative. The same staircase scored +0.535 in one corpus and -0.087 in another,
-and both are correct. Never place a number from one run beside a number from
-another. `docs/scope_and_comparability.md` has the rule and the two causes.
+## Queued right now
 
-## Before shutting down
+Running under `setsid` on the box, so an SSH drop will not kill it. Sequence:
 
-The box is `ssh -p 53677 root@connect.bjb2.seetacloud.com`, work2 lives at
-`/root/autodl-tmp/work2` and is isolated from work1 by directory and by conda
-environment. `cross_model.py` is still running there and writes
-`results/cross_model.json` when it finishes. Nothing else is queued.
+1. **conformal rerun**, for `results/conformal_losses.npz` and to exercise the
+   fixed sequence fallback. The stage 1 numbers already in hand are valid and
+   are preserved at `results/conformal_samepool_stage1.json`; this rerun adds
+   raw per window losses so any alpha or selection rule can be recomputed on
+   CPU. Also produces the stability table across six contamination rates, which
+   was interrupted twice and is currently missing.
+2. **soft_vs_hard**, the highest value remaining experiment. It is the only
+   controlled evidence for the mechanism difference against the closest
+   competing design: a soft penalty sweep over mu against a hard veto sweep
+   over tau, same proposer, same operators, plotted as a repair versus damage
+   frontier. E3 depends on it.
+3. **gating_m4**, the integration test. Criterion fixed before the run:
+   protected edits must fall and repair must not drop more than 10 percent
+   relative, otherwise M4 stays diagnostic.
 
-To collect it next session:
+Then, not yet queued: oracle upper bound and a random proposer, to complete the
+main table.
 
-    python -c "import sys,tempfile,os; sys.path.insert(0,tempfile.gettempdir()); \
-      os.environ.setdefault('W2_PASS','...'); from remote import client; \
-      c=client(); s=c.open_sftp(); \
-      s.get('/root/autodl-tmp/work2/results/cross_model.json','results/cross_model.json')"
+## For the writing phase
 
-The GPU bills while the instance is up. If the cross model result is not needed
-immediately, stopping the instance is safe, the job can be rerun in about four
-minutes.
+**Method chapter, four modules.** M1 behavioural probe and what it measures,
+evidence complete. M2 conformal acceptance threshold, evidence complete. M3
+invariant specification, deferred, weights hand set. M4 predictability
+decorrelation, diagnostic, integration pending.
+
+**Experiments and what each carries.** E1 main table, the modularity claim,
+needs oracle and random rows. E2 calibration curve, the guarantee. E3 soft
+against hard, the architectural claim, queued. E4 decorrelation AUROC table,
+done. E5 downstream, defensive only.
+
+**Limitations to write, each with its number.** Structural weights hand set,
+M3 deferred. Minimal interference forgone rate 0.263 and the utility condition
+being the worse of the two at 29.7 percent. Behavioural risk is a within corpus
+quantity, see `docs/scope_and_comparability.md`, and the same staircase scored
++0.535 in one corpus and -0.087 in another. No positive downstream gain at
+under 9 percent change volume. The reachable risk floor of 0.0088. The profile
+misfire not shown to generalise. Exchangeability required by the guarantee, with
+the measured cost of violating it at 20 to 50 percent relative.
+
+**Do not reintroduce.** Clean out of distribution data alarms the model more
+than contamination, withdrawn, real cross domain windows score -0.017 against
+contaminated at +0.090. Any ordering read off a median column without a
+significance test. Instance normalisation as the mechanism behind the level
+effect, tested and refuted. Pulse trains as the flattened windows, they were
+edited 0 times of 52.
+
+## Machine and environment
+
+Box is `ssh -p 24509 root@connect.bjb2.seetacloud.com`. **The port changes when
+the container is reassigned**, it has changed twice already, and the hostname
+changing is the signal that running processes were lost. Work2 lives at
+`/root/autodl-tmp/work2`, isolated from work1 by directory and conda
+environment, interpreter at `/root/autodl-tmp/envs/w2`.
+
+The SSH helper is at `~/.w2tools/remote.py`, moved out of the shared temp
+directory because a script named `inspect.py` belonging to the other project
+sits there and shadows the standard library. Do not add the temp directory to
+`sys.path`.
+
+Long jobs must be started with `setsid` and a queue script, or they die with
+the SSH session. Two runs were lost this way before that was fixed.
+
+Disk is at 78 percent, 12 GB free. That is enough for what is queued and not
+enough for a foundation model fine tune, which is another reason that step
+needs planning rather than an attempt.
