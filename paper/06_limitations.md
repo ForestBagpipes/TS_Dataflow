@@ -40,6 +40,32 @@ set and the grid, not of the calibration. `docs/conformal_threshold.md`.
 Two of our limitations have one cause, and stating them together turns two
 isolated defects into one understood property.
 
+### Three levels of shift, and the degradation at each
+
+The prediction this section makes is that a stronger shift in corpus
+composition produces a larger departure from the target. It was made before the
+stability runs and the runs test it directly.
+
+| shift | what changed | realised against a 0.02 target | outcome |
+|---|---|---|---|
+| none | same pool, same contamination rate | holds at every reachable target | one isolated violation at alpha 0.040, +0.0025 |
+| contamination rate | calibrated at 35 percent, applied at 5, 10, 20, 35 | 0.0125, 0.0175, 0.0200, 0.0200 | holds |
+| contamination rate | calibrated at 35 percent, applied at 50 | 0.0225 | violated by 0.0025, 12.5 percent relative |
+| corpus identity | calibrated on one seed, applied to an independently sampled corpus | held at 2 of 9 targets | violated by 20 to 50 percent relative, worst absolute 0.0125 |
+
+**The prediction holds and the ordering is the one it implies.** No shift gives
+a guarantee that holds where it can. A moderate shift, the contamination rate
+moving from 35 percent to 50, overshoots by 12.5 percent relative. A strong
+shift, a different corpus entirely, overshoots by 20 to 50 percent. At every
+level the failure is a degradation rather than a collapse: the realised risk
+exceeds the target by a bounded and measured amount rather than becoming
+uninformative.
+
+**Deployment consequence, and it belongs in the method rather than here.**
+Recalibrate when the corpus composition changes, and a substantial change in
+contamination rate counts as such a change. The figures above are the reference
+for what is lost by not doing so.
+
 **Both calibrated quantities are relative to the corpus they were calibrated
 on.** The behavioural risk is a peer calibrated z score, so the same window
 placed among different neighbours receives a different value: the same staircase

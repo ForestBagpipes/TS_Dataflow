@@ -113,6 +113,26 @@ most conservative threshold and stopping at the first hypothesis it cannot
 reject. That controls the family wise error rate without splitting it across
 the grid, and it requires only that the ordering be fixed in advance.
 
+**When to recalibrate.** The guarantee is conditional on exchangeability between
+the calibration data and the deployment data, and corpus composition is what
+that condition is about. Recalibration is required when the composition
+changes, and a substantial change in contamination rate qualifies. We measured
+the cost of not doing so at three levels of shift, and the degradation is
+ordered and bounded: no shift holds wherever a target is reachable, moving the
+contamination rate from 35 percent to 50 overshoots a 0.02 target by 12.5
+percent relative, and moving to an independently sampled corpus overshoots by
+20 to 50 percent relative. The failure mode is degradation rather than
+collapse at every level.
+
+**A note on proposal granularity.** The structural condition measures a
+compound of how much was changed and how far the structure moved, so it is
+sensitive to the granularity at which edits are proposed. Against a proposer
+that rewrites an entire series point by point it degenerates towards rejecting
+everything, which preserves the data and forgoes the repair. The layer applies
+to proposers whose edits are localised, and that can be checked in advance by
+measuring the fraction of points a proposer rewrites. See
+`docs/proposal_granularity.md`.
+
 Two properties of the procedure are worth stating because they bound what it
 delivers. There is a floor: the most conservative threshold in the grid already
 realises some non zero damage rate, so targets below that floor have no
