@@ -35,13 +35,39 @@ any target below it has no solution and the procedure returns the most
 conservative threshold available. The floor is a joint property of the operator
 set and the grid, not of the calibration. `docs/conformal_threshold.md`.
 
-**The guarantee is conditional on exchangeability, and we measured the cost of
-violating it.** Calibrating on a corpus built from one seed and reporting on an
-independently sampled one, the guarantee held at 2 of 9 target levels, with all
-seven violations underestimating and the two risk curves offset by a consistent
-1.2 to 1.5 across the whole threshold grid, worst absolute overshoot 0.0125.
-Under a same pool split it holds at every reachable target with one isolated
-violation at alpha 0.040, overshooting by 0.0025 with both neighbours holding.
+## The corpus dependence of calibration, and what it implies
+
+Two of our limitations have one cause, and stating them together turns two
+isolated defects into one understood property.
+
+**Both calibrated quantities are relative to the corpus they were calibrated
+on.** The behavioural risk is a peer calibrated z score, so the same window
+placed among different neighbours receives a different value: the same staircase
+generator scored a median of +0.535 in one corpus and -0.087 in another. The
+conformal threshold is calibrated against an empirical risk curve, so a corpus
+whose windows are harder to curate shifts that curve: calibrating on one corpus
+and reporting on an independently sampled one held the guarantee at 2 of 9
+target levels, with all seven violations underestimating and the two risk curves
+offset by a consistent factor of 1.2 to 1.5 across the whole threshold grid,
+worst absolute overshoot 0.0125. Under a same pool split the guarantee holds at
+every reachable target, with one isolated violation at alpha 0.040 overshooting
+by 0.0025 while both its neighbours hold.
+
+**The common cause is that calibration reads the corpus composition.** Peer
+calibration reads it through the neighbour set and conformal calibration reads
+it through the risk curve. Neither quantity is a property of a window alone.
+
+**The implicit assumption this makes explicit.** The method assumes curation is
+performed on a corpus of stable composition, and a change of corpus requires
+recalibration. That is a real operating condition and it is stated as one. Two
+consequences follow and both are observed in this paper. No behavioural risk
+value may be compared across corpora, which is why none is anywhere here. And
+the guarantee degrades rather than collapses when the assumption is violated,
+overshooting a small target by 20 to 50 percent relative rather than failing
+outright, which bounds what a user loses by deploying on data from a different
+source than the calibration set.
+
+`docs/scope_and_comparability.md`, `docs/conformal_threshold.md`,
 `results/conformal_crosscorpus.json`, `results/conformal_samepool_stage1.json`.
 
 ## On the evidence
@@ -80,12 +106,6 @@ an unpaired aggregation charges corpus variation to method differences. The
 unpaired noise floor on the reference row is 33 to 34 percent against 0.27 to
 2.99 once paired. All reported downstream numbers are paired. This was found by
 us rather than raised in review. `docs/downstream.md`.
-
-**Behavioural risk is a within corpus quantity.** Peer calibration is relative,
-so the same window placed in a different corpus receives a different risk. The
-same staircase generator scored a median of +0.535 in one corpus and -0.087 in
-another. No behavioural risk value is compared across corpora anywhere in this
-paper. `docs/scope_and_comparability.md`.
 
 ## On the evaluation setting
 

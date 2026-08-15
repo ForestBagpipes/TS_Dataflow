@@ -59,14 +59,46 @@ than for any particular edit. Their own parameter studies show the cost of
 raising that weight, since a penalty that restricts damage also restricts
 repair.
 
-Independently of this work, calibrated gating at execution time has been
-proposed in four other settings within the last six months, covering mobile
-interface automation, locally deployed language models, cross runtime action
-certification and tool call arguments. That convergence is evidence the problem
-is real and the shape of the answer is agreed. What none of them faces is a
-verifier that points the wrong way, because in each of those settings the risk
-signal is a sound proxy for the harm it is calibrated against. That is the
-premise we cannot borrow.
+## Why neither a rule nor a model suffices here
+
+Gating an action before it takes effect is an established construction. It has
+been proposed for code execution and driving agents, for mobile interface
+automation, for locally deployed language models, for cross runtime action
+certification and for tool call arguments, all within recent work. The closest
+of these gives a language in which a safety rule is a trigger, a predicate and
+an enforcement mechanism, and blocks any proposed action whose predicate
+rejects it. That convergence is evidence the problem is real and that the shape
+of the answer is agreed on.
+
+The construction transfers to data curation. The predicate does not, and the
+reason is the argument of this paper.
+
+**A safety predicate cannot be written here.** In those settings unsafe is
+expressible as a condition on the action itself. Do not delete outside this
+directory. Do not exceed this speed. Do not let untrusted content set a
+recipient. Whether an edit to a window is harmful is not a condition on the
+edit. The same operator applied with the same parameters repairs one window and
+destroys another, and which of the two occurred depends on what the window
+contained. No rule over operators and parameters separates them.
+
+**So the predicate must consult a model.** If harm cannot be read off the
+action, it has to be read off the effect, and the only instrument that reports
+on the effect is a model asked whether it does better on the result. That is
+what every curation system does, ours included, and there is no alternative
+instrument.
+
+**And the model's opinion is anti correlated with harm over a region we can
+characterise.** It rewards flattening as readily as repair, at seventeen times
+the rate per unit of variance destroyed. The behavioural signal it yields
+reaches a corpus AUROC of 0.468 with a bootstrap interval entirely below 0.5,
+and the region where it inverts is not an edge case but precisely the clean
+data that curation exists to protect.
+
+**Therefore neither alone.** A declared rule cannot express the condition, and
+the model that can express it is wrong where it matters most. The response is a
+compound admission test, in which a condition that consults the model and a
+condition that never does must both hold, and a calibration applied to that
+compound rather than to either part.
 
 ## Technical challenges
 
