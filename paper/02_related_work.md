@@ -108,20 +108,23 @@ relative.
 
 ## Calibrated gating of agent actions at execution time
 
-A recent and fast moving line places a calibrated gate between a proposer and
-its effects. One system scores each proposed mobile interface action with a
-separate risk model and calibrates an execute or abstain threshold so that the
-rate of harmful executed actions respects a stated budget. Another wraps a
-locally deployed language model with an anytime valid selective risk bound that
-holds per deployment rather than in aggregate. A third defines a runtime
-neutral certificate for each action, recording what was authorised and on what
-basis, with checkpoints from pre action admissibility to outcome closure. A
-fourth calibrates per argument role rather than per call, on the argument that
-a single budget over a whole tool call hides the fields where consequences
-concentrate.
+A recent and fast moving line places a gate between a proposer and its effects,
+calibrated or declared. One line gives a domain specific language in which a
+safety rule is a trigger, a predicate and an enforcement mechanism, intercepting
+proposed actions at runtime and blocking those the predicate rejects, evaluated
+on code execution, embodied and driving agents. A second scores each proposed
+mobile interface action with a separate risk model and calibrates an execute or
+abstain threshold so that the rate of harmful executed actions respects a stated
+budget. A third wraps a locally deployed language model with an anytime valid
+selective risk bound that holds per deployment rather than in aggregate. A
+fourth defines a runtime neutral certificate for each action, recording what was
+authorised and on what basis, with checkpoints from pre action admissibility to
+outcome closure. A fifth calibrates per argument role rather than per call, on
+the argument that a single budget over a whole tool call hides the fields where
+consequences concentrate.
 
-Taken together these establish that a calibrated gate at execution time is
-worth building, arrived at independently in four different settings. We take
+Taken together these establish that a gate at execution time is worth building,
+arrived at independently in five different settings. We take
 that as support for the premise rather than as competition, and our design is
 the same shape: a proposer, a scored candidate, a threshold with a distribution
 free guarantee, and an option to decline. Two specific points of contact are
@@ -131,10 +134,11 @@ method to zero absolute error. The per role line and our per stratum reporting
 share a refusal of the aggregate, reached from unrelated starting points.
 
 **The premise differs, and that is the contribution.** These works assume the
-risk signal is a reasonable proxy for harm, and what they calibrate is a signal
-taken to be reliable. That assumption is sound in their settings: a harmful
-interface action is harmful whatever a model believes, a verifiable reward is
-verifiable, and a recipient field is dangerous no matter what a detector says.
+risk signal is a reasonable proxy for harm, and what they calibrate or enforce
+is a signal taken to be reliable. That assumption is sound in their settings: a harmful interface action is
+harmful whatever a model believes, a verifiable reward is verifiable, a
+recipient field is dangerous no matter what a detector says, and a rule
+forbidding deletion outside a directory is correct by inspection.
 In data curation it fails. The most natural verifier is whether a model does
 better on the edited data, and a model does better on data that has been
 flattened as surely as on data that has been repaired. We measure that signal
@@ -144,9 +148,17 @@ correlated with harm over a characterisable region delivers the budget and not
 the safety, which is why our calibration is applied to a condition that never
 consults the model.
 
-**No experimental comparison is run against these four, deliberately.** Their
-corpora are mobile interface traces, training rounds, cross runtime execution
-records and tool call arguments. Their action spaces and their definitions of
+The specification based line is the closest architectural precedent and the
+comparison is worth being exact about. Their predicate is written by a domain
+expert, and the correctness of any individual rule is the user's
+responsibility. We cannot write ours, because whether an edit to a window is
+harmful is not expressible as a condition on the edit alone. That is why the
+natural move is to ask a model, and it is the reason this paper exists: the
+model answers wrongly over a region we can characterise.
+
+**No experimental comparison is run against these five, deliberately.** Their
+corpora are code execution and driving traces, mobile interface traces, training
+rounds, cross runtime execution records and tool call arguments. Their action spaces and their definitions of
 harm do not overlap with injected defects in a series corpus and an edit that
 damages a window. There is no shared platform, and constructing one would mean
 inventing a benchmark whose numbers would measure the benchmark. The comparison
