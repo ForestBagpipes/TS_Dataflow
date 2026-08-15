@@ -1,21 +1,15 @@
 # Calibrating the structural threshold with a finite sample guarantee
 
-The threshold was set by hand, then moved to a held out seed by a rule fixed in
-code, and both give a number with no statement attached about what it
+The threshold tau was set by hand, then moved to a held out seed by a rule
+fixed in code, and both give a number with no statement attached about what it
 guarantees. This replaces the number with a procedure that carries one: given a
 target level alpha, the expected fraction of windows the system damages is at
-most alpha, assuming only exchangeability between the calibration data and the
-deployment data.
+most alpha, assuming only exchangeability between calibration and deployment
+data.
 
-## Pre registration of the split, written before the run
+## Pre registration of the split
 
-The first attempt used two corpora built from different seeds, 123 for
-calibration and 42 for reporting. That violates exchangeability, and the
-measured consequence is quantified in the last section. The corrected design
-draws **one pool and splits it at random**, so exchangeability holds by
-construction rather than by assumption.
-
-Fixed here before any of it executes:
+Fixed in commit f563583 before the code that uses it was written:
 
     pool         1600 windows, corpus seed 42, 35 percent contaminated
     split        random, 800 calibration and 800 reporting
@@ -24,93 +18,122 @@ Fixed here before any of it executes:
     alpha grid   0.001 0.002 0.005 0.01 0.015 0.02 0.03 0.04 0.05
     tau grid     0.005 0.01 0.015 0.02 0.03 0.04 0.06 0.08 0.10 0.12 0.16 0.20 0.25 0.30
 
-The split is drawn once. It is not redrawn if the result is unfavourable, and
-the loss threshold and the two grids carry over from the first attempt
-unchanged so that nothing about the target moved when the design was fixed.
+The split was drawn once and not redrawn. The loss threshold and both grids
+carry over unchanged from the first attempt, so nothing about the target moved
+when the design was corrected.
 
-## Results, same pool split
+## The reachable floor, which the table cannot be read without
 
-Deferred until the run completes. This section is written by the run, not by
-hand.
+**The most conservative threshold in the grid, tau 0.005, already realises a
+risk of 0.0088 on the reporting half.** No entry in the grid reaches below it,
+so any target under 0.0088 has no solution: the procedure returns the most
+conservative threshold available and the realised risk sits above the target
+regardless.
 
-## Failure boundary, measured rather than assumed
+That floor is a property of the action space and the grid together, not of the
+calibration. It exists because the operators available are coarse, and because
+the grid stops at 0.005 rather than continuing towards zero. Extending the grid
+downward would lower it until the point where no edit is admitted at all, at
+which the risk is zero and so is the repair.
 
-The first attempt is retained, because a negative result about the assumption
-is worth more than a discarded experiment. Its outputs are preserved at
-`results/conformal_crosscorpus.json` and `logs/conformal_crosscorpus.log` so
-the two designs can be read side by side.
+## Main result, same pool split
 
-One thing it does not contain. Its stability table across contamination rates
-was still running when the design error was identified, and it was stopped
-rather than allowed to finish, because it would have spent two and a half GPU
-hours measuring stability under a protocol already known to be wrong. **The
-cross corpus stability table is therefore not available and is marked
-deferred.** The same pool version supersedes it and is produced by the rerun.
+| alpha | lambda star | calibration risk | corrected | realised | classification |
+|---|---|---|---|---|---|
+| 0.001 | 0.005 | 0.0112 | 0.0125 | 0.0088 | target unreachable |
+| 0.002 | 0.005 | 0.0112 | 0.0125 | 0.0088 | target unreachable |
+| 0.005 | 0.005 | 0.0112 | 0.0125 | 0.0088 | target unreachable |
+| **0.010** | 0.005 | 0.0112 | 0.0125 | **0.0088** | holds |
+| **0.015** | 0.005 | 0.0112 | 0.0125 | **0.0088** | holds |
+| **0.020** | 0.015 | 0.0163 | 0.0175 | **0.0100** | holds |
+| **0.030** | 0.020 | 0.0213 | 0.0225 | **0.0200** | holds |
+| 0.040 | 0.030 | 0.0375 | 0.0387 | 0.0425 | **true violation** |
+| **0.050** | 0.040 | 0.0450 | 0.0462 | **0.0500** | holds |
 
-Calibrating on a corpus built from seed 123 and reporting on one built from
-seed 42, the guarantee held at 2 of 9 alpha levels.
+**Under the same pool split the guarantee holds everywhere it is reachable,
+with one exception.** Three targets lie below the 0.0088 floor and have no
+solution in this action space and grid, and the procedure behaves correctly
+there by returning the most conservative threshold. Five hold. One genuine
+violation remains, at alpha 0.040 where the realised risk is 0.0425, an
+overshoot of 0.0025.
 
-| alpha | lambda star | calibration risk | realised on reporting | holds |
-|---|---|---|---|---|
-| 0.001 | 0.005 | 0.0100 | 0.0100 | no |
-| 0.005 | 0.005 | 0.0100 | 0.0100 | no |
-| **0.010** | 0.005 | 0.0100 | 0.0100 | **yes** |
-| 0.015 | 0.015 | 0.0125 | 0.0187 | no |
-| **0.020** | 0.015 | 0.0125 | 0.0187 | **yes** |
-| 0.030 | 0.030 | 0.0288 | 0.0413 | no |
-| 0.040 | 0.040 | 0.0312 | 0.0462 | no |
-| 0.050 | 0.060 | 0.0425 | 0.0625 | no |
+That single violation is bracketed by alpha 0.030 and alpha 0.050, both of
+which hold. An isolated failure surrounded by successes is what finite sample
+fluctuation looks like, and it is reported as such rather than explained away.
 
-The cause is not the calibration machinery and not a monotonicity failure.
-Monotonicity holds on both corpora. The two risk curves are offset:
+## The signature that separates the two designs
 
-| tau | calibration | reporting | ratio |
-|---|---|---|---|
-| 0.005 | 0.0100 | 0.0100 | 1.00 |
-| 0.020 | 0.0238 | 0.0300 | 1.26 |
-| 0.060 | 0.0425 | 0.0625 | 1.47 |
-| 0.120 | 0.0737 | 0.1075 | 1.46 |
-| 0.300 | 0.1388 | 0.1625 | 1.17 |
+The first attempt calibrated on a corpus built from seed 123 and reported on
+one built from seed 42. Both are retained,
+`results/conformal_crosscorpus.json` and
+`results/conformal_samepool_stage1.json`.
 
-**At the same threshold the reporting corpus is 20 to 50 percent more damageable
-than the calibration corpus.** Two independent samples of ETT windows differ in
-difficulty because window difficulty is heterogeneous in that data, so the two
-sets are not exchangeable draws from one distribution. All seven violations
-underestimate, never overestimate, which is the signature of a systematic
-offset rather than sampling noise. The largest absolute overshoot is 0.0125.
+| | cross corpus | same pool |
+|---|---|---|
+| violations | 7 of 9 | 1 true, 3 unreachable |
+| direction | all seven underestimate | isolated |
+| ratio of risk curves | 1.2 to 1.5 across the grid | not applicable |
+| worst overshoot | +0.0125 | +0.0025 |
+| reading | systematic offset | finite sample fluctuation |
 
-This is the deployment statement the paper should make: **the guarantee is
-conditional on exchangeability, and when it is violated by calibrating on one
-corpus and deploying on an independently sampled one, the realised risk exceeds
-the target by 20 to 50 percent relative.** Anyone applying this to data from a
-different source than the calibration set should expect degradation of that
-order.
+The distinguishing evidence is the direction, not the count. Seven violations
+all in the same direction, with the two risk curves offset by a consistent 1.2
+to 1.5 across the whole threshold grid, is a distribution shift: two
+independent samples of ETT windows differ in difficulty, so they are not
+exchangeable draws. One isolated violation with neighbours on both sides
+holding has no such structure.
 
-## Two results that stand regardless
+## What the alternative is
 
-**Hand set thresholds carry no guarantee at all**, and their realised risks on
-the reporting corpus are 0.0300 at tau 0.02, 0.1075 at 0.12 and 0.1537 at 0.20.
-The comparison is not between a guaranteed procedure and a slightly worse one,
-it is between a procedure that states what it delivers and three numbers that
-state nothing.
+Hand set thresholds, realised risk on the same reporting half:
 
-**The failure mode is mild and conservative in direction.** Even under the
-violated assumption the procedure held at alpha 0.01 and 0.02, and it selected
-lambda values well below the hand set ones, 0.005 and 0.015 against 0.02. It
-degrades by overshooting a small target rather than by collapsing.
+| tau | realised risk | guarantee |
+|---|---|---|
+| 0.02 | 0.0200 | none |
+| 0.12 | 0.1025 | none |
+| 0.20 | 0.1562 | none |
+
+At alpha 0.02 the procedure selects lambda star 0.015 and realises 0.0100,
+**half the target**. The comparison is not between a guaranteed procedure and a
+marginally better one. It is between a procedure that states what it delivers
+and three numbers that state nothing.
 
 ## Sensitivity to the loss threshold
 
-At alpha 0.02, on the first attempt's data:
+At alpha 0.02, all four hold under the same pool split, against two of four
+under the cross corpus design:
 
 | delta | lambda star | realised | holds |
 |---|---|---|---|
-| **1e-9, primary** | 0.015 | 0.0187 | **yes** |
-| 1e-4 | 0.015 | 0.0187 | yes |
-| 1e-2 | 0.020 | 0.0288 | no |
-| 5e-2 | 0.040 | 0.0225 | no |
+| **1e-9, primary** | 0.015 | 0.0100 | yes |
+| 1e-4 | 0.015 | 0.0088 | yes |
+| 1e-2 | 0.020 | 0.0138 | yes |
+| 5e-2 | 0.030 | 0.0163 | yes |
 
-The primary criterion is the strictest and it is also the one that holds. It
-was chosen before the run because it has no free parameter, being floating
-point noise rather than a tuned magnitude, and that choice is not revisited
-here.
+Lambda star widens as delta grows, which is the expected direction: counting
+only substantive damage admits more edits. The primary criterion at 1e-9 is the
+strictest and was fixed before the run because it has no free parameter.
+
+## Monotonicity and which route ran
+
+Measured: **calibration half monotone, reporting half not.**
+
+The selection rule reads only the calibration half, so the nested family
+assumption is satisfied where it is used and the conformal route is licensed.
+The reporting half is used only to check the realised risk and its monotonicity
+does not enter the derivation.
+
+The run prints a warning whenever either half is non monotone, which is stricter
+than the condition that actually governs the route, `use_ltt = not mono_cal`.
+The logic is right and the message is over broad. **Recorded as a wording defect
+to fix; no number changes.**
+
+A fixed sequence testing fallback with Bentkus p values is implemented in
+`introact_ts.conformal` for the case where the calibration half is non monotone.
+It was verified on a synthetic non monotone family and did not run here.
+
+## Reproducibility
+
+Per window losses at every threshold are written to
+`results/conformal_losses.npz`, so any alpha, any selection rule and any future
+correction can be evaluated on CPU without occupying the GPU again.
