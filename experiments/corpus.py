@@ -273,8 +273,15 @@ def _difficulty(series: np.ndarray) -> float:
     return float(1.0 - 0.5 * (seasonal / 0.3 if seasonal < 0.3 else 1.0) - 0.5 * memory)
 
 
-def build_corpus(spec: CorpusSpec = None, source: str = "ett") -> list:
-    """Assemble the stratified corpus. Returns a list of ``TSWindow``."""
+def build_corpus(spec: CorpusSpec = None, source: str = "ett",
+                 base: list = None) -> list:
+    """Assemble the stratified corpus. Returns a list of ``TSWindow``.
+
+    ``base`` optionally supplies the pool of defect free windows to draw from,
+    instead of sampling one here. It exists so a caller can control how the pool
+    was drawn, for instance to guarantee that every channel at a position is
+    present. Passing None preserves the original behaviour exactly.
+    """
     spec = spec or CorpusSpec()
     rng = np.random.RandomState(spec.seed)
     T = spec.window_len
@@ -282,7 +289,11 @@ def build_corpus(spec: CorpusSpec = None, source: str = "ett") -> list:
     # Over-draw so the `hard` stratum can be selected by difficulty rather than
     # constructed, which would make it a synthetic artefact.
     n_base = spec.total + spec.n_hard * 4
-    if source == "ett":
+    if base is not None:
+        if len(base) < n_base:
+            raise ValueError(f"base has {len(base)} items, need {n_base}")
+        base = base[:n_base]
+    elif source == "ett":
         from datasets import sample_ett_windows
 
         base = sample_ett_windows(n_base, window_len=T, seed=spec.seed)
@@ -406,3 +417,55 @@ def build_corpus(spec: CorpusSpec = None, source: str = "ett") -> list:
 
     rng.shuffle(windows)
     return windows
+
+
+# -- grouped corpus, for the multivariate downstream evaluation --------------
+
+
+def build_corpus_grouped(spec: CorpusSpec = None, seed: int = None):
+    """Assemble a corpus whose windows can be reassembled per channel group.
+
+    Returns ``(windows, group_map)``, where group_map sends a window id to
+    (group_id, channel_index). The map is separate from the window because the
+    window type is consumed by the curation loop and a downstream evaluation is
+    not a reason to change it. The grouping travels through the ``dataset``
+    label, which is metadata only and is read nowhere except the trace summary.
+
+    Only strata drawn from the ETT pool can be reassembled. The clean out of
+    distribution stratum is generated rather than drawn, so it has no channel
+    siblings and is absent from the map by construction. That is correct: those
+    windows are synthetic univariate shapes and a multivariate block containing
+    them would be a fiction.
+
+    **This changes the corpus composition** relative to the default sampler,
+    which draws positions and channels independently. Curation results on a
+    grouped corpus are therefore not comparable with results already in this
+    repository and must be recomputed.
+    """
+    spec = spec or CorpusSpec()
+    seed = spec.seed if seed is None else seed
+    n_base = spec.total + spec.n_hard * 4
+
+    from datasets import sample_ett_window_groups
+
+    n_channels = 7
+    n_groups = int(np.ceil(n_base / n_channels)) + 1
+    grouped = sample_ett_window_groups(n_groups, window_len=spec.window_len,
+                                       seed=seed)
+    for g in grouped:
+        g["dataset"] = f"{g['dataset']}#g{g['group_id']}c{g['channel_index']}"
+
+    windows = build_corpus(spec, source="ett", base=grouped)
+
+    group_map = {}
+    for w in windows:
+        label = w.dataset or ""
+        if "#g" not in label:
+            continue
+        tag = label.split("#g", 1)[1]
+        gid, _, ci = tag.partition("c")
+        try:
+            group_map[w.window_id] = (int(gid), int(ci))
+        except ValueError:
+            continue
+    return windows, group_map

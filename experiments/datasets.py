@@ -183,3 +183,66 @@ def sample_cross_domain_windows(
     if len(out) < n_windows:
         raise RuntimeError(f"only found {len(out)}/{n_windows} cross domain windows")
     return out
+
+
+# -- channel grouped sampling, for the multivariate downstream evaluation ----
+#
+# The default sampler round robins over (file, channel) pairs, so the windows in
+# a corpus come from unrelated positions in unrelated channels. That is the
+# right choice for curation, which operates on one channel at a time, and it
+# makes a multivariate downstream evaluation impossible: the seven channels of
+# any given timestamp are not all present in the corpus.
+#
+# This sampler draws a position once and takes every channel at that position,
+# so a group can be reassembled into a (T, C) matrix after curation. Curation
+# still sees one univariate window at a time and needs no change. The original
+# sampler is kept and unmodified, since every result currently in the repository
+# was produced with it.
+
+
+def sample_ett_window_groups(
+    n_groups: int,
+    window_len: int = 512,
+    datasets: tuple = ("ETTh1", "ETTh2", "ETTm1", "ETTm2"),
+    seed: int = 42,
+    min_std: float = 1e-3,
+) -> list:
+    """Draw groups of windows that share a file and a start position.
+
+    Returns a flat list of the same dicts `sample_ett_windows` returns, with two
+    extra keys, ``group_id`` and ``channel_index``, so the caller can reassemble
+    them. A group is emitted only if every channel at that position is finite
+    and non degenerate, because a group missing a channel cannot be stacked.
+    """
+    rng = np.random.RandomState(seed)
+    loaded = {name: load_ett(name) for name in datasets}
+
+    out, gid, attempts = [], 0, 0
+    max_attempts = n_groups * 40
+    while gid < n_groups and attempts < max_attempts:
+        attempts += 1
+        name = datasets[gid % len(datasets)]
+        values, channels = loaded[name]
+        T = len(values)
+        if T <= window_len:
+            continue
+        start = int(rng.randint(0, T - window_len))
+        block = values[start : start + window_len, :]
+        if not np.isfinite(block).all():
+            continue
+        if float(np.min(np.std(block, axis=0))) < min_std:
+            continue
+        for ci, ch in enumerate(channels):
+            out.append({
+                "series": block[:, ci].astype(np.float64).copy(),
+                "dataset": name,
+                "channel": ch,
+                "freq": ETT_FREQ[name],
+                "start": start,
+                "group_id": gid,
+                "channel_index": ci,
+            })
+        gid += 1
+    if gid < n_groups:
+        raise RuntimeError(f"only formed {gid}/{n_groups} complete channel groups")
+    return out
