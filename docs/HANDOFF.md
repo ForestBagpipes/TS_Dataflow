@@ -116,11 +116,19 @@ on this corpus, contaminated lift 0.83 to 1.00, so they are not a valid control.
 The fifth is silent on the stratum in question. Confirmed for our
 implementation only.
 
-**AegisTS cannot be run as published.** Its repository is missing the
-`Datasets` module that all four core modules import, and `.gitignore` excludes
-it. Request text is ready at `researched_papers/aegists/ISSUE_TO_SEND.md` and
-**has not been sent**; sending it is a manual step. The modularity claim does
-not depend on it, since two external proposers already support it.
+**AegisTS cannot be run as published, and the authors confirmed it.** The
+repository is missing the `Datasets` module that all four core modules import,
+and `.gitignore` excludes it. **The authors were contacted and replied that the
+data loading module cannot be located and cannot be supplied.** That exchange is
+the basis for the reproducibility statement in the paper, which should record
+both the request and the answer rather than only the absence.
+
+A three day timeboxed faithful reproduction is now under way, reconstructing the
+loader from the call sites. See `docs/aegists_reproduction.md` for the
+acceptance criterion, the reconstruction evidence and the stop rule. It runs
+outside the main queue and does not take priority over M2 or the soft against
+hard comparison. The modularity claim does not depend on it, since two external
+proposers already support it.
 
 **M3 invariant specification not done.** Deferred. The structural distance
 weights remain hand set, and that must appear in the limitations section as
