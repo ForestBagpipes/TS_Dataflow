@@ -170,7 +170,7 @@ def main():
     print(f"speed bounds estimated at 1st and 99th percentile: "
           f"{bounds[0]:.4f} to {bounds[1]:.4f}", flush=True)
 
-    results, decisions = {}, {}
+    results, decisions, audit = {}, {}, {}
     for name, fn in proposers.items():
         t0 = time.time()
         raw_rows, gated_rows, recs = [], [], []
@@ -188,6 +188,23 @@ def main():
         results[f"{name}_gated"] = score(gated_rows, windows, form)
         from collections import Counter
         decisions[name] = dict(Counter(r["verdict"] for r in recs))
+        # Per window record, so a veto can be audited offline against the
+        # pristine series without occupying the card again.
+        audit[name] = [
+            {"window_id": int(w.window_id), "stratum": w.stratum,
+             "contamination": w.contamination,
+             "verdict": rec["verdict"],
+             "delta_utility": rec.get("delta_utility"),
+             "distortion": rec.get("distortion"),
+             "risk": rec.get("risk"),
+             "nmse_before": float(_nmse(w.series, w.clean_series,
+                                        float(np.var(w.clean_series
+                                              - np.median(w.clean_series))))),
+             "nmse_candidate": float(_nmse(cand_row["series"], w.clean_series,
+                                           float(np.var(w.clean_series
+                                                 - np.median(w.clean_series)))))}
+            for w, rec, cand_row in zip(windows, recs, raw_rows)
+        ]
         print(f"  {name:12s} {time.time() - t0:.0f}s  verdicts {decisions[name]}",
               flush=True)
 
@@ -204,7 +221,7 @@ def main():
               f"{r['n_modified']:7d}{r['protected_edits']:12d}"
               f"{r['edit_precision']:11.3f}{r['windows_worsened']:10d}")
 
-    payload = {"results": results, "decisions": decisions,
+    payload = {"results": results, "decisions": decisions, "audit": audit,
                "speed_bounds": list(bounds), "selected_parameters": SELECTED,
                "selection_rule": "maximise the proposer's repair, damage ignored"}
     (ROOT / "results" / "gating_classic.json").write_text(

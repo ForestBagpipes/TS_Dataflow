@@ -1,0 +1,42 @@
+{
+ "behavioural": {
+  "mean_damage": 0.002029489476296576,
+  "repair_reduction": 0.18050524842660665,
+  "n_modified": 71,
+  "protected_edits": 26,
+  "edit_precision": 0.6338028169014085,
+  "windows_worsened": 29,
+  "protected_by_form": {
+   "random_walk": 2,
+   "sawtooth": 2,
+   "pulse_train": 1
+  },
+  "level_shift_missed": 30,
+  "level_shift_total": 40
+ },
+ "residual": {
+  "mean_damage": 0.002029489476296576,
+  "repair_reduction": 0.14878346994279257,
+  "n_modified": 71,
+  "protected_edits": 26,
+  "edit_precision": 0.6338028169014085,
+  "windows_worsened": 29,
+  "protected_by_form": {
+   "random_walk": 2,
+   "sawtooth": 2,
+   "pulse_train": 1
+  },
+  "level_shift_missed": 32,
+  "level_shift_total": 40
+ },
+ "verdict": "keep as diagnostic only",
+ "coefficients": {
+  "intercept": 1.435227495608341,
+  "spectral_entropy": 1.167860768506916,
+  "spectral_flatness": -3.51142835470152,
+  "ar_r2": -0.4752942517204098,
+  "naive_nmse": -1.8322227106498954e-12,
+  "diff_acf1": -0.5475419127133653,
+  "sample_entropy": -0.7339819400192619
+ }
+}

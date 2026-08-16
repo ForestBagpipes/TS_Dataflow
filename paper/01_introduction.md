@@ -32,13 +32,27 @@ this. It prefers it.
 Existing work addresses parts of the problem and leaves the acceptance question
 open.
 
-**First**, statistical outlier detection identifies defects from the data alone
-and does not consult any model. It works where a defect leaves a local trace
-and fails where it does not. On our corpus a duplicated segment is detected at
-0.489 by a statistical profile, which is a coin flip. Four standard outlier
-detectors could not separate contaminated windows from clean ones at all, with
-contaminated lifts between 0.83 and 1.00, so the failure is not specific to one
-implementation.
+**First**, established repair methods are effective at repairing and have no
+mechanism for declining. We ran two of them, a speed constraint repair from
+2015 and an iterative minimum repair from 2017, over our corpus and measured
+where their proposed edits land. **More than half of what they propose falls on
+data that should not be touched: 51.7 percent of the speed constraint method's
+candidates land on a protected stratum**, where the window is already clean and
+any edit increases error. On the windows that genuinely need repair the same
+method is good, with 61.8 percent of its candidates beneficial and a harm rate
+of 0.382.
+
+Those two figures belong together. The first says these methods work. The
+second says what they lack is not repair quality but the judgement of when to
+leave data alone. The problem this paper addresses is the decision to
+intervene, not the quality of the intervention.
+
+Statistical outlier detection, which identifies defects from the data alone
+without consulting any model, has the complementary limit. It works where a
+defect leaves a local trace and fails where it does not. On our corpus a
+duplicated segment is detected at 0.489 by a statistical profile, which is a
+coin flip, and four standard outlier detectors could not separate contaminated
+windows from clean ones at all, with contaminated lifts between 0.83 and 1.00.
 
 **Second**, model based quality scoring ranks windows by how a model reacts to
 them and curates the low scoring tail. This inherits the problem above. We

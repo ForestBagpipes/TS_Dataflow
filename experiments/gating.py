@@ -59,7 +59,7 @@ def proposals_of(trace) -> list:
     return [(r.action, dict(r.params)) for r in trace.records]
 
 
-def gate(window, state, models, plan, agent, peer_idx, cfg):
+def gate(window, state, models, plan, agent, peer_idx, cfg, audit=None):
     """Run one proposal sequence through the acceptance rule.
 
     Returns the curated series, the crop offset, and one record per proposal
@@ -94,6 +94,26 @@ def gate(window, state, models, plan, agent, peer_idx, cfg):
             "delta_utility": float(delta_u), "distortion": float(report.distortion),
             "risk": float(risk),
         })
+        if audit is not None and window.clean_series is not None:
+            # Incremental harm: would committing this candidate leave the window
+            # worse than the working copy it would replace. Judged against the
+            # pristine series, aligned on the span each side actually covers.
+            ref = np.asarray(window.clean_series, dtype=np.float64)
+            rv = float(np.var(ref - np.median(ref)))
+            base_off = crop_offset
+            cand_off = crop_offset + (int(outcome.params.get("lo", 0))
+                                      if action is Action.RESEGMENT else 0)
+            nb = _nmse(work, ref[base_off:base_off + len(work)], rv)
+            na = _nmse(outcome.series,
+                       ref[cand_off:cand_off + len(outcome.series)], rv)
+            audit.append({
+                "window_id": int(window.window_id), "stratum": window.stratum,
+                "contamination": window.contamination,
+                "action": str(action).split(".")[-1],
+                "verdict": str(verdict).split(".")[-1],
+                "nmse_before": float(nb), "nmse_candidate": float(na),
+                "harmful": bool(na > nb + 1e-9),
+            })
         if verdict is Verdict.ACCEPTED:
             if action is Action.RESEGMENT:
                 crop_offset += int(outcome.params.get("lo", 0))
@@ -176,7 +196,7 @@ def main():
     print(f"{len(windows)} windows, perceive {time.time() - t0:.0f}s, "
           f"tau {args.tau}", flush=True)
 
-    results, all_decisions = {}, {}
+    results, all_decisions, audit_all = {}, {}, {}
 
     def rows_from(traces):
         return [{"window_id": t.window_id, "series": t.final_series,
@@ -202,7 +222,7 @@ def main():
 
         # gated arm: same proposals, filtered
         t0 = time.time()
-        grows, decs = [], []
+        grows, decs, audit_rows = [], [], []
         byid = {w.window_id: (w, s, i)
                 for i, (w, s) in enumerate(zip(windows, states))}
         for t in traces:
@@ -212,13 +232,15 @@ def main():
                 grows.append({"window_id": w.window_id, "series": w.series,
                               "crop_offset": 0, "kept": [], "form": form.get(w.window_id)})
                 continue
-            series, crop, kept, d = gate(w, s, models, plan, agent, idx, cfg)
+            series, crop, kept, d = gate(w, s, models, plan, agent, idx, cfg,
+                                         audit=audit_rows)
             grows.append({"window_id": w.window_id, "series": series,
                           "crop_offset": crop, "kept": kept,
                           "form": form.get(w.window_id)})
             decs.extend(d)
         results[f"{name}_gated"] = score(grows, windows)
         all_decisions[name] = Counter(x["verdict"] for x in decs)
+        audit_all[name] = audit_rows
         print(f"  {name}_gated {time.time() - t0:.0f}s  "
               f"verdicts {dict(all_decisions[name])}", flush=True)
 
@@ -251,7 +273,8 @@ def main():
             print(f"  {k:22s}{results[k]['protected_edits_by_ood_form']}")
 
     (ROOT / "results" / "gating.json").write_text(
-        json.dumps({k: {kk: vv for kk, vv in v.items()} for k, v in results.items()},
+        json.dumps({"results": {k: dict(v) for k, v in results.items()},
+                    "audit": audit_all},
                    indent=1, default=float), encoding="utf-8")
     print("___GATING_DONE___", flush=True)
 
