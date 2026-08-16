@@ -134,11 +134,60 @@ proposers already support it.
 weights remain hand set, and that must appear in the limitations section as
 stated rather than as a detail.
 
+## Component three, settled
+
+**Reading one.** The structural condition has measurable discriminative power on
+the calibrated local operator path and none on the uncalibrated global path, and
+the difference between them is significant. Three seeds, merged.
+
+| path | n | odds ratio | accepted harm rate | rejected harm rate | vs blind |
+|---|---|---|---|---|---|
+| local | 2220 | **2.971** | **0.283** | 0.541 | p 1.0e-20 |
+| global | 1283 | 0.954 | 0.560 | 0.548 | p 0.641 |
+
+Interaction: log odds difference +1.136, CI [+0.711, +1.562], Wald p 1.6e-07,
+Breslow Day p below 1e-16. The local baseline harm rate is 0.496, so the layer
+takes the accepted side from 0.496 down to 0.283. On the global path the
+accepted side is dirtier than the rejected side.
+
+**Two tests are reported together and the disagreement is explained.** The
+binomial test on veto precision gives p 0.0051 and 0.0030 for the two local
+proposers at three seeds, and gave 0.092 and 0.054 at one seed. The association
+test gives 1.0e-20. They differ because the binomial test reads only the
+rejected side, which at an 84 percent rejection rate is forced towards the base
+rate whatever the policy, while the association test reads both sides. The
+rationale is in `docs/component3_verdict_criteria.md` and belongs in the paper
+rather than being left for a reader to rediscover.
+
+**Protected stratum recall is not significant** for any proposer, p 0.10 to
+0.13. Safety on that stratum comes from rejecting a lot rather than from
+rejecting selectively, and that is reported alongside the discriminative result
+rather than instead of it.
+
+**A withdrawn claim.** The earlier reading that the layer rejects a lot but not
+accurately is wrong. Discriminative power is hidden on the rejected side by the
+high rejection rate and is visible on the accepted side.
+
 ## Queued right now
 
 Running under `setsid` on the box, so an SSH drop will not kill it. Sequence:
 
-1. **conformal rerun**, for `results/conformal_losses.npz` and to exercise the
+0. **global_path_fix**, running at shutdown time. Tests whether the whole
+   series rewriters discriminate once they declare their actual changed point
+   set as a footprint and travel the calibrated local path. The prediction is
+   recorded in the script: the odds ratio should move from 0.954 towards 2.971
+   if the uncalibrated path account is right, and if it does not move the
+   account is wrong. Results land in `results/global_path_fix.json`.
+
+1. **nested stability**, NOT started. Three hours did not fit before shutdown
+   and it was removed from the queue rather than started and killed. The design
+   is implemented and verified in `experiments/nested_stability.py`: nesting is
+   exact, 10/10, 20/20, 40/40, 70/70 and 100/100 at each step, with the clean
+   batch constant and the corpus size fixed. It replaces the first stability
+   table, whose corpora shared only 22 to 43 percent of their windows and which
+   therefore could not attribute a difference to the contamination rate.
+
+2. **conformal rerun**, for `results/conformal_losses.npz` and to exercise the
    fixed sequence fallback. The stage 1 numbers already in hand are valid and
    are preserved at `results/conformal_samepool_stage1.json`; this rerun adds
    raw per window losses so any alpha or selection rule can be recomputed on
