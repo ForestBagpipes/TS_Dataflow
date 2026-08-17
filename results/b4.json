@@ -1,0 +1,234 @@
+{
+ "tau": 0.02,
+ "seed": 42,
+ "grouped_curation": {
+  "no_action": {
+   "mean_damage": 0.0,
+   "repair_reduction": 0.0,
+   "n_modified": 0,
+   "protected_edits": 0
+  },
+  "stat_only": {
+   "mean_damage": 0.09519495742898958,
+   "repair_reduction": 0.4008764547687994,
+   "n_modified": 425,
+   "protected_edits": 227
+  },
+  "stat_only_gated": {
+   "mean_damage": 0.0017956583646746784,
+   "repair_reduction": 0.2320270604979675,
+   "n_modified": 68,
+   "protected_edits": 37
+  },
+  "always_clean": {
+   "mean_damage": 0.22132458770479752,
+   "repair_reduction": 0.06834129995531046,
+   "n_modified": 800,
+   "protected_edits": 520
+  },
+  "always_clean_gated": {
+   "mean_damage": 0.007295659430762474,
+   "repair_reduction": 0.0313978020115625,
+   "n_modified": 194,
+   "protected_edits": 116
+  },
+  "introact_full": {
+   "mean_damage": 0.0009354447860807589,
+   "repair_reduction": 0.16984673406617667,
+   "n_modified": 54,
+   "protected_edits": 22
+  }
+ },
+ "block_report": {
+  "n_blocks": 150,
+  "total_channel_series": 684,
+  "channels_per_block": {
+   "3": 28,
+   "4": 47,
+   "5": 44,
+   "6": 25,
+   "7": 6
+  },
+  "median_channels": 4.5,
+  "min_channels": 3,
+  "max_channels": 7
+ },
+ "multivariate_downstream": {
+  "no_action": {
+   "n_train_pairs": 14484,
+   "n_test_pairs": 9179,
+   "n_train_pairs_dropped": 291,
+   "train_blocks": 105,
+   "test_blocks": 45,
+   "seasonal_naive": {
+    "mse": 2.779178803262547,
+    "mae": 1.065720737124301,
+    "block_mse": 2.6888644827268657
+   },
+   "ridge_ar": {
+    "mse": 1.907637811971345,
+    "mae": 0.8294075061796696,
+    "block_mse": 1.8354461087600316
+   },
+   "dlinear": {
+    "mse": 1.9068660641340907,
+    "mae": 0.8289685964594797,
+    "block_mse": 1.8341968975788652
+   },
+   "patchtst": {
+    "mse": 2.111077069033,
+    "mae": 0.8817027264852463,
+    "block_mse": 2.010764346354853
+   }
+  },
+  "stat_only": {
+   "error": "block count 145 != 150"
+  },
+  "stat_only_gated": {
+   "n_train_pairs": 13184,
+   "n_test_pairs": 9179,
+   "n_train_pairs_dropped": 254,
+   "train_blocks": 105,
+   "test_blocks": 45,
+   "seasonal_naive": {
+    "mse": 2.779178803262547,
+    "mae": 1.065720737124301,
+    "block_mse": 2.6888644827268657
+   },
+   "ridge_ar": {
+    "mse": 1.906249996734418,
+    "mae": 0.8282275910192154,
+    "block_mse": 1.8323058970883401
+   },
+   "dlinear": {
+    "mse": 1.905749253483516,
+    "mae": 0.8278627231364679,
+    "block_mse": 1.83119312466599
+   },
+   "patchtst": {
+    "mse": 2.1193451040005593,
+    "mae": 0.8819295726724782,
+    "block_mse": 2.0160803325315575
+   }
+  },
+  "always_clean": {
+   "n_train_pairs": 22036,
+   "n_test_pairs": 9179,
+   "n_train_pairs_dropped": 298,
+   "train_blocks": 105,
+   "test_blocks": 45,
+   "seasonal_naive": {
+    "mse": 2.779178803262547,
+    "mae": 1.065720737124301,
+    "block_mse": 2.6888644827268657
+   },
+   "ridge_ar": {
+    "mse": 2.1257103757626603,
+    "mae": 0.8937420894422671,
+    "block_mse": 2.0244354749219013
+   },
+   "dlinear": {
+    "mse": 2.2547214624448757,
+    "mae": 0.9268237542633576,
+    "block_mse": 2.1395265621878194
+   },
+   "patchtst": {
+    "mse": 3.9135224698873596,
+    "mae": 1.3068371240567476,
+    "block_mse": 3.697180862452317
+   }
+  },
+  "always_clean_gated": {
+   "n_train_pairs": 15610,
+   "n_test_pairs": 9179,
+   "n_train_pairs_dropped": 291,
+   "train_blocks": 105,
+   "test_blocks": 45,
+   "seasonal_naive": {
+    "mse": 2.779178803262547,
+    "mae": 1.065720737124301,
+    "block_mse": 2.6888644827268657
+   },
+   "ridge_ar": {
+    "mse": 1.9057284940043568,
+    "mae": 0.8286588911226057,
+    "block_mse": 1.8319945104578281
+   },
+   "dlinear": {
+    "mse": 1.9057654106529154,
+    "mae": 0.8284842305075553,
+    "block_mse": 1.83144878647065
+   },
+   "patchtst": {
+    "mse": 2.0976627774928542,
+    "mae": 0.881648875970667,
+    "block_mse": 2.000413329761561
+   }
+  },
+  "introact_full": {
+   "n_train_pairs": 14170,
+   "n_test_pairs": 9179,
+   "n_train_pairs_dropped": 273,
+   "train_blocks": 105,
+   "test_blocks": 45,
+   "seasonal_naive": {
+    "mse": 2.779178803262547,
+    "mae": 1.065720737124301,
+    "block_mse": 2.6888644827268657
+   },
+   "ridge_ar": {
+    "mse": 1.9090021710155751,
+    "mae": 0.8294982685090386,
+    "block_mse": 1.834839933257639
+   },
+   "dlinear": {
+    "mse": 1.9083721667559368,
+    "mae": 0.8290780842470316,
+    "block_mse": 1.8336949761107404
+   },
+   "patchtst": {
+    "mse": 2.1002760598297803,
+    "mae": 0.8843153441377744,
+    "block_mse": 2.0046644806563094
+   }
+  }
+ },
+ "ungrouped_curation": {
+  "no_action": {
+   "mean_damage": 0.0,
+   "repair_reduction": 0.0,
+   "n_modified": 0,
+   "protected_edits": 0
+  },
+  "stat_only": {
+   "mean_damage": 0.07145710913106224,
+   "repair_reduction": 0.36629842070006724,
+   "n_modified": 419,
+   "protected_edits": 219
+  },
+  "stat_only_gated": {
+   "mean_damage": 0.0016180493532171722,
+   "repair_reduction": 0.25514091006661554,
+   "n_modified": 64,
+   "protected_edits": 30
+  },
+  "always_clean": {
+   "mean_damage": 0.19189966772448983,
+   "repair_reduction": -0.01447207479064816,
+   "n_modified": 800,
+   "protected_edits": 520
+  },
+  "always_clean_gated": {
+   "mean_damage": 0.005671886903236487,
+   "repair_reduction": 0.04361529445944956,
+   "n_modified": 198,
+   "protected_edits": 125
+  },
+  "introact_full": {
+   "mean_damage": 0.002029489476296576,
+   "repair_reduction": 0.18050524842660665,
+   "n_modified": 62,
+   "protected_edits": 24
+  }
+ }
+}

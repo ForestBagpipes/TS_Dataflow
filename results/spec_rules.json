@@ -6,14 +6,14 @@
     "max_point_move_scales": 0.5,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 1.9808612440191387,
-   "p": 0.16924976619311494,
-   "accept_harm": 0.35714285714285715,
-   "reject_harm": 0.5239179954441914,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.975,
-   "overall_veto_rate": 0.9726390114739629
+   "n_contam": 2782,
+   "odds_ratio": 1.8321766561514197,
+   "p": 0.0017782401222664489,
+   "accept_harm": 0.37735849056603776,
+   "reject_harm": 0.5261584454409567,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9707409155261916,
+   "overall_veto_rate": 0.9672364672364673
   },
   {
    "cfg": {
@@ -21,14 +21,14 @@
     "max_point_move_scales": 0.5,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 1.2913525498891352,
-   "p": 0.3446327024135307,
-   "accept_harm": 0.4583333333333333,
-   "reject_harm": 0.5221445221445221,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9470588235294117,
-   "overall_veto_rate": 0.9470432480141218
+   "n_contam": 2782,
+   "odds_ratio": 1.4721857780110208,
+   "p": 0.008948600705297814,
+   "accept_harm": 0.43023255813953487,
+   "reject_harm": 0.5264367816091954,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9384143463898065,
+   "overall_veto_rate": 0.9383190883190883
   },
   {
    "cfg": {
@@ -36,14 +36,14 @@
     "max_point_move_scales": 1.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 1.9808612440191387,
-   "p": 0.16924976619311494,
-   "accept_harm": 0.35714285714285715,
-   "reject_harm": 0.5239179954441914,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9735294117647059,
-   "overall_veto_rate": 0.971756398940865
+   "n_contam": 2782,
+   "odds_ratio": 1.8432551150156051,
+   "p": 0.001410528322467839,
+   "accept_harm": 0.3761467889908257,
+   "reject_harm": 0.5263748597081931,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9695611137328929,
+   "overall_veto_rate": 0.9660968660968661
   },
   {
    "cfg": {
@@ -51,14 +51,14 @@
     "max_point_move_scales": 1.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 1.32,
-   "p": 0.2788448081301735,
-   "accept_harm": 0.45454545454545453,
-   "reject_harm": 0.5238095238095238,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9308823529411765,
-   "overall_veto_rate": 0.9293909973521624
+   "n_contam": 2782,
+   "odds_ratio": 1.4007209690672462,
+   "p": 0.011606519137237994,
+   "accept_harm": 0.44285714285714284,
+   "reject_harm": 0.5268273716951789,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9145823501651722,
+   "overall_veto_rate": 0.9185185185185185
   },
   {
    "cfg": {
@@ -66,14 +66,14 @@
     "max_point_move_scales": 2.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 2.4444444444444446,
-   "p": 0.07632988985469161,
-   "accept_harm": 0.3125,
-   "reject_harm": 0.5263157894736842,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9705882352941176,
-   "overall_veto_rate": 0.9682259488084731
+   "n_contam": 2782,
+   "odds_ratio": 2.022408963585434,
+   "p": 0.00017448169316380986,
+   "accept_harm": 0.3559322033898305,
+   "reject_harm": 0.5277777777777778,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9690891930155734,
+   "overall_veto_rate": 0.9645299145299145
   },
   {
    "cfg": {
@@ -81,14 +81,14 @@
     "max_point_move_scales": 2.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 1.7365196078431373,
-   "p": 0.061390769120670076,
-   "accept_harm": 0.3953488372093023,
-   "reject_harm": 0.5317073170731708,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9,
-   "overall_veto_rate": 0.9020300088261254
+   "n_contam": 2782,
+   "odds_ratio": 1.250711286582691,
+   "p": 0.041703483155124836,
+   "accept_harm": 0.47038327526132406,
+   "reject_harm": 0.5262525050100201,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.8876828692779613,
+   "overall_veto_rate": 0.8913105413105413
   },
   {
    "cfg": {
@@ -96,14 +96,14 @@
     "max_point_move_scales": 5.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 2.8201970443349755,
-   "p": 0.023935837983679997,
-   "accept_harm": 0.2857142857142857,
-   "reject_harm": 0.5300925925925926,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9705882352941176,
-   "overall_veto_rate": 0.9638128861429832
+   "n_contam": 2782,
+   "odds_ratio": 2.226215644820296,
+   "p": 9.90861567340485e-06,
+   "accept_harm": 0.33587786259541985,
+   "reject_harm": 0.5296114673708034,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9681453515809344,
+   "overall_veto_rate": 0.9621082621082621
   },
   {
    "cfg": {
@@ -111,14 +111,14 @@
     "max_point_move_scales": 5.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 2.6724980704913817,
-   "p": 0.00016865055187029863,
-   "accept_harm": 0.3194444444444444,
-   "reject_harm": 0.5564304461942258,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.8720588235294118,
-   "overall_veto_rate": 0.8596646072374228
+   "n_contam": 2782,
+   "odds_ratio": 1.562993762993763,
+   "p": 8.895420186060952e-06,
+   "accept_harm": 0.4276315789473684,
+   "reject_harm": 0.5386930352536543,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.8548843794242568,
+   "overall_veto_rate": 0.8474358974358974
   },
   {
    "cfg": {
@@ -126,14 +126,14 @@
     "max_point_move_scales": 0.5,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 1.9808612440191387,
-   "p": 0.16924976619311494,
-   "accept_harm": 0.35714285714285715,
-   "reject_harm": 0.5239179954441914,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.975,
-   "overall_veto_rate": 0.9726390114739629
+   "n_contam": 2782,
+   "odds_ratio": 1.7862198968992844,
+   "p": 0.0025070589100033586,
+   "accept_harm": 0.38317757009345793,
+   "reject_harm": 0.5259813084112149,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9707409155261916,
+   "overall_veto_rate": 0.9670940170940171
   },
   {
    "cfg": {
@@ -141,14 +141,14 @@
     "max_point_move_scales": 0.5,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 1.2913525498891352,
-   "p": 0.3446327024135307,
-   "accept_harm": 0.4583333333333333,
-   "reject_harm": 0.5221445221445221,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9382352941176471,
-   "overall_veto_rate": 0.941747572815534
+   "n_contam": 2782,
+   "odds_ratio": 1.4007299270072993,
+   "p": 0.017465943352304943,
+   "accept_harm": 0.4419889502762431,
+   "reject_harm": 0.5259515570934256,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.931571495988674,
+   "overall_veto_rate": 0.9329059829059829
   },
   {
    "cfg": {
@@ -156,14 +156,14 @@
     "max_point_move_scales": 1.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 1.9808612440191387,
-   "p": 0.16924976619311494,
-   "accept_harm": 0.35714285714285715,
-   "reject_harm": 0.5239179954441914,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9735294117647059,
-   "overall_veto_rate": 0.971756398940865
+   "n_contam": 2782,
+   "odds_ratio": 1.853902953586498,
+   "p": 0.0011182040360200802,
+   "accept_harm": 0.375,
+   "reject_harm": 0.5265917602996255,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9695611137328929,
+   "overall_veto_rate": 0.9656695156695156
   },
   {
    "cfg": {
@@ -171,14 +171,14 @@
     "max_point_move_scales": 1.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 1.1483253588516746,
-   "p": 0.4026301966333279,
-   "accept_harm": 0.48717948717948717,
-   "reject_harm": 0.5217391304347826,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9102941176470588,
-   "overall_veto_rate": 0.911738746690203
+   "n_contam": 2782,
+   "odds_ratio": 1.2161403214652444,
+   "p": 0.07938498604132771,
+   "accept_harm": 0.476,
+   "reject_harm": 0.5248815165876777,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.8909863142991977,
+   "overall_veto_rate": 0.8985754985754986
   },
   {
    "cfg": {
@@ -186,14 +186,14 @@
     "max_point_move_scales": 2.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 3.156862745098039,
-   "p": 0.01960787258166116,
-   "accept_harm": 0.2631578947368421,
-   "reject_harm": 0.5299539170506913,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9705882352941176,
-   "overall_veto_rate": 0.9655781112091791
+   "n_contam": 2782,
+   "odds_ratio": 2.3076635932658927,
+   "p": 4.285898534521468e-06,
+   "accept_harm": 0.3282442748091603,
+   "reject_harm": 0.5299886835156544,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9690891930155734,
+   "overall_veto_rate": 0.9626780626780627
   },
   {
    "cfg": {
@@ -201,14 +201,14 @@
     "max_point_move_scales": 2.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 1.5280167402929552,
-   "p": 0.09512203830386559,
-   "accept_harm": 0.42592592592592593,
-   "reject_harm": 0.531328320802005,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.8411764705882353,
-   "overall_veto_rate": 0.8570167696381289
+   "n_contam": 2782,
+   "odds_ratio": 1.036014131794343,
+   "p": 0.3940368254501175,
+   "accept_harm": 0.5128865979381443,
+   "reject_harm": 0.5217209690893901,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.8218499292118924,
+   "overall_veto_rate": 0.8371794871794872
   },
   {
    "cfg": {
@@ -216,14 +216,14 @@
     "max_point_move_scales": 5.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 3.855218855218855,
-   "p": 0.0020553619684867686,
-   "accept_harm": 0.23076923076923078,
-   "reject_harm": 0.5362997658079626,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9705882352941176,
-   "overall_veto_rate": 0.9593998234774934
+   "n_contam": 2782,
+   "odds_ratio": 3.179023898646703,
+   "p": 3.1000482451663686e-12,
+   "accept_harm": 0.26744186046511625,
+   "reject_harm": 0.5371647509578544,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9676734308636149,
+   "overall_veto_rate": 0.955982905982906
   },
   {
    "cfg": {
@@ -231,14 +231,14 @@
     "max_point_move_scales": 5.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 2.1477353149327674,
-   "p": 0.0007459681147787605,
-   "accept_harm": 0.3711340206185567,
-   "reject_harm": 0.5589887640449438,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.7691176470588236,
-   "overall_veto_rate": 0.7758164165931156
+   "n_contam": 2782,
+   "odds_ratio": 1.2499823250014461,
+   "p": 0.007082057716165223,
+   "accept_harm": 0.4779299847792998,
+   "reject_harm": 0.5336470588235294,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.7432751297781972,
+   "overall_veto_rate": 0.7514245014245015
   },
   {
    "cfg": {
@@ -246,14 +246,14 @@
     "max_point_move_scales": 0.5,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 1.9808612440191387,
-   "p": 0.16924976619311494,
-   "accept_harm": 0.35714285714285715,
-   "reject_harm": 0.5239179954441914,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.975,
-   "overall_veto_rate": 0.9726390114739629
+   "n_contam": 2782,
+   "odds_ratio": 1.7702484308640583,
+   "p": 0.0026433882131542395,
+   "accept_harm": 0.3853211009174312,
+   "reject_harm": 0.5260007482229705,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9707409155261916,
+   "overall_veto_rate": 0.9668091168091169
   },
   {
    "cfg": {
@@ -261,14 +261,14 @@
     "max_point_move_scales": 0.5,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 1.3975044563279857,
-   "p": 0.27251432017557137,
-   "accept_harm": 0.44,
-   "reject_harm": 0.5233644859813084,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9352941176470588,
-   "overall_veto_rate": 0.93909973521624
+   "n_contam": 2782,
+   "odds_ratio": 1.3180653661750175,
+   "p": 0.037324990002354834,
+   "accept_harm": 0.4564102564102564,
+   "reject_harm": 0.5253189022033243,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9308636149126946,
+   "overall_veto_rate": 0.9304843304843304
   },
   {
    "cfg": {
@@ -276,14 +276,14 @@
     "max_point_move_scales": 1.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 1.9808612440191387,
-   "p": 0.16924976619311494,
-   "accept_harm": 0.35714285714285715,
-   "reject_harm": 0.5239179954441914,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9735294117647059,
-   "overall_veto_rate": 0.971756398940865
+   "n_contam": 2782,
+   "odds_ratio": 1.8472352389878164,
+   "p": 0.000942706200256111,
+   "accept_harm": 0.37606837606837606,
+   "reject_harm": 0.526829268292683,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9695611137328929,
+   "overall_veto_rate": 0.964957264957265
   },
   {
    "cfg": {
@@ -291,14 +291,14 @@
     "max_point_move_scales": 1.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 0.9868197278911565,
-   "p": 0.5778798345263729,
-   "accept_harm": 0.5217391304347826,
-   "reject_harm": 0.5184275184275184,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.8926470588235295,
-   "overall_veto_rate": 0.8949691085613416
+   "n_contam": 2782,
+   "odds_ratio": 1.0962025316455697,
+   "p": 0.2456777902729281,
+   "accept_harm": 0.5,
+   "reject_harm": 0.5229468599033816,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.8808400188768287,
+   "overall_veto_rate": 0.8856125356125356
   },
   {
    "cfg": {
@@ -306,14 +306,14 @@
     "max_point_move_scales": 2.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 3.399014778325123,
-   "p": 0.01202079153277794,
-   "accept_harm": 0.25,
-   "reject_harm": 0.5311778290993071,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9705882352941176,
-   "overall_veto_rate": 0.9646954986760812
+   "n_contam": 2782,
+   "odds_ratio": 2.390547932920814,
+   "p": 8.561431921443823e-07,
+   "accept_harm": 0.32142857142857145,
+   "reject_harm": 0.5310370931112793,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9690891930155734,
+   "overall_veto_rate": 0.9613960113960114
   },
   {
    "cfg": {
@@ -321,14 +321,14 @@
     "max_point_move_scales": 2.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 0.7616557734204793,
-   "p": 0.8966021896221796,
-   "accept_harm": 0.5730337078651685,
-   "reject_harm": 0.5054945054945055,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.736764705882353,
-   "overall_veto_rate": 0.7634598411297441
+   "n_contam": 2782,
+   "odds_ratio": 0.6617737003058104,
+   "p": 0.9999967420074026,
+   "accept_harm": 0.6,
+   "reject_harm": 0.498158379373849,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.739735724398301,
+   "overall_veto_rate": 0.755982905982906
   },
   {
    "cfg": {
@@ -336,14 +336,14 @@
     "max_point_move_scales": 5.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 2.5255102040816326,
-   "p": 0.01217501040073638,
-   "accept_harm": 0.3125,
-   "reject_harm": 0.5344418052256532,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9676470588235294,
-   "overall_veto_rate": 0.9523389232127096
+   "n_contam": 2782,
+   "odds_ratio": 2.9378340526481264,
+   "p": 8.538554636282018e-13,
+   "accept_harm": 0.28502415458937197,
+   "reject_harm": 0.5394174757281553,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9664936290703162,
+   "overall_veto_rate": 0.9502849002849003
   },
   {
    "cfg": {
@@ -351,14 +351,14 @@
     "max_point_move_scales": 5.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 0.5101449275362319,
-   "p": 0.9998573979188975,
-   "accept_harm": 0.6097560975609756,
-   "reject_harm": 0.4435483870967742,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.49411764705882355,
-   "overall_veto_rate": 0.5154457193292145
+   "n_contam": 2782,
+   "odds_ratio": 0.4967544132064327,
+   "p": 1.0,
+   "accept_harm": 0.6153232242617718,
+   "reject_harm": 0.44277305428384567,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.499056158565361,
+   "overall_veto_rate": 0.5190883190883191
   },
   {
    "cfg": {
@@ -366,14 +366,14 @@
     "max_point_move_scales": 0.5,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 1.9808612440191387,
-   "p": 0.16924976619311494,
-   "accept_harm": 0.35714285714285715,
-   "reject_harm": 0.5239179954441914,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.975,
-   "overall_veto_rate": 0.9726390114739629
+   "n_contam": 2782,
+   "odds_ratio": 1.7278500761733449,
+   "p": 0.0036538186799447985,
+   "accept_harm": 0.39090909090909093,
+   "reject_harm": 0.5258233532934131,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9707409155261916,
+   "overall_veto_rate": 0.9666666666666667
   },
   {
    "cfg": {
@@ -381,14 +381,14 @@
     "max_point_move_scales": 0.5,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 1.3975044563279857,
-   "p": 0.27251432017557137,
-   "accept_harm": 0.44,
-   "reject_harm": 0.5233644859813084,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9338235294117647,
-   "overall_veto_rate": 0.9382171226831421
+   "n_contam": 2782,
+   "odds_ratio": 1.3158199764556733,
+   "p": 0.03751517194474519,
+   "accept_harm": 0.45685279187817257,
+   "reject_harm": 0.5253384912959381,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.929683813119396,
+   "overall_veto_rate": 0.9294871794871795
   },
   {
    "cfg": {
@@ -396,14 +396,14 @@
     "max_point_move_scales": 1.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 1.9808612440191387,
-   "p": 0.16924976619311494,
-   "accept_harm": 0.35714285714285715,
-   "reject_harm": 0.5239179954441914,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9735294117647059,
-   "overall_veto_rate": 0.971756398940865
+   "n_contam": 2782,
+   "odds_ratio": 1.8048991100537493,
+   "p": 0.0013339035510626827,
+   "accept_harm": 0.3813559322033898,
+   "reject_harm": 0.5266516516516516,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9695611137328929,
+   "overall_veto_rate": 0.9648148148148148
   },
   {
    "cfg": {
@@ -411,14 +411,14 @@
     "max_point_move_scales": 1.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 0.902276295133438,
-   "p": 0.6868431275329181,
-   "accept_harm": 0.5416666666666666,
-   "reject_harm": 0.5160493827160494,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.888235294117647,
-   "overall_veto_rate": 0.8905560458958517
+   "n_contam": 2782,
+   "odds_ratio": 1.0725208857076989,
+   "p": 0.3027450749456041,
+   "accept_harm": 0.5049180327868853,
+   "reject_harm": 0.5224061364553896,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.8732892873997169,
+   "overall_veto_rate": 0.8800569800569801
   },
   {
    "cfg": {
@@ -426,14 +426,14 @@
     "max_point_move_scales": 2.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 3.399014778325123,
-   "p": 0.01202079153277794,
-   "accept_harm": 0.25,
-   "reject_harm": 0.5311778290993071,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9705882352941176,
-   "overall_veto_rate": 0.9646954986760812
+   "n_contam": 2782,
+   "odds_ratio": 2.1241090943647247,
+   "p": 1.0096402450597272e-05,
+   "accept_harm": 0.3469387755102041,
+   "reject_harm": 0.5301707779886148,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9688532326569136,
+   "overall_veto_rate": 0.9602564102564103
   },
   {
    "cfg": {
@@ -441,14 +441,14 @@
     "max_point_move_scales": 2.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 0.7076131687242798,
-   "p": 0.9436335820834028,
-   "accept_harm": 0.5869565217391305,
-   "reject_harm": 0.5013850415512465,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.7264705882352941,
-   "overall_veto_rate": 0.7546337157987644
+   "n_contam": 2782,
+   "odds_ratio": 0.642277303503091,
+   "p": 0.9999996248127786,
+   "accept_harm": 0.6039755351681957,
+   "reject_harm": 0.4948308270676692,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.7199150542708825,
+   "overall_veto_rate": 0.7377492877492877
   },
   {
    "cfg": {
@@ -456,14 +456,14 @@
     "max_point_move_scales": 5.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 2.6538461538461537,
-   "p": 0.007951812028998997,
-   "accept_harm": 0.30303030303030304,
-   "reject_harm": 0.5357142857142857,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9676470588235294,
-   "overall_veto_rate": 0.9514563106796117
+   "n_contam": 2782,
+   "odds_ratio": 2.587014012708366,
+   "p": 2.3500337640241184e-11,
+   "accept_harm": 0.31140350877192985,
+   "reject_harm": 0.5391542678151918,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9662576687116564,
+   "overall_veto_rate": 0.9471509971509972
   },
   {
    "cfg": {
@@ -471,14 +471,14 @@
     "max_point_move_scales": 5.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 0.4634051962410171,
-   "p": 0.9999827086746018,
-   "accept_harm": 0.6175115207373272,
-   "reject_harm": 0.4279661016949153,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.475,
-   "overall_veto_rate": 0.49338040600176525
+   "n_contam": 2782,
+   "odds_ratio": 0.46836079899022887,
+   "p": 1.0,
+   "accept_harm": 0.6169265033407573,
+   "reject_harm": 0.4299651567944251,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.47215667767815006,
+   "overall_veto_rate": 0.4894586894586895
   },
   {
    "cfg": {
@@ -486,14 +486,14 @@
     "max_point_move_scales": 0.5,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 1.9808612440191387,
-   "p": 0.16924976619311494,
-   "accept_harm": 0.35714285714285715,
-   "reject_harm": 0.5239179954441914,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.975,
-   "overall_veto_rate": 0.9726390114739629
+   "n_contam": 2782,
+   "odds_ratio": 1.7278500761733449,
+   "p": 0.0036538186799447985,
+   "accept_harm": 0.39090909090909093,
+   "reject_harm": 0.5258233532934131,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9707409155261916,
+   "overall_veto_rate": 0.9666666666666667
   },
   {
    "cfg": {
@@ -501,14 +501,14 @@
     "max_point_move_scales": 0.5,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 1.3975044563279857,
-   "p": 0.27251432017557137,
-   "accept_harm": 0.44,
-   "reject_harm": 0.5233644859813084,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9323529411764706,
-   "overall_veto_rate": 0.9373345101500441
+   "n_contam": 2782,
+   "odds_ratio": 1.3158199764556733,
+   "p": 0.03751517194474519,
+   "accept_harm": 0.45685279187817257,
+   "reject_harm": 0.5253384912959381,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9294478527607362,
+   "overall_veto_rate": 0.9293447293447293
   },
   {
    "cfg": {
@@ -516,14 +516,14 @@
     "max_point_move_scales": 1.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 1.9808612440191387,
-   "p": 0.16924976619311494,
-   "accept_harm": 0.35714285714285715,
-   "reject_harm": 0.5239179954441914,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9735294117647059,
-   "overall_veto_rate": 0.971756398940865
+   "n_contam": 2782,
+   "odds_ratio": 1.8048991100537493,
+   "p": 0.0013339035510626827,
+   "accept_harm": 0.3813559322033898,
+   "reject_harm": 0.5266516516516516,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9695611137328929,
+   "overall_veto_rate": 0.9648148148148148
   },
   {
    "cfg": {
@@ -531,14 +531,14 @@
     "max_point_move_scales": 1.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 0.9481262327416173,
-   "p": 0.6275609886829632,
-   "accept_harm": 0.5306122448979592,
-   "reject_harm": 0.5173267326732673,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.8852941176470588,
-   "overall_veto_rate": 0.8879082082965578
+   "n_contam": 2782,
+   "odds_ratio": 1.065035359451603,
+   "p": 0.32228838189872183,
+   "accept_harm": 0.5064935064935064,
+   "reject_harm": 0.5222312045270816,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.8716375648890986,
+   "overall_veto_rate": 0.8786324786324786
   },
   {
    "cfg": {
@@ -546,14 +546,14 @@
     "max_point_move_scales": 2.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 3.399014778325123,
-   "p": 0.01202079153277794,
-   "accept_harm": 0.25,
-   "reject_harm": 0.5311778290993071,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9705882352941176,
-   "overall_veto_rate": 0.9646954986760812
+   "n_contam": 2782,
+   "odds_ratio": 2.1241090943647247,
+   "p": 1.0096402450597272e-05,
+   "accept_harm": 0.3469387755102041,
+   "reject_harm": 0.5301707779886148,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9688532326569136,
+   "overall_veto_rate": 0.9602564102564103
   },
   {
    "cfg": {
@@ -561,14 +561,14 @@
     "max_point_move_scales": 2.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 0.7580893682588598,
-   "p": 0.9053025685585393,
-   "accept_harm": 0.5729166666666666,
-   "reject_harm": 0.5042016806722689,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.7220588235294118,
-   "overall_veto_rate": 0.7484554280670785
+   "n_contam": 2782,
+   "odds_ratio": 0.6772108620512004,
+   "p": 0.9999952696814298,
+   "accept_harm": 0.593245227606461,
+   "reject_harm": 0.4969062351261304,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.7149598867390279,
+   "overall_veto_rate": 0.7309116809116809
   },
   {
    "cfg": {
@@ -576,14 +576,14 @@
     "max_point_move_scales": 5.0,
     "require_suspect": true
    },
-   "n_contam": 453,
-   "odds_ratio": 2.6538461538461537,
-   "p": 0.007951812028998997,
-   "accept_harm": 0.30303030303030304,
-   "reject_harm": 0.5357142857142857,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.9676470588235294,
-   "overall_veto_rate": 0.9514563106796117
+   "n_contam": 2782,
+   "odds_ratio": 2.587014012708366,
+   "p": 2.3500337640241184e-11,
+   "accept_harm": 0.31140350877192985,
+   "reject_harm": 0.5391542678151918,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.9662576687116564,
+   "overall_veto_rate": 0.9471509971509972
   },
   {
    "cfg": {
@@ -591,14 +591,14 @@
     "max_point_move_scales": 5.0,
     "require_suspect": false
    },
-   "n_contam": 453,
-   "odds_ratio": 0.48422234699606964,
-   "p": 0.9999554235795106,
-   "accept_harm": 0.6088888888888889,
-   "reject_harm": 0.4298245614035088,
-   "baseline": 0.5187637969094923,
-   "protected_recall": 0.4647058823529412,
-   "overall_veto_rate": 0.4801412180052957
+   "n_contam": 2782,
+   "odds_ratio": 0.48987350294361864,
+   "p": 1.0,
+   "accept_harm": 0.6087896253602305,
+   "reject_harm": 0.43256814921090386,
+   "baseline": 0.5204888569374551,
+   "protected_recall": 0.46271826333176025,
+   "overall_veto_rate": 0.4779202279202279
   }
  ],
  "selected": {
@@ -607,88 +607,90 @@
   "require_suspect": true
  },
  "best": {
-  "n_contam": 453,
-  "odds_ratio": 3.855218855218855,
-  "p": 0.0020553619684867686,
-  "accept_harm": 0.23076923076923078,
-  "reject_harm": 0.5362997658079626,
-  "baseline": 0.5187637969094923,
-  "protected_recall": 0.9705882352941176,
-  "overall_veto_rate": 0.9593998234774934,
+  "n_contam": 2782,
+  "odds_ratio": 3.179023898646703,
+  "p": 3.1000482451663686e-12,
+  "accept_harm": 0.26744186046511625,
+  "reject_harm": 0.5371647509578544,
+  "baseline": 0.5204888569374551,
+  "protected_recall": 0.9676734308636149,
+  "overall_veto_rate": 0.955982905982906,
   "table": [
-   229,
-   198,
-   6,
-   20
+   1402,
+   1208,
+   46,
+   126
   ]
  },
  "per_proposer": {
   "stat_only": {
-   "n_contam": 99,
-   "odds_ratio": 2.618181818181818,
-   "p": 0.061314636905114205,
-   "accept_harm": 0.21739130434782608,
-   "reject_harm": 0.42105263157894735,
-   "baseline": 0.37373737373737376,
-   "protected_recall": 0.8468468468468469,
-   "overall_veto_rate": 0.8095238095238095,
+   "n_contam": 659,
+   "odds_ratio": 2.1129310344827585,
+   "p": 0.00011973660855852927,
+   "accept_harm": 0.2597402597402597,
+   "reject_harm": 0.42574257425742573,
+   "baseline": 0.38694992412746587,
+   "protected_recall": 0.8282387190684134,
+   "overall_veto_rate": 0.7979197622585439,
    "table": [
-    32,
-    44,
-    5,
-    18
+    215,
+    290,
+    40,
+    114
    ]
   },
   "always_clean": {
-   "n_contam": 140,
+   "n_contam": 840,
    "odds_ratio": NaN,
    "p": 1.0,
    "accept_harm": 0.0,
-   "reject_harm": 0.6,
-   "baseline": 0.6,
+   "reject_harm": 0.580952380952381,
+   "baseline": 0.580952380952381,
    "protected_recall": 1.0,
    "overall_veto_rate": 1.0,
    "table": [
-    84,
-    56,
+    488,
+    352,
     0,
     0
    ]
   },
   "screen": {
-   "n_contam": 78,
-   "odds_ratio": Infinity,
-   "p": 0.4415584415584417,
-   "accept_harm": 0.0,
-   "reject_harm": 0.34210526315789475,
-   "baseline": 0.3333333333333333,
-   "protected_recall": 0.9682539682539683,
-   "overall_veto_rate": 0.9716312056737588,
+   "n_contam": 478,
+   "odds_ratio": 1.7142857142857142,
+   "p": 0.25774382195698253,
+   "accept_harm": 0.25,
+   "reject_harm": 0.36363636363636365,
+   "baseline": 0.3598326359832636,
+   "protected_recall": 0.9681050656660413,
+   "overall_veto_rate": 0.9673590504451038,
    "table": [
-    26,
-    50,
-    0,
-    2
+    168,
+    294,
+    4,
+    12
    ]
   },
   "imr": {
-   "n_contam": 136,
+   "n_contam": 805,
    "odds_ratio": 0.0,
    "p": 1.0,
    "accept_harm": 1.0,
-   "reject_harm": 0.6444444444444445,
-   "baseline": 0.6470588235294118,
-   "protected_recall": 0.9959349593495935,
-   "overall_veto_rate": 0.9947643979057592,
+   "reject_harm": 0.6612702366127023,
+   "baseline": 0.662111801242236,
+   "protected_recall": 0.9986282578875172,
+   "overall_veto_rate": 0.9982324348210341,
    "table": [
-    87,
-    48,
-    1,
+    531,
+    272,
+    2,
     0
    ]
   }
  },
  "seeds": [
-  42
+  42,
+  1,
+  2
  ]
 }
