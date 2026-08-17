@@ -50,16 +50,16 @@ standard deviation and that is not a claim. On patchtst the signs are not even
 stable across seeds. **Reported as no measurable difference.**
 
 The cause is mechanical rather than a failure of the method. `introact_full`
-edits 71 of 800 windows, **8.9 percent of the corpus**, and leaves the rest
-byte identical to what `no_action` produces. A downstream model trained on 91
+edits 62 of 800 windows, **7.75 percent of the corpus**, and leaves the rest
+byte identical to what `no_action` produces. A downstream model trained on 92
 percent identical data cannot be expected to show a difference, and the
-conservatism that produces that 8.9 percent is the same property that produces
+conservatism that produces that 7.75 percent is the same property that produces
 the protection results.
 
 Dilution is ruled out as the explanation. Evaluating only on the 515 windows
 some method edited amplifies `stat_only` by 4.9x on patchtst and 6.4x on
 ridge_ar, confirming that the mechanism is real, and leaves `introact_full`
-unchanged at -0.09, +0.07 and +0.08 percent across the three models. Its 71
+unchanged at -0.09, +0.07 and +0.08 percent across the three models. Its 62
 edited windows are all inside that subset, so the dilution is removed and the
 effect is still zero.
 
@@ -85,7 +85,7 @@ model on a curated corpus helps is a different question and is **not
 evaluated**.
 
 The reason is the measurement above rather than cost. At the change volume this
-method produces, under 9 percent of windows modified, the downstream protocol
+method produces, under 8 percent of windows modified, the downstream protocol
 in hand cannot resolve a difference on models that are far cheaper to train
 than a foundation model. Spending foundation model compute to reach the same
 inconclusive answer would not be informative. Establishing it needs either a

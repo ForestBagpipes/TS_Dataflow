@@ -139,7 +139,7 @@ independently trained models agree in direction at one to two orders of
 magnitude above any noise floor in the experiment. For the conservative
 methods no measurable difference is observed: every effect sits at or below its
 own model's paired noise floor of 0.27 to 2.99 percent. The cause is
-mechanical, since our method edits 71 of 800 windows and leaves 91 percent of
+mechanical, since our method edits 62 of 800 windows and leaves 92 percent of
 the corpus byte identical, and dilution is ruled out by evaluating on the 515
 edited windows only, which leaves the effect unchanged.
 

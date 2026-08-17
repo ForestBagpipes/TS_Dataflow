@@ -102,7 +102,7 @@ source than the calibration set.
 Every effect for the statistical rule, its gated variant and our full method
 sits at or below its own model's paired noise floor of 0.27 to 2.99 percent,
 and on the deep model the signs are not stable across seeds. The cause is
-mechanical: our method edits 71 of 800 windows, 8.9 percent of the corpus, and
+mechanical: our method edits 62 of 800 windows, 7.75 percent of the corpus, and
 leaves the remainder byte identical. Dilution was ruled out rather than assumed
 by evaluating on the 515 edited windows only, which leaves the effect at -0.09,
 +0.07 and +0.08 percent across three models. `docs/downstream.md`.

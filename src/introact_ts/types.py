@@ -173,8 +173,38 @@ class GovernanceTrace:
 
     @property
     def modified(self) -> bool:
-        """True if any mutating action was committed."""
+        """True if any mutating action was committed.
+
+        **This is the permissive reading and it is not the one to report.** An
+        operator can be admitted and leave the series unchanged, for instance an
+        imputation on a window that turned out to have nothing to fill, and this
+        property counts that as modified.
+
+        Two measurements of the same run disagreed because of it, 71 windows by
+        this reading against 62 by the strict one, and 62 is correct for any
+        statement of the form "the method edited N windows". Use
+        :func:`content_modified` for that. This property is kept because the
+        governance trace needs to know whether the loop committed anything,
+        which is a different question.
+        """
         return any(r.accepted and r.action in MUTATING_ACTIONS for r in self.records)
+
+    def content_modified(self, original) -> bool:
+        """True if the series content actually changed, the strict reading.
+
+        ``original`` is the window's input series. A crop counts as a change.
+        This is the definition every reported edit count uses.
+        """
+        import numpy as np
+
+        cur = np.asarray(self.final_series, dtype=np.float64)
+        src = np.asarray(original, dtype=np.float64)
+        if self.crop_offset:
+            return True
+        if len(cur) != len(src):
+            return True
+        return not np.allclose(np.nan_to_num(cur), np.nan_to_num(src),
+                               rtol=0, atol=1e-12)
 
     def summary(self) -> dict:
         """Flat, JSON friendly record of the episode.

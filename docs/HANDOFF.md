@@ -100,7 +100,7 @@ is the weaker one.
 **No positive downstream gain from conservative curation.** Every effect for
 stat_only, stat_only_gated and introact_full sits at or below its own model's
 paired noise floor of 0.27 to 2.99 percent. The cause is mechanical:
-introact_full edits 71 of 800 windows and leaves 91 percent of the corpus byte
+introact_full edits 62 of 800 windows and leaves 92 percent of the corpus byte
 identical. Dilution was ruled out, not assumed, by evaluating on the 515 edited
 windows only.
 
@@ -251,7 +251,7 @@ the SSH session. Two runs were lost this way before that was fixed.
 
 Disk was at 12 GB free and is now 405 GB. **That was never the reason foundation
 model fine tuning was skipped and it is no longer a constraint at all.** The
-reason is and remains the protocol: the method modifies 8.9 percent of the
+reason is and remains the protocol: the method modifies 7.75 percent of the
 corpus, and while the paired noise floor is under 3 percent the direction on the
 affected subset is not decidable, so the downstream protocol cannot resolve a
 difference on models far cheaper to train than a foundation model. If that step

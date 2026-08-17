@@ -30,7 +30,7 @@ batch before any parameter sees it.
 
 **It does not raise the fraction of the corpus that curation touched.** The
 downstream effects for the conservative methods sit inside a paired noise floor
-of 0.27 to 2.99 percent because our method edits 71 of 800 windows and leaves 91
+of 0.27 to 2.99 percent because our method edits 62 of 800 windows and leaves 92
 percent of the corpus byte identical. Nothing here changes that ratio.
 
 **An earlier expectation is withdrawn.** It was suggested that a multivariate
