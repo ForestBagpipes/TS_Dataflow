@@ -26,6 +26,65 @@ KNN Shapley, Data-OOB and TimeInf. TSQAgent compares against Data Shapley,
 Data-OOB, TimeInf and TSRating. Implementing the first three puts this paper in
 the same comparison setting those two use.
 
+## The route changed after reading TSRating's own baseline code
+
+`scoring/baseline_annotate.py` in `clsr1008/TSRating` implements all four
+valuation baselines in one function, on one `DataFetcher`, with the
+hyperparameters that paper published:
+
+| method | source of the implementation | hyperparameters as published |
+|---|---|---|
+| Data-OOB | `opendataval.dataval.DataOob` | `num_models=1000` |
+| Data Shapley | `opendataval.dataval.DataShapley` | `gr_threshold=1.1, max_mc_epochs=100, min_models=100` |
+| KNN Shapley | `opendataval.dataval.KNNShapley` | `k_neighbors=0.1 * len(X_train)` |
+| TimeInf | `calc_linear_time_inf`, vendored | mean influence on the validation blocks |
+| shared utility model | `RegressionSkLearnWrapper(LinearRegression)` | |
+
+**This is the route taken.** Reimplementing the adapters ourselves would have
+meant choosing those hyperparameters by guess, and the comparison would then be
+against our reading of the methods rather than against the configuration a
+published paper ran them in. Using their file puts all four on the same fetcher,
+the same utility model and the same block set, which is what makes them
+comparable to each other as well as to us.
+
+KNN Shapley falls out of the same call at no extra cost. It is not on the
+required list but it is in TSRating's comparison table, so it is reported.
+
+**A usage error avoided, recorded because it was nearly made.** TimeInf's own
+repository uses self influence, `calc_linear_time_inf(i, i, ...)`, wrapped in
+`scale_influence` which takes the absolute deviation from the mean. That is the
+anomaly detection reading and it is the wrong one here. For data valuation
+TSRating uses influence of training block `i` averaged over the validation
+blocks, which is signed and ranks blocks by how much they help. Taking the
+anomaly detection path would have scored deviation rather than value.
+
+## Block construction and scale
+
+| item | value | reason |
+|---|---|---|
+| block length | 128 | TSRating's default and the value in their example |
+| features and target | first 127 points predict the 128th | their `X = block[:, :-1]`, `Y = block[:, -1]` |
+| blocks per window | non overlapping, so 4 per 512 point window | see scale note below |
+| corpus scale | 800 windows | see scale note below |
+
+**Scale note.** TSRating slices one continuous series of 4000 points, giving
+about 2673 training blocks. This corpus is 800 or 2000 independent windows of
+512 points each. Fully overlapping blocks at step 1 would give 385 blocks per
+window, so 2000 windows would produce 770000 blocks, which the Data Shapley
+Monte Carlo cannot run at. Non overlapping blocks on 800 windows give 3200
+blocks, the same order as their 2673. The change is from step 1 to step 128 and
+it is made for tractability, stated rather than hidden.
+
+Train, validation and test are split **by window, not by time point**, so every
+block of a window lands in the same split and no window contributes to both the
+model and its own valuation.
+
+**A split discrepancy to note.** The instruction for this work says 7:2:1.
+TSRating's `main` uses 0.7 train, 0.1 validation, and the remaining 0.2 test,
+namely 7:1:2. The 7:2:1 given here is followed, and the difference from
+TSRating's own split is recorded so it is not mistaken for a transcription of
+theirs.
+
 ## Implementation route per method, with the reason
 
 | method | venue | route | reason |
