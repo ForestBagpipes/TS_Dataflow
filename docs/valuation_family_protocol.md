@@ -51,17 +51,30 @@ The two units do not coincide and the mapping changes the result, so it is fixed
 here.
 
 **TimeInf** blocks a series and scores each block. `utils.block_time_series`
-takes the block length directly. One window is one block. No aggregation.
+splits a series of length L at block length p into L minus p overlapping blocks,
+each of which receives its own influence value. A window here is 512 points, so
+one window yields hundreds of blocks.
 
 **Data Shapley and Data-OOB** score an `(X, y)` pair. A window is expanded by
 autoregressive featurisation, so one window of length L with lag order p yields
 L minus p supervised samples, each of which receives its own value.
 
-**The window score is the arithmetic mean of its samples' values, not the sum.**
-The reason is that RESEGMENT produces windows of unequal length, and a sum would
-rank a long window above a short one for length alone. The mean is invariant to
-that. This is a decision about a confound, not a preference, and it is recorded
-before any score exists.
+The two are the same shape. Both produce many per position values inside one
+window, and both need the same rule to reach a window score.
+
+**The window score is the arithmetic mean of its per position values, not the
+sum.** The reason is that RESEGMENT produces windows of unequal length, and a
+sum would rank a long window above a short one for length alone. The mean is
+invariant to that. This is a decision about a confound, not a preference, and it
+is recorded before any score exists.
+
+A correction to this section, made on the same day and before any score was
+computed. It first read that one window is one TimeInf block and needs no
+aggregation. That was wrong on a checkable fact, `CorpusSpec.window_len` is 512
+in `experiments/corpus.py`, so a window is far longer than any block length this
+method uses. The corrected rule is the one above and it is now identical across
+all three methods, which is the simpler arrangement anyway. The original wording
+is recorded here rather than silently replaced.
 
 ## Selection
 
