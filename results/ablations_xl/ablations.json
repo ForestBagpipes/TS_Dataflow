@@ -1,0 +1,1669 @@
+{
+  "scale": "xl",
+  "n_windows": 2000,
+  "rungs": {
+    "a_no_action": {
+      "n_windows": 2000,
+      "detection": {
+        "precision": 0.5,
+        "recall": 0.6743243243243243,
+        "f1": 0.5742232451093211,
+        "tp": 499,
+        "fp": 499,
+        "fn": 241,
+        "tn": 761,
+        "behav_risk_auroc": 0.4679869154869155
+      },
+      "action": {
+        "action_accuracy": 0.0,
+        "n_contaminated": 740,
+        "per_contamination": {
+          "duplicate": {
+            "n": 105,
+            "hit": 0,
+            "repaired": 0
+          },
+          "spike": {
+            "n": 106,
+            "hit": 0,
+            "repaired": 0
+          },
+          "missing_block": {
+            "n": 106,
+            "hit": 0,
+            "repaired": 0
+          },
+          "missing_scattered": {
+            "n": 106,
+            "hit": 0,
+            "repaired": 0
+          },
+          "flatline": {
+            "n": 106,
+            "hit": 0,
+            "repaired": 0
+          },
+          "noise": {
+            "n": 106,
+            "hit": 0,
+            "repaired": 0
+          },
+          "level_shift": {
+            "n": 105,
+            "hit": 0,
+            "repaired": 0
+          }
+        }
+      },
+      "repair": {
+        "n": 740,
+        "nmse_before": 1.167283767342178,
+        "nmse_after": 1.167283767342178,
+        "reduction": 0.0,
+        "worsened_frac": 0.0,
+        "per_contamination": {
+          "duplicate": {
+            "before": 0.26006764612649136,
+            "after": 0.26006764612649136,
+            "reduction": 0.0
+          },
+          "spike": {
+            "before": 0.7966205888071823,
+            "after": 0.7966205888071823,
+            "reduction": 0.0
+          },
+          "missing_block": {
+            "before": 0.10870207583187501,
+            "after": 0.10870207583187501,
+            "reduction": 0.0
+          },
+          "missing_scattered": {
+            "before": 0.027428523277074728,
+            "after": 0.027428523277074728,
+            "reduction": 0.0
+          },
+          "flatline": {
+            "before": 0.09791609734074758,
+            "after": 0.09791609734074758,
+            "reduction": 0.0
+          },
+          "noise": {
+            "before": 0.9478418086865479,
+            "after": 0.9478418086865479,
+            "reduction": 0.0
+          },
+          "level_shift": {
+            "before": 5.969151628875494,
+            "after": 5.969151628875494,
+            "reduction": 0.0
+          }
+        }
+      },
+      "corpus_effect": {
+        "n": 2000,
+        "nmse_before": 0.43189499391660585,
+        "nmse_after": 0.43189499391660585,
+        "net_reduction": 0.0,
+        "windows_improved": 0,
+        "windows_worsened": 0,
+        "per_stratum": {
+          "changepoint": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "clean": {
+            "n": 420,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "clean_ood": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "contaminated": {
+            "n": 740,
+            "before": 1.167283767342178,
+            "after": 1.167283767342178
+          },
+          "hard": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "rare_valid": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.0
+          }
+        }
+      },
+      "protection": {
+        "n_protected": 1260,
+        "over_clean_rate": 0.0,
+        "mean_damage": 0.0,
+        "per_stratum": {
+          "rare_valid": {
+            "n": 210,
+            "modified": 0,
+            "over_clean_rate": 0.0,
+            "mean_damage": 0.0
+          },
+          "changepoint": {
+            "n": 210,
+            "modified": 0,
+            "over_clean_rate": 0.0,
+            "mean_damage": 0.0
+          },
+          "clean_ood": {
+            "n": 210,
+            "modified": 0,
+            "over_clean_rate": 0.0,
+            "mean_damage": 0.0
+          },
+          "clean": {
+            "n": 420,
+            "modified": 0,
+            "over_clean_rate": 0.0,
+            "mean_damage": 0.0
+          },
+          "hard": {
+            "n": 210,
+            "modified": 0,
+            "over_clean_rate": 0.0,
+            "mean_damage": 0.0
+          }
+        }
+      },
+      "rollback": {
+        "n_attempted": 0,
+        "n_rolled_back": 0,
+        "rollback_rate": 0.0,
+        "by_reason": {},
+        "protected_windows_with_rollback": 0,
+        "abstain_rate": 0.0,
+        "quarantine_rate": 0.0,
+        "abstain_on_protected": 0,
+        "mean_probe_calls": 1.0
+      },
+      "utility": {
+        "n_edited": 0,
+        "mean_delta_utility": 0.0,
+        "min_delta_utility": 0.0
+      },
+      "transfer": {
+        "amazon/chronos-t5-small": {
+          "nrmse_before": 1.3643540846862152,
+          "nrmse_after": 1.374068193918309,
+          "improvement": -0.007119932678127272,
+          "n": 2000
+        },
+        "surrogate-s7": {
+          "nrmse_before": 2.0307238162684036,
+          "nrmse_after": 2.0307238162684036,
+          "improvement": 0.0,
+          "n": 2000
+        }
+      }
+    },
+    "b_no_verification": {
+      "n_windows": 2000,
+      "detection": {
+        "precision": 0.5,
+        "recall": 0.6743243243243243,
+        "f1": 0.5742232451093211,
+        "tp": 499,
+        "fp": 499,
+        "fn": 241,
+        "tn": 761,
+        "behav_risk_auroc": 0.4679869154869155
+      },
+      "action": {
+        "action_accuracy": 0.5148648648648648,
+        "n_contaminated": 740,
+        "per_contamination": {
+          "duplicate": {
+            "n": 105,
+            "hit": 5,
+            "repaired": 34
+          },
+          "spike": {
+            "n": 106,
+            "hit": 27,
+            "repaired": 44
+          },
+          "missing_block": {
+            "n": 106,
+            "hit": 106,
+            "repaired": 106
+          },
+          "missing_scattered": {
+            "n": 106,
+            "hit": 106,
+            "repaired": 106
+          },
+          "flatline": {
+            "n": 106,
+            "hit": 89,
+            "repaired": 91
+          },
+          "noise": {
+            "n": 106,
+            "hit": 2,
+            "repaired": 12
+          },
+          "level_shift": {
+            "n": 105,
+            "hit": 46,
+            "repaired": 61
+          }
+        }
+      },
+      "repair": {
+        "n": 740,
+        "nmse_before": 1.167283767342178,
+        "nmse_after": 0.7306995959878853,
+        "reduction": 0.37401717009083735,
+        "worsened_frac": 0.1972972972972973,
+        "per_contamination": {
+          "duplicate": {
+            "before": 0.26006764612649136,
+            "after": 0.30098026945201,
+            "reduction": -0.15731531366888918
+          },
+          "spike": {
+            "before": 0.7966205888071823,
+            "after": 0.5863826065615813,
+            "reduction": 0.26391231308796614
+          },
+          "missing_block": {
+            "before": 0.10870207583187501,
+            "after": 0.11966746411884724,
+            "reduction": -0.10087561072828022
+          },
+          "missing_scattered": {
+            "before": 0.027428523277074728,
+            "after": 0.00810618605131564,
+            "reduction": 0.7044614480542981
+          },
+          "flatline": {
+            "before": 0.09791609734074758,
+            "after": 0.09123893880471128,
+            "reduction": 0.06819265388815299
+          },
+          "noise": {
+            "before": 0.9478418086865479,
+            "after": 0.9421270834483866,
+            "reduction": 0.006029197262442332
+          },
+          "level_shift": {
+            "before": 5.969151628875494,
+            "after": 3.084546773011245,
+            "reduction": 0.48325206582290636
+          }
+        }
+      },
+      "corpus_effect": {
+        "n": 2000,
+        "nmse_before": 0.43189499391660585,
+        "nmse_after": 0.31069219260888153,
+        "net_reduction": 0.28063025275798226,
+        "windows_improved": 304,
+        "windows_worsened": 475,
+        "per_stratum": {
+          "changepoint": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.013845104949136555
+          },
+          "clean": {
+            "n": 420,
+            "before": 0.0,
+            "after": 0.027514071375906637
+          },
+          "clean_ood": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.08488191813115958
+          },
+          "contaminated": {
+            "n": 740,
+            "before": 1.167283767342178,
+            "after": 0.7306995959878853
+          },
+          "hard": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.19787997749127909
+          },
+          "rare_valid": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.0324919242324595
+          }
+        }
+      },
+      "protection": {
+        "n_protected": 1260,
+        "over_clean_rate": 0.30158730158730157,
+        "mean_damage": 0.06402117792597467,
+        "per_stratum": {
+          "rare_valid": {
+            "n": 210,
+            "modified": 64,
+            "over_clean_rate": 0.3047619047619048,
+            "mean_damage": 0.0324919242324595
+          },
+          "changepoint": {
+            "n": 210,
+            "modified": 48,
+            "over_clean_rate": 0.22857142857142856,
+            "mean_damage": 0.013845104949136555
+          },
+          "clean_ood": {
+            "n": 210,
+            "modified": 50,
+            "over_clean_rate": 0.23809523809523808,
+            "mean_damage": 0.08488191813115958
+          },
+          "clean": {
+            "n": 420,
+            "modified": 133,
+            "over_clean_rate": 0.31666666666666665,
+            "mean_damage": 0.027514071375906637
+          },
+          "hard": {
+            "n": 210,
+            "modified": 85,
+            "over_clean_rate": 0.40476190476190477,
+            "mean_damage": 0.19787997749127909
+          }
+        }
+      },
+      "rollback": {
+        "n_attempted": 925,
+        "n_rolled_back": 0,
+        "rollback_rate": 0.0,
+        "by_reason": {},
+        "protected_windows_with_rollback": 0,
+        "abstain_rate": 0.063,
+        "quarantine_rate": 0.0005,
+        "abstain_on_protected": 74,
+        "mean_probe_calls": 1.4625
+      },
+      "utility": {
+        "n_edited": 834,
+        "mean_delta_utility": 1.1382903600264525,
+        "min_delta_utility": -4.613496595189375
+      },
+      "transfer": {
+        "amazon/chronos-t5-small": {
+          "nrmse_before": 1.3577187364819256,
+          "nrmse_after": 1.2602694795086806,
+          "improvement": 0.07177425953902072,
+          "n": 2000
+        },
+        "surrogate-s7": {
+          "nrmse_before": 2.0307238162684036,
+          "nrmse_after": 1.8579498045037572,
+          "improvement": 0.0850800145152828,
+          "n": 2000
+        }
+      }
+    },
+    "c_no_utility_recheck": {
+      "n_windows": 2000,
+      "detection": {
+        "precision": 0.5,
+        "recall": 0.6743243243243243,
+        "f1": 0.5742232451093211,
+        "tp": 499,
+        "fp": 499,
+        "fn": 241,
+        "tn": 761,
+        "behav_risk_auroc": 0.4679869154869155
+      },
+      "action": {
+        "action_accuracy": 0.3310810810810811,
+        "n_contaminated": 740,
+        "per_contamination": {
+          "duplicate": {
+            "n": 105,
+            "hit": 6,
+            "repaired": 19
+          },
+          "spike": {
+            "n": 106,
+            "hit": 26,
+            "repaired": 41
+          },
+          "missing_block": {
+            "n": 106,
+            "hit": 46,
+            "repaired": 57
+          },
+          "missing_scattered": {
+            "n": 106,
+            "hit": 75,
+            "repaired": 78
+          },
+          "flatline": {
+            "n": 106,
+            "hit": 51,
+            "repaired": 56
+          },
+          "noise": {
+            "n": 106,
+            "hit": 1,
+            "repaired": 8
+          },
+          "level_shift": {
+            "n": 105,
+            "hit": 40,
+            "repaired": 45
+          }
+        }
+      },
+      "repair": {
+        "n": 740,
+        "nmse_before": 1.167283767342178,
+        "nmse_after": 0.7635901501704712,
+        "reduction": 0.34584017054472416,
+        "worsened_frac": 0.13783783783783785,
+        "per_contamination": {
+          "duplicate": {
+            "before": 0.26006764612649136,
+            "after": 0.27487132753901644,
+            "reduction": -0.05692242627260491
+          },
+          "spike": {
+            "before": 0.7966205888071823,
+            "after": 0.601209603315529,
+            "reduction": 0.24529994358324514
+          },
+          "missing_block": {
+            "before": 0.10870207583187501,
+            "after": 0.09655934253993081,
+            "reduction": 0.11170654469124264
+          },
+          "missing_scattered": {
+            "before": 0.027428523277074728,
+            "after": 0.015788940638519915,
+            "reduction": 0.4243605286721138
+          },
+          "flatline": {
+            "before": 0.09791609734074758,
+            "after": 0.09712903263689508,
+            "reduction": 0.008038154350796023
+          },
+          "noise": {
+            "before": 0.9478418086865479,
+            "after": 0.9464714207805316,
+            "reduction": 0.0014457981210127535
+          },
+          "level_shift": {
+            "before": 5.969151628875494,
+            "after": 3.332727978132791,
+            "reduction": 0.4416747663083521
+          }
+        }
+      },
+      "corpus_effect": {
+        "n": 2000,
+        "nmse_before": 0.43189499391660585,
+        "nmse_after": 0.29623022134773985,
+        "net_reduction": 0.3141151772531574,
+        "windows_improved": 199,
+        "windows_worsened": 260,
+        "per_stratum": {
+          "changepoint": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.018180218381992568
+          },
+          "clean": {
+            "n": 420,
+            "before": 0.0,
+            "after": 0.015495542738966073
+          },
+          "clean_ood": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.04698889417210378
+          },
+          "contaminated": {
+            "n": 740,
+            "before": 1.167283767342178,
+            "after": 0.7635901501704712
+          },
+          "hard": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.028586301954569182
+          },
+          "rare_valid": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.005747459867359181
+          }
+        }
+      },
+      "protection": {
+        "n_protected": 1260,
+        "over_clean_rate": 0.17063492063492064,
+        "mean_damage": 0.02174899330899281,
+        "per_stratum": {
+          "rare_valid": {
+            "n": 210,
+            "modified": 29,
+            "over_clean_rate": 0.1380952380952381,
+            "mean_damage": 0.005747459867359181
+          },
+          "changepoint": {
+            "n": 210,
+            "modified": 32,
+            "over_clean_rate": 0.1523809523809524,
+            "mean_damage": 0.018180218381992568
+          },
+          "clean_ood": {
+            "n": 210,
+            "modified": 22,
+            "over_clean_rate": 0.10476190476190476,
+            "mean_damage": 0.04698889417210378
+          },
+          "clean": {
+            "n": 420,
+            "modified": 77,
+            "over_clean_rate": 0.18333333333333332,
+            "mean_damage": 0.015495542738966073
+          },
+          "hard": {
+            "n": 210,
+            "modified": 55,
+            "over_clean_rate": 0.2619047619047619,
+            "mean_damage": 0.028586301954569182
+          }
+        }
+      },
+      "rollback": {
+        "n_attempted": 1457,
+        "n_rolled_back": 902,
+        "rollback_rate": 0.6190803019903912,
+        "by_reason": {
+          "ROLLED_BACK_STRUCTURE": 776,
+          "ROLLED_BACK_RISK": 126
+        },
+        "protected_windows_with_rollback": 302,
+        "abstain_rate": 0.054,
+        "quarantine_rate": 0.0025,
+        "abstain_on_protected": 65,
+        "mean_probe_calls": 1.7285
+      },
+      "utility": {
+        "n_edited": 519,
+        "mean_delta_utility": 1.3356692025098926,
+        "min_delta_utility": -4.613496595189375
+      },
+      "transfer": {
+        "amazon/chronos-t5-small": {
+          "nrmse_before": 1.3682018179741962,
+          "nrmse_after": 1.279345542540107,
+          "improvement": 0.06494383669629422,
+          "n": 2000
+        },
+        "surrogate-s7": {
+          "nrmse_before": 2.0307238162684036,
+          "nrmse_after": 1.8640189360702684,
+          "improvement": 0.08209136016559215,
+          "n": 2000
+        }
+      }
+    },
+    "d_no_structural_veto": {
+      "n_windows": 2000,
+      "detection": {
+        "precision": 0.5,
+        "recall": 0.6743243243243243,
+        "f1": 0.5742232451093211,
+        "tp": 499,
+        "fp": 499,
+        "fn": 241,
+        "tn": 761,
+        "behav_risk_auroc": 0.4679869154869155
+      },
+      "action": {
+        "action_accuracy": 0.27702702702702703,
+        "n_contaminated": 740,
+        "per_contamination": {
+          "duplicate": {
+            "n": 105,
+            "hit": 4,
+            "repaired": 23
+          },
+          "spike": {
+            "n": 106,
+            "hit": 26,
+            "repaired": 37
+          },
+          "missing_block": {
+            "n": 106,
+            "hit": 53,
+            "repaired": 58
+          },
+          "missing_scattered": {
+            "n": 106,
+            "hit": 44,
+            "repaired": 48
+          },
+          "flatline": {
+            "n": 106,
+            "hit": 49,
+            "repaired": 53
+          },
+          "noise": {
+            "n": 106,
+            "hit": 2,
+            "repaired": 8
+          },
+          "level_shift": {
+            "n": 105,
+            "hit": 27,
+            "repaired": 35
+          }
+        }
+      },
+      "repair": {
+        "n": 740,
+        "nmse_before": 1.167283767342178,
+        "nmse_after": 0.87733522491533,
+        "reduction": 0.248395934680939,
+        "worsened_frac": 0.12972972972972974,
+        "per_contamination": {
+          "duplicate": {
+            "before": 0.26006764612649136,
+            "after": 0.2793232945020613,
+            "reduction": -0.0740409222845213
+          },
+          "spike": {
+            "before": 0.7966205888071823,
+            "after": 0.5896986407953503,
+            "reduction": 0.25974968626114225
+          },
+          "missing_block": {
+            "before": 0.10870207583187501,
+            "after": 0.09630736530730795,
+            "reduction": 0.11402459823984823
+          },
+          "missing_scattered": {
+            "before": 0.027428523277074728,
+            "after": 0.0223464744573924,
+            "reduction": 0.1852833551535018
+          },
+          "flatline": {
+            "before": 0.09791609734074758,
+            "after": 0.094162764798669,
+            "reduction": 0.03833212969075961
+          },
+          "noise": {
+            "before": 0.9478418086865479,
+            "after": 0.9429846898842248,
+            "reduction": 0.005124398140923692
+          },
+          "level_shift": {
+            "before": 5.969151628875494,
+            "after": 4.141677403608339,
+            "reduction": 0.30615309157616855
+          }
+        }
+      },
+      "corpus_effect": {
+        "n": 2000,
+        "nmse_before": 0.43189499391660585,
+        "nmse_after": 0.34651028226789793,
+        "net_reduction": 0.1976978498278097,
+        "windows_improved": 163,
+        "windows_worsened": 304,
+        "per_stratum": {
+          "changepoint": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.011815319076668685
+          },
+          "clean": {
+            "n": 420,
+            "before": 0.0,
+            "after": 0.02398169075413613
+          },
+          "clean_ood": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.08016040833476189
+          },
+          "contaminated": {
+            "n": 740,
+            "before": 1.167283767342178,
+            "after": 0.87733522491533
+          },
+          "hard": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.04001501729673067
+          },
+          "rare_valid": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.028581579014288826
+          }
+        }
+      },
+      "protection": {
+        "n_protected": 1260,
+        "over_clean_rate": 0.2,
+        "mean_damage": 0.03475595087178705,
+        "per_stratum": {
+          "rare_valid": {
+            "n": 210,
+            "modified": 37,
+            "over_clean_rate": 0.1761904761904762,
+            "mean_damage": 0.028581579014288826
+          },
+          "changepoint": {
+            "n": 210,
+            "modified": 30,
+            "over_clean_rate": 0.14285714285714285,
+            "mean_damage": 0.011815319076668685
+          },
+          "clean_ood": {
+            "n": 210,
+            "modified": 45,
+            "over_clean_rate": 0.21428571428571427,
+            "mean_damage": 0.08016040833476189
+          },
+          "clean": {
+            "n": 420,
+            "modified": 90,
+            "over_clean_rate": 0.21428571428571427,
+            "mean_damage": 0.02398169075413613
+          },
+          "hard": {
+            "n": 210,
+            "modified": 50,
+            "over_clean_rate": 0.23809523809523808,
+            "mean_damage": 0.04001501729673067
+          }
+        }
+      },
+      "rollback": {
+        "n_attempted": 1325,
+        "n_rolled_back": 762,
+        "rollback_rate": 0.5750943396226416,
+        "by_reason": {
+          "ROLLED_BACK_UTILITY": 711,
+          "ROLLED_BACK_RISK": 51
+        },
+        "protected_windows_with_rollback": 197,
+        "abstain_rate": 0.0495,
+        "quarantine_rate": 0.0005,
+        "abstain_on_protected": 58,
+        "mean_probe_calls": 1.6625
+      },
+      "utility": {
+        "n_edited": 514,
+        "mean_delta_utility": 1.9732782121536976,
+        "min_delta_utility": 0.005062928578355219
+      },
+      "transfer": {
+        "amazon/chronos-t5-small": {
+          "nrmse_before": 1.361513593913232,
+          "nrmse_after": 1.284944724682079,
+          "improvement": 0.05623804975099833,
+          "n": 2000
+        },
+        "surrogate-s7": {
+          "nrmse_before": 2.0307238162684036,
+          "nrmse_after": 1.885400129686389,
+          "improvement": 0.07156250663817842,
+          "n": 2000
+        }
+      }
+    },
+    "e_no_peer_calibration": {
+      "n_windows": 2000,
+      "detection": {
+        "precision": 0.5015015015015015,
+        "recall": 0.677027027027027,
+        "f1": 0.5761932144910868,
+        "tp": 501,
+        "fp": 498,
+        "fn": 239,
+        "tn": 762,
+        "behav_risk_auroc": 0.46741634491634493
+      },
+      "action": {
+        "action_accuracy": 0.21216216216216216,
+        "n_contaminated": 740,
+        "per_contamination": {
+          "duplicate": {
+            "n": 105,
+            "hit": 5,
+            "repaired": 13
+          },
+          "spike": {
+            "n": 106,
+            "hit": 24,
+            "repaired": 33
+          },
+          "missing_block": {
+            "n": 106,
+            "hit": 26,
+            "repaired": 35
+          },
+          "missing_scattered": {
+            "n": 106,
+            "hit": 44,
+            "repaired": 47
+          },
+          "flatline": {
+            "n": 106,
+            "hit": 28,
+            "repaired": 33
+          },
+          "noise": {
+            "n": 106,
+            "hit": 1,
+            "repaired": 7
+          },
+          "level_shift": {
+            "n": 105,
+            "hit": 29,
+            "repaired": 32
+          }
+        }
+      },
+      "repair": {
+        "n": 740,
+        "nmse_before": 1.167283767342178,
+        "nmse_after": 0.8656527732468157,
+        "reduction": 0.25840417089167156,
+        "worsened_frac": 0.0918918918918919,
+        "per_contamination": {
+          "duplicate": {
+            "before": 0.26006764612649136,
+            "after": 0.26787112359076665,
+            "reduction": -0.03000556809161825
+          },
+          "spike": {
+            "before": 0.7966205888071823,
+            "after": 0.6154647965489934,
+            "reduction": 0.2274053605988794
+          },
+          "missing_block": {
+            "before": 0.10870207583187501,
+            "after": 0.10510920559236214,
+            "reduction": 0.03305245288111891
+          },
+          "missing_scattered": {
+            "before": 0.027428523277074728,
+            "after": 0.02214661559389676,
+            "reduction": 0.19256988901012706
+          },
+          "flatline": {
+            "before": 0.09791609734074758,
+            "after": 0.09168487617602368,
+            "reduction": 0.0636383734028867
+          },
+          "noise": {
+            "before": 0.9478418086865479,
+            "after": 0.9468930974931474,
+            "reduction": 0.0010009172255390775
+          },
+          "level_shift": {
+            "before": 5.969151628875494,
+            "after": 4.034656509873755,
+            "reduction": 0.32408208725067544
+          }
+        }
+      },
+      "corpus_effect": {
+        "n": 2000,
+        "nmse_before": 0.43189499391660585,
+        "nmse_after": 0.331350537733805,
+        "net_reduction": 0.2327983829379946,
+        "windows_improved": 129,
+        "windows_worsened": 171,
+        "per_stratum": {
+          "changepoint": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.013192160976574153
+          },
+          "clean": {
+            "n": 420,
+            "before": 0.0,
+            "after": 0.011418002085612985
+          },
+          "clean_ood": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.04698889417210378
+          },
+          "contaminated": {
+            "n": 740,
+            "before": 1.167283767342178,
+            "after": 0.8656527732468157
+          },
+          "hard": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.019400875007740608
+          },
+          "rare_valid": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.0029059859817191645
+          }
+        }
+      },
+      "protection": {
+        "n_protected": 1260,
+        "over_clean_rate": 0.11825396825396825,
+        "mean_damage": 0.01755398671822728,
+        "per_stratum": {
+          "rare_valid": {
+            "n": 210,
+            "modified": 19,
+            "over_clean_rate": 0.09047619047619047,
+            "mean_damage": 0.0029059859817191645
+          },
+          "changepoint": {
+            "n": 210,
+            "modified": 21,
+            "over_clean_rate": 0.1,
+            "mean_damage": 0.013192160976574153
+          },
+          "clean_ood": {
+            "n": 210,
+            "modified": 19,
+            "over_clean_rate": 0.09047619047619047,
+            "mean_damage": 0.04698889417210378
+          },
+          "clean": {
+            "n": 420,
+            "modified": 53,
+            "over_clean_rate": 0.1261904761904762,
+            "mean_damage": 0.011418002085612985
+          },
+          "hard": {
+            "n": 210,
+            "modified": 37,
+            "over_clean_rate": 0.1761904761904762,
+            "mean_damage": 0.019400875007740608
+          }
+        }
+      },
+      "rollback": {
+        "n_attempted": 1535,
+        "n_rolled_back": 1163,
+        "rollback_rate": 0.7576547231270359,
+        "by_reason": {
+          "ROLLED_BACK_UTILITY": 766,
+          "ROLLED_BACK_STRUCTURE": 379,
+          "ROLLED_BACK_RISK": 18
+        },
+        "protected_windows_with_rollback": 334,
+        "abstain_rate": 0.037,
+        "quarantine_rate": 0.007,
+        "abstain_on_protected": 37,
+        "mean_probe_calls": 1.7675
+      },
+      "utility": {
+        "n_edited": 349,
+        "mean_delta_utility": 2.0661754107559247,
+        "min_delta_utility": 0.005227366614503737
+      },
+      "transfer": {
+        "amazon/chronos-t5-small": {
+          "nrmse_before": 1.3519149265769075,
+          "nrmse_after": 1.2930301073019208,
+          "improvement": 0.04355660117170612,
+          "n": 2000
+        },
+        "surrogate-s7": {
+          "nrmse_before": 2.0307238162684036,
+          "nrmse_after": 1.8939472868308111,
+          "improvement": 0.06735358513149703,
+          "n": 2000
+        }
+      }
+    },
+    "f_single_step": {
+      "n_windows": 2000,
+      "detection": {
+        "precision": 0.5,
+        "recall": 0.6743243243243243,
+        "f1": 0.5742232451093211,
+        "tp": 499,
+        "fp": 499,
+        "fn": 241,
+        "tn": 761,
+        "behav_risk_auroc": 0.4679869154869155
+      },
+      "action": {
+        "action_accuracy": 0.1527027027027027,
+        "n_contaminated": 740,
+        "per_contamination": {
+          "duplicate": {
+            "n": 105,
+            "hit": 2,
+            "repaired": 6
+          },
+          "spike": {
+            "n": 106,
+            "hit": 20,
+            "repaired": 27
+          },
+          "missing_block": {
+            "n": 106,
+            "hit": 14,
+            "repaired": 14
+          },
+          "missing_scattered": {
+            "n": 106,
+            "hit": 37,
+            "repaired": 41
+          },
+          "flatline": {
+            "n": 106,
+            "hit": 13,
+            "repaired": 16
+          },
+          "noise": {
+            "n": 106,
+            "hit": 0,
+            "repaired": 6
+          },
+          "level_shift": {
+            "n": 105,
+            "hit": 27,
+            "repaired": 27
+          }
+        }
+      },
+      "repair": {
+        "n": 740,
+        "nmse_before": 1.167283767342178,
+        "nmse_after": 0.8796943462154774,
+        "reduction": 0.24637489972255955,
+        "worsened_frac": 0.03513513513513514,
+        "per_contamination": {
+          "duplicate": {
+            "before": 0.26006764612649136,
+            "after": 0.2613797344919101,
+            "reduction": -0.005045181071007043
+          },
+          "spike": {
+            "before": 0.7966205888071823,
+            "after": 0.6489536891125776,
+            "reduction": 0.18536666233509402
+          },
+          "missing_block": {
+            "before": 0.10870207583187501,
+            "after": 0.10108384497479422,
+            "reduction": 0.07008358210990917
+          },
+          "missing_scattered": {
+            "before": 0.027428523277074728,
+            "after": 0.02130441454989816,
+            "reduction": 0.22327518930978008
+          },
+          "flatline": {
+            "before": 0.09791609734074758,
+            "after": 0.09272531667322471,
+            "reduction": 0.05301253632953695
+          },
+          "noise": {
+            "before": 0.9478418086865479,
+            "after": 0.949139386547675,
+            "reduction": -0.0013689814579136428
+          },
+          "level_shift": {
+            "before": 5.969151628875494,
+            "after": 4.107895609341302,
+            "reduction": 0.31181248781325177
+          }
+        }
+      },
+      "corpus_effect": {
+        "n": 2000,
+        "nmse_before": 0.43189499391660585,
+        "nmse_after": 0.32819616264940465,
+        "net_reduction": 0.24010195239082655,
+        "windows_improved": 109,
+        "windows_worsened": 51,
+        "per_stratum": {
+          "changepoint": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.0014304883166734949
+          },
+          "clean": {
+            "n": 420,
+            "before": 0.0,
+            "after": 0.001623588611490368
+          },
+          "clean_ood": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.015626943869966724
+          },
+          "contaminated": {
+            "n": 740,
+            "before": 1.167283767342178,
+            "after": 0.8796943462154774
+          },
+          "hard": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.005456327336542613
+          },
+          "rare_valid": {
+            "n": 210,
+            "before": 0.0,
+            "after": 4.148753648397934e-05
+          }
+        }
+      },
+      "protection": {
+        "n_protected": 1260,
+        "over_clean_rate": 0.046031746031746035,
+        "mean_damage": 0.004300404047107923,
+        "per_stratum": {
+          "rare_valid": {
+            "n": 210,
+            "modified": 1,
+            "over_clean_rate": 0.004761904761904762,
+            "mean_damage": 4.148753648397934e-05
+          },
+          "changepoint": {
+            "n": 210,
+            "modified": 10,
+            "over_clean_rate": 0.047619047619047616,
+            "mean_damage": 0.0014304883166734949
+          },
+          "clean_ood": {
+            "n": 210,
+            "modified": 12,
+            "over_clean_rate": 0.05714285714285714,
+            "mean_damage": 0.015626943869966724
+          },
+          "clean": {
+            "n": 420,
+            "modified": 25,
+            "over_clean_rate": 0.05952380952380952,
+            "mean_damage": 0.001623588611490368
+          },
+          "hard": {
+            "n": 210,
+            "modified": 10,
+            "over_clean_rate": 0.047619047619047616,
+            "mean_damage": 0.005456327336542613
+          }
+        }
+      },
+      "rollback": {
+        "n_attempted": 838,
+        "n_rolled_back": 634,
+        "rollback_rate": 0.7565632458233891,
+        "by_reason": {
+          "ROLLED_BACK_UTILITY": 385,
+          "ROLLED_BACK_STRUCTURE": 241,
+          "ROLLED_BACK_RISK": 8
+        },
+        "protected_windows_with_rollback": 326,
+        "abstain_rate": 0.0415,
+        "quarantine_rate": 0.0025,
+        "abstain_on_protected": 50,
+        "mean_probe_calls": 1.419
+      },
+      "utility": {
+        "n_edited": 195,
+        "mean_delta_utility": 1.624624333452831,
+        "min_delta_utility": 0.005227366614503737
+      },
+      "transfer": {
+        "amazon/chronos-t5-small": {
+          "nrmse_before": 1.3568673204422534,
+          "nrmse_after": 1.3310667289723161,
+          "improvement": 0.01901482265895238,
+          "n": 2000
+        },
+        "surrogate-s7": {
+          "nrmse_before": 2.0307238162684036,
+          "nrmse_after": 1.9196169035242878,
+          "improvement": 0.05471296089306843,
+          "n": 2000
+        }
+      }
+    },
+    "g_no_abstain": {
+      "n_windows": 2000,
+      "detection": {
+        "precision": 0.5,
+        "recall": 0.6743243243243243,
+        "f1": 0.5742232451093211,
+        "tp": 499,
+        "fp": 499,
+        "fn": 241,
+        "tn": 761,
+        "behav_risk_auroc": 0.4679869154869155
+      },
+      "action": {
+        "action_accuracy": 0.21756756756756757,
+        "n_contaminated": 740,
+        "per_contamination": {
+          "duplicate": {
+            "n": 105,
+            "hit": 5,
+            "repaired": 13
+          },
+          "spike": {
+            "n": 106,
+            "hit": 31,
+            "repaired": 40
+          },
+          "missing_block": {
+            "n": 106,
+            "hit": 26,
+            "repaired": 35
+          },
+          "missing_scattered": {
+            "n": 106,
+            "hit": 43,
+            "repaired": 47
+          },
+          "flatline": {
+            "n": 106,
+            "hit": 27,
+            "repaired": 32
+          },
+          "noise": {
+            "n": 106,
+            "hit": 2,
+            "repaired": 7
+          },
+          "level_shift": {
+            "n": 105,
+            "hit": 27,
+            "repaired": 30
+          }
+        }
+      },
+      "repair": {
+        "n": 740,
+        "nmse_before": 1.167283767342178,
+        "nmse_after": 0.8686851596295334,
+        "reduction": 0.25580635666041374,
+        "worsened_frac": 0.0891891891891892,
+        "per_contamination": {
+          "duplicate": {
+            "before": 0.26006764612649136,
+            "after": 0.26787112359076665,
+            "reduction": -0.03000556809161825
+          },
+          "spike": {
+            "before": 0.7966205888071823,
+            "after": 0.5598705326012352,
+            "reduction": 0.29719299191155
+          },
+          "missing_block": {
+            "before": 0.10870207583187501,
+            "after": 0.10509929523717461,
+            "reduction": 0.03314362276091831
+          },
+          "missing_scattered": {
+            "before": 0.027428523277074728,
+            "after": 0.0221670895885357,
+            "reduction": 0.19182343997850704
+          },
+          "flatline": {
+            "before": 0.09791609734074758,
+            "after": 0.09240735401564074,
+            "reduction": 0.05625983341570939
+          },
+          "noise": {
+            "before": 0.9478418086865479,
+            "after": 0.9419585231010221,
+            "reduction": 0.006207033211246937
+          },
+          "level_shift": {
+            "before": 5.969151628875494,
+            "after": 4.116392894544779,
+            "reduction": 0.31038895466620087
+          }
+        }
+      },
+      "corpus_effect": {
+        "n": 2000,
+        "nmse_before": 0.43189499391660585,
+        "nmse_after": 0.33257927351108024,
+        "net_reduction": 0.2299533956272306,
+        "windows_improved": 135,
+        "windows_worsened": 173,
+        "per_stratum": {
+          "changepoint": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.013192160976574153
+          },
+          "clean": {
+            "n": 420,
+            "before": 0.0,
+            "after": 0.011483595615081625
+          },
+          "clean_ood": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.04698889417210378
+          },
+          "contaminated": {
+            "n": 740,
+            "before": 1.167283767342178,
+            "after": 0.8686851596295334
+          },
+          "hard": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.020286381431372527
+          },
+          "rare_valid": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.0029059859817191645
+          }
+        }
+      },
+      "protection": {
+        "n_protected": 1260,
+        "over_clean_rate": 0.1246031746031746,
+        "mean_damage": 0.017723435631988815,
+        "per_stratum": {
+          "rare_valid": {
+            "n": 210,
+            "modified": 19,
+            "over_clean_rate": 0.09047619047619047,
+            "mean_damage": 0.0029059859817191645
+          },
+          "changepoint": {
+            "n": 210,
+            "modified": 21,
+            "over_clean_rate": 0.1,
+            "mean_damage": 0.013192160976574153
+          },
+          "clean_ood": {
+            "n": 210,
+            "modified": 19,
+            "over_clean_rate": 0.09047619047619047,
+            "mean_damage": 0.04698889417210378
+          },
+          "clean": {
+            "n": 420,
+            "modified": 56,
+            "over_clean_rate": 0.13333333333333333,
+            "mean_damage": 0.011483595615081625
+          },
+          "hard": {
+            "n": 210,
+            "modified": 42,
+            "over_clean_rate": 0.2,
+            "mean_damage": 0.020286381431372527
+          }
+        }
+      },
+      "rollback": {
+        "n_attempted": 1553,
+        "n_rolled_back": 1168,
+        "rollback_rate": 0.7520927237604637,
+        "by_reason": {
+          "ROLLED_BACK_UTILITY": 771,
+          "ROLLED_BACK_STRUCTURE": 381,
+          "ROLLED_BACK_RISK": 16
+        },
+        "protected_windows_with_rollback": 333,
+        "abstain_rate": 0.0,
+        "quarantine_rate": 0.0025,
+        "abstain_on_protected": 0,
+        "mean_probe_calls": 1.7765
+      },
+      "utility": {
+        "n_edited": 361,
+        "mean_delta_utility": 2.022165824290431,
+        "min_delta_utility": 0.005227366614503737
+      },
+      "transfer": {
+        "amazon/chronos-t5-small": {
+          "nrmse_before": 1.3509213208138706,
+          "nrmse_after": 1.2892344448997095,
+          "improvement": 0.04566281911739867,
+          "n": 2000
+        },
+        "surrogate-s7": {
+          "nrmse_before": 2.0307238162684036,
+          "nrmse_after": 1.894734124262417,
+          "improvement": 0.06696611864033641,
+          "n": 2000
+        }
+      }
+    },
+    "h_full": {
+      "n_windows": 2000,
+      "detection": {
+        "precision": 0.5,
+        "recall": 0.6743243243243243,
+        "f1": 0.5742232451093211,
+        "tp": 499,
+        "fp": 499,
+        "fn": 241,
+        "tn": 761,
+        "behav_risk_auroc": 0.4679869154869155
+      },
+      "action": {
+        "action_accuracy": 0.21081081081081082,
+        "n_contaminated": 740,
+        "per_contamination": {
+          "duplicate": {
+            "n": 105,
+            "hit": 5,
+            "repaired": 13
+          },
+          "spike": {
+            "n": 106,
+            "hit": 27,
+            "repaired": 37
+          },
+          "missing_block": {
+            "n": 106,
+            "hit": 26,
+            "repaired": 35
+          },
+          "missing_scattered": {
+            "n": 106,
+            "hit": 43,
+            "repaired": 47
+          },
+          "flatline": {
+            "n": 106,
+            "hit": 27,
+            "repaired": 32
+          },
+          "noise": {
+            "n": 106,
+            "hit": 1,
+            "repaired": 7
+          },
+          "level_shift": {
+            "n": 105,
+            "hit": 27,
+            "repaired": 30
+          }
+        }
+      },
+      "repair": {
+        "n": 740,
+        "nmse_before": 1.167283767342178,
+        "nmse_after": 0.8728700551814,
+        "reduction": 0.25222119967549717,
+        "worsened_frac": 0.0918918918918919,
+        "per_contamination": {
+          "duplicate": {
+            "before": 0.26006764612649136,
+            "after": 0.26787112359076665,
+            "reduction": -0.03000556809161825
+          },
+          "spike": {
+            "before": 0.7966205888071823,
+            "after": 0.5844321190356775,
+            "reduction": 0.26636076540429954
+          },
+          "missing_block": {
+            "before": 0.10870207583187501,
+            "after": 0.1048184429802421,
+            "reduction": 0.03572731083479552
+          },
+          "missing_scattered": {
+            "before": 0.027428523277074728,
+            "after": 0.0221670895885357,
+            "reduction": 0.19182343997850704
+          },
+          "flatline": {
+            "before": 0.09791609734074758,
+            "after": 0.09240735401564074,
+            "reduction": 0.05625983341570939
+          },
+          "noise": {
+            "before": 0.9478418086865479,
+            "after": 0.9468930974931474,
+            "reduction": 0.0010009172255390775
+          },
+          "level_shift": {
+            "before": 5.969151628875494,
+            "after": 4.116392894544779,
+            "reduction": 0.31038895466620087
+          }
+        }
+      },
+      "corpus_effect": {
+        "n": 2000,
+        "nmse_before": 0.43189499391660585,
+        "nmse_after": 0.3340597707044194,
+        "net_reduction": 0.22652548556994245,
+        "windows_improved": 130,
+        "windows_worsened": 173,
+        "per_stratum": {
+          "changepoint": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.013192160976574153
+          },
+          "clean": {
+            "n": 420,
+            "before": 0.0,
+            "after": 0.011483595615081625
+          },
+          "clean_ood": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.04698889417210378
+          },
+          "contaminated": {
+            "n": 740,
+            "before": 1.167283767342178,
+            "after": 0.8728700551814
+          },
+          "hard": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.019639579899452878
+          },
+          "rare_valid": {
+            "n": 210,
+            "before": 0.0,
+            "after": 0.0029059859817191645
+          }
+        }
+      },
+      "protection": {
+        "n_protected": 1260,
+        "over_clean_rate": 0.12142857142857143,
+        "mean_damage": 0.01761563537666887,
+        "per_stratum": {
+          "rare_valid": {
+            "n": 210,
+            "modified": 19,
+            "over_clean_rate": 0.09047619047619047,
+            "mean_damage": 0.0029059859817191645
+          },
+          "changepoint": {
+            "n": 210,
+            "modified": 20,
+            "over_clean_rate": 0.09523809523809523,
+            "mean_damage": 0.013192160976574153
+          },
+          "clean_ood": {
+            "n": 210,
+            "modified": 19,
+            "over_clean_rate": 0.09047619047619047,
+            "mean_damage": 0.04698889417210378
+          },
+          "clean": {
+            "n": 420,
+            "modified": 55,
+            "over_clean_rate": 0.13095238095238096,
+            "mean_damage": 0.011483595615081625
+          },
+          "hard": {
+            "n": 210,
+            "modified": 40,
+            "over_clean_rate": 0.19047619047619047,
+            "mean_damage": 0.019639579899452878
+          }
+        }
+      },
+      "rollback": {
+        "n_attempted": 1539,
+        "n_rolled_back": 1164,
+        "rollback_rate": 0.7563352826510721,
+        "by_reason": {
+          "ROLLED_BACK_UTILITY": 769,
+          "ROLLED_BACK_STRUCTURE": 379,
+          "ROLLED_BACK_RISK": 16
+        },
+        "protected_windows_with_rollback": 331,
+        "abstain_rate": 0.046,
+        "quarantine_rate": 0.0025,
+        "abstain_on_protected": 54,
+        "mean_probe_calls": 1.7695
+      },
+      "utility": {
+        "n_edited": 354,
+        "mean_delta_utility": 2.0462395549901027,
+        "min_delta_utility": 0.005227366614503737
+      },
+      "transfer": {
+        "amazon/chronos-t5-small": {
+          "nrmse_before": 1.3732947437330143,
+          "nrmse_after": 1.289118205296832,
+          "improvement": 0.061295318299526946,
+          "n": 2000
+        },
+        "surrogate-s7": {
+          "nrmse_before": 2.0307238162684036,
+          "nrmse_after": 1.8952031677618206,
+          "improvement": 0.06673514508517042,
+          "n": 2000
+        }
+      }
+    }
+  },
+  "tau": {}
+}
