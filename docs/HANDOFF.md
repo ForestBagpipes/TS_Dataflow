@@ -249,6 +249,13 @@ sits there and shadows the standard library. Do not add the temp directory to
 Long jobs must be started with `setsid` and a queue script, or they die with
 the SSH session. Two runs were lost this way before that was fixed.
 
-Disk is at 78 percent, 12 GB free. That is enough for what is queued and not
-enough for a foundation model fine tune, which is another reason that step
-needs planning rather than an attempt.
+Disk was at 12 GB free and is now 405 GB. **That was never the reason foundation
+model fine tuning was skipped and it is no longer a constraint at all.** The
+reason is and remains the protocol: the method modifies 8.9 percent of the
+corpus, and while the paired noise floor is under 3 percent the direction on the
+affected subset is not decidable, so the downstream protocol cannot resolve a
+difference on models far cheaper to train than a foundation model. If that step
+is reconsidered, what has to be solved is the change volume, not the hardware.
+
+This distinction matters under review. Asked why no foundation model was fine
+tuned, the answer is a measurement limit, not a resource limit.
