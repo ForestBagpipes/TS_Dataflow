@@ -33,5 +33,3 @@ __pycache__/
 .idea/
 .serena/
 researched_papers/mtcsc_repo/
-third_party/*/
-!third_party/*/PROVENANCE.md
