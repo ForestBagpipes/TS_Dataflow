@@ -1,0 +1,107 @@
+{
+ "proposer": "stat_only",
+ "seed": 42,
+ "alpha": 0.02,
+ "grid": {
+  "0": {
+   "mean_damage": 0.03940649254334787,
+   "repair_reduction": 0.30918171021410756,
+   "n_modified": 274,
+   "protected_edits": 135
+  },
+  "0.005": {
+   "mean_damage": 0.03937955694169521,
+   "repair_reduction": 0.3090706838246974,
+   "n_modified": 265,
+   "protected_edits": 134
+  },
+  "0.01": {
+   "mean_damage": 0.038305906088901547,
+   "repair_reduction": 0.3090166438203804,
+   "n_modified": 251,
+   "protected_edits": 121
+  },
+  "0.02": {
+   "mean_damage": 0.03577547796410027,
+   "repair_reduction": 0.30997613343068064,
+   "n_modified": 231,
+   "protected_edits": 110
+  },
+  "0.05": {
+   "mean_damage": 0.031970388720813474,
+   "repair_reduction": 0.30852971789987893,
+   "n_modified": 190,
+   "protected_edits": 90
+  },
+  "0.1": {
+   "mean_damage": 0.030085677910446636,
+   "repair_reduction": 0.30863877130827977,
+   "n_modified": 160,
+   "protected_edits": 74
+  },
+  "0.25": {
+   "mean_damage": 0.022107457383489057,
+   "repair_reduction": 0.22478922373999022,
+   "n_modified": 108,
+   "protected_edits": 48
+  },
+  "0.5": {
+   "mean_damage": 0.018374692530789462,
+   "repair_reduction": 0.13533278547707872,
+   "n_modified": 76,
+   "protected_edits": 35
+  },
+  "1": {
+   "mean_damage": 0.017014802505363868,
+   "repair_reduction": 0.033827445911666754,
+   "n_modified": 41,
+   "protected_edits": 27
+  },
+  "2": {
+   "mean_damage": 0.014388444598091642,
+   "repair_reduction": 0.0027173159593617546,
+   "n_modified": 23,
+   "protected_edits": 21
+  },
+  "5": {
+   "mean_damage": 0.014388444598091642,
+   "repair_reduction": 0.0,
+   "n_modified": 19,
+   "protected_edits": 19
+  }
+ },
+ "epsilon_star": 5.0,
+ "realised": 0.02,
+ "frontier": [
+  {
+   "budget": 0.001,
+   "repair": NaN,
+   "eps": "none"
+  },
+  {
+   "budget": 0.002,
+   "repair": NaN,
+   "eps": "none"
+  },
+  {
+   "budget": 0.005,
+   "repair": NaN,
+   "eps": "none"
+  },
+  {
+   "budget": 0.01,
+   "repair": NaN,
+   "eps": "none"
+  },
+  {
+   "budget": 0.02,
+   "repair": 0.13533278547707872,
+   "eps": "0.5"
+  },
+  {
+   "budget": 0.05,
+   "repair": 0.30997613343068064,
+   "eps": "0.02"
+  }
+ ]
+}
