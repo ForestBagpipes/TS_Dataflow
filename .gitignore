@@ -38,3 +38,9 @@ __pycache__/
 .idea/
 .serena/
 researched_papers/mtcsc_repo/
+
+# monitor scratch, regenerated every run
+logs/heartbeat.jsonl
+logs/manifest.jsonl
+logs/runs.jsonl
+logs/remote/
