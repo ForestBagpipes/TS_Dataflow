@@ -1,0 +1,1903 @@
+{
+ "arm": "introact_full",
+ "scale": "xl",
+ "seed": 42,
+ "n_windows": 2000,
+ "by_k": {
+  "10": {
+   "cells_occupied": 30,
+   "cells_total": 40,
+   "n_candidates": 1561,
+   "cells_below_5": 5,
+   "empty_cells": [
+    [
+     2,
+     "DENOISE"
+    ],
+    [
+     3,
+     "RESEGMENT"
+    ],
+    [
+     4,
+     "DENOISE"
+    ],
+    [
+     6,
+     "DENOISE"
+    ],
+    [
+     8,
+     "IMPUTE"
+    ],
+    [
+     8,
+     "DESPIKE"
+    ],
+    [
+     8,
+     "DENOISE"
+    ],
+    [
+     8,
+     "RESEGMENT"
+    ],
+    [
+     9,
+     "IMPUTE"
+    ],
+    [
+     9,
+     "RESEGMENT"
+    ]
+   ],
+   "grid": {
+    "0|DENOISE": {
+     "n": 10,
+     "accepted": 1,
+     "mean_dU": 0.36040966863658985
+    },
+    "0|DESPIKE": {
+     "n": 11,
+     "accepted": 11,
+     "mean_dU": 1.6004790800272337
+    },
+    "0|IMPUTE": {
+     "n": 179,
+     "accepted": 19,
+     "mean_dU": 0.2537677935245406
+    },
+    "0|RESEGMENT": {
+     "n": 54,
+     "accepted": 34,
+     "mean_dU": 2.819657337915993
+    },
+    "1|DENOISE": {
+     "n": 32,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "1|DESPIKE": {
+     "n": 14,
+     "accepted": 14,
+     "mean_dU": 0.5610190700499037
+    },
+    "1|IMPUTE": {
+     "n": 131,
+     "accepted": 28,
+     "mean_dU": 0.08970706272543476
+    },
+    "1|RESEGMENT": {
+     "n": 21,
+     "accepted": 15,
+     "mean_dU": 0.673777147469094
+    },
+    "2|DESPIKE": {
+     "n": 8,
+     "accepted": 5,
+     "mean_dU": 0.21291190367632332
+    },
+    "2|IMPUTE": {
+     "n": 359,
+     "accepted": 71,
+     "mean_dU": 0.13245967440051706
+    },
+    "2|RESEGMENT": {
+     "n": 18,
+     "accepted": 13,
+     "mean_dU": 0.5283342157756574
+    },
+    "3|DENOISE": {
+     "n": 4,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "3|DESPIKE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 10.142176012169195
+    },
+    "3|IMPUTE": {
+     "n": 2,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "4|DESPIKE": {
+     "n": 13,
+     "accepted": 13,
+     "mean_dU": 0.5849572497560971
+    },
+    "4|IMPUTE": {
+     "n": 167,
+     "accepted": 24,
+     "mean_dU": 0.16012459507339405
+    },
+    "4|RESEGMENT": {
+     "n": 30,
+     "accepted": 22,
+     "mean_dU": 0.4695505080982291
+    },
+    "5|DENOISE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 0.32291475058053987
+    },
+    "5|DESPIKE": {
+     "n": 3,
+     "accepted": 3,
+     "mean_dU": 0.12267412232205732
+    },
+    "5|IMPUTE": {
+     "n": 36,
+     "accepted": 8,
+     "mean_dU": 0.12365337830360679
+    },
+    "5|RESEGMENT": {
+     "n": 7,
+     "accepted": 4,
+     "mean_dU": 0.7540242188335
+    },
+    "6|DESPIKE": {
+     "n": 15,
+     "accepted": 13,
+     "mean_dU": 0.3762108612242555
+    },
+    "6|IMPUTE": {
+     "n": 156,
+     "accepted": 31,
+     "mean_dU": 0.0918794476250125
+    },
+    "6|RESEGMENT": {
+     "n": 26,
+     "accepted": 19,
+     "mean_dU": 0.429661465414053
+    },
+    "7|DENOISE": {
+     "n": 7,
+     "accepted": 2,
+     "mean_dU": 0.5106953743595927
+    },
+    "7|DESPIKE": {
+     "n": 11,
+     "accepted": 7,
+     "mean_dU": 0.7558681127095884
+    },
+    "7|IMPUTE": {
+     "n": 185,
+     "accepted": 15,
+     "mean_dU": 0.3573620410006024
+    },
+    "7|RESEGMENT": {
+     "n": 28,
+     "accepted": 20,
+     "mean_dU": 2.0585056179301815
+    },
+    "9|DENOISE": {
+     "n": 17,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "9|DESPIKE": {
+     "n": 15,
+     "accepted": 10,
+     "mean_dU": 53.840060024159754
+    }
+   },
+   "tests": {
+    "IMPUTE": {
+     "testable": true,
+     "chi2": 22.384779633794302,
+     "p": 0.0021799074403977907,
+     "dof": 7,
+     "n_clusters": 8,
+     "n_candidates": 1215,
+     "cells_expected_below_5": 2,
+     "rate_min": 0.0,
+     "rate_max": 0.2222222222222222,
+     "p_fisher": null,
+     "p_permutation": 0.00305
+    },
+    "DESPIKE": {
+     "testable": true,
+     "chi2": 18.121659779614323,
+     "p": 0.020332652211789506,
+     "dof": 8,
+     "n_clusters": 9,
+     "n_candidates": 91,
+     "cells_expected_below_5": 11,
+     "rate_min": 0.625,
+     "rate_max": 1.0,
+     "p_fisher": null,
+     "p_permutation": 0.02015
+    },
+    "DENOISE": {
+     "testable": true,
+     "chi2": 27.200266524520252,
+     "p": 5.214154198373367e-05,
+     "dof": 5,
+     "n_clusters": 6,
+     "n_candidates": 71,
+     "cells_expected_below_5": 8,
+     "rate_min": 0.0,
+     "rate_max": 1.0,
+     "p_fisher": null,
+     "p_permutation": 0.0012
+    },
+    "RESEGMENT": {
+     "testable": true,
+     "chi2": 2.0688247077527357,
+     "p": 0.9132611522190579,
+     "dof": 6,
+     "n_clusters": 7,
+     "n_candidates": 184,
+     "cells_expected_below_5": 2,
+     "rate_min": 0.5714285714285714,
+     "rate_max": 0.7333333333333333,
+     "p_fisher": null,
+     "p_permutation": 0.91405
+    }
+   },
+   "stratum_confound": {
+    "ami": 0.15015524677074937,
+    "strata": [
+     "changepoint",
+     "clean",
+     "clean_ood",
+     "contaminated",
+     "hard",
+     "rare_valid"
+    ],
+    "table": {
+     "0": {
+      "changepoint": 13,
+      "clean": 111,
+      "clean_ood": 92,
+      "contaminated": 198,
+      "hard": 7,
+      "rare_valid": 83
+     },
+     "1": {
+      "changepoint": 33,
+      "clean": 52,
+      "clean_ood": 21,
+      "contaminated": 59,
+      "hard": 60,
+      "rare_valid": 5
+     },
+     "2": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 212,
+      "hard": 0,
+      "rare_valid": 0
+     },
+     "3": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 7,
+      "contaminated": 0,
+      "hard": 10,
+      "rare_valid": 0
+     },
+     "4": {
+      "changepoint": 49,
+      "clean": 62,
+      "clean_ood": 7,
+      "contaminated": 77,
+      "hard": 25,
+      "rare_valid": 44
+     },
+     "5": {
+      "changepoint": 8,
+      "clean": 6,
+      "clean_ood": 14,
+      "contaminated": 8,
+      "hard": 43,
+      "rare_valid": 0
+     },
+     "6": {
+      "changepoint": 50,
+      "clean": 65,
+      "clean_ood": 6,
+      "contaminated": 63,
+      "hard": 46,
+      "rare_valid": 13
+     },
+     "7": {
+      "changepoint": 57,
+      "clean": 124,
+      "clean_ood": 43,
+      "contaminated": 123,
+      "hard": 10,
+      "rare_valid": 65
+     },
+     "8": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 0,
+      "hard": 1,
+      "rare_valid": 0
+     },
+     "9": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 20,
+      "contaminated": 0,
+      "hard": 8,
+      "rare_valid": 0
+     }
+    },
+    "cluster_sizes": {
+     "0": 504,
+     "1": 230,
+     "2": 212,
+     "3": 17,
+     "4": 264,
+     "5": 79,
+     "6": 243,
+     "7": 422,
+     "8": 1,
+     "9": 28
+    }
+   }
+  },
+  "12": {
+   "cells_occupied": 36,
+   "cells_total": 48,
+   "n_candidates": 1561,
+   "cells_below_5": 7,
+   "empty_cells": [
+    [
+     1,
+     "DENOISE"
+    ],
+    [
+     2,
+     "RESEGMENT"
+    ],
+    [
+     5,
+     "IMPUTE"
+    ],
+    [
+     5,
+     "RESEGMENT"
+    ],
+    [
+     8,
+     "DENOISE"
+    ],
+    [
+     9,
+     "IMPUTE"
+    ],
+    [
+     9,
+     "DESPIKE"
+    ],
+    [
+     9,
+     "DENOISE"
+    ],
+    [
+     9,
+     "RESEGMENT"
+    ],
+    [
+     10,
+     "IMPUTE"
+    ],
+    [
+     10,
+     "DENOISE"
+    ],
+    [
+     11,
+     "DENOISE"
+    ]
+   ],
+   "grid": {
+    "0|DENOISE": {
+     "n": 6,
+     "accepted": 1,
+     "mean_dU": 0.5090467985753699
+    },
+    "0|DESPIKE": {
+     "n": 12,
+     "accepted": 8,
+     "mean_dU": 0.7519446867906364
+    },
+    "0|IMPUTE": {
+     "n": 188,
+     "accepted": 17,
+     "mean_dU": 0.316851192070689
+    },
+    "0|RESEGMENT": {
+     "n": 24,
+     "accepted": 15,
+     "mean_dU": 2.5652428381653443
+    },
+    "1|DESPIKE": {
+     "n": 8,
+     "accepted": 5,
+     "mean_dU": 0.21291190367632332
+    },
+    "1|IMPUTE": {
+     "n": 359,
+     "accepted": 71,
+     "mean_dU": 0.13245967440051706
+    },
+    "1|RESEGMENT": {
+     "n": 18,
+     "accepted": 13,
+     "mean_dU": 0.5283342157756574
+    },
+    "2|DENOISE": {
+     "n": 4,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "2|DESPIKE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 10.142176012169195
+    },
+    "2|IMPUTE": {
+     "n": 2,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "3|DENOISE": {
+     "n": 27,
+     "accepted": 1,
+     "mean_dU": 0.32291475058053987
+    },
+    "3|DESPIKE": {
+     "n": 10,
+     "accepted": 10,
+     "mean_dU": 0.37052320920341886
+    },
+    "3|IMPUTE": {
+     "n": 106,
+     "accepted": 22,
+     "mean_dU": 0.10421437431737698
+    },
+    "3|RESEGMENT": {
+     "n": 15,
+     "accepted": 10,
+     "mean_dU": 0.6364184920712976
+    },
+    "4|DENOISE": {
+     "n": 6,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "4|DESPIKE": {
+     "n": 12,
+     "accepted": 12,
+     "mean_dU": 0.6992825174829069
+    },
+    "4|IMPUTE": {
+     "n": 114,
+     "accepted": 24,
+     "mean_dU": 0.08684111982488095
+    },
+    "4|RESEGMENT": {
+     "n": 27,
+     "accepted": 19,
+     "mean_dU": 0.5162297822783466
+    },
+    "5|DENOISE": {
+     "n": 17,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "5|DESPIKE": {
+     "n": 15,
+     "accepted": 10,
+     "mean_dU": 53.840060024159754
+    },
+    "6|DENOISE": {
+     "n": 10,
+     "accepted": 1,
+     "mean_dU": 0.36040966863658985
+    },
+    "6|DESPIKE": {
+     "n": 9,
+     "accepted": 9,
+     "mean_dU": 1.8642183419750877
+    },
+    "6|IMPUTE": {
+     "n": 156,
+     "accepted": 15,
+     "mean_dU": 0.28734980819853895
+    },
+    "6|RESEGMENT": {
+     "n": 52,
+     "accepted": 33,
+     "mean_dU": 2.8990687103885557
+    },
+    "7|DENOISE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 0.5123439501438154
+    },
+    "7|DESPIKE": {
+     "n": 10,
+     "accepted": 10,
+     "mean_dU": 0.5905917861633881
+    },
+    "7|IMPUTE": {
+     "n": 132,
+     "accepted": 16,
+     "mean_dU": 0.13682599191413514
+    },
+    "7|RESEGMENT": {
+     "n": 26,
+     "accepted": 19,
+     "mean_dU": 0.46298569445999055
+    },
+    "8|DESPIKE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 0.18146479428185813
+    },
+    "8|IMPUTE": {
+     "n": 18,
+     "accepted": 4,
+     "mean_dU": 0.09203880755374438
+    },
+    "8|RESEGMENT": {
+     "n": 5,
+     "accepted": 3,
+     "mean_dU": 1.0011807624179836
+    },
+    "10|DESPIKE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 0.06060374261701984
+    },
+    "10|RESEGMENT": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 1.4752594866869746
+    },
+    "11|DESPIKE": {
+     "n": 12,
+     "accepted": 10,
+     "mean_dU": 0.2575690187213389
+    },
+    "11|IMPUTE": {
+     "n": 140,
+     "accepted": 27,
+     "mean_dU": 0.13864092715010393
+    },
+    "11|RESEGMENT": {
+     "n": 16,
+     "accepted": 14,
+     "mean_dU": 0.3613502991543584
+    }
+   },
+   "tests": {
+    "IMPUTE": {
+     "testable": true,
+     "chi2": 22.597590172209145,
+     "p": 0.003921198980185056,
+     "dof": 8,
+     "n_clusters": 9,
+     "n_candidates": 1215,
+     "cells_expected_below_5": 3,
+     "rate_min": 0.0,
+     "rate_max": 0.2222222222222222,
+     "p_fisher": null,
+     "p_permutation": 0.0043
+    },
+    "DESPIKE": {
+     "testable": true,
+     "chi2": 17.702651515151512,
+     "p": 0.06019147792852638,
+     "dof": 10,
+     "n_clusters": 11,
+     "n_candidates": 91,
+     "cells_expected_below_5": 14,
+     "rate_min": 0.625,
+     "rate_max": 1.0,
+     "p_fisher": null,
+     "p_permutation": 0.06395
+    },
+    "DENOISE": {
+     "testable": true,
+     "chi2": 20.28347153123272,
+     "p": 0.0024652461627138293,
+     "dof": 6,
+     "n_clusters": 7,
+     "n_candidates": 71,
+     "cells_expected_below_5": 9,
+     "rate_min": 0.0,
+     "rate_max": 1.0,
+     "p_fisher": null,
+     "p_permutation": 0.0361
+    },
+    "RESEGMENT": {
+     "testable": true,
+     "chi2": 4.77155074464095,
+     "p": 0.7816907272376616,
+     "dof": 8,
+     "n_clusters": 9,
+     "n_candidates": 184,
+     "cells_expected_below_5": 6,
+     "rate_min": 0.6,
+     "rate_max": 1.0,
+     "p_fisher": null,
+     "p_permutation": 0.8129
+    }
+   },
+   "stratum_confound": {
+    "ami": 0.14725922761686092,
+    "strata": [
+     "changepoint",
+     "clean",
+     "clean_ood",
+     "contaminated",
+     "hard",
+     "rare_valid"
+    ],
+    "table": {
+     "0": {
+      "changepoint": 51,
+      "clean": 123,
+      "clean_ood": 43,
+      "contaminated": 126,
+      "hard": 10,
+      "rare_valid": 64
+     },
+     "1": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 212,
+      "hard": 0,
+      "rare_valid": 0
+     },
+     "2": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 7,
+      "contaminated": 0,
+      "hard": 10,
+      "rare_valid": 0
+     },
+     "3": {
+      "changepoint": 27,
+      "clean": 31,
+      "clean_ood": 18,
+      "contaminated": 39,
+      "hard": 54,
+      "rare_valid": 0
+     },
+     "4": {
+      "changepoint": 40,
+      "clean": 64,
+      "clean_ood": 8,
+      "contaminated": 59,
+      "hard": 35,
+      "rare_valid": 9
+     },
+     "5": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 20,
+      "contaminated": 0,
+      "hard": 8,
+      "rare_valid": 0
+     },
+     "6": {
+      "changepoint": 10,
+      "clean": 101,
+      "clean_ood": 89,
+      "contaminated": 181,
+      "hard": 7,
+      "rare_valid": 75
+     },
+     "7": {
+      "changepoint": 51,
+      "clean": 55,
+      "clean_ood": 9,
+      "contaminated": 62,
+      "hard": 18,
+      "rare_valid": 43
+     },
+     "8": {
+      "changepoint": 5,
+      "clean": 2,
+      "clean_ood": 13,
+      "contaminated": 6,
+      "hard": 31,
+      "rare_valid": 0
+     },
+     "9": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 0,
+      "hard": 1,
+      "rare_valid": 0
+     },
+     "10": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 3,
+      "hard": 0,
+      "rare_valid": 0
+     },
+     "11": {
+      "changepoint": 26,
+      "clean": 44,
+      "clean_ood": 3,
+      "contaminated": 52,
+      "hard": 36,
+      "rare_valid": 19
+     }
+    },
+    "cluster_sizes": {
+     "0": 417,
+     "1": 212,
+     "2": 17,
+     "3": 169,
+     "4": 215,
+     "5": 28,
+     "6": 463,
+     "7": 238,
+     "8": 57,
+     "9": 1,
+     "10": 3,
+     "11": 180
+    }
+   }
+  },
+  "15": {
+   "cells_occupied": 39,
+   "cells_total": 60,
+   "n_candidates": 1561,
+   "cells_below_5": 7,
+   "empty_cells": [
+    [
+     0,
+     "DENOISE"
+    ],
+    [
+     1,
+     "DENOISE"
+    ],
+    [
+     2,
+     "RESEGMENT"
+    ],
+    [
+     6,
+     "IMPUTE"
+    ],
+    [
+     6,
+     "RESEGMENT"
+    ],
+    [
+     7,
+     "IMPUTE"
+    ],
+    [
+     7,
+     "DESPIKE"
+    ],
+    [
+     7,
+     "DENOISE"
+    ],
+    [
+     7,
+     "RESEGMENT"
+    ],
+    [
+     10,
+     "DENOISE"
+    ],
+    [
+     11,
+     "IMPUTE"
+    ],
+    [
+     11,
+     "DENOISE"
+    ],
+    [
+     11,
+     "RESEGMENT"
+    ],
+    [
+     12,
+     "IMPUTE"
+    ],
+    [
+     12,
+     "DESPIKE"
+    ],
+    [
+     12,
+     "DENOISE"
+    ],
+    [
+     12,
+     "RESEGMENT"
+    ],
+    [
+     13,
+     "DENOISE"
+    ],
+    [
+     14,
+     "IMPUTE"
+    ],
+    [
+     14,
+     "DESPIKE"
+    ],
+    [
+     14,
+     "DENOISE"
+    ]
+   ],
+   "grid": {
+    "0|DESPIKE": {
+     "n": 12,
+     "accepted": 12,
+     "mean_dU": 0.539382405069914
+    },
+    "0|IMPUTE": {
+     "n": 97,
+     "accepted": 14,
+     "mean_dU": 0.16828315677925687
+    },
+    "0|RESEGMENT": {
+     "n": 16,
+     "accepted": 12,
+     "mean_dU": 0.3709853449217904
+    },
+    "1|DESPIKE": {
+     "n": 8,
+     "accepted": 5,
+     "mean_dU": 0.21291190367632332
+    },
+    "1|IMPUTE": {
+     "n": 359,
+     "accepted": 71,
+     "mean_dU": 0.13245967440051706
+    },
+    "1|RESEGMENT": {
+     "n": 18,
+     "accepted": 13,
+     "mean_dU": 0.5283342157756574
+    },
+    "2|DENOISE": {
+     "n": 4,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "2|DESPIKE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 10.142176012169195
+    },
+    "2|IMPUTE": {
+     "n": 2,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "3|DENOISE": {
+     "n": 7,
+     "accepted": 1,
+     "mean_dU": 0.5090467985753699
+    },
+    "3|DESPIKE": {
+     "n": 11,
+     "accepted": 7,
+     "mean_dU": 0.8073079543757602
+    },
+    "3|IMPUTE": {
+     "n": 187,
+     "accepted": 16,
+     "mean_dU": 0.32184719984353527
+    },
+    "3|RESEGMENT": {
+     "n": 23,
+     "accepted": 15,
+     "mean_dU": 2.5078205723162186
+    },
+    "4|DENOISE": {
+     "n": 23,
+     "accepted": 1,
+     "mean_dU": 0.32291475058053987
+    },
+    "4|DESPIKE": {
+     "n": 7,
+     "accepted": 7,
+     "mean_dU": 0.29308578374743355
+    },
+    "4|IMPUTE": {
+     "n": 75,
+     "accepted": 15,
+     "mean_dU": 0.1201838623718138
+    },
+    "4|RESEGMENT": {
+     "n": 10,
+     "accepted": 7,
+     "mean_dU": 0.7895959858188814
+    },
+    "5|DENOISE": {
+     "n": 10,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "5|DESPIKE": {
+     "n": 10,
+     "accepted": 10,
+     "mean_dU": 0.662621723433384
+    },
+    "5|IMPUTE": {
+     "n": 116,
+     "accepted": 28,
+     "mean_dU": 0.06678902260139606
+    },
+    "5|RESEGMENT": {
+     "n": 18,
+     "accepted": 13,
+     "mean_dU": 0.4883422752644225
+    },
+    "6|DENOISE": {
+     "n": 17,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "6|DESPIKE": {
+     "n": 15,
+     "accepted": 10,
+     "mean_dU": 53.840060024159754
+    },
+    "8|DENOISE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 0.5123439501438154
+    },
+    "8|DESPIKE": {
+     "n": 5,
+     "accepted": 5,
+     "mean_dU": 0.45579585239913295
+    },
+    "8|IMPUTE": {
+     "n": 127,
+     "accepted": 14,
+     "mean_dU": 0.1588766190598399
+    },
+    "8|RESEGMENT": {
+     "n": 22,
+     "accepted": 17,
+     "mean_dU": 0.5244257069988788
+    },
+    "9|DENOISE": {
+     "n": 9,
+     "accepted": 1,
+     "mean_dU": 0.36040966863658985
+    },
+    "9|DESPIKE": {
+     "n": 8,
+     "accepted": 8,
+     "mean_dU": 2.0234447959833926
+    },
+    "9|IMPUTE": {
+     "n": 132,
+     "accepted": 15,
+     "mean_dU": 0.28734980819853895
+    },
+    "9|RESEGMENT": {
+     "n": 50,
+     "accepted": 31,
+     "mean_dU": 3.0615788321430877
+    },
+    "10|DESPIKE": {
+     "n": 12,
+     "accepted": 10,
+     "mean_dU": 0.4103653030879249
+    },
+    "10|IMPUTE": {
+     "n": 106,
+     "accepted": 21,
+     "mean_dU": 0.11278931981684773
+    },
+    "10|RESEGMENT": {
+     "n": 20,
+     "accepted": 15,
+     "mean_dU": 0.4271438775875869
+    },
+    "11|DESPIKE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 0.06060374261701984
+    },
+    "13|DESPIKE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 0.18146479428185813
+    },
+    "13|IMPUTE": {
+     "n": 14,
+     "accepted": 2,
+     "mean_dU": 0.1464155830305387
+    },
+    "13|RESEGMENT": {
+     "n": 5,
+     "accepted": 3,
+     "mean_dU": 1.0011807624179836
+    },
+    "14|RESEGMENT": {
+     "n": 2,
+     "accepted": 1,
+     "mean_dU": 1.4752594866869746
+    }
+   },
+   "tests": {
+    "IMPUTE": {
+     "testable": true,
+     "chi2": 24.138908013279632,
+     "p": 0.004087018741825968,
+     "dof": 9,
+     "n_clusters": 10,
+     "n_candidates": 1215,
+     "cells_expected_below_5": 3,
+     "rate_min": 0.0,
+     "rate_max": 0.2413793103448276,
+     "p_fisher": null,
+     "p_permutation": 0.0056
+    },
+    "DESPIKE": {
+     "testable": true,
+     "chi2": 18.633780991735538,
+     "p": 0.06799245793805153,
+     "dof": 11,
+     "n_clusters": 12,
+     "n_candidates": 91,
+     "cells_expected_below_5": 16,
+     "rate_min": 0.625,
+     "rate_max": 1.0,
+     "p_fisher": null,
+     "p_permutation": 0.07175
+    },
+    "DENOISE": {
+     "testable": true,
+     "chi2": 20.16577567648301,
+     "p": 0.0025873473728977815,
+     "dof": 6,
+     "n_clusters": 7,
+     "n_candidates": 71,
+     "cells_expected_below_5": 9,
+     "rate_min": 0.0,
+     "rate_max": 1.0,
+     "p_fisher": null,
+     "p_permutation": 0.0307
+    },
+    "RESEGMENT": {
+     "testable": true,
+     "chi2": 3.31657573106392,
+     "p": 0.9504114237423091,
+     "dof": 9,
+     "n_clusters": 10,
+     "n_candidates": 184,
+     "cells_expected_below_5": 6,
+     "rate_min": 0.5,
+     "rate_max": 0.7727272727272727,
+     "p_fisher": null,
+     "p_permutation": 0.9582
+    }
+   },
+   "stratum_confound": {
+    "ami": 0.14166773781718497,
+    "strata": [
+     "changepoint",
+     "clean",
+     "clean_ood",
+     "contaminated",
+     "hard",
+     "rare_valid"
+    ],
+    "table": {
+     "0": {
+      "changepoint": 27,
+      "clean": 40,
+      "clean_ood": 3,
+      "contaminated": 44,
+      "hard": 15,
+      "rare_valid": 24
+     },
+     "1": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 212,
+      "hard": 0,
+      "rare_valid": 0
+     },
+     "2": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 7,
+      "contaminated": 0,
+      "hard": 9,
+      "rare_valid": 0
+     },
+     "3": {
+      "changepoint": 46,
+      "clean": 118,
+      "clean_ood": 46,
+      "contaminated": 126,
+      "hard": 8,
+      "rare_valid": 64
+     },
+     "4": {
+      "changepoint": 20,
+      "clean": 23,
+      "clean_ood": 13,
+      "contaminated": 19,
+      "hard": 47,
+      "rare_valid": 0
+     },
+     "5": {
+      "changepoint": 31,
+      "clean": 53,
+      "clean_ood": 11,
+      "contaminated": 60,
+      "hard": 38,
+      "rare_valid": 7
+     },
+     "6": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 20,
+      "contaminated": 0,
+      "hard": 8,
+      "rare_valid": 0
+     },
+     "7": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 0,
+      "hard": 1,
+      "rare_valid": 0
+     },
+     "8": {
+      "changepoint": 43,
+      "clean": 54,
+      "clean_ood": 11,
+      "contaminated": 65,
+      "hard": 15,
+      "rare_valid": 39
+     },
+     "9": {
+      "changepoint": 7,
+      "clean": 89,
+      "clean_ood": 82,
+      "contaminated": 163,
+      "hard": 7,
+      "rare_valid": 66
+     },
+     "10": {
+      "changepoint": 32,
+      "clean": 42,
+      "clean_ood": 4,
+      "contaminated": 41,
+      "hard": 34,
+      "rare_valid": 10
+     },
+     "11": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 1,
+      "hard": 0,
+      "rare_valid": 0
+     },
+     "12": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 0,
+      "hard": 1,
+      "rare_valid": 0
+     },
+     "13": {
+      "changepoint": 4,
+      "clean": 1,
+      "clean_ood": 13,
+      "contaminated": 6,
+      "hard": 27,
+      "rare_valid": 0
+     },
+     "14": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 3,
+      "hard": 0,
+      "rare_valid": 0
+     }
+    },
+    "cluster_sizes": {
+     "0": 153,
+     "1": 212,
+     "2": 16,
+     "3": 408,
+     "4": 122,
+     "5": 200,
+     "6": 28,
+     "7": 1,
+     "8": 227,
+     "9": 414,
+     "10": 163,
+     "11": 1,
+     "12": 1,
+     "13": 51,
+     "14": 3
+    }
+   }
+  },
+  "20": {
+   "cells_occupied": 49,
+   "cells_total": 80,
+   "n_candidates": 1561,
+   "cells_below_5": 10,
+   "empty_cells": [
+    [
+     0,
+     "DENOISE"
+    ],
+    [
+     1,
+     "DENOISE"
+    ],
+    [
+     2,
+     "RESEGMENT"
+    ],
+    [
+     5,
+     "IMPUTE"
+    ],
+    [
+     5,
+     "RESEGMENT"
+    ],
+    [
+     8,
+     "IMPUTE"
+    ],
+    [
+     8,
+     "DESPIKE"
+    ],
+    [
+     8,
+     "DENOISE"
+    ],
+    [
+     8,
+     "RESEGMENT"
+    ],
+    [
+     9,
+     "IMPUTE"
+    ],
+    [
+     9,
+     "DESPIKE"
+    ],
+    [
+     9,
+     "DENOISE"
+    ],
+    [
+     11,
+     "DENOISE"
+    ],
+    [
+     12,
+     "DENOISE"
+    ],
+    [
+     13,
+     "DESPIKE"
+    ],
+    [
+     13,
+     "DENOISE"
+    ],
+    [
+     14,
+     "IMPUTE"
+    ],
+    [
+     14,
+     "DESPIKE"
+    ],
+    [
+     14,
+     "DENOISE"
+    ],
+    [
+     14,
+     "RESEGMENT"
+    ],
+    [
+     15,
+     "IMPUTE"
+    ],
+    [
+     15,
+     "DENOISE"
+    ],
+    [
+     15,
+     "RESEGMENT"
+    ],
+    [
+     16,
+     "DENOISE"
+    ],
+    [
+     17,
+     "IMPUTE"
+    ],
+    [
+     17,
+     "DESPIKE"
+    ],
+    [
+     17,
+     "DENOISE"
+    ],
+    [
+     17,
+     "RESEGMENT"
+    ],
+    [
+     19,
+     "DESPIKE"
+    ],
+    [
+     19,
+     "DENOISE"
+    ],
+    [
+     19,
+     "RESEGMENT"
+    ]
+   ],
+   "grid": {
+    "0|DESPIKE": {
+     "n": 8,
+     "accepted": 8,
+     "mean_dU": 0.554256021232362
+    },
+    "0|IMPUTE": {
+     "n": 90,
+     "accepted": 12,
+     "mean_dU": 0.18062422841646741
+    },
+    "0|RESEGMENT": {
+     "n": 14,
+     "accepted": 11,
+     "mean_dU": 0.31900734309615575
+    },
+    "1|DESPIKE": {
+     "n": 8,
+     "accepted": 5,
+     "mean_dU": 0.21291190367632332
+    },
+    "1|IMPUTE": {
+     "n": 359,
+     "accepted": 71,
+     "mean_dU": 0.13245967440051706
+    },
+    "1|RESEGMENT": {
+     "n": 18,
+     "accepted": 13,
+     "mean_dU": 0.5283342157756574
+    },
+    "2|DENOISE": {
+     "n": 4,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "2|DESPIKE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 10.142176012169195
+    },
+    "2|IMPUTE": {
+     "n": 2,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "3|DENOISE": {
+     "n": 6,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "3|DESPIKE": {
+     "n": 7,
+     "accepted": 5,
+     "mean_dU": 0.9631399549847981
+    },
+    "3|IMPUTE": {
+     "n": 163,
+     "accepted": 14,
+     "mean_dU": 0.28759603909097614
+    },
+    "3|RESEGMENT": {
+     "n": 17,
+     "accepted": 12,
+     "mean_dU": 3.0056952951513156
+    },
+    "4|DENOISE": {
+     "n": 13,
+     "accepted": 1,
+     "mean_dU": 0.32291475058053987
+    },
+    "4|DESPIKE": {
+     "n": 4,
+     "accepted": 4,
+     "mean_dU": 0.17586692033798534
+    },
+    "4|IMPUTE": {
+     "n": 47,
+     "accepted": 7,
+     "mean_dU": 0.14947461182091448
+    },
+    "4|RESEGMENT": {
+     "n": 7,
+     "accepted": 4,
+     "mean_dU": 0.77155341060957
+    },
+    "5|DENOISE": {
+     "n": 17,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "5|DESPIKE": {
+     "n": 15,
+     "accepted": 10,
+     "mean_dU": 53.840060024159754
+    },
+    "6|DENOISE": {
+     "n": 6,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "6|DESPIKE": {
+     "n": 8,
+     "accepted": 8,
+     "mean_dU": 0.788500608260017
+    },
+    "6|IMPUTE": {
+     "n": 73,
+     "accepted": 18,
+     "mean_dU": 0.09175320495383177
+    },
+    "6|RESEGMENT": {
+     "n": 16,
+     "accepted": 12,
+     "mean_dU": 0.464348704759671
+    },
+    "7|DENOISE": {
+     "n": 2,
+     "accepted": 2,
+     "mean_dU": 0.5106953743595927
+    },
+    "7|DESPIKE": {
+     "n": 7,
+     "accepted": 5,
+     "mean_dU": 0.3786177052951117
+    },
+    "7|IMPUTE": {
+     "n": 74,
+     "accepted": 6,
+     "mean_dU": 0.3614207544096679
+    },
+    "7|RESEGMENT": {
+     "n": 14,
+     "accepted": 11,
+     "mean_dU": 0.666416992301718
+    },
+    "9|RESEGMENT": {
+     "n": 2,
+     "accepted": 1,
+     "mean_dU": 1.4752594866869746
+    },
+    "10|DENOISE": {
+     "n": 9,
+     "accepted": 1,
+     "mean_dU": 0.36040966863658985
+    },
+    "10|DESPIKE": {
+     "n": 8,
+     "accepted": 8,
+     "mean_dU": 2.0234447959833926
+    },
+    "10|IMPUTE": {
+     "n": 119,
+     "accepted": 14,
+     "mean_dU": 0.2847964013031166
+    },
+    "10|RESEGMENT": {
+     "n": 49,
+     "accepted": 30,
+     "mean_dU": 3.0721423967975237
+    },
+    "11|DESPIKE": {
+     "n": 6,
+     "accepted": 6,
+     "mean_dU": 0.5433145553677518
+    },
+    "11|IMPUTE": {
+     "n": 91,
+     "accepted": 13,
+     "mean_dU": 0.13004074994223744
+    },
+    "11|RESEGMENT": {
+     "n": 17,
+     "accepted": 11,
+     "mean_dU": 0.6200936731003025
+    },
+    "12|DESPIKE": {
+     "n": 10,
+     "accepted": 8,
+     "mean_dU": 0.23299460906404015
+    },
+    "12|IMPUTE": {
+     "n": 92,
+     "accepted": 19,
+     "mean_dU": 0.0926265013232833
+    },
+    "12|RESEGMENT": {
+     "n": 14,
+     "accepted": 12,
+     "mean_dU": 0.44944557483139663
+    },
+    "13|IMPUTE": {
+     "n": 10,
+     "accepted": 2,
+     "mean_dU": 0.1464155830305387
+    },
+    "13|RESEGMENT": {
+     "n": 2,
+     "accepted": 1,
+     "mean_dU": 0.8884807901060974
+    },
+    "15|DESPIKE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 0.06060374261701984
+    },
+    "16|DESPIKE": {
+     "n": 1,
+     "accepted": 1,
+     "mean_dU": 0.18146479428185813
+    },
+    "16|IMPUTE": {
+     "n": 10,
+     "accepted": 3,
+     "mean_dU": 0.078249248766263
+    },
+    "16|RESEGMENT": {
+     "n": 3,
+     "accepted": 2,
+     "mean_dU": 1.0575307485739267
+    },
+    "18|DENOISE": {
+     "n": 14,
+     "accepted": 0,
+     "mean_dU": null
+    },
+    "18|DESPIKE": {
+     "n": 7,
+     "accepted": 7,
+     "mean_dU": 0.5580059045001037
+    },
+    "18|IMPUTE": {
+     "n": 79,
+     "accepted": 17,
+     "mean_dU": 0.07934676713020908
+    },
+    "18|RESEGMENT": {
+     "n": 11,
+     "accepted": 7,
+     "mean_dU": 0.6044335207789107
+    },
+    "19|IMPUTE": {
+     "n": 6,
+     "accepted": 0,
+     "mean_dU": null
+    }
+   },
+   "tests": {
+    "IMPUTE": {
+     "testable": true,
+     "chi2": 26.459968954420315,
+     "p": 0.014737618193073548,
+     "dof": 13,
+     "n_clusters": 14,
+     "n_candidates": 1215,
+     "cells_expected_below_5": 5,
+     "rate_min": 0.0,
+     "rate_max": 0.3,
+     "p_fisher": null,
+     "p_permutation": 0.01765
+    },
+    "DESPIKE": {
+     "testable": true,
+     "chi2": 16.751569264069264,
+     "p": 0.21091120756824605,
+     "dof": 13,
+     "n_clusters": 14,
+     "n_candidates": 91,
+     "cells_expected_below_5": 18,
+     "rate_min": 0.625,
+     "rate_max": 1.0,
+     "p_fisher": null,
+     "p_permutation": 0.2226
+    },
+    "DENOISE": {
+     "testable": true,
+     "chi2": 36.917463962240085,
+     "p": 4.862567417271108e-06,
+     "dof": 7,
+     "n_clusters": 8,
+     "n_candidates": 71,
+     "cells_expected_below_5": 10,
+     "rate_min": 0.0,
+     "rate_max": 1.0,
+     "p_fisher": null,
+     "p_permutation": 0.002
+    },
+    "RESEGMENT": {
+     "testable": true,
+     "chi2": 6.2290740589730325,
+     "p": 0.9040968211589274,
+     "dof": 12,
+     "n_clusters": 13,
+     "n_candidates": 184,
+     "cells_expected_below_5": 13,
+     "rate_min": 0.5,
+     "rate_max": 0.8571428571428571,
+     "p_fisher": null,
+     "p_permutation": 0.92395
+    }
+   },
+   "stratum_confound": {
+    "ami": 0.13841192884210574,
+    "strata": [
+     "changepoint",
+     "clean",
+     "clean_ood",
+     "contaminated",
+     "hard",
+     "rare_valid"
+    ],
+    "table": {
+     "0": {
+      "changepoint": 20,
+      "clean": 34,
+      "clean_ood": 2,
+      "contaminated": 39,
+      "hard": 13,
+      "rare_valid": 17
+     },
+     "1": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 212,
+      "hard": 0,
+      "rare_valid": 0
+     },
+     "2": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 7,
+      "contaminated": 0,
+      "hard": 9,
+      "rare_valid": 0
+     },
+     "3": {
+      "changepoint": 38,
+      "clean": 91,
+      "clean_ood": 42,
+      "contaminated": 115,
+      "hard": 2,
+      "rare_valid": 64
+     },
+     "4": {
+      "changepoint": 12,
+      "clean": 15,
+      "clean_ood": 8,
+      "contaminated": 13,
+      "hard": 33,
+      "rare_valid": 0
+     },
+     "5": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 16,
+      "contaminated": 0,
+      "hard": 6,
+      "rare_valid": 0
+     },
+     "6": {
+      "changepoint": 29,
+      "clean": 39,
+      "clean_ood": 6,
+      "contaminated": 44,
+      "hard": 23,
+      "rare_valid": 7
+     },
+     "7": {
+      "changepoint": 26,
+      "clean": 58,
+      "clean_ood": 12,
+      "contaminated": 49,
+      "hard": 8,
+      "rare_valid": 23
+     },
+     "8": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 0,
+      "hard": 1,
+      "rare_valid": 0
+     },
+     "9": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 3,
+      "hard": 0,
+      "rare_valid": 0
+     },
+     "10": {
+      "changepoint": 6,
+      "clean": 86,
+      "clean_ood": 81,
+      "contaminated": 152,
+      "hard": 3,
+      "rare_valid": 61
+     },
+     "11": {
+      "changepoint": 34,
+      "clean": 32,
+      "clean_ood": 5,
+      "contaminated": 42,
+      "hard": 15,
+      "rare_valid": 28
+     },
+     "12": {
+      "changepoint": 24,
+      "clean": 36,
+      "clean_ood": 4,
+      "contaminated": 31,
+      "hard": 32,
+      "rare_valid": 8
+     },
+     "13": {
+      "changepoint": 2,
+      "clean": 0,
+      "clean_ood": 9,
+      "contaminated": 4,
+      "hard": 16,
+      "rare_valid": 0
+     },
+     "14": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 0,
+      "hard": 1,
+      "rare_valid": 0
+     },
+     "15": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 1,
+      "hard": 0,
+      "rare_valid": 0
+     },
+     "16": {
+      "changepoint": 3,
+      "clean": 2,
+      "clean_ood": 4,
+      "contaminated": 3,
+      "hard": 17,
+      "rare_valid": 0
+     },
+     "17": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 4,
+      "contaminated": 0,
+      "hard": 2,
+      "rare_valid": 0
+     },
+     "18": {
+      "changepoint": 16,
+      "clean": 27,
+      "clean_ood": 10,
+      "contaminated": 31,
+      "hard": 25,
+      "rare_valid": 2
+     },
+     "19": {
+      "changepoint": 0,
+      "clean": 0,
+      "clean_ood": 0,
+      "contaminated": 1,
+      "hard": 4,
+      "rare_valid": 0
+     }
+    },
+    "cluster_sizes": {
+     "0": 125,
+     "1": 212,
+     "2": 16,
+     "3": 352,
+     "4": 81,
+     "5": 22,
+     "6": 148,
+     "7": 176,
+     "8": 1,
+     "9": 3,
+     "10": 389,
+     "11": 156,
+     "12": 135,
+     "13": 31,
+     "14": 1,
+     "15": 1,
+     "16": 29,
+     "17": 6,
+     "18": 111,
+     "19": 5
+    }
+   }
+  }
+ }
+}
