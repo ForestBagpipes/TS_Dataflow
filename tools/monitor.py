@@ -86,6 +86,45 @@ def config_hash(config: dict) -> str:
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
 
 
+#: Source files whose content decides what a run computes. Their combined hash
+#: is the version marker, and it is the marker rather than the git commit
+#: because the node is synced by rsync and carries no `.git`, so `git rev-parse`
+#: returns empty there. A hash over the actual bytes answers the question the
+#: commit was meant to answer, namely whether the code that ran is the code that
+#: is being reported.
+CODE_FILES = (
+    "src/introact_ts/spo.py",
+    "src/introact_ts/agent.py",
+    "src/introact_ts/policy.py",
+    "src/introact_ts/verify.py",
+    "src/introact_ts/types.py",
+    "src/introact_ts/conformal.py",
+    "src/introact_ts/structure.py",
+)
+
+
+def code_hash(files=CODE_FILES, root=None):
+    """Combined hash of the method layer, plus the per file digests.
+
+    Returns (combined, {relative path: md5 or 'MISSING'}). A missing file is
+    recorded rather than skipped, so a truncated deployment does not silently
+    produce the same hash as a complete one.
+    """
+    base = Path(root) if root else ROOT
+    per = {}
+    h = hashlib.sha256()
+    for rel in files:
+        p = base / rel
+        if p.exists():
+            d = file_md5(p)
+        else:
+            d = "MISSING"
+        per[rel] = d
+        h.update(rel.encode("utf-8"))
+        h.update(d.encode("utf-8"))
+    return h.hexdigest()[:16], per
+
+
 def file_md5(path: Path, chunk=1 << 20) -> str:
     h = hashlib.md5()
     with open(path, "rb") as f:
@@ -115,6 +154,7 @@ class Monitor:
 
     def __init__(self, name, expects=None, config=None, require_pool=None,
                  require_clean_tree=True, expect_config_hash=None,
+                 expect_code_hash=None,
                  beat_every=BEAT_EVERY, min_free_gb=MIN_FREE_GB):
         self.name = name
         self.expects = [str(p) for p in (expects or [])]
@@ -122,6 +162,7 @@ class Monitor:
         self.require_pool = require_pool
         self.require_clean_tree = require_clean_tree
         self.expect_config_hash = expect_config_hash
+        self.expect_code_hash = expect_code_hash
         self.beat_every = float(beat_every)
         self.min_free_gb = float(min_free_gb)
         self.t0 = time.time()
@@ -161,7 +202,18 @@ class Monitor:
             add("config_hash", h == self.expect_config_hash,
                 f"expected {self.expect_config_hash}, got {h}")
 
-        # 4. Output paths writable.
+        # 4. Code hash. On the node there is no `.git`, so the commit field is
+        #    empty and cannot catch a stale deployment. This compares the method
+        #    layer's actual bytes against what the caller expects.
+        ch, per_file = code_hash()
+        missing = [k for k, v in per_file.items() if v == "MISSING"]
+        add("code_present", not missing,
+            "all present" if not missing else f"missing {missing}")
+        if self.expect_code_hash:
+            add("code_hash", ch == self.expect_code_hash,
+                f"expected {self.expect_code_hash}, got {ch}")
+
+        # 5. Output paths writable.
         for rel in self.expects:
             p = (ROOT / rel).parent
             try:
@@ -173,7 +225,7 @@ class Monitor:
             except Exception as exc:
                 add(f"writable:{rel}", False, f"{type(exc).__name__}: {exc}")
 
-        # 5. Free space.
+        # 6. Free space.
         free_gb = shutil.disk_usage(str(ROOT)).free / 2**30
         add("disk_free", free_gb >= self.min_free_gb,
             f"{free_gb:.1f} GB free, need {self.min_free_gb}")
@@ -204,6 +256,8 @@ class Monitor:
             "git_branch": branch,
             "config": self.config,
             "config_hash": config_hash(self.config),
+            "code_hash": code_hash()[0],
+            "code_files": code_hash()[1],
             "pool_size": pool_size,
             "expects": self.expects,
             "python": sys.version.split()[0],
@@ -294,6 +348,7 @@ class Monitor:
             "finished": time.strftime("%Y-%m-%d %H:%M:%S"),
             "elapsed_s": round(time.time() - self.t0, 1),
             "git_commit": commit, "config_hash": config_hash(self.config),
+            "code_hash": code_hash()[0],
             "files": files, "staged": staged, "stage_error": stage_err,
         }
         with open(MANIFEST, "a", encoding="utf-8") as f:

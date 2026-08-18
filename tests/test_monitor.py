@@ -93,3 +93,30 @@ def test_status_separates_alive_stalled_done(tmp_path):
     mf.write_text(json.dumps({"run_id": "c-3", "name": "done"}))
     got = {r["name"]: r["state"] for r in status(tmp_path, stale_after=180)}
     assert got == {"alive": "alive", "stalled": "stalled", "done": "done"}
+
+
+def test_code_hash_detects_a_changed_or_missing_file(tmp_path):
+    from monitor import code_hash
+    (tmp_path / "a.py").write_text("one")
+    (tmp_path / "b.py").write_text("two")
+    files = ("a.py", "b.py")
+    h1, per1 = code_hash(files, root=tmp_path)
+    assert "MISSING" not in per1.values()
+    # A byte change moves the hash.
+    (tmp_path / "b.py").write_text("three")
+    h2, _ = code_hash(files, root=tmp_path)
+    assert h1 != h2
+    # A missing file is recorded, not skipped, so a truncated deployment cannot
+    # hash the same as a complete one.
+    (tmp_path / "b.py").unlink()
+    h3, per3 = code_hash(files, root=tmp_path)
+    assert per3["b.py"] == "MISSING"
+    assert h3 not in (h1, h2)
+
+
+def test_preflight_aborts_on_code_hash_mismatch():
+    m = Monitor("t", require_clean_tree=False,
+                expect_code_hash="0000000000000000")
+    with pytest.raises(PreflightError) as e:
+        m.preflight()
+    assert "code_hash" in str(e.value)
