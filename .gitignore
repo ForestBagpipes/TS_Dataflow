@@ -15,7 +15,12 @@ researched_papers/*/*.tar.gz
 
 # Personal progress docs
 进度文档/
-docx/
+# The progress document is the paper's method spec. Code changes that touch a
+# method definition, a module behaviour, a hyperparameter or an experiment
+# setting must update it in the same commit, so it is tracked. Older revisions
+# stay untracked.
+docx/*
+!docx/胡宏彬-进度文档-20260818.docx
 
 # Datasets: re-downloaded on first use by experiments/datasets.py
 data/*.csv
