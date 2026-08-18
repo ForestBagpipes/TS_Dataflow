@@ -1,0 +1,83 @@
+{
+ "scale": "xl",
+ "seed": 42,
+ "window": 5,
+ "n_windows": 2000,
+ "speed_bounds": [
+  -5.762053110746198,
+  5.697000503540039
+ ],
+ "window_level": {
+  "screen": 823,
+  "mtcsc": 823,
+  "both": 823,
+  "either": 823,
+  "jaccard": 1.0
+ },
+ "point_level": {
+  "intersection": 17790,
+  "union": 25337,
+  "jaccard": 0.7021352172711844,
+  "per_window_mean": 0.8013055856994117,
+  "per_window_median": 0.8421052631578947
+ },
+ "value_level": {
+  "same": 67,
+  "total": 17790,
+  "agreement": 0.003766160764474424,
+  "rtol": 0.001,
+  "rel_diff_sd_units": {
+   "25": 0.19244008139222846,
+   "50": 0.4450360504612345,
+   "75": 0.8507156695352848,
+   "90": 1.425990698230718,
+   "99": 4.364997625133654
+  },
+  "share_below_0.01sd": 0.013209668353007308,
+  "share_below_0.1sd": 0.13569421023046654
+ },
+ "per_stratum": {
+  "rare_valid": {
+   "n": 210,
+   "screen": 107,
+   "mtcsc": 107,
+   "both": 107,
+   "either": 107
+  },
+  "changepoint": {
+   "n": 210,
+   "screen": 75,
+   "mtcsc": 75,
+   "both": 75,
+   "either": 75
+  },
+  "contaminated": {
+   "n": 740,
+   "screen": 405,
+   "mtcsc": 405,
+   "both": 405,
+   "either": 405
+  },
+  "clean_ood": {
+   "n": 210,
+   "screen": 48,
+   "mtcsc": 48,
+   "both": 48,
+   "either": 48
+  },
+  "clean": {
+   "n": 420,
+   "screen": 149,
+   "mtcsc": 149,
+   "both": 149,
+   "either": 149
+  },
+  "hard": {
+   "n": 210,
+   "screen": 39,
+   "mtcsc": 39,
+   "both": 39,
+   "either": 39
+  }
+ }
+}

@@ -191,3 +191,88 @@ def imr_repair_supervised(series, clean_prefix_frac: float = 0.1, **kw):
     out = imr_repair(joined, **kw)
     out[:seed] = head
     return out
+
+
+# -- MTCSC, univariate branch, speed constraint with a consistency anchor -----
+#
+# Multivariate Time Series Cleaning under Speed Constraints, arXiv 2411.01214,
+# 2024. The reference implementation is `zaqthss/mtcsc`, class `MTCSC_Uni`, and
+# it ships no license file, so this is reimplemented from the algorithm the
+# class expresses rather than translated from it.
+#
+# The difference from SCREEN is what makes it worth measuring rather than
+# assuming. SCREEN repairs each point to the median of three candidates derived
+# from the speed bounds. MTCSC's univariate branch first looks for the longest
+# run of consecutive points that are mutually speed consistent inside the
+# window, treats the head of that run as a trustworthy anchor, and then repairs
+# the key point by linear interpolation between the last repaired point and that
+# anchor. So SCREEN asks what value the bounds allow, and MTCSC asks which
+# neighbours agree with each other and pulls the point toward them.
+#
+# Both are given the same speed bounds from `estimate_speed_bounds`, so any
+# difference in output is a difference in repair rule and not in calibration.
+
+
+def mtcsc_uni_repair(series, s_min: float, s_max: float, window: int = 5):
+    """Univariate MTCSC. Returns the repaired series.
+
+    ``window`` is the number of subsequent points the anchor is searched over,
+    matching the reference implementation's time window on an evenly sampled
+    series where one timestamp step equals one index step.
+
+    NaN entries are left untouched, the same convention `screen_repair` uses,
+    since this method repairs values rather than filling gaps.
+    """
+    x = np.asarray(series, dtype=np.float64).copy()
+    n = len(x)
+    if n < 3:
+        return x
+    known = np.isfinite(x)
+    idx = np.flatnonzero(known)
+    if len(idx) < 3:
+        return x
+
+    prev = idx[0]
+    for pos in range(1, len(idx)):
+        k = idx[pos]
+        tail = idx[pos:pos + window + 1]
+        if len(tail) < 2:
+            break
+
+        lo = x[prev] + s_min * (k - prev)
+        hi = x[prev] + s_max * (k - prev)
+
+        # Longest run of mutually speed consistent points in the window. `run`
+        # counts, for each start, how far the consistency extends.
+        run = np.ones(len(tail), dtype=int)
+        for i in range(len(tail) - 2, -1, -1):
+            a, b = tail[i], tail[i + 1]
+            d, dt = x[b] - x[a], b - a
+            if s_min * dt <= d <= s_max * dt:
+                run[i] = run[i + 1] + 1
+        # The anchor is the head of the longest run, excluding the key point
+        # itself, which is the candidate under repair.
+        if len(tail) > 1:
+            rel = int(np.argmax(run[1:])) + 1
+        else:
+            rel = 0
+        anchor = tail[rel]
+
+        # Bounds implied by the anchor, intersected with those from the last
+        # repaired point. The reference intersects only when an anchor other
+        # than the key point was found.
+        if anchor != k:
+            lo_a = x[anchor] + s_max * (k - anchor)
+            hi_a = x[anchor] + s_min * (k - anchor)
+            lo, hi = max(lo, lo_a), min(hi, hi_a)
+
+        if x[k] < lo or x[k] > hi:
+            span = anchor - prev
+            if span != 0:
+                rate = (k - prev) / span
+                x[k] = (x[anchor] - x[prev]) * rate + x[prev]
+            else:
+                x[k] = x[prev]
+        prev = k
+
+    return x
