@@ -111,3 +111,46 @@ it is not treated as independent evidence.
 The clustering is not a restatement of the stratum label. Adjusted mutual
 information between cluster and stratum is 0.1502, 0.1473, 0.1417 and 0.1384 at
 k equal to 10, 12, 15 and 20.
+
+## Learning loop configuration, fixed before the first run
+
+Written 2026-08-19, before any policy learning run. The monitor asserts this
+hash at startup and aborts if it differs, so a run that reports these settings
+cannot have used others.
+
+**Configuration hash: `fea464c049f8c5ad`**
+
+| key | value | source |
+|---|---|---|
+| k | 12 | occupancy criterion above |
+| split_seed | 20260818 | this document |
+| corpus_seed | 42 | the corpus every earlier result used |
+| scale | xl | 2000 windows |
+| reward_clip | 5.886732284690514 | 95th percentile of training rewards |
+| alpha | 0.02 | table 3 of the progress document |
+| c_u | 1.0 | table 3 |
+| c0 | 0.01 | table 3 |
+| optimistic_init | 1.0 | above any warm started value |
+| warm_start_cap | 20 | pseudo visits ceiling |
+| tail_floor | 5 | minimum cluster size |
+
+## The two blind spot cells, and what either outcome means
+
+Cluster 1 and cluster 11 hold 212 and 180 windows, 392 together, which is 19.6
+percent of the corpus. The fixed policy proposed DENOISE on neither, so both
+cells enter learning at the optimistic value with no history behind them.
+
+**This result is reported from the first run, whichever way it comes out.** No
+rerun, no configuration change, no second look. Recorded here because the two
+outcomes point in opposite directions for the paper and the temptation to prefer
+one of them is exactly what a pre registration is for.
+
+If the admission rate on these cells is meaningfully above zero, the fixed
+policy was leaving real repairs on the table, and the case for learning is
+stronger than the aggregate numbers suggest, because the aggregate is dominated
+by cells the fixed policy already visited.
+
+If it is near zero, the blind spot was not a loss. The fixed policy declined to
+propose DENOISE there for a reason the policy itself never articulated, and the
+optimistic initialisation will have spent probes confirming it. That is a cost
+of exploration and it is reported as one, with the probe count attached.
