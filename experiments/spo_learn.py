@@ -118,7 +118,11 @@ def main():
     ap.add_argument("--out", default=str(ROOT / "results" / "spo_learn.json"))
     args = ap.parse_args()
 
-    rel_out = str(Path(args.out).relative_to(ROOT)).replace("\\", "/")
+    out_path = Path(args.out)
+    if not out_path.is_absolute():
+        out_path = ROOT / out_path
+    args.out = str(out_path)
+    rel_out = str(out_path.relative_to(ROOT)).replace("\\", "/")
     # The clip decides which rewards the policy ever sees, so leaving it out of
     # the hash would let it change without the assertion noticing.
     ws_peek = json.loads(Path(args.warmstart).read_text(encoding="utf-8"))
