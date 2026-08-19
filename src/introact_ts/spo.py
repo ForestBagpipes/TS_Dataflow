@@ -50,6 +50,17 @@ from .types import Action, MUTATING_ACTIONS, Verdict
 #: not learned over, they are the policy's option to stop rather than an arm.
 ARMS = (Action.IMPUTE, Action.DESPIKE, Action.DENOISE, Action.RESEGMENT)
 
+#: Parameters used when an operator is injected rather than proposed. The most
+#: conservative setting each operator offers, because an injected candidate is a
+#: probe into a cell nothing is known about and it should not also carry an
+#: aggressive parameter.
+INJECT_PARAMS = {
+    Action.IMPUTE: {"method": "linear"},
+    Action.DESPIKE: {},
+    Action.DENOISE: {"strength": "light"},
+    Action.RESEGMENT: {},
+}
+
 #: Which table a candidate belongs to, keyed by the verdict on the previous
 #: candidate in the same window. The first candidate has no predecessor.
 FIRST = "Q0"
@@ -288,9 +299,30 @@ class SPOPolicy:
     after a utility veto consult different estimates.
     """
 
-    def __init__(self, tables: ValueTables, cfg: SPOConfig = None):
+    def __init__(self, tables: ValueTables, cfg: SPOConfig = None,
+                 p_inject: float = 0.0, seed: int = 20260819):
         self.tables = tables
         self.cfg = cfg or tables.cfg
+        #: Probability of forcing an unvisited operator into the candidate set.
+        #:
+        #: Optimistic initialisation acts on the selection layer, and the first
+        #: xl run showed that is the wrong layer for this corpus. Clusters 1 and
+        #: 11 hold 392 windows between them, 19.6 percent of the corpus, and the
+        #: proposer never emits DENOISE on any of them because their dominant
+        #: defect is never noise. The bound cannot select what is not offered,
+        #: so both cells were visited zero times and their Q stayed at the
+        #: optimistic value from start to finish.
+        #:
+        #: Injection puts the operator into the candidate set directly. The
+        #: injected candidate goes through the sandbox and the full shield like
+        #: any other, so theorem 3 covers it without modification, the structural
+        #: bound holds for every committed edit regardless of where the candidate
+        #: came from.
+        self.p_inject = float(p_inject)
+        self._rng = np.random.RandomState(seed)
+        #: Injection counters, for reporting how much of the exploration was
+        #: forced rather than chosen.
+        self.injected = defaultdict(int)
         #: Per cell counters for reporting, keyed by (table, cluster, arm).
         self.visits = defaultdict(int)
         self.accepts = defaultdict(int)
@@ -309,6 +341,33 @@ class SPOPolicy:
     def table_of(self, records) -> str:
         return table_for(self._prev_verdict(records))
 
+    def unvisited(self, table: str, cluster: int):
+        """Arms this cluster has no observation for, in the given table."""
+        j = self.tables.resolve(cluster)
+        return [a for i, a in enumerate(ARMS)
+                if self.tables.optimistic[table][j, i]]
+
+    def inject(self, candidates, cluster: int, records, table: str) -> list:
+        """Add an unvisited operator to the candidate set, with probability.
+
+        Only operators the window has not already tried are eligible, so an
+        injection never re proposes something the shield already ruled on in
+        this episode.
+        """
+        if self.p_inject <= 0.0:
+            return candidates
+        tried = {r.action for r in records}
+        present = {a for a, _ in candidates}
+        pool = [a for a in self.unvisited(table, cluster)
+                if a not in tried and a not in present]
+        if not pool:
+            return candidates
+        if self._rng.random_sample() >= self.p_inject:
+            return candidates
+        arm = pool[int(self._rng.randint(len(pool)))]
+        self.injected[(table, self.tables.resolve(cluster), arm.value)] += 1
+        return [(arm, dict(INJECT_PARAMS.get(arm, {})))] + list(candidates)
+
     def order(self, candidates, cluster: int, records) -> list:
         """Reorder the proposer's candidates by the upper confidence bound.
 
@@ -319,6 +378,7 @@ class SPOPolicy:
         if not candidates:
             return candidates
         table = self.table_of(records)
+        candidates = self.inject(candidates, cluster, records, table)
         feasible = {a for a, _ in candidates if a in ARMS}
         if not feasible:
             return candidates
@@ -347,6 +407,9 @@ class SPOPolicy:
         j, a = self.tables.resolve(cluster), ARMS.index(action)
         self.trace[key].append(float(self.tables.Q[table][j, a]))
         return reward
+
+    def injection_report(self) -> dict:
+        return {f"{t}|{c}|{a}": n for (t, c, a), n in self.injected.items()}
 
     def report(self) -> dict:
         """Per cell visits, admission rate, mean reward and the Q trajectory."""

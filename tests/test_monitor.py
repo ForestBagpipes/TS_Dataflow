@@ -120,3 +120,28 @@ def test_preflight_aborts_on_code_hash_mismatch():
     with pytest.raises(PreflightError) as e:
         m.preflight()
     assert "code_hash" in str(e.value)
+
+
+def test_missing_expected_hash_is_a_failure_not_a_skip():
+    # The first xl learning run started with no expected hash and its config
+    # silently omitted reward_clip. An optional assertion is no assertion.
+    m = Monitor("t", config={"k": 12}, require_clean_tree=False)
+    with pytest.raises(PreflightError) as e:
+        m.preflight()
+    assert "config_hash" in str(e.value)
+    assert "no expected hash" in str(e.value)
+
+
+def test_a_run_with_no_config_still_needs_no_hash():
+    # Utilities that carry no decisive settings are not forced to declare one.
+    m = Monitor("t", config={}, require_clean_tree=False)
+    assert all(c["ok"] for c in m.preflight())
+
+
+def test_learn_config_keys_match_the_pre_registration():
+    from pathlib import Path
+    from monitor import LEARN_CONFIG_KEYS
+    doc = Path(__file__).resolve().parent.parent / "docs" / "spo_preregistration.md"
+    text = doc.read_text(encoding="utf-8")
+    missing = [k for k in LEARN_CONFIG_KEYS if f"| {k} |" not in text]
+    assert not missing, f"keys absent from the pre registration table: {missing}"

@@ -118,7 +118,12 @@ Written 2026-08-19, before any policy learning run. The monitor asserts this
 hash at startup and aborts if it differs, so a run that reports these settings
 cannot have used others.
 
-**Configuration hash: `fea464c049f8c5ad`**
+**Configuration hash: `669ce2f1341ed6ca`**
+
+The hash covers every key in `monitor.LEARN_CONFIG_KEYS`, and a test
+checks that list against this table so a new hyperparameter cannot be
+added to the code without appearing here. The earlier value
+`fea464c049f8c5ad` predates the injection parameter and is superseded.
 
 | key | value | source |
 |---|---|---|
@@ -133,6 +138,7 @@ cannot have used others.
 | optimistic_init | 1.0 | above any warm started value |
 | warm_start_cap | 20 | pseudo visits ceiling |
 | tail_floor | 5 | minimum cluster size |
+| p_inject | 0.05 | injection probability, see below |
 
 ## The two blind spot cells, and what either outcome means
 
@@ -154,3 +160,50 @@ If it is near zero, the blind spot was not a loss. The fixed policy declined to
 propose DENOISE there for a reason the policy itself never articulated, and the
 optimistic initialisation will have spent probes confirming it. That is a cost
 of exploration and it is reported as one, with the probe count attached.
+
+
+## Forced candidate injection
+
+The first xl learning run visited clusters 1 and 11 on DENOISE **zero times**.
+Not a low admission rate, no observations at all. The cause is a layer mismatch.
+Optimistic initialisation raises the value of an unvisited cell so the bound
+will select it, but the bound only ever chooses among candidates the proposer
+emitted, and the proposer derives its candidate set from the dominant defect
+field, which on those 392 windows is never noise. Nothing the selection layer
+does can reach a cell the proposal layer never offers.
+
+Injection addresses it at the layer the problem is on. When a cluster and
+operator pair has no observation, that operator is forced into the candidate set
+with probability **p_inject = 0.05**, and the injected candidate then goes
+through the sandbox and the full shield exactly like a proposed one.
+
+**Theorem 3 is unaffected.** Its proof turns on where the operator is applied and
+what gate the commit passes, not on where the candidate came from. An injected
+candidate is applied to the sandbox copy and committed only if the structural
+condition holds, so the bound on committed structural distortion holds for any
+candidate source. This is stated in section 3.3 of the progress document.
+
+Injected candidates use the most conservative parameter each operator offers,
+because an injection is a probe into a cell nothing is known about and should
+not also carry an aggressive setting.
+
+### The three outcomes, fixed before the rerun
+
+**Admission rate meaningfully above zero.** Both the fixed rule and the pure
+reordering policy were leaving real repairs unclaimed on a fifth of the corpus.
+This is the strongest case for policy learning available in this work, because
+it is a gain no reordering of the existing candidate set could produce.
+
+**Admission rate near zero.** The proposal layer was right to withhold DENOISE
+there. The blind spot was not a loss, and the probes injection spent are the
+price of establishing that. The probe count is reported alongside.
+
+**Still zero visits.** The injection did not fire, which is an implementation
+fault rather than a finding. The implementation is checked before anything is
+concluded.
+
+### Sensitivity
+
+p_inject is swept over 0.02, 0.05 and 0.10. Reported per level: visits to the
+two blind spot cells, total probe cost, and the headline damage and repair. The
+sweep establishes whether the conclusion depends on the injection rate.

@@ -108,6 +108,8 @@ def main():
     ap.add_argument("--surrogate", action="store_true",
                     help="offline surrogate pool, for the smoke test")
     ap.add_argument("--budget-per-window", dest="bpw", type=float, default=2.0)
+    ap.add_argument("--p-inject", dest="p_inject", type=float, default=0.05,
+                    help="probability of forcing an unvisited operator in")
     ap.add_argument("--n-jobs", dest="n_jobs", type=int, default=32)
     ap.add_argument("--warmstart",
                     default=str(ROOT / "results" / "spo_warmstart.json"))
@@ -123,7 +125,8 @@ def main():
     cfg_dict = {"k": args.k, "split_seed": SPLIT_SEED, "corpus_seed": args.seed,
                 "scale": args.scale, "alpha": 0.02, "c_u": 1.0, "c0": 0.01,
                 "optimistic_init": 1.0, "warm_start_cap": 20, "tail_floor": 5,
-                "reward_clip": float(ws_peek["config"]["reward_clip"])}
+                "reward_clip": float(ws_peek["config"]["reward_clip"]),
+                "p_inject": args.p_inject}
     mon = Monitor("spo_learn", expects=[rel_out], config=cfg_dict,
                   require_pool=None if args.surrogate else 3,
                   require_clean_tree=False, beat_every=20.0,
@@ -156,8 +159,9 @@ def main():
         tables.Q[name] = np.array(arr, dtype=np.float64)
         tables.N[name] = np.array(ws["tables"]["N"][name], dtype=np.int64)
         tables.optimistic[name] = np.array(ws["tables"]["optimistic"][name], dtype=bool)
-    policy = SPOPolicy(tables, cfg)
-    print(f"warm start loaded, reward clip {clip:.4f}", flush=True)
+    policy = SPOPolicy(tables, cfg, p_inject=args.p_inject)
+    print(f"warm start loaded, reward clip {clip:.4f}, "
+          f"p_inject {args.p_inject}", flush=True)
 
     tr_w, ev_w, tr_i, ev_i = split_windows(windows)
     print(f"train {len(tr_w)} windows, eval {len(ev_w)} windows", flush=True)
@@ -236,6 +240,9 @@ def main():
                    "skipped_by_contamination": dict(
                        Counter(c or "none" for _, c in skipped))},
         "decisions": tables.t,
+        "p_inject": args.p_inject,
+        "injections": policy.injection_report(),
+        "n_injected": int(sum(policy.injected.values())),
         "blind_spots": blind,
         "cells": rep,
         "tables_after": tables.snapshot(),

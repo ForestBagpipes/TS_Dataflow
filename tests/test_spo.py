@@ -113,3 +113,54 @@ def test_budget_respects_the_total():
     t = ValueTables(n_clusters=1)
     alloc = allocate_budget([0] * 10, [3.0] * 10, t, total_budget=7)
     assert alloc.sum() <= 7
+
+
+def test_injection_only_targets_unvisited_arms():
+    from introact_ts.spo import SPOPolicy, INJECT_PARAMS
+    t = ValueTables(n_clusters=2)
+    # Mark IMPUTE as visited, leave the rest optimistic.
+    t.warm_start(FIRST, 0, Action.IMPUTE, [0.5, 0.5])
+    pol = SPOPolicy(t, p_inject=1.0, seed=1)
+    assert Action.IMPUTE not in pol.unvisited(FIRST, 0)
+    for _ in range(20):
+        out = pol.inject([(Action.KEEP, {})], 0, [], FIRST)
+        assert out[0][0] is not Action.IMPUTE
+        assert out[0][0] in (Action.DESPIKE, Action.DENOISE, Action.RESEGMENT)
+        # Injected candidates carry the conservative parameter set.
+        assert out[0][1] == INJECT_PARAMS[out[0][0]]
+
+
+def test_injection_respects_probability_and_is_reproducible():
+    from introact_ts.spo import SPOPolicy
+    def count(p, seed):
+        pol = SPOPolicy(ValueTables(n_clusters=1), p_inject=p, seed=seed)
+        return sum(len(pol.inject([(Action.KEEP, {})], 0, [], FIRST)) > 1
+                   for _ in range(400))
+    assert count(0.0, 3) == 0
+    lo, hi = count(0.05, 3), count(0.5, 3)
+    assert lo < hi
+    # Same seed gives the same draw sequence, so a rerun reproduces exactly.
+    assert count(0.05, 3) == count(0.05, 3)
+
+
+def test_injection_skips_what_the_window_already_tried():
+    from introact_ts.spo import SPOPolicy
+    from introact_ts.types import ActionRecord, Verdict
+    pol = SPOPolicy(ValueTables(n_clusters=1), p_inject=1.0, seed=2)
+    hist = [ActionRecord(step=0, action=a, params={}, verdict=Verdict.ROLLED_BACK_UTILITY,
+                         delta_utility=0.0, struct_distortion=0.0, risk=0.0,
+                         utility_before=0.0, utility_after=0.0)
+            for a in (Action.DESPIKE, Action.DENOISE, Action.RESEGMENT)]
+    out = pol.inject([(Action.KEEP, {})], 0, hist, FIRST)
+    # Only IMPUTE is left unvisited and untried, so that is what may appear.
+    assert all(a in (Action.KEEP, Action.IMPUTE) for a, _ in out)
+
+
+def test_order_puts_an_injected_arm_through_the_bound():
+    from introact_ts.spo import SPOPolicy
+    pol = SPOPolicy(ValueTables(n_clusters=1), p_inject=1.0, seed=4)
+    out = pol.order([(Action.KEEP, {})], 0, [])
+    # The injected arm is an arm, so it ranks ahead of the terminal action.
+    assert out[0][0] in ARMS
+    assert out[-1][0] is Action.KEEP
+    assert sum(pol.injected.values()) == 1

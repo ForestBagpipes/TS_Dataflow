@@ -60,6 +60,16 @@ RUNS = LOGS / "runs.jsonl"
 #: Abort if the volume holding the outputs has less than this free.
 MIN_FREE_GB = 5.0
 
+#: Every key that must appear in a learning run's config hash. Adding a
+#: hyperparameter without adding it here leaves it outside the assertion, which
+#: is how reward_clip escaped on the first xl run. `test_monitor` checks this
+#: list against docs/spo_preregistration.md so the two cannot drift.
+LEARN_CONFIG_KEYS = (
+    "k", "split_seed", "corpus_seed", "scale", "alpha", "c_u", "c0",
+    "optimistic_init", "warm_start_cap", "tail_floor", "reward_clip",
+    "p_inject",
+)
+
 #: Default seconds between heartbeat lines. `beat` is cheap to call in a tight
 #: loop, it only writes when this much time has passed.
 BEAT_EVERY = 30.0
@@ -197,8 +207,19 @@ class Monitor:
                 "clean" if not status else status[:400])
 
         # 3. Config hash against what the pre registration fixed.
+        #
+        # This is mandatory rather than optional. The first xl learning run was
+        # started without it and its config silently omitted reward_clip, so it
+        # hashed differently from the pre registration and nothing stopped it.
+        # The omission was found afterwards by reading the log. An assertion
+        # that callers may skip is an assertion that will be skipped on the run
+        # that needed it, so a missing expected hash is now a failure.
         h = config_hash(self.config)
-        if self.expect_config_hash:
+        if self.config and not self.expect_config_hash:
+            add("config_hash", False,
+                "no expected hash was supplied, pass expect_config_hash "
+                f"(this run would hash to {h})")
+        elif self.expect_config_hash:
             add("config_hash", h == self.expect_config_hash,
                 f"expected {self.expect_config_hash}, got {h}")
 
