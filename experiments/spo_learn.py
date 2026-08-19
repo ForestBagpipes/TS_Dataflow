@@ -111,16 +111,23 @@ def main():
     ap.add_argument("--n-jobs", dest="n_jobs", type=int, default=32)
     ap.add_argument("--warmstart",
                     default=str(ROOT / "results" / "spo_warmstart.json"))
+    ap.add_argument("--expect-hash", dest="expect_hash", default="",
+                    help="abort unless the config hashes to this")
     ap.add_argument("--out", default=str(ROOT / "results" / "spo_learn.json"))
     args = ap.parse_args()
 
     rel_out = str(Path(args.out).relative_to(ROOT)).replace("\\", "/")
+    # The clip decides which rewards the policy ever sees, so leaving it out of
+    # the hash would let it change without the assertion noticing.
+    ws_peek = json.loads(Path(args.warmstart).read_text(encoding="utf-8"))
     cfg_dict = {"k": args.k, "split_seed": SPLIT_SEED, "corpus_seed": args.seed,
                 "scale": args.scale, "alpha": 0.02, "c_u": 1.0, "c0": 0.01,
-                "optimistic_init": 1.0, "warm_start_cap": 20, "tail_floor": 5}
+                "optimistic_init": 1.0, "warm_start_cap": 20, "tail_floor": 5,
+                "reward_clip": float(ws_peek["config"]["reward_clip"])}
     mon = Monitor("spo_learn", expects=[rel_out], config=cfg_dict,
                   require_pool=None if args.surrogate else 3,
-                  require_clean_tree=False, beat_every=20.0)
+                  require_clean_tree=False, beat_every=20.0,
+                  expect_config_hash=(args.expect_hash or None))
 
     spec = SCALES[args.scale]
     spec.seed = args.seed
@@ -141,7 +148,7 @@ def main():
     mon.beat("clusters", done=1, total=6)
 
     # Warm start from the fixed policy's history on the training split only.
-    ws = json.loads(Path(args.warmstart).read_text(encoding="utf-8"))
+    ws = ws_peek
     clip = ws["config"]["reward_clip"]
     cfg = SPOConfig(reward_clip=clip)
     tables = ValueTables(n_clusters=args.k, cfg=cfg, cluster_map=mapping)
