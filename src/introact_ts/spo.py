@@ -38,12 +38,13 @@ tests.
 This module performs no file IO. Warm start statistics are passed in.
 """
 
+from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Optional
 
 import numpy as np
 
-from .types import Action
+from .types import Action, MUTATING_ACTIONS, Verdict
 
 #: Operators the policy chooses among. Terminal actions end the episode and are
 #: not learned over, they are the policy's option to stop rather than an arm.
@@ -272,3 +273,91 @@ def allocate_budget(clusters, costs, tables: ValueTables, total_budget: int,
         alloc[i] = take
         left -= take
     return alloc
+
+
+class SPOPolicy:
+    """Chooses the order candidates are tried in, and learns from the verdicts.
+
+    This wraps :class:`ValueTables` into the shape ``curate_window`` needs. The
+    proposer still generates the candidate set, and the shield still decides
+    what is admitted. What the policy changes is which candidate is tried first,
+    which is the only thing stage zero found learnable structure in.
+
+    The table a decision is drawn from depends on the verdict of the previous
+    candidate in the same window, so a retry after a structural veto and a retry
+    after a utility veto consult different estimates.
+    """
+
+    def __init__(self, tables: ValueTables, cfg: SPOConfig = None):
+        self.tables = tables
+        self.cfg = cfg or tables.cfg
+        #: Per cell counters for reporting, keyed by (table, cluster, arm).
+        self.visits = defaultdict(int)
+        self.accepts = defaultdict(int)
+        self.rewards = defaultdict(list)
+        #: Q value after every update, for the learning curves.
+        self.trace = defaultdict(list)
+
+    @staticmethod
+    def _prev_verdict(records):
+        """Verdict of the last adjudicated candidate, or None if there is none."""
+        for r in reversed(records):
+            if r.action in MUTATING_ACTIONS and r.verdict is not Verdict.NO_OP:
+                return r.verdict
+        return None
+
+    def table_of(self, records) -> str:
+        return table_for(self._prev_verdict(records))
+
+    def order(self, candidates, cluster: int, records) -> list:
+        """Reorder the proposer's candidates by the upper confidence bound.
+
+        Terminal actions keep their position, because they are the policy's
+        option to stop rather than arms it is choosing among, and moving them
+        would change when an episode ends rather than what it tries.
+        """
+        if not candidates:
+            return candidates
+        table = self.table_of(records)
+        feasible = {a for a, _ in candidates if a in ARMS}
+        if not feasible:
+            return candidates
+        score = self.tables.ucb(table, cluster, feasible)
+        rank = {ARMS[i]: -score[i] for i in range(len(ARMS)) if np.isfinite(score[i])}
+
+        arms, tail = [], []
+        for a, p in candidates:
+            (arms if a in rank else tail).append((a, p))
+        arms.sort(key=lambda ap: rank[ap[0]])
+        return arms + tail
+
+    def observe(self, cluster: int, action: Action, verdict, delta_utility: float,
+                probes: int, records) -> float:
+        """Update the table this decision came from, and return the reward."""
+        if action not in ARMS:
+            return 0.0
+        table = self.table_of(records[:-1] if records else [])
+        reward = shielded_reward(verdict, delta_utility, probes, self.cfg)
+        self.tables.update(table, cluster, action, reward)
+
+        key = (table, self.tables.resolve(cluster), action.value)
+        self.visits[key] += 1
+        self.accepts[key] += int(getattr(verdict, "value", verdict) == "ACCEPTED")
+        self.rewards[key].append(reward)
+        j, a = self.tables.resolve(cluster), ARMS.index(action)
+        self.trace[key].append(float(self.tables.Q[table][j, a]))
+        return reward
+
+    def report(self) -> dict:
+        """Per cell visits, admission rate, mean reward and the Q trajectory."""
+        out = {}
+        for key, n in self.visits.items():
+            table, cluster, arm = key
+            out[f"{table}|{cluster}|{arm}"] = {
+                "visits": n,
+                "accepts": self.accepts[key],
+                "accept_rate": self.accepts[key] / n if n else 0.0,
+                "mean_reward": float(np.mean(self.rewards[key])) if self.rewards[key] else 0.0,
+                "q_trace": self.trace[key],
+            }
+        return out

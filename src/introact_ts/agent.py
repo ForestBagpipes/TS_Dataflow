@@ -161,8 +161,22 @@ class IntroActAgent:
 
     # -- curation -----------------------------------------------------------
 
-    def curate_window(self, window, state: RiskState, peer_idx: int) -> GovernanceTrace:
-        """Run the closed loop on one window and return its governance trace."""
+    def curate_window(self, window, state: RiskState, peer_idx: int,
+                      policy=None, cluster: int = None,
+                      budget: int = None) -> GovernanceTrace:
+        """Run the closed loop on one window and return its governance trace.
+
+        ``policy`` is optional. Without it the proposer's own ordering is used,
+        which is the fixed rule every earlier result was produced with. With it
+        the candidate list is reordered by the upper confidence bound before
+        anything is tried, and every adjudicated candidate is fed back. The
+        shield is untouched either way, so a learned policy cannot admit
+        anything the fixed rule could not.
+
+        ``budget`` caps the probe calls for this window, which is how the
+        corpus level allocation reaches a single episode. None means the
+        configured global cap applies.
+        """
         cfg = self.cfg
         original = np.asarray(window.series, dtype=np.float64).copy()
         scale = reference_scale(original)
@@ -179,8 +193,12 @@ class IntroActAgent:
         step = 0
         crop_offset = 0
 
-        while step < cfg.policy.max_steps and probe_calls < cfg.max_probe_calls:
+        cap = cfg.max_probe_calls if budget is None else min(cfg.max_probe_calls,
+                                                            max(int(budget), 1))
+        while step < cfg.policy.max_steps and probe_calls < cap:
             candidates = propose_actions(live, records, cfg.policy)
+            if policy is not None and cluster is not None:
+                candidates = policy.order(candidates, cluster, records)
             committed = False
 
             for action, params in candidates:
@@ -240,6 +258,10 @@ class IntroActAgent:
                         note=outcome.note,
                     )
                 )
+
+                if policy is not None and cluster is not None:
+                    policy.observe(cluster, action, verdict, float(delta_u),
+                                   1, records)
 
                 if verdict is Verdict.ACCEPTED:
                     if action is Action.RESEGMENT:
