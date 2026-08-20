@@ -22,6 +22,7 @@ researched_papers/*/*.tar.gz
 docx/*
 !docx/胡宏彬-进度文档-20260818.docx
 !docx/胡宏彬-进度文档-20260819.docx
+!docx/胡宏彬-进度文档-20260820.docx
 
 # Datasets: re-downloaded on first use by experiments/datasets.py
 data/*.csv
