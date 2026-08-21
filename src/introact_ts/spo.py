@@ -102,6 +102,14 @@ class SPOConfig:
     #: The bound is a quantile of the *training* split only, passed in by the
     #: caller, so the evaluation split never informs it.
     reward_clip: Optional[float] = None
+    #: Decisions between two conformal recalibrations, section 3.5's T_cal.
+    #:
+    #: Theorem 6 bounds the guarantee's decay between calibrations by
+    #: 2 q T_cal / (gamma n_min), so the interval is the only term in that bound
+    #: the implementation chooses. It is recorded here rather than left to the
+    #: caller so it enters the configuration hash, which means a run cannot
+    #: report the bound under one interval while having used another.
+    t_cal: int = 500
 
 
 @dataclass
@@ -330,6 +338,26 @@ class SPOPolicy:
         #: Q value after every update, for the learning curves.
         self.trace = defaultdict(list)
 
+        # -- theorem 6 instrumentation, recording only --------------------
+        #
+        # The theorem bounds the decay of the risk guarantee between two
+        # calibrations by 2 q T_cal / (gamma n_min), and section 3.5 notes the
+        # gap condition gamma > 0 has never been checked against data. Nothing
+        # below feeds a decision. The bound's three measurable terms are
+        # collected so experiment six's calibration interval rung can compare
+        # the predicted decay against the observed one, and so the lower tail of
+        # gamma can say whether the worst case form of the theorem applies at
+        # all or whether it has to be restated in expectation.
+        #
+        #: Gap between the best and second best upper confidence bound at every
+        #: decision where at least two arms were feasible.
+        self.ucb_gaps = []
+        #: One entry per completed calibration interval.
+        self.intervals = []
+        #: Cells updated since the last interval boundary, and their counts.
+        self._interval_updates = defaultdict(int)
+        self._interval_start_t = int(self.tables.t)
+
     @staticmethod
     def _prev_verdict(records):
         """Verdict of the last adjudicated candidate, or None if there is none."""
@@ -383,6 +411,7 @@ class SPOPolicy:
         if not feasible:
             return candidates
         score = self.tables.ucb(table, cluster, feasible)
+        self._record_gap(score, table, cluster)
         rank = {ARMS[i]: -score[i] for i in range(len(ARMS)) if np.isfinite(score[i])}
 
         arms, tail = [], []
@@ -390,6 +419,47 @@ class SPOPolicy:
             (arms if a in rank else tail).append((a, p))
         arms.sort(key=lambda ap: rank[ap[0]])
         return arms + tail
+
+    def _record_gap(self, score: np.ndarray, table: str, cluster: int) -> None:
+        """Store the top two gap of one decision's confidence bounds.
+
+        Theorem 6's second inequality needs gamma, the infimum over states of
+        the distance between the best and second best bound. A single arm is
+        not a choice, so those decisions contribute nothing.
+        """
+        finite = np.sort(score[np.isfinite(score)])[::-1]
+        if finite.size < 2:
+            return
+        self.ucb_gaps.append({
+            "t": int(self.tables.t),
+            "table": table,
+            "cluster": int(self.tables.resolve(cluster)),
+            "gap": float(finite[0] - finite[1]),
+            "n_feasible": int(finite.size),
+        })
+
+    def _close_interval(self) -> None:
+        """Snapshot one calibration interval's minimum visit count.
+
+        The minimum is taken over cells that were actually updated in the
+        interval. A cell nobody touched has an unchanged Q and contributes
+        nothing to the total variation, so counting its zero visits would drive
+        the bound to infinity for a reason that has nothing to do with the
+        quantity being bounded.
+        """
+        counts = list(self._interval_updates.values())
+        self.intervals.append({
+            "t_start": self._interval_start_t,
+            "t_end": int(self.tables.t),
+            "n_updates": int(sum(counts)),
+            "cells_touched": len(counts),
+            "n_min": int(min(counts)) if counts else 0,
+            "n_min_cumulative": int(min(
+                self.tables.N[t][j, a]
+                for (t, j, a) in self._interval_updates)) if counts else 0,
+        })
+        self._interval_updates = defaultdict(int)
+        self._interval_start_t = int(self.tables.t)
 
     def observe(self, cluster: int, action: Action, verdict, delta_utility: float,
                 probes: int, records) -> float:
@@ -399,6 +469,11 @@ class SPOPolicy:
         table = self.table_of(records[:-1] if records else [])
         reward = shielded_reward(verdict, delta_utility, probes, self.cfg)
         self.tables.update(table, cluster, action, reward)
+
+        j0, a0 = self.tables.resolve(cluster), ARMS.index(action)
+        self._interval_updates[(table, j0, a0)] += 1
+        if self.cfg.t_cal and self.tables.t - self._interval_start_t >= self.cfg.t_cal:
+            self._close_interval()
 
         key = (table, self.tables.resolve(cluster), action.value)
         self.visits[key] += 1
@@ -410,6 +485,51 @@ class SPOPolicy:
 
     def injection_report(self) -> dict:
         return {f"{t}|{c}|{a}": n for (t, c, a), n in self.injected.items()}
+
+    def theorem6_report(self, quantiles=(0.0, 0.01, 0.05, 0.25, 0.50)) -> dict:
+        """The three measurable terms of theorem 6's decay bound.
+
+        Returns the empirical distribution of the confidence bound gap, the per
+        interval minimum visit count, and the bound each interval implies. The
+        bound is 2 q T_cal / (gamma n_min) with q the reward clip, and it is
+        evaluated at several lower quantiles of gamma rather than at the
+        infimum alone: section 3.5 states the worst case form fails if the lower
+        tail of gamma reaches zero, and reporting the quantiles is how that is
+        decided rather than assumed.
+
+        A gamma of zero produces an infinite bound. That is the theorem's own
+        content, not a defect in the measurement, so it is reported as infinity
+        rather than clipped.
+        """
+        gaps = np.array([g["gap"] for g in self.ucb_gaps], dtype=np.float64)
+        if self._interval_updates:
+            self._close_interval()
+        q = self.cfg.reward_clip
+        out = {
+            "t_cal": int(self.cfg.t_cal),
+            "reward_clip": float(q) if q is not None else None,
+            "n_decisions_with_choice": int(gaps.size),
+            "gamma": {},
+            "intervals": list(self.intervals),
+        }
+        if gaps.size:
+            out["gamma"] = {
+                **{f"q{p:.2f}": float(np.quantile(gaps, p)) for p in quantiles},
+                "mean": float(gaps.mean()),
+                "n_zero": int(np.sum(gaps <= 1e-12)),
+                "zero_share": float(np.mean(gaps <= 1e-12)),
+            }
+        if gaps.size and q is not None and self.intervals:
+            n_min = [iv["n_min"] for iv in self.intervals if iv["n_min"] > 0]
+            for p in quantiles:
+                g = float(np.quantile(gaps, p))
+                key = f"tv_bound_at_gamma_q{p:.2f}"
+                if g <= 1e-12 or not n_min:
+                    out[key] = float("inf")
+                else:
+                    out[key] = [2.0 * float(q) * self.cfg.t_cal / (g * nm)
+                                for nm in n_min]
+        return out
 
     def report(self) -> dict:
         """Per cell visits, admission rate, mean reward and the Q trajectory."""

@@ -164,3 +164,57 @@ def test_order_puts_an_injected_arm_through_the_bound():
     assert out[0][0] in ARMS
     assert out[-1][0] is Action.KEEP
     assert sum(pol.injected.values()) == 1
+
+
+def _drive(policy, steps=90, seed=11):
+    """Run a fixed pseudo episode sequence, returning the arms chosen."""
+    import numpy as np
+    from introact_ts.types import Verdict
+    rng = np.random.RandomState(seed)
+    picked = []
+    for _ in range(steps):
+        cl = int(rng.randint(4))
+        ordered = policy.order([(a, {}) for a in ARMS], cl, [])
+        arm = ordered[0][0]
+        picked.append(arm.value)
+        verdict = (Verdict.ACCEPTED if rng.rand() < 0.4
+                   else Verdict.ROLLED_BACK_STRUCTURE)
+        policy.observe(cl, arm, verdict, float(rng.rand()), 1, [])
+    return picked
+
+
+def test_theorem_six_recording_does_not_change_decisions():
+    # Section 3.5's instrumentation is recording only. If it ever moved a
+    # decision the numbers it collects would describe a policy nobody ran.
+    from introact_ts.spo import SPOConfig, SPOPolicy
+    quiet = SPOConfig(reward_clip=5.0, t_cal=0)
+    loud = SPOConfig(reward_clip=5.0, t_cal=10)
+    a = _drive(SPOPolicy(ValueTables(n_clusters=4, cfg=quiet), quiet, seed=7))
+    b = _drive(SPOPolicy(ValueTables(n_clusters=4, cfg=loud), loud, seed=7))
+    assert a == b
+
+
+def test_theorem_six_report_carries_the_three_bound_terms():
+    from introact_ts.spo import SPOConfig, SPOPolicy
+    cfg = SPOConfig(reward_clip=5.0, t_cal=10)
+    pol = SPOPolicy(ValueTables(n_clusters=4, cfg=cfg), cfg, seed=7)
+    _drive(pol)
+    r = pol.theorem6_report()
+    assert r["t_cal"] == 10 and r["reward_clip"] == 5.0
+    assert r["n_decisions_with_choice"] > 0
+    assert r["intervals"] and all(iv["n_min"] >= 1 for iv in r["intervals"])
+    # The gap is a top two distance, so it is never negative.
+    assert r["gamma"]["q0.00"] >= 0.0
+    assert 0.0 <= r["gamma"]["zero_share"] <= 1.0
+
+
+def test_a_zero_gap_reports_an_infinite_bound_rather_than_a_clipped_one():
+    # Unvisited cells share an optimistic value and a visit count, so their
+    # bounds are exactly equal and gamma is exactly zero. Theorem 6's worst
+    # case form is then vacuous, and saying so is the point of measuring it.
+    from introact_ts.spo import SPOConfig, SPOPolicy
+    cfg = SPOConfig(reward_clip=5.0, t_cal=10)
+    pol = SPOPolicy(ValueTables(n_clusters=4, cfg=cfg), cfg, seed=7)
+    _drive(pol)
+    if pol.theorem6_report()["gamma"]["q0.00"] == 0.0:
+        assert pol.theorem6_report()["tv_bound_at_gamma_q0.00"] == float("inf")

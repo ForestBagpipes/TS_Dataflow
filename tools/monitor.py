@@ -67,7 +67,7 @@ MIN_FREE_GB = 5.0
 LEARN_CONFIG_KEYS = (
     "k", "split_seed", "corpus_seed", "scale", "alpha", "c_u", "c0",
     "optimistic_init", "warm_start_cap", "tail_floor", "reward_clip",
-    "p_inject",
+    "p_inject", "t_cal",
 )
 
 #: Default seconds between heartbeat lines. `beat` is cheap to call in a tight

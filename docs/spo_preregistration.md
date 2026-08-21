@@ -118,12 +118,16 @@ Written 2026-08-19, before any policy learning run. The monitor asserts this
 hash at startup and aborts if it differs, so a run that reports these settings
 cannot have used others.
 
-**Configuration hash: `669ce2f1341ed6ca`**
+**Configuration hash: `3b38ecf2a2f5a51f`**
 
 The hash covers every key in `monitor.LEARN_CONFIG_KEYS`, and a test
 checks that list against this table so a new hyperparameter cannot be
-added to the code without appearing here. The earlier value
-`fea464c049f8c5ad` predates the injection parameter and is superseded.
+added to the code without appearing here. Two earlier values are
+superseded, `fea464c049f8c5ad` which predates the injection parameter and
+`669ce2f1341ed6ca` which predates `t_cal`. `t_cal` was added on 2026-08-22
+when theorem 6's instrumentation landed. It is a recording interval and no
+decision reads it, but it sets the T_cal term of the theorem's own bound, so
+a run must not be able to report that bound under an interval it did not use.
 
 | key | value | source |
 |---|---|---|
@@ -139,6 +143,7 @@ added to the code without appearing here. The earlier value
 | warm_start_cap | 20 | pseudo visits ceiling |
 | tail_floor | 5 | minimum cluster size |
 | p_inject | 0.05 | injection probability, see below |
+| t_cal | 500 | decisions between recalibrations, table 3 |
 
 ## The two blind spot cells, and what either outcome means
 

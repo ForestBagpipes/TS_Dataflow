@@ -111,6 +111,10 @@ def main():
     ap.add_argument("--p-inject", dest="p_inject", type=float, default=0.05,
                     help="probability of forcing an unvisited operator in")
     ap.add_argument("--n-jobs", dest="n_jobs", type=int, default=32)
+    #: Decisions between recalibrations. Nothing in the loop reads it for a
+    #: decision, but it is the T_cal term of theorem 6's bound, so it is hashed
+    #: rather than left implicit.
+    ap.add_argument("--t-cal", dest="t_cal", type=int, default=500)
     ap.add_argument("--warmstart",
                     default=str(ROOT / "results" / "spo_warmstart.json"))
     ap.add_argument("--expect-hash", dest="expect_hash", default="",
@@ -130,7 +134,7 @@ def main():
                 "scale": args.scale, "alpha": 0.02, "c_u": 1.0, "c0": 0.01,
                 "optimistic_init": 1.0, "warm_start_cap": 20, "tail_floor": 5,
                 "reward_clip": float(ws_peek["config"]["reward_clip"]),
-                "p_inject": args.p_inject}
+                "p_inject": args.p_inject, "t_cal": args.t_cal}
     mon = Monitor("spo_learn", expects=[rel_out], config=cfg_dict,
                   require_pool=None if args.surrogate else 3,
                   require_clean_tree=False, beat_every=20.0,
@@ -157,7 +161,7 @@ def main():
     # Warm start from the fixed policy's history on the training split only.
     ws = ws_peek
     clip = ws["config"]["reward_clip"]
-    cfg = SPOConfig(reward_clip=clip)
+    cfg = SPOConfig(reward_clip=clip, t_cal=args.t_cal)
     tables = ValueTables(n_clusters=args.k, cfg=cfg, cluster_map=mapping)
     for name, arr in ws["tables"]["Q"].items():
         tables.Q[name] = np.array(arr, dtype=np.float64)
@@ -247,6 +251,7 @@ def main():
         "p_inject": args.p_inject,
         "injections": policy.injection_report(),
         "n_injected": int(sum(policy.injected.values())),
+        "theorem6": policy.theorem6_report(),
         "blind_spots": blind,
         "cells": rep,
         "tables_after": tables.snapshot(),
