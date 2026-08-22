@@ -104,6 +104,18 @@ def opendataval_scores(Xtr, Ytr, Xva, Yva):
     from opendataval.model import RegressionSkLearnWrapper
     from sklearn.linear_model import LinearRegression
 
+    from opendataval.dataloader import DataFetcher
+
+    # `train` takes a DataFetcher rather than raw arrays in this version, so the
+    # three splits are handed over through the fetcher's own from_data_splits
+    # entry point. This is the same object TSRating's baseline file builds, so
+    # the four methods still see one fetcher between them.
+    fetcher = DataFetcher.from_data_splits(
+        x_train=Xtr, y_train=Ytr[:, None],
+        x_valid=Xva, y_valid=Yva[:, None],
+        x_test=Xva, y_test=Yva[:, None],
+        one_hot=False,
+    )
     pred = RegressionSkLearnWrapper(LinearRegression)
     out = {}
     specs = [
@@ -115,7 +127,7 @@ def opendataval_scores(Xtr, Ytr, Xva, Yva):
     ]
     for name, dv in specs:
         t0 = time.time()
-        dv.train(Xtr, Ytr, Xva, Yva, pred_model=pred)
+        dv.train(fetcher, pred_model=pred)
         out[name] = {"scores": np.asarray(dv.data_values, dtype=np.float64),
                      "seconds": time.time() - t0}
         print(f"  {name} done in {out[name]['seconds']:.0f}s", flush=True)
