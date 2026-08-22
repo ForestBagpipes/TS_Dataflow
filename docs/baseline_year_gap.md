@@ -116,19 +116,22 @@ So if TimeLAVA is implemented here it is labelled in every table as our
 reimplementation, with the approximated components named. That is weaker than a
 published implementation and it is stated rather than hidden.
 
-**LTSV is the fallback and its trade is the mirror image.** Its method is close
-to machinery this paper already has, a frozen TSFM measured before and after,
-aggregated over blocks, so a faithful implementation is realistic. Its venue,
-DASFAA, is a database conference of good standing but not of the class named in
-the requirement. It would satisfy the spirit of covering recent work and not the
-letter of the venue list.
+**LTSV is the first fallback, revised 2026-08-22.** The venue objection is
+withdrawn: DASFAA is a formally published database conference and a full paper
+there carries proper review, so it is not excluded. Fidelity is the deciding
+axis rather than venue prominence, and on that axis LTSV wins. Its method is
+close to machinery this paper already has, and its feasibility has now been
+tested rather than guessed, see `docs/ltsv_feasibility.md`. TimeLAVA drops to
+third choice.
 
 ### Sequencing, cheapest first
 
 The two lines are alternatives rather than additions. If the TSRating pilot
-succeeds the count is two and TimeLAVA becomes optional. The pilot costs hours,
-a TimeLAVA reimplementation costs days and carries fidelity risk. So the pilot
-runs first and the reimplementation is committed to only if the pilot fails.
+succeeds the count is two and no new baseline is required. The pilot costs hours.
+If it fails, LTSV is implemented, at an estimated two and a half days with the
+pivotal risk already retired. TimeLAVA is third and is committed to only if both
+of the first two fall through, and if it is used it is labelled in every table as
+this paper's reimplementation with the approximated components named.
 
 ## Where a new baseline has to appear
 
