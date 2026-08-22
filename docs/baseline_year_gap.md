@@ -78,6 +78,86 @@ bounded before it is spent. The full corpus is committed to only if the pilot
 says it is affordable. If the pilot has not completed by 8-25, TSRating is
 marked deferred as agreed, and line two carries the requirement alone.
 
+## The consistency check, run 2026-08-22, and what it decided
+
+Run before any annotation, as agreed, by `experiments/tsrating_consistency.py`.
+Template, serialisation, generation count and parsing are the repository's,
+unchanged. Only the model and the endpoint differ. Results in
+`results/tsrating_consistency.json`.
+
+| item | value |
+|---|---|
+| model | `deepseek-v4-pro`, endpoint `https://api.deepseek.com` |
+| thinking | disabled, see below |
+| pairs | 15, each judged in both orders at 20 generations |
+| dimensions | trend, frequency, amplitude, pattern |
+| calls | 2400 |
+| prompt tokens | 3186080, prefix cache hit **0.932** |
+| completion tokens | 2414, so 1 per call |
+| wall clock | 433 s |
+| spend | 161.73 to 153.99 CNY, so **7.74 CNY** |
+
+### Flip rate
+
+| dimension | scored | flips | flip rate |
+|---|---|---|---|
+| trend | 15 | 7 | 0.467 |
+| frequency | 15 | 7 | 0.467 |
+| amplitude | 15 | 11 | 0.733 |
+| pattern | 14 | 5 | 0.357 |
+| **overall** | **59** | **30** | **0.508** |
+
+A flip rate of one half is what an unbiased coin gives. The preference this
+backend expresses is therefore not a property of the two series, and a rater
+distilled from it would be distilled from noise.
+
+### The mechanism, measured rather than guessed
+
+Averaged over both presentation orders, **73.6 percent of votes went to whichever
+option was shown first**, median 76.0 percent, and in 17 of 60 pair dimensions
+the first option took at least 90 percent. That is position bias, not judgment.
+It also explains the flip rate directly: if the answer is mostly determined by
+position, swapping position mostly swaps the answer.
+
+The method's own calibration does not rescue it. After averaging the two orders,
+24 of 60 pair dimensions land between 0.4 and 0.6, which is the band the method
+treats as undecided, and only 30 of 60 clear its high confidence threshold of
+0.25 or 0.75. So half the pairs would be discarded and the surviving half rests
+on a signal that reverses with presentation order.
+
+### Consequence for this baseline
+
+**TSRating is not usable through this backend as configured.** The failure is in
+the judgment stage, upstream of everything the method does afterwards, so no
+amount of rater training repairs it.
+
+This is a finding about the substitution, not about TSRating. The published
+method uses `gpt-4o-mini` and reports its results there. What is established
+here is that `deepseek-v4-pro` with thinking disabled does not reproduce the
+judgment behaviour the method assumes.
+
+One untested branch is worth naming rather than quietly skipping: thinking was
+disabled to control cost, and a pairwise preference under position bias is
+exactly the sort of task extended reasoning might fix. That was not tried. It is
+a separate experiment with a different cost profile, since output tokens carry
+the reasoning and the measurement above shows reasoning at roughly 23 tokens for
+a one letter answer.
+
+### Cost, extrapolated from the measurement
+
+Per pair per dimension: 40 calls, 53101 prompt tokens, about 7.2 s, and
+7.74 / 59 CNY, so about 0.13 CNY.
+
+The pair count is linear rather than quadratic. `score_pairwise.py` enumerates
+all combinations but stops as soon as `high_confidence_count` reaches
+`total_samples * ratio`, with `ratio` at 1.0, so it needs about one high
+confidence pair per window. At the measured high confidence rate of one half it
+must attempt about two pairs per window.
+
+For 2000 windows across four dimensions that is roughly 16000 pair dimensions,
+about **2100 CNY and 32 hours**. The balance is 153.99 CNY. So the full run was
+out of reach on cost alone, independently of the flip rate.
+
 ## Line two, candidates published 2025 or later
 
 Searched arXiv metadata for time series data selection, valuation, curation,

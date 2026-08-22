@@ -1,0 +1,1257 @@
+{
+ "model": "deepseek-v4-pro",
+ "base_url": "https://api.deepseek.com",
+ "thinking": "disabled",
+ "generations": 20,
+ "pairs": 15,
+ "dimensions": [
+  "trend",
+  "frequency",
+  "amplitude",
+  "pattern"
+ ],
+ "seed": 42,
+ "calls": 2400,
+ "prompt_tokens": 3186080,
+ "completion_tokens": 2414,
+ "cached_prompt_tokens": 2969600,
+ "cache_hit_fraction": 0.9320544368000804,
+ "seconds": 433.35823583602905,
+ "overall": {
+  "scored": 59,
+  "flips": 30,
+  "flip_rate": 0.5084745762711864
+ },
+ "by_dimension": {
+  "trend": {
+   "scored": 15,
+   "flips": 7,
+   "flip_rate": 0.4666666666666667,
+   "high_confidence": 8,
+   "hc_rate": 0.5333333333333333
+  },
+  "frequency": {
+   "scored": 15,
+   "flips": 7,
+   "flip_rate": 0.4666666666666667,
+   "high_confidence": 8,
+   "hc_rate": 0.5333333333333333
+  },
+  "amplitude": {
+   "scored": 15,
+   "flips": 11,
+   "flip_rate": 0.7333333333333333,
+   "high_confidence": 4,
+   "hc_rate": 0.26666666666666666
+  },
+  "pattern": {
+   "scored": 14,
+   "flips": 5,
+   "flip_rate": 0.35714285714285715,
+   "high_confidence": 10,
+   "hc_rate": 0.6666666666666666
+  }
+ },
+ "rows": [
+  {
+   "dimension": "trend",
+   "pair": 0,
+   "p_ab": 0.05,
+   "p_ba": 0.15789473684210525,
+   "votes_ab": [
+    19,
+    1
+   ],
+   "votes_ba": [
+    16,
+    3
+   ],
+   "stratum_a": "rare_valid",
+   "stratum_b": "clean_ood",
+   "calibrated": 0.44605263157894737,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "trend",
+   "pair": 1,
+   "p_ab": 0.1,
+   "p_ba": 0.8,
+   "votes_ab": [
+    18,
+    2
+   ],
+   "votes_ba": [
+    4,
+    16
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "rare_valid",
+   "calibrated": 0.14999999999999997,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "trend",
+   "pair": 2,
+   "p_ab": 0.0,
+   "p_ba": 0.55,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    9,
+    11
+   ],
+   "stratum_a": "changepoint",
+   "stratum_b": "hard",
+   "calibrated": 0.22499999999999998,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "trend",
+   "pair": 3,
+   "p_ab": 0.21052631578947367,
+   "p_ba": 0.0,
+   "votes_ab": [
+    15,
+    4
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "hard",
+   "stratum_b": "clean",
+   "calibrated": 0.6052631578947368,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "trend",
+   "pair": 4,
+   "p_ab": 0.1,
+   "p_ba": 0.05,
+   "votes_ab": [
+    18,
+    2
+   ],
+   "votes_ba": [
+    19,
+    1
+   ],
+   "stratum_a": "rare_valid",
+   "stratum_b": "contaminated",
+   "calibrated": 0.525,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "trend",
+   "pair": 5,
+   "p_ab": 0.0,
+   "p_ba": 0.85,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    3,
+    17
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.07500000000000001,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "trend",
+   "pair": 6,
+   "p_ab": 0.0,
+   "p_ba": 1.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    0,
+    20
+   ],
+   "stratum_a": "changepoint",
+   "stratum_b": "contaminated",
+   "calibrated": 0.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "trend",
+   "pair": 7,
+   "p_ab": 0.25,
+   "p_ba": 0.0,
+   "votes_ab": [
+    15,
+    5
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "clean",
+   "calibrated": 0.625,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "trend",
+   "pair": 8,
+   "p_ab": 0.8,
+   "p_ba": 0.0,
+   "votes_ab": [
+    4,
+    16
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "hard",
+   "stratum_b": "rare_valid",
+   "calibrated": 0.9,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "trend",
+   "pair": 9,
+   "p_ab": 0.2,
+   "p_ba": 0.0,
+   "votes_ab": [
+    16,
+    4
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "clean",
+   "stratum_b": "clean",
+   "calibrated": 0.6,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "trend",
+   "pair": 10,
+   "p_ab": 0.2,
+   "p_ba": 0.05,
+   "votes_ab": [
+    16,
+    4
+   ],
+   "votes_ba": [
+    19,
+    1
+   ],
+   "stratum_a": "clean",
+   "stratum_b": "clean",
+   "calibrated": 0.575,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "trend",
+   "pair": 11,
+   "p_ab": 1.0,
+   "p_ba": 0.0,
+   "votes_ab": [
+    0,
+    20
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "changepoint",
+   "calibrated": 1.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "trend",
+   "pair": 12,
+   "p_ab": 0.0,
+   "p_ba": 0.15,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    17,
+    3
+   ],
+   "stratum_a": "clean",
+   "stratum_b": "rare_valid",
+   "calibrated": 0.425,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "trend",
+   "pair": 13,
+   "p_ab": 0.0,
+   "p_ba": 1.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    0,
+    20
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "trend",
+   "pair": 14,
+   "p_ab": 0.0,
+   "p_ba": 1.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    0,
+    20
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "frequency",
+   "pair": 0,
+   "p_ab": 0.0,
+   "p_ba": 0.8,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    4,
+    16
+   ],
+   "stratum_a": "rare_valid",
+   "stratum_b": "clean_ood",
+   "calibrated": 0.09999999999999998,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "frequency",
+   "pair": 1,
+   "p_ab": 0.0,
+   "p_ba": 0.75,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    5,
+    15
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "rare_valid",
+   "calibrated": 0.125,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "frequency",
+   "pair": 2,
+   "p_ab": 0.0,
+   "p_ba": 0.2,
+   "votes_ab": [
+    19,
+    0
+   ],
+   "votes_ba": [
+    16,
+    4
+   ],
+   "stratum_a": "changepoint",
+   "stratum_b": "hard",
+   "calibrated": 0.4,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "frequency",
+   "pair": 3,
+   "p_ab": 0.5263157894736842,
+   "p_ba": 0.0,
+   "votes_ab": [
+    9,
+    10
+   ],
+   "votes_ba": [
+    19,
+    0
+   ],
+   "stratum_a": "hard",
+   "stratum_b": "clean",
+   "calibrated": 0.763157894736842,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "frequency",
+   "pair": 4,
+   "p_ab": 0.2,
+   "p_ba": 0.15,
+   "votes_ab": [
+    16,
+    4
+   ],
+   "votes_ba": [
+    17,
+    3
+   ],
+   "stratum_a": "rare_valid",
+   "stratum_b": "contaminated",
+   "calibrated": 0.525,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "frequency",
+   "pair": 5,
+   "p_ab": 0.0,
+   "p_ba": 0.75,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    5,
+    15
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.125,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "frequency",
+   "pair": 6,
+   "p_ab": 0.0,
+   "p_ba": 1.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    0,
+    19
+   ],
+   "stratum_a": "changepoint",
+   "stratum_b": "contaminated",
+   "calibrated": 0.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "frequency",
+   "pair": 7,
+   "p_ab": 0.0,
+   "p_ba": 0.0,
+   "votes_ab": [
+    19,
+    0
+   ],
+   "votes_ba": [
+    19,
+    0
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "clean",
+   "calibrated": 0.5,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "frequency",
+   "pair": 8,
+   "p_ab": 0.0,
+   "p_ba": 0.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "hard",
+   "stratum_b": "rare_valid",
+   "calibrated": 0.5,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "frequency",
+   "pair": 9,
+   "p_ab": 0.05,
+   "p_ba": 0.1,
+   "votes_ab": [
+    19,
+    1
+   ],
+   "votes_ba": [
+    18,
+    2
+   ],
+   "stratum_a": "clean",
+   "stratum_b": "clean",
+   "calibrated": 0.47500000000000003,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "frequency",
+   "pair": 10,
+   "p_ab": 0.3,
+   "p_ba": 0.15,
+   "votes_ab": [
+    14,
+    6
+   ],
+   "votes_ba": [
+    17,
+    3
+   ],
+   "stratum_a": "clean",
+   "stratum_b": "clean",
+   "calibrated": 0.575,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "frequency",
+   "pair": 11,
+   "p_ab": 1.0,
+   "p_ba": 0.0,
+   "votes_ab": [
+    0,
+    20
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "changepoint",
+   "calibrated": 1.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "frequency",
+   "pair": 12,
+   "p_ab": 0.0,
+   "p_ba": 0.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "clean",
+   "stratum_b": "rare_valid",
+   "calibrated": 0.5,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "frequency",
+   "pair": 13,
+   "p_ab": 0.0,
+   "p_ba": 1.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    0,
+    20
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "frequency",
+   "pair": 14,
+   "p_ab": 0.0,
+   "p_ba": 1.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    0,
+    20
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 0,
+   "p_ab": 0.25,
+   "p_ba": 0.0,
+   "votes_ab": [
+    15,
+    5
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "rare_valid",
+   "stratum_b": "clean_ood",
+   "calibrated": 0.625,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 1,
+   "p_ab": 0.05,
+   "p_ba": 0.0,
+   "votes_ab": [
+    19,
+    1
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "rare_valid",
+   "calibrated": 0.525,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 2,
+   "p_ab": 0.0,
+   "p_ba": 0.05,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    19,
+    1
+   ],
+   "stratum_a": "changepoint",
+   "stratum_b": "hard",
+   "calibrated": 0.475,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 3,
+   "p_ab": 0.0,
+   "p_ba": 0.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "hard",
+   "stratum_b": "clean",
+   "calibrated": 0.5,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 4,
+   "p_ab": 0.05,
+   "p_ba": 0.0,
+   "votes_ab": [
+    19,
+    1
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "rare_valid",
+   "stratum_b": "contaminated",
+   "calibrated": 0.525,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 5,
+   "p_ab": 0.0,
+   "p_ba": 0.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.5,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 6,
+   "p_ab": 0.0,
+   "p_ba": 1.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    0,
+    20
+   ],
+   "stratum_a": "changepoint",
+   "stratum_b": "contaminated",
+   "calibrated": 0.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 7,
+   "p_ab": 0.0,
+   "p_ba": 0.35,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    13,
+    7
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "clean",
+   "calibrated": 0.325,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 8,
+   "p_ab": 0.0,
+   "p_ba": 0.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "hard",
+   "stratum_b": "rare_valid",
+   "calibrated": 0.5,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 9,
+   "p_ab": 0.0,
+   "p_ba": 0.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "clean",
+   "stratum_b": "clean",
+   "calibrated": 0.5,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 10,
+   "p_ab": 0.0,
+   "p_ba": 0.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "clean",
+   "stratum_b": "clean",
+   "calibrated": 0.5,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 11,
+   "p_ab": 0.95,
+   "p_ba": 0.0,
+   "votes_ab": [
+    1,
+    19
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "changepoint",
+   "calibrated": 0.975,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 12,
+   "p_ab": 0.0,
+   "p_ba": 0.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "clean",
+   "stratum_b": "rare_valid",
+   "calibrated": 0.5,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 13,
+   "p_ab": 0.0,
+   "p_ba": 1.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    0,
+    20
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "amplitude",
+   "pair": 14,
+   "p_ab": 0.0,
+   "p_ba": 0.9,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    2,
+    18
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.04999999999999999,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 0,
+   "p_ab": 0.0,
+   "p_ba": 1.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    0,
+    20
+   ],
+   "stratum_a": "rare_valid",
+   "stratum_b": "clean_ood",
+   "calibrated": 0.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 1,
+   "p_ab": 0.2,
+   "p_ba": 0.95,
+   "votes_ab": [
+    16,
+    4
+   ],
+   "votes_ba": [
+    1,
+    19
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "rare_valid",
+   "calibrated": 0.12500000000000003,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 2,
+   "p_ab": 0.0,
+   "p_ba": 0.45,
+   "votes_ab": [
+    19,
+    0
+   ],
+   "votes_ba": [
+    11,
+    9
+   ],
+   "stratum_a": "changepoint",
+   "stratum_b": "hard",
+   "calibrated": 0.275,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "pattern",
+   "pair": 3,
+   "p_ab": 0.9,
+   "p_ba": 0.1,
+   "votes_ab": [
+    2,
+    18
+   ],
+   "votes_ba": [
+    18,
+    2
+   ],
+   "stratum_a": "hard",
+   "stratum_b": "clean",
+   "calibrated": 0.9,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 4,
+   "p_ab": 0.05,
+   "p_ba": 0.55,
+   "votes_ab": [
+    19,
+    1
+   ],
+   "votes_ba": [
+    9,
+    11
+   ],
+   "stratum_a": "rare_valid",
+   "stratum_b": "contaminated",
+   "calibrated": 0.24999999999999997,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 5,
+   "p_ab": 0.0,
+   "p_ba": 0.75,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    5,
+    15
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.125,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 6,
+   "p_ab": 0.0,
+   "p_ba": 1.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    0,
+    20
+   ],
+   "stratum_a": "changepoint",
+   "stratum_b": "contaminated",
+   "calibrated": 0.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 7,
+   "p_ab": 0.3157894736842105,
+   "p_ba": 0.0,
+   "votes_ab": [
+    13,
+    6
+   ],
+   "votes_ba": [
+    17,
+    0
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "clean",
+   "calibrated": 0.6578947368421053,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "pattern",
+   "pair": 8,
+   "p_ab": 0.5,
+   "p_ba": 0.0,
+   "votes_ab": [
+    10,
+    10
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "hard",
+   "stratum_b": "rare_valid",
+   "calibrated": 0.75,
+   "tie": true,
+   "agree": false,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 9,
+   "p_ab": 0.25,
+   "p_ba": 0.1,
+   "votes_ab": [
+    15,
+    5
+   ],
+   "votes_ba": [
+    18,
+    2
+   ],
+   "stratum_a": "clean",
+   "stratum_b": "clean",
+   "calibrated": 0.575,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "pattern",
+   "pair": 10,
+   "p_ab": 0.3,
+   "p_ba": 0.15,
+   "votes_ab": [
+    14,
+    6
+   ],
+   "votes_ba": [
+    17,
+    3
+   ],
+   "stratum_a": "clean",
+   "stratum_b": "clean",
+   "calibrated": 0.575,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "pattern",
+   "pair": 11,
+   "p_ab": 1.0,
+   "p_ba": 0.0,
+   "votes_ab": [
+    0,
+    20
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "changepoint",
+   "calibrated": 1.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 12,
+   "p_ab": 0.15,
+   "p_ba": 0.0,
+   "votes_ab": [
+    17,
+    3
+   ],
+   "votes_ba": [
+    20,
+    0
+   ],
+   "stratum_a": "clean",
+   "stratum_b": "rare_valid",
+   "calibrated": 0.575,
+   "tie": false,
+   "agree": false,
+   "high_confidence": false
+  },
+  {
+   "dimension": "pattern",
+   "pair": 13,
+   "p_ab": 0.0,
+   "p_ba": 0.8947368421052632,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    2,
+    17
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.05263157894736842,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 14,
+   "p_ab": 0.0,
+   "p_ba": 1.0,
+   "votes_ab": [
+    20,
+    0
+   ],
+   "votes_ba": [
+    0,
+    20
+   ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  }
+ ]
+}
