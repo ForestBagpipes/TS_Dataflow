@@ -98,21 +98,29 @@ def main():
                 else:
                     fails[f"{fam}:rare:A3_no_return"] += 1
 
-        ok_c, dg_c = C.is_changepoint(w["series"], ref)
-        d["cp"] += int(ok_c)
-        if dg_c:
-            if dg_c["jump_d"] < C.JUMP_D:
-                fails[f"{fam}:cp:B1_no_jump"] += 1
-            elif not ((1 / C.SCALE_RATIO) <= dg_c["scale_ratio"] <= C.SCALE_RATIO):
-                fails[f"{fam}:cp:B2_scale_moved"] += 1
-            elif dg_c["also_rare"]:
-                fails[f"{fam}:cp:B3_also_rare"] += 1
+        t, dg_c = C.jump_t(w["series"], ref)
+        if dg_c and not dg_c["passes_gates"]:
+            if not ((1 / C.SCALE_RATIO) <= dg_c["scale_ratio"] <= C.SCALE_RATIO):
+                fails[f"{fam}:cp:C1_scale_moved"] += 1
+            else:
+                fails[f"{fam}:cp:C2_also_rare"] += 1
 
         for unit, val in jump_in_units(w["series"], ref).items():
             jumps[f"{fam}:real"][unit].append(val)
         shifted, _ = C.inject(w["series"], "level_shift", rng)
         for unit, val in jump_in_units(shifted, ref).items():
             jumps[f"{fam}:injected"][unit].append(val)
+
+    # The changepoint layer is a within family rank, so it is selected over the
+    # whole pool at once rather than window by window.
+    refs = {i: C.channel_reference(cols[(w["dataset"], w["channel"])])
+            for i, w in enumerate(pool)}
+    fams = {i: family_of(w["dataset"]) for i, w in enumerate(pool)}
+    n_cp = int(round(0.1125 * len(pool)))
+    chosen, cp_report = C.select_changepoints(
+        [(i, w["series"]) for i, w in enumerate(pool)], refs, fams, n_cp)
+    for i in chosen:
+        per_ds[pool[i]["dataset"]]["cp"] += 1
 
     def qs(a):
         a = np.asarray(a, dtype=np.float64)
@@ -127,6 +135,7 @@ def main():
         },
         "per_dataset": {k: dict(v) for k, v in per_ds.items()},
         "failure_reasons": dict(fails),
+        "changepoint_rank_selection": cp_report,
         "jump_distribution": {k: {u: qs(v) for u, v in d.items()}
                               for k, d in jumps.items()},
     }
@@ -139,6 +148,16 @@ def main():
     tot_r = sum(v["rare"] for v in per_ds.values())
     tot_c = sum(v["cp"] for v in per_ds.values())
     print(f"{'total':22s}{len(pool):6d}{tot_r:12d}{tot_c:13d}")
+
+    print()
+    print("changepoint layer, within family rank")
+    for fam, v in cp_report.items():
+        ts = v["t_selected"]
+        print(f"  {fam:12s} pool {v['pool']:5d} quota {v['quota']:4d} "
+              f"eligible {v['eligible']:5d} taken {v['taken']:4d} "
+              f"shortfall {v['shortfall']:3d}  "
+              f"t min {min(ts) if ts else float('nan'):.3f} "
+              f"max {max(ts) if ts else float('nan'):.3f}")
 
     print()
     print("why a window was rejected")

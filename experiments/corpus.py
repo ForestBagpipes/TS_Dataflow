@@ -23,6 +23,7 @@ break, one is an artefact worth resegmenting and the other is the data doing
 what the system really did.
 """
 
+from collections import defaultdict
 from dataclasses import dataclass
 
 import numpy as np
@@ -284,18 +285,62 @@ def best_split(series: np.ndarray, ref: tuple) -> tuple:
     return float(d.max()), float(ratio), k
 
 
-def is_changepoint(series: np.ndarray, ref: tuple) -> tuple:
-    """Criterion B. Returns (qualifies, diagnostics)."""
+def jump_t(series: np.ndarray, ref: tuple) -> tuple:
+    """The rank statistic of the changepoint criterion, and its two gates.
+
+    `t` is the difference of segment means over the pooled within segment
+    standard deviation, so it is invariant to rescaling the window and needs no
+    reference to the channel or to the injector. See
+    `docs/changepoint_criterion_preregistration.md` for why an absolute
+    threshold on any unit was abandoned: the financial median sits above the
+    industrial ninetieth percentile in every unit measured.
+    """
     x = np.asarray(series, dtype=np.float64)
     if not np.isfinite(x).all():
-        return False, {}
+        return -np.inf, {}
+    _, ratio, k = best_split(x, ref)
+    if not (0 < k < len(x)):
+        return -np.inf, {}
+    pooled = float(np.sqrt((np.var(x[:k]) + np.var(x[k:])) / 2.0))
+    t = abs(float(np.mean(x[:k])) - float(np.mean(x[k:]))) / max(pooled, 1e-12)
     rare, _ = is_rare_valid(x, ref)
-    d, ratio, k = best_split(x, ref)
-    ok = bool(d >= JUMP_D
-              and (1.0 / SCALE_RATIO) <= ratio <= SCALE_RATIO
-              and not rare)
-    return ok, {"jump_d": d, "scale_ratio": ratio, "split": k,
-                "also_rare": bool(rare)}
+    gates = bool((1.0 / SCALE_RATIO) <= ratio <= SCALE_RATIO and not rare)
+    return (t if gates else -np.inf), {
+        "t": t, "scale_ratio": ratio, "split": k, "also_rare": bool(rare),
+        "passes_gates": gates}
+
+
+def select_changepoints(items, refs, families, n_wanted):
+    """Top `t` within each family, quota split in proportion to the pool.
+
+    `items` are (index, series) pairs, `refs` maps index to that window's
+    channel reference and `families` maps index to a family label. Returns the
+    chosen indices and a per family report including the shortfall, which is
+    reported rather than repaired.
+    """
+    scored = {}
+    for idx, series in items:
+        t, diag = jump_t(series, refs[idx])
+        scored[idx] = (t, diag)
+
+    by_family = defaultdict(list)
+    for idx in scored:
+        by_family[families[idx]].append(idx)
+
+    total = sum(len(v) for v in by_family.values())
+    chosen, report = [], {}
+    for fam, idxs in sorted(by_family.items()):
+        quota = int(round(n_wanted * len(idxs) / max(total, 1)))
+        eligible = sorted((i for i in idxs if np.isfinite(scored[i][0])),
+                          key=lambda i: -scored[i][0])
+        take = eligible[:quota]
+        chosen.extend(take)
+        report[fam] = {
+            "pool": len(idxs), "quota": quota, "eligible": len(eligible),
+            "taken": len(take), "shortfall": max(0, quota - len(take)),
+            "t_selected": [round(float(scored[i][0]), 4) for i in take],
+        }
+    return chosen, report
 
 
 def make_rare_valid(series: np.ndarray, rng: np.random.RandomState) -> np.ndarray:
