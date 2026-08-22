@@ -164,6 +164,37 @@ the model scored on it. This matches the existing downstream protocol in
 `docs/downstream.md`, including its finding that comparisons must be paired
 within seed.
 
+## Windows the valuation family cannot consume, found on export
+
+Measured while writing the exporter, on the `small` scale: **10 of 95 windows
+carry non finite values and cannot be turned into supervised blocks at all.**
+Those are exactly the windows with an injected gap, `missing_block`,
+`missing_scattered` and the flatline variant, since the injection writes NaN.
+
+This is not a detail of the file format. It decides whether the comparison is
+fair, and in the direction that flatters the baselines.
+
+An `(X, y)` regression sample cannot hold a NaN, so a valuation method never
+sees the windows that IMPUTE exists to repair. If those windows are simply
+dropped from the export the valuation arms are scored on an easier corpus than
+the cleaning arms, and their protected stratum retention is computed over a
+denominator that excludes the hardest cases.
+
+**The rule, fixed here before any score is computed.** Windows that cannot be
+blocked are not dropped from the comparison. They are carried into the prepared
+corpus of every valuation arm as **not selected**, that is, treated as if the
+method had scored them at the bottom and its selection had discarded them. This
+is the behaviour the family actually has on such data: a scorer that cannot
+score a window cannot keep it.
+
+The count of such windows is reported in every table that involves the valuation
+family, next to the selection fraction, so that a reader can see how much of the
+corpus was decided by this rule rather than by a score.
+
+Imputing them before export was rejected. It would hand the valuation arms a
+repaired corpus produced by our own operator, so their input would already
+contain the intervention under test.
+
 ## The safety metric the valuation family does not measure
 
 Every method above reports accuracy on the downstream task. None reports what it
