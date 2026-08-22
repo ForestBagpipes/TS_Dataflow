@@ -39,6 +39,28 @@ CONTAMINATIONS = (
     "duplicate",
 )
 
+# -- the two noise classes of section 4.1.2 ---------------------------------
+#
+# Random noise lands on one channel at a time, its position and magnitude drawn
+# independently. Systematic noise lands on several channels of the same time
+# position at once and the channels share the direction of the offset, because
+# what produces it is one event upstream of all of them: a recalibration, a
+# feed change, a market wide move.
+#
+# ``flatline`` sits in the systematic class rather than the random one. It was
+# previously routed to IMPUTE, which reads a held value as a gap to fill. On a
+# multi channel feed a stuck value is the feed itself stalling, every channel
+# holds its last value together, and the repair is to cut the stalled span out
+# rather than to interpolate across it. Its oracle operator moves accordingly.
+RANDOM_NOISE = ("spike", "missing_scattered", "missing_block", "duplicate")
+SYSTEMATIC_NOISE = ("level_shift", "noise", "flatline")
+
+#: Which class each contamination belongs to.
+NOISE_CLASS = {
+    **{k: "random" for k in RANDOM_NOISE},
+    **{k: "systematic" for k in SYSTEMATIC_NOISE},
+}
+
 STRATA = (
     "contaminated",
     "clean",
@@ -54,7 +76,9 @@ STRATA = (
 ORACLE_ACTION = {
     "missing_block": "IMPUTE",
     "missing_scattered": "IMPUTE",
-    "flatline": "IMPUTE",
+    # A stalled feed is a span to cut, not a gap to interpolate. See the noise
+    # class note above for why this moved.
+    "flatline": "RESEGMENT",
     "spike": "DESPIKE",
     "noise": "DENOISE",
     "level_shift": "RESEGMENT",
@@ -126,7 +150,152 @@ def inject(series: np.ndarray, kind: str, rng: np.random.RandomState) -> tuple:
     return x, mask
 
 
+def inject_systematic_group(block: np.ndarray, kind: str,
+                            rng: np.random.RandomState,
+                            share: float = 1.0) -> tuple:
+    """Inject one systematic defect across several channels of one position.
+
+    ``block`` is (T, C), the channels of a single time position. The defect is
+    placed once and applied to a subset of the channels, all of them at the
+    same time index and, where the defect has a direction, with the same sign.
+    That shared direction is the whole point: a per channel draw would average
+    out across the group and read as random noise, which is the class this one
+    is defined against.
+
+    ``share`` is the fraction of channels affected, so a partial event can be
+    injected as well as a whole feed failure. Channels are chosen without
+    replacement.
+
+    Returns (corrupted block, per channel boolean masks, affected channel
+    indices).
+    """
+    if kind not in SYSTEMATIC_NOISE:
+        raise ValueError(f"{kind} is not a systematic defect")
+    x = np.asarray(block, dtype=np.float64).copy()
+    T, C = x.shape
+    masks = np.zeros((T, C), dtype=bool)
+
+    n_hit = max(2, int(round(share * C))) if C >= 2 else C
+    hit = np.sort(rng.choice(C, size=min(n_hit, C), replace=False))
+
+    # One draw per event, reused by every affected channel. Sign included.
+    sign = float(rng.choice([-1.0, 1.0]))
+    if kind == "level_shift":
+        lo = int(rng.randint(T // 3, 2 * T // 3))
+        size = rng.uniform(2.5, 4.0)
+        for ci in hit:
+            s_c = _spread(x[:, ci])
+            x[lo:, ci] = x[lo:, ci] + sign * size * s_c
+            masks[lo:, ci] = True
+    elif kind == "noise":
+        level = rng.uniform(0.5, 0.9)
+        # The disturbance is drawn once and scaled per channel, so the channels
+        # move together rather than independently. Independent draws here would
+        # be the random class wearing the systematic label.
+        shape = rng.randn(T)
+        for ci in hit:
+            x[:, ci] = x[:, ci] + shape * level * _spread(x[:, ci])
+            masks[:, ci] = True
+    elif kind == "flatline":
+        length = int(rng.randint(max(24, T // 20), max(32, T // 10)))
+        lo = int(rng.randint(T // 8, T - length - T // 8))
+        for ci in hit:
+            x[lo:lo + length, ci] = x[lo, ci]
+            masks[lo:lo + length, ci] = True
+
+    return x, masks, hit
+
+
 # -- special strata ---------------------------------------------------------
+
+
+# -- selection of the two protected strata ----------------------------------
+#
+# Criteria and thresholds are fixed in docs/stratum_selection_preregistration.md
+# and were committed before this code ran. Nothing here may be widened to make a
+# layer fill: a shortfall is reported with its cause instead.
+#
+# Both layers used to be constructed, a real window plus a synthetic excursion
+# or a synthetic tail modulation. Section 4.1.2 claims they are taken from the
+# data, and that claim is the one worth having, so the construction went and the
+# selection arrived.
+
+#: See the pre registration for the derivation of each of these.
+TAIL_PERCENTILE = 99.5
+BRIEF_FRAC = 0.05
+RETURN_TOL = 0.5
+JUMP_D = 2.5
+SCALE_RATIO = 1.5
+SPLIT_MARGIN = 0.25
+
+
+def channel_reference(column: np.ndarray) -> tuple:
+    """Robust centre, scale and tail threshold of one channel.
+
+    Every criterion is expressed against these rather than against a constant,
+    because the corpus now spans quantities three orders of magnitude apart
+    inside a single file.
+    """
+    col = np.asarray(column, dtype=np.float64)
+    col = col[np.isfinite(col)]
+    if col.size < 8:
+        return 0.0, 1.0, np.inf
+    m = float(np.median(col))
+    q75, q25 = np.percentile(col, [75, 25])
+    s = max(float(q75 - q25), 1e-12)
+    tail = float(np.percentile(np.abs((col - m) / s), TAIL_PERCENTILE))
+    return m, s, tail
+
+
+def is_rare_valid(series: np.ndarray, ref: tuple) -> tuple:
+    """Criterion A. Returns (qualifies, diagnostics)."""
+    m, s, tail = ref
+    x = np.asarray(series, dtype=np.float64)
+    if not np.isfinite(x).all() or not np.isfinite(tail):
+        return False, {}
+    z = np.abs((x - m) / s)
+    peak = float(z.max())
+    hits = z >= tail
+    share = float(hits.mean())
+    q = len(x) // 4
+    ends = abs(float(np.median(x[:q])) - float(np.median(x[-q:]))) / s
+    ok = bool(peak >= tail and share <= BRIEF_FRAC and ends <= RETURN_TOL)
+    return ok, {"peak_z": peak, "tail_z": float(tail),
+                "tail_share": share, "end_gap": float(ends)}
+
+
+def best_split(series: np.ndarray, ref: tuple) -> tuple:
+    """Criterion B's statistics at the strongest split in the middle half."""
+    m, s, tail = ref
+    x = np.asarray(series, dtype=np.float64)
+    T = len(x)
+    lo, hi = int(SPLIT_MARGIN * T), int((1.0 - SPLIT_MARGIN) * T)
+    if hi - lo < 2:
+        return 0.0, np.inf, -1
+    # Cumulative sums make the scan over all admissible splits exact and cheap.
+    cs = np.concatenate([[0.0], np.cumsum(x)])
+    idx = np.arange(lo, hi)
+    left_mean = cs[idx] / idx
+    right_mean = (cs[T] - cs[idx]) / (T - idx)
+    d = np.abs(left_mean - right_mean) / s
+    k = int(idx[int(np.argmax(d))])
+    sl, sr = float(np.std(x[:k])), float(np.std(x[k:]))
+    ratio = sl / max(sr, 1e-12)
+    return float(d.max()), float(ratio), k
+
+
+def is_changepoint(series: np.ndarray, ref: tuple) -> tuple:
+    """Criterion B. Returns (qualifies, diagnostics)."""
+    x = np.asarray(series, dtype=np.float64)
+    if not np.isfinite(x).all():
+        return False, {}
+    rare, _ = is_rare_valid(x, ref)
+    d, ratio, k = best_split(x, ref)
+    ok = bool(d >= JUMP_D
+              and (1.0 / SCALE_RATIO) <= ratio <= SCALE_RATIO
+              and not rare)
+    return ok, {"jump_d": d, "scale_ratio": ratio, "split": k,
+                "also_rare": bool(rare)}
 
 
 def make_rare_valid(series: np.ndarray, rng: np.random.RandomState) -> np.ndarray:
@@ -297,6 +466,24 @@ def build_corpus(spec: CorpusSpec = None, source: str = "ett",
         from datasets import sample_ett_windows
 
         base = sample_ett_windows(n_base, window_len=T, seed=spec.seed)
+    elif source in ("finance", "mixed"):
+        # Section 4.1.1 takes both scene families because peer calibration and
+        # abstention assume the corpus is structurally heterogeneous, and one
+        # source cannot test that. The halves are interleaved rather than
+        # concatenated so that the difficulty ranking which selects the hard
+        # stratum sees both, and so a truncated pool is not all one family.
+        from datasets import sample_ett_windows, sample_time_windows
+
+        if source == "finance":
+            base = sample_time_windows(n_base, window_len=T, seed=spec.seed)
+        else:
+            n_fin = n_base // 2
+            fin = sample_time_windows(n_fin, window_len=T, seed=spec.seed)
+            ind = sample_ett_windows(n_base - n_fin, window_len=T,
+                                     seed=spec.seed)
+            base = [w for pair in zip(ind, fin) for w in pair]
+            base += ind[len(fin):] + fin[len(ind):]
+            base = base[:n_base]
     else:
         base = _synthetic_base(n_base, T, rng)
 

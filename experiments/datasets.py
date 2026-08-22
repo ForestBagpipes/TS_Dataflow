@@ -22,6 +22,21 @@ ETT_FILES = {
 
 ETT_FREQ = {"ETTh1": "H", "ETTh2": "H", "ETTm1": "15T", "ETTm2": "15T"}
 
+#: The industrial half of section 4.1.1's corpus. ETTm2 is loadable and is not
+#: part of it: the document names three transformer sources, and a fourth from
+#: the same two devices adds sampling positions rather than a distinct regime.
+INDUSTRIAL = ("ETTh1", "ETTh2", "ETTm1")
+
+#: The financial half, exported from the TIME benchmark by time_export.py. The
+#: values are (T, C) matrices in npz files so that reading them needs numpy and
+#: nothing else, see that script for why.
+TIME_FILES = {
+    "Crypto": "time_Crypto.npz",
+    "US Term Structure": "time_US_Term_Structure.npz",
+    "Oil Price": "time_Oil_Price.npz",
+}
+FINANCIAL = tuple(TIME_FILES)
+
 MIRRORS = (
     "https://raw.githubusercontent.com/zhouhaoyi/ETDataset/main/ETT-small",
     "https://raw.githubusercontent.com/thuml/Time-Series-Library/main/dataset/ETT-small",
@@ -58,7 +73,7 @@ def load_ett(name: str) -> tuple:
 def sample_ett_windows(
     n_windows: int,
     window_len: int = 512,
-    datasets: tuple = ("ETTh1", "ETTh2", "ETTm1", "ETTm2"),
+    datasets: tuple = INDUSTRIAL,
     seed: int = 42,
     min_std: float = 1e-3,
 ) -> list:
@@ -102,6 +117,212 @@ def sample_ett_windows(
             f"only found {len(windows)}/{n_windows} usable ETT windows"
         )
     return windows
+
+
+def channel_columns(names=None) -> dict:
+    """Every channel's full history, keyed by (dataset, channel).
+
+    The stratum selection in corpus.py expresses its criteria against the
+    channel a window came from, so it needs the column and not just the window.
+    Loading is cheap relative to a curation run and the result is small, both
+    halves together are under twenty megabytes.
+    """
+    out = {}
+    for name in (names or INDUSTRIAL):
+        if name in TIME_FILES:
+            values, channels, _ = load_time(name)
+        else:
+            values, channels = load_ett(name)
+        for ci, ch in enumerate(channels):
+            out[(name, ch)] = values[:, ci]
+    return out
+
+
+# -- the financial half of the corpus, from the TIME benchmark --------------
+#
+# Section 4.1.1 takes two scene families rather than one because peer
+# calibration and abstention both assume the corpus is structurally
+# heterogeneous, and a single source cannot test that assumption. The three
+# sources here carry real cross channel coupling: crypto prices move together,
+# the whole forward rate curve shifts at once, and refined products track crude.
+# That coupling is what multi channel system noise has to be injected against,
+# and it is why these arrive as channel groups rather than loose columns.
+#
+# Two things differ from ETT and both change how windows are drawn.
+#
+# **Scale.** Bitcoin sits near 26000 and Litecoin near 81 in the same file, and
+# the oil sources mix crude near 75 with refined products near 2.2. An absolute
+# spread floor of 1e-3 admits a flat crypto window and rejects nothing, while
+# the same floor on a rate curve quoted in percent rejects genuinely varying
+# windows. The floor is therefore relative to the channel's own spread, with a
+# small absolute term left only to catch numerically degenerate columns.
+#
+# **Gaps.** Term structure is 95.7 percent finite and oil price 94.9 percent,
+# against ETT's complete coverage. Missing entries are left in place by the
+# exporter, because dropping them would shift the time axis and break channel
+# alignment, so the sampler skips any window that is not finite throughout. The
+# corpus needs a defect free base, since contaminated has to mean exactly that
+# something was put there.
+
+
+def load_time(name: str, compact: bool = True):
+    """Return (values, channels, freq) for one exported TIME source.
+
+    With ``compact`` the non trading rows are removed. This is not an
+    imputation choice dressed up as a loading detail, it is what the data is.
+    Term structure is 95.7 percent finite and oil price 94.9 percent, and in
+    both the gaps fall on whole rows: 403 of 9326 and 259 of 5035, every channel
+    missing together, spaced a median of 22 and 16 rows apart. Those are market
+    holidays on a Monday to Friday calendar, roughly ten a year, not sensor
+    dropouts. Leaving them in makes a gap free window of 512 steps impossible,
+    since the longest uninterrupted run is 74 rows and 62 rows respectively.
+
+    Two alternatives were rejected. Filling the holidays forward would write
+    flat segments into a corpus where flatline is one of the injected defects,
+    so the base would no longer be defect free. Shortening the window for the
+    financial half alone would make the two scene families incomparable.
+
+    Dropping whole rows keeps every channel on the same index, so the cross
+    channel coupling that multi channel system noise is injected against is
+    preserved exactly.
+    """
+    path = DATA_DIR / TIME_FILES[name]
+    if not path.exists():
+        raise FileNotFoundError(
+            f"{path} not present. Run experiments/time_export.py in an "
+            f"environment that has pyarrow, see that script's docstring.")
+    with np.load(path, allow_pickle=True) as z:
+        values = z["values"].astype(np.float64)
+        channels = [str(c) for c in z["channels"]]
+        freq = str(z["freq"])
+    if compact:
+        keep = np.isfinite(values).all(axis=1)
+        partial = int(np.sum(np.isfinite(values).any(axis=1) & ~keep))
+        if partial:
+            raise RuntimeError(
+                f"{name} has {partial} rows missing in some channels but not "
+                f"all, which is not the holiday pattern this assumes")
+        values = np.ascontiguousarray(values[keep])
+    return values, channels, freq
+
+
+def local_scale(column: np.ndarray, window_len: int, n_probe: int = 40,
+                seed: int = 0) -> float:
+    """Median spread of same length windows drawn from this channel.
+
+    The comparison a flatness test wants is against what this channel normally
+    does over this span, not against the channel's whole history. Prices trend,
+    so a column's global spread is mostly the trend: US term structure runs from
+    eight percent to near zero across the sample, and every 512 step window
+    looks flat beside that. Measured against the local scale instead the median
+    window sits at 1.0 by construction and the first percentile at 0.27, so a
+    threshold well under one rejects a stuck channel and nothing else.
+    """
+    col = column[np.isfinite(column)]
+    if col.size <= window_len:
+        return float(np.std(col)) if col.size > 1 else 0.0
+    rng = np.random.RandomState(seed)
+    starts = rng.randint(0, col.size - window_len, size=n_probe)
+    return float(np.median([np.std(col[s:s + window_len]) for s in starts]))
+
+
+def _usable(seg: np.ndarray, scale: float, min_std_ratio: float,
+            abs_floor: float = 1e-9) -> bool:
+    """Is this window finite throughout and not flat for its own channel."""
+    if not np.isfinite(seg).all():
+        return False
+    spread = float(np.std(seg))
+    if spread < abs_floor:
+        return False
+    return spread >= min_std_ratio * max(scale, 1e-12)
+
+
+def sample_time_windows(
+    n_windows: int,
+    window_len: int = 512,
+    sources: tuple = FINANCIAL,
+    seed: int = 42,
+    min_std_ratio: float = 0.05,
+) -> list:
+    """Draw defect free windows across the financial sources and channels.
+
+    Round robins over (source, channel) pairs on the same schedule the ETT
+    sampler uses, so neither the 40 channel rate curve nor the 4 channel crypto
+    file dominates by channel count alone.
+    """
+    rng = np.random.RandomState(seed)
+    pools = []
+    for name in sources:
+        values, channels, freq = load_time(name)
+        for ci, ch in enumerate(channels):
+            col = values[:, ci]
+            pools.append((name, ch, ci, col, freq,
+                          local_scale(col, window_len)))
+
+    windows, attempts = [], 0
+    while len(windows) < n_windows and attempts < n_windows * 80:
+        attempts += 1
+        name, ch, ci, col, freq, scale = pools[len(windows) % len(pools)]
+        if len(col) <= window_len:
+            continue
+        start = int(rng.randint(0, len(col) - window_len))
+        seg = col[start:start + window_len]
+        if not _usable(seg, scale, min_std_ratio):
+            continue
+        windows.append({
+            "series": seg.astype(np.float64).copy(),
+            "dataset": name, "channel": ch, "freq": freq, "start": start,
+        })
+    if len(windows) < n_windows:
+        raise RuntimeError(
+            f"only found {len(windows)}/{n_windows} usable financial windows")
+    return windows
+
+
+def sample_time_window_groups(
+    n_groups: int,
+    window_len: int = 512,
+    sources: tuple = FINANCIAL,
+    seed: int = 42,
+    min_std_ratio: float = 0.05,
+) -> list:
+    """Draw groups of financial windows sharing a source and a start position.
+
+    The counterpart of `sample_ett_window_groups`. A group is the unit multi
+    channel system noise is injected into, so every channel of the position has
+    to be present and usable or the group is dropped.
+    """
+    rng = np.random.RandomState(seed)
+    loaded = {n: load_time(n) for n in sources}
+    scales = {n: [local_scale(v[:, ci], window_len) for ci in range(v.shape[1])]
+              for n, (v, _, _) in loaded.items()}
+    order = list(sources)
+
+    out, gid, attempts = [], 0, 0
+    while gid < n_groups and attempts < n_groups * 400:
+        attempts += 1
+        name = order[gid % len(order)]
+        values, channels, freq = loaded[name]
+        T = values.shape[0]
+        if T <= window_len:
+            continue
+        start = int(rng.randint(0, T - window_len))
+        block = values[start:start + window_len, :]
+        ok = all(_usable(block[:, ci], scales[name][ci], min_std_ratio)
+                 for ci in range(block.shape[1]))
+        if not ok:
+            continue
+        for ci, ch in enumerate(channels):
+            out.append({
+                "series": block[:, ci].astype(np.float64).copy(),
+                "dataset": name, "channel": ch, "freq": freq, "start": start,
+                "group_id": gid, "channel_index": ci,
+            })
+        gid += 1
+    if gid < n_groups:
+        raise RuntimeError(
+            f"only assembled {gid}/{n_groups} financial channel groups")
+    return out
 
 
 # -- cross domain sources, used for the real_ood stratum --
