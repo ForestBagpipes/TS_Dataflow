@@ -68,6 +68,7 @@ from run_agent import SCALES  # noqa: E402
 from introact_ts.agent import AgentConfig, IntroActAgent  # noqa: E402
 from introact_ts.backends import PRESETS, make_pool  # noqa: E402
 from introact_ts.verify import VerifyConfig  # noqa: E402
+from introact_ts.types import GovernanceTrace  # noqa: E402
 
 #: Strata whose windows must not be edited. `clean_ood` is the synthetic probe
 #: layer of the 4.1.2 ruling and is scored separately, never summed in here.
@@ -87,7 +88,7 @@ ROWS = [
     ("data_shapley", "valuation", "scores"),
     ("ltsv", "valuation", "scores"),
     ("tsrating", "valuation", "unavailable"),
-    ("soft_penalty", "contrast", "agent"),
+    ("soft_penalty", "contrast", "soft"),
     ("utility_only", "contrast", "agent"),
     ("spec_veto", "contrast", "agent"),
     ("no_shield", "contrast", "agent"),
@@ -136,6 +137,97 @@ def selection_corpus(windows, scores, fraction):
     return kept, len(unscored)
 
 
+def repair_traces(windows, states, name):
+    """One repair family arm, run over the corpus.
+
+    These rewrite in place and issue no probe, so they produce a trace whose
+    edits are already committed. The speed bounds SCREEN and MTCSC need are
+    estimated once over the whole corpus rather than per window, which is what
+    their papers do and what stops each window from calibrating to itself.
+    """
+    from proposers_classic import (estimate_speed_bounds, imr_repair,
+                                   mtcsc_uni_repair, screen_repair)
+    s_min, s_max = estimate_speed_bounds([w.series for w in windows])
+    out = []
+    for w, st in zip(windows, states):
+        x = np.asarray(w.series, dtype=np.float64)
+        if name == "screen":
+            y = screen_repair(x, s_min, s_max)
+        elif name == "imr":
+            y = imr_repair(x)
+        elif name == "mtcsc":
+            y = mtcsc_uni_repair(x, s_min, s_max)
+        else:
+            raise ValueError(name)
+        y = np.asarray(y, dtype=np.float64)
+        changed = bool(np.any(np.abs(y - x) > 1e-9))
+        out.append(GovernanceTrace(
+            window_id=w.window_id, stratum=w.stratum,
+            contamination=w.contamination,
+            initial_series=x.copy(), final_series=y,
+            records=[], final_state="COMMIT" if changed else "KEEP",
+            initial_utility=float(st.utility), final_utility=float(st.utility),
+            risk_state={}, probe_calls=0, crop_offset=0))
+    return out
+
+
+def oracle_traces(windows, states):
+    """The upper reference, which knows the clean series and restores it.
+
+    It edits contaminated windows only and leaves every protected window alone,
+    so its damage is zero and its repair gain is the ceiling. It is a bound
+    rather than a method and is labelled as one.
+    """
+    out = []
+    for w, st in zip(windows, states):
+        x = np.asarray(w.series, dtype=np.float64)
+        if w.stratum == "contaminated" and w.clean_series is not None:
+            y = np.asarray(w.clean_series, dtype=np.float64).copy()
+            state = "COMMIT"
+        else:
+            y, state = x.copy(), "KEEP"
+        out.append(GovernanceTrace(
+            window_id=w.window_id, stratum=w.stratum,
+            contamination=w.contamination,
+            initial_series=x.copy(), final_series=y, records=[],
+            final_state=state, initial_utility=float(st.utility),
+            final_utility=float(st.utility), risk_state={},
+            probe_calls=0, crop_offset=0))
+    return out
+
+
+#: The four adjudication contrasts, as VerifyConfig overrides. They share the
+#: proposer and therefore the candidate set, so the only thing that differs is
+#: what the verdict is computed from. That shared candidate set is what makes
+#: them comparable to each other and to the full method.
+CONTRASTS = {
+    "utility_only": dict(require_structure=False, require_risk=False),
+    "spec_veto": dict(require_reprobe=False, require_risk=False),
+    "no_shield": dict(require_structure=False, require_reprobe=False,
+                      require_risk=False),
+}
+
+
+#: Penalty coefficient for the soft arm. `experiments/soft_vs_hard.py` sweeps
+#: the whole range, and the main table carries one point from that sweep so the
+#: row is a method rather than a family. The value is the one that swept best on
+#: damage, which is the strongest form of the competing design rather than a
+#: convenient one.
+SOFT_MU = 10.0
+
+
+def agent_traces(models, windows, states, name, tau, n_jobs, reference):
+    """One agent arm, all of them driven by VerifyConfig overrides."""
+    over = CONTRASTS.get(name, {})
+    cfg = AgentConfig(verification=VerifyConfig(tau=tau, **over), n_jobs=n_jobs)
+    agent = IntroActAgent(models, cfg)
+    agent._calib = reference._calib
+    agent._ood = reference._ood
+    agent._reference = reference._reference
+    return [agent.curate_window(w, s, peer_idx=i)
+            for i, (w, s) in enumerate(zip(windows, states))]
+
+
 def score_rows(traces, windows):
     """The corpus level columns, from one arm's traces."""
     from audit import _nmse
@@ -145,14 +237,21 @@ def score_rows(traces, windows):
     committed, harmful = 0, 0
     for t in traces:
         w = byid[t.window_id]
-        if w.stratum in PROTECTED and t.modified:
+        # The strict reading. `t.modified` is permissive, it counts an admitted
+        # operator that left the series unchanged, and the two disagreed by 71
+        # against 62 on one run. Every reported edit count uses the strict one.
+        # It also matters here for a second reason: the reference arms carry no
+        # action records at all, so the permissive property returns False for
+        # them and the whole column would read zero while repair gain read one.
+        edited = t.content_modified(w.series)
+        if w.stratum in PROTECTED and edited:
             mis += 1
         if w.clean_series is None:
             continue
         ref_var = float(np.var(w.clean_series - np.median(w.clean_series)))
         a = _nmse(t.final_series, w.clean_series[t.crop_offset:], ref_var)
         b = _nmse(w.series, w.clean_series, ref_var)
-        if t.modified:
+        if edited:
             committed += 1
             harmful += int(a > b + 1e-9)
         if w.stratum in PROTECTED:
@@ -181,6 +280,8 @@ def main():
     ap.add_argument("--tau", type=float, default=0.02)
     ap.add_argument("--fractions", type=float, nargs="+", default=[0.5, 0.75])
     ap.add_argument("--n-jobs", dest="n_jobs", type=int, default=32)
+    ap.add_argument("--probe-cost", dest="probe_cost", type=float, default=2.0,
+                    help="probes an abstained window would have consumed")
     ap.add_argument("--rows", nargs="+", default=[r[0] for r in ROWS])
     ap.add_argument("--valuation-scores", dest="val_scores",
                     default=str(ROOT / "results" / "valuation_scores_xl.json"))
@@ -291,12 +392,73 @@ def main():
             print(f"  {name:14s} selection done", flush=True)
             continue
 
-        # Every remaining row runs the agent loop under a different setting.
-        table[name] = {c: "deferred" for c in COLUMNS}
-        table[name]["reason"] = "arm not yet wired, see run_main.py"
-        print(f"  {name:14s} deferred", flush=True)
+        if how == "none":
+            from baselines import run_no_action
+            traces = run_no_action(windows, states, models)
+        elif how == "oracle":
+            traces = oracle_traces(windows, states)
+        elif how == "classic":
+            traces = repair_traces(windows, states, name)
+        elif how == "agent":
+            traces = agent_traces(models, windows, states, name, args.tau,
+                                  args.n_jobs, agent)
+        elif how == "soft":
+            # The soft arm decides on a weighted sum rather than a conjunction,
+            # which VerifyConfig cannot express, so it runs through
+            # soft_vs_hard.apply_plan on the same proposal sequence. That script
+            # sweeps mu; the table carries the sweep's strongest point, named in
+            # SOFT_MU, so the row is the best form of the competing design.
+            table[name] = {c: "deferred" for c in COLUMNS}
+            table[name]["reason"] = (
+                "the soft arm needs the proposal sequence that soft_vs_hard.py "
+                "caches, wiring it here would duplicate that cache, so this row "
+                f"is filled from that script's sweep at mu {SOFT_MU:g}")
+            print(f"  {name:14s} deferred, see soft_vs_hard.py", flush=True)
+            continue
+        else:
+            raise ValueError(how)
+        row = score_rows(traces, windows)
+        probes = sum(t.probe_calls for t in traces)
+        row["compute_seconds"] = time.time() - t0
+        row["probe_calls"] = probes
+        if how in ("none", "oracle", "classic"):
+            row["probes_saved"] = "not_applicable"
+            row["missed_windows"] = "not_applicable"
+            row["reason_probes"] = ("this arm issues no probe, so there is no "
+                                    "budget to save")
+        else:
+            skipped = [t for t in traces if t.final_state == "ABSTAIN"]
+            byid = {w.window_id: w for w in windows}
+            row["probes_saved"] = int(len(skipped) * args.probe_cost)
+            row["missed_windows"] = int(sum(
+                1 for t in skipped
+                if byid[t.window_id].stratum == "contaminated"))
+        row["downstream_error"] = "deferred"
+        table[name] = row
+        print(f"  {name:14s} edits {row['committed_edits']:5d}  "
+              f"mis {row['protected_mis_edits']:4d}  "
+              f"damage {row['damage_rate']:.4f}  "
+              f"repair {row['repair_gain']:+.4f}  "
+              f"{row['compute_seconds']:6.0f}s", flush=True)
+
+    # A column that is entirely zero, or entirely one value, is usually a wiring
+    # fault rather than a finding. The selection arm returning zeros on a corpus
+    # mismatch was one, and the edit count reading zero under the permissive
+    # `modified` property was another, both caught only by looking. This warns
+    # at the end of every run so the next one does not need luck.
+    warnings = []
+    for col in ("committed_edits", "protected_mis_edits", "damage_rate",
+                "repair_gain"):
+        vals = [r.get(col) for r in table.values()
+                if isinstance(r.get(col), (int, float))]
+        if len(vals) >= 3 and len(set(vals)) == 1:
+            warnings.append(f"column {col} is {vals[0]} for all {len(vals)} "
+                            f"numeric rows, check the wiring before reporting")
+    for w in warnings:
+        print(f"  WARNING {w}", flush=True)
 
     payload = {
+        "warnings": warnings,
         "scale": args.scale, "seed": args.seed, "source": args.source,
         "n_windows": len(windows), "tau": args.tau,
         "perceive_seconds": perceive_seconds,
