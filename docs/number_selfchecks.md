@@ -156,3 +156,47 @@ worst rate, so it is the criterion's yield and not the pool's size. The
 mechanism is criterion A3, which requires the window to return to baseline, and
 financial series trend so their ends disagree more often. Reported, not
 corrected.
+
+
+## Valuation family scored window count, 1246, five methods
+
+**Denominator.** The training split of the blockable windows of the xl corpus.
+Identical for every method by construction, since all five read one exported
+npz and score `wid[partition == 0]`.
+
+**Subgroup.** Not applicable, the count is a set size rather than a rate.
+
+**Competing explanation.** Five equal counts could mean the methods agree or it
+could mean they were computed from one cached array and the equality is
+trivial. It is closer to the second and that is the point: the columns of the
+main table must share a denominator, so this number being trivially equal is the
+requirement rather than a finding. What is checked is that no method silently
+scores a subset.
+
+**Cross reconciliation, check four.** Three independent routes had to close on
+the same number.
+
+| route | value |
+|---|---|
+| LTSV, an independent script in the curation environment | 1246 |
+| TimeInf, Data-OOB, Data Shapley, KNN Shapley, in the dataval environment | 1246 each |
+| 4984 training blocks divided by four blocks per window | 1246.0 |
+| 1788 blockable windows times the 0.7 training fraction | 1251.6 |
+
+The window id **sets** were compared, not only the counts, and all five are
+identical. The fourth row differs by 5.6 because the split is drawn by window
+rather than by proportion, which is the expected sampling difference and not a
+fourth source.
+
+## Selection arm returning zero, caught by a smoke run
+
+Not a paper number, recorded because it is the failure mode the rules target. A
+smoke run of the main table on the `small ett` corpus, against score files
+computed on `xl mixed`, produced an LTSV row retaining zero windows with every
+stratum retention at 0.000. No window id overlapped, so the arithmetic ran on an
+empty set and returned a table of zeros rather than an error.
+
+A row of zeros reads as a result. `run_main.py` now refuses to proceed when
+fewer than five percent of the corpus carries a score, since the expected
+overlap is the training fraction times the blockable share and is far above
+that floor.
