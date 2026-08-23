@@ -50,17 +50,37 @@ longer reasoning is what hits the ceiling. The survivors are the easy pairs.
 **Conclusion.** The zero is survivorship bias and is not reported as stability.
 Both numbers go into the paper together, never the flip rate alone.
 
-## Blockable window share, 19 percent unblockable
+## Blockable window share, **corrected**, first error this rule caught in the text
 
-**Denominator.** 210 windows of the heavy corpus, 40 unblockable. The exclusion
-is precisely correlated with the effect, which is the point rather than a fault:
-the unblockable windows are the ones with injected gaps, which is what the
-valuation family cannot consume and what IMPUTE exists for.
+**The error.** 19 percent was written into section 4.1.3 as a property of the
+valuation family. It is not. It is a property of one corpus.
 
-**Competing explanation.** The 40 could be an artefact of the block length
-rather than of missingness. Ruled out by construction: the export drops a window
-only when the block contains a non finite value, and the only source of non
-finite values in this corpus is the gap injection.
+**How check one found it.** The denominator question was asked of a different
+number, the LTSV scored window count of 1246 against a corpus of 2000. The
+arithmetic was required to close: 1788 blockable times 0.7 is 1251.6 against an
+actual 1246, and 4984 training blocks over four blocks per window is exactly
+1246. It closed, so there was no third source. But closing it required the
+blockable count, and that count was 1788 of 2000, so **10.6 percent
+unblockable, not 19**.
+
+**The relation, which is what should have been reported.** Unblockable share
+equals the contaminated stratum's share of the corpus times the fraction of
+defect kinds that write NaN, which is two of seven.
+
+| corpus | contaminated share | predicted | measured |
+|---|---|---|---|
+| heavy | 0.667 | 0.1905 | 0.1905 |
+| xl | 0.3700 | 0.1057 | **0.1060** |
+
+**What the paper says now.** The relation, with both measurements, rather than
+either number alone. The argument it supports is unchanged and is in fact
+stronger: the valuation family's blind spot grows with the corpus's missing data
+content, which is predictable rather than incidental.
+
+**Why this is recorded rather than quietly fixed.** It is the first time the
+denominator check caught something already in the text. The number was
+arithmetically correct on the corpus it came from and wrong for the sentence it
+was placed in, which is the exact failure mode the rule exists for.
 
 ## Changepoint layer, 180 of 1600 under the rank criterion
 
@@ -93,3 +113,38 @@ of the statistic rather than a property of the data.
 **Not fixed here.** Changing `_difficulty` changes a selection criterion, which
 requires pre registration before the counts under it are seen. The finding is
 reported and the decision is open.
+
+
+## Hard layer under the new criterion, 210 windows, 110 financial and 100 industrial
+
+**Subgroup, and it now passes.** The old statistic gave zero financial windows.
+The new one gives 110 of 210. The change was made because the statistic was
+backwards on random walks, not to obtain this split, and the entry above on the
+criterion records that ordering.
+
+**Denominator.** The pool after rare_valid and changepoint are taken, since
+assignment order is fixed and hard is third.
+
+**Competing explanation.** A near even split could mean the criterion is
+balanced, or it could mean the within family rank forces it. It is the second,
+by construction, and that is stated rather than presented as a finding. The
+quota is split in proportion to the pool, so any criterion would produce roughly
+this split. What the criterion decides is *which* windows, not how many per
+family, and the evidence for it being the right criterion is the control cases,
+random walk 0.9684 against pure sine 0.0000, not the layer composition.
+
+## Rare valid layer, 201 of 210, shortfall 9
+
+**Denominator.** The over drawn base pool, not the corpus, since selection runs
+before assembly.
+
+**Subgroup, and it fails mildly.** Qualification rate runs 0.075 to 0.173 across
+industrial datasets and 0.015 to 0.043 across financial ones. The largest pool,
+720 windows, has the lowest rate at 0.015.
+
+**Competing explanation, ruled out.** A shortfall usually means the quota
+exceeded a small pool. Ruled out by the rate table: the biggest pool has the
+worst rate, so it is the criterion's yield and not the pool's size. The
+mechanism is criterion A3, which requires the window to return to baseline, and
+financial series trend so their ends disagree more often. Reported, not
+corrected.

@@ -463,28 +463,86 @@ def _synthetic_base(n: int, T: int, rng: np.random.RandomState) -> list:
     return out
 
 
-def _difficulty(series: np.ndarray) -> float:
-    """Difficulty proxy: how little exploitable structure a window carries.
+#: Autoregression order used by the difficulty statistic. Sixteen lags cover a
+#: daily cycle at hourly sampling and stay far below the window length, so the
+#: fit is not free to explain everything.
+DIFFICULTY_LAGS = 16
 
-    Deliberately *not* the high-frequency energy share. That is the very
-    statistic the noise contamination raises, so selecting hard windows by it
-    would make the two indistinguishable by construction and the resulting
-    "hard" stratum would just be undeclared noise. What makes a window hard is
-    the absence of structure to predict from: weak dominant periodicity and
-    weak short-range memory.
+
+def _difficulty(series: np.ndarray, p: int = DIFFICULTY_LAGS) -> float:
+    """One minus the share of the differenced series a linear AR can explain.
+
+    Larger means harder to forecast. Fixed in
+    `docs/difficulty_criterion_preregistration.md` before any count under it.
+
+    The statistic this replaced was `1 - 0.5 * seasonal - 0.5 * memory`, and it
+    was wrong on the case that matters. A series near a random walk has short lag
+    autocorrelation close to one and its spectral power at the lowest frequency,
+    so both terms subtracted and it read as easy, while a random walk is the
+    canonical hard case in forecasting. The statistic and the concept it names
+    pointed in opposite directions. That is a definitional error and it holds on
+    a corpus with no financial data in it.
+
+    Differencing is what fixes it. A random walk's level is highly
+    autocorrelated and its increments are not, so measuring the increments asks
+    what forecasting asks. Measured on fifty draws each: random walk 0.9684,
+    pure sine 0.0000, sine plus noise 0.5567, white noise 0.5113. The white noise
+    value is a property of the statistic rather than a fault, differencing white
+    noise gives a moving average with lag one autocorrelation of minus one half
+    which the autoregression partly predicts, and the corpus base pool is real
+    data.
+
+    `R2` is a ratio of variances, so this is invariant to rescaling the window.
+
+    It deliberately uses no model from the judged pool. Experiment one asks
+    whether the behavioural signal misreads clean but complex data as low
+    quality, and a hard layer defined by that signal would make the experiment
+    circular.
     """
     x = np.asarray(series, dtype=np.float64)
-    x = x - x.mean()
-    spec = np.abs(np.fft.rfft(x)) ** 2
-    total = spec[1:].sum()
-    if total < 1e-12:
-        return 1.0
-    seasonal = float(spec[1:].max() / total)
+    if not np.isfinite(x).all():
+        return 0.0
+    d = np.diff(x)
+    d = d - d.mean()
+    if len(d) <= 4 * p or float(np.std(d)) < 1e-12:
+        return 0.0
+    X = np.stack([d[i:len(d) - p + i] for i in range(p)], axis=1)
+    y = d[p:]
+    beta, *_ = np.linalg.lstsq(X, y, rcond=None)
+    resid = y - X @ beta
+    ss = float(np.dot(y, y))
+    if ss < 1e-12:
+        return 0.0
+    r2 = max(0.0, 1.0 - float(np.dot(resid, resid)) / ss)
+    return float(np.clip(1.0 - r2, 0.0, 1.0))
 
-    denom = float(np.dot(x, x)) + 1e-12
-    acf = [abs(float(np.dot(x[:-k], x[k:]) / denom)) for k in (1, 2, 3)]
-    memory = float(np.mean(acf))
-    return float(1.0 - 0.5 * (seasonal / 0.3 if seasonal < 0.3 else 1.0) - 0.5 * memory)
+
+def select_by_rank(scores, families, n_wanted):
+    """Top scorers within each family, quota split in proportion to the pool.
+
+    Shared by the changepoint layer and the hard layer. Both reached the same
+    conclusion for the same reason: the two families' distributions of the
+    relevant statistic do not share a scale, so a global threshold or a global
+    rank takes almost everything from one side.
+    """
+    by_family = defaultdict(list)
+    for idx in scores:
+        by_family[families[idx]].append(idx)
+    total = sum(len(v) for v in by_family.values())
+    chosen, report = [], {}
+    for fam, idxs in sorted(by_family.items()):
+        quota = int(round(n_wanted * len(idxs) / max(total, 1)))
+        eligible = sorted((i for i in idxs if np.isfinite(scores[i])),
+                          key=lambda i: -scores[i])
+        take = eligible[:quota]
+        chosen.extend(take)
+        vals = [round(float(scores[i]), 4) for i in take]
+        report[fam] = {
+            "pool": len(idxs), "quota": quota, "eligible": len(eligible),
+            "taken": len(take), "shortfall": max(0, quota - len(take)),
+            "min": min(vals) if vals else None, "max": max(vals) if vals else None,
+        }
+    return chosen, report
 
 
 def build_corpus(spec: CorpusSpec = None, source: str = "ett",
@@ -562,9 +620,14 @@ def build_corpus(spec: CorpusSpec = None, source: str = "ett",
         cp_pool, refs, fams, spec.n_changepoint)
     taken.update(cp_idx)
 
-    difficulties = np.asarray([_difficulty(b["series"]) for b in base])
-    order = [i for i in np.argsort(-difficulties) if i not in taken]
-    hard_idx = set(order[: spec.n_hard])
+    # Hard, by within family rank on the difficulty statistic. The financial
+    # fifth percentile sits above the industrial twenty fifth, so a global rank
+    # would fill the layer mostly from one family. Same degradation path the
+    # changepoint layer takes, and it is written into the pre registration.
+    diff_scores = {i: _difficulty(b["series"])
+                   for i, b in enumerate(base) if i not in taken}
+    hard_list, hard_report = select_by_rank(diff_scores, fams, spec.n_hard)
+    hard_idx = set(hard_list)
     taken.update(hard_idx)
 
     selection_report = {
@@ -573,7 +636,9 @@ def build_corpus(spec: CorpusSpec = None, source: str = "ett",
         "changepoint": {"wanted": spec.n_changepoint, "found": len(cp_idx),
                         "shortfall": max(0, spec.n_changepoint - len(cp_idx)),
                         "per_family": cp_report},
-        "hard": {"wanted": spec.n_hard, "found": len(hard_idx)},
+        "hard": {"wanted": spec.n_hard, "found": len(hard_idx),
+                 "shortfall": max(0, spec.n_hard - len(hard_idx)),
+                 "per_family": hard_report},
     }
     rest = [i for i in range(len(base)) if i not in taken]
     rng.shuffle(rest)
