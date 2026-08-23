@@ -50,15 +50,30 @@ from .types import Action, MUTATING_ACTIONS, Verdict
 #: not learned over, they are the policy's option to stop rather than an arm.
 ARMS = (Action.IMPUTE, Action.DESPIKE, Action.DENOISE, Action.RESEGMENT)
 
-#: Parameters used when an operator is injected rather than proposed. The most
-#: conservative setting each operator offers, because an injected candidate is a
-#: probe into a cell nothing is known about and it should not also carry an
-#: aggressive parameter.
+#: Parameters an injected candidate carries, one per operator.
+#:
+#: Section 3.4 requires an injected candidate to take the least aggressive
+#: setting the operator offers, because it is probing a cell with no
+#: information behind it and should not also carry an aggressive configuration.
+#: Two of these used to be empty dicts, which falls back to the operator's own
+#: default rather than to its conservative end, so the requirement held for
+#: DENOISE alone. That is an implementation not matching a stated design, and
+#: the correction is recorded in docs/spo_preregistration.md with its date.
+#:
+#: The wording in 3.4 is now the least aggressive setting rather than the most
+#: conservative one, because IMPUTE's conservatism is in not assuming a period
+#: rather than in a magnitude, and one word cannot describe both axes.
 INJECT_PARAMS = {
+    # Linear fill assumes no periodicity, against the seasonal default.
     Action.IMPUTE: {"method": "linear"},
-    Action.DESPIKE: {},
+    # n_sigma raised and max_width cut to one, so only the narrowest and most
+    # extreme excursions are touched. Defaults are 4.0 and 3.
+    Action.DESPIKE: {"n_sigma": 6.0, "max_width": 1},
+    # Window five against the default eleven, the shortest the operator allows.
     Action.DENOISE: {"strength": "light"},
-    Action.RESEGMENT: {},
+    # Keeps at least nine tenths of the window, against a default that permits
+    # discarding half of it.
+    Action.RESEGMENT: {"min_keep_frac": 0.9},
 }
 
 #: Which table a candidate belongs to, keyed by the verdict on the previous

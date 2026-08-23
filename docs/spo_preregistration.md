@@ -212,3 +212,51 @@ concluded.
 p_inject is swept over 0.02, 0.05 and 0.10. Reported per level: visits to the
 two blind spot cells, total probe cost, and the headline damage and repair. The
 sweep establishes whether the conclusion depends on the injection rate.
+
+
+## Injection parameters corrected, 2026-08-23
+
+**What changed.** `INJECT_PARAMS` in `src/introact_ts/spo.py`.
+
+| operator | before | after | operator default |
+|---|---|---|---|
+| IMPUTE | `method=linear` | unchanged | `seasonal` |
+| DENOISE | `strength=light` | unchanged | `medium` |
+| DESPIKE | `{}` | `n_sigma=6.0, max_width=1` | `n_sigma=4.0, max_width=3` |
+| RESEGMENT | `{}` | `min_keep_frac=0.9` | `min_keep_frac=0.5` |
+
+**Why this is a correction and not a tuning.** Section 3.4 states that an
+injected candidate takes the operator's least aggressive setting, on the ground
+that it is probing a cell with no information behind it and should not also
+carry an aggressive configuration. An empty dict does not do that. It falls back
+to the operator's own default, which is its ordinary working point rather than
+its conservative end. So the stated design held for DENOISE and IMPUTE and was
+silently absent for the other two. The change makes the code do what the
+document already said.
+
+Nothing here was chosen after seeing a result. The direction of each parameter
+is fixed by the operator's own signature: a higher `n_sigma` flags fewer points,
+a smaller `max_width` touches only the narrowest excursions, a higher
+`min_keep_frac` discards less of the window.
+
+**Verified rather than asserted.** On a window carrying one two point spike and
+one single point spike, the injected DESPIKE configuration changes 1 point and
+the default changes 3.
+
+**Wording in 3.4.** From most conservative to least aggressive. IMPUTE's
+conservatism is in not assuming a period while the others' is in a magnitude,
+and one phrase could not cover both axes honestly.
+
+**Code hash.** The method layer hash moves from `6741ded339e5a8df` to
+`fcd7ba0bf05d5277`. `spo.py` is in `monitor.CODE_FILES`, so a run started
+against the old expected hash aborts rather than silently using the new
+parameters.
+
+**Effect on the blind spot cells.** Clusters 1 and 11 were reported from the
+first run under the pre registration's no rerun rule. That rule protects a
+result from being rerun until it is favourable. It does not freeze an
+implementation defect. The two versions are therefore reported side by side,
+never the corrected one alone, and the comparison is run on one corpus under one
+clustering. The protected layers have been rebuilt twice since that first run, so
+cluster identity is matched by profile centroid rather than by cluster index, and
+the matching is stated with the result.
