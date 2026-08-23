@@ -532,10 +532,50 @@ def build_corpus(spec: CorpusSpec = None, source: str = "ett",
     else:
         base = _synthetic_base(n_base, T, rng)
 
+    # -- protected layer selection, in the order the pre registration fixes ----
+    #
+    # rare_valid and changepoint used to be constructed by adding a synthetic
+    # excursion or a synthetic tail modulation to a real window. Section 4.1.2
+    # claims both are taken from the data, so both are now selected. The
+    # criteria are in docs/stratum_selection_preregistration.md and
+    # docs/changepoint_criterion_preregistration.md, both committed before any
+    # count under them was seen.
+    #
+    # Order is rare_valid, then changepoint, then hard, then the remainder. No
+    # window enters two layers.
+    from datasets import FINANCIAL, channel_columns
+
+    cols = channel_columns(tuple(sorted({b["dataset"] for b in base})))
+    refs = {i: channel_reference(cols[(b["dataset"], b["channel"])])
+            for i, b in enumerate(base)}
+    fin = set(FINANCIAL)
+    fams = {i: ("financial" if b["dataset"] in fin else "industrial")
+            for i, b in enumerate(base)}
+
+    taken = set()
+    rare_idx = [i for i, b in enumerate(base)
+                if is_rare_valid(b["series"], refs[i])[0]][: spec.n_rare_valid]
+    taken.update(rare_idx)
+
+    cp_pool = [(i, b["series"]) for i, b in enumerate(base) if i not in taken]
+    cp_idx, cp_report = select_changepoints(
+        cp_pool, refs, fams, spec.n_changepoint)
+    taken.update(cp_idx)
+
     difficulties = np.asarray([_difficulty(b["series"]) for b in base])
-    order = np.argsort(-difficulties)
-    hard_idx = set(order[: spec.n_hard].tolist())
-    rest = [i for i in range(len(base)) if i not in hard_idx]
+    order = [i for i in np.argsort(-difficulties) if i not in taken]
+    hard_idx = set(order[: spec.n_hard])
+    taken.update(hard_idx)
+
+    selection_report = {
+        "rare_valid": {"wanted": spec.n_rare_valid, "found": len(rare_idx),
+                       "shortfall": max(0, spec.n_rare_valid - len(rare_idx))},
+        "changepoint": {"wanted": spec.n_changepoint, "found": len(cp_idx),
+                        "shortfall": max(0, spec.n_changepoint - len(cp_idx)),
+                        "per_family": cp_report},
+        "hard": {"wanted": spec.n_hard, "found": len(hard_idx)},
+    }
+    rest = [i for i in range(len(base)) if i not in taken]
     rng.shuffle(rest)
 
     windows = []
@@ -592,31 +632,21 @@ def build_corpus(spec: CorpusSpec = None, source: str = "ett",
             )
         )
 
-    # rare_valid
-    for _ in range(spec.n_rare_valid):
-        item = take()
-        s = make_rare_valid(item["series"], rng)
-        wid += 1
-        windows.append(
-            TSWindow(
-                window_id=wid, series=s.copy(), freq=item["freq"],
-                dataset=item["dataset"], stratum="rare_valid", clean_series=s.copy(),
-                seed=spec.seed,
+    # rare_valid and changepoint, selected rather than constructed. The window
+    # is its own clean reference, so any edit here counts as damage, which is
+    # what makes these protected layers.
+    for stratum, chosen in (("rare_valid", rare_idx), ("changepoint", cp_idx)):
+        for i in chosen:
+            item = base[i]
+            s = item["series"].copy()
+            wid += 1
+            windows.append(
+                TSWindow(
+                    window_id=wid, series=s.copy(), freq=item["freq"],
+                    dataset=item["dataset"], stratum=stratum,
+                    clean_series=s.copy(), seed=spec.seed,
+                )
             )
-        )
-
-    # changepoint
-    for _ in range(spec.n_changepoint):
-        item = take()
-        s = make_changepoint(item["series"], rng)
-        wid += 1
-        windows.append(
-            TSWindow(
-                window_id=wid, series=s.copy(), freq=item["freq"],
-                dataset=item["dataset"], stratum="changepoint", clean_series=s.copy(),
-                seed=spec.seed,
-            )
-        )
 
     # clean_ood
     for i in range(spec.n_clean_ood):
