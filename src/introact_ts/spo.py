@@ -342,6 +342,12 @@ class SPOPolicy:
         #: bound holds for every committed edit regardless of where the candidate
         #: came from.
         self.p_inject = float(p_inject)
+        #: Whether the policy learns from the shielded reward or from the raw
+        #: utility change. True is the method. False is the ablation rung that
+        #: section 3.3 predicts will drive the policy toward flattening edits,
+        #: because an unfiltered delta utility rewards exactly the actions the
+        #: structural condition exists to stop.
+        self.shaped_reward = True
         self._rng = np.random.RandomState(seed)
         #: Injection counters, for reporting how much of the exploration was
         #: forced rather than chosen.
@@ -482,7 +488,15 @@ class SPOPolicy:
         if action not in ARMS:
             return 0.0
         table = self.table_of(records[:-1] if records else [])
-        reward = shielded_reward(verdict, delta_utility, probes, self.cfg)
+        if self.shaped_reward:
+            reward = shielded_reward(verdict, delta_utility, probes, self.cfg)
+        else:
+            # The raw reading, whatever the shield decided. The candidate is
+            # still rolled back, so this changes what is learned and not what is
+            # committed, which is the comparison experiment two needs.
+            reward = float(delta_utility)
+            if self.cfg.reward_clip is not None:
+                reward = min(reward, float(self.cfg.reward_clip))
         self.tables.update(table, cluster, action, reward)
 
         j0, a0 = self.tables.resolve(cluster), ARMS.index(action)

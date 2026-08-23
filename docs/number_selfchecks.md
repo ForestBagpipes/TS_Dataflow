@@ -17,6 +17,7 @@ and against three questions.
 | 1 | What is the denominator. Which samples is it computed over, which are excluded, and is the exclusion correlated with the effect being measured |
 | 2 | Is a subgroup driving it. Split by stratum, by defect type and by dataset, does the conclusion survive |
 | 3 | What else would produce this number. Name the competing explanation and say what rules it out |
+| 4 | Cross reconcile. Make the number close arithmetically against a second number from an independent source. A wrong number is usually self consistent inside its own context, and only disagrees when set against another one |
 
 Below, one entry per number, with what the checks removed.
 
@@ -81,6 +82,13 @@ content, which is predictable rather than incidental.
 denominator check caught something already in the text. The number was
 arithmetically correct on the corpus it came from and wrong for the sentence it
 was placed in, which is the exact failure mode the rule exists for.
+
+**And it is why check four exists.** The 19 percent was self consistent in its
+own paragraph and would have stayed there indefinitely. It only broke when it
+was required to close against an unrelated number, the LTSV scored window count,
+which came from a different script in a different environment. Reconciliation
+against an independent source is now a standing requirement rather than
+something that happened once.
 
 ## Changepoint layer, 180 of 1600 under the rank criterion
 

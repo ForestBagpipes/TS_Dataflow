@@ -28,43 +28,73 @@ sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "experiments"))
 
 from corpus import build_corpus  # noqa: E402
+from spo_feasibility import profile_matrix  # noqa: E402
 from metrics import summarise  # noqa: E402
 from run_agent import SCALES  # noqa: E402
 
 from introact_ts.agent import AgentConfig, IntroActAgent  # noqa: E402
 from introact_ts.backends import PRESETS, make_pool  # noqa: E402
 from introact_ts.policy import PolicyConfig  # noqa: E402
+from introact_ts.spo import SPOConfig, SPOPolicy, ValueTables  # noqa: E402
 from introact_ts.verify import VerifyConfig  # noqa: E402
 
 
+def cluster_labels(windows, k, seed=42, n_jobs=32):
+    """One profile clustering, shared by every rung that learns."""
+    from sklearn.cluster import KMeans
+    P = profile_matrix(windows, n_jobs=n_jobs)
+    return KMeans(n_clusters=k, n_init=10, random_state=seed).fit_predict(P)
+
+
 def ladder() -> dict:
-    """Eight configurations, ordered from doing nothing to doing everything."""
+    """Six rungs, matching section 4.2's ablation group exactly.
+
+    The eight rung version this replaces is described in
+    `docs/CHANGELOG.md` under the 2026-08-22 consolidation. Three rungs were
+    removed on measured grounds rather than for budget, and each reason is in
+    section 4.2 so a reader does not have to take the list on trust:
+
+      no utility condition   the utility condition vetoed 769 candidates against
+                             the structural condition's 616, so removing it
+                             leaves an acceptance set close to no shield at all
+      no budget allocation   its effect already appears in the main table's cost
+                             column and its two probe count columns
+      no peer calibration    early measurement found no detectable difference in
+                             discriminative power against global standardisation,
+                             and that result stays in section 6.1
+
+    Two rungs of the old ladder are gone for a different reason. `f_single_step`
+    and `g_no_abstain` have no landing place in the document: neither appears in
+    section 4.2's design and neither isolates a component the method claims. They
+    are removed rather than carried as orphans.
+
+    Three of the six rungs need the policy, so this module now builds one.
+    """
     return {
-        # a. perception only, nothing is edited
-        "a_no_action": None,
-        # b. every proposal committed unconditionally
-        "b_no_verification": AgentConfig(
-            verification=VerifyConfig(
-                require_structure=False, require_reprobe=False, require_risk=False
-            )
-        ),
-        # c. structural veto only, model utility never consulted after the edit
-        "c_no_utility_recheck": AgentConfig(
-            verification=VerifyConfig(require_reprobe=False)
-        ),
-        # d. utility recheck only, no structural veto
-        "d_no_structural_veto": AgentConfig(
-            verification=VerifyConfig(require_structure=False)
-        ),
-        # e. behaviour z scored against the whole corpus rather than peers
-        "e_no_peer_calibration": AgentConfig(peer_calibration=False),
-        # f. one shot. a rejected candidate ends the episode, so vetoing still
-        #    happens but recovering from a veto does not
-        "f_single_step": AgentConfig(policy=PolicyConfig(max_candidates=1)),
-        # g. no refusal floor, the agent must always name an action
-        "g_no_abstain": AgentConfig(policy=PolicyConfig(min_confidence=0.0)),
-        # h. everything on
-        "h_full": AgentConfig(),
+        # a. every proposal committed unconditionally
+        "a_no_shield": dict(
+            agent=AgentConfig(verification=VerifyConfig(
+                require_structure=False, require_reprobe=False,
+                require_risk=False)),
+            policy=True, inject=True, shaped_reward=True),
+        # b. utility recheck only, no structural veto
+        "b_no_structural": dict(
+            agent=AgentConfig(verification=VerifyConfig(require_structure=False)),
+            policy=True, inject=True, shaped_reward=True),
+        # c. the fixed rule, so the shield stands but nothing is learned
+        "c_no_policy": dict(
+            agent=AgentConfig(), policy=False, inject=False, shaped_reward=True),
+        # d. the policy learns but cannot try what the proposer never offers
+        "d_no_injection": dict(
+            agent=AgentConfig(), policy=True, inject=False, shaped_reward=True),
+        # e. the policy learns from the raw utility change rather than the
+        #    shielded reward. This is section 3.3's second claim, that the shield
+        #    shapes what the policy learns as well as gating what it commits.
+        "e_raw_reward": dict(
+            agent=AgentConfig(), policy=True, inject=True, shaped_reward=False),
+        # f. everything on
+        "f_full": dict(
+            agent=AgentConfig(), policy=True, inject=True, shaped_reward=True),
     }
 
 
@@ -76,6 +106,12 @@ def main():
     ap.add_argument("--taus", type=float, nargs="*",
                     default=[0.04, 0.08, 0.12, 0.20, 0.30])
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--k", type=int, default=12)
+    ap.add_argument("--p-inject", dest="p_inject", type=float, default=0.05)
+    ap.add_argument("--t-cal", dest="t_cal", type=int, default=500)
+    ap.add_argument("--reward-clip", dest="reward_clip", type=float,
+                    default=5.886732284690514)
+    ap.add_argument("--n-jobs", dest="n_jobs", type=int, default=32)
     ap.add_argument("--out", default=str(ROOT / "results" / "ablations"))
     args = ap.parse_args()
 
@@ -99,22 +135,40 @@ def main():
 
     payload = {"scale": args.scale, "n_windows": len(windows), "rungs": {}, "tau": {}}
 
-    for name, cfg in ladder().items():
+    # Cluster labels for the policy. Every rung that learns shares one
+    # clustering, so a difference between rungs is the rung and not a different
+    # partition of the corpus.
+    clusters = cluster_labels(windows, args.k, seed=args.seed,
+                              n_jobs=args.n_jobs)
+
+    for name, rung in ladder().items():
         t0 = time.time()
-        if cfg is None:
-            traces = run_no_action(windows, states, models)
-        else:
-            agent = IntroActAgent(models, cfg)
-            if cfg.peer_calibration:
-                agent._calib = reference._calib
-                agent._ood = reference._ood
-                agent._reference = reference._reference
-                run_states = states
-            else:
-                run_states = agent.perceive(windows)
-            traces = [agent.curate_window(w, s, peer_idx=i)
-                      for i, (w, s) in enumerate(zip(windows, run_states))]
+        agent = IntroActAgent(models, rung["agent"])
+        agent._calib = reference._calib
+        agent._ood = reference._ood
+        agent._reference = reference._reference
+
+        policy = None
+        if rung["policy"]:
+            # A rung that learns starts from a cold table rather than the warm
+            # start, so the six rungs differ only by what this loop switches and
+            # not by what history happened to be available to each.
+            cfg = SPOConfig(reward_clip=args.reward_clip,
+                            t_cal=args.t_cal)
+            tables = ValueTables(n_clusters=args.k, cfg=cfg)
+            policy = SPOPolicy(tables, cfg,
+                               p_inject=args.p_inject if rung["inject"] else 0.0,
+                               seed=args.seed)
+            policy.shaped_reward = rung["shaped_reward"]
+
+        traces = [agent.curate_window(
+                      w, s, peer_idx=i, policy=policy,
+                      cluster=int(clusters[i]) if policy is not None else None)
+                  for i, (w, s) in enumerate(zip(windows, states))]
         payload["rungs"][name] = summarise(traces, windows, transfer)
+        if policy is not None:
+            payload["rungs"][name]["injections"] = int(sum(policy.injected.values()))
+            payload["rungs"][name]["theorem6"] = policy.theorem6_report()
         print(f"  {name:24s} {time.time() - t0:6.0f}s", flush=True)
         (out_dir / "ablations.json").write_text(
             json.dumps(payload, indent=2, default=float), encoding="utf-8")

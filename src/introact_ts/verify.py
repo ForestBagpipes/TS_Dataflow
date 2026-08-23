@@ -22,11 +22,34 @@ import numpy as np
 from .types import Verdict
 
 
+#: Fraction of the surrogate utility spread that sets the minimum improvement.
+#: Section 4.1.5 defines epsilon as a tenth of the standard deviation of the
+#: utility readings on the same batch of windows, so the number below is a
+#: fallback rather than the definition, and `epsilon_from_spread` is the
+#: conversion the document describes. Both are kept so that a caller which has
+#: measured the spread uses it and one which has not still has a value.
+EPSILON_SPREAD_FRACTION = 0.1
+
+
+def epsilon_from_spread(utility_readings) -> float:
+    """Section 4.1.5's epsilon, a tenth of the utility spread."""
+    import numpy as _np
+    a = _np.asarray(list(utility_readings), dtype=_np.float64)
+    a = a[_np.isfinite(a)]
+    if a.size < 2:
+        return VerifyConfig.epsilon
+    return float(EPSILON_SPREAD_FRACTION * _np.std(a))
+
+
 @dataclass
 class VerifyConfig:
+    #: Fallback only. Prefer `epsilon_from_spread` on the run's own readings.
     epsilon: float = 0.005
     tau: float = 0.12
-    eta: float = 0.62
+    #: Section 4.1.5's initial value. The 0.62 this replaces had no recorded
+    #: derivation, and the risk condition never fired at it: on the xl corpus it
+    #: vetoed 0 of 1613 candidates under the old R(a) and 16 under the new one.
+    eta: float = 0.5
     require_structure: bool = True
     require_reprobe: bool = True
     require_risk: bool = True

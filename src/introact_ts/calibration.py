@@ -66,7 +66,7 @@ def calibrate(
     behaviors: np.ndarray,
     profiles: np.ndarray,
     signal_names: tuple,
-    K: int = 40,
+    K: int = 50,
     weights: dict = None,
     eps: float = 1e-8,
 ) -> PeerCalibration:
