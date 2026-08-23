@@ -72,6 +72,14 @@ DIMENSIONS = ("trend", "frequency", "amplitude", "pattern")
 #: it off; the explicit form is used.
 THINKING_OFF = {"thinking": {"type": "disabled"}}
 
+#: With thinking on, `max_tokens` has to cover the reasoning as well as the
+#: answer. At the disabled run's value of 8 the reasoning would consume the
+#: whole budget and the reply would come back empty, so the two arms cannot share
+#: one value. This is the only setting that differs between them and it is forced
+#: by the mode rather than chosen.
+MAX_TOKENS_NO_THINK = 8
+MAX_TOKENS_THINK = 2048
+
 
 def load_serialiser():
     sys.path.insert(0, str(TSRATING / "data_preparation"))
@@ -98,21 +106,39 @@ def series_to_text(x, serialize_arr, settings):
     return str(serialize_arr(x, settings))
 
 
-def _one(client, prompt):
+def _one(client, prompt, thinking):
+    kwargs = {}
+    if thinking:
+        kwargs["max_tokens"] = MAX_TOKENS_THINK
+    else:
+        kwargs["max_tokens"] = MAX_TOKENS_NO_THINK
+        kwargs["extra_body"] = THINKING_OFF
     r = client.chat.completions.create(
         model=MODEL,
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=8,
         temperature=1.0,
-        extra_body=THINKING_OFF,
+        **kwargs,
     )
     u = r.usage
+    det = getattr(u, "completion_tokens_details", None)
+    reasoning = getattr(det, "reasoning_tokens", 0) if det else 0
     return ((r.choices[0].message.content or "").strip(),
             u.prompt_tokens, u.completion_tokens,
-            getattr(u, "prompt_cache_hit_tokens", 0))
+            getattr(u, "prompt_cache_hit_tokens", 0), reasoning or 0)
 
 
-def query(client, prompt, n, workers=10):
+def balance_cny(key):
+    """Current balance, used only to enforce the spend cap."""
+    import urllib.request
+    req = urllib.request.Request(
+        "https://api.deepseek.com/user/balance",
+        headers={"Authorization": f"Bearer {key}"})
+    with urllib.request.urlopen(req, timeout=20) as fh:
+        d = json.loads(fh.read().decode("utf-8"))
+    return float(d["balance_infos"][0]["total_balance"])
+
+
+def query(client, prompt, n, thinking=False, workers=10):
     """n independent generations.
 
     This backend rejects `n` greater than one, which is the parameter the
@@ -123,7 +149,7 @@ def query(client, prompt, n, workers=10):
     """
     from concurrent.futures import ThreadPoolExecutor
     with ThreadPoolExecutor(max_workers=workers) as pool:
-        return list(pool.map(lambda _: _one(client, prompt), range(n)))
+        return list(pool.map(lambda _: _one(client, prompt, thinking), range(n)))
 
 
 def vote_share(generations):
@@ -141,6 +167,10 @@ def main():
     ap.add_argument("--dimensions", nargs="+", default=list(DIMENSIONS))
     ap.add_argument("--generations", type=int, default=GENERATIONS)
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--thinking", action="store_true",
+                    help="leave the model's reasoning on, see MAX_TOKENS_THINK")
+    ap.add_argument("--max-spend-cny", dest="max_spend", type=float, default=40.0,
+                    help="abort once this much has been spent, checked per pair")
     ap.add_argument("--out", default=str(ROOT / "results" / "tsrating_consistency.json"))
     args = ap.parse_args()
 
@@ -164,9 +194,15 @@ def main():
           f"{len(args.dimensions)} dimensions, {args.generations} generations, "
           f"model {MODEL}, thinking disabled", flush=True)
 
-    rows, tok_in, tok_out, tok_cached, calls = [], 0, 0, 0, 0
+    rows, tok_in, tok_out, tok_cached, tok_reason, calls = [], 0, 0, 0, 0, 0
+    start_balance = balance_cny(key)
+    aborted = False
+    print(f"balance {start_balance:.2f} CNY, cap {args.max_spend:.2f} CNY, "
+          f"thinking {'enabled' if args.thinking else 'disabled'}", flush=True)
     t0 = time.time()
     for dim in args.dimensions:
+        if aborted:
+            break
         template = (TSRATING / "prompting" / "templates"
                     / f"pairwise_{dim}.txt").read_text(encoding="utf-8")
         for pi, (wa, wb) in enumerate(pairs):
@@ -176,13 +212,21 @@ def main():
                                       label_a=LABELS[0], label_b=LABELS[1])
             reverse = template.format(text_a=tb, text_b=ta,
                                       label_a=LABELS[0], label_b=LABELS[1])
-            g_ab = query(client, forward, args.generations)
-            g_ba = query(client, reverse, args.generations)
+            g_ab = query(client, forward, args.generations, args.thinking)
+            g_ba = query(client, reverse, args.generations, args.thinking)
             calls += 2 * args.generations
             for g in g_ab + g_ba:
                 tok_in += g[1]
                 tok_out += g[2]
                 tok_cached += g[3]
+                tok_reason += g[4]
+
+            spent = start_balance - balance_cny(key)
+            if spent > args.max_spend:
+                print(f"  spend cap reached, {spent:.2f} of {args.max_spend:.2f} "
+                      f"CNY, stopping after {len(rows)+1} pair dimensions",
+                      flush=True)
+                aborted = True
 
             p_ab, a1, b1 = vote_share(g_ab)
             p_ba, a2, b2 = vote_share(g_ba)
@@ -203,6 +247,8 @@ def main():
             print(f"  {dim:10s} pair {pi:2d}  p_ab={p_ab}  p_ba={p_ba}  "
                   f"agree={row.get('agree')}  cal={row.get('calibrated')}",
                   flush=True)
+            if aborted:
+                break
 
     scored = [r for r in rows if "agree" in r and not r["tie"]]
     flip = [r for r in scored if not r["agree"]]
@@ -218,7 +264,12 @@ def main():
 
     elapsed = time.time() - t0
     report = {
-        "model": MODEL, "base_url": BASE_URL, "thinking": "disabled",
+        "model": MODEL, "base_url": BASE_URL,
+        "thinking": "enabled" if args.thinking else "disabled",
+        "max_tokens": MAX_TOKENS_THINK if args.thinking else MAX_TOKENS_NO_THINK,
+        "reasoning_tokens": tok_reason,
+        "aborted_on_spend_cap": aborted,
+        "spend_cny": start_balance - balance_cny(key),
         "generations": args.generations, "pairs": len(pairs),
         "dimensions": list(args.dimensions), "seed": args.seed,
         "calls": calls, "prompt_tokens": tok_in, "completion_tokens": tok_out,
@@ -241,8 +292,11 @@ def main():
     fr = "n/a" if o["flip_rate"] is None else f"{o['flip_rate']:.3f}"
     print(f"{'overall':12s}{o['scored']:8d}{o['flips']:7d}{fr:>11s}")
     print()
-    print(f"{calls} calls, {tok_in} prompt tokens, {tok_out} completion tokens, "
-          f"cache hit {report['cache_hit_fraction']:.3f}, {elapsed:.0f}s")
+    print(f"{calls} calls, {tok_in} prompt tokens, {tok_out} completion tokens "
+          f"of which {tok_reason} reasoning, "
+          f"cache hit {report['cache_hit_fraction']:.3f}, {elapsed:.0f}s, "
+          f"spend {report['spend_cny']:.2f} CNY"
+          + (" ABORTED ON CAP" if aborted else ""))
     print(f"per pair per dimension: {tok_in/max(len(rows),1):.0f} prompt tokens, "
           f"{2*args.generations} calls")
 
