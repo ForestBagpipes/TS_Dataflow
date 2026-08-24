@@ -1,0 +1,107 @@
+{
+ "scale": "xl",
+ "source": "mixed",
+ "seed": 42,
+ "method_hash": "1f6d57bb1a15e4a0",
+ "corpus_fingerprint": "948f229ab4698dc2",
+ "strata": {
+  "clean": 420,
+  "contaminated": 740,
+  "clean_ood": 210,
+  "changepoint": 210,
+  "hard": 210,
+  "rare_valid": 201
+ },
+ "checks": [
+  {
+   "check": "method_hash",
+   "ok": true,
+   "detail": "1f6d57bb1a15e4a0"
+  },
+  {
+   "check": "method_files_present",
+   "ok": true,
+   "detail": "7 files"
+  },
+  {
+   "check": "calibration.K",
+   "ok": true,
+   "detail": "50 against 50"
+  },
+  {
+   "check": "verify.eta",
+   "ok": true,
+   "detail": "0.5 against 0.5"
+  },
+  {
+   "check": "verify.epsilon_path",
+   "ok": true,
+   "detail": "True against True"
+  },
+  {
+   "check": "corpus.TAIL_PERCENTILE",
+   "ok": true,
+   "detail": "99.5 against 99.5"
+  },
+  {
+   "check": "corpus.BRIEF_FRAC",
+   "ok": true,
+   "detail": "0.05 against 0.05"
+  },
+  {
+   "check": "corpus.RETURN_TOL",
+   "ok": true,
+   "detail": "0.5 against 0.5"
+  },
+  {
+   "check": "corpus.SCALE_RATIO",
+   "ok": true,
+   "detail": "1.5 against 1.5"
+  },
+  {
+   "check": "corpus.DIFFICULTY_LAGS",
+   "ok": true,
+   "detail": "16 against 16"
+  },
+  {
+   "check": "spo.t_cal",
+   "ok": true,
+   "detail": "500 against 500"
+  },
+  {
+   "check": "corpus_built",
+   "ok": true,
+   "detail": "1991 windows, fingerprint 948f229ab4698dc2"
+  },
+  {
+   "check": "corpus_strata",
+   "ok": true,
+   "detail": "{\"changepoint\": 210, \"clean\": 420, \"clean_ood\": 210, \"contaminated\": 740, \"hard\": 210, \"rare_valid\": 201}"
+  },
+  {
+   "check": "scores:timeinf:id_overlap",
+   "ok": true,
+   "detail": "overlap 0.622 (1238 of 1991)"
+  },
+  {
+   "check": "scores:data_oob:id_overlap",
+   "ok": true,
+   "detail": "overlap 0.622 (1238 of 1991)"
+  },
+  {
+   "check": "scores:data_shapley:id_overlap",
+   "ok": true,
+   "detail": "overlap 0.622 (1238 of 1991)"
+  },
+  {
+   "check": "scores:ltsv:id_overlap",
+   "ok": true,
+   "detail": "overlap 0.622 (1238 of 1991)"
+  },
+  {
+   "check": "scores_corpus_identity",
+   "ok": false,
+   "detail": "0 of 1779 windows match on content (0.0000), anything below one means the score file predates a corpus change"
+  }
+ ]
+}
