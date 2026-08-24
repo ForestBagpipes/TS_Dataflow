@@ -78,30 +78,49 @@ PROBE_LAYER = "clean_ood"
 #: Every row of the main table, in the order it is printed. The third field says
 #: which family the row belongs to, which decides how its prepared corpus is
 #: produced.
+#: Baselines carry an L prefix, fixed in docs/experiment-matrix.md. The B
+#: numbering that appears in docs/CHANGELOG.md refers to work items and stays
+#: valid, the two are different registers and neither is retired.
+#:
+#: `no_shield` is no longer a baseline row. It changes one component of this
+#: paper's method rather than being an independently published method, so it
+#: belongs with the ablation and with experiment two's contrast. Learn2Clean
+#: takes its place as L7, which is the published work that actually holds the
+#: position no_shield was standing in for.
 ROWS = [
-    ("no_action", "reference", "none"),
-    ("screen", "repair", "classic"),
-    ("imr", "repair", "classic"),
-    ("mtcsc", "repair", "classic"),
-    ("timeinf", "valuation", "scores"),
-    ("data_oob", "valuation", "scores"),
-    ("data_shapley", "valuation", "scores"),
-    ("ltsv", "valuation", "scores"),
-    ("tsrating", "valuation", "unavailable"),
+    ("L0_no_action", "reference", "none"),
+    ("L1_screen", "repair", "classic"),
+    ("L2_imr", "repair", "classic"),
+    ("L3_mtcsc", "repair", "classic"),
+    ("L4_data_oob", "valuation", "scores"),
+    ("L5_timeinf", "valuation", "scores"),
+    ("L6_ltsv", "valuation", "scores"),
+    ("L7_learn2clean", "learning", "l2c"),
+    ("L8_tsrating", "valuation", "unavailable"),
     ("soft_penalty", "contrast", "soft"),
     ("utility_only", "contrast", "agent"),
     ("spec_veto", "contrast", "agent"),
-    ("no_shield", "contrast", "agent"),
     ("introact", "ours", "agent"),
     ("oracle", "reference", "oracle"),
 ]
 
+#: Row name to the key its scores are stored under, since the score files
+#: predate the L prefix.
+SCORE_KEY = {"L4_data_oob": "data_oob", "L5_timeinf": "timeinf",
+             "L6_ltsv": "ltsv", "L7_learn2clean": None}
+
 #: Reasons a cell is not applicable, keyed by row. Printed in the table note.
 NOT_APPLICABLE = {
-    "tsrating": (
+    "L8_tsrating": (
         "the substituted judgment backend is not stable enough to distil a "
-        "rater from, flip rate 0.508 with reasoning off and an unscorable rate "
-        "of 0.333 with reasoning on, see docs/baseline_year_gap.md"),
+        "rater from. Three backend configurations were tried and all three "
+        "failed: deepseek-v4-pro with reasoning off gives a 0.508 order flip "
+        "rate, the same model with reasoning on gives zero flips but a 0.333 "
+        "unscorable rate whose survivors are the easy pairs, and "
+        "deepseek-v4-flash gives 0.833. The repository publishes no rater "
+        "weights and no annotations, last pushed 2025-05-27 with zero "
+        "releases, so there is no path that avoids generating judgments. "
+        "See docs/baseline_year_gap.md"),
 }
 
 #: Columns every row must fill, so a missing one is an error rather than a gap.
@@ -127,6 +146,9 @@ def selection_corpus(windows, scores, fraction):
     # a result. The floor is well under the expected overlap, which is the
     # training split times the blockable share, so it fires only on a genuine
     # mismatch.
+    overlap = len(have) / max(len(windows), 1)
+    print(f"    score overlap {overlap:.3f} ({len(have)} of {len(windows)})",
+          flush=True)
     if len(have) < 0.05 * len(windows):
         raise SystemExit(
             f"only {len(have)} of {len(windows)} windows carry a score, "
@@ -280,6 +302,7 @@ def main():
     ap.add_argument("--tau", type=float, default=0.02)
     ap.add_argument("--fractions", type=float, nargs="+", default=[0.5, 0.75])
     ap.add_argument("--n-jobs", dest="n_jobs", type=int, default=32)
+    ap.add_argument("--l2c-episodes", dest="l2c_episodes", type=int, default=3)
     ap.add_argument("--probe-cost", dest="probe_cost", type=float, default=2.0,
                     help="probes an abstained window would have consumed")
     ap.add_argument("--rows", nargs="+", default=[r[0] for r in ROWS])
@@ -358,14 +381,15 @@ def main():
             continue
 
         if how == "scores":
-            if name not in val_scores:
+            key = SCORE_KEY.get(name, name)
+            if key not in val_scores:
                 table[name] = {c: "not_applicable" for c in COLUMNS}
                 table[name]["reason"] = "scores not yet computed on this corpus"
                 print(f"  {name:14s} deferred, no scores", flush=True)
                 continue
             row = {"selection": {}}
             for frac in args.fractions:
-                kept, unscored = selection_corpus(windows, val_scores[name], frac)
+                kept, unscored = selection_corpus(windows, val_scores[key], frac)
                 kept_ids = {w.window_id for w in kept}
                 # A selection arm commits no edit, so its damage and mis edit
                 # counts are zero by construction. What it can lose is coverage,
@@ -398,7 +422,16 @@ def main():
         elif how == "oracle":
             traces = oracle_traces(windows, states)
         elif how == "classic":
-            traces = repair_traces(windows, states, name)
+            traces = repair_traces(windows, states, name.split("_", 1)[1])
+        elif how == "l2c":
+            from learn2clean import run as run_l2c
+            from introact_ts.profiling import extract_statistical_profile
+            profiles = [extract_statistical_profile(
+                np.nan_to_num(np.asarray(w.series, dtype=np.float64)))
+                for w in windows]
+            traces, l2c_history, _ = run_l2c(windows, profiles,
+                                             episodes=args.l2c_episodes,
+                                             seed=args.seed)
         elif how == "agent":
             traces = agent_traces(models, windows, states, name, args.tau,
                                   args.n_jobs, agent)
@@ -434,6 +467,10 @@ def main():
                 1 for t in skipped
                 if byid[t.window_id].stratum == "contaminated"))
         row["downstream_error"] = "deferred"
+        if how == "l2c":
+            # Harmful edits per episode, which accumulate because this arm has
+            # no sandbox. This is the quantity the comparison exists for.
+            row["learning_history"] = l2c_history
         table[name] = row
         print(f"  {name:14s} edits {row['committed_edits']:5d}  "
               f"mis {row['protected_mis_edits']:4d}  "

@@ -56,7 +56,7 @@ sys.path.insert(0, str(ROOT / "experiments"))
 TSRATING = ROOT / ".tmp" / "TSRating"
 
 BASE_URL = "https://api.deepseek.com"
-MODEL = "deepseek-v4-pro"
+MODEL = os.environ.get("TSR_MODEL", "deepseek-v4-pro")
 
 #: The repository's own values, from prompting/run_score_pairwise.py and
 #: data_preparation/load_Time_300B.py.

@@ -23,7 +23,7 @@ docx/*
 !docx/胡宏彬-进度文档-20260818.docx
 !docx/胡宏彬-进度文档-20260819.docx
 !docx/胡宏彬-进度文档-20260820.docx
-!docx/【work2】胡宏彬-进度文档-20260821.docx
+!docx/【work2】胡宏彬-进度文档-*.docx
 
 # Datasets: re-downloaded on first use by experiments/datasets.py
 data/*.csv
