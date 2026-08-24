@@ -138,6 +138,10 @@ def main():
                     help="score only this many training windows, for a smoke run")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--out", default=str(ROOT / "results" / "ltsv_scores.json"))
+    ap.add_argument("--checkpoint-every", dest="ckpt_every", type=int, default=200,
+                    help="blocks between partial writes, see the resume note")
+    ap.add_argument("--fresh", action="store_true",
+                    help="ignore any partial result and recompute everything")
     args = ap.parse_args()
 
     z = np.load(args.corpus, allow_pickle=True)
@@ -186,15 +190,50 @@ def main():
     print(f"scoring {len(tr_idx)} training blocks over "
           f"{len(np.unique(wid[tr_idx]))} windows", flush=True)
 
+    # Resume. At about 350 ms a block a full pass is half an hour, so an
+    # interruption without a checkpoint costs the whole run. Partial values are
+    # written every `--checkpoint-every` blocks, keyed by block index, and a
+    # restart picks up from the first index that has no value. The context set is
+    # rebuilt identically from the same seed, so a resumed run computes the same
+    # numbers as an uninterrupted one.
+    ckpt_path = Path(args.out).with_suffix(".partial.json")
+    done = {}
+    if ckpt_path.exists() and not args.fresh:
+        blob = json.loads(ckpt_path.read_text(encoding="utf-8"))
+        if (blob.get("base_context_loss") == base
+                and blob.get("n_blocks_total") == len(tr_idx)):
+            done = {int(k): float(v) for k, v in blob["values"].items()}
+            print(f"resuming from {len(done)} of {len(tr_idx)} blocks",
+                  flush=True)
+        else:
+            print("checkpoint does not match this corpus, starting over",
+                  flush=True)
+
     values = np.zeros(len(tr_idx), dtype=np.float64)
+    for k, v in done.items():
+        if k < len(values):
+            values[k] = v
+
+    def write_ckpt(upto):
+        ckpt_path.write_text(json.dumps({
+            "base_context_loss": base, "n_blocks_total": int(len(tr_idx)),
+            "values": {str(k): float(values[k]) for k in range(upto)},
+        }, default=float), encoding="utf-8")
+
     t0 = time.time()
-    for k, i in enumerate(tr_idx):
+    start_at = len(done)
+    for k in range(start_at, len(tr_idx)):
+        i = tr_idx[k]
         b, bm = to_tensor(blocks[i:i + 1])
         values[k] = block_value(model, torch, b, bm, ctx, ctx_mask, base)
+        if (k + 1) % args.ckpt_every == 0:
+            write_ckpt(k + 1)
         if (k + 1) % 50 == 0:
             el = time.time() - t0
+            n = k + 1 - start_at
             print(f"  {k+1}/{len(tr_idx)} blocks, {el:.0f}s, "
-                  f"{el/(k+1)*1000:.0f} ms per block", flush=True)
+                  f"{el/max(n,1)*1000:.0f} ms per block", flush=True)
+    write_ckpt(len(tr_idx))
 
     win = {}
     for w in np.unique(wid[tr_idx]):
@@ -216,6 +255,8 @@ def main():
           f"sd {vals.std():.3e}, {report['seconds']:.0f}s")
     Path(args.out).write_text(json.dumps(report, indent=1, default=float),
                               encoding="utf-8")
+    if ckpt_path.exists():
+        ckpt_path.unlink()
     print("___LTSV_SCORE_DONE___", flush=True)
 
 

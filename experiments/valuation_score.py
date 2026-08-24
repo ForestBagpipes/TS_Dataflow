@@ -31,6 +31,7 @@ Usage, in the dataval environment:
 """
 
 import argparse
+import hashlib
 import json
 import sys
 import time
@@ -98,8 +99,18 @@ def timeinf_scores(Xtr, Ytr, Xva, Yva):
     return out
 
 
-def opendataval_scores(Xtr, Ytr, Xva, Yva):
-    """Data-OOB, Data Shapley and KNN Shapley, at their published settings."""
+def opendataval_scores(Xtr, Ytr, Xva, Yva, wanted=None):
+    """Data-OOB, Data Shapley and KNN Shapley, at their published settings.
+
+    Yields `(name, scores, seconds)` as each finishes rather than returning them
+    together, so the caller can persist one before the next starts.
+
+    **Only the requested methods are built.** Data Shapley is not a row of the
+    frozen matrix, `docs/valuation_family_protocol.md` keeps it out because it is
+    the same game theoretic family as Data-OOB at an order of magnitude more
+    cost, and running it by default once cost forty minutes of a machine that was
+    needed elsewhere.
+    """
     from opendataval.dataval import DataOob, DataShapley, KNNShapley
     from opendataval.model import RegressionSkLearnWrapper
     from sklearn.linear_model import LinearRegression
@@ -117,21 +128,23 @@ def opendataval_scores(Xtr, Ytr, Xva, Yva):
         one_hot=False,
     )
     pred = RegressionSkLearnWrapper(LinearRegression)
-    out = {}
-    specs = [
-        ("data_oob", DataOob(num_models=OOB_MODELS)),
-        ("data_shapley", DataShapley(gr_threshold=SHAPLEY_GR,
-                                     max_mc_epochs=SHAPLEY_MAX_EPOCHS,
-                                     min_models=SHAPLEY_MIN_MODELS)),
-        ("knn_shapley", KNNShapley(k_neighbors=max(1, int(KNN_K_FRACTION * len(Xtr))))),
-    ]
-    for name, dv in specs:
+    builders = {
+        "data_oob": lambda: DataOob(num_models=OOB_MODELS),
+        "data_shapley": lambda: DataShapley(gr_threshold=SHAPLEY_GR,
+                                            max_mc_epochs=SHAPLEY_MAX_EPOCHS,
+                                            min_models=SHAPLEY_MIN_MODELS),
+        "knn_shapley": lambda: KNNShapley(
+            k_neighbors=max(1, int(KNN_K_FRACTION * len(Xtr)))),
+    }
+    for name in (wanted if wanted is not None else builders):
+        if name not in builders:
+            continue
         t0 = time.time()
+        dv = builders[name]()
         dv.train(fetcher, pred_model=pred)
-        out[name] = {"scores": np.asarray(dv.data_values, dtype=np.float64),
-                     "seconds": time.time() - t0}
-        print(f"  {name} done in {out[name]['seconds']:.0f}s", flush=True)
-    return out
+        secs = time.time() - t0
+        print(f"  {name} done in {secs:.0f}s", flush=True)
+        yield name, np.asarray(dv.data_values, dtype=np.float64), secs
 
 
 def to_window_scores(block_scores, window_ids):
@@ -145,9 +158,13 @@ def to_window_scores(block_scores, window_ids):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--corpus", default=str(ROOT / "data" / "valuation_corpus.npz"))
-    ap.add_argument("--methods", nargs="+",
-                    default=["timeinf", "data_oob", "data_shapley", "knn_shapley"])
+    #: The frozen matrix's valuation rows are L4 Data-OOB and L5 TimeInf, plus
+    #: L6 LTSV which has its own script. Data Shapley and KNN Shapley are not
+    #: rows and are not computed unless asked for by name.
+    ap.add_argument("--methods", nargs="+", default=["timeinf", "data_oob"])
     ap.add_argument("--out", default=str(ROOT / "results" / "valuation_scores.json"))
+    ap.add_argument("--fresh", action="store_true",
+                    help="ignore any partial result and recompute everything")
     args = ap.parse_args()
 
     env = check_environment()
@@ -160,10 +177,35 @@ def main():
     print(f"{X.shape[0]} blocks, {tr.sum()} train, {va.sum()} validation, "
           f"{(part == 2).sum()} test, {len(np.unique(wid))} windows", flush=True)
 
+    # Resume. Each method writes as soon as it finishes, so a run that is
+    # interrupted, or a machine that is shut down, loses only the method that
+    # was in flight. The corpus fingerprint is stored with the results and a
+    # mismatch discards them, since a partial file computed on another corpus is
+    # worse than no file.
+    fingerprint = hashlib.sha256(
+        np.ascontiguousarray(X[:64]).tobytes()
+        + np.ascontiguousarray(wid).tobytes()).hexdigest()[:16]
+    out_path = Path(args.out)
     report = {"environment": env, "corpus": str(args.corpus),
+              "corpus_fingerprint": fingerprint,
               "n_blocks": int(X.shape[0]), "methods": {}}
+    if out_path.exists() and not args.fresh:
+        old = json.loads(out_path.read_text(encoding="utf-8"))
+        if old.get("corpus_fingerprint") == fingerprint:
+            report["methods"] = old.get("methods", {})
+            done = sorted(report["methods"])
+            print(f"resuming, {len(done)} method(s) already computed: "
+                  f"{', '.join(done) or 'none'}", flush=True)
+        else:
+            print("existing result is from a different corpus, discarding it",
+                  flush=True)
 
-    if "timeinf" in args.methods:
+    def flush():
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(report, indent=1, default=float),
+                            encoding="utf-8")
+
+    if "timeinf" in args.methods and "timeinf" not in report["methods"]:
         t0 = time.time()
         s = timeinf_scores(X[tr], Y[tr], X[va], Y[va])
         report["methods"]["timeinf"] = {
@@ -171,17 +213,20 @@ def main():
             "window_scores": to_window_scores(s, wid[tr]),
         }
         print(f"  timeinf done in {time.time()-t0:.0f}s", flush=True)
+        flush()
 
-    wanted = [m for m in args.methods if m != "timeinf"]
+    wanted = [m for m in args.methods
+              if m != "timeinf" and m not in report["methods"]]
     if wanted:
-        res = opendataval_scores(X[tr], Y[tr], X[va], Y[va])
-        for name, v in res.items():
-            if name not in wanted:
-                continue
+        # The methods are handed the same fetcher one at a time, and each one is
+        # written out before the next begins.
+        for name, scores, secs in opendataval_scores(
+                X[tr], Y[tr], X[va], Y[va], wanted):
             report["methods"][name] = {
-                "seconds": v["seconds"],
-                "window_scores": to_window_scores(v["scores"], wid[tr]),
+                "seconds": secs,
+                "window_scores": to_window_scores(scores, wid[tr]),
             }
+            flush()
 
     for name, v in report["methods"].items():
         vals = np.array(list(v["window_scores"].values()))
