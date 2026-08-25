@@ -283,6 +283,77 @@ def agent_traces(models, windows, states, name, tau, n_jobs, reference):
             for i, (w, s) in enumerate(zip(windows, states))]
 
 
+def dump_window_traces(traces, windows, path, arm):
+    """Append one line per candidate to a JSONL file.
+
+    Written line by line rather than as one JSON document so that an
+    interruption keeps whatever was already flushed. Every口径 change so far has
+    needed the per candidate record and not had it, which cost two full reruns,
+    so the fields below are the ones a recomputation needs rather than the ones
+    that happen to be convenient:
+
+      the operator, its parameters and the verdict
+      the utility change and the structural distortion the shield saw
+      the distance to the clean reference before and after the candidate
+
+    The distances are what make a metric change recomputable offline. They are
+    measured on the sandbox result, so a rolled back candidate carries the
+    distance it would have produced had it been committed, which is exactly the
+    counterfactual `shield_replay.py` has to reconstruct by re executing.
+    """
+    from introact_ts.actions import robust_scale
+    byid = {w.window_id: w for w in windows}
+    path.parent.mkdir(parents=True, exist_ok=True)
+    n = 0
+    with path.open("a", encoding="utf-8") as fh:
+        for t in traces:
+            w = byid.get(t.window_id)
+            if w is None:
+                continue
+            src = np.asarray(w.series, dtype=np.float64)
+            scale = max(float(robust_scale(src)), 1e-9)
+            base = _dist(src, w.clean_series)
+            final = _dist(t.final_series, w.clean_series, t.crop_offset)
+            rec = {
+                "arm": arm, "window_id": int(t.window_id),
+                "stratum": w.stratum, "dataset": w.dataset,
+                "contamination": w.contamination,
+                "robust_scale": scale,
+                "dist_before": base, "dist_after": final,
+                "nrmsd_after": (final / scale) if final is not None else None,
+                "final_state": t.final_state,
+                "crop_offset": int(t.crop_offset),
+                "modified": bool(t.content_modified(w.series)),
+                "probe_calls": int(t.probe_calls),
+                "steps": [
+                    {"action": getattr(r.action, "value", str(r.action)),
+                     "params": {k: (float(v) if isinstance(v, (int, float)) else v)
+                                for k, v in dict(r.params).items()},
+                     "verdict": getattr(r.verdict, "value", str(r.verdict)),
+                     "delta_utility": float(r.delta_utility),
+                     "struct_distortion": float(r.struct_distortion),
+                     "risk": float(r.risk), "cost": float(r.cost)}
+                    for r in t.records],
+            }
+            fh.write(json.dumps(rec, default=float) + chr(10))
+            n += 1
+    return n
+
+
+def _dist(series, clean, crop=0):
+    """Root mean square distance to the clean reference over the shared span."""
+    if clean is None:
+        return None
+    a = np.asarray(series, dtype=np.float64)
+    b = np.asarray(clean, dtype=np.float64)[crop:crop + len(a)]
+    n = min(len(a), len(b))
+    if n == 0:
+        return None
+    d = a[:n] - b[:n]
+    d = d[np.isfinite(d)]
+    return float(np.sqrt(np.mean(d ** 2))) if d.size else None
+
+
 def score_rows(traces, windows):
     """The corpus level columns, from one arm's traces.
 
@@ -401,6 +472,10 @@ def main():
     #: after seeing a result.
     ap.add_argument("--raw-score-selection", dest="rank_within_dataset",
                     action="store_false", default=True)
+    #: Per window traces, on by default. Without them a metric change costs a
+    #: full rerun of the probe, which has already happened twice.
+    ap.add_argument("--no-dump-traces", dest="dump_traces",
+                    action="store_false", default=True)
     ap.add_argument("--l2c-episodes", dest="l2c_episodes", type=int, default=3)
     ap.add_argument("--probe-cost", dest="probe_cost", type=float, default=2.0,
                     help="probes an abstained window would have consumed")
@@ -440,6 +515,12 @@ def main():
         require_clean_tree=args.require_clean_tree,
         expect_code_hash=args.expect_code_hash,
     )
+    trace_path = ROOT / "results" / "xl" / f"seed_{args.seed}_window_traces.jsonl"
+    if args.dump_traces and trace_path.exists():
+        # A rerun starts a fresh file rather than appending to a stale one,
+        # otherwise a resumed run would carry both versions.
+        trace_path.unlink()
+
     mon.start(pool_size=len(models))
     print(f"{len(windows)} windows, source {args.source}, tau {args.tau}",
           flush=True)
@@ -592,6 +673,9 @@ def main():
         else:
             raise ValueError(how)
         row = score_rows(traces, windows)
+        if args.dump_traces:
+            n_dumped = dump_window_traces(traces, windows, trace_path, name)
+            row["traces_written"] = n_dumped
         probes = sum(t.probe_calls for t in traces)
         row["compute_seconds"] = time.time() - t0
         row["probe_calls"] = probes
