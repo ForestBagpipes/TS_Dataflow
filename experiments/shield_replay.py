@@ -22,12 +22,25 @@ count it actually used, `DESPIKE` records `n_sigma` and how many points it
 replaced, `RESEGMENT` records the exact `lo` and `hi` it cut to. Re applying the
 operator with those values is deterministic and reproduces the same series.
 
-**One limitation, stated rather than discovered later.** The replay applies the
-candidate to the window as the corpus holds it, that is to the state before any
-edit in that window was committed. Where a window had an earlier accepted edit,
-the candidate originally ran against that edited copy instead. Windows with an
-accepted edit preceding a rollback are counted and reported, so the share of the
-result that carries this approximation is visible rather than assumed.
+**The limitation, and it is larger than it first looked.** The replay applies
+the candidate to the window as the corpus holds it, that is to the state before
+any edit in that window was committed, whereas the candidate originally ran
+against whatever the working copy had become. Where an earlier candidate was
+accepted, the defect it repaired is still present in the replay's input.
+
+That is not a rare corner. Measured on the xl traces, 449 of 1157 rolled back
+candidates come back reporting nothing to do, 444 of them `IMPUTE` finding
+nothing to fill and 5 `DESPIKE` finding no spike, because the defect they were
+proposed for had already been repaired by an accepted edit earlier in the same
+window. Those are counted as **superseded** rather than failed, since nothing
+went wrong: the replay is asking about a defect that is absent from its input.
+
+Genuine failures are 39, all RESEGMENT declining because the cut would discard
+too much of the window.
+
+The consequence for the result is that the replayable set is biased away from
+imputation on windows that had already been repaired once. That is stated with
+the number rather than folded into a single failure count.
 
 No GPU, no model, no API. Pure numpy over the stored actions.
 
@@ -111,8 +124,14 @@ def replay_window(window, steps):
                          "after_accepted": accepted_before})
             continue
         if not out.applicable:
+            # An operator that reports nothing to do is not a replay failure.
+            # It means the defect this candidate targeted is absent from the
+            # replay's input, which is what an earlier accepted edit does.
+            note = (out.note or "").lower()
+            superseded = ("nothing to fill" in note or "no spikes" in note)
             rows.append({"verdict": verdict, "action": s["action"],
                          "stratum": window.stratum, "replayed": False,
+                         "superseded": superseded, "note": out.note,
                          "after_accepted": accepted_before})
             continue
         crop = int(out.params.get("lo", 0)) if action is Action.RESEGMENT else 0
@@ -136,10 +155,18 @@ def replay_window(window, steps):
 
 def summarise(rows):
     ok = [r for r in rows if r.get("replayed")]
+    superseded = [r for r in rows if not r.get("replayed") and r.get("superseded")]
+    failed = [r for r in rows
+              if not r.get("replayed") and not r.get("superseded")]
     out = {
         "candidates": len(rows),
         "replayed": len(ok),
-        "replay_failed": len(rows) - len(ok),
+        # The defect was already repaired by an earlier accepted edit, so the
+        # replay's input no longer contains it. Not a failure.
+        "superseded": len(superseded),
+        "superseded_by_note": dict(Counter(r.get("note", "") for r in superseded)),
+        "replay_failed": len(failed),
+        "failed_by_note": dict(Counter(r.get("note", "") for r in failed)),
         "after_accepted_edit": sum(1 for r in ok if r["after_accepted"]),
     }
     if not ok:
@@ -202,8 +229,10 @@ def main():
     rep["traces"] = str(args.traces)
 
     print(f"candidates {rep['candidates']}, replayed {rep['replayed']}, "
-          f"failed {rep['replay_failed']}, "
-          f"after an accepted edit {rep.get('after_accepted_edit', 0)}")
+          f"superseded by an earlier accepted edit {rep['superseded']}, "
+          f"genuinely failed {rep['replay_failed']}")
+    for note, n in rep["failed_by_note"].items():
+        print(f"    failed: {n:5d}  {note}")
     if rep.get("replayed"):
         print(f"wrongly refused {rep['would_have_helped']} of {rep['replayed']} "
               f"({rep['wrongly_refused_rate']:.3f})")

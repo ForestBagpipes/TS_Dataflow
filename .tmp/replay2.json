@@ -1,0 +1,80 @@
+{
+ "candidates": 1157,
+ "replayed": 669,
+ "superseded": 449,
+ "superseded_by_note": {
+  "nothing to fill": 444,
+  "no spikes": 5
+ },
+ "replay_failed": 39,
+ "failed_by_note": {
+  "would discard too much": 39
+ },
+ "after_accepted_edit": 22,
+ "would_have_helped": 88,
+ "would_have_harmed": 581,
+ "wrongly_refused_rate": 0.13153961136023917,
+ "by_stratum": {
+  "changepoint": {
+   "n": 18,
+   "would_have_helped": 0,
+   "wrongly_refused_rate": 0.0,
+   "median_delta": 0.11364789698081249
+  },
+  "clean": {
+   "n": 56,
+   "would_have_helped": 0,
+   "wrongly_refused_rate": 0.0,
+   "median_delta": 0.3701427704051239
+  },
+  "clean_ood": {
+   "n": 67,
+   "would_have_helped": 0,
+   "wrongly_refused_rate": 0.0,
+   "median_delta": 0.45961070287900335
+  },
+  "contaminated": {
+   "n": 471,
+   "would_have_helped": 88,
+   "wrongly_refused_rate": 0.18683651804670912,
+   "median_delta": 0.15421075269040296
+  },
+  "hard": {
+   "n": 29,
+   "would_have_helped": 0,
+   "wrongly_refused_rate": 0.0,
+   "median_delta": 0.41487945617081384
+  },
+  "rare_valid": {
+   "n": 28,
+   "would_have_helped": 0,
+   "wrongly_refused_rate": 0.0,
+   "median_delta": 0.3332146719886915
+  }
+ },
+ "by_action": {
+  "DENOISE": {
+   "n": 67,
+   "would_have_helped": 5,
+   "wrongly_refused_rate": 0.07462686567164178
+  },
+  "DESPIKE": {
+   "n": 9,
+   "would_have_helped": 0,
+   "wrongly_refused_rate": 0.0
+  },
+  "IMPUTE": {
+   "n": 575,
+   "would_have_helped": 78,
+   "wrongly_refused_rate": 0.1356521739130435
+  },
+  "RESEGMENT": {
+   "n": 18,
+   "would_have_helped": 5,
+   "wrongly_refused_rate": 0.2777777777777778
+  }
+ },
+ "windows_not_in_corpus": 0,
+ "arm": "introact_full",
+ "traces": "results/xl/xl_ett_multi-family_seed42_traces.json"
+}
