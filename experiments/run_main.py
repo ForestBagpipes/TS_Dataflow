@@ -128,6 +128,39 @@ COLUMNS = ("downstream_error", "protected_mis_edits", "damage_rate",
            "repair_gain", "compute_seconds", "probes_saved", "missed_windows")
 
 
+def rank_within_dataset(windows, scores):
+    """Replace each score by its rank inside its own dataset, normalised to [0, 1].
+
+    Measured on the xl corpus, the raw scores are not scale free and the corpus
+    now spans quantities three orders of magnitude apart. Selecting on them
+    degenerates into selecting by magnitude: Data-OOB's raw top half takes zero
+    percent of Crypto and one hundred percent of the staircase probe, and LTSV's
+    takes zero percent of Crypto and eighty percent of ETTh1. Ranking inside a
+    dataset first and merging the ranks removes that without touching what each
+    method computes.
+
+    This is the same device the changepoint and hard layers already use, and for
+    the same reason: two families whose statistics do not share a scale cannot be
+    merged by a single threshold or a single global order.
+
+    Note that a global z score would change nothing at all. It is a monotone
+    transform, selection depends only on the order, and the two give identical
+    selections. Measured, not assumed.
+    """
+    from collections import defaultdict
+    by_ds = defaultdict(list)
+    ds_of = {int(w.window_id): w.dataset for w in windows}
+    for wid in scores:
+        by_ds[ds_of.get(int(wid), "unknown")].append(int(wid))
+    out = {}
+    for _, ids in by_ds.items():
+        order = sorted(ids, key=lambda i: scores[i])
+        n = len(order)
+        for r, i in enumerate(order):
+            out[i] = r / max(n - 1, 1)
+    return out
+
+
 def selection_corpus(windows, scores, fraction):
     """A valuation arm's prepared corpus, keeping the top fraction by score.
 
@@ -302,6 +335,12 @@ def main():
     ap.add_argument("--tau", type=float, default=0.02)
     ap.add_argument("--fractions", type=float, nargs="+", default=[0.5, 0.75])
     ap.add_argument("--n-jobs", dest="n_jobs", type=int, default=32)
+    #: Selection basis. The default is the within dataset rank, fixed after the
+    #: three regime comparison recorded in section 4.1.3. The flag exists so the
+    #: raw score comparison can be reproduced, not so the basis can be chosen
+    #: after seeing a result.
+    ap.add_argument("--raw-score-selection", dest="rank_within_dataset",
+                    action="store_false", default=True)
     ap.add_argument("--l2c-episodes", dest="l2c_episodes", type=int, default=3)
     ap.add_argument("--probe-cost", dest="probe_cost", type=float, default=2.0,
                     help="probes an abstained window would have consumed")
@@ -387,9 +426,15 @@ def main():
                 table[name]["reason"] = "scores not yet computed on this corpus"
                 print(f"  {name:14s} deferred, no scores", flush=True)
                 continue
-            row = {"selection": {}}
+            raw = val_scores[key]
+            ranked = (rank_within_dataset(windows, raw)
+                      if args.rank_within_dataset else raw)
+            row = {"selection": {},
+                   "selection_basis": ("within dataset rank"
+                                       if args.rank_within_dataset
+                                       else "raw score")}
             for frac in args.fractions:
-                kept, unscored = selection_corpus(windows, val_scores[key], frac)
+                kept, unscored = selection_corpus(windows, ranked, frac)
                 kept_ids = {w.window_id for w in kept}
                 # A selection arm commits no edit, so its damage and mis edit
                 # counts are zero by construction. What it can lose is coverage,
@@ -399,10 +444,30 @@ def main():
                             for s in PROTECTED + (PROBE_LAYER, "contaminated")}
                 total = {s: sum(1 for w in windows if w.stratum == s)
                          for s in retained}
+                # The selection fraction is applied to the whole corpus, per
+                # docs/valuation_family_protocol.md: windows this family cannot
+                # score are carried as not selected rather than dropped, so they
+                # occupy the denominator without occupying a place. The rate
+                # that actually applies inside the scored pool is therefore
+                # higher than the nominal fraction, and comparing a layer's
+                # retention against the nominal one reads every layer as
+                # preferred. The baseline reported here is the effective rate.
+                n_scored = len(windows) - unscored
+                actual = len(kept) / max(n_scored, 1)
                 row["selection"][f"{frac:g}"] = {
                     "kept": len(kept), "unscored": unscored,
+                    "n_scored": n_scored,
+                    "nominal_rate": frac,
+                    "actual_rate": actual,
                     "retention": {s: retained[s] / total[s] if total[s] else None
                                   for s in retained},
+                    # Above one means the layer is kept more often than the pool
+                    # average, below one means it is dropped more often. This is
+                    # the number the protocol's prediction is about.
+                    "retention_ratio": {
+                        s: (retained[s] / total[s] / actual)
+                        if total[s] and actual else None
+                        for s in retained},
                 }
             row.update({"protected_mis_edits": 0, "damage_rate": 0.0,
                         "repair_gain": 0.0, "committed_edits": 0,

@@ -200,3 +200,57 @@ A row of zeros reads as a result. `run_main.py` now refuses to proceed when
 fewer than five percent of the corpus carries a score, since the expected
 overlap is the training fraction times the blockable share and is far above
 that floor.
+
+
+## Valuation family retention by layer, **first reported wrong, corrected**
+
+**The error.** I reported that the protected layers were retained at 0.57 to
+0.67 against a corpus share of 0.52 and concluded the protocol's prediction did
+not hold. Both the numbers and the conclusion were wrong.
+
+**Check one, which I skipped and should not have.** The selection fraction is
+applied to the whole corpus, per `docs/valuation_family_protocol.md`, so windows
+the family cannot score occupy the denominator without occupying a place. On xl
+that is `round(0.5 * 1991) = 996` places drawn from a scored pool of 1240, an
+effective rate of **0.803 rather than 0.5**. Measuring every layer against 0.5
+reads all of them as preferred, which is what produced the first table.
+
+**Corrected, against the effective rate.**
+
+| method | contaminated | clean | hard | rare_valid | changepoint |
+|---|---|---|---|---|---|
+| TimeInf | 0.940 | 1.035 | 1.090 | **0.908** | 1.060 |
+| Data-OOB | **0.797** | 1.144 | 1.107 | **0.878** | 1.197 |
+| LTSV | 0.967 | 0.985 | 0.968 | **1.163** | 1.012 |
+
+**Against the pre registration, item by item.** It predicted retention below the
+selection rate on rare_valid and on hard.
+
+Rare valid, holds for two of three. TimeInf 0.908 and Data-OOB 0.878 sit below
+the line, LTSV at 1.163 goes the other way.
+
+Hard, **does not hold**. All three are at or above the line. Reported as not
+holding, which is the branch the protocol wrote down in advance.
+
+Data-OOB's contaminated ratio of 0.797 is the lowest cell in the table. It drops
+injected windows more than any other layer, which is what it should do and which
+the protocol did not predict either way.
+
+**What the code fix was.** `run_main.py` now reports `actual_rate` and a
+`retention_ratio` normalised by it, so the baseline is computed rather than
+assumed by whoever reads the table.
+
+## Selection basis, within dataset rank
+
+**Competing explanation, ruled out by measurement.** A global z score was the
+obvious alternative and it changes nothing: it is monotone, selection depends
+only on the order, and the two produce byte identical selections. Measured on
+all three methods rather than argued.
+
+**What the raw order does.** Data-OOB's raw top half takes 0.000 of Crypto and
+1.000 of the staircase probe; LTSV's takes 0.000 of Crypto and 0.797 of ETTh1.
+Overlap with the rank basis is 0.632 and 0.779. TimeInf is barely affected at
+0.956, so the problem is not universal to the family.
+
+**Check on the fix itself.** Every dataset's ranks span 0.000 to 1.000
+separately, verified per dataset, which a global rank would not produce.
