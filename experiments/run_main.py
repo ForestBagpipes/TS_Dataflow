@@ -124,8 +124,8 @@ NOT_APPLICABLE = {
 }
 
 #: Columns every row must fill, so a missing one is an error rather than a gap.
-COLUMNS = ("downstream_error", "protected_mis_edits", "damage_rate",
-           "repair_gain", "compute_seconds", "probes_saved", "missed_windows")
+COLUMNS = ("downstream_error", "protected_mis_edit_rate", "damage_rate",
+           "repair_rmsd", "compute_seconds", "probes_saved", "missed_windows")
 
 
 def rank_within_dataset(windows, scores):
@@ -284,11 +284,32 @@ def agent_traces(models, windows, states, name, tau, n_jobs, reference):
 
 
 def score_rows(traces, windows):
-    """The corpus level columns, from one arm's traces."""
+    """The corpus level columns, from one arm's traces.
+
+    Two of these changed口径 with the frozen matrix and the change is not
+    cosmetic.
+
+    **Repair accuracy is a distance, not a ratio.** It was `1 - after / before`,
+    a relative improvement, which hides how far from correct the result still is
+    and which is unstable when `before` is small. It is now the root mean square
+    distance to the clean reference over the injected layer, so lower is better
+    and the units are the data's. The reference is the pre injection series that
+    `corpus.build_corpus` stored on the window, not the corpus's current value,
+    which is the corrupted one.
+
+    **Protected mis edits is a rate.** A count cannot be read across corpus
+    sizes, and this paper reports on two. The denominator is the four protected
+    layers, `clean`, `hard`, `rare_valid` and `changepoint`. The synthetic probe
+    layer is excluded by the 4.1.2 ruling and is reported on its own.
+    """
     from audit import _nmse
     byid = {w.window_id: w for w in windows}
     dmg, before, after = [], [], []
+    sq_err, n_inj = 0.0, 0
     mis = 0
+    n_protected = sum(1 for w in windows if w.stratum in PROTECTED)
+    probe_mis = 0
+    n_probe = sum(1 for w in windows if w.stratum == PROBE_LAYER)
     committed, harmful = 0, 0
     for t in traces:
         w = byid[t.window_id]
@@ -301,6 +322,8 @@ def score_rows(traces, windows):
         edited = t.content_modified(w.series)
         if w.stratum in PROTECTED and edited:
             mis += 1
+        if w.stratum == PROBE_LAYER and edited:
+            probe_mis += 1
         if w.clean_series is None:
             continue
         ref_var = float(np.var(w.clean_series - np.median(w.clean_series)))
@@ -314,11 +337,31 @@ def score_rows(traces, windows):
         elif w.stratum == "contaminated":
             before.append(b)
             after.append(a)
+            # Repair accuracy. Squared error against the clean reference, over
+            # the span the arm actually produced, accumulated per point so that
+            # a cropped window does not weigh less for having been cropped.
+            fin = np.asarray(t.final_series, dtype=np.float64)
+            ref = np.asarray(w.clean_series, dtype=np.float64)[t.crop_offset:]
+            n = min(len(fin), len(ref))
+            if n:
+                dd = fin[:n] - ref[:n]
+                dd = dd[np.isfinite(dd)]
+                if dd.size:
+                    sq_err += float(np.sum(dd ** 2))
+                    n_inj += int(dd.size)
     bb = float(np.mean(before)) if before else 0.0
     aa = float(np.mean(after)) if after else 0.0
     return {
         "protected_mis_edits": int(mis),
+        "n_protected_windows": int(n_protected),
+        "protected_mis_edit_rate": (mis / n_protected) if n_protected else None,
+        "probe_layer_mis_edits": int(probe_mis),
+        "n_probe_windows": int(n_probe),
         "damage_rate": (harmful / committed) if committed else 0.0,
+        "repair_rmsd": float(np.sqrt(sq_err / n_inj)) if n_inj else None,
+        "n_injected_scored": int(len(after)),
+        # Kept beside the RMSD for one release so the two口径 can be compared,
+        # and because the earlier tables report it.
         "repair_gain": (1.0 - aa / bb) if bb > 1e-9 else 0.0,
         "committed_edits": int(committed),
         "mean_protected_damage": float(np.mean(dmg)) if dmg else 0.0,
@@ -439,35 +482,51 @@ def main():
                 # A selection arm commits no edit, so its damage and mis edit
                 # counts are zero by construction. What it can lose is coverage,
                 # which is what the retention numbers record.
+                # Two denominators, and they answer different questions, so
+                # both are reported and neither is mixed into the other. An
+                # earlier version divided a corpus level numerator by a pool
+                # level baseline and produced ratios that meant nothing.
+                #
+                # corpus level   how much of a stratum survives into the prepared
+                #                corpus. Unscored windows count as dropped, per
+                #                the protocol, so the baseline is the nominal
+                #                fraction. This is what a downstream consumer
+                #                sees.
+                # pool level     within the windows this method could score, is
+                #                the stratum ranked lower than average. The
+                #                baseline is the effective rate inside that
+                #                pool. This is what the protocol's prediction is
+                #                about, since it is a claim about the scorer's
+                #                judgement rather than about coverage.
+                scored_ids = set(ranked)
+                layers = PROTECTED + (PROBE_LAYER, "contaminated")
                 retained = {s: sum(1 for w in windows
                                    if w.stratum == s and w.window_id in kept_ids)
-                            for s in PROTECTED + (PROBE_LAYER, "contaminated")}
-                total = {s: sum(1 for w in windows if w.stratum == s)
-                         for s in retained}
-                # The selection fraction is applied to the whole corpus, per
-                # docs/valuation_family_protocol.md: windows this family cannot
-                # score are carried as not selected rather than dropped, so they
-                # occupy the denominator without occupying a place. The rate
-                # that actually applies inside the scored pool is therefore
-                # higher than the nominal fraction, and comparing a layer's
-                # retention against the nominal one reads every layer as
-                # preferred. The baseline reported here is the effective rate.
-                n_scored = len(windows) - unscored
+                            for s in layers}
+                total_all = {s: sum(1 for w in windows if w.stratum == s)
+                             for s in layers}
+                total_scored = {s: sum(1 for w in windows if w.stratum == s
+                                       and int(w.window_id) in scored_ids)
+                                for s in layers}
+                n_scored = len(scored_ids)
                 actual = len(kept) / max(n_scored, 1)
                 row["selection"][f"{frac:g}"] = {
                     "kept": len(kept), "unscored": unscored,
                     "n_scored": n_scored,
                     "nominal_rate": frac,
                     "actual_rate": actual,
-                    "retention": {s: retained[s] / total[s] if total[s] else None
-                                  for s in retained},
-                    # Above one means the layer is kept more often than the pool
-                    # average, below one means it is dropped more often. This is
-                    # the number the protocol's prediction is about.
-                    "retention_ratio": {
-                        s: (retained[s] / total[s] / actual)
-                        if total[s] and actual else None
-                        for s in retained},
+                    "retention_corpus": {
+                        s: retained[s] / total_all[s] if total_all[s] else None
+                        for s in layers},
+                    "retention_corpus_ratio": {
+                        s: (retained[s] / total_all[s] / frac)
+                        if total_all[s] and frac else None for s in layers},
+                    "retention_pool": {
+                        s: retained[s] / total_scored[s] if total_scored[s] else None
+                        for s in layers},
+                    "retention_pool_ratio": {
+                        s: (retained[s] / total_scored[s] / actual)
+                        if total_scored[s] and actual else None for s in layers},
                 }
             row.update({"protected_mis_edits": 0, "damage_rate": 0.0,
                         "repair_gain": 0.0, "committed_edits": 0,
@@ -537,11 +596,12 @@ def main():
             # no sandbox. This is the quantity the comparison exists for.
             row["learning_history"] = l2c_history
         table[name] = row
+        rr = row.get("repair_rmsd")
+        rrs = f"{rr:.4f}" if rr is not None else "n/a"
         print(f"  {name:14s} edits {row['committed_edits']:5d}  "
-              f"mis {row['protected_mis_edits']:4d}  "
+              f"mis rate {row['protected_mis_edit_rate']:.4f}  "
               f"damage {row['damage_rate']:.4f}  "
-              f"repair {row['repair_gain']:+.4f}  "
-              f"{row['compute_seconds']:6.0f}s", flush=True)
+              f"rmsd {rrs:>9s}  {row['compute_seconds']:6.0f}s", flush=True)
 
     # A column that is entirely zero, or entirely one value, is usually a wiring
     # fault rather than a finding. The selection arm returning zeros on a corpus
