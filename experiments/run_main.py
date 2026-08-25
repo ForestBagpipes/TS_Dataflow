@@ -125,7 +125,7 @@ NOT_APPLICABLE = {
 
 #: Columns every row must fill, so a missing one is an error rather than a gap.
 COLUMNS = ("downstream_error", "protected_mis_edit_rate", "damage_rate",
-           "repair_rmsd", "compute_seconds", "probes_saved", "missed_windows")
+           "repair_nrmsd", "compute_seconds", "probes_saved", "missed_windows")
 
 
 def rank_within_dataset(windows, scores):
@@ -289,13 +289,24 @@ def score_rows(traces, windows):
     Two of these changed口径 with the frozen matrix and the change is not
     cosmetic.
 
-    **Repair accuracy is a distance, not a ratio.** It was `1 - after / before`,
-    a relative improvement, which hides how far from correct the result still is
-    and which is unstable when `before` is small. It is now the root mean square
-    distance to the clean reference over the injected layer, so lower is better
-    and the units are the data's. The reference is the pre injection series that
-    `corpus.build_corpus` stored on the window, not the corpus's current value,
-    which is the corrupted one.
+    **Repair accuracy is a normalised distance.** It was `1 - after / before`, a
+    relative improvement, which hides how far from correct the result still is
+    and is unstable when `before` is small. A plain root mean square distance
+    fixes that and introduces a worse problem on this corpus: the distance
+    carries the data's units, and the corpus spans a bitcoin price near 26000
+    beside a rate near 3.4, so a handful of high magnitude windows dominate the
+    column. Measured on the mixed corpus, plain RMSD put SCREEN at 2109 against
+    no action at 1382, which reads as SCREEN being worse and is really SCREEN
+    having touched a few large magnitude windows.
+
+    Each window's distance is therefore divided by that window's own robust
+    scale before averaging, using the same blockwise measure the operators and
+    SIR already use. This is the same move the valuation family's within dataset
+    rank makes and for the same reason: on a corpus of mixed provenance a
+    quantity carrying units cannot be aggregated directly.
+
+    The reference is the pre injection series that `corpus.build_corpus` stored
+    on the window, not the corpus's current value, which is the corrupted one.
 
     **Protected mis edits is a rate.** A count cannot be read across corpus
     sizes, and this paper reports on two. The denominator is the four protected
@@ -303,9 +314,10 @@ def score_rows(traces, windows):
     layer is excluded by the 4.1.2 ruling and is reported on its own.
     """
     from audit import _nmse
+    from introact_ts.actions import robust_scale
     byid = {w.window_id: w for w in windows}
     dmg, before, after = [], [], []
-    sq_err, n_inj = 0.0, 0
+    nrmsd = []
     mis = 0
     n_protected = sum(1 for w in windows if w.stratum in PROTECTED)
     probe_mis = 0
@@ -337,9 +349,10 @@ def score_rows(traces, windows):
         elif w.stratum == "contaminated":
             before.append(b)
             after.append(a)
-            # Repair accuracy. Squared error against the clean reference, over
-            # the span the arm actually produced, accumulated per point so that
-            # a cropped window does not weigh less for having been cropped.
+            # Repair accuracy, one normalised distance per window then averaged
+            # over windows. Normalising per window and averaging over windows,
+            # rather than pooling squared error over points, is what keeps a
+            # long window from outweighing a short one as well.
             fin = np.asarray(t.final_series, dtype=np.float64)
             ref = np.asarray(w.clean_series, dtype=np.float64)[t.crop_offset:]
             n = min(len(fin), len(ref))
@@ -347,8 +360,11 @@ def score_rows(traces, windows):
                 dd = fin[:n] - ref[:n]
                 dd = dd[np.isfinite(dd)]
                 if dd.size:
-                    sq_err += float(np.sum(dd ** 2))
-                    n_inj += int(dd.size)
+                    # Scale from the window's own input. A constant window has no
+                    # scale, hence the floor.
+                    sc = max(float(robust_scale(
+                        np.asarray(w.series, dtype=np.float64))), 1e-9)
+                    nrmsd.append(float(np.sqrt(np.mean(dd ** 2))) / sc)
     bb = float(np.mean(before)) if before else 0.0
     aa = float(np.mean(after)) if after else 0.0
     return {
@@ -358,7 +374,8 @@ def score_rows(traces, windows):
         "probe_layer_mis_edits": int(probe_mis),
         "n_probe_windows": int(n_probe),
         "damage_rate": (harmful / committed) if committed else 0.0,
-        "repair_rmsd": float(np.sqrt(sq_err / n_inj)) if n_inj else None,
+        "repair_nrmsd": float(np.mean(nrmsd)) if nrmsd else None,
+        "repair_nrmsd_median": float(np.median(nrmsd)) if nrmsd else None,
         "n_injected_scored": int(len(after)),
         # Kept beside the RMSD for one release so the two口径 can be compared,
         # and because the earlier tables report it.
@@ -596,12 +613,12 @@ def main():
             # no sandbox. This is the quantity the comparison exists for.
             row["learning_history"] = l2c_history
         table[name] = row
-        rr = row.get("repair_rmsd")
+        rr = row.get("repair_nrmsd")
         rrs = f"{rr:.4f}" if rr is not None else "n/a"
         print(f"  {name:14s} edits {row['committed_edits']:5d}  "
               f"mis rate {row['protected_mis_edit_rate']:.4f}  "
               f"damage {row['damage_rate']:.4f}  "
-              f"rmsd {rrs:>9s}  {row['compute_seconds']:6.0f}s", flush=True)
+              f"nrmsd {rrs:>8s}  {row['compute_seconds']:6.0f}s", flush=True)
 
     # A column that is entirely zero, or entirely one value, is usually a wiring
     # fault rather than a finding. The selection arm returning zeros on a corpus

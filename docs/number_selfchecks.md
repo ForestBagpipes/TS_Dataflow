@@ -254,3 +254,44 @@ Overlap with the rank basis is 0.632 and 0.779. TimeInf is barely affected at
 
 **Check on the fix itself.** Every dataset's ranks span 0.000 to 1.000
 separately, verified per dataset, which a global rank would not produce.
+
+
+## Repair accuracy, RMSD to normalised RMSD, **caught on the second seed**
+
+**The error.** The matrix changed repair from a ratio to a distance, and a plain
+root mean square distance carries the data's units. On the mixed corpus that put
+SCREEN at 2109 against no action at 1382, which reads as SCREEN being worse than
+doing nothing.
+
+**How it survived the smoke test.** The smoke ran `--source ett`, where every
+window is transformer telemetry and the units are uniform, so the column looked
+fine. The corpus the paper uses is `mixed` and spans a bitcoin price near 26000
+beside a rate near 3.4. **A口径 change has to be smoked on the corpus it will
+run on, not on the convenient one.**
+
+**The fix, and why it is the same fix as twice before.** Each window's distance
+is divided by that window's own blockwise robust scale before averaging. This is
+the third time on this project that a quantity carrying units had to be made
+scale free before aggregation: the changepoint criterion, the valuation family's
+selection basis, and now this. The common cause is the corpus being of mixed
+provenance, and the common fix is to normalise or rank inside the homogeneous
+unit before merging.
+
+**Verified on the corpus it will run on.**
+
+| row | nRMSD | old RMSD |
+|---|---|---|
+| oracle | **0.0000** | not run |
+| MTCSC | 1.2174 | 797.71 |
+| SCREEN | 1.2498 | 2109.31 |
+| no action | 1.2671 | 1381.99 |
+| IMR | 1.3114 | 392.01 |
+
+The inversion is gone. IMR still sits above no action and that one is real: it
+edits almost every window and its damage rate is 0.8587 with a mis edit rate of
+0.9600.
+
+**Aggregation also changed.** Per window normalisation then a mean over windows,
+rather than pooling squared error over points. Pooling would weight a long
+window more, and RESEGMENT produces windows of unequal length. Same reason the
+valuation family's window score is a mean and not a sum.
