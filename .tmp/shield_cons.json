@@ -1,0 +1,50 @@
+{
+ "n": 1157,
+ "would_have_helped": 444,
+ "would_have_harmed": 713,
+ "ratio": 0.3837510803802939,
+ "by_verdict": {
+  "ROLLED_BACK_UTILITY": {
+   "n": 770,
+   "would_have_helped": 57,
+   "ratio": 0.07402597402597402
+  },
+  "ROLLED_BACK_STRUCTURE": {
+   "n": 387,
+   "would_have_helped": 387,
+   "ratio": 1.0
+  }
+ },
+ "by_stratum": {
+  "changepoint": {
+   "n": 67,
+   "would_have_helped": 27,
+   "ratio": 0.40298507462686567
+  },
+  "clean": {
+   "n": 189,
+   "would_have_helped": 71,
+   "ratio": 0.37566137566137564
+  },
+  "clean_ood": {
+   "n": 73,
+   "would_have_helped": 64,
+   "ratio": 0.8767123287671232
+  },
+  "contaminated": {
+   "n": 578,
+   "would_have_helped": 199,
+   "ratio": 0.34429065743944637
+  },
+  "hard": {
+   "n": 135,
+   "would_have_helped": 39,
+   "ratio": 0.28888888888888886
+  },
+  "rare_valid": {
+   "n": 115,
+   "would_have_helped": 44,
+   "ratio": 0.3826086956521739
+  }
+ }
+}
