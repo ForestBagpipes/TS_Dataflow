@@ -599,3 +599,55 @@ measured exactly zero on this corpus. What survives is theorem 4, exploration
 structural safety, and that one is measured strongly: 265 windows reordered, 20
 operators injected that the proposer never offers, and the committed set
 identical on all 1986 windows.
+
+### The policy did learn a different strategy, and the shield undid it
+
+The strongest reading of the collapsed rungs, added after the first three
+checks. Seed 0, `f_full` against `c_no_policy`, over the 1986 shared windows.
+
+**What the policy changed.** The first operator tried in each window:
+
+| operator | fixed rule | full method |
+|---|---|---|
+| RESEGMENT | 737 | **890** |
+| IMPUTE | 437 | **225** |
+| DESPIKE | 31 | 71 |
+| DENOISE | 25 | 48 |
+| KEEP | 689 | 685 |
+| ABSTAIN | 67 | 67 |
+
+263 of 1986 windows open with a different operator. The bound did not nudge the
+ordering, it learned a visibly different preference: imputation as an opening
+move falls by half and resegmentation rises by a fifth.
+
+**What the shield did to it.** The operators actually committed:
+
+| operator | fixed rule | full method |
+|---|---|---|
+| RESEGMENT | 129 | 129 |
+| IMPUTE | 9 | 9 |
+| DESPIKE | 27 | 27 |
+
+Identical, operator by operator, to the count. Two policies that open
+differently on 263 windows commit exactly the same 165 edits.
+
+**The three remaining explanations, each ruled out by reading the code.**
+
+  the tables never update      `observe` calls `tables.update`, which is the
+                               standard incremental mean, and `agent.py` line
+                               263 calls `observe` on every adjudicated
+                               candidate. The method is named `observe` rather
+                               than `update`, which is why a grep for the latter
+                               finds nothing
+  exploration is too weak      `c_u` is 1.0 and the width is
+                               `c_u sqrt(2 log t / n)`, so it varies with the
+                               round and the visit count. An unvisited cell
+                               enters at `optimistic_init` 1.0, deliberately
+                               above any plausible real value
+  the clustering degenerated   a single cluster could touch at most 3 tables
+                               times 7 arms, so 21 cells. The runs report 45
+                               and 46 cells touched per calibration interval,
+                               so at least three clusters are in use
+
+So the policy runs, learns, and acts on what it learned, and the acceptance set
+does not move. That is the design working as specified rather than a defect.
