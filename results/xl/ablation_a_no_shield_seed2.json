@@ -1,0 +1,73 @@
+{
+ "protected_mis_edits": 259,
+ "n_protected_windows": 1050,
+ "protected_mis_edit_rate": 0.24666666666666667,
+ "probe_layer_mis_edits": 53,
+ "n_probe_windows": 210,
+ "damage_rate": 0.4116161616161616,
+ "repair_nrmsd": 1.0808506000503944,
+ "repair_nrmsd_median": 0.34024494210915557,
+ "n_injected_scored": 740,
+ "repair_gain": 0.40599864973189714,
+ "committed_edits": 792,
+ "mean_protected_damage": 0.017252877600559584,
+ "matrix_id": "A1",
+ "tau": 0.02,
+ "policy": true,
+ "inject": true,
+ "shaped_reward": true,
+ "injections": 15,
+ "theorem6": {
+  "t_cal": 500,
+  "reward_clip": 5.886732284690514,
+  "n_decisions_with_choice": 435,
+  "gamma": {
+   "q0.00": 0.0,
+   "q0.01": 0.0,
+   "q0.05": 0.07819392583107727,
+   "q0.25": 0.5610061576075703,
+   "q0.50": 1.0287765153683595,
+   "mean": 0.914296261813742,
+   "n_zero": 13,
+   "zero_share": 0.029885057471264367
+  },
+  "intervals": [
+   {
+    "t_start": 0,
+    "t_end": 500,
+    "n_updates": 500,
+    "cells_touched": 28,
+    "n_min": 1,
+    "n_min_cumulative": 2
+   },
+   {
+    "t_start": 500,
+    "t_end": 923,
+    "n_updates": 423,
+    "cells_touched": 30,
+    "n_min": 1,
+    "n_min_cumulative": 2
+   }
+  ],
+  "tv_bound_at_gamma_q0.00": Infinity,
+  "tv_bound_at_gamma_q0.01": Infinity,
+  "tv_bound_at_gamma_q0.05": [
+   75283.7541039652,
+   75283.7541039652
+  ],
+  "tv_bound_at_gamma_q0.25": [
+   10493.168755570674,
+   10493.168755570674
+  ],
+  "tv_bound_at_gamma_q0.50": [
+   5722.071020043391,
+   5722.071020043391
+  ]
+ },
+ "compute_seconds": 198.8792245388031,
+ "seed": 2,
+ "scale": "xl",
+ "source": "mixed",
+ "n_windows": 2000,
+ "traces_written": 2000
+}

@@ -721,3 +721,80 @@ carries 78 percent of the refusals and is the most reliably correct refusal.
 This is the split the discussion needs when it explains why introact repairs
 spike worse than spec_veto: a spike is exactly the case where DESPIKE and
 DENOISE look like structure removal.
+
+## The ablation ladder, three seeds, and the two questions it answers differently
+
+Complete 2026-08-27. Seven rungs on three seeds, `--source mixed --scale xl
+--tau 0.02`, aggregated by `experiments/aggregate_ablations.py`.
+
+| rung | id | edits | mis edit rate | damage rate | nRMSD |
+|---|---|---|---|---|---|
+| a_no_shield | A1 | 813 +- 20 | 0.2602 +- 0.0118 | 0.4130 +- 0.0179 | 1.0280 +- 0.0486 |
+| b_no_structural | A2 | 315 +- 12 | 0.0991 +- 0.0056 | 0.3745 +- 0.0250 | 1.0535 +- 0.0496 |
+| g_no_conformal | A4 | 251 +- 8 | 0.0861 +- 0.0043 | 0.2613 +- 0.0421 | 1.0537 +- 0.0498 |
+| c_no_policy | A5 | 161 +- 9 | 0.0635 +- 0.0054 | 0.1287 +- 0.0107 | 1.0754 +- 0.0458 |
+| d_no_injection | A6 | 161 +- 9 | 0.0635 +- 0.0054 | 0.1306 +- 0.0084 | 1.0764 +- 0.0472 |
+| e_raw_reward | A3 | 161 +- 9 | 0.0635 +- 0.0054 | 0.1306 +- 0.0084 | 1.0764 +- 0.0472 |
+| **f_full** | reference | 161 +- 9 | 0.0635 +- 0.0054 | 0.1306 +- 0.0084 | 1.0764 +- 0.0472 |
+
+Ratio to the reference row:
+
+| rung | damage | mis edits |
+|---|---|---|
+| a_no_shield | **3.16x** | **4.10x** |
+| b_no_structural | **2.87x** | 1.56x |
+| g_no_conformal | **2.00x** | 1.36x |
+| the three policy rungs | 0.98 to 1.00x | 1.00x |
+
+### The two questions need different evidence and get it
+
+**How far a shield rung falls.** Far enough that three seed means settle it.
+Removing the shield triples damage and quadruples mis edits. Removing only the
+structural half still nearly triples damage, and note that it does so while
+editing a third as often as no shield at all, so the structural condition is not
+merely reducing the edit count. Replacing the calibrated threshold with the hand
+set 0.12 doubles damage, which is the clearest evidence the paper has that the
+conformal procedure earned its place.
+
+**Whether a policy rung differs at all.** Three seed means cannot settle this
+and no test on three points would either. Counted window by window instead,
+which is exact:
+
+| rung | seed | windows | different endpoint | different action order |
+|---|---|---|---|---|
+| c_no_policy | 0 | 1986 | **0** | 265 |
+| c_no_policy | 1 | 2000 | **7** | 292 |
+| c_no_policy | 2 | 2000 | **3** | 281 |
+| d_no_injection | 0, 1, 2 | 5986 | **0, 0, 0** | 23, 34, 19 |
+| e_raw_reward | 0, 1, 2 | 5986 | **0, 0, 1** | 31, 48, 47 |
+
+Across all three seeds the fixed rule ends somewhere different from the full
+method on **10 windows out of 5986, 0.17 percent**, while opening with a
+different operator on 838 of them, 14 percent. Removing injection alone changes
+no endpoint at all in any seed. Learning from the raw utility rather than the
+shielded reward changes one.
+
+Exact McNemar on the paired mis edit outcome is p = 1 for every rung and seed:
+the discordant counts are 0 against 0. **No window is mis edited by one and not
+the other, ever.**
+
+### Check four, the cross reconciliation
+
+Edits and mis edit rate recomputed from each rung's own flushed traces and
+compared to its result file, 12 of 12 agree exactly. The damage rate is not
+reconciled this way and the reason is recorded above: the trace stores a
+distance that drops non finite differences while the table's definition fills
+them, so on the missing kinds the two are different quantities by construction.
+
+### What the ladder licenses
+
+**The shield carries the result and the ladder shows it three ways.** All three
+shield rungs degrade substantially and monotonically in the order the design
+predicts.
+
+**The policy changes the path and not the destination, and that is now measured
+at three seeds rather than one.** The seed 0 result where every policy rung was
+identical to the reference row was not an identity, seeds 1 and 2 differ on 7
+and 3 windows. The effect is real and it is 0.17 percent. No claim of a repair
+or safety gain from learning survives this table, and the exploration safety
+claim is what it supports instead.
