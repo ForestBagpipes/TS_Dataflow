@@ -661,3 +661,33 @@ introact_full 改为 introact。原来的 0.187 与按算子的那组数是在 e
 是效果最难与移除真实结构区分的，而结构条件正是为防这个而设。IMPUTE 承担了 78%
 的拒绝且最可靠，0.1280 加减 0.0014。这一条正好解释了 introact 在 spike 上修得
 不如 spec_veto，尖峰正是 DESPIKE 与 DENOISE 看起来像在削结构的形态。
+
+## 2026-08-27 软惩罚接入主表
+
+### 方法层，`VerifyConfig.soft_mu`
+
+主表的 soft_penalty 行此前是 deferred，理由写的是 VerifyConfig 表达不了加权和
+判据。现在给它加一个可选字段 soft_mu，非空时把合取换成 dU 减 mu 乘 D_struct 大
+于 epsilon，且对畸变本身不设阈值。默认 None，现有调用一律不受影响，两条测试分
+别钉住这两半。
+
+拒绝在软规则下报为 ROLLED_BACK_UTILITY，因为软规则只有一个分数可失败，没有独立
+的结构否决可报，这正是对照要说明的事。
+
+这样软臂就与其余对照走同一条 agent_traces，语料提议沙箱探测评分全部相同，唯一
+差异是判据，四列由 score_rows 直接产出，能与我们的行并列。
+
+方法层代码哈希由 `1f6d57bb1a15e4a0` 变为 **`4dafbe9f0e36e7e4`**，后续所有跑要用
+新值断言。
+
+### `experiments/run_soft_sweep.py`
+
+新增，mu 十档乘三 seed，走 run_main 的臂调度与指标。按要求实现熔断恢复，每个
+(mu, seed) 写临时文件再 rename，rename 是原子的，所以断电只会留下临时文件不会留
+下截断的结果。已存在且能解析的组合跳过，存在但解析失败的删掉重算。感知每个 seed
+算一次，某个 seed 的全部档位都在盘上时连感知一起跳过。
+
+`soft_vs_hard.py` 保留不动，它的前沿分析回答的是另一个问题。原来打算从它取数填
+主表那一格，但它用的是 ett 语料、自建的 CorpusSpec、把 clean_ood 计入受保护层、
+以受保护层平均 nmse 当损害率、提议序列来自 stat_only 而非 agent，这样产出的行填
+不进主表。

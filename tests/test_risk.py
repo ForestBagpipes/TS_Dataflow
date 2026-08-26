@@ -157,3 +157,42 @@ def test_policy_does_not_repeat_a_committed_operator():
     ]
     cands = propose_actions(_state("contaminated", {"missing_frac": 0.1}), history)
     assert Action.IMPUTE not in [a for a, _ in cands]
+
+
+def test_soft_mu_replaces_the_conjunction_with_a_weighted_sum():
+    """The soft contrast accepts a structurally damaging edit for enough gain.
+
+    The conjunction refuses any distortion above tau whatever the gain. The
+    soft rule has no such threshold, which is the architectural difference the
+    main table's `soft_penalty` row exists to measure, so the test fixes both
+    halves of it: the same candidate is refused by one and taken by the other.
+    """
+    from introact_ts.verify import VerifyConfig, verify
+    from introact_ts.types import Verdict
+
+    # Distortion far above tau, gain large enough to outweigh mu times it.
+    du, dist = 10.0, 0.5
+    hard = VerifyConfig(tau=0.02)
+    assert verify(du, dist, 0.0, hard) is Verdict.ROLLED_BACK_STRUCTURE
+
+    soft = VerifyConfig(tau=0.02, soft_mu=1.0)
+    assert verify(du, dist, 0.0, soft) is Verdict.ACCEPTED
+
+    # A large enough weight refuses it again, and reports the refusal as a
+    # utility rollback because the soft rule has only one score to fail.
+    heavy = VerifyConfig(tau=0.02, soft_mu=100.0)
+    assert verify(du, dist, 0.0, heavy) is Verdict.ROLLED_BACK_UTILITY
+
+
+def test_soft_mu_none_leaves_every_existing_caller_unchanged():
+    """The default must not perturb the conjunction, since the main table ran
+    on it and those numbers are already recorded."""
+    from introact_ts.verify import VerifyConfig, verify
+    from introact_ts.types import Verdict
+
+    cfg = VerifyConfig(tau=0.02)
+    assert cfg.soft_mu is None
+    assert verify(1.0, 0.001, 0.0, cfg) is Verdict.ACCEPTED
+    assert verify(0.0, 0.001, 0.0, cfg) is Verdict.ROLLED_BACK_UTILITY
+    assert verify(1.0, 0.9, 0.0, cfg) is Verdict.ROLLED_BACK_STRUCTURE
+    assert verify(1.0, 0.001, 0.99, cfg) is Verdict.ROLLED_BACK_RISK

@@ -260,6 +260,11 @@ CONTRASTS = {
     "spec_veto": dict(require_reprobe=False, require_risk=False),
     "no_shield": dict(require_structure=False, require_reprobe=False,
                       require_risk=False),
+    # The competing design, decided by a weighted sum rather than a
+    # conjunction. It runs through the same `agent_traces` as every other
+    # contrast, so it differs from ours in the decision rule and in nothing
+    # else. See `VerifyConfig.soft_mu`.
+    "soft_penalty": dict(soft_mu=None),   # filled from SOFT_MU at call time
 }
 
 
@@ -271,9 +276,12 @@ CONTRASTS = {
 SOFT_MU = 10.0
 
 
-def agent_traces(models, windows, states, name, tau, n_jobs, reference):
+def agent_traces(models, windows, states, name, tau, n_jobs, reference,
+                 soft_mu=None):
     """One agent arm, all of them driven by VerifyConfig overrides."""
-    over = CONTRASTS.get(name, {})
+    over = dict(CONTRASTS.get(name, {}))
+    if name == "soft_penalty":
+        over["soft_mu"] = SOFT_MU if soft_mu is None else float(soft_mu)
     cfg = AgentConfig(verification=VerifyConfig(tau=tau, **over), n_jobs=n_jobs)
     agent = IntroActAgent(models, cfg)
     agent._calib = reference._calib
@@ -476,6 +484,10 @@ def main():
     #: full rerun of the probe, which has already happened twice.
     ap.add_argument("--no-dump-traces", dest="dump_traces",
                     action="store_false", default=True)
+    #: Penalty weight for the soft contrast row. None takes SOFT_MU, which is
+    #: the point of the sweep the table carries. The flag exists so the sweep
+    #: can drive this script rather than duplicating the arm.
+    ap.add_argument("--soft-mu", dest="soft_mu", type=float, default=None)
     ap.add_argument("--l2c-episodes", dest="l2c_episodes", type=int, default=3)
     ap.add_argument("--probe-cost", dest="probe_cost", type=float, default=2.0,
                     help="probes an abstained window would have consumed")
@@ -672,18 +684,14 @@ def main():
             traces = agent_traces(models, windows, states, name, args.tau,
                                   args.n_jobs, agent)
         elif how == "soft":
-            # The soft arm decides on a weighted sum rather than a conjunction,
-            # which VerifyConfig cannot express, so it runs through
-            # soft_vs_hard.apply_plan on the same proposal sequence. That script
-            # sweeps mu; the table carries the sweep's strongest point, named in
-            # SOFT_MU, so the row is the best form of the competing design.
-            table[name] = {c: "deferred" for c in COLUMNS}
-            table[name]["reason"] = (
-                "the soft arm needs the proposal sequence that soft_vs_hard.py "
-                "caches, wiring it here would duplicate that cache, so this row "
-                f"is filled from that script's sweep at mu {SOFT_MU:g}")
-            print(f"  {name:14s} deferred, see soft_vs_hard.py", flush=True)
-            continue
+            # The soft arm now runs here rather than being deferred.
+            # `VerifyConfig.soft_mu` expresses the weighted sum, so this arm
+            # shares the corpus, the proposals, the sandbox and the probe with
+            # every other contrast and differs only in the decision rule.
+            # `experiments/run_soft_sweep.py` sweeps mu; the table carries the
+            # point named in SOFT_MU and the table note says which and why.
+            traces = agent_traces(models, windows, states, name, args.tau,
+                                  args.n_jobs, agent, soft_mu=args.soft_mu)
         else:
             raise ValueError(how)
         row = score_rows(traces, windows)

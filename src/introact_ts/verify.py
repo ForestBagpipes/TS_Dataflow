@@ -53,6 +53,19 @@ class VerifyConfig:
     require_structure: bool = True
     require_reprobe: bool = True
     require_risk: bool = True
+    #: When set, the conjunction above is replaced by the competing design's
+    #: weighted sum, `dU - mu * D_struct > epsilon`, with no threshold on the
+    #: distortion itself. None keeps the conjunction, so every existing caller
+    #: is unaffected.
+    #:
+    #: This lives here rather than in a separate script because the comparison
+    #: is only about the decision rule. Sharing the corpus, the proposals, the
+    #: sandbox and the probe means the soft arm differs from ours in exactly one
+    #: place, which is what makes it a contrast rather than a different
+    #: experiment. `experiments/soft_vs_hard.py` sweeps the same weight on its
+    #: own proposal sequence to trace the frontier; this switch is what puts one
+    #: point of that sweep into the main table in the table's own columns.
+    soft_mu: float = None
 
 
 def improvement_consistency(z_before: np.ndarray, z_after: np.ndarray) -> float:
@@ -130,6 +143,17 @@ def verify(
 ) -> Verdict:
     """Apply the acceptance rule and report which condition failed, if any."""
     cfg = cfg or VerifyConfig()
+
+    if cfg.soft_mu is not None:
+        # The competing design. Structure is a penalty in the objective, so a
+        # large enough utility gain buys a structurally damaging edit and there
+        # is no distortion the rule refuses outright. A rejection here is
+        # reported as a utility rollback because that is what it is: the single
+        # weighted score failed to clear epsilon. There is no structural
+        # rollback to report, which is the whole point of the contrast.
+        if (delta_utility - cfg.soft_mu * struct_distortion) > cfg.epsilon:
+            return Verdict.ACCEPTED
+        return Verdict.ROLLED_BACK_UTILITY
 
     if cfg.require_reprobe and not (delta_utility > cfg.epsilon):
         return Verdict.ROLLED_BACK_UTILITY
