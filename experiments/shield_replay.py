@@ -197,27 +197,52 @@ def summarise(rows):
     return out
 
 
+def load_traces(path, arm):
+    """Traces from either the JSONL the main run flushes or the older JSON.
+
+    The JSONL is one record per window with an `arm` field, written line by line
+    so an interrupted run keeps what it flushed. The older format is one JSON
+    document keyed by arm. Both are read here because the ett run that produced
+    the first version of this measurement is in the older one and is kept for
+    comparison, while every number that goes in the paper comes from the newer.
+    """
+    p = Path(path)
+    if p.suffix == ".jsonl":
+        out = []
+        for line in p.open(encoding="utf-8"):
+            r = json.loads(line)
+            if r.get("arm") == arm:
+                out.append(r)
+        return out
+    blob = json.loads(p.read_text(encoding="utf-8"))
+    return blob[arm] if arm in blob else blob
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--traces", required=True)
-    ap.add_argument("--arm", default="introact_full")
+    ap.add_argument("--arm", default="introact")
     ap.add_argument("--scale", default="xl", choices=list(SCALES))
-    ap.add_argument("--source", default="ett")
-    ap.add_argument("--seed", type=int, default=42)
+    #: The paper's corpus. The first version of this measurement ran on `ett`,
+    #: whose windows are all transformer telemetry, and a number measured there
+    #: cannot be quoted in a section whose table is on `mixed`. That is the same
+    #: mistake the repair distance column made, see `docs/number_selfchecks.md`.
+    ap.add_argument("--source", default="mixed")
+    ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out", default=str(ROOT / "results" / "shield_replay.json"))
     args = ap.parse_args()
 
     spec = SCALES[args.scale]
     spec.seed = args.seed
     windows = {w.window_id: w for w in build_corpus(spec, source=args.source)}
-    blob = json.loads(Path(args.traces).read_text(encoding="utf-8"))
-    traces = blob[args.arm] if args.arm in blob else blob
-    print(f"{len(windows)} windows, {len(traces)} traces", flush=True)
+    traces = load_traces(args.traces, args.arm)
+    print(f"{len(windows)} windows, {len(traces)} traces, "
+          f"source {args.source}, seed {args.seed}", flush=True)
 
     rows = []
     missing = 0
     for t in traces:
-        w = windows.get(t["window_id"])
+        w = windows.get(int(t["window_id"]))
         if w is None:
             missing += 1
             continue

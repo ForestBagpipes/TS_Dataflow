@@ -651,3 +651,73 @@ differently on 263 windows commit exactly the same 165 edits.
 
 So the policy runs, learns, and acts on what it learned, and the acceptance set
 does not move. That is the design working as specified rather than a defect.
+
+## Shield conservatism on the paper's corpus, and why the ett numbers were void
+
+Section 4.2's experiment two. `experiments/shield_replay.py` re executes every
+rolled back candidate on its window and measures the distance to the clean
+reference before and after, so whether refusing it cost a real repair is
+measured rather than modelled.
+
+**The earlier numbers cannot be used.** The first run of this measurement was on
+`--source ett`, seed 42, and that corpus is entirely transformer telemetry while
+the paper's table is on `mixed`. Recomputed on the corpus the section actually
+reports, the headline moves and the operator ordering inverts:
+
+| quantity | ett seed 42 | mixed, three seeds |
+|---|---|---|
+| contaminated layer | 0.187 | **0.2855 +- 0.0106** |
+| DENOISE | 0.075 | **0.4197 +- 0.0361** |
+| DESPIKE | 0.000 | **0.3711 +- 0.0355** |
+| IMPUTE | 0.136 | 0.1280 +- 0.0014 |
+| RESEGMENT | 0.278 | 0.1820 +- 0.0133 |
+
+RESEGMENT was the worst operator on ett and is now the second best; DESPIKE was
+perfect there and is now second worst. **This is the third time a number
+measured on ett failed to transfer to mixed**, after the repair distance and the
+selection basis. The rule stands and has to be applied without exception: a
+number is measured on the corpus the section reports.
+
+### The result, three seeds on mixed
+
+Overall wrongly refused 0.1739 +- 0.0055, over 1251 to 1299 replayable
+candidates per seed. Replay coverage is essentially total: 2 to 3 candidates
+per seed are superseded by an earlier accepted edit and **zero fail**, against
+449 superseded and 39 failed on the ett run, so the limitation the module
+docstring warns about is not binding here.
+
+| stratum | n per seed | wrongly refused |
+|---|---|---|
+| clean | 147 | **0.0000** |
+| hard | 46 | **0.0000** |
+| rare_valid | 116 | **0.0000** |
+| changepoint | 106 | **0.0000** |
+| clean_ood, the probe layer | 83 | **0.0000** |
+| contaminated | 776 | 0.2855 +- 0.0106 |
+
+**Every protected layer is exactly zero in all three seeds, and so is the probe
+layer.** Of the candidates the shield refused, not one would have improved a
+window it was supposed to protect. The entire cost of the shield's caution falls
+on the injected layer, which is where a refused repair is a repair forgone
+rather than a protection earned.
+
+The median distance change on the protected layers is between +0.15 and +0.54,
+so the refused candidates there were not marginal: committing them would have
+moved those windows substantially away from the truth.
+
+### Which operators the caution falls on
+
+| operator | n per seed | wrongly refused |
+|---|---|---|
+| DENOISE | 123 | 0.4197 +- 0.0361 |
+| DESPIKE | 68 | 0.3711 +- 0.0355 |
+| RESEGMENT | 111 | 0.1820 +- 0.0133 |
+| IMPUTE | 972 | 0.1280 +- 0.0014 |
+
+The two smoothing operators are where the shield is most often wrong, and they
+are also the two whose effect is hardest to distinguish from removing genuine
+structure, which is what the structural condition exists to prevent. IMPUTE
+carries 78 percent of the refusals and is the most reliably correct refusal.
+This is the split the discussion needs when it explains why introact repairs
+spike worse than spec_veto: a spike is exactly the case where DESPIKE and
+DENOISE look like structure removal.

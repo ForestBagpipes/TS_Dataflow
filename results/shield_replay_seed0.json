@@ -1,0 +1,77 @@
+{
+ "candidates": 1253,
+ "replayed": 1251,
+ "superseded": 2,
+ "superseded_by_note": {
+  "no spikes": 2
+ },
+ "replay_failed": 0,
+ "failed_by_note": {},
+ "after_accepted_edit": 40,
+ "would_have_helped": 210,
+ "would_have_harmed": 1041,
+ "wrongly_refused_rate": 0.16786570743405277,
+ "by_stratum": {
+  "changepoint": {
+   "n": 108,
+   "would_have_helped": 0,
+   "wrongly_refused_rate": 0.0,
+   "median_delta": 0.24425947902683
+  },
+  "clean": {
+   "n": 141,
+   "would_have_helped": 0,
+   "wrongly_refused_rate": 0.0,
+   "median_delta": 0.3145339922164532
+  },
+  "clean_ood": {
+   "n": 88,
+   "would_have_helped": 0,
+   "wrongly_refused_rate": 0.0,
+   "median_delta": 0.4415661634378982
+  },
+  "contaminated": {
+   "n": 760,
+   "would_have_helped": 210,
+   "wrongly_refused_rate": 0.27631578947368424,
+   "median_delta": 0.017877145799296123
+  },
+  "hard": {
+   "n": 49,
+   "would_have_helped": 0,
+   "wrongly_refused_rate": 0.0,
+   "median_delta": 0.23109530714674537
+  },
+  "rare_valid": {
+   "n": 105,
+   "would_have_helped": 0,
+   "wrongly_refused_rate": 0.0,
+   "median_delta": 0.3107075901758675
+  }
+ },
+ "by_action": {
+  "DENOISE": {
+   "n": 116,
+   "would_have_helped": 45,
+   "wrongly_refused_rate": 0.3879310344827586
+  },
+  "DESPIKE": {
+   "n": 62,
+   "would_have_helped": 22,
+   "wrongly_refused_rate": 0.3548387096774194
+  },
+  "IMPUTE": {
+   "n": 962,
+   "would_have_helped": 122,
+   "wrongly_refused_rate": 0.12681912681912683
+  },
+  "RESEGMENT": {
+   "n": 111,
+   "would_have_helped": 21,
+   "wrongly_refused_rate": 0.1891891891891892
+  }
+ },
+ "windows_not_in_corpus": 0,
+ "arm": "introact",
+ "traces": "results/xl/seed_0_window_traces.jsonl"
+}
