@@ -1,0 +1,528 @@
+{
+ "warnings": [],
+ "scale": "xl",
+ "seed": 0,
+ "source": "mixed",
+ "n_windows": 1986,
+ "tau": 0.02,
+ "perceive_seconds": 335.333487033844,
+ "protected": [
+  "clean",
+  "hard",
+  "rare_valid",
+  "changepoint"
+ ],
+ "probe_layer": "clean_ood",
+ "columns": [
+  "downstream_error",
+  "protected_mis_edit_rate",
+  "damage_rate",
+  "repair_nrmsd",
+  "compute_seconds",
+  "probes_saved",
+  "missed_windows"
+ ],
+ "rows": {
+  "L0_no_action": {
+   "protected_mis_edits": 0,
+   "n_protected_windows": 1036,
+   "protected_mis_edit_rate": 0.0,
+   "probe_layer_mis_edits": 0,
+   "n_probe_windows": 210,
+   "damage_rate": 0.0,
+   "repair_nrmsd": 1.1172176897768473,
+   "repair_nrmsd_median": 0.46556701079277185,
+   "n_injected_scored": 740,
+   "repair_gain": 0.0,
+   "committed_edits": 0,
+   "mean_protected_damage": 0.0,
+   "traces_written": 1986,
+   "compute_seconds": 1.3566346168518066,
+   "probe_calls": 1986,
+   "probes_saved": "not_applicable",
+   "missed_windows": "not_applicable",
+   "reason_probes": "this arm issues no probe, so there is no budget to save",
+   "downstream_error": "deferred"
+  },
+  "L1_screen": {
+   "protected_mis_edits": 169,
+   "n_protected_windows": 1036,
+   "protected_mis_edit_rate": 0.16312741312741313,
+   "probe_layer_mis_edits": 1,
+   "n_probe_windows": 210,
+   "damage_rate": 0.6656534954407295,
+   "repair_nrmsd": 1.1185644035560913,
+   "repair_nrmsd_median": 0.44827920559767687,
+   "n_injected_scored": 740,
+   "repair_gain": 0.03101629604292999,
+   "committed_edits": 329,
+   "mean_protected_damage": 0.012353319654202577,
+   "traces_written": 1986,
+   "compute_seconds": 24.090500831604004,
+   "probe_calls": 0,
+   "probes_saved": "not_applicable",
+   "missed_windows": "not_applicable",
+   "reason_probes": "this arm issues no probe, so there is no budget to save",
+   "downstream_error": "deferred"
+  },
+  "L2_imr": {
+   "protected_mis_edits": 1026,
+   "n_protected_windows": 1036,
+   "protected_mis_edit_rate": 0.9903474903474904,
+   "probe_layer_mis_edits": 195,
+   "n_probe_windows": 210,
+   "damage_rate": 0.8635184224182667,
+   "repair_nrmsd": 1.099502210955154,
+   "repair_nrmsd_median": 0.45651783603438284,
+   "n_injected_scored": 740,
+   "repair_gain": 0.03753944992242264,
+   "committed_edits": 1927,
+   "mean_protected_damage": 0.08702255875352148,
+   "traces_written": 1986,
+   "compute_seconds": 7.185240745544434,
+   "probe_calls": 0,
+   "probes_saved": "not_applicable",
+   "missed_windows": "not_applicable",
+   "reason_probes": "this arm issues no probe, so there is no budget to save",
+   "downstream_error": "deferred"
+  },
+  "L3_mtcsc": {
+   "protected_mis_edits": 169,
+   "n_protected_windows": 1036,
+   "protected_mis_edit_rate": 0.16312741312741313,
+   "probe_layer_mis_edits": 1,
+   "n_probe_windows": 210,
+   "damage_rate": 0.7021276595744681,
+   "repair_nrmsd": 1.066505713439169,
+   "repair_nrmsd_median": 0.3680840968957158,
+   "n_injected_scored": 740,
+   "repair_gain": 0.037378850207728354,
+   "committed_edits": 329,
+   "mean_protected_damage": 0.002546540047672559,
+   "traces_written": 1986,
+   "compute_seconds": 20.580937147140503,
+   "probe_calls": 0,
+   "probes_saved": "not_applicable",
+   "missed_windows": "not_applicable",
+   "reason_probes": "this arm issues no probe, so there is no budget to save",
+   "downstream_error": "deferred"
+  },
+  "L4_data_oob": {
+   "selection": {
+    "0.5": {
+     "kept": 993,
+     "unscored": 750,
+     "n_scored": 1240,
+     "nominal_rate": 0.5,
+     "actual_rate": 0.8008064516129032,
+     "retention_corpus": {
+      "clean": 0.5857142857142857,
+      "hard": 0.638095238095238,
+      "rare_valid": 0.37755102040816324,
+      "changepoint": 0.680952380952381,
+      "clean_ood": 0.5571428571428572,
+      "contaminated": 0.377027027027027
+     },
+     "retention_corpus_ratio": {
+      "clean": 1.1714285714285715,
+      "hard": 1.276190476190476,
+      "rare_valid": 0.7551020408163265,
+      "changepoint": 1.361904761904762,
+      "clean_ood": 1.1142857142857143,
+      "contaminated": 0.754054054054054
+     },
+     "retention_pool": {
+      "clean": 0.8282828282828283,
+      "hard": 0.8758169934640523,
+      "rare_valid": 0.6065573770491803,
+      "changepoint": 0.9470198675496688,
+      "clean_ood": 0.8013698630136986,
+      "contaminated": 0.7602179836512262
+     },
+     "retention_pool_ratio": {
+      "clean": 1.0343108832534815,
+      "hard": 1.0936687531675982,
+      "rare_valid": 0.7574331797995807,
+      "changepoint": 1.182582714764944,
+      "clean_ood": 1.0007035550221413,
+      "contaminated": 0.9493155082855191
+     }
+    },
+    "0.75": {
+     "kept": 1236,
+     "unscored": 750,
+     "n_scored": 1240,
+     "nominal_rate": 0.75,
+     "actual_rate": 0.9967741935483871,
+     "retention_corpus": {
+      "clean": 0.7071428571428572,
+      "hard": 0.7285714285714285,
+      "rare_valid": 0.6224489795918368,
+      "changepoint": 0.719047619047619,
+      "clean_ood": 0.6952380952380952,
+      "contaminated": 0.49594594594594593
+     },
+     "retention_corpus_ratio": {
+      "clean": 0.942857142857143,
+      "hard": 0.9714285714285714,
+      "rare_valid": 0.8299319727891157,
+      "changepoint": 0.9587301587301588,
+      "clean_ood": 0.9269841269841269,
+      "contaminated": 0.6612612612612613
+     },
+     "retention_pool": {
+      "clean": 1.0,
+      "hard": 1.0,
+      "rare_valid": 1.0,
+      "changepoint": 1.0,
+      "clean_ood": 1.0,
+      "contaminated": 1.0
+     },
+     "retention_pool_ratio": {
+      "clean": 1.0032362459546924,
+      "hard": 1.0032362459546924,
+      "rare_valid": 1.0032362459546924,
+      "changepoint": 1.0032362459546924,
+      "clean_ood": 1.0032362459546924,
+      "contaminated": 1.0032362459546924
+     }
+    }
+   },
+   "selection_basis": "within dataset rank",
+   "protected_mis_edits": 0,
+   "damage_rate": 0.0,
+   "repair_gain": 0.0,
+   "committed_edits": 0,
+   "probes_saved": "not_applicable",
+   "missed_windows": "not_applicable",
+   "downstream_error": "deferred",
+   "compute_seconds": "see valuation score run",
+   "reason_probes": "this family issues no probes, so the budget columns have no definition for it"
+  },
+  "L5_timeinf": {
+   "selection": {
+    "0.5": {
+     "kept": 993,
+     "unscored": 750,
+     "n_scored": 1240,
+     "nominal_rate": 0.5,
+     "actual_rate": 0.8008064516129032,
+     "retention_corpus": {
+      "clean": 0.5785714285714286,
+      "hard": 0.6285714285714286,
+      "rare_valid": 0.4030612244897959,
+      "changepoint": 0.6238095238095238,
+      "clean_ood": 0.5571428571428572,
+      "contaminated": 0.3932432432432432
+     },
+     "retention_corpus_ratio": {
+      "clean": 1.1571428571428573,
+      "hard": 1.2571428571428571,
+      "rare_valid": 0.8061224489795918,
+      "changepoint": 1.2476190476190476,
+      "clean_ood": 1.1142857142857143,
+      "contaminated": 0.7864864864864864
+     },
+     "retention_pool": {
+      "clean": 0.8181818181818182,
+      "hard": 0.8627450980392157,
+      "rare_valid": 0.6475409836065574,
+      "changepoint": 0.8675496688741722,
+      "clean_ood": 0.8013698630136986,
+      "contaminated": 0.7929155313351499
+     },
+     "retention_pool_ratio": {
+      "clean": 1.0216973358967318,
+      "hard": 1.077345338941216,
+      "rare_valid": 0.8086110973536065,
+      "changepoint": 1.0833450044350186,
+      "clean_ood": 1.0007035550221413,
+      "contaminated": 0.9901462828354339
+     }
+    },
+    "0.75": {
+     "kept": 1236,
+     "unscored": 750,
+     "n_scored": 1240,
+     "nominal_rate": 0.75,
+     "actual_rate": 0.9967741935483871,
+     "retention_corpus": {
+      "clean": 0.7071428571428572,
+      "hard": 0.7285714285714285,
+      "rare_valid": 0.6224489795918368,
+      "changepoint": 0.719047619047619,
+      "clean_ood": 0.6952380952380952,
+      "contaminated": 0.49594594594594593
+     },
+     "retention_corpus_ratio": {
+      "clean": 0.942857142857143,
+      "hard": 0.9714285714285714,
+      "rare_valid": 0.8299319727891157,
+      "changepoint": 0.9587301587301588,
+      "clean_ood": 0.9269841269841269,
+      "contaminated": 0.6612612612612613
+     },
+     "retention_pool": {
+      "clean": 1.0,
+      "hard": 1.0,
+      "rare_valid": 1.0,
+      "changepoint": 1.0,
+      "clean_ood": 1.0,
+      "contaminated": 1.0
+     },
+     "retention_pool_ratio": {
+      "clean": 1.0032362459546924,
+      "hard": 1.0032362459546924,
+      "rare_valid": 1.0032362459546924,
+      "changepoint": 1.0032362459546924,
+      "clean_ood": 1.0032362459546924,
+      "contaminated": 1.0032362459546924
+     }
+    }
+   },
+   "selection_basis": "within dataset rank",
+   "protected_mis_edits": 0,
+   "damage_rate": 0.0,
+   "repair_gain": 0.0,
+   "committed_edits": 0,
+   "probes_saved": "not_applicable",
+   "missed_windows": "not_applicable",
+   "downstream_error": "deferred",
+   "compute_seconds": "see valuation score run",
+   "reason_probes": "this family issues no probes, so the budget columns have no definition for it"
+  },
+  "L6_ltsv": {
+   "selection": {
+    "0.5": {
+     "kept": 993,
+     "unscored": 750,
+     "n_scored": 1240,
+     "nominal_rate": 0.5,
+     "actual_rate": 0.8008064516129032,
+     "retention_corpus": {
+      "clean": 0.5619047619047619,
+      "hard": 0.580952380952381,
+      "rare_valid": 0.5561224489795918,
+      "changepoint": 0.5761904761904761,
+      "clean_ood": 0.5571428571428572,
+      "contaminated": 0.3891891891891892
+     },
+     "retention_corpus_ratio": {
+      "clean": 1.1238095238095238,
+      "hard": 1.161904761904762,
+      "rare_valid": 1.1122448979591837,
+      "changepoint": 1.1523809523809523,
+      "clean_ood": 1.1142857142857143,
+      "contaminated": 0.7783783783783784
+     },
+     "retention_pool": {
+      "clean": 0.7946127946127947,
+      "hard": 0.7973856209150327,
+      "rare_valid": 0.8934426229508197,
+      "changepoint": 0.8013245033112583,
+      "clean_ood": 0.8013698630136986,
+      "contaminated": 0.784741144414169
+     },
+     "retention_pool_ratio": {
+      "clean": 0.9922657253976489,
+      "hard": 0.9957282678093058,
+      "rare_valid": 1.1156786026777608,
+      "changepoint": 1.000646912493414,
+      "clean_ood": 1.0007035550221413,
+      "contaminated": 0.9799385891979553
+     }
+    },
+    "0.75": {
+     "kept": 1236,
+     "unscored": 750,
+     "n_scored": 1240,
+     "nominal_rate": 0.75,
+     "actual_rate": 0.9967741935483871,
+     "retention_corpus": {
+      "clean": 0.7071428571428572,
+      "hard": 0.7285714285714285,
+      "rare_valid": 0.6224489795918368,
+      "changepoint": 0.719047619047619,
+      "clean_ood": 0.6952380952380952,
+      "contaminated": 0.49594594594594593
+     },
+     "retention_corpus_ratio": {
+      "clean": 0.942857142857143,
+      "hard": 0.9714285714285714,
+      "rare_valid": 0.8299319727891157,
+      "changepoint": 0.9587301587301588,
+      "clean_ood": 0.9269841269841269,
+      "contaminated": 0.6612612612612613
+     },
+     "retention_pool": {
+      "clean": 1.0,
+      "hard": 1.0,
+      "rare_valid": 1.0,
+      "changepoint": 1.0,
+      "clean_ood": 1.0,
+      "contaminated": 1.0
+     },
+     "retention_pool_ratio": {
+      "clean": 1.0032362459546924,
+      "hard": 1.0032362459546924,
+      "rare_valid": 1.0032362459546924,
+      "changepoint": 1.0032362459546924,
+      "clean_ood": 1.0032362459546924,
+      "contaminated": 1.0032362459546924
+     }
+    }
+   },
+   "selection_basis": "within dataset rank",
+   "protected_mis_edits": 0,
+   "damage_rate": 0.0,
+   "repair_gain": 0.0,
+   "committed_edits": 0,
+   "probes_saved": "not_applicable",
+   "missed_windows": "not_applicable",
+   "downstream_error": "deferred",
+   "compute_seconds": "see valuation score run",
+   "reason_probes": "this family issues no probes, so the budget columns have no definition for it"
+  },
+  "L7_learn2clean": {
+   "protected_mis_edits": 183,
+   "n_protected_windows": 1036,
+   "protected_mis_edit_rate": 0.17664092664092665,
+   "probe_layer_mis_edits": 31,
+   "n_probe_windows": 210,
+   "damage_rate": 0.6567567567567567,
+   "repair_nrmsd": 1.0692308183992008,
+   "repair_nrmsd_median": 0.39956336479298526,
+   "n_injected_scored": 740,
+   "repair_gain": 0.12179094577544058,
+   "committed_edits": 370,
+   "mean_protected_damage": 0.009610712452158205,
+   "traces_written": 1986,
+   "compute_seconds": 631.7337386608124,
+   "probe_calls": 0,
+   "probes_saved": 0,
+   "missed_windows": 0,
+   "downstream_error": "deferred",
+   "learning_history": [
+    {
+     "episode": 0,
+     "harmful_edits": 127,
+     "states": 27
+    },
+    {
+     "episode": 1,
+     "harmful_edits": 130,
+     "states": 27
+    },
+    {
+     "episode": 2,
+     "harmful_edits": 81,
+     "states": 27
+    }
+   ]
+  },
+  "L8_tsrating": {
+   "downstream_error": "not_applicable",
+   "protected_mis_edit_rate": "not_applicable",
+   "damage_rate": "not_applicable",
+   "repair_nrmsd": "not_applicable",
+   "compute_seconds": "not_applicable",
+   "probes_saved": "not_applicable",
+   "missed_windows": "not_applicable",
+   "reason": "the substituted judgment backend is not stable enough to distil a rater from. Three backend configurations were tried and all three failed: deepseek-v4-pro with reasoning off gives a 0.508 order flip rate, the same model with reasoning on gives zero flips but a 0.333 unscorable rate whose survivors are the easy pairs, and deepseek-v4-flash gives 0.833. The repository publishes no rater weights and no annotations, last pushed 2025-05-27 with zero releases, so there is no path that avoids generating judgments. See docs/baseline_year_gap.md"
+  },
+  "soft_penalty": {
+   "downstream_error": "deferred",
+   "protected_mis_edit_rate": "deferred",
+   "damage_rate": "deferred",
+   "repair_nrmsd": "deferred",
+   "compute_seconds": "deferred",
+   "probes_saved": "deferred",
+   "missed_windows": "deferred",
+   "reason": "the soft arm needs the proposal sequence that soft_vs_hard.py caches, wiring it here would duplicate that cache, so this row is filled from that script's sweep at mu 10"
+  },
+  "utility_only": {
+   "protected_mis_edits": 178,
+   "n_protected_windows": 1036,
+   "protected_mis_edit_rate": 0.1718146718146718,
+   "probe_layer_mis_edits": 53,
+   "n_probe_windows": 210,
+   "damage_rate": 0.3960573476702509,
+   "repair_nrmsd": 1.0564775019938544,
+   "repair_nrmsd_median": 0.3489642940489275,
+   "n_injected_scored": 740,
+   "repair_gain": 0.2803933684609986,
+   "committed_edits": 558,
+   "mean_protected_damage": 0.00960395572911025,
+   "traces_written": 1986,
+   "compute_seconds": 234.57120013237,
+   "probe_calls": 3150,
+   "probes_saved": 220,
+   "missed_windows": 53,
+   "downstream_error": "deferred"
+  },
+  "spec_veto": {
+   "protected_mis_edits": 144,
+   "n_protected_windows": 1036,
+   "protected_mis_edit_rate": 0.138996138996139,
+   "probe_layer_mis_edits": 21,
+   "n_probe_windows": 210,
+   "damage_rate": 0.14652956298200515,
+   "repair_nrmsd": 1.0189031866488325,
+   "repair_nrmsd_median": 0.3365406320965071,
+   "n_injected_scored": 740,
+   "repair_gain": 0.4321744966021329,
+   "committed_edits": 389,
+   "mean_protected_damage": 0.0011310247287153023,
+   "traces_written": 1986,
+   "compute_seconds": 268.64765095710754,
+   "probe_calls": 3369,
+   "probes_saved": 178,
+   "missed_windows": 40,
+   "downstream_error": "deferred"
+  },
+  "introact": {
+   "protected_mis_edits": 72,
+   "n_protected_windows": 1036,
+   "protected_mis_edit_rate": 0.0694980694980695,
+   "probe_layer_mis_edits": 15,
+   "n_probe_windows": 210,
+   "damage_rate": 0.1402439024390244,
+   "repair_nrmsd": 1.0797187701084558,
+   "repair_nrmsd_median": 0.37318948082462694,
+   "n_injected_scored": 740,
+   "repair_gain": 0.1836437909298101,
+   "committed_edits": 164,
+   "mean_protected_damage": 0.000444895517625599,
+   "traces_written": 1986,
+   "compute_seconds": 264.10289001464844,
+   "probe_calls": 3404,
+   "probes_saved": 154,
+   "missed_windows": 34,
+   "downstream_error": "deferred"
+  },
+  "oracle": {
+   "protected_mis_edits": 0,
+   "n_protected_windows": 1036,
+   "protected_mis_edit_rate": 0.0,
+   "probe_layer_mis_edits": 0,
+   "n_probe_windows": 210,
+   "damage_rate": 0.0,
+   "repair_nrmsd": 0.0,
+   "repair_nrmsd_median": 0.0,
+   "n_injected_scored": 740,
+   "repair_gain": 1.0,
+   "committed_edits": 737,
+   "mean_protected_damage": 0.0,
+   "traces_written": 1986,
+   "compute_seconds": 2.450854539871216,
+   "probe_calls": 0,
+   "probes_saved": "not_applicable",
+   "missed_windows": "not_applicable",
+   "reason_probes": "this arm issues no probe, so there is no budget to save",
+   "downstream_error": "deferred"
+  }
+ },
+ "not_applicable_reasons": {
+  "L8_tsrating": "the substituted judgment backend is not stable enough to distil a rater from. Three backend configurations were tried and all three failed: deepseek-v4-pro with reasoning off gives a 0.508 order flip rate, the same model with reasoning on gives zero flips but a 0.333 unscorable rate whose survivors are the easy pairs, and deepseek-v4-flash gives 0.833. The repository publishes no rater weights and no annotations, last pushed 2025-05-27 with zero releases, so there is no path that avoids generating judgments. See docs/baseline_year_gap.md"
+ }
+}

@@ -1,0 +1,114 @@
+{
+ "a": "introact",
+ "b": "spec_veto",
+ "per_seed": {
+  "0": {
+   "n_paired": 1986,
+   "mis_edit": {
+    "a_only": 0,
+    "b_only": 72,
+    "both": 72,
+    "neither": 892,
+    "mcnemar_p": 4.235164736271502e-22
+   },
+   "nrmsd": {
+    "all": {
+     "n": 150,
+     "statistic": 3018.0,
+     "z": -4.961715301411511,
+     "p": 6.997981375489459e-07,
+     "median_difference": -0.02488861930122339,
+     "n_negative": 123,
+     "n_positive": 27
+    },
+    "excluding_missing": {
+     "n": 53,
+     "statistic": 845.0,
+     "z": 1.146433018506593,
+     "p": 0.2516161389771633,
+     "median_difference": 0.003261460865675714,
+     "n_negative": 26,
+     "n_positive": 27
+    }
+   }
+  },
+  "1": {
+   "n_paired": 2000,
+   "mis_edit": {
+    "a_only": 0,
+    "b_only": 80,
+    "both": 62,
+    "neither": 908,
+    "mcnemar_p": 1.6543612251060553e-24
+   },
+   "nrmsd": {
+    "all": {
+     "n": 152,
+     "statistic": 3923.0,
+     "z": -3.47840158776688,
+     "p": 0.0005045053804770827,
+     "median_difference": -0.019723328431207447,
+     "n_negative": 119,
+     "n_positive": 33
+    },
+    "excluding_missing": {
+     "n": 66,
+     "statistic": 1389.0,
+     "z": 1.8110210342006572,
+     "p": 0.07013748712337509,
+     "median_difference": 0.0011029783444541415,
+     "n_negative": 33,
+     "n_positive": 33
+    }
+   }
+  },
+  "2": {
+   "n_paired": 2000,
+   "mis_edit": {
+    "a_only": 0,
+    "b_only": 69,
+    "both": 65,
+    "neither": 916,
+    "mcnemar_p": 3.3881317890172014e-21
+   },
+   "nrmsd": {
+    "all": {
+     "n": 154,
+     "statistic": 3575.0,
+     "z": -4.315708649578545,
+     "p": 1.5920801475277635e-05,
+     "median_difference": -0.021065827659995092,
+     "n_negative": 119,
+     "n_positive": 35
+    },
+    "excluding_missing": {
+     "n": 64,
+     "statistic": 1207.0,
+     "z": 1.1168132852596173,
+     "p": 0.264074264960382,
+     "median_difference": 0.008260022952299717,
+     "n_negative": 29,
+     "n_positive": 35
+    }
+   }
+  }
+ },
+ "pooled_all": {
+  "n": 456,
+  "statistic": 31381.0,
+  "z": -7.357945670461382,
+  "p": 1.8818280267396403e-13,
+  "median_difference": -0.02168112208467976,
+  "n_negative": 361,
+  "n_positive": 95
+ },
+ "pooled_excluding_missing": {
+  "n": 183,
+  "statistic": 10097.0,
+  "z": 2.3398543714245754,
+  "p": 0.01929122050400911,
+  "median_difference": 0.0067151948709138765,
+  "n_negative": 88,
+  "n_positive": 95
+ }
+}

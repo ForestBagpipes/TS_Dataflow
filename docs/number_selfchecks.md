@@ -295,3 +295,104 @@ edits almost every window and its damage rate is 0.8587 with a mis edit rate of
 rather than pooling squared error over points. Pooling would weight a long
 window more, and RESEGMENT produces windows of unequal length. Same reason the
 valuation family's window score is a mean and not a sum.
+
+## The three seed main table, and two things the reconciliation found
+
+Run 2026-08-26 over seeds 0, 1 and 2 at xl on the mixed corpus, code hash
+`1f6d57bb1a15e4a0`. Aggregated by `experiments/aggregate_seeds.py`, reconciled
+against the flushed per window traces by `experiments/reconcile_traces.py`,
+and the two arm comparison tested by `experiments/arm_significance.py`.
+
+### Check four, the cross reconciliation, and what it caught
+
+Every column recomputed from the JSONL agrees with the table to floating point
+**except the damage rate**, which disagreed by up to 0.32 on `spec_veto`. That
+is far too large to be rounding, so it was traced rather than explained away.
+
+**The cause.** The table measures damage with `audit._nmse`, the traces store
+`run_main._dist`. The two differ in how they treat a non finite point. `_nmse`
+replaces it with the series median before measuring, `_dist` drops the
+difference. Under a missing kind of contamination that difference is not
+cosmetic. Measured on the untouched corpus:
+
+| contamination | n | median `_dist` to clean | share exactly zero |
+|---|---|---|---|
+| missing_block | 106 | 0.00000 | **1.000** |
+| missing_scattered | 106 | 0.00000 | **1.000** |
+| level_shift | 105 | 2.32943 | 0.000 |
+| noise | 106 | 0.69106 | 0.000 |
+| duplicate | 105 | 0.37619 | 0.000 |
+| spike | 106 | 0.35411 | 0.000 |
+| flatline | 106 | 0.08765 | 0.009 |
+
+A window with a hole in it is at distance zero from the truth under `_dist`,
+because the only points where it differs are the ones being dropped. So **every
+imputation is damage** under that reading, and the 212 missing windows make
+`spec_veto` look like it damages 0.4627 of its edits rather than 0.1465. The
+accepted operators on the windows the two readings disagree about are 120
+IMPUTE out of 180, which is the same fact counted a second way.
+
+**The verdict. The table is right and the trace field is wrong.** Confirmed on
+`L1_screen`, which reproduces exactly offline with no GPU: 329 edits and damage
+0.6657, matching the table to the digit. On that arm the two readings disagree
+on 21 of 329 windows and the cause there is level shift rather than missing,
+since SCREEN imputes little.
+
+**Consequence for the JSONL.** `dist_before`, `dist_after` and `nrmsd_after`
+must not be used to recompute damage. They were added so a metric change would
+not need a GPU, and for the damage column they do not deliver that. Recorded
+here rather than quietly fixed, because the affected numbers are already in the
+table and the fix costs a rerun.
+
+### Check one and check two, on the repair nRMSD column
+
+The same decomposition, applied to the column itself rather than to the
+disagreement, says the column is not measuring what its name suggests.
+
+| contamination | no action | SCREEN | spec_veto | introact | oracle |
+|---|---|---|---|---|---|
+| level_shift | 4.9092 | 4.8732 | 4.5432 | 4.9672 | 0.0000 |
+| spike | 1.2520 | 1.0653 | 0.9138 | 0.9252 | 0.0000 |
+| duplicate | 0.7469 | 0.8425 | 0.7379 | 0.7578 | 0.0000 |
+| noise | 0.6391 | 0.6142 | 0.6389 | 0.6392 | 0.0000 |
+| flatline | 0.3056 | 0.3670 | 0.2863 | 0.2987 | 0.0000 |
+| missing_block | **0.0000** | 0.0667 | 0.0073 | 0.0029 | 0.0000 |
+| missing_scattered | **0.0000** | 0.0340 | 0.0356 | 0.0006 | 0.0000 |
+| **the reported mean** | 1.1172 | 1.1186 | 1.0189 | 1.0797 | 0.0000 |
+
+**Check two, subgroup domination.** Level shift is 105 of 740 windows, 14
+percent, and contributes 4.9092 times 105 over 740, which is 0.70 of the 1.1172
+mean. **Sixty two percent of the column is one contamination kind.** The column
+ranks arms by their level shift behaviour and reports it under a general name.
+
+**Check one, the denominator and what it excludes.** The two missing kinds
+score exactly zero for the arm that does nothing, for the reason above. An arm
+is charged for the error of the values it filled in and an arm that filled
+nothing is charged nothing. **The column rewards inaction on 28.6 percent of
+its own denominator.**
+
+### The introact against spec_veto comparison, tested rather than eyeballed
+
+Three seeds are three points and a mean over them cannot establish an ordering.
+The windows are the unit of evidence and both arms ran on the same windows, so
+the comparison is paired window by window.
+
+**Mis edits, exact McNemar over the four protected strata.** In all three seeds
+the windows `introact` mis edits are a **strict subset** of the ones
+`spec_veto` mis edits: the discordant counts are 0 against 72, 0 against 80 and
+0 against 69, giving p of 4.2e-22, 1.7e-24 and 3.4e-21. This is measured, not
+constructed. Nothing in the design forces it, since a refusal changes the
+proposals that follow.
+
+**Repair nRMSD, Wilcoxon signed rank, and it points both ways.**
+
+| set | n pooled | median difference | p | reading |
+|---|---|---|---|---|
+| all contaminated | 456 | -0.0217 | 1.9e-13 | introact better |
+| excluding the two missing kinds | 183 | +0.0067 | 0.0193 | spec_veto better |
+| the reported mean | 740 per seed | +0.0453 | not tested | spec_veto better |
+
+The sign flips with the subset, and the subset that flips it is exactly the one
+check one identified as broken. **No ordering on this column may be stated in
+the paper until the口径 is decided.** The mean and the median already disagree
+in direction, which the level shift domination explains on its own.
