@@ -576,3 +576,39 @@ noise_injection 三个名字不对应，按语料实际标签分组。
 L4 L5 L6 此前不写这个键，汇总渲染成 n/a，读起来像没测。改为显式 0 并带
 `mis_edit_rate_note` 说明是构造上为零而不是谨慎所致。`aggregate_seeds.py` 对旧
 结果文件补同一个默认值，所以三 seed 不需要重跑。
+
+### 消融脚本改造，使其能与主表并列
+
+`run_ablations.py` 原本跑出来的行无法与主表并列，三处不一致，都是读代码查出来的。
+
+一 语料。原脚本硬编码 `build_corpus(spec, source="ett")`，主表是 mixed。改为
+`--source` 参数，默认 mixed。
+
+二 指标。原脚本用 `metrics.summarise`，它根本不产出 protected_mis_edit_rate
+与 repair_nrmsd 这两列。改为直接调用 `run_main.score_rows`，四列同名同义。
+
+三 轨迹。改为与主表同一个 `dump_window_traces`，落 JSONL，所以消融的口径变更
+也能离线重算。
+
+另加多 seed 循环、逐级逐 seed 的结果文件跳过、以及补上缺失的 A4。
+
+### 两处此前未记录的事实，都影响正文表述
+
+一 **主表的 introact 行是固定规则，不含策略学习。** `run_main.agent_traces`
+调用 `curate_window(w, s, peer_idx=i)`，没有传 policy 与 cluster，而
+`agent.curate_window` 的文档写明无 policy 时用提议器自身顺序，即固定规则。所以
+主表的 introact 等价于消融的 `c_no_policy`，完整方法是 `f_full`。正文凡是同时
+出现主表与消融的地方都要写明这个区别，冒烟的验收标准也据此改为 `c_no_policy`
+对照主表 introact 四列一致，而不是 `f_full`。
+
+二 **共形标定是离线接入的。** `src/introact_ts/conformal.py` 不被 run_main 或
+run_ablations 调用。流程是 `run_conformal.py` 先产出 `results/conformal.json`，
+其 alpha 0.03 处的 lambda_star 为 0.02，主表再以 `--tau 0.02` 启动。因此 A4 无
+共形标定这一级实现为把标定前的手工值 0.12 放回去，该值记录在 conformal.py 的文
+档字符串里，是本项目在程序存在之前实际用过的数，不是现在为了输而挑的。
+
+### 冒烟只能在服务器做
+
+本地无法加载模型池，`make_pool` 报三个后端都缺依赖，chronos-forecasting 与
+timesfm 都没装。所以消融的冒烟排到服务器上机第一步，在 small mixed seed 0 上比
+`c_no_policy` 与主表 introact 的四列。
