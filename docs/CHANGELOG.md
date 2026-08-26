@@ -537,3 +537,42 @@ introact 损害率 std 0.0107，预设阈值 0.05，未超。
 | `experiments/damage_metric_probe.py` | 新增，在无 GPU 的确定性臂上定位两个口径的差异来源 |
 | `experiments/arm_significance.py` | 新增，配对 McNemar 与 Wilcoxon，不依赖 scipy |
 | `docs/number_selfchecks.md` | 三 seed 主表的四条自检，两处发现 |
+
+### nRMSD 裁决，分污染类型报，不重跑
+
+裁决 2026-08-26。列保留，聚合方式改。单一均值被 level_shift 一个子群主导，
+这是聚合的问题不是指标的问题。`experiments/nrmsd_by_contamination.py` 从已落盘
+的三 seed 轨迹提取，零 GPU。
+
+正文主表的 nRMSD 改为五个可信类型的按窗口数加权均值，表注写明排除两个缺失类
+及理由。分类型完整数字进附表。
+
+| 臂 | 可信类型加权均值 |
+|---|---|
+| L0 no_action | 1.6161 +- 0.0850 |
+| L1 SCREEN | 1.5853 +- 0.0666 |
+| L2 IMR | 1.4114 +- 0.0699 |
+| L3 MTCSC | 1.5306 +- 0.0713 |
+| L7 Learn2Clean | 1.5463 +- 0.0868 |
+| utility_only | 1.4435 +- 0.0658 |
+| spec_veto | 1.4359 +- 0.0717 |
+| introact | 1.5067 +- 0.0645 |
+
+这一列最低的是 IMR，而 IMR 的误编辑率 0.9885 损害率 0.8646。它靠重写几乎每一
+个点把 spike 压到 0.2992，代价是别的全毁。该列不得脱离误编辑与损害两列单独读，
+正文必须点破。
+
+分类型后 introact 与 spec_veto 的对照出现真实分歧，level_shift 与 duplicate
+上 introact 更优，spike 上 introact 明显更差，中位数差 +0.3715 p 0.00093。汇总
+的 +0.0067 是这两个方向抵消后的残差。spike 那处是讨论必须解释的，尖峰正是结构
+条件最可能读成真实特征而拒绝移除的形态。
+
+实际语料的污染类型是七类 duplicate flatline level_shift missing_block
+missing_scattered noise spike，与规划里写的 point_outlier contextual_anomaly
+noise_injection 三个名字不对应，按语料实际标签分组。
+
+### 选择臂的误编辑率改为显式 0
+
+L4 L5 L6 此前不写这个键，汇总渲染成 n/a，读起来像没测。改为显式 0 并带
+`mis_edit_rate_note` 说明是构造上为零而不是谨慎所致。`aggregate_seeds.py` 对旧
+结果文件补同一个默认值，所以三 seed 不需要重跑。

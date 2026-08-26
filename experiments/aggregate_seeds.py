@@ -56,9 +56,22 @@ def numeric(v):
     return isinstance(v, (int, float)) and not isinstance(v, bool)
 
 
+#: Arms that commit no edit at all. Their mis edit rate is zero by
+#: construction, and a run from before that was written explicitly leaves the
+#: key absent, which the aggregate would otherwise render as `n/a`. Filling it
+#: here keeps an old result file readable without a rerun. The distinction goes
+#: in the table note, not into the number.
+SELECTION_ARMS = ("L4_data_oob", "L5_timeinf", "L6_ltsv")
+ZERO_BY_CONSTRUCTION = ("protected_mis_edit_rate", "damage_rate")
+
+
 def aggregate(blobs, arm):
     """Mean, sample std and the per seed values, for every numeric column."""
-    rows = [b["rows"][arm] for b in blobs]
+    rows = [dict(b["rows"][arm]) for b in blobs]
+    if arm in SELECTION_ARMS:
+        for r in rows:
+            for k in ZERO_BY_CONSTRUCTION:
+                r.setdefault(k, 0.0)
     keys = [set(r) for r in rows]
     common = set.intersection(*keys)
     out = {}

@@ -396,3 +396,69 @@ The sign flips with the subset, and the subset that flips it is exactly the one
 check one identified as broken. **No ordering on this column may be stated in
 the paper until the口径 is decided.** The mean and the median already disagree
 in direction, which the level shift domination explains on its own.
+
+## The repair nRMSD ruling, report by kind rather than as one mean
+
+Decided 2026-08-26. The column stays, the aggregation changes. A single mean
+over the injected layer is dominated by one contamination kind, and that is a
+fact about the aggregation rather than about the metric, so the fix is to stop
+aggregating that way. Produced by `experiments/nrmsd_by_contamination.py` from
+the three seeds' flushed traces, no rerun.
+
+| kind | n | no action | SCREEN | IMR | MTCSC | Learn2Clean | utility_only | spec_veto | introact | oracle |
+|---|---|---|---|---|---|---|---|---|---|---|
+| duplicate | 315 | 0.7162 | 0.7518 | 0.7842 | 0.7188 | 0.7191 | 0.6750 | 0.6729 | 0.6760 | 0.0000 |
+| flatline | 318 | 0.2828 | 0.3253 | 0.5019 | 0.2876 | 0.2893 | 0.2370 | 0.2641 | 0.2722 | 0.0000 |
+| level_shift | 315 | 5.0498 | 4.9905 | 4.8626 | 5.0509 | 4.9289 | 5.0695 | 4.7690 | 5.0557 | 0.0000 |
+| noise | 318 | 0.6344 | 0.6142 | 0.6358 | 0.6077 | 0.5881 | 0.5681 | 0.6336 | 0.6345 | 0.0000 |
+| spike | 318 | 1.4211 | 1.2688 | 0.2992 | 1.0133 | 1.2304 | 0.6949 | 0.8641 | 0.9209 | 0.0000 |
+| missing_block \* | 318 | 0.0000 | 0.0488 | 0.3682 | 0.0215 | 0.0217 | 0.1646 | 0.0054 | 0.0017 | 0.0000 |
+| missing_scattered \* | 318 | 0.0000 | 0.0864 | 0.3122 | 0.0223 | 0.0119 | 0.0379 | 0.0341 | 0.0009 | 0.0000 |
+| **headline, sound kinds** | 1584 | 1.6161 | 1.5853 | **1.4114** | 1.5306 | 1.5463 | 1.4435 | 1.4359 | 1.5067 | 0.0000 |
+
+Spreads are the sample standard deviation over the three seeds and are in
+`results/nrmsd_by_contamination.json`. The two starred kinds are excluded from
+the headline and are never ranked, for the reason in the section above: the
+distance drops non finite differences, so a window with a hole sits at zero and
+the arm that fills nothing wins by default.
+
+**The headline is a window count weighted mean over the five sound kinds**,
+which on this corpus is the plain mean over those 528 windows per seed. Table
+note must carry the exclusion and the reason.
+
+### The trap this column sets, and it has to be defused in the text
+
+**The best headline nRMSD belongs to IMR at 1.4114, and IMR mis edits 0.9885 of
+the protected layers and damages 0.8646 of what it commits.** It reaches that
+number by rewriting almost every point, which flattens a spike to 0.2992
+against no action's 1.4211 and destroys everything else on the way. A reader who
+takes this column alone concludes IMR is the best repairer. The column is a
+repair accuracy measured only where a defect was injected, so it says nothing
+about what an arm did elsewhere, and it must never be read without the mis edit
+and damage columns beside it.
+
+### The introact against spec_veto ordering, by kind
+
+Wilcoxon signed rank on the paired difference, pooled over the three seeds.
+`n discordant` counts only the windows where the two arms produced different
+results, since a window neither touched carries no evidence.
+
+| kind | n paired | n discordant | median difference | introact better | p |
+|---|---|---|---|---|---|
+| duplicate | 315 | 15 | -0.1030 | 14 of 15 | 0.0106 |
+| flatline | 318 | 15 | -0.0164 | 8 of 15 | 0.233 |
+| level_shift | 315 | 77 | -0.5683 | 39 of 77 | 0.00258 |
+| noise | 318 | 35 | +0.0075 | 13 of 35 | 0.0423 |
+| spike | 318 | 41 | +0.3715 | 14 of 41 | 0.00093 |
+| missing_scattered \* | 318 | 266 | -0.0241 | 266 of 266 | <1e-15 |
+| missing_block \* | 318 | 7 | not tested | | too few |
+| **all sound kinds** | 1584 | 183 | +0.0067 | 88 of 183 | 0.0193 |
+
+The single aggregate hides a real split. **introact repairs level shift and
+duplicate better than spec_veto and repairs spike worse**, and the pooled number
+is the residue of those cancelling. The spike gap is the largest and is the one
+the discussion has to account for, since a spike is what the shield's structural
+condition is most likely to read as a genuine feature and refuse to remove.
+
+Only the sound kinds are averaged into the paper's ordering, and no ordering is
+stated for the two starred ones.

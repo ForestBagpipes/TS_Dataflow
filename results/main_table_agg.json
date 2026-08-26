@@ -582,6 +582,15 @@
      0.0
     ]
    },
+   "protected_mis_edit_rate": {
+    "mean": 0.0,
+    "std": 0.0,
+    "values": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
    "protected_mis_edits": {
     "mean": 0.0,
     "std": 0.0,
@@ -620,6 +629,15 @@
      0.0
     ]
    },
+   "protected_mis_edit_rate": {
+    "mean": 0.0,
+    "std": 0.0,
+    "values": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
    "protected_mis_edits": {
     "mean": 0.0,
     "std": 0.0,
@@ -650,6 +668,15 @@
     ]
    },
    "damage_rate": {
+    "mean": 0.0,
+    "std": 0.0,
+    "values": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "protected_mis_edit_rate": {
     "mean": 0.0,
     "std": 0.0,
     "values": [

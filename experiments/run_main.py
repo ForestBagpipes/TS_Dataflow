@@ -626,7 +626,21 @@ def main():
                         s: (retained[s] / total_scored[s] / actual)
                         if total_scored[s] and actual else None for s in layers},
                 }
-            row.update({"protected_mis_edits": 0, "damage_rate": 0.0,
+            # The rate is written as an explicit zero rather than left absent.
+            # A selection arm commits no edit at all, so zero is the measured
+            # value and not a missing one, and an absent key was being rendered
+            # as `n/a` in the aggregate, which reads as untested. The table note
+            # states the distinction: zero here means the arm cannot mis edit by
+            # construction, not that it was careful.
+            n_protected = sum(1 for w in windows if w.stratum in PROTECTED)
+            row.update({"protected_mis_edits": 0,
+                        "n_protected_windows": int(n_protected),
+                        "protected_mis_edit_rate": 0.0,
+                        "probe_layer_mis_edits": 0,
+                        "mis_edit_rate_note": (
+                            "zero by construction, this family selects windows "
+                            "and commits no edit"),
+                        "damage_rate": 0.0,
                         "repair_gain": 0.0, "committed_edits": 0,
                         "probes_saved": "not_applicable",
                         "missed_windows": "not_applicable",
