@@ -462,3 +462,90 @@ condition is most likely to read as a genuine feature and refuse to remove.
 
 Only the sound kinds are averaged into the paper's ordering, and no ordering is
 stated for the two starred ones.
+
+## The ablation ladder, seed 0, and the policy rungs collapsing onto the reference
+
+Run 2026-08-26 by `experiments/run_ablations.py` on the main table's corpus, in
+the main table's columns. Seed 0, 1986 windows, tau 0.02.
+
+| rung | matrix | edits | mis edit rate | damage rate | nRMSD |
+|---|---|---|---|---|---|
+| a_no_shield | A1 | 816 | 0.2654 | 0.3958 | 1.0180 |
+| b_no_structural | A2 | 305 | 0.0927 | 0.3508 | 1.0636 |
+| g_no_conformal | A4 | 244 | 0.0811 | 0.2172 | 1.0646 |
+| c_no_policy | A5 | 164 | 0.0695 | 0.1402 | 1.0797 |
+| d_no_injection | A6 | 164 | 0.0695 | 0.1402 | 1.0797 |
+| e_raw_reward | A3 | 164 | 0.0695 | 0.1402 | 1.0797 |
+| f_full | reference | 164 | 0.0695 | 0.1402 | 1.0797 |
+
+The three shield rungs separate cleanly. **The three policy rungs are identical
+to the reference row in every column, to the digit.**
+
+### Check three, is there another explanation that produces the same number
+
+The first candidate explanation is a wiring fault, that the policy is never
+reaching `curate_window`. It is ruled out by three independent readings rather
+than by inspecting the call site alone.
+
+`agent.py` line 201 calls `policy.order` and line 263 calls `policy.observe`, so
+the loop is closed. The rung's own report carries
+`n_decisions_with_choice` of 423, so 423 decisions had at least two feasible
+arms and the upper confidence bound actually chose between them. And the
+per window traces disagree with the fixed rule on **265 of 1986 windows in
+action order** and on 37 in step count. The policy is running and it is
+changing what gets tried.
+
+What it does not change is where the episode ends. Comparing final state window
+by window against `c_no_policy`:
+
+| quantity | value |
+|---|---|
+| windows compared | 1986 |
+| identical final state | **1986** |
+| different final state | **0** |
+| probe calls, fixed rule against full | 3404 against 3388 |
+| total steps | 4099 against 4083 |
+
+### Where the injected candidates went
+
+Injection is the only mechanism that can change the acceptance set, since
+reordering can only permute a fixed candidate list. It fired 20 times across
+1986 windows. Following the 25 actions that appear in `f_full` and not in the
+fixed rule:
+
+| outcome | n |
+|---|---|
+| NO_OP, the operator did not apply at all | 17 |
+| ROLLED_BACK_UTILITY | 4 |
+| ROLLED_BACK_STRUCTURE | 2 |
+| ROLLED_BACK_RISK | 2 |
+| **ACCEPTED** | **0** |
+
+Not one injected candidate was committed. Two thirds of them were not even
+applicable.
+
+**Why injection is this sparse, from `SPOPolicy.inject`.** An arm is eligible
+only if it is unvisited for that table and cluster, not already tried in this
+window, and not already in the candidate list, and only then does the 0.05
+probability apply. The unvisited set empties as learning proceeds, so the
+opportunities disappear early. And an arm the proposer never offers is usually
+one that does not apply to the window, which is what the 17 NO_OPs are.
+
+### What this does and does not license
+
+It does not license the sentence that the policy improves curation quality. On
+this corpus, in these four columns, **the gain is exactly zero**, and the
+efficiency gain is 16 probes and 16 steps, 0.47 percent.
+
+It is direct evidence for theorem 4, exploration structural safety. The
+strongest form of that claim is that no amount of exploration can commit
+something the shield would refuse, and here the exploration reordered 265
+windows and injected 20 operators the proposer never offers, and the committed
+set did not move by one window. That is the theorem holding under a genuine
+attempt to break it rather than an assumption.
+
+The ladder's own conclusion is unaffected and is the one the paper needs: **the
+shield carries the result.** Removing it entirely multiplies damage by 2.8 and
+mis edits by 3.8, removing the structural half alone still multiplies damage by
+2.5, and replacing the calibrated threshold with the hand set constant it
+superseded multiplies damage by 1.5.
