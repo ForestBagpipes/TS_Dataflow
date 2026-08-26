@@ -549,3 +549,53 @@ shield carries the result.** Removing it entirely multiplies damage by 2.8 and
 mis edits by 3.8, removing the structural half alone still multiplies damage by
 2.5, and replacing the calibrated threshold with the hand set constant it
 superseded multiplies damage by 1.5.
+
+## Theorem 6's decay bound, evaluated rather than quoted
+
+Experiment two's calibration decay row needs no new run. `theorem6_report`
+already writes its three terms into every result file whose rung carries a
+policy, so `experiments/calibration_decay.py` collects and evaluates them.
+Seed 0, the three policy rungs.
+
+| rung | intervals | decisions with a choice | gamma q00 | gamma q05 | gamma median | tie share | n_min |
+|---|---|---|---|---|---|---|---|
+| d_no_injection | 3 | 414 | 0.0000 | 0.0647 | 1.0814 | 0.0362 | 1 |
+| e_raw_reward | 3 | 422 | 0.0000 | 0.0835 | 1.2994 | 0.0190 | 1 |
+| f_full | 3 | 423 | 0.0000 | 0.0476 | 1.0848 | 0.0378 | 1 |
+
+The bound is 2 q T_cal / (gamma n_min), with q the reward clip 5.8867 and T_cal
+500.
+
+| rung | bound at gamma q00 | at q05 | at median gamma |
+|---|---|---|---|
+| d_no_injection | inf | 9.10e4 | 5444 |
+| e_raw_reward | inf | 7.05e4 | 4531 |
+| f_full | inf | 1.24e5 | 5426 |
+
+**The bound is vacuous and this has to be said outright.** It bounds a total
+variation distance, which is at most 1 by definition, and the smallest value it
+takes anywhere in this table is 4531. It constrains nothing.
+
+**Why, and it is not the gamma tail.** The tail is real, 1.9 to 3.8 percent of
+decisions have the top two bounds tied so gamma is zero there, and that alone
+sends the infimum form to infinity. But the median gamma is around 1.08, which
+is healthy, and the bound is still four thousand. The term that destroys it is
+**n_min of 1**: in every calibration interval there is some visited cell that
+was reached exactly once, and the bound is inversely proportional to that count.
+With 45 or 46 cells touched per interval and 500 updates to spread over them,
+a singly visited cell is not an accident of this run, it is what happens when
+the cell count and the update budget are of the same order.
+
+**Consequence.** The theorem is not wrong, its bound is simply not informative
+at this corpus size and this cell count. Two honest options: report it as
+measured and state that it is vacuous here, saying what would make it bite
+(fewer cells, or a longer interval, both of which change the method), or drop
+the quantitative claim and keep only the qualitative statement. Either way the
+paper must not print the theorem and stay silent about its measured value.
+
+This matters for how the policy module is positioned, because it removes the
+second of its two supports. The first, that learning improves the four columns,
+measured exactly zero on this corpus. What survives is theorem 4, exploration
+structural safety, and that one is measured strongly: 265 windows reordered, 20
+operators injected that the proposer never offers, and the committed set
+identical on all 1986 windows.
