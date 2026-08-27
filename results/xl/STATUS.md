@@ -15,8 +15,8 @@ since the switch defaults to off and changes no existing path.
 | shield conservatism | `shield_replay.py` | done | done | done | `fafbdd5`, recomputed on mixed |
 | nRMSD by kind | `nrmsd_by_contamination.py` | done | done | done | `214e6a2`, from traces, no GPU |
 | calibration decay | `calibration_decay.py` | done | done | done | `99b6b46`, extracted, bound is vacuous |
-| soft penalty sweep | `run_soft_sweep.py` | running | queued | queued | 10 weights per seed |
-| damage target sweep | not written | | | | experiment one sub table 3 |
+| soft penalty sweep | `run_soft_sweep.py` | done | done | done | `4ee8043`, 10 weights, mu 100 is the table's point |
+| damage target sweep | not written | | | | experiment one sub table 3, next |
 | downstream by stratum | not written | | | | PatchTST and DLinear, batch C |
 
 ## Rows that need no run
