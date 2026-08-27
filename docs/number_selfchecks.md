@@ -798,3 +798,78 @@ identical to the reference row was not an identity, seeds 1 and 2 differ on 7
 and 3 windows. The effect is real and it is 0.17 percent. No claim of a repair
 or safety gain from learning survives this table, and the exploration safety
 claim is what it supports instead.
+
+## The soft penalty sweep, and why theorem 2 cannot be stated as a strict claim
+
+Experiment one's second sub table, complete 2026-08-27. Ten weights across four
+orders of magnitude, three seeds, produced by `experiments/run_soft_sweep.py`
+and aggregated by `experiments/aggregate_soft.py`. The arm runs through the same
+`agent_traces` as ours with `VerifyConfig.soft_mu` set, so it differs from our
+row in the decision rule and in nothing else.
+
+| mu | edits | mis edit rate | damage rate | nRMSD, sound kinds |
+|---|---|---|---|---|
+| 0 | 556 +- 19 | 0.1716 | 0.4203 +- 0.0210 | 1.4435 |
+| 0.1 | 534 +- 17 | 0.1601 | 0.4022 +- 0.0206 | 1.4428 |
+| 0.5 | 477 +- 14 | 0.1384 | 0.3723 +- 0.0288 | **1.4425** |
+| 1 | 434 +- 21 | 0.1272 | 0.3566 +- 0.0336 | 1.4433 |
+| 2 | 382 +- 18 | 0.1138 | 0.3350 +- 0.0242 | 1.4455 |
+| 5 | 293 +- 15 | 0.0931 | 0.2907 +- 0.0207 | 1.4557 |
+| 10 | 254 +- 13 | 0.0829 | 0.2432 +- 0.0237 | 1.4590 |
+| 25 | 225 +- 20 | 0.0753 | 0.1956 +- 0.0116 | 1.4645 |
+| 50 | 210 +- 16 | 0.0721 | 0.1700 +- 0.0199 | 1.4726 |
+| 100 | 192 +- 19 | 0.0711 | 0.1531 +- 0.0227 | 1.4932 |
+| **f_full** | **161 +- 9** | **0.0635** | **0.1306 +- 0.0084** | 1.5080 |
+
+The nRMSD column is the window count weighted mean over the five sound
+contamination kinds, for the reason recorded above: the plain mean is 62 percent
+one subgroup and the two missing kinds score an arm that repairs nothing at
+zero, so a frontier read off the plain mean would reward the high weight end for
+not repairing.
+
+**Wiring check.** At mu 0 the soft rule degenerates to the utility condition
+alone, and all three seeds reproduce the main table's `utility_only` row to the
+digit. Cross reconciliation of edits and mis edit rate against each weight's own
+traces agrees 30 of 30.
+
+### What the sweep actually shows, which is not what was expected
+
+**The soft arm repairs better than ours at every weight**, 1.4425 to 1.4932
+against our 1.5080, and pays for it in edits and damage. Ours is not uniformly
+better; the two designs sit at different points of the same trade off.
+
+**No weight reaches our damage rate.** The lowest the sweep gets is 0.1531 at mu
+100, against 0.1306. The direction is consistent across all three seeds,
++0.0322, +0.0031 and +0.0322.
+
+**But that difference is not significant and the paper must not claim it is.**
+
+| test | result |
+|---|---|
+| sign test, three seeds, all one direction | p = 0.250 |
+| two proportion, pooled windows, 88/576 against 63/482 | z = 1.022, **p = 0.307** |
+
+The intervals overlap as well, 0.1531 +- 0.0227 against 0.1306 +- 0.0084.
+Writing that the soft penalty cannot reach the veto's damage level is a claim
+this data does not support, and it is the kind of sentence a reviewer refutes in
+one line.
+
+### What can be claimed, and it is about the shape rather than a point
+
+The repair column bottoms out at mu 0.5 with 1.4425 and degrades monotonically
+from there to 1.4932 at mu 100, while the damage rate is still falling and still
+above ours at the end of the sweep. So **past mu 0.5 the design is paying repair
+for damage reduction and has still not bought its way down to the conjunction's
+damage level by the end of four orders of magnitude**. That is the shape theorem
+2 predicts, and it is a statement about the frontier rather than about a
+significant gap at one point.
+
+The honest form of the theorem's empirical support is therefore: within the
+swept range, raising the penalty begins to cost repair before it reaches the
+veto's damage rate. The strict lower bound claim stays a theoretical statement
+and is not asserted as measured.
+
+**What would settle it.** The damage rate's spread across seeds is about 0.02
+and the gap is 0.022, so roughly ten or more seeds would be needed, about eight
+GPU hours. Recorded here so the choice is visible rather than implied by
+silence.

@@ -1,0 +1,22 @@
+{
+ "protected_mis_edits": 125,
+ "n_protected_windows": 1036,
+ "protected_mis_edit_rate": 0.12065637065637065,
+ "probe_layer_mis_edits": 52,
+ "n_probe_windows": 210,
+ "damage_rate": 0.3191489361702128,
+ "repair_nrmsd": 1.0431090281167805,
+ "repair_nrmsd_median": 0.3191125933636455,
+ "n_injected_scored": 740,
+ "repair_gain": 0.2807338244526827,
+ "committed_edits": 423,
+ "mean_protected_damage": 0.00631478503183917,
+ "soft_mu": 1.0,
+ "seed": 0,
+ "tau": 0.02,
+ "scale": "xl",
+ "source": "mixed",
+ "n_windows": 1986,
+ "compute_seconds": 231.45916318893433,
+ "traces_written": 1986
+}
