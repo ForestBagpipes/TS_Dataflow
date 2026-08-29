@@ -1,0 +1,229 @@
+{
+ "arm": "f_full",
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "n_traces": 5986,
+ "n_attempts": 6438,
+ "n_commits": 488,
+ "by_contamination": {
+  "duplicate": {
+   "commits": 15,
+   "top_operator": "RESEGMENT",
+   "top_share": 0.9333333333333333,
+   "counts": {
+    "RESEGMENT": 14,
+    "DESPIKE": 1
+   },
+   "mean_gain": 9.79834217906012,
+   "entropy_bits": 0.35335933502142136
+  },
+  "flatline": {
+   "commits": 15,
+   "top_operator": "RESEGMENT",
+   "top_share": 1.0,
+   "counts": {
+    "RESEGMENT": 15
+   },
+   "mean_gain": 12.338067441863274,
+   "entropy_bits": 0.0
+  },
+  "level_shift": {
+   "commits": 55,
+   "top_operator": "RESEGMENT",
+   "top_share": 1.0,
+   "counts": {
+    "RESEGMENT": 55
+   },
+   "mean_gain": 1.7626659049044098,
+   "entropy_bits": 0.0
+  },
+  "missing_block": {
+   "commits": 21,
+   "top_operator": "RESEGMENT",
+   "top_share": 0.9047619047619048,
+   "counts": {
+    "RESEGMENT": 19,
+    "IMPUTE": 2
+   },
+   "mean_gain": -0.024853622327772128,
+   "entropy_bits": 0.4537163391869448
+  },
+  "missing_scattered": {
+   "commits": 21,
+   "top_operator": "RESEGMENT",
+   "top_share": 0.6190476190476191,
+   "counts": {
+    "RESEGMENT": 13,
+    "IMPUTE": 8
+   },
+   "mean_gain": -0.024359409768526172,
+   "entropy_bits": 0.9587118829771318
+  },
+  "noise": {
+   "commits": 10,
+   "top_operator": "RESEGMENT",
+   "top_share": 1.0,
+   "counts": {
+    "RESEGMENT": 10
+   },
+   "mean_gain": -0.011018750653014105,
+   "entropy_bits": 0.0
+  },
+  "none": {
+   "commits": 242,
+   "top_operator": "RESEGMENT",
+   "top_share": 0.9049586776859504,
+   "counts": {
+    "RESEGMENT": 219,
+    "DESPIKE": 8,
+    "IMPUTE": 15
+   },
+   "mean_gain": -0.07684162416321308,
+   "entropy_bits": 0.5416660265854013
+  },
+  "spike": {
+   "commits": 109,
+   "top_operator": "DESPIKE",
+   "top_share": 0.8990825688073395,
+   "counts": {
+    "DESPIKE": 98,
+    "RESEGMENT": 11
+   },
+   "mean_gain": 227.67849822678875,
+   "entropy_bits": 0.4718970538750853
+  }
+ },
+ "by_stratum": {
+  "changepoint": {
+   "commits": 84,
+   "top_operator": "RESEGMENT",
+   "top_share": 1.0,
+   "counts": {
+    "RESEGMENT": 84
+   },
+   "mean_gain": 0.0,
+   "entropy_bits": 0.0
+  },
+  "clean": {
+   "commits": 56,
+   "top_operator": "RESEGMENT",
+   "top_share": 0.8571428571428571,
+   "counts": {
+    "RESEGMENT": 48,
+    "IMPUTE": 6,
+    "DESPIKE": 2
+   },
+   "mean_gain": -0.09865686909836642,
+   "entropy_bits": 0.7075696535050607
+  },
+  "clean_ood": {
+   "commits": 43,
+   "top_operator": "RESEGMENT",
+   "top_share": 0.9069767441860465,
+   "counts": {
+    "RESEGMENT": 39,
+    "DESPIKE": 4
+   },
+   "mean_gain": -0.03256280837525416,
+   "entropy_bits": 0.44648134689680297
+  },
+  "contaminated": {
+   "commits": 246,
+   "top_operator": "RESEGMENT",
+   "top_share": 0.556910569105691,
+   "counts": {
+    "DESPIKE": 99,
+    "RESEGMENT": 137,
+    "IMPUTE": 10
+   },
+   "mean_gain": 102.62116022204474,
+   "entropy_bits": 1.1865958805329506
+  },
+  "hard": {
+   "commits": 31,
+   "top_operator": "RESEGMENT",
+   "top_share": 0.967741935483871,
+   "counts": {
+    "RESEGMENT": 30,
+    "IMPUTE": 1
+   },
+   "mean_gain": -0.013582773021145763,
+   "entropy_bits": 0.205592508185083
+  },
+  "rare_valid": {
+   "commits": 28,
+   "top_operator": "RESEGMENT",
+   "top_share": 0.6428571428571429,
+   "counts": {
+    "RESEGMENT": 18,
+    "IMPUTE": 8,
+    "DESPIKE": 2
+   },
+   "mean_gain": -0.40177220193562857,
+   "entropy_bits": 1.1981174211304033
+  }
+ },
+ "acceptance_rates": {
+  "duplicate": {
+   "IMPUTE": 0.0,
+   "DESPIKE": 0.14285714285714285,
+   "DENOISE": null,
+   "RESEGMENT": 0.12389380530973451
+  },
+  "flatline": {
+   "IMPUTE": 0.0,
+   "DESPIKE": 0.0,
+   "DENOISE": null,
+   "RESEGMENT": 0.07853403141361257
+  },
+  "level_shift": {
+   "IMPUTE": 0.0,
+   "DESPIKE": 0.0,
+   "DENOISE": null,
+   "RESEGMENT": 0.2422907488986784
+  },
+  "missing_block": {
+   "IMPUTE": 0.0033003300330033004,
+   "DESPIKE": 0.0,
+   "DENOISE": 0.0,
+   "RESEGMENT": 0.09693877551020408
+  },
+  "missing_scattered": {
+   "IMPUTE": 0.01606425702811245,
+   "DESPIKE": 0.0,
+   "DENOISE": 0.0,
+   "RESEGMENT": 0.07065217391304347
+  },
+  "noise": {
+   "IMPUTE": 0.0,
+   "DESPIKE": 0.0,
+   "DENOISE": 0.0,
+   "RESEGMENT": 0.10309278350515463
+  },
+  "none": {
+   "IMPUTE": 0.014563106796116505,
+   "DESPIKE": 0.07079646017699115,
+   "DENOISE": 0.0,
+   "RESEGMENT": 0.1360248447204969
+  },
+  "spike": {
+   "IMPUTE": 0.0,
+   "DESPIKE": 0.6012269938650306,
+   "DENOISE": 0.0,
+   "RESEGMENT": 0.07432432432432433
+  }
+ },
+ "best_operator": {
+  "duplicate": "DESPIKE",
+  "flatline": "RESEGMENT",
+  "level_shift": "RESEGMENT",
+  "missing_block": "RESEGMENT",
+  "missing_scattered": "RESEGMENT",
+  "noise": "RESEGMENT",
+  "none": "RESEGMENT",
+  "spike": "DESPIKE"
+ }
+}

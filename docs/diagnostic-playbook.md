@@ -173,3 +173,100 @@ Each of these was proposed at least once and was wrong every time. The cause
 was a hard coded corpus, a units mismatch, an aggregation over an inhomogeneous
 axis, a denominator over the wrong set, and a metric that dropped the points it
 was supposed to measure.
+
+## Tree five, a condition that never fires
+
+**The case.** Of 2766 RESEGMENT attempts the structural condition refused
+exactly zero, and the reported distortion was identically 0.000000 on every one
+of them, while the same condition refused 1139 of 2910 IMPUTE attempts.
+
+    is the condition ever the binding one for this operator?
+        count refusals attributed to it, per operator, not in aggregate
+        zero refusals for one operator and thousands for another is the signal
+
+    if zero: what does the measurement compare?
+        find the alignment or preprocessing step between the raw inputs and the
+        comparison. Ask what region of the input it removes
+        if it removes exactly the region the operator acts on, the measurement
+        is structurally incapable of seeing that operator, and the value it
+        returns is not small, it is undefined and reported as zero
+
+**The general shape, because this will recur.** A measurement that aligns two
+objects before comparing them can align away the very difference it exists to
+detect. Here `structure.align_for_action` sliced the original down to the span
+the crop retained, and a crop rewrites nothing inside that span, so the two
+inputs to the comparison were point wise identical by construction. Every
+guard built on that number was inert.
+
+**How to catch it early.** For each condition and each operator, report the
+refusal count and the distribution of the quantity the condition tests. A
+column of exact zeros with no variance is the tell. A condition that never
+fires is not evidence that the operator is safe.
+
+**What it cost here.** 180 commits inside protected strata, discarding a median
+40 percent of the window, at a reported distortion of zero and a mean fidelity
+gain of zero or below. That is the bulk of v1's protected mis edit rate.
+
+## Tree six, an operator that is never accepted
+
+**The case.** DENOISE, 416 attempts, zero accepted, 81.7 percent refused on
+structural grounds.
+
+    is the operator ever applicable?          if not, it is a routing problem
+    is it applicable and always refused?      compare the distribution of the
+                                              tested quantity against the
+                                              threshold, at quantiles
+        median within a factor of two of the threshold -> a calibration question
+        median an order of magnitude above  -> the operator cannot pass this
+                                              condition as posed, and the
+                                              condition is wrong for its family
+                                              rather than the operator being bad
+
+Measured: DENOISE's distortion quantiles are 0.0000, 0.1096, 0.2085, 0.2590,
+0.3688 against a threshold of 0.02. The median is ten times the threshold.
+Savitzky Golay smoothing changes every point, so a point wise distortion is high
+for it by construction, and a single global threshold calibrated on operators
+that rewrite a handful of points cannot also govern one that rewrites all of
+them.
+
+**The rule.** A threshold calibrated on one family of transformations does not
+transfer to another. Calibrate per family, on that family's own score
+distribution, at the same target risk level.
+
+## Tree seven, a signal that is small by design
+
+**The case.** IMPUTE's acceptance rate on the two missing kinds is 0.003 and
+0.016, and 51.6 percent of its refusals are on the utility condition, which is
+its own target defect.
+
+    before calling this a failure, read what the probe feeds the model
+        `probe._naive_fill` carries the last valid observation forward
+        so a gap arrives as a frozen plateau, not as a hole
+
+**This one is not a defect.** The docstring states the reason: a zero fill would
+leave the model unable to distinguish the candidate from the original, the
+measured utility change would be exactly zero, and every fill would be refused
+for failing to help. Forward filling reproduces what a model meets when nobody
+curated the data.
+
+**But it has a consequence that must be stated rather than discovered twice.**
+IMPUTE competes against forward fill, not against a hole, so its utility gain is
+the difference between two plausible reconstructions and is small by
+construction. An operator in that position should not have its acceptance rest
+mainly on the utility condition. This is the same conclusion tree six reaches
+from the other direction, and both point at per family calibration.
+
+## Tree eight, two numbers for one column
+
+**The case.** `f_full`'s nRMSD is 1.0764 in the ablation table and 1.5080 in the
+soft penalty table.
+
+    are they the same quantity?
+        list the denominator of each in words before comparing them
+        here: all seven contamination kinds, against the five sound ones
+
+Neither was wrong. They answered different questions and nothing recorded which
+question each table asked. **The fix is a ledger with the convention written
+down once**, `docs/version_ledger.md`, and every version measured under it. Two
+readings of one column are not a discrepancy to resolve, they are a missing
+definition to supply.

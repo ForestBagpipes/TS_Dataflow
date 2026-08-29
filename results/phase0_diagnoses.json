@@ -1,0 +1,277 @@
+{
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "check1_structure": {
+  "IMPUTE": {
+   "n": 2910,
+   "max": 0.5704471661813488,
+   "all_zero": false,
+   "structural_rollbacks": 1139
+  },
+  "DESPIKE": {
+   "n": 346,
+   "max": 0.5259357800999533,
+   "all_zero": false,
+   "structural_rollbacks": 137
+  },
+  "DENOISE": {
+   "n": 416,
+   "max": 0.4803015592397957,
+   "all_zero": false,
+   "structural_rollbacks": 340
+  },
+  "RESEGMENT": {
+   "n": 2766,
+   "max": 5.662137425588298e-17,
+   "all_zero": false,
+   "structural_rollbacks": 0
+  }
+ },
+ "check1_examples": [
+  {
+   "window_id": 1776,
+   "stratum": "changepoint",
+   "kept": 257,
+   "lo": 255,
+   "hi": 512,
+   "distortion": 2.831068712794149e-17,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1739,
+   "stratum": "changepoint",
+   "kept": 257,
+   "lo": 255,
+   "hi": 512,
+   "distortion": 0.0,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1593,
+   "stratum": "changepoint",
+   "kept": 257,
+   "lo": 255,
+   "hi": 512,
+   "distortion": 2.831068712794149e-17,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1623,
+   "stratum": "changepoint",
+   "kept": 260,
+   "lo": 0,
+   "hi": 260,
+   "distortion": 2.831068712794149e-17,
+   "gain": 0.0
+  },
+  {
+   "window_id": 903,
+   "stratum": "clean",
+   "kept": 260,
+   "lo": 0,
+   "hi": 260,
+   "distortion": 0.0,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1620,
+   "stratum": "changepoint",
+   "kept": 260,
+   "lo": 0,
+   "hi": 260,
+   "distortion": 0.0,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1634,
+   "stratum": "changepoint",
+   "kept": 260,
+   "lo": 0,
+   "hi": 260,
+   "distortion": 2.831068712794149e-17,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1628,
+   "stratum": "changepoint",
+   "kept": 260,
+   "lo": 75,
+   "hi": 335,
+   "distortion": 5.662137425588298e-17,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1613,
+   "stratum": "changepoint",
+   "kept": 260,
+   "lo": 55,
+   "hi": 315,
+   "distortion": 0.0,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1667,
+   "stratum": "changepoint",
+   "kept": 260,
+   "lo": 95,
+   "hi": 355,
+   "distortion": 0.0,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1656,
+   "stratum": "changepoint",
+   "kept": 260,
+   "lo": 70,
+   "hi": 330,
+   "distortion": 2.831068712794149e-17,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1666,
+   "stratum": "changepoint",
+   "kept": 260,
+   "lo": 0,
+   "hi": 260,
+   "distortion": 2.831068712794149e-17,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1168,
+   "stratum": "hard",
+   "kept": 260,
+   "lo": 0,
+   "hi": 260,
+   "distortion": 0.0,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1601,
+   "stratum": "changepoint",
+   "kept": 260,
+   "lo": 0,
+   "hi": 260,
+   "distortion": 0.0,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1660,
+   "stratum": "changepoint",
+   "kept": 260,
+   "lo": 60,
+   "hi": 320,
+   "distortion": 0.0,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1162,
+   "stratum": "hard",
+   "kept": 262,
+   "lo": 250,
+   "hi": 512,
+   "distortion": 0.0,
+   "gain": 0.0
+  },
+  {
+   "window_id": 806,
+   "stratum": "clean",
+   "kept": 265,
+   "lo": 145,
+   "hi": 410,
+   "distortion": 0.0,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1579,
+   "stratum": "changepoint",
+   "kept": 265,
+   "lo": 0,
+   "hi": 265,
+   "distortion": 0.0,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1653,
+   "stratum": "changepoint",
+   "kept": 265,
+   "lo": 0,
+   "hi": 265,
+   "distortion": 2.831068712794149e-17,
+   "gain": 0.0
+  },
+  {
+   "window_id": 1267,
+   "stratum": "hard",
+   "kept": 265,
+   "lo": 25,
+   "hi": 290,
+   "distortion": 5.662137425588298e-17,
+   "gain": 0.0
+  }
+ ],
+ "check2_probe_fill": {
+  "fill": "forward fill with leading back fill",
+  "deliberate": true,
+  "location": "src/introact_ts/probe.py:104"
+ },
+ "check3_denoise": {
+  "n": 416,
+  "q05": 0.0,
+  "q25": 0.10959679744496584,
+  "q50": 0.2084543044757131,
+  "q75": 0.25897495662083503,
+  "q95": 0.3688424687629575,
+  "share_below_tau": 0.09615384615384616,
+  "verdict": "structurally impossible at this tau"
+ },
+ "check4_acceptance": {
+  "IMPUTE": {
+   "attempts": 2910,
+   "accepted": 25,
+   "rate": 0.00859106529209622,
+   "on_protected": 15,
+   "by_stratum": {
+    "contaminated": 10,
+    "rare_valid": 8,
+    "clean": 6,
+    "hard": 1
+   }
+  },
+  "DESPIKE": {
+   "attempts": 346,
+   "accepted": 107,
+   "rate": 0.3092485549132948,
+   "on_protected": 4,
+   "by_stratum": {
+    "contaminated": 99,
+    "clean_ood": 4,
+    "clean": 2,
+    "rare_valid": 2
+   }
+  },
+  "DENOISE": {
+   "attempts": 416,
+   "accepted": 0,
+   "rate": 0.0,
+   "on_protected": 0,
+   "by_stratum": {}
+  },
+  "RESEGMENT": {
+   "attempts": 2766,
+   "accepted": 356,
+   "rate": 0.128705712219812,
+   "on_protected": 180,
+   "by_stratum": {
+    "changepoint": 84,
+    "clean": 48,
+    "contaminated": 137,
+    "rare_valid": 18,
+    "clean_ood": 39,
+    "hard": 30
+   }
+  }
+ }
+}
