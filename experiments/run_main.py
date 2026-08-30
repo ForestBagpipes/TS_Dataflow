@@ -67,6 +67,7 @@ from run_agent import SCALES  # noqa: E402
 
 from introact_ts.agent import AgentConfig, IntroActAgent  # noqa: E402
 from introact_ts.backends import PRESETS, make_pool  # noqa: E402
+from introact_ts.structure import _discard_distortion  # noqa: E402
 from introact_ts.verify import VerifyConfig  # noqa: E402
 from introact_ts.types import GovernanceTrace  # noqa: E402
 
@@ -420,9 +421,19 @@ def score_rows(traces, windows):
         ref_var = float(np.var(w.clean_series - np.median(w.clean_series)))
         a = _nmse(t.final_series, w.clean_series[t.crop_offset:], ref_var)
         b = _nmse(w.series, w.clean_series, ref_var)
+        # Discarding data is damage. The distance comparison above cannot see a
+        # crop, because cropping leaves the surviving span point wise correct,
+        # so a protected window can lose 40 percent of itself at zero measured
+        # damage. Same blind spot, same fix, as `structure._discard_distortion`
+        # and `conformal.damage_loss`. See docs/version_ledger.md for what this
+        # does to the v1 numbers.
+        lo = int(t.crop_offset)
+        hi = lo + len(np.asarray(t.final_series))
+        disc = _discard_distortion(np.asarray(w.series, dtype=np.float64),
+                                   {"lo": lo, "hi": hi})
         if edited:
             committed += 1
-            harmful += int(a > b + 1e-9)
+            harmful += int(a > b + 1e-9 or disc > 1e-9)
         if w.stratum in PROTECTED:
             dmg.append(a)
         elif w.stratum == "contaminated":

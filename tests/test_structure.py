@@ -86,11 +86,42 @@ def test_plausible_fill_is_not_penalised():
     assert r.parts["patch"] < 0.5
 
 
-def test_resegment_compares_only_the_retained_span():
-    """A crop leaves what it keeps untouched, so distortion must be ~zero."""
+def test_resegment_distortion_counts_what_the_crop_discarded():
+    """A crop is judged on what it threw away, not only on what it kept.
+
+    This test asserted the opposite until 2026-08-27. The old form read "a crop
+    leaves what it keeps untouched, so distortion must be near zero", which is
+    true of the retained span and false of the operation: `align_for_action`
+    slices the original down to that same span, so the comparison saw two
+    identical arrays and returned zero for every crop ever attempted. Measured
+    on the xl corpus, 2766 attempts all reported exactly 0.000000 and the
+    structural condition refused none of them, while 180 crops discarding a
+    median 40 percent of their window were committed inside protected strata.
+
+    The test had encoded the defect as the specification, which is why it did
+    not fail when the defect was present. It now pins the corrected behaviour
+    from both ends: a crop that discards a large share is distorted, and an
+    operation that discards nothing is unaffected by the new term.
+    """
     x = synth(8)
     x[300:] += 25.0
     out = apply_action(x, Action.RESEGMENT)
     assert out.applicable
     r = structure_distortion(x, out.series, Action.RESEGMENT, out.params, out.touched)
-    assert r.distortion < 0.05
+    discarded = 1.0 - len(out.series) / len(x)
+    assert discarded > 0.1, "the fixture stopped exercising a real crop"
+    assert r.distortion > 0.1, (
+        f"a crop discarding {discarded:.2f} of the window reported "
+        f"{r.distortion:.6f}")
+    assert "discarded" in r.parts
+
+
+def test_distortion_unchanged_when_nothing_is_discarded():
+    """The new term must vanish for every operator that preserves length."""
+    x = synth(8)
+    x[100:104] += 40.0
+    out = apply_action(x, Action.DESPIKE)
+    assert out.applicable
+    assert len(out.series) == len(x)
+    r = structure_distortion(x, out.series, Action.DESPIKE, out.params, out.touched)
+    assert "discarded" not in r.parts

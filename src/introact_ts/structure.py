@@ -257,11 +257,57 @@ def _shape_distortion(a: np.ndarray, b: np.ndarray) -> float:
 
 def align_for_action(original: np.ndarray, candidate: np.ndarray,
                      action: Action, params: dict) -> tuple:
-    """Slice the original down to the span an action retained, if it cropped."""
+    """Slice the original down to the span an action retained, if it cropped.
+
+    This makes the two arrays comparable point wise. It also removes the region
+    a crop acted on, which is why `_discard_distortion` below has to put that
+    region back into the measurement: on its own this alignment reports a crop
+    as a perfect edit, because a crop rewrites nothing inside the span it keeps.
+    """
     if Action(action) is Action.RESEGMENT and "lo" in params and "hi" in params:
         lo, hi = int(params["lo"]), int(params["hi"])
         return np.asarray(original, dtype=np.float64)[lo:hi], candidate
     return original, candidate
+
+
+def _discard_distortion(original: np.ndarray, params: dict) -> float:
+    """Share of the window's variation that a crop threw away.
+
+    The measurement `align_for_action` cannot make: everything a crop does
+    happens outside the span the comparison sees. Measured on 2766 attempts,
+    the point wise distortion of RESEGMENT was identically zero, and 180 crops
+    discarding a median 40 percent of their window were committed inside
+    protected strata at a reported distortion of zero.
+
+    The quantity is the fraction of the total squared deviation about the median
+    that lies outside the retained span. It has the three properties the
+    condition needs and introduces no constant to tune:
+
+      discarding nothing gives exactly zero, so an uncropped edit is unaffected
+      discarding more gives more, monotonically
+      discarding a stretch that carries more of the window's variation gives
+      more than discarding a flat stretch of the same length
+
+    A window with no variation at all has no variance to apportion, so the
+    fraction of points discarded is used instead, which is the same quantity in
+    the limit and keeps the function defined.
+    """
+    if "lo" not in params or "hi" not in params:
+        return 0.0
+    x = np.asarray(original, dtype=np.float64)
+    finite = np.isfinite(x)
+    if finite.sum() < 8:
+        return 0.0
+    lo, hi = int(params["lo"]), int(params["hi"])
+    lo = max(0, min(lo, len(x)))
+    hi = max(lo, min(hi, len(x)))
+    med = float(np.median(x[finite]))
+    dev = np.where(finite, (x - med) ** 2, 0.0)
+    total = float(dev.sum())
+    if total <= 1e-12:
+        return float(np.clip(1.0 - (hi - lo) / max(len(x), 1), 0.0, 1.0))
+    kept = float(dev[lo:hi].sum())
+    return float(np.clip(1.0 - kept / total, 0.0, 1.0))
 
 
 def structure_distortion(
@@ -324,7 +370,17 @@ def structure_distortion(
     mean_term = sum(weights.get(k, 0.0) * v for k, v in parts.items()) / max(total_w, 1e-9)
     worst_term = max(parts.values())
     distortion = float(0.7 * mean_term + 0.3 * worst_term)
-    return StructureReport(distortion=distortion, parts=parts)
+
+    # What the alignment removed, put back as a floor rather than as another
+    # weighted term. A floor, because discarding a third of a window is at least
+    # that much distortion whatever survives inside the retained span, and
+    # because a weight would be a constant to tune where none is needed. The
+    # part is reported either way so a trace records why a crop was refused.
+    discarded = _discard_distortion(original, params)
+    if discarded > 0.0:
+        parts["discarded"] = discarded
+        distortion = max(distortion, discarded)
+    return StructureReport(distortion=float(distortion), parts=parts)
 
 
 def _spread_distortion(a: np.ndarray, b: np.ndarray) -> float:

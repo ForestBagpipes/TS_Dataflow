@@ -270,3 +270,35 @@ question each table asked. **The fix is a ledger with the convention written
 down once**, `docs/version_ledger.md`, and every version measured under it. Two
 readings of one column are not a discrepancy to resolve, they are a missing
 definition to supply.
+
+## Tree nine, a quantity established on one corpus does not transfer
+
+**Four occurrences, same shape.** Each was found separately and each cost
+something before it was found.
+
+| what was established on `ett` | what happened on `mixed` |
+|---|---|
+| repair distance as a plain RMSD | SCREEN 2109 against no action 1382, a repair looked worse than doing nothing |
+| the valuation family's selection basis | raw scores selected by magnitude, zero percent of Crypto and one hundred percent of one probe |
+| shield conservatism, the replay | the injected layer moved 0.187 to 0.2855 and the operator ordering inverted |
+| **the conformal calibration corpus** | **the calibration pool has no financial series at all while 44.6 percent of deployment is financial, so exchangeability never held and the deployed damage rate sat at four times the target** |
+
+**The rule, stated once so it does not have to be rediscovered a fifth time.**
+Any quantity calibrated, tuned or validated on `ett` is assumed not to transfer
+to `mixed` until measured there. `ett` is three transformer telemetry sets with
+one unit and one regime; `mixed` adds a bitcoin price, an oil price and a term
+structure. A statistic that is stable within one is under no obligation to be
+stable across both.
+
+**The specific form the fourth one took, because it is the least visible.** A
+calibration corpus is not a hyperparameter, so it does not get swept, and it is
+not a metric, so it does not get reconciled. It sits in one line of the launcher
+(`run_conformal.py:130`, `source="ett"`) and every guarantee downstream inherits
+it silently. When a theorem's premise is a property of two datasets, check the
+two datasets, not the theorem.
+
+**How the fourth one was caught.** Not by suspicion of the calibration but by
+asking why the deployed damage rate was four times the target level when the
+theorem said it should be below. A guarantee that does not hold in deployment is
+either a broken proof or a broken premise, and the premise is much cheaper to
+check first.

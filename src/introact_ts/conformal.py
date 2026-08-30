@@ -114,11 +114,34 @@ def calibrate(losses_by_lambda: dict, alpha: float) -> ConformalThreshold:
 
 
 def damage_loss(nmse_before: np.ndarray, nmse_after: np.ndarray,
-                tol: float = 1e-9) -> np.ndarray:
-    """The fixed loss: one per window that came out worse than it went in."""
+                discard_share=None, tol: float = 1e-9) -> np.ndarray:
+    """The fixed loss: one per window that came out worse than it went in.
+
+    **Discarding data is damage and this had to be written in explicitly.** The
+    distance comparison alone cannot see a crop: a protected window's clean
+    reference is the window itself, so cropping it leaves the surviving span
+    point wise correct and the distance unchanged. Measured on seed 0, 66 crops
+    committed inside protected strata discarded a median 40 percent of their
+    window and every one of them scored zero damage.
+
+    That is the same blind spot `structure._discard_distortion` fixes for the
+    structural condition, and it is fixed the same way here so that the shield,
+    the loss and the calibration all mean one thing by damage. Without it a per
+    family calibration would hand the cropping family a loose threshold on the
+    evidence that cropping never hurts.
+
+    ``discard_share`` is the fraction of the window's variation that was thrown
+    away, in [0, 1], which keeps the loss bounded as conformal risk control
+    requires. A window that was not cropped passes zero and is judged exactly as
+    before.
+    """
     a = np.asarray(nmse_after, dtype=np.float64)
     b = np.asarray(nmse_before, dtype=np.float64)
-    return (a > b + tol).astype(np.float64)
+    worse = (a > b + tol).astype(np.float64)
+    if discard_share is None:
+        return worse
+    d = np.clip(np.asarray(discard_share, dtype=np.float64), 0.0, 1.0)
+    return np.maximum(worse, d)
 
 
 # -- fallback for a non monotone risk curve ---------------------------------

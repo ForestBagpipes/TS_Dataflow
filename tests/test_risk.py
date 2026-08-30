@@ -196,3 +196,55 @@ def test_soft_mu_none_leaves_every_existing_caller_unchanged():
     assert verify(0.0, 0.001, 0.0, cfg) is Verdict.ROLLED_BACK_UTILITY
     assert verify(1.0, 0.9, 0.0, cfg) is Verdict.ROLLED_BACK_STRUCTURE
     assert verify(1.0, 0.001, 0.99, cfg) is Verdict.ROLLED_BACK_RISK
+
+
+def _rec(action, verdict):
+    from introact_ts.types import ActionRecord
+    return ActionRecord(
+        step=0, action=action, params={}, verdict=verdict, delta_utility=0.0,
+        struct_distortion=0.0, risk=0.0, utility_before=0.0, utility_after=0.0)
+
+
+def test_ladder_rung_moves_with_the_shield_reason():
+    """A structural veto goes gentler, a utility veto goes stronger.
+
+    This is the whole mechanism: the rung is not a schedule, it is a response
+    to why the last attempt was refused, and it routes the same way
+    `spo.table_for` routes the value table so the estimate and the situation
+    always refer to each other.
+    """
+    from introact_ts.policy import _rung
+    from introact_ts.types import Action, Verdict
+
+    assert _rung([]) == "default"
+    assert _rung([_rec(Action.DESPIKE, Verdict.ROLLED_BACK_STRUCTURE)]) == "conservative"
+    assert _rung([_rec(Action.DESPIKE, Verdict.ROLLED_BACK_UTILITY)]) == "aggressive"
+    assert _rung([_rec(Action.DESPIKE, Verdict.ROLLED_BACK_RISK)]) == "conservative"
+    # An acceptance resets the rung, the next defect starts from the default.
+    assert _rung([_rec(Action.DESPIKE, Verdict.ROLLED_BACK_UTILITY),
+                  _rec(Action.IMPUTE, Verdict.ACCEPTED)]) == "default"
+
+
+def test_ladder_rungs_are_distinct_proposals():
+    """Two rungs of one operator must not hash to the same identity.
+
+    `fresh` drops a candidate whose (action, key) was already tried. If the key
+    ignored the ladder's parameters, the retry would be filtered out as already
+    attempted and the loop would do nothing, which is the failure this test
+    exists to catch.
+    """
+    from introact_ts.policy import LADDER, _at_rung, _key
+    from introact_ts.types import Action
+
+    for action in (Action.DESPIKE, Action.RESEGMENT, Action.DENOISE):
+        keys = {_key(_at_rung(action, r))
+                for r in ("default", "conservative", "aggressive")}
+        assert len(keys) == 3, f"{action} rungs collapse to {keys}"
+
+
+def test_ladder_off_by_default_proposes_exactly_what_it_used_to():
+    """The switch must not perturb the路径 every recorded result ran on."""
+    from introact_ts.policy import PolicyConfig
+    assert PolicyConfig().enable_param_ladder is False
+    assert PolicyConfig().add_fallback is False
+    assert PolicyConfig().secondary_threshold == 1.6

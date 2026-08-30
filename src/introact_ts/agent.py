@@ -276,7 +276,16 @@ class IntroActAgent:
                 # Rejected: the sandbox copy is discarded, `work` is untouched.
 
             if not committed:
-                break
+                # Without the ladder a refused list ends the episode, which is
+                # what every result before this was produced under. With it,
+                # the refusal is information rather than a stop: the next round
+                # proposes the same operators at the rung the verdict selected,
+                # `fresh` keeps it from retrying a setting already judged, and
+                # `max_steps` still bounds the whole thing. When the rungs run
+                # out `propose_actions` returns a terminal action and the loop
+                # leaves through the branch above.
+                if not getattr(cfg.policy, "enable_param_ladder", False):
+                    break
             step += 1
 
         return GovernanceTrace(
