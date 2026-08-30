@@ -248,3 +248,43 @@ def test_ladder_off_by_default_proposes_exactly_what_it_used_to():
     assert PolicyConfig().enable_param_ladder is False
     assert PolicyConfig().add_fallback is False
     assert PolicyConfig().secondary_threshold == 1.6
+
+
+def test_per_family_threshold_governs_its_own_operator():
+    """Each family is judged against its own calibrated bound.
+
+    A single threshold made the condition vacuous for one operator and
+    impossible for another. This pins that the action decides which bound
+    applies, and that an unnamed action still falls back to the global one.
+    """
+    from introact_ts.types import Action, Verdict
+    from introact_ts.verify import VerifyConfig, tau_for, verify
+
+    cfg = VerifyConfig(tau=0.02, tau_by_family={"RESEGMENT": 0.40,
+                                                "DENOISE": 0.10})
+    assert tau_for(Action.RESEGMENT, cfg) == 0.40
+    assert tau_for(Action.DENOISE, cfg) == 0.10
+    assert tau_for(Action.IMPUTE, cfg) == 0.02, "unnamed falls back to tau"
+    assert tau_for(None, cfg) == 0.02, "no action falls back to tau"
+
+    # A distortion of 0.3 is refused globally and admitted for RESEGMENT.
+    assert verify(1.0, 0.3, 0.0, cfg) is Verdict.ROLLED_BACK_STRUCTURE
+    assert verify(1.0, 0.3, 0.0, cfg, action=Action.RESEGMENT) is Verdict.ACCEPTED
+    # And a family calibrated to zero admits nothing, which is a real outcome
+    # rather than a bug: DESPIKE's contaminated layer loss is above the target
+    # risk on its own.
+    zero = VerifyConfig(tau=0.02, tau_by_family={"DESPIKE": 0.0})
+    assert verify(1.0, 1e-9, 0.0, zero,
+                  action=Action.DESPIKE) is Verdict.ROLLED_BACK_STRUCTURE
+
+
+def test_no_family_table_leaves_every_existing_caller_alone():
+    from introact_ts.types import Action, Verdict
+    from introact_ts.verify import VerifyConfig, verify
+
+    cfg = VerifyConfig(tau=0.02)
+    assert cfg.tau_by_family is None
+    for act in (None, Action.RESEGMENT, Action.DESPIKE):
+        assert verify(1.0, 0.001, 0.0, cfg, action=act) is Verdict.ACCEPTED
+        assert verify(1.0, 0.9, 0.0, cfg,
+                      action=act) is Verdict.ROLLED_BACK_STRUCTURE

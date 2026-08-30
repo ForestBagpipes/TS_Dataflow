@@ -246,7 +246,12 @@ class IntroActAgent:
                     depth if USE_DEPTH else live.confidence,
                     outcome.cost, consistency,
                 )
-                verdict = verify(delta_u, report.distortion, risk, cfg.verification)
+                # The action is passed so the structural condition can use its
+                # family's own threshold. One global value cannot govern an
+                # operator that rewrites four points and one that rewrites all
+                # of them.
+                verdict = verify(delta_u, report.distortion, risk,
+                                 cfg.verification, action=action)
 
                 records.append(
                     ActionRecord(

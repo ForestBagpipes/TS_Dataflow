@@ -873,3 +873,46 @@ and is not asserted as measured.
 and the gap is 0.022, so roughly ten or more seeds would be needed, about eight
 GPU hours. Recorded here so the choice is visible rather than implied by
 silence.
+
+
+## The risk condition discriminates backwards on two families
+
+Found while checking whether the risk condition could separate mis perceived
+protected windows from genuinely contaminated ones. It cannot, and on two
+families it prefers the wrong ones.
+
+`verify` short circuits, so a candidate reaching the risk condition has already
+cleared utility and structure. Among the accepted and the risk refused, the risk
+condition is therefore the only thing separating them, which makes this an exact
+reading rather than an attribution. Three seeds of the xl deployment traces:
+
+| operator | layer | reached risk | refused | refusal rate |
+|---|---|---|---|---|
+| IMPUTE | protected | 41 | 26 | 0.6341 |
+| IMPUTE | contaminated | 209 | 199 | **0.9522** |
+| DESPIKE | protected | 21 | 13 | 0.6190 |
+| DESPIKE | contaminated | 140 | 41 | 0.2929 |
+| RESEGMENT | protected | 266 | 47 | **0.1767** |
+| RESEGMENT | contaminated | 191 | 54 | 0.2827 |
+
+For the condition to help, the protected rate would have to exceed the
+contaminated one. On IMPUTE and RESEGMENT it is the other way round, and
+RESEGMENT's 219 released protected candidates are where v1's 180 protected mis
+edits come from.
+
+**Why IMPUTE refuses 0.9522 of the candidates it should accept.** `action_risk`
+weights the depth and the breadth of the behavioural improvement at 0.45 and
+0.30. Filling a gap moves a few dimensions of the signature and leaves the rest
+alone, so a correct imputation scores low on both and reads as risky. The
+condition is built for edits that improve the window broadly, and a local repair
+is not that. This is the direct cause of IMPUTE's overall acceptance rate of
+0.0086, and it is not a threshold that can be moved, it is the wrong shape of
+score for a local operator.
+
+**Carried to v3's backlog, not fixed in v2.** The redesign should make the risk
+term scale aware, judging a local edit against the footprint it claims rather
+than against the whole window. Two lines of work are relevant to the robust
+form: distributionally robust uncertainty sets that adapt to the deployed
+distribution, and manifold constrained versions of the same, both addressing the
+case where a fixed uncertainty region is wrong systematically rather than
+randomly.

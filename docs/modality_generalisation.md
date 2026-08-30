@@ -102,3 +102,51 @@ perplexity readout, reporting the damage rate and the protected mis edit rate.
 That would show the machinery runs on another modality and that the two failure
 modes above appear there too. It would not show the method is competitive with
 text specific curation pipelines, and the text should not imply it does.
+
+
+## Training dynamics diagnosis, the part that is already standard elsewhere
+
+The section above argues from mechanism. This one argues from precedent: the
+signal v3 turns to is the standard toolbox of LLM data curation, and what is new
+here is where it sits rather than what it measures.
+
+| the text side | what it measures | our operationalisation |
+|---|---|---|
+| forgetting events, Toneva et al. 2019 | how often a learned example is unlearned | flips from below to above a per window learning threshold across epochs |
+| EL2N and GraNd, Paul et al. 2021 | error norm early in training as a difficulty proxy | the error at ten percent of the training run |
+| dataset cartography, Swayamdipta et al. 2020 | confidence and variability place a sample in easy, hard or ambiguous | mean and cross seed variance of the per window loss |
+| data pruning at scale, Sorscher et al. 2022 | which examples can be removed without loss | which windows should be left alone, the same question inverted |
+| TracIn, Pruthi et al. 2020 | influence of a training example along the trajectory | complementary rather than the same; it needs gradients, these need only the loss |
+
+**What is different here, and it is the whole claim.** Every one of those is an
+offline scoring pass: train a model, read the trajectory, rank the corpus, prune
+once. In an agent loop the trajectory becomes a state signal read while the
+decision is being made, and the decision is not keep or drop but leave this
+window alone or offer it to the repair operators. None of them was built to
+answer that, because none of them has an operator to gate.
+
+The second difference is the modality. All five are stated for classification
+over discrete examples. The operationalisation here is regression over
+overlapping windows, where an example is not a natural unit and a window's loss
+has to be assembled from the training samples that cover it. That mapping is in
+`docs/v3_triage_design.md` and it is a contribution of the transfer rather than
+a detail of it.
+
+**Why it should transfer back.** The failure driving v3 is that a static readout
+prefers unfamiliar clean data: the utility gain on the synthetic probe layer is
+sixteen times the gain on genuinely contaminated windows. The text analogue is
+already known in another guise, that a language model's perplexity improves most
+on templated low entropy text, so a pipeline scoring documents by perplexity
+change will systematically prefer to rewrite the documents that least need it.
+Any pipeline whose quality signal is a model's own readout has this problem, and
+training dynamics is one of the few signals that does not, because it measures
+the data's relationship with the learner rather than the learner's comfort with
+the data.
+
+## A caveat this section must carry
+
+The trajectory signal is unproven here. It is a hypothesis with a pre registered
+test and a stated failure threshold. If the test fails, this section reduces to
+the correspondence table and the negative result. Writing it as established
+before the probe returns would repeat the error that produced the five fold
+damage advantage, which turned out to be a measurement blind spot.

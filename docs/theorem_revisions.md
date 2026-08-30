@@ -102,3 +102,36 @@ The per family thresholds are being calibrated now. Two of the revisions above
 assume the calibration produces a usable threshold per family. If a family's
 sample is too small for its own calibration, its statement has to say what was
 done instead, and silently falling back to a global value is not an option.
+
+
+## What triage does not change, and the one condition on that
+
+v3 puts a gate between perception and the proposer. It decides whether a window
+is offered to `propose_actions` at all; it never builds a candidate and never
+hands one to the shield directly. Everything reaching the three conditions still
+comes from the proposer and is still judged against its family's calibrated
+threshold.
+
+**So theorems 2, 4 and 5 carry over unchanged**, each for its own reason.
+
+Theorem 2 is about which actions a weighted sum accepts among those offered. A
+gate upstream changes what is offered, not how the rule ranks them.
+
+Theorem 4's proof uses two facts: the action is applied to a copy, and the
+working copy is updated only when all three conditions hold. Neither is touched
+by a gate that runs before any candidate exists.
+
+Theorem 5 is the one with a condition attached. Its guarantee is over the
+population the thresholds were calibrated on, and with triage in front the
+deployed population becomes routed and released rather than routed. The theorem
+holds on the deployed population only if the calibration was done on that same
+population.
+
+**The constraint, therefore, and it is not optional.** Either the triage policy
+is frozen and the thresholds are calibrated under that snapshot, so the two ship
+as a pair; or the thresholds are recalibrated on a rolling window of recent
+decisions at a stated interval, with theorem 6's decay bound covering the gap.
+`docs/v3_triage_design.md` records which was chosen. A learning triage policy
+deployed against thresholds calibrated before it started learning would be the
+sixth instance of the calibration and deployment populations differing, and the
+first five each cost a rerun or a retracted claim.

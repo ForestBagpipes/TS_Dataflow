@@ -53,6 +53,17 @@ class VerifyConfig:
     require_structure: bool = True
     require_reprobe: bool = True
     require_risk: bool = True
+    #: One structural threshold per operator family, keyed by the action's
+    #: string value. When present it replaces `tau` for any action named in it,
+    #: and `tau` still covers anything that is not.
+    #:
+    #: A single threshold was calibrated on the families that rewrite a handful
+    #: of points and then applied to families that do something else. Measured
+    #: on xl, RESEGMENT's distortion was identically zero on all 2766 attempts
+    #: so the condition never refused it, and DENOISE's median was 0.2085
+    #: against a threshold of 0.02 so it never accepted one. One family always
+    #: passed and one never did, and both are the same fault.
+    tau_by_family: dict = None
     #: When set, the conjunction above is replaced by the competing design's
     #: weighted sum, `dU - mu * D_struct > epsilon`, with no threshold on the
     #: distortion itself. None keeps the conjunction, so every existing caller
@@ -135,11 +146,25 @@ def action_risk(
     return float(np.clip(0.45 * depth_term + 0.25 * cost_term + 0.30 * cons_term, 0.0, 1.0))
 
 
+def tau_for(action, cfg: VerifyConfig) -> float:
+    """The structural threshold governing one action's family.
+
+    Falls back to the global `tau` for an action the calibration does not name,
+    so a caller that passes no action, or an action outside the calibrated
+    families, behaves exactly as before.
+    """
+    if not cfg.tau_by_family or action is None:
+        return cfg.tau
+    key = getattr(action, "value", action)
+    return float(cfg.tau_by_family.get(key, cfg.tau))
+
+
 def verify(
     delta_utility: float,
     struct_distortion: float,
     risk: float,
     cfg: VerifyConfig = None,
+    action=None,
 ) -> Verdict:
     """Apply the acceptance rule and report which condition failed, if any."""
     cfg = cfg or VerifyConfig()
@@ -157,7 +182,7 @@ def verify(
 
     if cfg.require_reprobe and not (delta_utility > cfg.epsilon):
         return Verdict.ROLLED_BACK_UTILITY
-    if cfg.require_structure and not (struct_distortion < cfg.tau):
+    if cfg.require_structure and not (struct_distortion < tau_for(action, cfg)):
         return Verdict.ROLLED_BACK_STRUCTURE
     if cfg.require_risk and not (risk < cfg.eta):
         return Verdict.ROLLED_BACK_RISK

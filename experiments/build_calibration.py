@@ -76,6 +76,50 @@ def target_counts(n):
     return {k: int(round(n * v)) for k, v in DEPLOY_SHARES.items()}
 
 
+def build_slice(n, seed, source="mixed", scale="xl", dep_seeds=(0, 1, 2),
+                also_avoid=(), oversample=1.6, verbose=False):
+    """A held out slice at deployment's stratum shares, disjoint from everything.
+
+    `also_avoid` takes further window collections to stay clear of, which is how
+    a smoke slice avoids the calibration corpus as well as the deployment seeds.
+    A slice that shares windows with either would be reporting on data one of
+    them has already seen.
+    """
+    banned = set()
+    for s in dep_seeds:
+        spec = SCALES[scale]
+        spec.seed = s
+        for w in build_corpus(spec, source=source):
+            banned.add(ident(w))
+    for coll in also_avoid:
+        for w in coll:
+            banned.add(ident(w))
+    raw = build_corpus(spec_for(n, seed, oversample), source=source)
+    seen = set()
+    by_stratum = defaultdict(list)
+    dropped = {"overlap": 0, "duplicate": 0}
+    for w in raw:
+        k = ident(w)
+        if k in banned:
+            dropped["overlap"] += 1
+            continue
+        if k in seen:
+            dropped["duplicate"] += 1
+            continue
+        seen.add(k)
+        by_stratum[w.stratum].append(w)
+    out, short = [], {}
+    for st, target in target_counts(n).items():
+        take = by_stratum.get(st, [])[:target]
+        out.extend(take)
+        if len(take) < target:
+            short[st] = {"wanted": target, "got": len(take)}
+    if verbose:
+        print(f"slice seed {seed}: {len(out)} windows, dropped {dropped}"
+              + (f", short {short}" if short else ""), flush=True)
+    return out, dropped, short
+
+
 def build(n=1600, seed=101, source="mixed", scale="xl",
           dep_seeds=(0, 1, 2), oversample=1.35, verbose=False):
     """The calibration corpus itself, so a caller gets the same one this
