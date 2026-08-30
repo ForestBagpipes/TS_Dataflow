@@ -84,6 +84,11 @@ _DEFECT_OPERATOR = {
     "shift": Action.RESEGMENT,
 }
 
+#: Order the rungs are offered in, conservative before aggressive so that the
+#: fixed rule, which takes the first admissible candidate, prefers the gentler
+#: setting. The learned policy reorders this; the fixed rule does not.
+RUNG_ORDER = ("default", "conservative", "aggressive")
+
 #: Which rung the previous verdict sends the next attempt to. Keyed on the
 #: verdict's string value so this module does not import the shield's enum.
 RUNG_AFTER = {
@@ -195,7 +200,6 @@ def propose_actions(
         # are separate on purpose: mixing them would let a refusal on one
         # operator change which operators are on offer, and then a rejection
         # would be doing the proposer's job.
-        rung = _rung(history)
         wanted = []
         for d in (defect, _secondary_defect(state, defect,
                                             cfg.secondary_threshold)):
@@ -204,7 +208,19 @@ def propose_actions(
             act = _DEFECT_OPERATOR.get(d)
             if act is not None and act not in wanted:
                 wanted.append(act)
-        cands = [(a, _at_rung(a, rung)) for a in wanted]
+        # Every rung of every routed operator, conservative first so the fixed
+        # rule keeps the gentler setting's precedence. The rungs are offered
+        # together rather than one per round because that is what gives the
+        # policy something to rank: three settings of one operator have three
+        # different chances of clearing the shield, and which one to try first
+        # is a decision with consequences. `fresh` still removes a setting
+        # already judged, so a later round proposes only what is left.
+        #
+        # This is also the candidate set the calibration sees. Calibrating on
+        # one candidate distribution and deploying on another is the same
+        # mistake as calibrating on one corpus and deploying on another, which
+        # is recorded in docs/diagnostic-playbook.md as tree nine.
+        cands = [(a, _at_rung(a, r)) for a in wanted for r in RUNG_ORDER]
         # An operator the routing did not reach is still worth one attempt at
         # the gentle end, which is what gives the policy something to compare
         # the routed choice against on a window with a single clear defect.
@@ -293,6 +309,25 @@ def _rung(history: list) -> str:
             return RUNG_AFTER[name]
         if name == "ACCEPTED":
             return "default"
+    return "default"
+
+
+def rung_of(action, params) -> str:
+    """Which rung a parameter dict came from.
+
+    Falls back to `default` for anything the ladder does not describe, which is
+    what every candidate looks like when the ladder is switched off. That makes
+    the value table's rung dimension collapse onto one slot per operator in the
+    off case, so the off case ranks exactly as it did before the dimension
+    existed.
+    """
+    table = LADDER.get(action)
+    if not table:
+        return "default"
+    k = _key(params or {})
+    for name in RUNG_ORDER:
+        if name in table and _key(table[name]) == k:
+            return name
     return "default"
 
 

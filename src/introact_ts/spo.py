@@ -44,11 +44,39 @@ from typing import Optional
 
 import numpy as np
 
+from .policy import _key as _key_of
+from .policy import rung_of
 from .types import Action, MUTATING_ACTIONS, Verdict
 
 #: Operators the policy chooses among. Terminal actions end the episode and are
 #: not learned over, they are the policy's option to stop rather than an arm.
 ARMS = (Action.IMPUTE, Action.DESPIKE, Action.DENOISE, Action.RESEGMENT)
+
+#: Parameter rungs the value table distinguishes, in `policy.RUNG_ORDER`'s
+#: order. An arm and a rung together are one slot, which is the unit the bound
+#: ranks and the unit a reward updates.
+#:
+#: Before this the table was indexed by arm alone, so three settings of one
+#: operator shared a cell, their bounds were equal, and `sorted` left them in
+#: the order they arrived. The policy could reorder operators and not settings,
+#: which is most of what there is to choose between once the proposer has routed
+#: a defect to its operator.
+TIERS = ("default", "conservative", "aggressive")
+N_SLOTS = len(ARMS) * len(TIERS)
+
+
+def slot(arm: Action, tier: str = "default") -> int:
+    """Flat index of one (arm, rung) pair."""
+    t = TIERS.index(tier) if tier in TIERS else 0
+    return ARMS.index(arm) * len(TIERS) + t
+
+
+def slot_arm(i: int) -> Action:
+    return ARMS[i // len(TIERS)]
+
+
+def slot_tier(i: int) -> str:
+    return TIERS[i % len(TIERS)]
 
 #: Parameters an injected candidate carries, one per operator.
 #:
@@ -131,7 +159,8 @@ class SPOConfig:
 class ValueTables:
     """Q and visit counts for every table, cluster and arm.
 
-    Shapes are (n_clusters, len(ARMS)) per table. ``t`` is the global decision
+    Shapes are (n_clusters, N_SLOTS) per table, a slot being one arm at one
+    parameter rung. ``t`` is the global decision
     count the confidence width is computed against, shared across tables because
     it counts decisions the policy made, not updates to one cell.
     """
@@ -150,7 +179,7 @@ class ValueTables:
 
     def __post_init__(self):
         if not self.Q:
-            shape = (self.n_clusters, len(ARMS))
+            shape = (self.n_clusters, N_SLOTS)
             for name in TABLES:
                 self.Q[name] = np.full(shape, self.cfg.optimistic_init, dtype=np.float64)
                 self.N[name] = np.full(shape, self.cfg.optimistic_visits, dtype=np.int64)
@@ -162,7 +191,8 @@ class ValueTables:
         """Tail clusters route to the large cluster they were merged into."""
         return self.cluster_map.get(int(cluster), int(cluster))
 
-    def warm_start(self, table: str, cluster: int, arm: Action, rewards) -> None:
+    def warm_start(self, table: str, cluster: int, arm: Action, rewards,
+                   tier: str = "default") -> None:
         """Seed one cell from what the fixed policy actually earned there.
 
         ``rewards`` is the sequence of shielded rewards, one per adjudicated
@@ -177,7 +207,7 @@ class ValueTables:
         rewards = np.asarray(list(rewards), dtype=np.float64)
         if rewards.size == 0:
             return
-        j, a = self.resolve(cluster), ARMS.index(arm)
+        j, a = self.resolve(cluster), slot(arm, tier)
         self.Q[table][j, a] = float(rewards.mean())
         self.N[table][j, a] = int(min(rewards.size, self.cfg.warm_start_cap))
         self.optimistic[table][j, a] = False
@@ -189,17 +219,19 @@ class ValueTables:
         k tested, permutation p from 0.81 to 0.96. Seeding it per cluster would
         encode noise as signal, so the column carries its global mean instead.
         """
-        a = ARMS.index(arm)
-        for name in ([table] if table else TABLES):
-            self.Q[name][:, a] = value
-            self.N[name][:, a] = visits
-            self.optimistic[name][:, a] = False
+        for t in TIERS:
+            a = slot(arm, t)
+            for name in ([table] if table else TABLES):
+                self.Q[name][:, a] = value
+                self.N[name][:, a] = visits
+                self.optimistic[name][:, a] = False
 
     def ucb(self, table: str, cluster: int, feasible) -> np.ndarray:
         """Upper confidence bound over the arms, section 3.4's formula.
 
-        Infeasible arms are masked to negative infinity rather than dropped, so
-        the returned vector stays aligned with ARMS.
+        ``feasible`` is a set of slot indices. Infeasible slots are masked to
+        negative infinity rather than dropped, so the returned vector stays
+        aligned with the flat slot order.
         """
         j = self.resolve(cluster)
         q = self.Q[table][j]
@@ -207,19 +239,21 @@ class ValueTables:
         t = max(self.t, 1)
         width = self.cfg.c_u * np.sqrt(2.0 * np.log(t) / n)
         score = q + width
-        mask = np.array([a in feasible for a in ARMS])
+        mask = np.array([i in feasible for i in range(N_SLOTS)])
         return np.where(mask, score, -np.inf)
 
-    def select(self, table: str, cluster: int, feasible) -> Optional[Action]:
-        """Pick the highest bound among feasible arms, or None if none are."""
+    def select(self, table: str, cluster: int, feasible):
+        """Highest bound among feasible slots, as (arm, rung), or None."""
         score = self.ucb(table, cluster, feasible)
         if not np.isfinite(score).any():
             return None
-        return ARMS[int(np.argmax(score))]
+        i = int(np.argmax(score))
+        return slot_arm(i), slot_tier(i)
 
-    def update(self, table: str, cluster: int, arm: Action, reward: float) -> None:
-        """Incremental mean update, the standard form."""
-        j, a = self.resolve(cluster), ARMS.index(arm)
+    def update(self, table: str, cluster: int, arm: Action, reward: float,
+               tier: str = "default") -> None:
+        """Incremental mean update, the standard form, on one slot."""
+        j, a = self.resolve(cluster), slot(arm, tier)
         self.N[table][j, a] += 1
         n = self.N[table][j, a]
         self.Q[table][j, a] += (reward - self.Q[table][j, a]) / n
@@ -231,6 +265,7 @@ class ValueTables:
         return {
             "n_clusters": self.n_clusters,
             "arms": [a.value for a in ARMS],
+            "tiers": list(TIERS),
             "t": self.t,
             "cluster_map": {str(k): v for k, v in self.cluster_map.items()},
             "Q": {k: v.tolist() for k, v in self.Q.items()},
@@ -391,10 +426,20 @@ class SPOPolicy:
         return table_for(self._prev_verdict(records))
 
     def unvisited(self, table: str, cluster: int):
-        """Arms this cluster has no observation for, in the given table."""
+        """Arms with no observation at any rung, in the given table.
+
+        Reported per arm rather than per slot because injection offers an
+        operator the proposer never routed to, and offering one rung of an
+        operator the policy has never seen is the same probe as offering
+        another. The rung an injected candidate carries is fixed by
+        INJECT_PARAMS.
+        """
         j = self.tables.resolve(cluster)
-        return [a for i, a in enumerate(ARMS)
-                if self.tables.optimistic[table][j, i]]
+        out = []
+        for a in ARMS:
+            if all(self.tables.optimistic[table][j, slot(a, t)] for t in TIERS):
+                out.append(a)
+        return out
 
     def inject(self, candidates, cluster: int, records, table: str) -> list:
         """Add an unvisited operator to the candidate set, with probability.
@@ -428,17 +473,23 @@ class SPOPolicy:
             return candidates
         table = self.table_of(records)
         candidates = self.inject(candidates, cluster, records, table)
-        feasible = {a for a, _ in candidates if a in ARMS}
-        if not feasible:
+        # A candidate's slot is its operator and its parameter rung together,
+        # so two settings of one operator are ranked against each other rather
+        # than tied. Ranking them was impossible while the table was indexed by
+        # operator alone.
+        slots = {}
+        for a, p in candidates:
+            if a in ARMS:
+                slots[(a, _key_of(p))] = slot(a, rung_of(a, p))
+        if not slots:
             return candidates
-        score = self.tables.ucb(table, cluster, feasible)
+        score = self.tables.ucb(table, cluster, set(slots.values()))
         self._record_gap(score, table, cluster)
-        rank = {ARMS[i]: -score[i] for i in range(len(ARMS)) if np.isfinite(score[i])}
 
         arms, tail = [], []
         for a, p in candidates:
-            (arms if a in rank else tail).append((a, p))
-        arms.sort(key=lambda ap: rank[ap[0]])
+            (arms if a in ARMS else tail).append((a, p))
+        arms.sort(key=lambda ap: -score[slots[(ap[0], _key_of(ap[1]))]])
         return arms + tail
 
     def _record_gap(self, score: np.ndarray, table: str, cluster: int) -> None:
@@ -483,10 +534,19 @@ class SPOPolicy:
         self._interval_start_t = int(self.tables.t)
 
     def observe(self, cluster: int, action: Action, verdict, delta_utility: float,
-                probes: int, records) -> float:
-        """Update the table this decision came from, and return the reward."""
+                probes: int, records, params=None) -> float:
+        """Update the slot this decision came from, and return the reward.
+
+        Every adjudicated candidate updates its own slot, refused ones
+        included. A refusal is the only evidence the policy gets that a given
+        operator at a given rung does not clear the shield in this cluster, and
+        without it the table would learn from acceptances alone and never learn
+        where not to go. The reward for a refusal is the negated probe cost, so
+        it is a small negative rather than a zero.
+        """
         if action not in ARMS:
             return 0.0
+        tier = rung_of(action, params or {})
         table = self.table_of(records[:-1] if records else [])
         if self.shaped_reward:
             reward = shielded_reward(verdict, delta_utility, probes, self.cfg)
@@ -497,18 +557,18 @@ class SPOPolicy:
             reward = float(delta_utility)
             if self.cfg.reward_clip is not None:
                 reward = min(reward, float(self.cfg.reward_clip))
-        self.tables.update(table, cluster, action, reward)
+        self.tables.update(table, cluster, action, reward, tier=tier)
 
-        j0, a0 = self.tables.resolve(cluster), ARMS.index(action)
+        j0, a0 = self.tables.resolve(cluster), slot(action, tier)
         self._interval_updates[(table, j0, a0)] += 1
         if self.cfg.t_cal and self.tables.t - self._interval_start_t >= self.cfg.t_cal:
             self._close_interval()
 
-        key = (table, self.tables.resolve(cluster), action.value)
+        key = (table, self.tables.resolve(cluster), f"{action.value}|{tier}")
         self.visits[key] += 1
         self.accepts[key] += int(getattr(verdict, "value", verdict) == "ACCEPTED")
         self.rewards[key].append(reward)
-        j, a = self.tables.resolve(cluster), ARMS.index(action)
+        j, a = self.tables.resolve(cluster), slot(action, tier)
         self.trace[key].append(float(self.tables.Q[table][j, a]))
         return reward
 

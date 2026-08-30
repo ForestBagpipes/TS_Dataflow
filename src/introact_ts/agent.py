@@ -260,8 +260,13 @@ class IntroActAgent:
                 )
 
                 if policy is not None and cluster is not None:
+                    # `params` is what the proposer offered, not what the
+                    # operator reported back, because the rung is a property of
+                    # the proposal. Passing the outcome's dict would carry the
+                    # operator's after the fact fields and route the reward to
+                    # the wrong slot.
                     policy.observe(cluster, action, verdict, float(delta_u),
-                                   1, records)
+                                   1, records, params=dict(params))
 
                 if verdict is Verdict.ACCEPTED:
                     if action is Action.RESEGMENT:

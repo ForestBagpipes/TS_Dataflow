@@ -9,9 +9,13 @@ from introact_ts.types import Action, Verdict
 
 
 def test_tables_start_optimistic():
+    from introact_ts.spo import N_SLOTS
     t = ValueTables(n_clusters=12)
     for name in TABLES:
-        assert t.Q[name].shape == (12, 4)
+        # One column per (arm, rung) slot, not per arm. Three settings of one
+        # operator used to share a cell, which tied their bounds and left the
+        # policy unable to rank them.
+        assert t.Q[name].shape == (12, N_SLOTS)
         assert t.optimistic[name].all()
         assert np.allclose(t.Q[name], t.cfg.optimistic_init)
 
@@ -59,13 +63,18 @@ def test_warm_start_uses_expected_shielded_reward():
     assert t.Q[FIRST][1, ARMS.index(Action.IMPUTE)] > q
 
 
-def test_ucb_masks_infeasible_arms():
+def test_ucb_masks_infeasible_slots():
+    from introact_ts.spo import slot
     t = ValueTables(n_clusters=2)
     t.t = 100
-    score = t.ucb(FIRST, 0, feasible={Action.IMPUTE, Action.DESPIKE})
-    assert np.isfinite(score[ARMS.index(Action.IMPUTE)])
-    assert score[ARMS.index(Action.DENOISE)] == -np.inf
-    assert t.select(FIRST, 0, feasible={Action.DENOISE}) is Action.DENOISE
+    feasible = {slot(Action.IMPUTE, "default"), slot(Action.DESPIKE, "default")}
+    score = t.ucb(FIRST, 0, feasible=feasible)
+    assert np.isfinite(score[slot(Action.IMPUTE, "default")])
+    assert score[slot(Action.DENOISE, "default")] == -np.inf
+    # A rung of a feasible arm that was not offered is masked too, which is
+    # what keeps the bound from ranking a setting the proposer never gave.
+    assert score[slot(Action.IMPUTE, "aggressive")] == -np.inf
+    assert t.select(FIRST, 0, feasible={slot(Action.DENOISE, "conservative")})         == (Action.DENOISE, "conservative")
     assert t.select(FIRST, 0, feasible=set()) is None
 
 
@@ -80,13 +89,15 @@ def test_update_is_incremental_mean():
     assert not t.optimistic[FIRST][0, a]
 
 
-def test_set_column_writes_every_table():
+def test_set_column_writes_every_table_and_every_rung():
+    from introact_ts.spo import TIERS, slot
     t = ValueTables(n_clusters=4)
     t.set_column(None, Action.RESEGMENT, -0.01, 20)
-    a = ARMS.index(Action.RESEGMENT)
     for name in TABLES:
-        assert np.allclose(t.Q[name][:, a], -0.01)
-        assert not t.optimistic[name][:, a].any()
+        for tier in TIERS:
+            a = slot(Action.RESEGMENT, tier)
+            assert np.allclose(t.Q[name][:, a], -0.01)
+            assert not t.optimistic[name][:, a].any()
 
 
 def test_tail_cluster_routing():
@@ -218,3 +229,58 @@ def test_a_zero_gap_reports_an_infinite_bound_rather_than_a_clipped_one():
     _drive(pol)
     if pol.theorem6_report()["gamma"]["q0.00"] == 0.0:
         assert pol.theorem6_report()["tv_bound_at_gamma_q0.00"] == float("inf")
+
+
+def test_a_refused_candidate_updates_its_own_slot():
+    """The policy learns where not to go from refusals, so they must land.
+
+    A refusal carries the negated probe cost rather than nothing, and it has to
+    reach the slot of the exact operator and rung that was refused. Before the
+    rung dimension existed a refusal of the aggressive setting was recorded
+    against the same cell as an acceptance of the conservative one, which is the
+    two cancelling rather than the policy learning.
+    """
+    from introact_ts.policy import _at_rung
+    from introact_ts.spo import SPOConfig, SPOPolicy, ValueTables, slot
+
+    cfg = SPOConfig()
+    tables = ValueTables(n_clusters=2, cfg=cfg)
+    pol = SPOPolicy(tables, cfg, p_inject=0.0, seed=0)
+    aggressive = _at_rung(Action.DESPIKE, "aggressive")
+
+    before = float(tables.Q[FIRST][0, slot(Action.DESPIKE, "aggressive")])
+    r = pol.observe(0, Action.DESPIKE, Verdict.ROLLED_BACK_STRUCTURE, 0.0, 1,
+                    [], params=aggressive)
+    assert r < 0.0, "a refusal must cost something, not nothing"
+
+    hit = slot(Action.DESPIKE, "aggressive")
+    assert tables.N[FIRST][0, hit] > cfg.optimistic_visits
+    assert float(tables.Q[FIRST][0, hit]) < before
+    # The other rungs of the same operator are untouched.
+    for other in ("default", "conservative"):
+        j = slot(Action.DESPIKE, other)
+        assert tables.optimistic[FIRST][0, j], f"{other} was written to"
+
+
+def test_the_bound_ranks_two_rungs_of_one_operator():
+    """Two settings of one operator must be orderable, which was the point."""
+    from introact_ts.policy import _at_rung
+    from introact_ts.spo import SPOConfig, SPOPolicy, ValueTables
+
+    cfg = SPOConfig()
+    tables = ValueTables(n_clusters=2, cfg=cfg)
+    pol = SPOPolicy(tables, cfg, p_inject=0.0, seed=0)
+    # Teach it that the aggressive rung gets refused here.
+    for _ in range(6):
+        pol.observe(0, Action.DESPIKE, Verdict.ROLLED_BACK_STRUCTURE, 0.0, 1,
+                    [], params=_at_rung(Action.DESPIKE, "aggressive"))
+
+    cands = [(Action.DESPIKE, _at_rung(Action.DESPIKE, "aggressive")),
+             (Action.DESPIKE, _at_rung(Action.DESPIKE, "conservative")),
+             (Action.KEEP, {})]
+    ordered = pol.order(list(cands), 0, [])
+    first = ordered[0]
+    assert first[0] is Action.DESPIKE
+    from introact_ts.policy import rung_of
+    assert rung_of(Action.DESPIKE, first[1]) != "aggressive", (
+        "the refused rung should not stay first once it has been paid for")
