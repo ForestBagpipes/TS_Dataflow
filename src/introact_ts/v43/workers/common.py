@@ -37,7 +37,9 @@ def verify_model(request, key):
         require(file_hash(item["path"]) == item["sha256"], "model file hash mismatch")
     require(Path(record["snapshot_path"]).name == record["revision"], "snapshot revision mismatch")
     root = Path(__file__).resolve().parents[4]
-    hashes = {str(p.relative_to(root)): file_hash(p) for p in sorted((root / "src/introact_ts/v43").rglob("*.py"))}
+    files = [root / "src/introact_ts/__init__.py", root / "src/introact_ts/types.py",
+             root / "src/introact_ts/verify.py", *sorted((root / "src/introact_ts/v43").rglob("*.py"))]
+    hashes = {str(p.relative_to(root)): file_hash(p) for p in files}
     require(json_hash(hashes) == request["code_hash"], "worker code mismatch")
     package = "tsicl.pipeline" if key == "tsicl" else "chronos.base"
     relative = "src/tsicl/pipeline.py" if key == "tsicl" else "src/chronos/base.py"

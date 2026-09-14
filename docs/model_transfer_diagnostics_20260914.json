@@ -1,0 +1,59 @@
+{
+  "at": "2026-09-14T12:45:29.471369+00:00",
+  "tsicl_http_probe_8mib": [
+    {
+      "route": "proxy",
+      "revision": "19c94031439fb31f36ce395088ee50a6762d3774",
+      "sample_mib": 8,
+      "status": 206,
+      "bytes": 8388608,
+      "seconds": 59.35082917100044,
+      "mib_per_second": 0.13479168622828194,
+      "final_host": "us.aws.cdn.hf.co"
+    },
+    {
+      "route": "direct",
+      "revision": "19c94031439fb31f36ce395088ee50a6762d3774",
+      "sample_mib": 8,
+      "status": 206,
+      "bytes": 8388608,
+      "seconds": 231.62709148499926,
+      "mib_per_second": 0.034538272251415696,
+      "final_host": "us.aws.cdn.hf.co"
+    }
+  ],
+  "bolt_hf_mirror_probe": {
+    "at": "2026-09-14T12:24:04.913806+00:00",
+    "source": "hf-mirror",
+    "repo": "amazon/chronos-bolt-base",
+    "revision": "5d9f166d69f47aef3401367a7b842e78fe97b121",
+    "exit_code": 28,
+    "stderr": "curl: (28) Operation timed out after 14761 milliseconds with 689395 out of 1048576 bytes received\n",
+    "http_status": "206",
+    "bytes": "689395",
+    "bytes_per_second": "45632",
+    "seconds": "15.107519",
+    "final_host": "cas-bridge.xethub.hf.co"
+  },
+  "bolt_modelscope_probe": {
+    "at": "2026-09-14T12:32:47.755946+00:00",
+    "url": "https://modelscope.cn/api/v1/models/amazon/chronos-bolt-base/repo?Revision=00f02a9ecea896c254ed1315c0596e52f3e144ce&FilePath=model.safetensors",
+    "expected_sha256": "31f875483a3215bc6880a0837ea608a13ce55f88ad90538c3cdd0b29aeb60b36",
+    "expected_bytes": 821203576,
+    "revision": "00f02a9ecea896c254ed1315c0596e52f3e144ce",
+    "exit_code": 0,
+    "stderr": "",
+    "http_status": "206",
+    "bytes": "1048576",
+    "bytes_per_second": "1355073",
+    "seconds": "0.773815",
+    "final_host": "cdn-lfs-cn-1.modelscope.cn"
+  },
+  "bolt_modelscope_range_probe": {
+    "exit_code": 0,
+    "result": "206 4194304 1331037 3.151154",
+    "error": "",
+    "range": "83886080-88080383"
+  },
+  "scope": "download_transport_only; official model identity unchanged; mirror not yet adopted"
+}

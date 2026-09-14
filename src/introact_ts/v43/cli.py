@@ -26,7 +26,8 @@ def atomic_json(path, value):
 
 
 def code_manifest():
-    files = sorted((ROOT / "src/introact_ts/v43").rglob("*.py"))
+    files = [ROOT / "src/introact_ts/__init__.py", ROOT / "src/introact_ts/types.py",
+             ROOT / "src/introact_ts/verify.py", *sorted((ROOT / "src/introact_ts/v43").rglob("*.py"))]
     hashes = {str(p.relative_to(ROOT)): file_hash(p) for p in files}
     return {"files": hashes, "hash": json_hash(hashes),
             "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()}

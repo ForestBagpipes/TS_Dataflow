@@ -10,6 +10,7 @@ for label, path in (
     ('Environment installation', stage / 'status.json'),
     ('Model preparation queue', stage / 'continuation-status.json'),
     ('Model manifest', root / 'configs/v43/model_manifest.bootstrap.json'),
+    ('Bolt mirror transfer (not model readiness)', root / 'results/v43/bolt_mirror_status.json'),
     ('v43 pilot queue', root / 'results/v43/pilot_queue_status.json'),
     ('v43 live monitor', root / 'results/v43/monitor_status.json'),
 ):
@@ -19,7 +20,8 @@ for label, path in (
         continue
     obj = json.loads(path.read_text())
     for key in ('status', 'phase', 'updated_at', 'at', 'pid', 'monitor_pid', 'environment_phase',
-                'pilot_status', 'pilot_directory', 'error', 'model_exit_code', 'alerts'):
+                'pilot_status', 'pilot_directory', 'error', 'model_exit_code', 'alerts',
+                'downloaded_bytes', 'expected_bytes', 'route'):
         if key in obj:
             print(f'  {key}: {obj[key]}')
     pid = obj.get('pid', obj.get('monitor_pid'))

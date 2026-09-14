@@ -764,3 +764,12 @@ work2已实际切到任务专用直连分段下载，保留约932MB已有数据�
 三个独立环境全部完成安装、依赖检查和指定模块导入；TS-ICL与Chronos的CUDA256×256矩阵检查通过，RTX4090支持BF16，单次小测试峰值分配9,502,720字节。TS-ICL为Python3.12/NumPy2.5.3，core与Chronos为Python3.11/NumPy1.26.4，两GPU环境保持Torch2.9.1+cu126。25个恢复wheel整包官方哈希校验通过，环境freeze/conda-explicit与SHA256SUMS已落盘并逐项复核。
 
 安装20:14:48结束，模型接续20:15:27开始；TS-ICL官方revision已锁为19c94031439fb31f36ce395088ee50a6762d3774，权重下载中。Bolt尚未下载，真实32-origin pilot仍未运行。此处是环境验收，不是模型worker或方法成功。证据见 docs/environment_acceptance_20260914.json；冻结记录见 requirements/bootstrap-20260914/。待两个模型接口验收通过后，队列重验CPU gate并运行真实pilot，calibration/test读取仍关闭。
+
+
+## 2026-09-14 20:53 首轮真实pilot失败与入口修复
+
+首个真实pilot于20:49启动，run results/v43/20260914T124856.762289Z-pilot；CPU gate40项通过后，TS-ICL worker在模块导入时因缺statsmodels失败，尚未执行预测或读取future标签。原因是introact_ts顶层入口提前加载旧Agent/profile依赖，而TS-ICL环境按官方依赖保持隔离。没有向TS-ICL环境补装core栈。
+
+已将旧重依赖导出改为按需加载，保留原公共API，并将顶层__init__/types/verify三项必要入口依赖纳入worker代码hash。43项CPU测试通过（1.29秒），4项旧API判据回归通过，两个worker在各自冻结解释器的--help入口均通过。完整失败日志、测试和代码hash见 docs/worker_import_fix_20260914.json。新真实pilot仍须实际执行后验收，不把此修复记为方法成功。
+
+Bolt镜像于20:46:09整包官方SHA256通过，20:46:52在旧传输进程退出和HF文件锁保护下接入同一官方revision缓存；保存旧335,236,791字节未完成文件。原验收器确认Bolt GPU接口通过，TS-ICL也通过。可选Chronos-2元数据TLS失败及一次独立重试失败保留，不阻塞只要求TS-ICL/Bolt的pilot。权重完整镜像耗时与HF缓存命中耗时分别保存，不能混算。

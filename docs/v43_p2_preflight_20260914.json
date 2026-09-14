@@ -1,0 +1,46 @@
+{
+  "at": "2026-09-14T12:28:10.976941+00:00",
+  "scope": "P2 capacity and static integration audit, not experiments",
+  "source_manifest_path": "/home/vipuser/work/work2/results/v43/20260914T104433.076049Z-data/data_manifest.json",
+  "source_manifest_sha256": "c7ef13d86291fdad2701886847f199385813b42974a1c721f2fb8439e1db8cfa",
+  "labels_decoded_in_this_audit": 0,
+  "capacity": [
+    {
+      "source": "ETTh1",
+      "dev_rows": 2613,
+      "L512_H96_nonoverlap_upper_bound": 4,
+      "L512_H192_nonoverlap_upper_bound": 3
+    },
+    {
+      "source": "ETTh2",
+      "dev_rows": 2613,
+      "L512_H96_nonoverlap_upper_bound": 4,
+      "L512_H192_nonoverlap_upper_bound": 3
+    },
+    {
+      "source": "ETTm1",
+      "dev_rows": 10452,
+      "L512_H96_nonoverlap_upper_bound": 17,
+      "L512_H192_nonoverlap_upper_bound": 14
+    },
+    {
+      "source": "Crypto",
+      "dev_rows": 426,
+      "L512_H96_nonoverlap_upper_bound": 0,
+      "L512_H192_nonoverlap_upper_bound": 0
+    },
+    {
+      "source": "US_Term_Structure",
+      "dev_rows": 1399,
+      "L512_H96_nonoverlap_upper_bound": 2,
+      "L512_H192_nonoverlap_upper_bound": 1
+    },
+    {
+      "source": "Oil_Price",
+      "dev_rows": 755,
+      "L512_H96_nonoverlap_upper_bound": 1,
+      "L512_H192_nonoverlap_upper_bound": 1
+    }
+  ],
+  "status": "pending_pilot_and_P2_implementation"
+}
