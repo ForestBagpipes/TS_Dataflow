@@ -69,3 +69,5 @@ MASE=1.685227229；ETTm1=1.507982237，Solar=2.556695553，US_Term_Structure=0.9
 | 直接 context ridge | 1.090969717 | 0.203695 |
 
 全部low/high预算事后复核均未超支。费用已计入原有候选实际治理费，并补计跨行缓存推断及当前整个进程余项；不称每行重新冷启动实测。TimesFM 的当前固定最佳臂是ridge，Bolt固定参照是TS-ICL，支持继续检查动作与backbone的相互作用；这里没有训练或验证跨家族agent，不能把固定臂改善算成方法收益。
+
+23:59:19，TimesFM TATO亦完成全156窗并通过独立原始预测/决策重放：MASE=1.529002061，完整费用估计1.023989467秒，实际进程110.1756秒、552份唯一真实输出。low预算超支156/156，high预算0；失败的太长trimmer trial均显式保留，未删窗或填入未来。分来源MASE：ETTm1=1.762650497，Solar=1.814687991，US_Term_Structure=1.009667695。最终文件为 `results/v431/20260914-sprint/timesfm_tato/baseline_table.json`、`scored_rows.json` 和 `independent_replay.json`。这批结果是第二家族的固定方法与短预算TATO核心对照，完整agent跨家族验证仍未完成。

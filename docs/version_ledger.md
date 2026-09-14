@@ -225,4 +225,3 @@ PICS_joint_relabel不变；TS-ICL约8.06%是基线收益，非agent。calibratio
 PICS_joint_relabel继续作为原协议incumbent，calibration/test仍封存。新并行调度已生效，不再以H2显著通过作为接强baseline/第二家族的启动条件；方法晋升仍须公平共同表与完整确认支持。
 
 > 2026-09-14 23:59 最终收口：共同表50个组合均已运行并独立复核；TimesFM固定五臂与TATO已完成，取代下文同步时的在途状态。全部三来源/26 dev parent/156变体，结果与费用以 [v431_sprint_report.md](v431_sprint_report.md) 为准。完整新agent未晋升，calibration/test封存。
-
