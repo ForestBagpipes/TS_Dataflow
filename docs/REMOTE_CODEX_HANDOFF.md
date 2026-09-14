@@ -45,6 +45,8 @@ git status --short
 
 服务器新增的交接文件、环境脚本、安装报告和后续官方模型源码不属于上述原始快照计数。服务器使用独立的 `codex/introactts-v43-bootstrap` 分支保存迁移基线，原仓库历史没有复制；来源HEAD和逐文件清单已保留。最终提交状态由接管时的 `git status` / `git log` 确认，详情见暂存目录 `git-baseline-result.json`。保留已存在的用户修改，后续在 `codex/` 分支提交代码、配置和文档，不将数据、权重或大中间产物提交进 Git。
 
+已保存源码基线 `005d48fb7cf33f7cdb4cb7f56499594a56193097`（346个文件）。提交前只读核验216个研究源文件，全部与原快照一致，提交后工作区干净。资产排除规则放在该服务器仓库的 `.git/info/exclude`；原 `.gitignore` 和旧研究文档保持原样。后续环境freeze及模型manifest会新增文件，需核验后正常提交，不能将这种变化误认成旧快照损坏。
+
 ## 3. 资源与持久化事实
 
 本次服务器采集值如下，运行任务前仍须重新检查占用情况：
@@ -86,6 +88,8 @@ tmux list-sessions
 每个环境的报告位于暂存目录 `logs/`，包括 `<env>.verification.json`、`<env>.pip-check.txt`、`<env>.platform.txt`、`<env>.pip-inspect.json` 及安装解析报告。成功冻结后，`requirements/bootstrap-20260914/` 保存 `.freeze.txt`、`.conda-explicit.txt`、官方源码 commit、安装来源和 `SHA256SUMS`。未出现完整 freeze 时保持该阶段 pending。
 
 core 使用 Python 3.11/NumPy 1 系；TS-ICL 使用 Python 3.12 及其官方所需科学栈；Chronos 使用 Python 3.11。两个 GPU 环境采用已选定的 torch 2.9.1 CUDA 12.6 wheel，按安装报告冻结真实解析结果。不要把旧 `requirements.txt` 宽范围依赖或旧 `tsicl==0.2.1 --no-deps` 做法套到这三个新环境，也不要执行旧 `setup_remote.sh` 或 `env_autodl.sh`。
+
+两个官方源码checkout已固定：TS-ICL `349f3eae4f01f78536b16a6ea53c0837760166ec`，Chronos `4dbf163c2734c089cdf7da2b86fde48862ff9c6f`。共享pip缓存不保证所有CUDA wheel复用，部分官方NVIDIA响应禁止缓存；下载可能继续较长时间，不据小文件测速承诺总耗时。
 
 已在服务器 core 环境执行 `tests/test_actions.py`、`tests/test_risk.py`：**41 passed in 4.04s**。日志与 JUnit 记录为 `logs/v43/install/core-smoke.log`、`logs/v43/install/core-smoke.xml`。这两组测试验证现有轻量动作与风险基础路径，不是 v43 语义测试或全项目测试通过的证明。
 
