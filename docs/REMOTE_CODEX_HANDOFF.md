@@ -1,3 +1,5 @@
+> 当前状态入口（2026-09-14）：最小agent开发对照已完成，H2/H3未通过，详见[验收报告](v43_agent_report_20260914.md)和[HANDOFF](HANDOFF.md)。下文初始迁移/安装状态为历史记录，恢复时以bootstrap_status和实际状态为准。
+
 # IntroAct-TS 新服务器交接
 
 交接日期：2026-09-14。项目位于 `/home/vipuser/work/work2`，日常使用 `vipuser`。本轮用户要求先完成环境准备、代码和资产上传，后续方法实现与实验由服务器上的 Codex 接管。

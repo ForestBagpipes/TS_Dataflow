@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""Publish compact, auditable development evidence, including negative results."""
+import argparse
+from collections import Counter
+import json
+import hashlib
+import subprocess
+from pathlib import Path
+from introact_ts.v43.data_io import file_hash
+from introact_ts.v43.cli import atomic_json
+
+
+def main():
+    parser=argparse.ArgumentParser();parser.add_argument('run',type=Path)
+    root=parser.parse_args().run.resolve();logs=Path('logs/v43')/root.name
+    read=lambda p:json.loads((root/p).read_text())
+    summary=read('agent/comparison.json');policies=summary['policies']
+    mechanism=read('agent/mechanism_diagnostic/summary.json')
+    a5root=Path('results/v43/20260914T135305.172771Z-a5-diagnostic')
+    a5=json.loads((a5root/'candidate_diagnostics.json').read_text())
+    a5counts=Counter((r['condition'],r['static_record']['status'],r['static_record'].get('reason')) for r in a5.values())
+    ledger=read('cost_ledger.json')
+    source=read('code_manifest.json');archived_commit='9f5f49f4bbf79bfde738609cb0d1e0b0af60ca7c'
+    for name,digest in source['files'].items():
+        archived=subprocess.check_output(['git','show',archived_commit+':'+name])
+        assert hashlib.sha256(archived).hexdigest()==digest, 'committed source differs from run snapshot'
+    primary=['resolved_config.yaml','code_manifest.json','semantic_gate.json','episode_manifest.json','data_manifest.json',
+        'contexts.npz','candidates.npz','forecasts.npz','targets.npz','evidence.json','task_labels.json',
+        'base_costs.json','direct_candidate_costs.json','tool_costs.json','forecast_costs.json','model_invoices.json','cost_ledger.json',
+        'agent/models.joblib','agent/model_manifest.json','agent/decisions.json','agent/tool_value_training_ledger.json',
+        'agent/independent_verification.json','agent/paired_comparisons.json','agent/mechanism_diagnostic/summary.json',
+        'agent/mechanism_diagnostic/tool_transitions.json','agent/mechanism_diagnostic/dev_evidence_switches.json',
+        'online/posthoc_boundary_audit.json','online/producer_online_v1.py',
+        'online-boundary-v2/status.json','online-accounted-v3/status.json','online-accounted-v3/decisions.json',
+        'online-accounted-v3/label_access_barrier.json','online-accounted-v3/independent_verification.json']
+    scripts=['scripts/online_v43_agent.py','scripts/serve_v43_model.py','scripts/verify_v43_agent.py',
+             'scripts/verify_v43_online.py','scripts/verify_v43_a5_diagnostic.py','scripts/diagnose_v43_agent.py','scripts/run_v43_online_accounted.py',__file__]
+    evidence=dict(scope='train_fitted_reused_dev_evaluation_no_promotion',run=str(root),logs=str(logs.resolve()),
+        source_snapshot_saved_in_commit=archived_commit,run_recorded_git_head=source['git_commit'],
+        source_commit_files_verified=True,source_commit_timing='working tree frozen by content hash before run; archived in subsequent commit',
+        a5_independent_verification=json.loads((a5root/'independent_verification.json').read_text()),
+        a5_verifier_initial_failure=json.loads((a5root/'independent_verification_attempt1.json').read_text()),
+        a5_artifact_sha256={str(p):file_hash(p) for p in a5root.glob('*.json')},
+        collected=read('status.json'),fitted=read('agent/status.json'),model_manifest=read('agent/model_manifest.json'),
+        semantic_gate=read('semantic_gate.json'),independent_verification=read('agent/independent_verification.json'),
+        policies=policies,paired_comparisons=read('agent/paired_comparisons.json'),mechanism=mechanism,
+        a5_support_counts=[dict(condition=k[0],status=k[1],reason=k[2],episodes=v) for k,v in a5counts.items()],
+        a5_rejected_definition='26 alternatives better than static: 20 nonzero eta in 11 parents, 6 ETA_0 reversions; union 14 parents',
+        online_initial=read('online/status.json'),online_initial_boundary_audit=read('online/posthoc_boundary_audit.json'),
+        online_boundary_corrected=read('online-boundary-v2/status.json'),online_accounted=read('online-accounted-v3/status.json'),
+        online_verified=read('online-accounted-v3/independent_verification.json'),
+        online_full_cost=json.loads((logs/'online-accounted-v3-process.json').read_text()),
+        model_calls={t:sum(r['n_requests'] for r in ledger if r['task']==t) for t in ('impute','forecast')},
+        peak_gpu_allocated_bytes=max(r['peak_gpu_bytes'] for r in ledger),
+        artifact_sha256={p:file_hash(root/p) for p in primary},script_sha256={p:file_hash(p) for p in scripts},
+        incumbent='PICS_joint_relabel',promotion=False,
+        conclusion=dict(H1='candidate_selection_space_observed_only',H2='not_supported_by_current_scorer',
+            H3='not_supported_against_best_fixed_and_simple; low_budget_overrun'))
+    for policy in policies.values():
+        policy['total_with_final_forecast_seconds']=policy['total_governance_seconds']+policy['final_forecast_seconds']
+    atomic_json('docs/v43_agent_evidence_20260914.json',evidence)
+    names=['FIXED_A0_NATIVE','TRAIN_BEST_FIXED','DIRTY_SELECTOR','MASK_RULE','HISTORY_RULE','LEARNED_zero',
+           'FIXED_MASK_HISTORY_one_tool','FIXED_HISTORY_MASK_one_tool','LEARNED_one_tool','LEARNED_two_tools','ALL_EVIDENCE']
+    labels=['KEEP','train 最佳固定（A2 single）','dirty 简单选择器','遮挡误差规则','历史预测规则','联合评分器、零工具',
+            '固定 mask→history，低预算','固定 history→mask，低预算','学习获取停止，低预算','学习获取停止，高预算','全部证据 / 高预算两种固定顺序']
+    table='| 策略 | MASE ↓ | task harm % ↓ | 治理秒数 | 含最终预测秒数 | 超预算变体 |\n|---|---:|---:|---:|---:|---:|\n'
+    for name,label in zip(names,labels):
+        p=policies[name]
+        table+=f"| {label} | {p['mase']:.6f} | {100*p['task_harm']:.2f} | {p['total_governance_seconds']:.4f} | {p['total_with_final_forecast_seconds']:.4f} | {p['overrun_count']} |\n"
+    # Both high-budget fixed orders have identical task results to ALL_EVIDENCE,
+    # but their separately measured selection cost differs; preserve exact rows.
+    table+='\n高预算 mask→history / history→mask 的完整秒数分别为 '
+    table+=f"{policies['FIXED_MASK_HISTORY_two_tools']['total_with_final_forecast_seconds']:.4f} / {policies['FIXED_HISTORY_MASK_two_tools']['total_with_final_forecast_seconds']:.4f}；全部证据行为相同，选择计时独立。\n"
+    report='''# v4.3 最小 agent 开发验收：选择空间存在，当前证据决策未成立
+
+2026-09-14，全部在 `/home/vipuser/work/work2` 执行。原始 run：`results/v43/20260914T141030.324186Z-agent`；日志：同名 `logs/v43/` 目录。运行时 Git HEAD 是 `c92eab5`，实际执行包含未提交工作区代码，先以文件内容 hash 冻结，随后由 `9f5f49f4bbf79bfde738609cb0d1e0b0af60ca7c` 保存；已逐文件核对该提交与运行快照一致。实际 code/config/model SHA 见 [机器证据](v43_agent_evidence_20260914.json)。本报告为重复使用的开发集结果，保留 **PICS_joint_relabel**；无方法晋升、SOTA 或 ICLR 充分证据声明。
+
+## 1. 三个问题的答案
+
+| 假设 | 本轮实际证据 | 判断 |
+|---|---|---|
+| H1 是否需要因数据而异治理 | 五臂开发 oracle 1.094080，train 最佳固定 1.157005；62 个变体、22 个 parent 存在更优臂，差 0.062925 MASE | 存在选择空间；尚未证明可部署学习得到这部分收益 |
+| H2 合法证据能否帮助判断 | dirty 简单选择 1.165414；同一个联合评分器 empty/mask/history/both 为 1.174563/1.174563/1.204589/1.204589 | 当前学习实现未支持；遮挡规则有 harm/成本权衡，不能据此否定所有合法证据 |
+| H3 主动获取是否优于固定流程 | 高预算学习 1.190112；最佳固定 1.157005；全部调用 1.204589 | 相对全部调用有点估计改善及成本节省，但未胜过最佳固定、简单选择或低预算 mask-first；不构成核心机制成立 |
+
+## 2. A5 阴性的代码与逐窗解释
+
+复用 P2 全部真实 TS-ICL 伪块输出，新增 TS-ICL 调用 **0**、只为遗漏强度新增 Bolt **92** 次（20.1648 秒）。`scripts/diagnose_v43_a5.py:43` 从冻结 OOF 残差重建 delta；`:52` 枚举 eta 0/.5/1；`:62` 检查原静态候选 hash；`:82` 对已保存同一 future 评价，新增 heldout/future 读取 0。
+
+受支持的是 ETTm1/Solar 的 50 个 target-block 变体；其 gap 协变量观察比例均为 1，delta 实际非零，100 个非零 eta 候选均改变候选数组和真实 Bolt 预测。因此不能将阴性归因于“残差没接线”或“模型没有响应”。50 个无缺失 raw 不需修正。辅助不足的 54 个变体实际为 **52 个 shared-block + 2 个 USTS raw**，另有 2 个 USTS target-block 缺少三个可观察伪块；此前“54 个都是共享缺失”的表述在此纠正，原文件保留。
+
+静态规则选择非零 eta 的只有 8 个变体/4 个 ETTm1 parent：原真缺口误差 6 好 2 坏，未来误差 2 好 6 坏。补全强度后有 **26 个变体/14 个 parent** 存在比静态选择更好的 eta；其中 **20 个变体/11 个 parent 是遗漏非零修正**，另外 **6 个是应退回 eta=0**，不能把 26 个全称作有效修正被拒绝。
+
+例：ETTm1 parent `[42512,43216)`，H96、target-block，静态 eta=0，而 eta=1 的已读 future MAE 比它低 0.217678；delta L1=0.795827，Bolt 点预测 L1 改变 0.329516。这个例子证明静态伪块规则与任务收益不一致，不能把事后最优 eta 用作部署成绩。
+
+相对固定五臂池，所有 eta 的 oracle 只把来源宏 MASE 从 **1.094080 降到 1.093753**，增量 0.000327；原“静态 A5 没有额外 oracle 增益”仍成立，但不能扩展到完整强度池。残差移出本轮核心贡献，保留可选工具与负结果。完整字段见 `results/v43/20260914T135305.172771Z-a5-diagnostic/candidate_diagnostics.json`、`beneficial_static_rejected.json` 和 [诊断摘要](v43_a5_extended_diagnostic_20260914.json)。
+
+A5 的独立复核另从原始预测重算 150 个强度标签、92 个新增 quantile 输出和三种 oracle 池，全部一致。复核脚本首次忽略旧 P2 的预测 alias，遇到不存在的独立数组键而明确失败；已按冻结 alias 映射并核对候选 hash 后通过，`independent_verification_attempt1.json`、原脚本和日志均保留，未填零或重新执行模型。
+
+## 3. 冻结任务与可部署机制
+
+固定候选池：KEEP/native NaN、FFILL、单变量 TS-ICL、多变量 TS-ICL、当前 context ridge。没有 A4 全历史或残差额外信息。基础五臂全部生成，计入 C_base；单个固定策略只计它所需的候选。两个验证工具均从当时可见的 dirty 输入重新治理：三个严格遮挡伪块，及 cutoff 448/480 的 H32 历史预测。后者是 H96/H192 正式任务的短期代理，是否对齐需单独检验。
+
+110 个 train parent，按时间拆成 **75 个动作评分训练 / 35 个工具获取训练**；dev 为 **26 个 parent**（ETTm1 14、Solar 11、USTS 1）。同一 parent 的 H96/H192 × raw/target-block/shared-block 六种变体始终同组，共 660 train + 156 dev。没有行级随机拆分。calibration/test 读取为 0。USTS/Solar 的时间与发布延迟限制沿用来源契约，不能声称真实部署日历已恢复。
+
+动作模型只接 dirty、合法协变量、已生成候选以及已取得工具的白名单特征；没有 source/UID/缺陷类型/oracle/future 标签。主评分器在 75 parent 上学习候选相对 KEEP 的真实 MASE gain；工具模型在另 35 parent 上学习**冻结评分器实际决策前后的任务差 - 成本**，不是 oracle 工具标签。模型为固定浅层 HGB，同一轮没有按 dev 结果重训或调参。评分不大于 KEEP 时保留输入。实现入口：`agent_inputs.py`、`agent_collect.py:113`、`agent_fit.py:63`、`agent_fit.py:100`、`agent_policy.py:78`。
+
+预算是验证工具的秒数预算，C_base、选择和最终预测另行完整报告；代码名称 `one_tool/two_tools` 对应 **0.502485/3.491223 秒**，不是严格一次/两次配额，便宜样本在低预算内也可能调用两项。估计费用来自 train，实际超支保留原费用及样本。
+
+## 4. 实际部署策略效果与成本
+
+下表所有行采用同一 156 变体分母，先在 source×horizon×condition 内平均、再等权宏平均。task harm 是相对 KEEP 的任务误差恶化比例，**不是已提交编辑的条件风险，也没有校准保证**。秒数包含实际候选、工具、选择、模型分片加载与 IPC；最后一列秒数再加真实最终预测。这里是批处理服务的实测摊销账单，真实在线完整进程费用另见第 6 节。
+
+'''+table+'''
+全部调用相对 dirty 简单选择的 MASE gain 为 -0.039175，来源内 parent bootstrap 95% 区间 [-0.081551,-0.001371]。学习高预算相对最佳固定 gain 为 -0.033108，区间 [-0.106854,0.034124]；相对全部调用 gain 0.014476，区间 [-0.000541,0.037034]。这些是 **2,000 次保留 parent 全部变体的条件探索区间**；USTS 仅一个 parent，不能当作独立确认、跨来源泛化或多重比较校正后的显著性；未校正相邻 parent 的剩余序列相关。
+
+低预算学习与 history-first 各有 **1/156 个超支**：Solar `[31536,32240)`、H96 target-block，工具实际 0.786215 秒，预算 0.502485 秒。该样本没有被删、费用没有截断；两行不具备硬预算达标声明。其他行没有观察到超支，也不意味着已证明在线硬上界。
+
+## 5. 失败机制已定位到实际选择，而非笼统“agent 无效”
+
+冻结主评分器的 mask 获取在全部 816 个 train/dev episode 中都没有改变动作。dev 的 312 个可枚举 mask 转移中，工具模型却预测 106 个净收益为正，而真实决策 gain 全为 0。代码记录了真实成本和负净值，未把工具标签替换为 oracle；当前共享回归器没有学会这一无效工具的停止边界。
+
+历史证据在 dev 的 312 个可枚举转移中产生 48 次动作变化（同一 episode 从 empty/mask 两种状态进入会重复，不能当作独立样本），20 次任务改善、28 次恶化。来源上，主评分器 empty→both 的 MASE 为 ETTm1 1.015889→1.014696，Solar **1.467310→1.558579**，USTS 1.040491 不变。Solar `[31536,32240)` 的 H96 shared-block 从 A2 变成 KEEP，MASE 恶化 1.630476；同 parent 的 target-block 从 ridge 变成 COV，恶化 1.001107。源码没有当前 future 进入历史特征；**H32 代理错配与当前评分器的收益泛化是待区分解释，不把相关性当因果定论**。
+
+最终高预算学习轨迹实际执行 173 个工具步骤：6 次改善、11 次恶化、156 次任务误差不变。效益稀疏并非单凭“正例少”就能否定期望价值，但当前策略在真实 MASE/费用上没有超过强简单对照，且无效 mask 仍被调用，这直接否定本轮核心验收。
+
+dev raw 层有 52 变体，其中 50 个无缺失输入的五个候选全部与 KEEP 逐字节相同；2 个 USTS raw 含自然缺失。所有候选对原观察值的修改数为 0。valid-event/changepoint 保护标签尚未构建，不能从这些检查推出真实变化识别已经成立。逐窗证据见 `agent/mechanism_diagnostic/`，由 `scripts/diagnose_v43_agent.py` 对冻结模型与现存标签生成，未重训。
+
+## 6. 真实在线边界、失败记录与完整费用
+
+预先按时间固定每来源最多前 3 个 dev parent、H96 target-block，共 7 例。只执行 `LEARNED_two_tools`，两个独立环境模型驻留，GPU 锁串行运算，策略只按需调用工具。未根据效果更换样本、模型、预算或评分器。
+
+第一次 `online/` 保留失败：脚本的 `AgentDataset` 过早加载了当前离线 task-label 档案，虽然未传入策略，仍不满足严格部署读取边界。另有 1 例首次历史调用实际 3.471849 秒，剩余预算不足继续 mask，在线轨迹 6/7 一致、最终动作 7/7 一致。不能将该次记为验收通过。
+
+已改为仅载 context/冻结策略，在 OS 文件打开审计处封锁当前 `task_labels`、`targets`、`evidence`、`forecasts`、`candidates` 和离线 decisions 六个档案；六次预检均被拒绝。只有全部 7 个最终预测写盘并记录 SHA 后才解除 evaluator 屏障。修正后的 `online-boundary-v2/` 7/7 一致且无超支。第一次较慢说明冷调用/缓存状态会影响实际预算，重复成功不能删除这一事实。
+
+`online-accounted-v3/` 补计**整个子进程从 spawn 到退出**：7 例合计 **24.661710 秒**，每请求摊销 **3.523101 秒**；已分解候选/工具/选择/模型启动/最终预测合计 20.222626 秒，剩余 4.439083 秒的 Python 导入、策略和 context 初始化、序列化、服务创建/退出与调度也全额入账。它不是稳态吞吐估计，不能把 0.4703 秒批量摊销数当作冷在线实测。边界、动作、证据和最终预测再次 7/7 一致，无超支；独立脚本复核 137 份原始模型输出，并用实际费用重新执行 7 条策略轨迹全部通过。
+
+## 7. 本阶段通过项、失败项及下一步
+
+通过：58 项 CPU 语义 gate；7,968 次真实插补、8,304 次真实预测，共 16,272 份原始 quantile 复核；2,964 条策略决策及费用独立重算；816 个 episode 的时间父组边界；修正后 7 个真实在线请求及完整进程计费。收集 726.674 秒，拟合/开发评价 16.479 秒，最大 GPU 分配 1,899,153,920 字节。全部服务已退出，没有遗留 GPU 训练任务。
+
+失败/未满足：当前 H2/H3 验收、低预算硬约束、初版在线读取隔离；独立确认、第二 TSFM 家族、近期强 baseline、valid-event 保护评价尚未完成。TS-ICL 的约 8.06% 相对 KEEP 收益仍为基线成绩，不能归于 agent。TATO 输入优化、AegisTS 清洗 agent/下游奖励等已有内容不能作为本项目新意；本轮也没有提供足以区别它们的实证增益。
+
+下一步先在 **train 内按 parent/时间** 注册诊断，分别检验 (a) 每种证据状态独立评分与当前共享评分，(b) 历史 H32 证据对 H96/H192 的收益排序是否可迁移，(c) 无任务变化工具的净值停止能否在未见 train parent 上通过。冻结判据后才再次开发评价，保留本次 RED 和多轮开发使用次数。预算应以实际在线成本或明确调用计费单位注册，不能通过抬高 dev 预算掩盖超支。只有 H2/H3 取得可靠增量，再扩强 baseline、第二 TSFM 和独立确认集；本阶段不机械扩大模型或加入更多算子。
+
+代码/配置/文档正常提交并推送 `codex/introactts-v43-bootstrap`；原始缓存、权重、大结果和 checkpoint 不入 Git。上传核验记录位于本 run 日志目录 `git-sync.json`。RED 与规划不写成进度 DOCX 的已验证研究成果。
+'''
+    Path('docs/v43_agent_report_20260914.md').write_text(report)
+    print(json.dumps(dict(report='docs/v43_agent_report_20260914.md',evidence='docs/v43_agent_evidence_20260914.json')),flush=True)
+
+
+if __name__=='__main__':main()

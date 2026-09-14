@@ -5,7 +5,7 @@
 | 阶段/臂 | 当前状态 | 证据/依赖 |
 |---|---|---|
 | 接管与旧入口审计 | completed（静态） | `v43_entrypoint_audit_20260914.md` |
-| CPU 数据/worker 语义 | completed（已列测试范围） | P2为51 passed；`results/v43/p2_semantic_gate.json` 指向原日志 |
+| CPU 数据/worker 语义 | completed（已列测试范围） | P2为51、最小agent为58 passed；`results/v43/p2_semantic_gate.json` 指向原日志 |
 | 32 origin 原始输入准备 | completed | 20 train/12 dev；future labels read=0 |
 | 真实 TS-ICL/Bolt worker | completed（已验接口范围） | 两必需模型 ready/passed，真实 pilot 通过 |
 | L512/H32 真实 pilot | completed（接口诊断） | 32 origins、64 插补、96 预测；独立复核通过 |
@@ -16,7 +16,7 @@
 | A4 direct ridge 与全历史强版本 | first_dev_tranche_completed | 同split全部合法历史和context两个版本已运行 |
 | A5 nested OOF residual / static eta | first_dev_tranche_completed_increment_not_established | 七类真实遮挡接线已运行；加入简单强候选集的oracle增量为0 |
 | A9 oracle | available_arms_dev_upper_bound_completed | 仅已执行臂的完整任务标签；不把缺失A1/其他模型当0 |
-| A6–A8 工具策略 | pending | 可见状态/选择接口通过测试，工具 ledger 与模型尚未训练 |
+| A6–A8 工具策略 | minimal_agent_dev_completed_RED | 19策略、train拟合/dev评价和7例在线完成；H2/H3未通过，完整风险/确认协议未完成 |
 | calibration / adaptation / confirm | pending | 读取权限仍关闭；适配仅 pair hash 接口已测试 |
 
 首批队列预算为 TS-ICL 64 个插补请求 + Bolt 96 个预测请求，32 origins，3 个 worker 加载。内部调用次数、加载/推断耗时、峰值显存和每千 origin 成本待真实 pilot，当前不提供伪造时间或租费估计。正式实验矩阵预算在 pilot 后按相同协议实测外推，保留20%余量。
@@ -54,3 +54,16 @@ A1仍为blocked_adapter：`experiments/v39_phase0_replay.py:321` 强依赖771个
 复用全部已有TS-ICL遮挡输出，为未选择的eta强度补92次真实Bolt预测（20.16秒，未新增future读取），50个受支持episode中发现26个变体/14个parent有静态规则错过的更优任务强度。相对固定五臂强候选池，全部eta的开发oracle仅从MASE1.094080降至1.093753，增量约0.000327；新增胜出变体ETTm1有4个、Solar有5个。此前“加入A5的oracle增量为0”仅适用于静态选择后的候选，不适用于所有eta。保留两种口径和原始失败，不将新oracle作为部署成绩。证据见docs/v43_a5_extended_diagnostic_20260914.json。
 
 最小agent配置configs/v43/agent_minimal.yaml已冻结：110个train parent按时间拆75 scorer-fit / 35 acquisition-fit，dev维持26 parent。固定五臂初始池，strict_mask/history_probe两个验证工具，最多两轮；比较全体固定臂、train最佳固定、dirty简单选择、mask/history规则、全部证据、两种固定顺序及学习获取停止。同一浅层HGB模型族，source/uid/seed/真实缺陷类型/future不得进特征。费用计入基础候选、验证、选择、最终预测与分片加载/IPC，固定臂仅计实际所需候选；真实在线按需核验在离线评估后执行。尚未运行得出的agent结果均为pending，不作ICLR或晋升声明。
+
+
+## 2026-09-14 最小 agent 开发验收：H1 有选择空间，H2/H3 未通过
+
+已完成固定五臂、两个验证工具、19组策略：110 train parent按时间拆75动作评分/35工具获取，dev为26 parent/156变体。58项CPU gate、16,272份真实模型输出和2,964条决策/费用独立复核通过。五臂oracle MASE1.094080、train最佳固定TS-ICL1.157005、dirty简单选择1.165414、学习获取停止1.190112、全部调用1.204589；当前agent没有超越强固定/简单策略。173次实际工具步骤中156次任务误差不变、6次改善、11次恶化，mask证据未改变当前评分器动作，历史证据在Solar造成明显退步。
+
+A5补全诊断证明100个非零eta候选均改变真实预测；相对静态有26个更优替代，其中20个为遗漏非零修正、6个应回eta0，不能全称作有效修正被拒绝。对强五臂池的oracle增量仅0.000327。A5新增92份预测、150标签及三种oracle池已独立复核；首次复核未解析旧预测alias而失败，修正映射后通过，保留失败。原P2“54个shared”纠正为52 shared + 2 USTS raw。
+
+低预算学习和history-first各1/156变体超支，未删样本或截费用。初版在线过早加载离线标签档案、1例冷调用轨迹不同均保留；修正后文件访问屏障封锁6个evaluator/缓存档案，7例动作/证据/最终预测一致。完整在线进程24.661710秒，7请求摊销3.523101秒，含初始化/退出；137份在线模型输出与7条实际费用轨迹独立复核通过。批量0.4703秒的学习策略含最终预测费用不是冷在线成本。
+
+PICS_joint_relabel不变；TS-ICL约8.06%是基线收益，非agent。calibration/test读取0；无ICLR/SOTA/安全保证。下一步只在train内注册证据状态独立评分、H32→H96/H192收益排序迁移、无增益工具停止和真实成本预算诊断，先满足H2/H3再扩强baseline/第二TSFM/独立确认。RED不写入DOCX已验证成果。
+
+完整报告与代码证据：[v43_agent_report_20260914.md](v43_agent_report_20260914.md)，机器记录：[v43_agent_evidence_20260914.json](v43_agent_evidence_20260914.json)。原始run `results/v43/20260914T141030.324186Z-agent`；最新阶段状态 `results/v43/agent_stage_acceptance.json`。运行Git HEAD为c92eab5上的未提交工作区，先按内容hash冻结，随后9f5f49f保存了完全一致的代码；不以旧HEAD覆盖快照。

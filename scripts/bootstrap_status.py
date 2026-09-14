@@ -14,7 +14,9 @@ for label, path in (
     ('Bolt mirror transfer (not model readiness)', root / 'results/v43/bolt_mirror_status.json'),
     ('v43 pilot queue', root / 'results/v43/pilot_queue_status.json'),
     ('v43 P2 experiment queue', root / 'results/v43/p2_queue_status.json'),
-    ('v43 live monitor', root / 'results/v43/monitor_status.json'),
+    ('v43 minimal agent queue', root / 'results/v43/agent_queue_status.json'),
+    ('v43 minimal agent acceptance (separate from job completion)', root / 'results/v43/agent_stage_acceptance.json'),
+    ('Historical pilot monitor (not current model status)', root / 'results/v43/monitor_status.json'),
 ):
     print('\n' + label + ': ' + str(path), flush=True)
     if not path.exists():
@@ -23,7 +25,8 @@ for label, path in (
     obj = json.loads(path.read_text())
     for key in ('status', 'phase', 'updated_at', 'at', 'pid', 'monitor_pid', 'environment_phase',
                 'pilot_status', 'pilot_directory', 'error', 'model_exit_code', 'alerts',
-                'downloaded_bytes', 'expected_bytes', 'route', 'run', 'logs', 'finished_at'):
+                'downloaded_bytes', 'expected_bytes', 'route', 'run', 'logs', 'finished_at',
+                'method_status', 'independent_verification', 'online_status', 'report', 'next_step'):
         if key in obj:
             print(f'  {key}: {obj[key]}')
     pid = obj.get('pid', obj.get('monitor_pid'))
