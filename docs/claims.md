@@ -1,3 +1,5 @@
+> **2026-09-14 v4.3 当前边界。** 39项 CPU 契约测试通过、32个 train/dev origin 输入已校验，属于工程事实。真实 worker 和 pilot 尚待环境/模型就绪；没有 task gain、跨模型收益、适配收益、风险证书或 SOTA 证据。PICS_joint_relabel 保持历史 incumbent。TIME 原始日历和发布延迟未恢复，不宣称实时金融部署已通过 as-of 审计。详见 `v43_entrypoint_audit_20260914.md`。
+
 # The claims, and the measurement behind each
 
 > **2026-09-02 staleness notice.** This file predates the corrected damage
@@ -100,3 +102,6 @@ Downstream evidence that a gated corpus trains a better model is running and
 unreported at the time of writing. AegisTS as a third proposer is blocked on a
 missing module in its public repository. The pre registered prediction in
 `docs/prediction_aegists.md` stands unverified and is not withdrawn.
+
+
+2026-09-14 18:48 工程复核追加：修复残差PCA后附加缺失指示可能超过8维的问题，新增测试检查实际回归输入维度；最终CPU测试40项通过（0.96s），见 `logs/v43/contracts/20260914T104754.619288Z/`。旧39项日志保留；真实模型pilot仍待依赖，未产生方法晋升。

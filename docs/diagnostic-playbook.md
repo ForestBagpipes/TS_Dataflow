@@ -1254,3 +1254,17 @@ beneficial coverage to 0.3205, while still missing the gain-sum and harmful
 targets. Incumbent remains PICS_joint_relabel. Results:
 `results/v42_phase0a_integration.json`,
 `results/v42_phase0b_portfolio_oracle.json`.
+
+
+## 2026-09-14 v4.3：时间与 worker 审计入口
+
+先看 `docs/v43_entrypoint_audit_20260914.md`。新增检查顺序：原始row/time -> split完整读取区间 -> delayed availability -> NaN/共同mask -> candidate写入 -> worker实际输入hash/单位/revision -> future ->完整分母。旧 `downstream.make_pairs` 会删除NaN，不作为v43入口。
+
+若 residual 外层证据异常好，先冻结块位置，用 `test_residual_leakage.py` 对外层真值毒化，验证每个内层基础预测都看不到外层块。若历史验证异常好，检查as-of前缀重建和协变量晚发布遮挡，不能裁剪当前已修复结果。若所有候选预测相同，检查请求input hash与candidate ID；缺行、错单位、NaN输出整批失败，不回KEEP假装成功。
+
+若沙箱里bootstrap PID缺失或nvidia-smi失败，先在主机可见范围只读检查。2026-09-14主机PID和GPU均正常；默认tmux socket一度报server exited，显式 `/tmp/tmux-1000/default` 能看到原会话。这类可见范围错误不能触发重装或driver操作。
+
+如果pilot queue blocked，读 `results/v43/pilot_queue_status.json` 及其queue_directory中的原始日志；如代码/config变化，重新审计并重跑gate后新建队列，不绕过hash检查。已写出的失败run保持不变。
+
+
+2026-09-14 18:48 工程复核追加：修复残差PCA后附加缺失指示可能超过8维的问题，新增测试检查实际回归输入维度；最终CPU测试40项通过（0.96s），见 `logs/v43/contracts/20260914T104754.619288Z/`。旧39项日志保留；真实模型pilot仍待依赖，未产生方法晋升。

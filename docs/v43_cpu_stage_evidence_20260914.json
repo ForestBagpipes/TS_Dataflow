@@ -1,0 +1,65 @@
+{
+  "scope": "v43_CPU_contracts_and_input_preparation_only",
+  "status": "completed",
+  "model_pilot_status": "waiting_for_models",
+  "incumbent": "PICS_joint_relabel",
+  "tests": {
+    "counts": {
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "runtime_seconds": 1.9761463729992101,
+    "python": "/home/vipuser/work2-envs/w2-core/bin/python",
+    "code_hash": "bec04e88567e8c513e4bdf9d7070519e1b8088c6f4ddee11db1976ab2e9ad28f",
+    "config_hash": "2864fb28de80338540e9c758f506296d2273857afb551c55bcc135aff73725e9",
+    "log": "/home/vipuser/work/work2/logs/v43/contracts/20260914T104900.858201Z/pytest.log",
+    "junit": "/home/vipuser/work/work2/logs/v43/contracts/20260914T104900.858201Z/pytest.xml"
+  },
+  "test_log_sha256": "dd7bc443b2fa37c755e7d64b2c7613bffd661698fc5ca0f31a53a023c7723e6f",
+  "test_junit_sha256": "5459482990c763d2d2e7f3e8121c55c1fff1be6e1512d0dc29e1dca0325037da",
+  "input_run": "results/v43/20260914T104433.076049Z-data",
+  "data_determinism": {
+    "status": "completed",
+    "scope": "CPU_data_determinism_only",
+    "runs": [
+      "results/v43/20260914T103653.354766Z-data",
+      "results/v43/20260914T104433.076049Z-data"
+    ],
+    "files": {
+      "origin_manifest.json": "0166e3bfdb69fed360027f5c3884430026729f1435531139de5e3881f8fbfb32",
+      "context_audit.json": "d1c52dee62b931725ca4049056fbedb6a683e0ea0f4977e8205238af8fe0525f",
+      "data_manifest.json": "c7ef13d86291fdad2701886847f199385813b42974a1c721f2fb8439e1db8cfa"
+    },
+    "future_labels_read": 0
+  },
+  "queue_at_capture": {
+    "status": "waiting_for_models",
+    "pid": 58448,
+    "created_at": "20260914T104918.613360Z",
+    "code_hash": "bec04e88567e8c513e4bdf9d7070519e1b8088c6f4ddee11db1976ab2e9ad28f",
+    "config_hash": "2864fb28de80338540e9c758f506296d2273857afb551c55bcc135aff73725e9",
+    "script_sha256": "39fc1d73e4f4765618331064658668a1a16fe456d760a784b06d428ed8d66fed",
+    "queue_directory": "/home/vipuser/work/work2/logs/v43/20260914T104918.613360Z-pilot-queue",
+    "config": "/home/vipuser/work/work2/configs/v43/bootstrap.yaml",
+    "owner": "vipuser",
+    "program": "/home/vipuser/work/work2/scripts/run_v43_pilot_queue.py",
+    "pilot_status": "not_run",
+    "updated_at": "2026-09-14T10:49:48.632566+00:00",
+    "reasons": [
+      "tsicl: bootstrap model interface not ready",
+      "bolt: bootstrap model interface not ready"
+    ]
+  },
+  "unrun": [
+    "real_model_worker_validation",
+    "32_origin_real_pilot",
+    "A0-A5",
+    "calibration",
+    "adaptation",
+    "confirm"
+  ],
+  "future_labels_read": 0,
+  "previous_queue_block": "logs/v43/20260914T104447.518448Z-pilot-queue/status.json"
+}

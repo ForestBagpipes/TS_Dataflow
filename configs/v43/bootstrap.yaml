@@ -1,0 +1,51 @@
+schema_version: 1
+experiment: introact_ts_v43
+mode: development
+seed: 101
+runtime:
+  device: cuda:0
+  heavy_gpu_jobs: 1
+  cpu_jobs: 1
+  blas_threads_per_job: 1
+  dataloader_workers: 0
+  inference_batch_size: 1
+  shard_origins: 32
+  label_access: train_dev_only
+  semantic_gate: /home/vipuser/work/work2/results/v43/semantic_gate.json
+data:
+  root: /home/vipuser/work/work2/data
+  context: 512
+  horizons: [96, 192]
+  pilot_horizon: 32
+  pilot_origins: 32
+  extra_history: 0
+  split_ratio: [0.60, 0.15, 0.10, 0.15]
+  split_unit: source_panel_raw_interval
+  future_covariate_values: false
+  pilot_target_channel: 0
+  pilot_stride: context_plus_horizon
+  time_mode_time: benchmark_common_row_index
+  availability_assumption: benchmark_values_observed_at_row_time
+  availability_limitation: original_release_delays_unrecovered
+  pilot_block: [230, 281]
+  seasonal_periods: {ETTh1: 24, ETTh2: 24, ETTm1: 96, Crypto: 7, US_Term_Structure: 5, Oil_Price: 5}
+models:
+  manifest: /home/vipuser/work/work2/configs/v43/model_manifest.bootstrap.json
+  required: [tsicl, bolt]
+method:
+  residual_blocks: 3
+  residual_alpha: 1.0
+  residual_eta: [0.0, 0.5, 1.0]
+  residual_min_fit_rows: 32
+  residual_max_features: 8
+  covariate_min_observed_fraction: 0.50
+  max_tool_rounds: 2
+evaluation:
+  primary: source_macro_mase
+  secondary: [mae, mse, task_harm]
+  mase_degenerate: report_mae_separately
+  risk_mode: empirical_grouped
+status:
+  method: pending
+  full_p1: pending
+  incumbent: PICS_joint_relabel

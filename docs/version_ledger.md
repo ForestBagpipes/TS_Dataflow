@@ -131,3 +131,13 @@ RESEGMENT candidates. With one positive example, grouped leave-one-source-out
 AUROC is degenerate and the pilot cannot decide whether TSFM signals improve the
 acceptance decision. The correct conclusion is "sample too small and too
 imbalanced to evaluate," not "TSFM signals do not work."
+
+
+## 2026-09-14 v4.3 工程接管记录（不进入正式方法版本表）
+
+历史 incumbent 保持 **PICS_joint_relabel**，v4.2 RED 记录保留。v4.3 已有39项 CPU 契约测试通过和32个 train/dev origin 输入清单；真实模型 pilot 尚未执行，A0–A5 未运行，不能形成方法晋升行。测试日志 `logs/v43/contracts/20260914T104430.294322Z/`，数据运行 `results/v43/20260914T104433.076049Z-data/`，独立进程清单一致性 `results/v43/data_determinism.json`。task gain/置信区间/真实GPU成本均暂无数值。
+
+解释修正：旧 v41 `calibrate_tau` 的密度权重只影响 coverage 目标，CHR 和 CP 风险约束未加权。因此相同阈值不能排除真正风险重加权；旧实验数字不变。旧 v42 integrated oracle 的非TS-ICL gain 缺失、已有提交锁定限制仍保留，不将其当完整统一复核上界。详见本轮旧入口审计文档。
+
+
+2026-09-14 18:48 工程复核追加：修复残差PCA后附加缺失指示可能超过8维的问题，新增测试检查实际回归输入维度；最终CPU测试40项通过（0.96s），见 `logs/v43/contracts/20260914T104754.619288Z/`。旧39项日志保留；真实模型pilot仍待依赖，未产生方法晋升。

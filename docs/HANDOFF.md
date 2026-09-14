@@ -1,3 +1,21 @@
+### 2026-09-14 18:48 最终 CPU 复核
+
+最终测试增至 **40 passed in 0.96s**，日志 `logs/v43/contracts/20260914T104754.619288Z/`。修复残差回归在 PCA 后附加缺失指示导致最终维度可能超过8的问题；现将缺失指示纳入训练支持内的缩放/PCA，最终维度上限8。旧39项日志保留。先前等待队列会因代码hash改变正常阻塞退出，新队列与当前代码绑定；实时状态仍查 `results/v43/pilot_queue_status.json`。真实模型实验仍未运行。
+
+## 2026-09-14 新服务器 v4.3 接管更新
+
+本轮已经实际完成旧入口静态审计与 CPU 契约实现，**39 passed in 0.95s**。日志：`logs/v43/contracts/20260914T104430.294322Z/`；最新 gate：`results/v43/semantic_gate.json`。这不是模型或方法验收。
+
+最新数据输入 run：`results/v43/20260914T104433.076049Z-data/`。32 个不重叠 origin（20 train/12 dev），ETTh1/ETTh2/ETTm1/USTS 各6、Oil5、Crypto3。独立进程 origin/data/context 清单逐字节相同，记录 `results/v43/data_determinism.json`。future 标签读取数为0。TIME 明确采用 benchmark 共同原始行号，真实日历/发布延迟未恢复，不能将其称为已验证实时可用时间。
+
+TS-ICL/Bolt worker 与真实 pilot 入口已实现但尚未真实验收。安装和模型准备复用原后台任务，未改写三个 prefix。一次性 pilot 队列使用 tmux `work2-v43-pilot-20260914`，socket `/tmp/tmux-1000/default`；入口 `scripts/launch_v43_pilot_queue.sh`；最新状态 `results/v43/pilot_queue_status.json`，其中记录本次目录、PID、代码/config hash 和错误。它在模型 ready 后重跑 CPU gate，然后执行真实32-origin pilot；如代码/config变化、模型失败或 GPU 契约失败则停止并留痕。队列启动不代表 pilot 完成。原环境任务与模型接续的 PID 在接管时为45580、47722。
+
+复核入口：显式 `source scripts/env_new_server.sh` 后运行 `python3 scripts/bootstrap_status.py`，再读 pilot queue 状态。主机 GPU/PID/tmux 检查应在能看到主机进程的执行范围做，不能用沙箱不可见作死亡证据。不要重启或重复安装现有任务。
+
+当前研究状态：PICS_joint_relabel 仍是 incumbent，v4.3 未晋升；A0–A5、正式 H96/H192、工具价值训练、calibration/test、适配和确认均未执行。完整范围见 `docs/v43_entrypoint_audit_20260914.md`、`docs/v43_experiment_matrix.md`。真实 pilot 完成后先核对身份、单位、shape、NaN、原始预测和成本，再按完整方案推进 A0–A5，不因接口通过更新 DOCX 中的已验证方法成果。
+
+---
+
 # Handoff, end of the experimental phase
 
 State as of 2026-08-15. **This is a historical snapshot. For the current
@@ -604,3 +622,6 @@ is reconsidered, what has to be solved is the change volume, not the hardware.
 
 This distinction matters under review. Asked why no foundation model was fine
 tuned, the answer is a measurement limit, not a resource limit.
+
+
+2026-09-14 18:49 最新冻结：40 passed in 1.01s，日志 `logs/v43/contracts/20260914T104900.858201Z/`。显存账本补记模型加载峰值，最终峰值取加载与推断最大值。旧队列因代码hash变化正确停止，已确认旧PID退出后重新启动；当前PID 58448，状态 `waiting_for_models`。完整机器可读证据见 `docs/v43_cpu_stage_evidence_20260914.json`，实时状态见 `results/v43/pilot_queue_status.json`。模型/方法结果仍未产生。

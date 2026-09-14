@@ -124,3 +124,10 @@ Tracked 删除：`docx/胡宏彬-进度文档-20260820.docx`。当前存在带 `
 默认排除：`.git`、`.tmp`、`.pytest_cache`、所有 `__pycache__`/`.pyc`、`.server-codex-setup` 中本机脚本/SSH辅助状态、`.codex-setup-known-hosts`、`.claude`/`.superpowers` 等本机代理状态、历史日志、重复 `gpt_pack`/项目 ZIP、论文参考仓库、图工作流临时输出、0 字节根目录 checkpoint。若需要 Git 历史可另行做受控迁移；本轮代码接续不依赖将 `.git` 整包传输。
 
 本报告仅记录磁盘存在性与历史文档事实，不声称模型环境可复现、数据语义完整、实验已通过或新服务器已完成验证。迁移后的传输哈希、环境安装与验证由主执行任务记录。
+
+
+## 2026-09-14 服务器接管追加
+
+项目路径 `/home/vipuser/work/work2`。三个环境prefix复用现有安装；core解释器与CPU测试可运行，TS-ICL正在下载CUDA依赖、Chronos及模型阶段以bootstrap状态文件为准，不能将prefix存在标成ready。本轮未再次安装或下载模型。
+
+六来源metadata清单及32-origin context审计保存于 `results/v43/20260914T104433.076049Z-data/`。ETT时间戳可用；TIME同步原始数组和导出metadata可用，但真实日历、发布/修订延迟未恢复。旧节点三份大缓存缺失状态不变，不阻断新CPU契约工作。

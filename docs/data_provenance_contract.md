@@ -396,3 +396,17 @@ All carry the full identity schema; per-candidate files additionally carry
   `results/v39_longgap_probe.json`, `results/v40_phase3_pool.jsonl`,
   `results/v41_selector_rows.jsonl`. Zero paid API calls; GPU not used.
 - v4.1's records remain closed and were not modified by this round.
+
+
+## 2026-09-14 v4.3 追加契约（独立于旧 repair 轨道）
+
+使用 `source+panel+原始完整读取区间` 切分，默认60/15/10/15；context+future 必须位于同 split。同步通道、parent及其污染副本同组。新 hash 覆盖 shape、dtype、规范 NaN 和未舍入原始值；旧舍入 hash 仅保留历史含义。
+
+Episode 仅有可见 context；future 由 `v43.task_labels.read_target` 在split权限检查后读取。当前 reader 只开放 train/dev，calibration/test 未启用。候选不适用回 KEEP，模型故障为实验失败。共同 future mask 从原值冻结，失败预测不能改变评分集合。MASE 尺度由指定原始 train 和冻结周期计算，退化时 null，不暗置1。
+
+ETT 保留CSV原timestamp，检查递增和等间隔；TIME 不解码 object channels，按导出清单绑定二维原始数组及共同 row index，不逐通道删除NaN。真实 TIME 日历/发布延迟仍未恢复，benchmark 行时刻可用性属于显式假设。此声明不等同真实线上 available_at 证据。
+
+32-origin pilot 输入清单已独立进程逐字节复核，`results/v43/data_determinism.json`。抽样只用长度和时间边界，未用future有限性或误差筛选；Crypto dev太短而不取，train只取3个，其余来源轮转补足。真实模型请求包含原输入、mask、协变量、availability、timestamp、cutoff、参数、horizon、代码/env/model revision；整批一一对应验证后才开放任务标签。
+
+
+2026-09-14 18:48 工程复核追加：修复残差PCA后附加缺失指示可能超过8维的问题，新增测试检查实际回归输入维度；最终CPU测试40项通过（0.96s），见 `logs/v43/contracts/20260914T104754.619288Z/`。旧39项日志保留；真实模型pilot仍待依赖，未产生方法晋升。
