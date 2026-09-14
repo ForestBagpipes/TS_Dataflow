@@ -53,5 +53,6 @@
 | timesfm-2.5-200m-pytorch / TIMESFM_FIXED_A2_SINGLE | 1.096135 | 0.2300 | 0.00 | 26 |
 | timesfm-2.5-200m-pytorch / TIMESFM_FIXED_A3_COV | 1.136583 | 0.2341 | 0.00 | 26 |
 | timesfm-2.5-200m-pytorch / TIMESFM_FIXED_A4_RIDGE_CONTEXT | 1.090970 | 0.2037 | 0.00 | 26 |
+| timesfm-2.5-200m-pytorch / TIMESFM_TATO_8_OFFICIAL_SPACE_OBSERVED_LINEAR | 1.529002 | 1.0240 | 8.00 | 26 |
 
-未完成项：[{"backend": "timesfm_tato", "backbone": "timesfm-2.5-200m", "policy": "TATO_8_OFFICIAL_SPACE_OBSERVED_LINEAR", "status": {"status": "running", "pid": 14594, "worker_python": "/home/vipuser/work2-envs/w2-chronos/bin/python", "request_sha256": "89bae9a35aaf88b249d0ce9f81f9e2b457d409ac156f3878fd316aa1e7930a98", "rows_done": 11, "future_labels_read": 0, "heldout_labels_read": 0, "elapsed_seconds": 16.030243392999637}}]
+未完成项：[]

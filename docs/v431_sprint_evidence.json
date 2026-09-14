@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-09-14T15:57:16.145590+00:00",
+  "created_at": "2026-09-14T15:59:04.719009+00:00",
   "run": "/home/vipuser/work/work2/results/v431/20260914-sprint",
   "method_status": "not_promoted",
   "incumbent": "PICS_joint_relabel",
@@ -19,24 +19,8 @@
     "T_acq": 18,
     "dev": 26
   },
-  "table_rows": 49,
-  "missing": [
-    {
-      "backend": "timesfm_tato",
-      "backbone": "timesfm-2.5-200m",
-      "policy": "TATO_8_OFFICIAL_SPACE_OBSERVED_LINEAR",
-      "status": {
-        "status": "running",
-        "pid": 14594,
-        "worker_python": "/home/vipuser/work2-envs/w2-chronos/bin/python",
-        "request_sha256": "89bae9a35aaf88b249d0ce9f81f9e2b457d409ac156f3878fd316aa1e7930a98",
-        "rows_done": 11,
-        "future_labels_read": 0,
-        "heldout_labels_read": 0,
-        "elapsed_seconds": 16.030243392999637
-      }
-    }
-  ],
+  "table_rows": 50,
+  "missing": [],
   "conditional_intervals": {
     "CART_target_horizon": {
       "reference": "FIXED_A2_SINGLE",
@@ -131,6 +115,26 @@
         "all_row_wall_seconds": 56.953198895005244,
         "process_overhead_seconds": 14.538168794994817
       }
+    },
+    "timesfm_tato": {
+      "table_sha256": "2a88bdb5ecf9e22baa5ae453cd030c9cb554ae7b5dc3cf01bb673bf059bb9953",
+      "status": {
+        "status": "completed",
+        "pid": 14594,
+        "worker_python": "/home/vipuser/work2-envs/w2-chronos/bin/python",
+        "request_sha256": "89bae9a35aaf88b249d0ce9f81f9e2b457d409ac156f3878fd316aa1e7930a98",
+        "rows_done": 156,
+        "future_labels_read": 0,
+        "heldout_labels_read": 0,
+        "elapsed_seconds": 110.16801975699991,
+        "model_load_seconds": 3.883725028000299,
+        "total_wall_seconds": 110.17557101700004,
+        "prediction_file_sha256": "cef23200eb0a813125fbb1813b35d9e45dfc86d309837e6e635bb29aed74c3d5",
+        "actual_model_calls": 552,
+        "peak_gpu_bytes": 941848064,
+        "all_row_wall_seconds": 91.26976451899873,
+        "process_overhead_seconds": 18.90580649800131
+      }
     }
   },
   "artifact_sha256": {
@@ -139,7 +143,7 @@
     "results/v431/20260914-sprint/value_labels.json": "3f613403efd46c64393d3540b0231af2fcf0d596ef75125105abd823559c32e4",
     "results/v431/20260914-sprint/partition.json": "b6609cc65e73ffd653b01d6944fd0452b2ed8e00f652313302f081fbca608556",
     "configs/v431/sprint_manifest.json": "a3f721cb1169c4d109c765067220d97797427719d46093d3e09c4cd3e25ccb39",
-    "results/v431/20260914-sprint/common_table.json": "0e77ff2eb5fc09210d51772af63f27327cb02a73413701c0bd59a566f3027172"
+    "results/v431/20260914-sprint/common_table.json": "a316f521584afebde08330c48d017ae7a31c4bb144db488a03ce713c2c5dba3c"
   },
   "heldout_labels_read": 0,
   "promotion": false

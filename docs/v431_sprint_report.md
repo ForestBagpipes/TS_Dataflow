@@ -85,27 +85,31 @@ TimesFM是独立家族，模型与官方来源revision另冻结。当前完成�
       "all_row_wall_seconds": 56.953198895005244,
       "process_overhead_seconds": 14.538168794994817
     }
+  },
+  "timesfm_tato": {
+    "table_sha256": "2a88bdb5ecf9e22baa5ae453cd030c9cb554ae7b5dc3cf01bb673bf059bb9953",
+    "status": {
+      "status": "completed",
+      "pid": 14594,
+      "worker_python": "/home/vipuser/work2-envs/w2-chronos/bin/python",
+      "request_sha256": "89bae9a35aaf88b249d0ce9f81f9e2b457d409ac156f3878fd316aa1e7930a98",
+      "rows_done": 156,
+      "future_labels_read": 0,
+      "heldout_labels_read": 0,
+      "elapsed_seconds": 110.16801975699991,
+      "model_load_seconds": 3.883725028000299,
+      "total_wall_seconds": 110.17557101700004,
+      "prediction_file_sha256": "cef23200eb0a813125fbb1813b35d9e45dfc86d309837e6e635bb29aed74c3d5",
+      "actual_model_calls": 552,
+      "peak_gpu_bytes": 941848064,
+      "all_row_wall_seconds": 91.26976451899873,
+      "process_overhead_seconds": 18.90580649800131
+    }
   }
 }
 
 未完成或在途：
-[
-  {
-    "backend": "timesfm_tato",
-    "backbone": "timesfm-2.5-200m",
-    "policy": "TATO_8_OFFICIAL_SPACE_OBSERVED_LINEAR",
-    "status": {
-      "status": "running",
-      "pid": 14594,
-      "worker_python": "/home/vipuser/work2-envs/w2-chronos/bin/python",
-      "request_sha256": "89bae9a35aaf88b249d0ce9f81f9e2b457d409ac156f3878fd316aa1e7930a98",
-      "rows_done": 11,
-      "future_labels_read": 0,
-      "heldout_labels_read": 0,
-      "elapsed_seconds": 16.030243392999637
-    }
-  }
-]
+[]
 
 ## 成本与在线执行
 

@@ -223,3 +223,6 @@ PICS_joint_relabel不变；TS-ICL约8.06%是基线收益，非agent。calibratio
 22项本轮测试通过；6,656份新增历史raw输出、2,768份current raw预测、6,708条策略决策和432条同冻结pi获取标签独立复核通过。诊断补费生成accounted派生表，原决策、模型、标签及其SHA保持不变；完整成本不得混淆批量摊销与冷在线墙钟。原标签档案被history准备进程打开但未用于历史证据公式的限制、首次审计失败及其他阴性记录保留。
 
 PICS_joint_relabel继续作为原协议incumbent，calibration/test仍封存。新并行调度已生效，不再以H2显著通过作为接强baseline/第二家族的启动条件；方法晋升仍须公平共同表与完整确认支持。
+
+> 2026-09-14 23:59 最终收口：共同表50个组合均已运行并独立复核；TimesFM固定五臂与TATO已完成，取代下文同步时的在途状态。全部三来源/26 dev parent/156变体，结果与费用以 [v431_sprint_report.md](v431_sprint_report.md) 为准。完整新agent未晋升，calibration/test封存。
+
