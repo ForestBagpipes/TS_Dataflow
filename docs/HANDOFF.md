@@ -649,3 +649,10 @@ tuned, the answer is a measurement limit, not a resource limit.
 ## 2026-09-14 20:00 用户授权下载切线
 
 work2已实际切到任务专用直连分段下载，保留约932MB已有数据。旧安装PID45580/61386退出，新bootstrap PID66506、下载PID66519；模型接续和pilot队列已恢复，监控PID59254保持。代理服务与Codex配置未改，端口切换前后可达。首次切线父进程已退出异常与分段重试全部留痕，详见 docs/download_switch_20260914.md 及机器证据；不能重启旧安装或同时改写prefix。真实pilot仍待验收。
+
+
+## 2026-09-14 20:15 环境验收完成
+
+三个独立环境全部完成安装、依赖检查和指定模块导入；TS-ICL与Chronos的CUDA256×256矩阵检查通过，RTX4090支持BF16，单次小测试峰值分配9,502,720字节。TS-ICL为Python3.12/NumPy2.5.3，core与Chronos为Python3.11/NumPy1.26.4，两GPU环境保持Torch2.9.1+cu126。25个恢复wheel整包官方哈希校验通过，环境freeze/conda-explicit与SHA256SUMS已落盘并逐项复核。
+
+安装20:14:48结束，模型接续20:15:27开始；TS-ICL官方revision已锁为19c94031439fb31f36ce395088ee50a6762d3774，权重下载中。Bolt尚未下载，真实32-origin pilot仍未运行。此处是环境验收，不是模型worker或方法成功。证据见 docs/environment_acceptance_20260914.json；冻结记录见 requirements/bootstrap-20260914/。待两个模型接口验收通过后，队列重验CPU gate并运行真实pilot，calibration/test读取仍关闭。

@@ -1,0 +1,115 @@
+{
+  "at": "2026-09-14T12:16:37.522809+00:00",
+  "status": "completed",
+  "scope": "environment_only_not_method_success",
+  "reports": {
+    "w2-core": {
+      "environment": "w2-core",
+      "python": "3.11.16 (main, Sep  2 2026, 23:39:52) [GCC 15.3.0]",
+      "executable": "/home/vipuser/work2-envs/w2-core/bin/python",
+      "platform": "Linux-7.0.0-28-generic-x86_64-with-glibc2.39",
+      "imports": [
+        "numpy",
+        "scipy",
+        "pandas",
+        "sklearn",
+        "statsmodels.api",
+        "ruptures",
+        "pyarrow",
+        "introact_ts.backends",
+        "pytest",
+        "yaml",
+        "joblib",
+        "psutil",
+        "matplotlib"
+      ],
+      "versions": {
+        "numpy": "1.26.4"
+      },
+      "status": "passed",
+      "checked_at": "2026-09-14T09:34:40.600242+00:00",
+      "model_inference": "not_performed",
+      "gpu": {
+        "status": "not_applicable"
+      }
+    },
+    "w2-tsicl": {
+      "environment": "w2-tsicl",
+      "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+      "executable": "/home/vipuser/work2-envs/w2-tsicl/bin/python",
+      "platform": "Linux-7.0.0-28-generic-x86_64-with-glibc2.39",
+      "imports": [
+        "numpy",
+        "torch",
+        "tsicl"
+      ],
+      "versions": {
+        "numpy": "2.5.3",
+        "torch": "2.9.1+cu126",
+        "cuda_runtime": "12.6",
+        "tsicl": "0.2.1"
+      },
+      "status": "passed",
+      "checked_at": "2026-09-14T12:14:36.250464+00:00",
+      "model_inference": "not_performed",
+      "gpu": {
+        "status": "passed",
+        "device_name": "NVIDIA GeForce RTX 4090",
+        "bf16_supported": true,
+        "peak_allocated_bytes": 9502720
+      }
+    },
+    "w2-chronos": {
+      "environment": "w2-chronos",
+      "python": "3.11.16 (main, Sep  2 2026, 23:39:52) [GCC 15.3.0]",
+      "executable": "/home/vipuser/work2-envs/w2-chronos/bin/python",
+      "platform": "Linux-7.0.0-28-generic-x86_64-with-glibc2.39",
+      "imports": [
+        "numpy",
+        "scipy",
+        "pandas",
+        "sklearn",
+        "statsmodels.api",
+        "ruptures",
+        "pyarrow",
+        "introact_ts.backends",
+        "torch",
+        "chronos"
+      ],
+      "versions": {
+        "numpy": "1.26.4",
+        "torch": "2.9.1+cu126",
+        "cuda_runtime": "12.6",
+        "chronos-forecasting": "2.3.3.dev0"
+      },
+      "status": "passed",
+      "checked_at": "2026-09-14T12:14:39.232590+00:00",
+      "model_inference": "not_performed",
+      "gpu": {
+        "status": "passed",
+        "device_name": "NVIDIA GeForce RTX 4090",
+        "bf16_supported": true,
+        "peak_allocated_bytes": 9502720
+      }
+    }
+  },
+  "environment_locks": {
+    "w2-core": {
+      "path": "/home/vipuser/work/work2/requirements/bootstrap-20260914/w2-core.freeze.txt",
+      "sha256": "4e8ffa543cd7e190bddbe0589faa876675af240510b320f94c025f381e9de660"
+    },
+    "w2-tsicl": {
+      "path": "/home/vipuser/work/work2/requirements/bootstrap-20260914/w2-tsicl.freeze.txt",
+      "sha256": "63bb5411bc29e64110415017c83f205f5961bee5dc9554bf7f902d553d0afa86"
+    },
+    "w2-chronos": {
+      "path": "/home/vipuser/work/work2/requirements/bootstrap-20260914/w2-chronos.freeze.txt",
+      "sha256": "03857e0851a9946518bd58dfd188d156557bcef9a320cb7a293b93de96d44d0f"
+    }
+  },
+  "requirements_hash_check": "passed",
+  "installation_log": "/home/vipuser/work2-staging/bootstrap-20260914/logs/bootstrap-direct-resume.log",
+  "worker_model_validation": "pending",
+  "real_pilot": "not_run",
+  "incumbent": "PICS_joint_relabel"
+}

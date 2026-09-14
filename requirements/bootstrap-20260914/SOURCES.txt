@@ -1,0 +1,8 @@
+Python and pip seed: conda-forge, explicit per-prefix conda records included.
+PyTorch 2.9.1+cu126: official SHA256 pinned; SJTU/direct NVIDIA wheelhouse; logs/v43/direct-switch-20260914/
+Python dependencies: https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple (task-scoped direct route)
+TS-ICL: https://github.com/EDF-Lab/ts-icl.git (commit file alongside)
+Chronos: https://github.com/amazon-science/chronos-forecasting.git (commit file alongside)
+Each freeze is paired with installation reports and platform metadata in bootstrap logs.
+No model weights or datasets were downloaded by this environment bootstrap.
+GPU tensor validation may be deferred when another compute process is present.

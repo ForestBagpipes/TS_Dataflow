@@ -73,5 +73,13 @@
   "total_wheel_bytes": 3532630185,
   "preserved_bytes": 932113925,
   "validation": "manifest official hashes and ranges checked; full model/environment validation pending",
-  "method_status": "not_run; historical incumbent unchanged"
+  "method_status": "not_run; historical incumbent unchanged",
+  "wheel_verification": {
+    "status": "completed",
+    "n_packages": 25,
+    "raw_path": "/home/vipuser/work/work2/logs/v43/direct-switch-20260914/verified-wheels.json",
+    "raw_sha256": "9657b085681e6395e77a1d000a7df7c91c00da576b9b6b10d6cf7dc2f0d7ecc2",
+    "mtime_utc": "2026-09-14T12:10:58.072419+00:00"
+  },
+  "remaining_environment_validation": "completed; see docs/environment_acceptance_20260914.json"
 }

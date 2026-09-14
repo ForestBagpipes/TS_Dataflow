@@ -17,3 +17,10 @@ scripts/download_bootstrap_wheels.py 通过官方NVIDIA/国内镜像直连分段
 截至20:00依赖下载继续推进，真实pilot尚未运行。20:30–20:45启动pilot只是条件估计，必须以完整依赖、模型验收和CPU gate实际通过为准；A0–A5仍需pilot先通过。PICS_joint_relabel保留为incumbent。本阶段是工程恢复，不更新DOCX为方法成功。
 
 Git仍在codex/introactts-v43-bootstrap本地正常提交；上次实际push因缺HTTPS认证失败，尚未恢复，不标为已上传。
+
+
+## 2026-09-14 20:15 环境验收完成
+
+三个独立环境全部完成安装、依赖检查和指定模块导入；TS-ICL与Chronos的CUDA256×256矩阵检查通过，RTX4090支持BF16，单次小测试峰值分配9,502,720字节。TS-ICL为Python3.12/NumPy2.5.3，core与Chronos为Python3.11/NumPy1.26.4，两GPU环境保持Torch2.9.1+cu126。25个恢复wheel整包官方哈希校验通过，环境freeze/conda-explicit与SHA256SUMS已落盘并逐项复核。
+
+安装20:14:48结束，模型接续20:15:27开始；TS-ICL官方revision已锁为19c94031439fb31f36ce395088ee50a6762d3774，权重下载中。Bolt尚未下载，真实32-origin pilot仍未运行。此处是环境验收，不是模型worker或方法成功。证据见 docs/environment_acceptance_20260914.json；冻结记录见 requirements/bootstrap-20260914/。待两个模型接口验收通过后，队列重验CPU gate并运行真实pilot，calibration/test读取仍关闭。

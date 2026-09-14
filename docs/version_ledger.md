@@ -146,3 +146,15 @@ imbalanced to evaluate," not "TSFM signals do not work."
 ### 2026-09-14 下载链路诊断（非方法版本）
 
 直连/代理/国内镜像只读实测已完成，详见 docs/download_routes_20260914.md。未重新安装或运行真实模型，不新增方法结果行；PICS_joint_relabel仍为incumbent，v4.3真实pilot待依赖与模型就绪。
+
+
+### 2026-09-14 20:11 依赖下载恢复（非方法版本）
+
+用户授权后仅切换work2下载任务线路，保留932,113,925字节旧下载；25个Torch/CUDA wheel已全部通过完整官方SHA256校验，Chronos Torch已安装，其他依赖安装/验收继续。固定下载清单见 requirements/bootstrap-20260914/torch-cp311-direct-downloads.json，切线记录见 docs/download_switch_20260914.md。代理/Codex配置未修改，真实pilot尚未运行；incumbent不变。切线代码本地提交1b02b501dc903804fad83e1eb1acb46b3f33b109，远端认证仍待恢复。
+
+
+## 2026-09-14 20:15 环境验收完成
+
+三个独立环境全部完成安装、依赖检查和指定模块导入；TS-ICL与Chronos的CUDA256×256矩阵检查通过，RTX4090支持BF16，单次小测试峰值分配9,502,720字节。TS-ICL为Python3.12/NumPy2.5.3，core与Chronos为Python3.11/NumPy1.26.4，两GPU环境保持Torch2.9.1+cu126。25个恢复wheel整包官方哈希校验通过，环境freeze/conda-explicit与SHA256SUMS已落盘并逐项复核。
+
+安装20:14:48结束，模型接续20:15:27开始；TS-ICL官方revision已锁为19c94031439fb31f36ce395088ee50a6762d3774，权重下载中。Bolt尚未下载，真实32-origin pilot仍未运行。此处是环境验收，不是模型worker或方法成功。证据见 docs/environment_acceptance_20260914.json；冻结记录见 requirements/bootstrap-20260914/。待两个模型接口验收通过后，队列重验CPU gate并运行真实pilot，calibration/test读取仍关闭。
