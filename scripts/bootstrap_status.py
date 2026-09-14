@@ -21,6 +21,8 @@ for label, path in (
     ('v431 TimesFM TATO', root / 'results/v431/20260914-sprint/timesfm_tato/status.json'),
     ('v431 r2 delivery', root / 'results/v431-r2/delivery_status.json'),
     ('v431 r3 queue', root / 'results/v431-r3/queue_status.json'),
+    ('v431 r3 CPU queue', root / 'results/v431-r3/cpu_queue_status.json'),
+    ('v431 r3 delivery (method success is separate)', root / 'results/v431-r3/delivery_status.json'),
     ('Historical pilot monitor (not current model status)', root / 'results/v43/monitor_status.json'),
 ):
     print('\n' + label + ': ' + str(path), flush=True)

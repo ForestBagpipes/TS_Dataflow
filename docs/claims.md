@@ -164,3 +164,16 @@ A5补全诊断证明100个非零eta候选均改变真实预测；相对静态有
 PICS_joint_relabel不变；TS-ICL约8.06%是基线收益，非agent。calibration/test读取0；无ICLR/SOTA/安全保证。下一步只在train内注册证据状态独立评分、H32→H96/H192收益排序迁移、无增益工具停止和真实成本预算诊断，先满足H2/H3再扩强baseline/第二TSFM/独立确认。RED不写入DOCX已验证成果。
 
 完整报告与代码证据：[v43_agent_report_20260914.md](v43_agent_report_20260914.md)，机器记录：[v43_agent_evidence_20260914.json](v43_agent_evidence_20260914.json)。原始run `results/v43/20260914T141030.324186Z-agent`；最新阶段状态 `results/v43/agent_stage_acceptance.json`。运行Git HEAD为c92eab5上的未提交工作区，先按内容hash冻结，随后9f5f49f保存了完全一致的代码；不以旧HEAD覆盖快照。
+
+
+## 2026-09-15 v4.3.1-r3 完成交付，研究未晋升
+
+从r2提交9d31106接续，未重装环境或改五臂/模型家族。实现同origin长短64步治理响应、真实任务收益ridge及同容量direct/CART、冻结终态后的单步取证、真实在线与完整费用账本。主表98组（含继承原生TATO与旧CART），共同DEV26 parent/156相关变体；四套新评估376组/26,978条记录、144项配对比较独立重算一致。
+
+高预算Bolt：固定TSICL1.157005、r3 agent1.156351、固定取证1.156351；TimesFM：固定TSICL1.096135、agent1.102669、固定取证1.096019。主动未成立，响应未稳定胜旧分歧/等次数回测/direct/CART。训练110 parent分54/21/17/18，主状态有效fit51/gate20/acq16；学习曲线没有一致支持“加数据即改善”。获取树常数根，LOPO15<16而全STOP，lambda0是平局，不是价格选择成功。
+
+两家族各7个自然在线：Bolt6次control/12个真实probe，TimesFM6次H32/6个probe；其余各1次STOP。另各4受控case覆盖完整输入、B0、真实工具后故障及长短对。22case原始输出/隐藏屏障/费用通过；自然热请求无超预算，启动各约9秒，不能称单冷请求满足3.5秒。金融2parent附表TimesFM agent4.920632，但8/12真实超预算；Bolt3.103498差于固定参照3.069683；自然缺口与严格历史vintage仍缺项。完整观测保持no-op，不冒称预测提升。
+
+冻结的source整TRAIN MASE常数用于r3证据归一化，包含早train origin之后和内部check/acq观测；不能称所有训练预处理严格逐origin隔离。DEV时该TRAIN均已过去，calibration/test未参与。保留既定共同分母与所有负结果；候选文件冻结供复核，不满足研究晋升/独立确认条件。PICS_joint_relabel仍为历史incumbent，不宣称SOTA，不把RED写成DOCX已验证成果。
+
+入口：[r3报告](v431_r3_report.md)、[共同主表](v431_r3_main_table.md)、[金融附表](v431_r3_financial_table.md)、[代码审计](v431_r3_code_audit.md)、[独立验证](v431_r3_verification.md)、[创新矩阵](novelty_matrix.md)、[论文](paper_v431_draft.md)。真实命令/配置/预测/支持/成本在results/v431-r3；最终提交和远端一致性见logs/v431-r3/git-sync.json，精简审阅包见results/v431-r3/review_package.json。同步失败不得标完成。

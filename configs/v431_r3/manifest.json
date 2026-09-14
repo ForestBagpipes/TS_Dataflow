@@ -1,0 +1,72 @@
+{
+  "version": "v4.3.1-r3",
+  "registered_at": "2026-09-14T17:09:55.432512+00:00",
+  "parent_commit": "9d31106ba1ffb929137ec682d06b4a2b2e6c51a0",
+  "families": [
+    "bolt",
+    "timesfm"
+  ],
+  "context": 512,
+  "horizons": [
+    96,
+    192
+  ],
+  "length_difference": 64,
+  "coverage_min_fraction": 0.5,
+  "coverage_min_points": 16,
+  "ridge_alphas": [
+    0.1,
+    1,
+    10
+  ],
+  "state_fit_role": "T_fit",
+  "state_select_role": "T_gate",
+  "check_role": "T_check",
+  "acq_role": "T_acq",
+  "tools": [
+    "H32",
+    "H",
+    "control"
+  ],
+  "mechanism_states": [
+    "equal-cost",
+    "old-disagreement"
+  ],
+  "budgets": {
+    "low": 0.8140623268639832,
+    "high": 3.5
+  },
+  "error_tolerance": 0,
+  "generalization": {
+    "role": "T_check",
+    "horizon": 192,
+    "gap": [
+      358,
+      409
+    ],
+    "kind": "target_only",
+    "parent_count": 17
+  },
+  "reference_roles": [
+    "T_fit",
+    "T_gate"
+  ],
+  "plan_sha256": "8e94c0e89d9055b2ccbe3329789df60533f7f47821a86ded6a9eff5c9c028bbb",
+  "heldout_read": false,
+  "method_promoted": false,
+  "preregistration_correction": {
+    "at": "2026-09-14T17:19:24.199490+00:00",
+    "previous_plan_sha256": "5a6c0f30e87fdd07ad4c063bea2f1248898b35c615ad13b059e59eac364bf867",
+    "reason": "legacy cached std came from Bolt only; paired unsigned dispersion is fair within-family same-evidence control",
+    "new_results_seen": false
+  },
+  "dispersion": "mean_horizon std_raw_forecast_across_long_short ddof0 divided by current MASE scale; no length factor",
+  "raw_dispersion_correction": {
+    "at": "2026-09-14T17:26:43.718795+00:00",
+    "previous_plan_sha256": "b591593cd7a8656ca724305dbb0607d21312c8eff80955d75d8acdf0521768f5",
+    "reason": "exact old probe.py multiview statistic is raw forecast dispersion, not gain_std",
+    "pilot_measurements_seen": true,
+    "r3_model_fit_started": false,
+    "r3_dev_policy_results_seen": false
+  }
+}
