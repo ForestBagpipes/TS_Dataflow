@@ -742,3 +742,8 @@ seed 方向一致。但这个差异不显著，三 seed 符号检验 p 0.250，�
 最新快照 `results/v43/monitor_status.json`，完整采样 `/home/vipuser/work/work2/logs/v43/20260914T105516.706494Z-monitor/samples.jsonl`，监控入口 `scripts/launch_v43_monitor.sh`。`python3 scripts/bootstrap_status.py` 已纳入pilot与监控状态；PID不可见时提示先核对主机命名空间。报告写盘不等同于自动发送聊天通知。
 
 18:55确认依赖下载仍推进：nvshmem 124.7MB已完成，开始nvjitlink 19.7MB；真实pilot仍未开始，模型manifest尚缺。
+
+
+## 2026-09-14 维护原Git仓库
+
+登记origin为ForestBagpipes/TS_Dataflow，保持当前快照内容接入远端master历史；新增每阶段推送及远端SHA核对规则。凭据/数据/权重文件检查未发现待上传项。首次push实际失败于HTTPS身份认证，记录在docs/git_sync.md；没有修改远端master或force push。

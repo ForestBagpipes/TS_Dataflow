@@ -634,3 +634,8 @@ tuned, the answer is a measurement limit, not a resource limit.
 最新快照 `results/v43/monitor_status.json`，完整采样 `/home/vipuser/work/work2/logs/v43/20260914T105516.706494Z-monitor/samples.jsonl`，监控入口 `scripts/launch_v43_monitor.sh`。`python3 scripts/bootstrap_status.py` 已纳入pilot与监控状态；PID不可见时提示先核对主机命名空间。报告写盘不等同于自动发送聊天通知。
 
 18:55确认依赖下载仍推进：nvshmem 124.7MB已完成，开始nvjitlink 19.7MB；真实pilot仍未开始，模型manifest尚缺。
+
+
+## 2026-09-14 原仓库同步
+
+原仓库 `https://github.com/ForestBagpipes/TS_Dataflow.git` 已设为origin，当前 `codex/introactts-v43-bootstrap` 已连接远端初始master历史，合并前后工作树完全相同。阶段commit/push规则已写入AGENTS.md。首次实际push因缺GitHub写入认证失败；待认证后补推HEAD，详情 `docs/git_sync.md`。这只阻断上传，不阻断本机安装/模型/pilot/监控。
