@@ -10,20 +10,29 @@ for label, path in (
     ('Environment installation', stage / 'status.json'),
     ('Model preparation queue', stage / 'continuation-status.json'),
     ('Model manifest', root / 'configs/v43/model_manifest.bootstrap.json'),
+    ('v43 pilot queue', root / 'results/v43/pilot_queue_status.json'),
+    ('v43 live monitor', root / 'results/v43/monitor_status.json'),
 ):
-    print('\n' + label + ': ' + str(path))
+    print('\n' + label + ': ' + str(path), flush=True)
     if not path.exists():
         print('PENDING: no report yet')
         continue
     obj = json.loads(path.read_text())
-    for key in ('status', 'phase', 'updated_at', 'pid', 'environment_phase', 'error', 'model_exit_code'):
+    for key in ('status', 'phase', 'updated_at', 'at', 'pid', 'monitor_pid', 'environment_phase',
+                'pilot_status', 'pilot_directory', 'error', 'model_exit_code', 'alerts'):
         if key in obj:
             print(f'  {key}: {obj[key]}')
-    if obj.get('pid'):
-        print('  pid_exists:', Path(f'/proc/{obj["pid"]}').exists())
+    pid = obj.get('pid', obj.get('monitor_pid'))
+    if pid:
+        print('  pid_visible_in_current_namespace:', Path(f'/proc/{pid}').exists())
+        if not Path(f'/proc/{pid}').exists():
+            print('  Check host process visibility before treating this as a dead process.')
     for key, info in obj.get('models', {}).items():
-        print(f'  {key}: {info.get("status", "pending")} revision={info.get("revision", "pending")}')
-print('\nRecent installation log:')
+        if isinstance(info, dict):
+            print(f'  {key}: {info.get("status", "pending")} revision={info.get("revision", "pending")}')
+        else:
+            print(f'  {key}: {info}')
+print('\nRecent installation log:', flush=True)
 path = stage / 'logs/bootstrap.log'
 if path.exists():
     subprocess.run(['tail', '-n', '8', str(path)], check=False)

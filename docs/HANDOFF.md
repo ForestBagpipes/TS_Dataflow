@@ -625,3 +625,12 @@ tuned, the answer is a measurement limit, not a resource limit.
 
 
 2026-09-14 18:49 最新冻结：40 passed in 1.01s，日志 `logs/v43/contracts/20260914T104900.858201Z/`。显存账本补记模型加载峰值，最终峰值取加载与推断最大值。旧队列因代码hash变化正确停止，已确认旧PID退出后重新启动；当前PID 58448，状态 `waiting_for_models`。完整机器可读证据见 `docs/v43_cpu_stage_evidence_20260914.json`，实时状态见 `results/v43/pilot_queue_status.json`。模型/方法结果仍未产生。
+
+
+## 2026-09-14 持续监控
+
+用户要求持续监控后，启动独立 tmux `work2-v43-monitor-20260914`（socket `/tmp/tmux-1000/default`），监控PID 59254。每30秒只读采集原安装、模型接续和pilot进程树的I/O、打开的wheel/incomplete文件大小、GPU、可用内存、磁盘和错误；不采集命令行，不安装、重启或终止任何进程。连续15分钟安装phase/I/O不变时记录告警。监控持续至pilot完成或24小时窗口结束。
+
+最新快照 `results/v43/monitor_status.json`，完整采样 `/home/vipuser/work/work2/logs/v43/20260914T105516.706494Z-monitor/samples.jsonl`，监控入口 `scripts/launch_v43_monitor.sh`。`python3 scripts/bootstrap_status.py` 已纳入pilot与监控状态；PID不可见时提示先核对主机命名空间。报告写盘不等同于自动发送聊天通知。
+
+18:55确认依赖下载仍推进：nvshmem 124.7MB已完成，开始nvjitlink 19.7MB；真实pilot仍未开始，模型manifest尚缺。
