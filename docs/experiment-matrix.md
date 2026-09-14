@@ -1,3 +1,19 @@
+## 2026-09-14 v4.3.1 当前矩阵（旧矩阵留作历史）
+
+| 项目 | 本条同步时实际状态 | 共同证据/限制 |
+|---|---|---|
+| 五固定臂、旧HGB、dirty任务损失树、同证据CART/flat树 | 已运行 | 本地43策略共同26parent/156变体；非独立确认 |
+| 8终态配置、独立gate拒绝、不剪枝消融 | 已冻结并运行 | 最大深度3、parent支持、train内部隔离；未晋升 |
+| 2获取器、单步工具、STOP、固定/条件/随机/全部调用 | 已运行 | 新agent全部STOP，MASE1.200158；固定TS-ICL1.157005、同证据CART1.136486 |
+| 旧H32、同原点H32、目标H96/H192历史证据 | 已运行并独立复核 | 6,656份新增raw输出，原始cutoff416/320，不读当前future作证据 |
+| TATO官方实现短预算Bolt适配 | 已运行 | 数值与真实预算见共同报告；不称官方完整复现，不限制为本项目五臂 |
+| 第二独立家族TimesFM | 统一GPU队列在途 | 本条不预填数字；以共同报告/实际状态更新 |
+| 当前成本与共同主表 | 已产出并复核 | accounted_table.json；dirty诊断补费，初始化/离线/在线分列 |
+| 本轮回归与标签身份 | 22项新测试、独立复核通过 | 8终态/2获取器/432标签、6,708决策；不构成方法成功 |
+| calibration/test、方法晋升 | 继续封存/未晋升 | PICS_joint_relabel不变，无SOTA或确认成功声明 |
+
+[当日共同动态主表与缺项](v431_sprint_report.md)、[预登记计划](v431_sprint_plan.md)、[论文论证草稿](paper_v431_draft.md)。本轮以A/B/C线并行组织；旧文档“先H2/H3通过再开始强baseline/第二家族”仅为历史调度，当前已取消该启动门槛，真实依赖与最终验收保持。
+
 # Experiment matrix, frozen
 
 Frozen 2026-08-24 for the ICLR submission. Four tables: baselines, metrics,

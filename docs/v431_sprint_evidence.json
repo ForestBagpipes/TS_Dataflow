@@ -1,0 +1,146 @@
+{
+  "created_at": "2026-09-14T15:57:16.145590+00:00",
+  "run": "/home/vipuser/work/work2/results/v431/20260914-sprint",
+  "method_status": "not_promoted",
+  "incumbent": "PICS_joint_relabel",
+  "config_count": 8,
+  "selected": [
+    "d2_target_horizon_gated",
+    "d2_old32_gated"
+  ],
+  "budgets": {
+    "low": 0.8140623268639832,
+    "high": 3.5
+  },
+  "partition_counts": {
+    "T_fit": 54,
+    "T_gate": 21,
+    "T_check": 17,
+    "T_acq": 18,
+    "dev": 26
+  },
+  "table_rows": 49,
+  "missing": [
+    {
+      "backend": "timesfm_tato",
+      "backbone": "timesfm-2.5-200m",
+      "policy": "TATO_8_OFFICIAL_SPACE_OBSERVED_LINEAR",
+      "status": {
+        "status": "running",
+        "pid": 14594,
+        "worker_python": "/home/vipuser/work2-envs/w2-chronos/bin/python",
+        "request_sha256": "89bae9a35aaf88b249d0ce9f81f9e2b457d409ac156f3878fd316aa1e7930a98",
+        "rows_done": 11,
+        "future_labels_read": 0,
+        "heldout_labels_read": 0,
+        "elapsed_seconds": 16.030243392999637
+      }
+    }
+  ],
+  "conditional_intervals": {
+    "CART_target_horizon": {
+      "reference": "FIXED_A2_SINGLE",
+      "gain_mase": 0.02051873866115983,
+      "conditional_95_interval": [
+        -0.012210532054364138,
+        0.0716598409204611
+      ]
+    },
+    "AGENT_d2_target_horizon_gated_high": {
+      "reference": "FIXED_A2_SINGLE",
+      "gain_mase": -0.04315313707710855,
+      "conditional_95_interval": [
+        -0.07616418487538508,
+        -0.016768135648880633
+      ]
+    },
+    "ALL_d2_target_horizon_gated": {
+      "reference": "FIXED_A2_SINGLE",
+      "gain_mase": -0.034783537436829715,
+      "conditional_95_interval": [
+        -0.06829325221953789,
+        -0.0095467652846367
+      ]
+    }
+  },
+  "cart_split_indices": {
+    "old32": [
+      2,
+      25
+    ],
+    "same_origin32": [
+      2,
+      25
+    ],
+    "target_horizon": [
+      2,
+      25
+    ]
+  },
+  "online": {
+    "status": "completed",
+    "exit_code": 0,
+    "worker_pid": 11433,
+    "process_wall_seconds": 12.536751288000005,
+    "scope": "complete worker spawn through exit, including model services",
+    "finished_at": "2026-09-14T15:45:42.820614+00:00",
+    "requests": 7,
+    "hot_request_seconds": 1.8643262829998548,
+    "model_startup_seconds": 8.703547417999971,
+    "remaining_process_overhead_seconds": 1.9688775870001791,
+    "complete_process_budget_overruns": 0,
+    "mean_complete_request_seconds": 1.7909644697142864
+  },
+  "baseline_audits": {
+    "tato": {
+      "table_sha256": "8490adb7374d4491bff9520011e88d61fed7d135a37025f147811ae82e232219",
+      "status": {
+        "status": "completed",
+        "pid": 10157,
+        "worker_python": "/home/vipuser/work2-envs/w2-chronos/bin/python",
+        "request_sha256": "54949d7055cd9b2f16f0e8fb6a13f7f9f974bd610bd6d76cf594c624235259ee",
+        "rows_done": 156,
+        "future_labels_read": 0,
+        "heldout_labels_read": 0,
+        "elapsed_seconds": 79.89861163,
+        "model_load_seconds": 4.106744997000078,
+        "total_wall_seconds": 79.90672176599992,
+        "prediction_file_sha256": "24244f92bed9153f5b34727330ebafb16ccba807f4932545162b61cb5655f2cb",
+        "actual_model_calls": 837,
+        "peak_gpu_bytes": 429876224,
+        "all_row_wall_seconds": 52.36885990600081,
+        "process_overhead_seconds": 27.53786185999911
+      }
+    },
+    "timesfm": {
+      "table_sha256": "1891a98cbc2a523fb1fb26de98dec167aff79b2b26a3b346b049eca44d50e9b2",
+      "status": {
+        "status": "completed",
+        "pid": 13992,
+        "worker_python": "/home/vipuser/work2-envs/w2-chronos/bin/python",
+        "request_sha256": "0e371c52527e0c648ae1ffdf6f5e54bdaf9b4872e4db9958218a26d295d38a7a",
+        "rows_done": 780,
+        "future_labels_read": 0,
+        "heldout_labels_read": 0,
+        "elapsed_seconds": 71.45795860599992,
+        "model_load_seconds": 3.350128885000231,
+        "total_wall_seconds": 71.49136769000006,
+        "prediction_file_sha256": "c982b3bc5c4c1e2e77b14c44de2f8ace3066b5aa8e099ff8e776056bdcad68f1",
+        "actual_model_calls": 370,
+        "peak_gpu_bytes": 941848064,
+        "all_row_wall_seconds": 56.953198895005244,
+        "process_overhead_seconds": 14.538168794994817
+      }
+    }
+  },
+  "artifact_sha256": {
+    "results/v431/20260914-sprint/terminal_manifest.json": "66fb98f9fe9609ebdc0e58ac0299bad979d0050e5e64c6c9ee750ff1ebc9b157",
+    "results/v431/20260914-sprint/models_frozen.json": "d8cf1f65f6710082826c1c67d740a6f1c57f48859872780c3d0d7c9fd7d563d5",
+    "results/v431/20260914-sprint/value_labels.json": "3f613403efd46c64393d3540b0231af2fcf0d596ef75125105abd823559c32e4",
+    "results/v431/20260914-sprint/partition.json": "b6609cc65e73ffd653b01d6944fd0452b2ed8e00f652313302f081fbca608556",
+    "configs/v431/sprint_manifest.json": "a3f721cb1169c4d109c765067220d97797427719d46093d3e09c4cd3e25ccb39",
+    "results/v431/20260914-sprint/common_table.json": "0e77ff2eb5fc09210d51772af63f27327cb02a73413701c0bd59a566f3027172"
+  },
+  "heldout_labels_read": 0,
+  "promotion": false
+}

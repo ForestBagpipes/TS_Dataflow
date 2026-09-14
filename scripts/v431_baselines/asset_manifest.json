@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "tato": {
+    "repo": "https://github.com/thulab/TATO",
+    "commit": "402bbc8998c49e2f33d9afbcc42140347a6b8c36",
+    "trial_budget": 8,
+    "seed": 101,
+    "full_native_search_space": true,
+    "missing_bridge": "observed_linear",
+    "finite_failure_policy": "raise_and_preserve_failed_trial",
+    "patch_sizes": {
+      "bolt": 16,
+      "timesfm": 32
+    }
+  },
+  "timesfm": {
+    "repo_id": "google/timesfm-2.5-200m-pytorch",
+    "revision": "1d952420fba87f3c6dee4f240de0f1a0fbc790e3",
+    "verified_sha256": "2f776efe6245e42b24bc4153ffdf61810140210e4bd3b01fb21f7aa779ab6ce8",
+    "official_code_commit": "8cb0628371af142e16b8c232cc9fbf667ffb12f9",
+    "source_license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "environment_lock_sha256": "03857e0851a9946518bd58dfd188d156557bcef9a320cb7a293b93de96d44d0f",
+    "license": "Apache-2.0"
+  },
+  "target_requirements_sha256": "d9a88d3ff57a1e558829b28ac478e59069a81a23cc3ad8687f6bde814ecd9a3c",
+  "model_capability_status": "see actual GPU run capability.json; downloaded weights alone are not acceptance"
+}

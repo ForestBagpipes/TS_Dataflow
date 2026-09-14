@@ -214,3 +214,12 @@ A5补全诊断证明100个非零eta候选均改变真实预测；相对静态有
 PICS_joint_relabel不变；TS-ICL约8.06%是基线收益，非agent。calibration/test读取0；无ICLR/SOTA/安全保证。下一步只在train内注册证据状态独立评分、H32→H96/H192收益排序迁移、无增益工具停止和真实成本预算诊断，先满足H2/H3再扩强baseline/第二TSFM/独立确认。RED不写入DOCX已验证成果。
 
 完整报告与代码证据：[v43_agent_report_20260914.md](v43_agent_report_20260914.md)，机器记录：[v43_agent_evidence_20260914.json](v43_agent_evidence_20260914.json)。原始run `results/v43/20260914T141030.324186Z-agent`；最新阶段状态 `results/v43/agent_stage_acceptance.json`。运行Git HEAD为c92eab5上的未提交工作区，先按内容hash冻结，随后9f5f49f保存了完全一致的代码；不以旧HEAD覆盖快照。
+
+
+## 2026-09-14 v4.3.1 并行冲刺诊断登记（未晋升）
+
+新任务协议来源宏平均MASE与上方历史治理nRMSD台账不能混算。固定五臂，train在原始时间内拆54/21/17/18个parent用于fit/gate/check/acq，dev保持26parent/156变体。已完成43本地策略、TATO官方实现短预算Bolt适配；共同主表及原始证据见[v431_sprint_report.md](v431_sprint_report.md)。同证据普通CART为1.136486、固定TS-ICL1.157005、冻结单步agent1.200158且全部STOP。终态拒绝层及主动获取没有超越简单强对照，不晋升v4.3.1。TATO数值只引用动态主表；TimesFM本条同步时在统一队列，不登记未运行成绩。
+
+22项本轮测试通过；6,656份新增历史raw输出、2,768份current raw预测、6,708条策略决策和432条同冻结pi获取标签独立复核通过。诊断补费生成accounted派生表，原决策、模型、标签及其SHA保持不变；完整成本不得混淆批量摊销与冷在线墙钟。原标签档案被history准备进程打开但未用于历史证据公式的限制、首次审计失败及其他阴性记录保留。
+
+PICS_joint_relabel继续作为原协议incumbent，calibration/test仍封存。新并行调度已生效，不再以H2显著通过作为接强baseline/第二家族的启动条件；方法晋升仍须公平共同表与完整确认支持。

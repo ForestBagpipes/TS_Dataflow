@@ -16,6 +16,9 @@ for label, path in (
     ('v43 P2 experiment queue', root / 'results/v43/p2_queue_status.json'),
     ('v43 minimal agent queue', root / 'results/v43/agent_queue_status.json'),
     ('v43 minimal agent acceptance (separate from job completion)', root / 'results/v43/agent_stage_acceptance.json'),
+    ('v431 sprint delivery', root / 'results/v431/20260914-sprint/sprint_status.json'),
+    ('v431 TimesFM fixed candidates', root / 'results/v431/20260914-sprint/timesfm/status.json'),
+    ('v431 TimesFM TATO', root / 'results/v431/20260914-sprint/timesfm_tato/status.json'),
     ('Historical pilot monitor (not current model status)', root / 'results/v43/monitor_status.json'),
 ):
     print('\n' + label + ': ' + str(path), flush=True)

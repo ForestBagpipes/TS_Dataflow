@@ -1,3 +1,5 @@
+> **2026-09-14 v4.3.1 当前主张边界。** 下文旧版本的正向结论不能转用于当前TSFM治理任务。本轮43本地策略与TATO/Bolt短预算适配已运行；普通同证据CART MASE1.136486、固定TS-ICL1.157005、新单步agent1.200158且全部STOP。该结果支持简单选择器具有开发价值，不支持证据细化或主动获取的额外贡献。TATO数值、成本和当前跨家族状态见[共同动态主表](v431_sprint_report.md)。TimesFM本条同步时仍在GPU队列，不能称已胜第二家族。22项新测试及原始输出、标签、分母、费用复核属于可信实现证据，不构成方法成功。确认集封存、PICS_joint_relabel不变；无SOTA、录用、正式安全保证或TSFM适配/文本大模型训练收益主张。并行调度替代旧H2/H3串行启动门槛，但不取消最终验收和冻结后确认。
+
 > **2026-09-14 v4.3 当前边界。** 39项 CPU 契约测试通过、32个 train/dev origin 输入已校验，属于工程事实。真实 worker 和 pilot 尚待环境/模型就绪；没有 task gain、跨模型收益、适配收益、风险证书或 SOTA 证据。PICS_joint_relabel 保持历史 incumbent。TIME 原始日历和发布延迟未恢复，不宣称实时金融部署已通过 as-of 审计。详见 `v43_entrypoint_audit_20260914.md`。
 
 # The claims, and the measurement behind each

@@ -1,0 +1,129 @@
+{
+  "version": "v4.3.1",
+  "title": "IntroAct-TS: Evidence-Seeking Data Governance for Time Series Foundation Models",
+  "start": "2026-09-14T23:28:17+08:00",
+  "deadline": "2026-09-15T00:00:00+08:00",
+  "timezone": "Asia/Shanghai",
+  "T_seconds": 1903.0,
+  "time_allocations": {
+    "audit": 190.3,
+    "parallel_build": 1046.65,
+    "verification": 380.6,
+    "delivery": 285.45
+  },
+  "parent_archive": "results/v43/20260914T141030.324186Z-agent",
+  "sources": [
+    "ETTm1",
+    "Solar",
+    "US_Term_Structure"
+  ],
+  "dev_selection": "all existing 26 parents / 156 variants, fixed before new outcomes",
+  "train_partition": "within-source chronological parent floor cuts [.5,.7,.85], full range704 stays in role",
+  "contexts": 512,
+  "horizons": [
+    96,
+    192
+  ],
+  "extra_history": 0,
+  "seed": 101,
+  "tools": [
+    "strict_mask",
+    "history"
+  ],
+  "history_conditions": [
+    "old32",
+    "same_origin32",
+    "target_horizon"
+  ],
+  "terminal_configs": [
+    {
+      "name": "d1_old32_gated",
+      "depth": 1,
+      "evidence": "old32",
+      "prune": true
+    },
+    {
+      "name": "d2_old32_gated",
+      "depth": 2,
+      "evidence": "old32",
+      "prune": true
+    },
+    {
+      "name": "d1_same_origin32_gated",
+      "depth": 1,
+      "evidence": "same_origin32",
+      "prune": true
+    },
+    {
+      "name": "d2_same_origin32_gated",
+      "depth": 2,
+      "evidence": "same_origin32",
+      "prune": true
+    },
+    {
+      "name": "d1_target_horizon_gated",
+      "depth": 1,
+      "evidence": "target_horizon",
+      "prune": true
+    },
+    {
+      "name": "d2_target_horizon_gated",
+      "depth": 2,
+      "evidence": "target_horizon",
+      "prune": true
+    },
+    {
+      "name": "d1_target_horizon_unpruned",
+      "depth": 1,
+      "evidence": "target_horizon",
+      "prune": false
+    },
+    {
+      "name": "d2_target_horizon_unpruned",
+      "depth": 2,
+      "evidence": "target_horizon",
+      "prune": false
+    }
+  ],
+  "terminal_selection": "best two gated configs by T_gate source-macro MASE, tie prefer target_horizon then shallower; freeze before T_acq labels",
+  "min_fit_parents": 16,
+  "min_gate_parents": 8,
+  "gate_bootstrap": 0.9,
+  "max_thresholds": 16,
+  "max_depth": 3,
+  "max_leaves": 8,
+  "acquisition": {
+    "max_steps": 1,
+    "max_depth": 2,
+    "min_parents": 16,
+    "lambdas": [
+      "0",
+      "0.1*train_median_abs_task_difference/positive_tool_cost_median"
+    ],
+    "selection": "within T_acq grouped only",
+    "full_branch_admission": true
+  },
+  "baselines": [
+    "native_KEEP",
+    "fixed_five",
+    "old_HGB_simple",
+    "old_HGB_acquisition",
+    "dirty_loss_tree",
+    "ordinary_CART_same_evidence",
+    "flat_loss_tree_same_evidence",
+    "gated_refinement",
+    "unpruned_refinement",
+    "fixed_single_tool",
+    "visible_condition_tool",
+    "seed101_random_same_budget",
+    "new_one_step_agent",
+    "all_tools",
+    "official_TATO_short_budget"
+  ],
+  "second_family": "TimesFM preferred; if assets absent record concrete pending, never substitute another Chronos",
+  "gpu_owner": "root_unified_queue",
+  "cpu_workers_max": 2,
+  "blas_threads": 1,
+  "heldout": "sealed_until_full_method_and_comparison_freeze",
+  "promotion": false
+}
