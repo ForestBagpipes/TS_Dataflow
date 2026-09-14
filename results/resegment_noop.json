@@ -1,0 +1,163 @@
+{
+ "n_windows": 350,
+ "slice_seed": 202,
+ "per_rung": {
+  "default": {
+   "params": {
+    "penalty": 12.0,
+    "min_size": 24,
+    "min_keep_frac": 0.5
+   },
+   "counts": {
+    "would discard too much": 266,
+    "acted": 72,
+    "no changepoint": 12
+   },
+   "act_rate": 0.2057142857142857
+  },
+  "conservative": {
+   "params": {
+    "penalty": 20.0,
+    "min_size": 24,
+    "min_keep_frac": 0.5
+   },
+   "counts": {
+    "would discard too much": 216,
+    "acted": 111,
+    "no changepoint": 23
+   },
+   "act_rate": 0.3171428571428571
+  },
+  "aggressive": {
+   "params": {
+    "penalty": 8.0,
+    "min_size": 24,
+    "min_keep_frac": 0.4
+   },
+   "counts": {
+    "would discard too much": 234,
+    "acted": 108,
+    "no changepoint": 8
+   },
+   "act_rate": 0.30857142857142855
+  }
+ },
+ "penalty_sweep": {
+  "4.0": {
+   "counts": {
+    "would discard too much": 332,
+    "acted": 17,
+    "no changepoint": 1
+   },
+   "act_rate": 0.04857142857142857,
+   "mean_cuts": 7.817142857142857
+  },
+  "6.0": {
+   "counts": {
+    "would discard too much": 316,
+    "acted": 29,
+    "no changepoint": 5
+   },
+   "act_rate": 0.08285714285714285,
+   "mean_cuts": 6.4314285714285715
+  },
+  "8.0": {
+   "counts": {
+    "would discard too much": 297,
+    "acted": 45,
+    "no changepoint": 8
+   },
+   "act_rate": 0.12857142857142856,
+   "mean_cuts": 5.557142857142857
+  },
+  "12.0": {
+   "counts": {
+    "would discard too much": 266,
+    "acted": 72,
+    "no changepoint": 12
+   },
+   "act_rate": 0.2057142857142857,
+   "mean_cuts": 4.554285714285714
+  },
+  "20.0": {
+   "counts": {
+    "would discard too much": 216,
+    "acted": 111,
+    "no changepoint": 23
+   },
+   "act_rate": 0.3171428571428571,
+   "mean_cuts": 3.357142857142857
+  },
+  "30.0": {
+   "counts": {
+    "would discard too much": 156,
+    "acted": 157,
+    "no changepoint": 37
+   },
+   "act_rate": 0.44857142857142857,
+   "mean_cuts": 2.2885714285714287
+  },
+  "50.0": {
+   "counts": {
+    "would discard too much": 98,
+    "acted": 185,
+    "no changepoint": 67
+   },
+   "act_rate": 0.5285714285714286,
+   "mean_cuts": 1.54
+  }
+ },
+ "by_stratum": {
+  "changepoint": {
+   "n": 37,
+   "counts": {
+    "would discard too much": 26,
+    "acted": 11
+   },
+   "act_rate": 0.2972972972972973
+  },
+  "clean": {
+   "n": 74,
+   "counts": {
+    "would discard too much": 66,
+    "acted": 8
+   },
+   "act_rate": 0.10810810810810811
+  },
+  "clean_ood": {
+   "n": 37,
+   "counts": {
+    "would discard too much": 26,
+    "no changepoint": 9,
+    "acted": 2
+   },
+   "act_rate": 0.05405405405405406
+  },
+  "contaminated": {
+   "n": 130,
+   "counts": {
+    "would discard too much": 92,
+    "acted": 35,
+    "no changepoint": 3
+   },
+   "act_rate": 0.2692307692307692
+  },
+  "hard": {
+   "n": 37,
+   "counts": {
+    "would discard too much": 28,
+    "acted": 9
+   },
+   "act_rate": 0.24324324324324326
+  },
+  "rare_valid": {
+   "n": 35,
+   "counts": {
+    "would discard too much": 28,
+    "acted": 7
+   },
+   "act_rate": 0.2
+  }
+ },
+ "dominant_cause": "would discard too much"
+}

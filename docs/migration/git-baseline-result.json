@@ -1,0 +1,12 @@
+{
+  "status": "completed",
+  "baseline_commit": "005d48fb7cf33f7cdb4cb7f56499594a56193097",
+  "branch": "codex/introactts-v43-bootstrap",
+  "tracked_files_at_baseline": 346,
+  "verified_research_source_files": 216,
+  "research_source_changed": false,
+  "source_history_copied": false,
+  "status_porcelain_at_baseline": "",
+  "asset_exclusions": ".git/info/exclude",
+  "old_project_documents_modified": false
+}

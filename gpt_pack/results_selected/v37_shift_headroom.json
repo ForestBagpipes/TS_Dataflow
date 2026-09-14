@@ -1,0 +1,1875 @@
+{
+  "phase": "v3.7 Phase 0 §3.1–§3.2 reproduction + oracle headroom",
+  "preregistration": "docs/v3_7_shift_preregistration.md §3",
+  "hashes": {
+    "v36_pair_probe": "1c11873f702dc8530127c45c9c7d9933d3e33bc1ca820787276d4e0a5b6bc6db",
+    "v36_pair_predictions": "2e58bff773ff466a9204f76d1dd91a67368b23e0bb7372c8f6ccbc76ec87802b",
+    "v36_pair_dataset": "7278cb27211da4e0050c5e859b4dca87541d78ddb5adddf5731a463ec815539b",
+    "v33_training_data": "84ab59d9e63048586ba7ddbc44398a729d927fe924411b8bc345b6ad97e282ef",
+    "v33_clean_rerun": "976780a3d74756a1bd295c4af8ba2b5aa589c7959de4c7db62f95f0ff677311b",
+    "v33_clean_rerun_harmful": "ae87c2bdd73c52f402d8d0e9b70853bac240901bd44a94bfe6833866917ca5fa",
+    "v36_code": "e2231ee8bf8561a5a9949cba6af667e8d817f7d2dbf8c7b1e2326e1248e9da14",
+    "code": "88d95a1d305912fba5d7763b8e17ddbf821b2d2fbde87eba7536f530e91bbe94"
+  },
+  "environment": {
+    "sklearn": "1.9.0",
+    "numpy": "2.5.1",
+    "device": "CPU"
+  },
+  "reproduction": {
+    "tolerance": 1e-09,
+    "max_abs_diff_overall": 0.0,
+    "per_fold": {
+      "US Term Structure": {
+        "floats": {
+          "margin": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "cal_bcov": {
+            "got": 0.06896551724137931,
+            "ref": 0.06896551724137931,
+            "abs_diff": 0.0
+          },
+          "cal_chr": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "pairwise_accuracy": {
+            "got": 0.6303797468354431,
+            "ref": 0.6303797468354431,
+            "abs_diff": 0.0
+          },
+          "auroc": {
+            "got": 0.7715814773273514,
+            "ref": 0.7715814773273514,
+            "abs_diff": 0.0
+          },
+          "auprc": {
+            "got": 0.804071125231052,
+            "ref": 0.804071125231052,
+            "abs_diff": 0.0
+          },
+          "train_pairwise_accuracy": {
+            "got": 0.7898330804248862,
+            "ref": 0.7898330804248862,
+            "abs_diff": 0.0
+          },
+          "pkeep_bns_auroc": {
+            "got": 0.9543199973808275,
+            "ref": 0.9543199973808275,
+            "abs_diff": 0.0
+          },
+          "bcov": {
+            "got": 0.03867403314917127,
+            "ref": 0.03867403314917127,
+            "abs_diff": 0.0
+          },
+          "chr": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "pme": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "damage": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "gain": {
+            "got": 0.030108805046800483,
+            "ref": 0.030108805046800483,
+            "abs_diff": 0.0
+          },
+          "per_candidate_max_abs_diff": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          }
+        },
+        "exact": {
+          "calibration_degraded": false,
+          "int_and_distribution_match": true,
+          "n_candidates": 700,
+          "selected_match": true,
+          "n_selected": 7,
+          "veto_mismatch": 0
+        },
+        "candidate_sample": [
+          {
+            "candidate": [
+              "US Term Structure:changepoint:null:00a105471a404178578765e87549801363d044dac1c837d3edfe98d37cebc1b8:00a105471a404178578765e87549801363d044dac1c837d3edfe98d37cebc1b8",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.14569793168729217,
+            "ref_p_vs_keep": 0.14569793168729217,
+            "got_tournament": 0.14569793168729217,
+            "ref_tournament": 0.14569793168729217,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "US Term Structure:changepoint:null:00a105471a404178578765e87549801363d044dac1c837d3edfe98d37cebc1b8:00a105471a404178578765e87549801363d044dac1c837d3edfe98d37cebc1b8",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.17923777832945031,
+            "ref_p_vs_keep": 0.17923777832945031,
+            "got_tournament": 0.17923777832945031,
+            "ref_tournament": 0.17923777832945031,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "US Term Structure:changepoint:null:02b6fb3196212f8dfb50e2141fd8a4de1e7d58e568c64c4bce39aadbaf220334:02b6fb3196212f8dfb50e2141fd8a4de1e7d58e568c64c4bce39aadbaf220334",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.17441797273803838,
+            "ref_p_vs_keep": 0.17441797273803838,
+            "got_tournament": 0.17441797273803838,
+            "ref_tournament": 0.17441797273803838,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "US Term Structure:changepoint:null:02b6fb3196212f8dfb50e2141fd8a4de1e7d58e568c64c4bce39aadbaf220334:02b6fb3196212f8dfb50e2141fd8a4de1e7d58e568c64c4bce39aadbaf220334",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.16652079436630984,
+            "ref_p_vs_keep": 0.16652079436630984,
+            "got_tournament": 0.16652079436630984,
+            "ref_tournament": 0.16652079436630984,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "US Term Structure:changepoint:null:02b6fb3196212f8dfb50e2141fd8a4de1e7d58e568c64c4bce39aadbaf220334:02b6fb3196212f8dfb50e2141fd8a4de1e7d58e568c64c4bce39aadbaf220334",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.16652079436630984,
+            "ref_p_vs_keep": 0.16652079436630984,
+            "got_tournament": 0.16652079436630984,
+            "ref_tournament": 0.16652079436630984,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "US Term Structure:changepoint:null:049d60006dfb5134dda2ee3cde0c9bd18ff72f21334f25e61e46fccf00cae254:049d60006dfb5134dda2ee3cde0c9bd18ff72f21334f25e61e46fccf00cae254",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.1622708911256619,
+            "ref_p_vs_keep": 0.1622708911256619,
+            "got_tournament": 0.1622708911256619,
+            "ref_tournament": 0.1622708911256619,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "US Term Structure:changepoint:null:049d60006dfb5134dda2ee3cde0c9bd18ff72f21334f25e61e46fccf00cae254:049d60006dfb5134dda2ee3cde0c9bd18ff72f21334f25e61e46fccf00cae254",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.16466451810989047,
+            "ref_p_vs_keep": 0.16466451810989047,
+            "got_tournament": 0.16466451810989047,
+            "ref_tournament": 0.16466451810989047,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "US Term Structure:changepoint:null:142f7ee42dbbfc2ef20cb78b22acb0410c0d54369af28a67325d17ad05b99883:142f7ee42dbbfc2ef20cb78b22acb0410c0d54369af28a67325d17ad05b99883",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.1843488430629283,
+            "ref_p_vs_keep": 0.1843488430629283,
+            "got_tournament": 0.1843488430629283,
+            "ref_tournament": 0.1843488430629283,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "US Term Structure:changepoint:null:142f7ee42dbbfc2ef20cb78b22acb0410c0d54369af28a67325d17ad05b99883:142f7ee42dbbfc2ef20cb78b22acb0410c0d54369af28a67325d17ad05b99883",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.17088524719104797,
+            "ref_p_vs_keep": 0.17088524719104797,
+            "got_tournament": 0.17088524719104797,
+            "ref_tournament": 0.17088524719104797,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "US Term Structure:changepoint:null:142f7ee42dbbfc2ef20cb78b22acb0410c0d54369af28a67325d17ad05b99883:142f7ee42dbbfc2ef20cb78b22acb0410c0d54369af28a67325d17ad05b99883",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.17088524719104797,
+            "ref_p_vs_keep": 0.17088524719104797,
+            "got_tournament": 0.17088524719104797,
+            "ref_tournament": 0.17088524719104797,
+            "selected": false
+          }
+        ],
+        "max_abs_diff": 0.0,
+        "pass": true
+      },
+      "ETTh1": {
+        "floats": {
+          "margin": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "cal_bcov": {
+            "got": 0.21428571428571427,
+            "ref": 0.21428571428571427,
+            "abs_diff": 0.0
+          },
+          "cal_chr": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "pairwise_accuracy": {
+            "got": 0.7775590551181102,
+            "ref": 0.7775590551181102,
+            "abs_diff": 0.0
+          },
+          "auroc": {
+            "got": 0.8347812945625892,
+            "ref": 0.8347812945625892,
+            "abs_diff": 0.0
+          },
+          "auprc": {
+            "got": 0.8343184940922564,
+            "ref": 0.8343184940922564,
+            "abs_diff": 0.0
+          },
+          "train_pairwise_accuracy": {
+            "got": 0.7805178791615289,
+            "ref": 0.7805178791615289,
+            "abs_diff": 0.0
+          },
+          "pkeep_bns_auroc": {
+            "got": 0.7762584961767205,
+            "ref": 0.7762584961767205,
+            "abs_diff": 0.0
+          },
+          "bcov": {
+            "got": 0.20833333333333334,
+            "ref": 0.20833333333333334,
+            "abs_diff": 0.0
+          },
+          "chr": {
+            "got": 0.21052631578947367,
+            "ref": 0.21052631578947367,
+            "abs_diff": 0.0
+          },
+          "pme": {
+            "got": 0.031578947368421054,
+            "ref": 0.031578947368421054,
+            "abs_diff": 0.0
+          },
+          "damage": {
+            "got": 0.023952095808383235,
+            "ref": 0.023952095808383235,
+            "abs_diff": 0.0
+          },
+          "gain": {
+            "got": 0.012927858665433075,
+            "ref": 0.012927858665433075,
+            "abs_diff": 0.0
+          },
+          "per_candidate_max_abs_diff": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          }
+        },
+        "exact": {
+          "calibration_degraded": false,
+          "int_and_distribution_match": true,
+          "n_candidates": 459,
+          "selected_match": true,
+          "n_selected": 19,
+          "veto_mismatch": 0
+        },
+        "candidate_sample": [
+          {
+            "candidate": [
+              "ETTh1:changepoint:null:1387a2399fa8dd310231fbbe55b77cad49a3120f7308ebbc78bac318255d57f3:1387a2399fa8dd310231fbbe55b77cad49a3120f7308ebbc78bac318255d57f3",
+              "IMPUTE",
+              "aggressive",
+              "{\"method\": \"seasonal\", \"min_run\": 8}"
+            ],
+            "got_p_vs_keep": 0.44914602792985847,
+            "ref_p_vs_keep": 0.44914602792985847,
+            "got_tournament": 0.9600639925560313,
+            "ref_tournament": 0.9600639925560313,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh1:changepoint:null:1387a2399fa8dd310231fbbe55b77cad49a3120f7308ebbc78bac318255d57f3:1387a2399fa8dd310231fbbe55b77cad49a3120f7308ebbc78bac318255d57f3",
+              "IMPUTE",
+              "conservative",
+              "{\"method\": \"linear\", \"min_run\": 32}"
+            ],
+            "got_p_vs_keep": 0.4383649478189506,
+            "ref_p_vs_keep": 0.4383649478189506,
+            "got_tournament": 0.9329059655058642,
+            "ref_tournament": 0.9329059655058642,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh1:changepoint:null:1387a2399fa8dd310231fbbe55b77cad49a3120f7308ebbc78bac318255d57f3:1387a2399fa8dd310231fbbe55b77cad49a3120f7308ebbc78bac318255d57f3",
+              "IMPUTE",
+              "default",
+              "{\"method\": \"linear\", \"min_run\": 16}"
+            ],
+            "got_p_vs_keep": 0.4383649478189506,
+            "ref_p_vs_keep": 0.4383649478189506,
+            "got_tournament": 0.9329059655058642,
+            "ref_tournament": 0.9329059655058642,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh1:changepoint:null:181ab04928936ddf0db1c825a825b2db057152da467cd2859c0d3862caf0a96b:181ab04928936ddf0db1c825a825b2db057152da467cd2859c0d3862caf0a96b",
+              "IMPUTE",
+              "aggressive",
+              "{\"method\": \"seasonal\", \"min_run\": 8}"
+            ],
+            "got_p_vs_keep": 0.5177259056154009,
+            "ref_p_vs_keep": 0.5177259056154009,
+            "got_tournament": 1.0374699083428025,
+            "ref_tournament": 1.0374699083428025,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh1:changepoint:null:181ab04928936ddf0db1c825a825b2db057152da467cd2859c0d3862caf0a96b:181ab04928936ddf0db1c825a825b2db057152da467cd2859c0d3862caf0a96b",
+              "IMPUTE",
+              "default",
+              "{\"method\": \"linear\", \"min_run\": 16}"
+            ],
+            "got_p_vs_keep": 0.4979790737502656,
+            "ref_p_vs_keep": 0.4979790737502656,
+            "got_tournament": 0.978235071022864,
+            "ref_tournament": 0.978235071022864,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh1:changepoint:null:181ab04928936ddf0db1c825a825b2db057152da467cd2859c0d3862caf0a96b:181ab04928936ddf0db1c825a825b2db057152da467cd2859c0d3862caf0a96b",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.2606164538089449,
+            "ref_p_vs_keep": 0.2606164538089449,
+            "got_tournament": 0.2606164538089449,
+            "ref_tournament": 0.2606164538089449,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh1:changepoint:null:181ab04928936ddf0db1c825a825b2db057152da467cd2859c0d3862caf0a96b:181ab04928936ddf0db1c825a825b2db057152da467cd2859c0d3862caf0a96b",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.2606164538089449,
+            "ref_p_vs_keep": 0.2606164538089449,
+            "got_tournament": 0.2606164538089449,
+            "ref_tournament": 0.2606164538089449,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh1:changepoint:null:181ab04928936ddf0db1c825a825b2db057152da467cd2859c0d3862caf0a96b:181ab04928936ddf0db1c825a825b2db057152da467cd2859c0d3862caf0a96b",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.2606164538089449,
+            "ref_p_vs_keep": 0.2606164538089449,
+            "got_tournament": 0.2606164538089449,
+            "ref_tournament": 0.2606164538089449,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh1:changepoint:null:33a578f82c8859796245ee9cf23ce901793beb78b25d6cdf9fe23cc3c5bc464e:33a578f82c8859796245ee9cf23ce901793beb78b25d6cdf9fe23cc3c5bc464e",
+              "IMPUTE",
+              "aggressive",
+              "{\"method\": \"seasonal\", \"min_run\": 8}"
+            ],
+            "got_p_vs_keep": 0.4882204221248434,
+            "ref_p_vs_keep": 0.4882204221248434,
+            "got_tournament": 0.9911541403635244,
+            "ref_tournament": 0.9911541403635244,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh1:changepoint:null:33a578f82c8859796245ee9cf23ce901793beb78b25d6cdf9fe23cc3c5bc464e:33a578f82c8859796245ee9cf23ce901793beb78b25d6cdf9fe23cc3c5bc464e",
+              "IMPUTE",
+              "default",
+              "{\"method\": \"linear\", \"min_run\": 16}"
+            ],
+            "got_p_vs_keep": 0.48528873745119794,
+            "ref_p_vs_keep": 0.48528873745119794,
+            "got_tournament": 0.982355019212517,
+            "ref_tournament": 0.982355019212517,
+            "selected": false
+          }
+        ],
+        "max_abs_diff": 0.0,
+        "pass": true
+      },
+      "ETTh2": {
+        "floats": {
+          "margin": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "cal_bcov": {
+            "got": 0.14102564102564102,
+            "ref": 0.14102564102564102,
+            "abs_diff": 0.0
+          },
+          "cal_chr": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "pairwise_accuracy": {
+            "got": 0.732739420935412,
+            "ref": 0.732739420935412,
+            "abs_diff": 0.0
+          },
+          "auroc": {
+            "got": 0.8052192201427573,
+            "ref": 0.8052192201427573,
+            "abs_diff": 0.0
+          },
+          "auprc": {
+            "got": 0.7920910029667994,
+            "ref": 0.7920910029667994,
+            "abs_diff": 0.0
+          },
+          "train_pairwise_accuracy": {
+            "got": 0.7659048795552811,
+            "ref": 0.7659048795552811,
+            "abs_diff": 0.0
+          },
+          "pkeep_bns_auroc": {
+            "got": 0.7923646723646723,
+            "ref": 0.7923646723646723,
+            "abs_diff": 0.0
+          },
+          "bcov": {
+            "got": 0.06349206349206349,
+            "ref": 0.06349206349206349,
+            "abs_diff": 0.0
+          },
+          "chr": {
+            "got": 0.6363636363636364,
+            "ref": 0.6363636363636364,
+            "abs_diff": 0.0
+          },
+          "pme": {
+            "got": 0.05660377358490566,
+            "ref": 0.05660377358490566,
+            "abs_diff": 0.0
+          },
+          "damage": {
+            "got": 0.0603448275862069,
+            "ref": 0.0603448275862069,
+            "abs_diff": 0.0
+          },
+          "gain": {
+            "got": 0.0038212812170862775,
+            "ref": 0.0038212812170862775,
+            "abs_diff": 0.0
+          },
+          "per_candidate_max_abs_diff": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          }
+        },
+        "exact": {
+          "calibration_degraded": false,
+          "int_and_distribution_match": true,
+          "n_candidates": 406,
+          "selected_match": true,
+          "n_selected": 11,
+          "veto_mismatch": 0
+        },
+        "candidate_sample": [
+          {
+            "candidate": [
+              "ETTh2:changepoint:null:06230f69d90ef656f62c1e2cf2de5b496ca7a435fa41de6a8932c0189442f5e0:06230f69d90ef656f62c1e2cf2de5b496ca7a435fa41de6a8932c0189442f5e0",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.21003366558988734,
+            "ref_p_vs_keep": 0.21003366558988734,
+            "got_tournament": 0.21003366558988734,
+            "ref_tournament": 0.21003366558988734,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh2:changepoint:null:121186e1c0cdcb91847087e24b95bd42ddfcea506983c0d0a4180a97512d18f8:121186e1c0cdcb91847087e24b95bd42ddfcea506983c0d0a4180a97512d18f8",
+              "IMPUTE",
+              "aggressive",
+              "{\"method\": \"seasonal\", \"min_run\": 8}"
+            ],
+            "got_p_vs_keep": 0.46674222861320785,
+            "ref_p_vs_keep": 0.46674222861320785,
+            "got_tournament": 0.9667422286132079,
+            "ref_tournament": 0.9667422286132079,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh2:changepoint:null:121186e1c0cdcb91847087e24b95bd42ddfcea506983c0d0a4180a97512d18f8:121186e1c0cdcb91847087e24b95bd42ddfcea506983c0d0a4180a97512d18f8",
+              "IMPUTE",
+              "default",
+              "{\"method\": \"linear\", \"min_run\": 16}"
+            ],
+            "got_p_vs_keep": 0.46674222861320785,
+            "ref_p_vs_keep": 0.46674222861320785,
+            "got_tournament": 0.9667422286132079,
+            "ref_tournament": 0.9667422286132079,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh2:changepoint:null:121186e1c0cdcb91847087e24b95bd42ddfcea506983c0d0a4180a97512d18f8:121186e1c0cdcb91847087e24b95bd42ddfcea506983c0d0a4180a97512d18f8",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.2527320187400861,
+            "ref_p_vs_keep": 0.2527320187400861,
+            "got_tournament": 0.2527320187400861,
+            "ref_tournament": 0.2527320187400861,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh2:changepoint:null:121186e1c0cdcb91847087e24b95bd42ddfcea506983c0d0a4180a97512d18f8:121186e1c0cdcb91847087e24b95bd42ddfcea506983c0d0a4180a97512d18f8",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.2527320187400861,
+            "ref_p_vs_keep": 0.2527320187400861,
+            "got_tournament": 0.2527320187400861,
+            "ref_tournament": 0.2527320187400861,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh2:changepoint:null:18a1a69b48338b2e36475995a88d5666733121b27dcfe4796633b55e16f9571b:18a1a69b48338b2e36475995a88d5666733121b27dcfe4796633b55e16f9571b",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.2063235132611591,
+            "ref_p_vs_keep": 0.2063235132611591,
+            "got_tournament": 0.2063235132611591,
+            "ref_tournament": 0.2063235132611591,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh2:changepoint:null:18a1a69b48338b2e36475995a88d5666733121b27dcfe4796633b55e16f9571b:18a1a69b48338b2e36475995a88d5666733121b27dcfe4796633b55e16f9571b",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.24706609054748302,
+            "ref_p_vs_keep": 0.24706609054748302,
+            "got_tournament": 0.24706609054748302,
+            "ref_tournament": 0.24706609054748302,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh2:changepoint:null:18a1a69b48338b2e36475995a88d5666733121b27dcfe4796633b55e16f9571b:18a1a69b48338b2e36475995a88d5666733121b27dcfe4796633b55e16f9571b",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.24706609054748302,
+            "ref_p_vs_keep": 0.24706609054748302,
+            "got_tournament": 0.24706609054748302,
+            "ref_tournament": 0.24706609054748302,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh2:changepoint:null:1f4211616c1e587c3ee880c03c0832bef1947ce024988f554058a16207d8beab:1f4211616c1e587c3ee880c03c0832bef1947ce024988f554058a16207d8beab",
+              "IMPUTE",
+              "aggressive",
+              "{\"method\": \"seasonal\", \"min_run\": 8}"
+            ],
+            "got_p_vs_keep": 0.462877843926528,
+            "ref_p_vs_keep": 0.462877843926528,
+            "got_tournament": 0.9622411476414849,
+            "ref_tournament": 0.9622411476414849,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTh2:changepoint:null:1f4211616c1e587c3ee880c03c0832bef1947ce024988f554058a16207d8beab:1f4211616c1e587c3ee880c03c0832bef1947ce024988f554058a16207d8beab",
+              "IMPUTE",
+              "default",
+              "{\"method\": \"linear\", \"min_run\": 16}"
+            ],
+            "got_p_vs_keep": 0.46351109047141376,
+            "ref_p_vs_keep": 0.46351109047141376,
+            "got_tournament": 0.9641477867564567,
+            "ref_tournament": 0.9641477867564567,
+            "selected": false
+          }
+        ],
+        "max_abs_diff": 0.0,
+        "pass": true
+      },
+      "ETTm1": {
+        "floats": {
+          "margin": {
+            "got": 0.04,
+            "ref": 0.04,
+            "abs_diff": 0.0
+          },
+          "cal_bcov": {
+            "got": 0.013157894736842105,
+            "ref": 0.013157894736842105,
+            "abs_diff": 0.0
+          },
+          "cal_chr": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "pairwise_accuracy": {
+            "got": 0.6890080428954424,
+            "ref": 0.6890080428954424,
+            "abs_diff": 0.0
+          },
+          "auroc": {
+            "got": 0.789389703081313,
+            "ref": 0.789389703081313,
+            "abs_diff": 0.0
+          },
+          "auprc": {
+            "got": 0.8011819222109324,
+            "ref": 0.8011819222109324,
+            "abs_diff": 0.0
+          },
+          "train_pairwise_accuracy": {
+            "got": 0.7421083978558666,
+            "ref": 0.7421083978558666,
+            "abs_diff": 0.0
+          },
+          "pkeep_bns_auroc": {
+            "got": 0.8220016542597188,
+            "ref": 0.8220016542597188,
+            "abs_diff": 0.0
+          },
+          "bcov": {
+            "got": 0.05555555555555555,
+            "ref": 0.05555555555555555,
+            "abs_diff": 0.0
+          },
+          "chr": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "pme": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "damage": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "gain": {
+            "got": 0.02892065425786852,
+            "ref": 0.02892065425786852,
+            "abs_diff": 0.0
+          },
+          "per_candidate_max_abs_diff": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          }
+        },
+        "exact": {
+          "calibration_degraded": false,
+          "int_and_distribution_match": true,
+          "n_candidates": 316,
+          "selected_match": true,
+          "n_selected": 4,
+          "veto_mismatch": 0
+        },
+        "candidate_sample": [
+          {
+            "candidate": [
+              "ETTm1:changepoint:null:0046e8f9d79067451e5aae1d3a17711ce288c3dcc1dc901d94a5d0519133d0c2:0046e8f9d79067451e5aae1d3a17711ce288c3dcc1dc901d94a5d0519133d0c2",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.20399032830863506,
+            "ref_p_vs_keep": 0.20399032830863506,
+            "got_tournament": 0.20399032830863506,
+            "ref_tournament": 0.20399032830863506,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTm1:changepoint:null:0046e8f9d79067451e5aae1d3a17711ce288c3dcc1dc901d94a5d0519133d0c2:0046e8f9d79067451e5aae1d3a17711ce288c3dcc1dc901d94a5d0519133d0c2",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.20399032830863506,
+            "ref_p_vs_keep": 0.20399032830863506,
+            "got_tournament": 0.20399032830863506,
+            "ref_tournament": 0.20399032830863506,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTm1:changepoint:null:1118e308fce2cafa9588cc5dd16a037be0099a59c9c02e24e29fad9bfa604ccc:1118e308fce2cafa9588cc5dd16a037be0099a59c9c02e24e29fad9bfa604ccc",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.1823212417319655,
+            "ref_p_vs_keep": 0.1823212417319655,
+            "got_tournament": 0.1823212417319655,
+            "ref_tournament": 0.1823212417319655,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTm1:changepoint:null:1118e308fce2cafa9588cc5dd16a037be0099a59c9c02e24e29fad9bfa604ccc:1118e308fce2cafa9588cc5dd16a037be0099a59c9c02e24e29fad9bfa604ccc",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.23481191642487997,
+            "ref_p_vs_keep": 0.23481191642487997,
+            "got_tournament": 0.23481191642487997,
+            "ref_tournament": 0.23481191642487997,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTm1:changepoint:null:180054508bd2c361181f0dda9464c78a5a50355d1bb18ae761e813303455914c:180054508bd2c361181f0dda9464c78a5a50355d1bb18ae761e813303455914c",
+              "IMPUTE",
+              "aggressive",
+              "{\"method\": \"seasonal\", \"min_run\": 8}"
+            ],
+            "got_p_vs_keep": 0.42172384293363074,
+            "ref_p_vs_keep": 0.42172384293363074,
+            "got_tournament": 0.9217238429336307,
+            "ref_tournament": 0.9217238429336307,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTm1:changepoint:null:180054508bd2c361181f0dda9464c78a5a50355d1bb18ae761e813303455914c:180054508bd2c361181f0dda9464c78a5a50355d1bb18ae761e813303455914c",
+              "IMPUTE",
+              "conservative",
+              "{\"method\": \"linear\", \"min_run\": 32}"
+            ],
+            "got_p_vs_keep": 0.42172384293363074,
+            "ref_p_vs_keep": 0.42172384293363074,
+            "got_tournament": 0.9217238429336307,
+            "ref_tournament": 0.9217238429336307,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTm1:changepoint:null:180054508bd2c361181f0dda9464c78a5a50355d1bb18ae761e813303455914c:180054508bd2c361181f0dda9464c78a5a50355d1bb18ae761e813303455914c",
+              "IMPUTE",
+              "default",
+              "{\"method\": \"linear\", \"min_run\": 16}"
+            ],
+            "got_p_vs_keep": 0.42172384293363074,
+            "ref_p_vs_keep": 0.42172384293363074,
+            "got_tournament": 0.9217238429336307,
+            "ref_tournament": 0.9217238429336307,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTm1:changepoint:null:180054508bd2c361181f0dda9464c78a5a50355d1bb18ae761e813303455914c:180054508bd2c361181f0dda9464c78a5a50355d1bb18ae761e813303455914c",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.1592203299426856,
+            "ref_p_vs_keep": 0.1592203299426856,
+            "got_tournament": 0.1592203299426856,
+            "ref_tournament": 0.1592203299426856,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTm1:changepoint:null:180054508bd2c361181f0dda9464c78a5a50355d1bb18ae761e813303455914c:180054508bd2c361181f0dda9464c78a5a50355d1bb18ae761e813303455914c",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.17410751741112307,
+            "ref_p_vs_keep": 0.17410751741112307,
+            "got_tournament": 0.17410751741112307,
+            "ref_tournament": 0.17410751741112307,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "ETTm1:changepoint:null:180054508bd2c361181f0dda9464c78a5a50355d1bb18ae761e813303455914c:180054508bd2c361181f0dda9464c78a5a50355d1bb18ae761e813303455914c",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.17410751741112307,
+            "ref_p_vs_keep": 0.17410751741112307,
+            "got_tournament": 0.17410751741112307,
+            "ref_tournament": 0.17410751741112307,
+            "selected": false
+          }
+        ],
+        "max_abs_diff": 0.0,
+        "pass": true
+      },
+      "Oil Price": {
+        "floats": {
+          "margin": {
+            "got": 0.06,
+            "ref": 0.06,
+            "abs_diff": 0.0
+          },
+          "cal_bcov": {
+            "got": 0.023809523809523808,
+            "ref": 0.023809523809523808,
+            "abs_diff": 0.0
+          },
+          "cal_chr": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "pairwise_accuracy": {
+            "got": 0.8634538152610441,
+            "ref": 0.8634538152610441,
+            "abs_diff": 0.0
+          },
+          "auroc": {
+            "got": 0.9625812486895373,
+            "ref": 0.9625812486895373,
+            "abs_diff": 0.0
+          },
+          "auprc": {
+            "got": 0.9654833654314205,
+            "ref": 0.9654833654314205,
+            "abs_diff": 0.0
+          },
+          "train_pairwise_accuracy": {
+            "got": 0.7142055025266704,
+            "ref": 0.7142055025266704,
+            "abs_diff": 0.0
+          },
+          "pkeep_bns_auroc": {
+            "got": 0.9865965563460151,
+            "ref": 0.9865965563460151,
+            "abs_diff": 0.0
+          },
+          "bcov": {
+            "got": 0.03125,
+            "ref": 0.03125,
+            "abs_diff": 0.0
+          },
+          "chr": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "pme": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "damage": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "gain": {
+            "got": 0.019594461801104524,
+            "ref": 0.019594461801104524,
+            "abs_diff": 0.0
+          },
+          "per_candidate_max_abs_diff": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          }
+        },
+        "exact": {
+          "calibration_degraded": false,
+          "int_and_distribution_match": true,
+          "n_candidates": 220,
+          "selected_match": true,
+          "n_selected": 1,
+          "veto_mismatch": 0
+        },
+        "candidate_sample": [
+          {
+            "candidate": [
+              "Oil Price:changepoint:null:09444831c2b100f054e33c29ec527a1f933cde6f07ab4b4458c3d2983ca06940:09444831c2b100f054e33c29ec527a1f933cde6f07ab4b4458c3d2983ca06940",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.17952310389957205,
+            "ref_p_vs_keep": 0.17952310389957205,
+            "got_tournament": 0.17952310389957205,
+            "ref_tournament": 0.17952310389957205,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Oil Price:changepoint:null:09444831c2b100f054e33c29ec527a1f933cde6f07ab4b4458c3d2983ca06940:09444831c2b100f054e33c29ec527a1f933cde6f07ab4b4458c3d2983ca06940",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.17952310389957205,
+            "ref_p_vs_keep": 0.17952310389957205,
+            "got_tournament": 0.17952310389957205,
+            "ref_tournament": 0.17952310389957205,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Oil Price:changepoint:null:09444831c2b100f054e33c29ec527a1f933cde6f07ab4b4458c3d2983ca06940:09444831c2b100f054e33c29ec527a1f933cde6f07ab4b4458c3d2983ca06940",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.17952310389957205,
+            "ref_p_vs_keep": 0.17952310389957205,
+            "got_tournament": 0.17952310389957205,
+            "ref_tournament": 0.17952310389957205,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Oil Price:changepoint:null:0bc421b822555d3124fb41804a0afa6004cf545434108e3ca1b90635ab6b323c:0bc421b822555d3124fb41804a0afa6004cf545434108e3ca1b90635ab6b323c",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.15059835020203338,
+            "ref_p_vs_keep": 0.15059835020203338,
+            "got_tournament": 0.15059835020203338,
+            "ref_tournament": 0.15059835020203338,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Oil Price:changepoint:null:1a99f02edcf4e67ddb17ddf10bf45c6daf0012b35910393ea3225cb5f6b29b1a:1a99f02edcf4e67ddb17ddf10bf45c6daf0012b35910393ea3225cb5f6b29b1a",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.16829919045882713,
+            "ref_p_vs_keep": 0.16829919045882713,
+            "got_tournament": 0.16829919045882713,
+            "ref_tournament": 0.16829919045882713,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Oil Price:changepoint:null:1a99f02edcf4e67ddb17ddf10bf45c6daf0012b35910393ea3225cb5f6b29b1a:1a99f02edcf4e67ddb17ddf10bf45c6daf0012b35910393ea3225cb5f6b29b1a",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.19670566173699516,
+            "ref_p_vs_keep": 0.19670566173699516,
+            "got_tournament": 0.19670566173699516,
+            "ref_tournament": 0.19670566173699516,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Oil Price:changepoint:null:1a99f02edcf4e67ddb17ddf10bf45c6daf0012b35910393ea3225cb5f6b29b1a:1a99f02edcf4e67ddb17ddf10bf45c6daf0012b35910393ea3225cb5f6b29b1a",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.19670566173699516,
+            "ref_p_vs_keep": 0.19670566173699516,
+            "got_tournament": 0.19670566173699516,
+            "ref_tournament": 0.19670566173699516,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Oil Price:changepoint:null:32e92fea0164a008f140272f28bf89b8b05b82ad0a5ac29b87560d8ff418501d:32e92fea0164a008f140272f28bf89b8b05b82ad0a5ac29b87560d8ff418501d",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.1408362017170905,
+            "ref_p_vs_keep": 0.1408362017170905,
+            "got_tournament": 0.1408362017170905,
+            "ref_tournament": 0.1408362017170905,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Oil Price:changepoint:null:32e92fea0164a008f140272f28bf89b8b05b82ad0a5ac29b87560d8ff418501d:32e92fea0164a008f140272f28bf89b8b05b82ad0a5ac29b87560d8ff418501d",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.1408362017170905,
+            "ref_p_vs_keep": 0.1408362017170905,
+            "got_tournament": 0.1408362017170905,
+            "ref_tournament": 0.1408362017170905,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Oil Price:changepoint:null:32e92fea0164a008f140272f28bf89b8b05b82ad0a5ac29b87560d8ff418501d:32e92fea0164a008f140272f28bf89b8b05b82ad0a5ac29b87560d8ff418501d",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.1408362017170905,
+            "ref_p_vs_keep": 0.1408362017170905,
+            "got_tournament": 0.1408362017170905,
+            "ref_tournament": 0.1408362017170905,
+            "selected": false
+          }
+        ],
+        "max_abs_diff": 0.0,
+        "pass": true
+      },
+      "Crypto": {
+        "floats": {
+          "margin": {
+            "got": 0.04,
+            "ref": 0.04,
+            "abs_diff": 0.0
+          },
+          "cal_bcov": {
+            "got": 0.024390243902439025,
+            "ref": 0.024390243902439025,
+            "abs_diff": 0.0
+          },
+          "cal_chr": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "pairwise_accuracy": {
+            "got": 0.7372881355932204,
+            "ref": 0.7372881355932204,
+            "abs_diff": 0.0
+          },
+          "auroc": {
+            "got": 0.8953605285837403,
+            "ref": 0.8953605285837403,
+            "abs_diff": 0.0
+          },
+          "auprc": {
+            "got": 0.9064710502311079,
+            "ref": 0.9064710502311079,
+            "abs_diff": 0.0
+          },
+          "train_pairwise_accuracy": {
+            "got": 0.7463692946058091,
+            "ref": 0.7463692946058091,
+            "abs_diff": 0.0
+          },
+          "pkeep_bns_auroc": {
+            "got": 1.0,
+            "ref": 1.0,
+            "abs_diff": 0.0
+          },
+          "bcov": {
+            "got": 0.05,
+            "ref": 0.05,
+            "abs_diff": 0.0
+          },
+          "chr": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "pme": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "damage": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          },
+          "gain": {
+            "got": 0.019270134405723678,
+            "ref": 0.019270134405723678,
+            "abs_diff": 0.0
+          },
+          "per_candidate_max_abs_diff": {
+            "got": 0.0,
+            "ref": 0.0,
+            "abs_diff": 0.0
+          }
+        },
+        "exact": {
+          "calibration_degraded": false,
+          "int_and_distribution_match": true,
+          "n_candidates": 99,
+          "selected_match": true,
+          "n_selected": 1,
+          "veto_mismatch": 0
+        },
+        "candidate_sample": [
+          {
+            "candidate": [
+              "Crypto:changepoint:null:5c083ff6bd17e60b2563228d5733c5bc770b9ea14183515eefd42aaf6b86adef:5c083ff6bd17e60b2563228d5733c5bc770b9ea14183515eefd42aaf6b86adef",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.20668834557109655,
+            "ref_p_vs_keep": 0.20668834557109655,
+            "got_tournament": 0.20668834557109655,
+            "ref_tournament": 0.20668834557109655,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Crypto:changepoint:null:5c083ff6bd17e60b2563228d5733c5bc770b9ea14183515eefd42aaf6b86adef:5c083ff6bd17e60b2563228d5733c5bc770b9ea14183515eefd42aaf6b86adef",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.2415291840414467,
+            "ref_p_vs_keep": 0.2415291840414467,
+            "got_tournament": 0.2415291840414467,
+            "ref_tournament": 0.2415291840414467,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Crypto:changepoint:null:5c083ff6bd17e60b2563228d5733c5bc770b9ea14183515eefd42aaf6b86adef:5c083ff6bd17e60b2563228d5733c5bc770b9ea14183515eefd42aaf6b86adef",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.2415291840414467,
+            "ref_p_vs_keep": 0.2415291840414467,
+            "got_tournament": 0.2415291840414467,
+            "ref_tournament": 0.2415291840414467,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Crypto:changepoint:null:d628eaeffce504248494015b71ee26885475d5f4c37b36c321f87a61b6d7c645:d628eaeffce504248494015b71ee26885475d5f4c37b36c321f87a61b6d7c645",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.1899808866316703,
+            "ref_p_vs_keep": 0.1899808866316703,
+            "got_tournament": 0.1899808866316703,
+            "ref_tournament": 0.1899808866316703,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Crypto:changepoint:null:d628eaeffce504248494015b71ee26885475d5f4c37b36c321f87a61b6d7c645:d628eaeffce504248494015b71ee26885475d5f4c37b36c321f87a61b6d7c645",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.21829561491115768,
+            "ref_p_vs_keep": 0.21829561491115768,
+            "got_tournament": 0.21829561491115768,
+            "ref_tournament": 0.21829561491115768,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Crypto:clean:null:037721e1237259e29e5676fd01935ab05b621689f8d34115e9369dac0c947f91:037721e1237259e29e5676fd01935ab05b621689f8d34115e9369dac0c947f91",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.16561524550947904,
+            "ref_p_vs_keep": 0.16561524550947904,
+            "got_tournament": 0.16561524550947904,
+            "ref_tournament": 0.16561524550947904,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Crypto:clean:null:283ec9994e59abfbb11282475d433e6ad3da68d3b8ef34774979933e5ffb693e:283ec9994e59abfbb11282475d433e6ad3da68d3b8ef34774979933e5ffb693e",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.18399857292183763,
+            "ref_p_vs_keep": 0.18399857292183763,
+            "got_tournament": 0.18399857292183763,
+            "ref_tournament": 0.18399857292183763,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Crypto:clean:null:283ec9994e59abfbb11282475d433e6ad3da68d3b8ef34774979933e5ffb693e:283ec9994e59abfbb11282475d433e6ad3da68d3b8ef34774979933e5ffb693e",
+              "RESEGMENT",
+              "conservative",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 20.0}"
+            ],
+            "got_p_vs_keep": 0.18399857292183763,
+            "ref_p_vs_keep": 0.18399857292183763,
+            "got_tournament": 0.18399857292183763,
+            "ref_tournament": 0.18399857292183763,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Crypto:clean:null:283ec9994e59abfbb11282475d433e6ad3da68d3b8ef34774979933e5ffb693e:283ec9994e59abfbb11282475d433e6ad3da68d3b8ef34774979933e5ffb693e",
+              "RESEGMENT",
+              "default",
+              "{\"min_keep_frac\": 0.5, \"min_size\": 24, \"penalty\": 12.0}"
+            ],
+            "got_p_vs_keep": 0.18399857292183763,
+            "ref_p_vs_keep": 0.18399857292183763,
+            "got_tournament": 0.18399857292183763,
+            "ref_tournament": 0.18399857292183763,
+            "selected": false
+          },
+          {
+            "candidate": [
+              "Crypto:clean:null:49e65ca35ddbddbdd7cf24f5e8ee2f08b5d80ad183457909eb9615075f4eb4f3:49e65ca35ddbddbdd7cf24f5e8ee2f08b5d80ad183457909eb9615075f4eb4f3",
+              "RESEGMENT",
+              "aggressive",
+              "{\"min_keep_frac\": 0.4, \"min_size\": 24, \"penalty\": 8.0}"
+            ],
+            "got_p_vs_keep": 0.19972687368135378,
+            "ref_p_vs_keep": 0.19972687368135378,
+            "got_tournament": 0.19972687368135378,
+            "ref_tournament": 0.19972687368135378,
+            "selected": false
+          }
+        ],
+        "max_abs_diff": 0.0,
+        "pass": true
+      }
+    },
+    "pooled": {
+      "float_abs_diffs": {
+        "beneficial_coverage": 0.0,
+        "conditional_harm_rate": 0.0,
+        "protected_mis_edit_rate": 0.0,
+        "damage": 0.0,
+        "mean_repair_gain_contaminated": 0.0,
+        "commit_rate": 0.0
+      },
+      "exact_match": true,
+      "max_abs_diff": 0.0
+    },
+    "pass": true
+  },
+  "oracle": {
+    "note": "target-label oracles; DIAGNOSTIC ONLY, not deployable",
+    "constraints": {
+      "chr": 0.1,
+      "pme": 0.0055,
+      "damage": 0.0402
+    },
+    "margin_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4
+    ],
+    "simplex_step": 0.25,
+    "n_simplex_weight_vectors": 70,
+    "selection_rule": "feasible first; then max bcov, max gain, min CHR, lowest margin grid index, lowest weight vector index",
+    "oracle_target_threshold_global": {
+      "per_fold": {
+        "US Term Structure": {
+          "feasible": true,
+          "margins": {
+            "DENOISE": 0.0,
+            "DESPIKE": 0.0,
+            "IMPUTE": 0.0
+          },
+          "metrics": {
+            "n_windows": 265,
+            "committed": 7,
+            "commit_rate": 0.026415094339622643,
+            "bcov": 0.03867403314917127,
+            "gain": 0.030108805046800483,
+            "chr": 0.0,
+            "pme": 0.0,
+            "damage": 0.0,
+            "harmful_commits": 0,
+            "beneficial_commits": 7,
+            "commit_by_family": {
+              "DENOISE": 7
+            },
+            "commit_by_source": {
+              "US Term Structure": 7
+            }
+          },
+          "vectorised_vs_exact_max_abs_diff": 0.0,
+          "n_configs": 729,
+          "n_feasible": 729
+        },
+        "ETTh1": {
+          "feasible": true,
+          "margins": {
+            "DENOISE": 0.0,
+            "DESPIKE": 0.0,
+            "IMPUTE": 0.05
+          },
+          "metrics": {
+            "n_windows": 167,
+            "committed": 4,
+            "commit_rate": 0.023952095808383235,
+            "bcov": 0.05555555555555555,
+            "gain": 0.012092572759069222,
+            "chr": 0.0,
+            "pme": 0.0,
+            "damage": 0.0,
+            "harmful_commits": 0,
+            "beneficial_commits": 4,
+            "commit_by_family": {
+              "DENOISE": 4
+            },
+            "commit_by_source": {
+              "ETTh1": 4
+            }
+          },
+          "vectorised_vs_exact_max_abs_diff": 1.734723475976807e-18,
+          "n_configs": 729,
+          "n_feasible": 648
+        },
+        "ETTh2": {
+          "feasible": true,
+          "margins": {
+            "DENOISE": 0.15,
+            "DESPIKE": 0.0,
+            "IMPUTE": 0.05
+          },
+          "metrics": {
+            "n_windows": 116,
+            "committed": 1,
+            "commit_rate": 0.008620689655172414,
+            "bcov": 0.015873015873015872,
+            "gain": 0.005559660155283292,
+            "chr": 0.0,
+            "pme": 0.0,
+            "damage": 0.0,
+            "harmful_commits": 0,
+            "beneficial_commits": 1,
+            "commit_by_family": {
+              "DENOISE": 1
+            },
+            "commit_by_source": {
+              "ETTh2": 1
+            }
+          },
+          "vectorised_vs_exact_max_abs_diff": 0.0,
+          "n_configs": 729,
+          "n_feasible": 432
+        },
+        "ETTm1": {
+          "feasible": true,
+          "margins": {
+            "DENOISE": 0.0,
+            "DESPIKE": 0.0,
+            "IMPUTE": 0.0
+          },
+          "metrics": {
+            "n_windows": 106,
+            "committed": 4,
+            "commit_rate": 0.03773584905660377,
+            "bcov": 0.05555555555555555,
+            "gain": 0.02892065425786852,
+            "chr": 0.0,
+            "pme": 0.0,
+            "damage": 0.0,
+            "harmful_commits": 0,
+            "beneficial_commits": 4,
+            "commit_by_family": {
+              "DENOISE": 4
+            },
+            "commit_by_source": {
+              "ETTm1": 4
+            }
+          },
+          "vectorised_vs_exact_max_abs_diff": 6.938893903907228e-18,
+          "n_configs": 729,
+          "n_feasible": 729
+        },
+        "Oil Price": {
+          "feasible": true,
+          "margins": {
+            "DENOISE": 0.0,
+            "DESPIKE": 0.0,
+            "IMPUTE": 0.0
+          },
+          "metrics": {
+            "n_windows": 86,
+            "committed": 1,
+            "commit_rate": 0.011627906976744186,
+            "bcov": 0.03125,
+            "gain": 0.019594461801104524,
+            "chr": 0.0,
+            "pme": 0.0,
+            "damage": 0.0,
+            "harmful_commits": 0,
+            "beneficial_commits": 1,
+            "commit_by_family": {
+              "DENOISE": 1
+            },
+            "commit_by_source": {
+              "Oil Price": 1
+            }
+          },
+          "vectorised_vs_exact_max_abs_diff": 0.0,
+          "n_configs": 729,
+          "n_feasible": 729
+        },
+        "Crypto": {
+          "feasible": true,
+          "margins": {
+            "DENOISE": 0.0,
+            "DESPIKE": 0.0,
+            "IMPUTE": 0.0
+          },
+          "metrics": {
+            "n_windows": 31,
+            "committed": 1,
+            "commit_rate": 0.03225806451612903,
+            "bcov": 0.05,
+            "gain": 0.019270134405723678,
+            "chr": 0.0,
+            "pme": 0.0,
+            "damage": 0.0,
+            "harmful_commits": 0,
+            "beneficial_commits": 1,
+            "commit_by_family": {
+              "DENOISE": 1
+            },
+            "commit_by_source": {
+              "Crypto": 1
+            }
+          },
+          "vectorised_vs_exact_max_abs_diff": 0.0,
+          "n_configs": 729,
+          "n_feasible": 729
+        }
+      },
+      "pooled": {
+        "n_windows": 771,
+        "committed": 18,
+        "commit_rate": 0.023346303501945526,
+        "bcov": 0.04090909090909091,
+        "gain": 0.022193932077779706,
+        "chr": 0.0,
+        "pme": 0.0,
+        "damage": 0.0,
+        "harmful_commits": 0,
+        "beneficial_commits": 18,
+        "commit_by_family": {
+          "DENOISE": 18
+        },
+        "commit_by_source": {
+          "US Term Structure": 7,
+          "ETTh1": 4,
+          "ETTh2": 1,
+          "ETTm1": 4,
+          "Oil Price": 1,
+          "Crypto": 1
+        }
+      }
+    },
+    "oracle_target_expert_mixture": {
+      "per_fold": {
+        "US Term Structure": {
+          "feasible": true,
+          "weights": {
+            "ETTh1": 0.25,
+            "ETTh2": 0.0,
+            "ETTm1": 0.25,
+            "Oil Price": 0.0,
+            "Crypto": 0.5
+          },
+          "margins": {
+            "DENOISE": 0.0,
+            "DESPIKE": 0.0,
+            "IMPUTE": 0.0
+          },
+          "metrics": {
+            "n_windows": 265,
+            "committed": 49,
+            "commit_rate": 0.18490566037735848,
+            "bcov": 0.2596685082872928,
+            "gain": 0.030307420694865417,
+            "chr": 0.04081632653061224,
+            "pme": 0.0,
+            "damage": 0.007547169811320755,
+            "harmful_commits": 2,
+            "beneficial_commits": 47,
+            "commit_by_family": {
+              "IMPUTE": 42,
+              "DENOISE": 7
+            },
+            "commit_by_source": {
+              "US Term Structure": 49
+            }
+          },
+          "n_weight_vectors": 70,
+          "n_configs": 51030
+        },
+        "ETTh1": {
+          "feasible": true,
+          "weights": {
+            "US Term Structure": 0.0,
+            "ETTh2": 0.0,
+            "ETTm1": 0.25,
+            "Oil Price": 0.75,
+            "Crypto": 0.0
+          },
+          "margins": {
+            "DENOISE": 0.0,
+            "DESPIKE": 0.0,
+            "IMPUTE": 0.0
+          },
+          "metrics": {
+            "n_windows": 167,
+            "committed": 15,
+            "commit_rate": 0.08982035928143713,
+            "bcov": 0.19444444444444445,
+            "gain": 0.013248320957060612,
+            "chr": 0.06666666666666667,
+            "pme": 0.0,
+            "damage": 0.005988023952095809,
+            "harmful_commits": 1,
+            "beneficial_commits": 14,
+            "commit_by_family": {
+              "IMPUTE": 11,
+              "DENOISE": 4
+            },
+            "commit_by_source": {
+              "ETTh1": 15
+            }
+          },
+          "n_weight_vectors": 70,
+          "n_configs": 51030
+        },
+        "ETTh2": {
+          "feasible": true,
+          "weights": {
+            "US Term Structure": 0.5,
+            "ETTh1": 0.5,
+            "ETTm1": 0.0,
+            "Oil Price": 0.0,
+            "Crypto": 0.0
+          },
+          "margins": {
+            "DENOISE": 0.15,
+            "DESPIKE": 0.0,
+            "IMPUTE": 0.0
+          },
+          "metrics": {
+            "n_windows": 116,
+            "committed": 10,
+            "commit_rate": 0.08620689655172414,
+            "bcov": 0.14285714285714285,
+            "gain": 0.00609661900438396,
+            "chr": 0.1,
+            "pme": 0.0,
+            "damage": 0.008620689655172414,
+            "harmful_commits": 1,
+            "beneficial_commits": 9,
+            "commit_by_family": {
+              "IMPUTE": 9,
+              "DENOISE": 1
+            },
+            "commit_by_source": {
+              "ETTh2": 10
+            }
+          },
+          "n_weight_vectors": 70,
+          "n_configs": 51030
+        },
+        "ETTm1": {
+          "feasible": true,
+          "weights": {
+            "US Term Structure": 1.0,
+            "ETTh1": 0.0,
+            "ETTh2": 0.0,
+            "Oil Price": 0.0,
+            "Crypto": 0.0
+          },
+          "margins": {
+            "DENOISE": 0.0,
+            "DESPIKE": 0.0,
+            "IMPUTE": 0.3
+          },
+          "metrics": {
+            "n_windows": 106,
+            "committed": 4,
+            "commit_rate": 0.03773584905660377,
+            "bcov": 0.05555555555555555,
+            "gain": 0.02892065425786852,
+            "chr": 0.0,
+            "pme": 0.0,
+            "damage": 0.0,
+            "harmful_commits": 0,
+            "beneficial_commits": 4,
+            "commit_by_family": {
+              "DENOISE": 4
+            },
+            "commit_by_source": {
+              "ETTm1": 4
+            }
+          },
+          "n_weight_vectors": 70,
+          "n_configs": 51030
+        },
+        "Oil Price": {
+          "feasible": true,
+          "weights": {
+            "US Term Structure": 0.25,
+            "ETTh1": 0.0,
+            "ETTh2": 0.5,
+            "ETTm1": 0.0,
+            "Crypto": 0.25
+          },
+          "margins": {
+            "DENOISE": 0.0,
+            "DESPIKE": 0.0,
+            "IMPUTE": 0.0
+          },
+          "metrics": {
+            "n_windows": 86,
+            "committed": 2,
+            "commit_rate": 0.023255813953488372,
+            "bcov": 0.0625,
+            "gain": 0.019602304623137033,
+            "chr": 0.0,
+            "pme": 0.0,
+            "damage": 0.0,
+            "harmful_commits": 0,
+            "beneficial_commits": 2,
+            "commit_by_family": {
+              "DENOISE": 1,
+              "IMPUTE": 1
+            },
+            "commit_by_source": {
+              "Oil Price": 2
+            }
+          },
+          "n_weight_vectors": 70,
+          "n_configs": 51030
+        },
+        "Crypto": {
+          "feasible": true,
+          "weights": {
+            "US Term Structure": 1.0,
+            "ETTh1": 0.0,
+            "ETTh2": 0.0,
+            "ETTm1": 0.0,
+            "Oil Price": 0.0
+          },
+          "margins": {
+            "DENOISE": 0.0,
+            "DESPIKE": 0.0,
+            "IMPUTE": 0.0
+          },
+          "metrics": {
+            "n_windows": 31,
+            "committed": 3,
+            "commit_rate": 0.0967741935483871,
+            "bcov": 0.15,
+            "gain": 0.01937344242523149,
+            "chr": 0.0,
+            "pme": 0.0,
+            "damage": 0.0,
+            "harmful_commits": 0,
+            "beneficial_commits": 3,
+            "commit_by_family": {
+              "IMPUTE": 2,
+              "DENOISE": 1
+            },
+            "commit_by_source": {
+              "Crypto": 3
+            }
+          },
+          "n_weight_vectors": 70,
+          "n_configs": 51030
+        }
+      },
+      "pooled": {
+        "n_windows": 771,
+        "committed": 83,
+        "commit_rate": 0.10765239948119326,
+        "bcov": 0.17954545454545454,
+        "gain": 0.02254690671583351,
+        "chr": 0.04819277108433735,
+        "pme": 0.0,
+        "damage": 0.005188067444876783,
+        "harmful_commits": 4,
+        "beneficial_commits": 79,
+        "commit_by_family": {
+          "IMPUTE": 65,
+          "DENOISE": 18
+        },
+        "commit_by_source": {
+          "US Term Structure": 49,
+          "ETTh1": 15,
+          "ETTh2": 10,
+          "ETTm1": 4,
+          "Oil Price": 2,
+          "Crypto": 3
+        }
+      },
+      "train_sources_by_fold": {
+        "US Term Structure": [
+          "ETTh1",
+          "ETTh2",
+          "ETTm1",
+          "Oil Price",
+          "Crypto"
+        ],
+        "ETTh1": [
+          "US Term Structure",
+          "ETTh2",
+          "ETTm1",
+          "Oil Price",
+          "Crypto"
+        ],
+        "ETTh2": [
+          "US Term Structure",
+          "ETTh1",
+          "ETTm1",
+          "Oil Price",
+          "Crypto"
+        ],
+        "ETTm1": [
+          "US Term Structure",
+          "ETTh1",
+          "ETTh2",
+          "Oil Price",
+          "Crypto"
+        ],
+        "Oil Price": [
+          "US Term Structure",
+          "ETTh1",
+          "ETTh2",
+          "ETTm1",
+          "Crypto"
+        ],
+        "Crypto": [
+          "US Term Structure",
+          "ETTh1",
+          "ETTh2",
+          "ETTm1",
+          "Oil Price"
+        ]
+      }
+    },
+    "verdict": {
+      "target": {
+        "bcov": 0.3,
+        "gain": 0.1
+      },
+      "constraints": {
+        "chr": 0.1,
+        "pme": 0.0055,
+        "damage": 0.0402
+      },
+      "global_oracle_ok": false,
+      "expert_mixture_oracle_ok": false,
+      "global_pooled": {
+        "bcov": 0.04090909090909091,
+        "gain": 0.022193932077779706,
+        "chr": 0.0,
+        "pme": 0.0,
+        "damage": 0.0
+      },
+      "expert_mixture_pooled": {
+        "bcov": 0.17954545454545454,
+        "gain": 0.02254690671583351,
+        "chr": 0.04819277108433735,
+        "pme": 0.0,
+        "damage": 0.005188067444876783
+      },
+      "light": "RED",
+      "phase1_primary_arm": null,
+      "rationale": "neither oracle reaches pooled bcov>=0.30 and gain>=0.10 under the constraints -> SHIFT red light"
+    }
+  },
+  "runtime_sec": 9.734681606292725
+}

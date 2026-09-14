@@ -1,0 +1,1777 @@
+{
+ "phase": "v3.9 Phase 1 joint unrestricted oracle (gate 2 detail)",
+ "pool": {
+  "n_rows": 1771,
+  "n_base_non_impute": 1046,
+  "n_fact_short": 88,
+  "n_bridge_long": 445,
+  "n_keep_placeholders": 192,
+  "allowed_families": [
+   "DENOISE",
+   "DESPIKE",
+   "FACT_SHORT",
+   "BRIDGE_LONG"
+  ],
+  "bridge_rungs": {
+   "fm_mean": 89,
+   "linear_bridge": 89,
+   "moment_reconstruct": 89,
+   "openfim_pointwise": 89,
+   "tsicl_median": 89
+  },
+  "frame": "frozen 771 real windows; candidate-less windows stay as no-commit KEEP placeholders"
+ },
+ "rule": "unrestricted per-window max-gain beneficial_and_safe oracle over PICS_non_IMPUTE pool + FACT_SHORT + BRIDGE_LONG (new long-gap proposers); RESEGMENT and inherited IMPUTE closed; headroom measurement only, never a deployment rule",
+ "n_windows": 771,
+ "committed": 244,
+ "bcov": 0.5545454545454546,
+ "gain": 0.19497789939446003,
+ "chr": 0.0,
+ "pme": 0.0,
+ "damage": 0.0,
+ "applicability_coverage": 0.3164721141374838,
+ "action_conditional_bs_precision": 1.0,
+ "abstention_rate": 0.6835278858625162,
+ "commit_by_family": {
+  "BRIDGE_LONG": 81,
+  "DENOISE": 41,
+  "FACT_SHORT": 76,
+  "DESPIKE": 46
+ },
+ "commit_by_bridge_rung": {
+  "tsicl_median": 40,
+  "fm_mean": 7,
+  "moment_reconstruct": 9,
+  "linear_bridge": 21,
+  "openfim_pointwise": 4
+ },
+ "picks": {
+  "ETTh1:contaminated:missing_block:3efb5deeccab27ab5761ff9351440cacf520f80e80788be8c5b7fc55f8723818:d59e8c7c5da508212cf5fd09136e3cc3d0fef6465b5e259031e5d9a5ec4238d7": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.0066048387713566045,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_block:831b83cf95c06f1c0442c58ef6fa647fcf137875d0268eafbcf5e0aa27ec0415:77cdd023464982e628c44674937f09cf8eb3f527d6b4cade2e92c19ace2d47cb": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.05664617362925448,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:01fc5f83f241ffb314896b1650b3b222b4a41d4ddf25bdedd7313ab33a0e76da:35d65a9147d0e1db54a8a26124688ced806675bc907e5237a08a6726f4f32db3": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.9645951542916973,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:8e569c4ba4a00d96c37221293f87544fbcf346d6aa8d9afbc4ad47d4f2e5d070:00db9f7b0a55dcffbb7105ef2f81d0282c6c3ebd4d295db0cc2ba7d4d14fb845": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.554615301939828,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:ea5d02f4ca00dcafb1c2ddb87ed82a2be5262b8b6b2ead3431b57e3258f851d5:93be61f5d8b450a1eac870df25ac6cf25ff08a02a313c57e51bb37b083bfa0f5": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0017224554766372654,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:noise:9d981694b453e3c5c2bad48cbbae64a9de4997479dbe2fd16074d87f9f8906ae:1d79f0c1b3ba07c1c23491388deff68dbca7cdfcc78a9d1dccb4a27e18b56938": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.0959942292338163,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:spike:83eae4a6a3398bb702310021708ff439439cc8396817326ef29840d93b803658:1b5ce62f5272f98d47ad835ad26dba82b19a56bf8691536d393b23d426b8faa4": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.6396871537201159,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:f167ce49f4b91c9d790bafce7e7ee38e2f58dca8b08658345026d83d0c89b42e:dd9eb21120050eaa45f7060e3a2774ae654a060722199e45758a407dd924bc6a": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 1.145042476038053,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:noise:0dbb6c9ece3470bd0923fa53df4a7a1f64045028d941b1b22e2620e82e0bd26b:300eb2d60ebe6b4f1c98256a97aa17cf69beaab4c32c04009fec6ec3716257a1": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.7966287167336537,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:be374db6ce4195ea29cfb66d0b4f76ffc51ab0b6b53e0081c6b60b14dae2c937:afa583f6cd9cb66f8a88672d7b2d4ab4e87e8234e7d779f7982e837f7c1d799d": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.3506997946985173,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:8a6f5b29aa4d67797ab974bba0cd1b8cddc7fa5fc0fa3cada2028b192ce05d3d:dcfc5d55971d59364a56acebe98e968d15fb231fd254638b2655d8e3eed2e180": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 1.0521782335313374,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:duplicate:3fd8fd3809760fc0840979f726005dc513c1122301a042c3980b47ec042b6ab6:b7c9e5ee7a23fc61b36e56d331decb18a5326d5d02731fa7c2ae2a12b52add14": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 0.0027942876516197646,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:noise:886b9d2bcbaf76c4bd0191c0014185fd8927451a53efb6b43e9fa9bd01619493:b4e44a4547913345ed29f40413e01b0fab5d61b566aae4a817bee645270bef7e": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.3578908359620103,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:03aacc880150442d5f06a9925f2821e81088d6c28de6b2e1a9ce5272ed252fbc:9df220636c62c68a847f757a2c5a528f439db08c7fd818fabcb15daba01ba3c0": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.0025998559546190013,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:9a26fd9caa13ede523fff832a548f209734ebcce0ccf8749c5f6a65d1682aac2:c776f91c49f62b221bd9b4b67dc3e37f2ad6403d9304c4baf7a0ea228c6d5ead": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.6653308121761738,
+   "true_loss": 0.0
+  },
+  "Crypto:contaminated:spike:74b69a56c7bf72e551fe452f02c65f6c619844cd780513bc90b567005127e760:f0b49bc7d03d29bf821bb785acffb567328fe990383eb7ffa0a844d3aeaeac61": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 0.28594466349754355,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_block:45e7dfe1212fa6da8dd39a51a0b39e3b36577de95f9fe9285fa29c488c9ded85:e0f5d22c020da59c7457e7bad82937c6e336e7aa1ebd6496438316a9a6441dc6": {
+   "family": "BRIDGE_LONG",
+   "rung": "fm_mean",
+   "proposer": "fm_mean",
+   "true_repair_gain": 0.1265981351604742,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:spike:60ec18dcfde0cad0e25732ed16c375aaa2a29d86c089706cb10815109e1f0d33:307ddfecc94cb722ca1ab48c9a28b17c2cdc80c8b9ecddf18a337afcb1e0a6ea": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 1.0557874117155055,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:4bdf99f31472d4221f0f76e7c45f773d2e14e4cc710e3728219d6ffffbd61134:168d011bbd5505605d873d092148d26a91eecc8177144851a47f19224358dc03": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.8255018828245829,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:spike:eeb4daf024d27f55de31ac8b8218ac96f0f140e55dca3f0c8186a6d0a33f907a:8b45b09f347352ef003d8e2591ecdc1b8d90616e0168ae49ab5b0f9a6a570e32": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.2643591515704933,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:spike:f51ac03e21b118ae62dcd7c7d30570be8b83ba599e5dd336f45eb8084d76864d:5541486211824de5e6c629fef6127188fe86e485c74aec847b993ea6fc54a1c1": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 1.6831931203955597,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:cf23b1aa8e04cef2c7a75051af8677c1810f51de9e8fc6f0f434450fbbda45ae:24a4f7dff9b95f85867b490c4c664a31cb78cd84ab4c237e834549dee0b4b9ce": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.5575234603246422,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:noise:62cc90cf8ad5dce74e634c0347b43dab81a34c7c61acee9ab88c9ddeee396d8a:28435bc2d167b6800490982e9588272a23ac6e4a9df03e2bda710ec057e76fd9": {
+   "family": "DENOISE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.5316686423239743,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:66c6a18c837866ed60a409575bc6d429cf2de15ac10b662d397e4efe7c01e2f9:3bf2d75b0ebc8cf12e037a21fa12d978c615b729706a057a290a5fb0434d5faa": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.6636801557872304,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:c7e16007acfadea6f3cd5fcaf3e58794d06ac48e81c255ed08e251a5ebc8035d:fbf20eed96df3e83a7d00367d84f3bb401511502d37a23b85407f44564c2b4f3": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.909667730242226,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:missing_scattered:843024500cdcfef72451c558955a9c25e23c9f6a20a94b012815ac25ab43bd66:0f370b8fdcc6fb5f3df619c1a91445836148ad0d56dbd010f99d099b4162fa9c": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0002509703050402394,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_scattered:a46645ef56363c383ea03231fa746fee1d121714fa036de7808e979832bf6176:ec94adac6ccf0e7e4ab1ef9107f7b94dbb0f79b4c273bc1480cb492187a3bf24": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0032707377077904453,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:aba7be27112078f207619546768b0d915cc4c034fd181c2ff993689248c1e007:8d16f975cb53c9421f9f9b540aff143d22fdd5422d63aadafe4271399c5f9cc5": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.7467695014984386,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:noise:28e6078f3c13e82c1cf83f2eb73558410b7d6b78cfe60f5fad8e3a12afb0821d:423bd105d444f7a89e16fc93d4c750c3375b373ba92700f647e07fc0e1386ac5": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.013095178341686442,
+   "true_loss": 0.0
+  },
+  "Crypto:contaminated:missing_block:95ca043d7a8192eaa07d07e8d67da5cdfc47b3b8eddb1fcc4b9da952544cfcbd:0d0620c6e694cdbb974da4825f76eac9ef8b2aa784937b02e2498df2ddbe8106": {
+   "family": "BRIDGE_LONG",
+   "rung": "moment_reconstruct",
+   "proposer": "moment",
+   "true_repair_gain": 0.050614414437159576,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:noise:a59346749e6c58630ac92883586918190a04687677b70332cc4a091ce54ac07a:7e77df1629c0c9f1bb69ca5f6c42c085cf5f90c12cc11b11623a882286fee870": {
+   "family": "DENOISE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.34178296591668167,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:noise:7b8a6debb63dafeeeda781847b355cd48ab0c82c36496532f3cbc6ef3bb652e3:8c47c3555495e2975fe356f32f0d0f30b38836b95008b0803af10318efc113fa": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.5657809406041003,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_block:41ae8d98048b588a2202a9a68ab1eb6009c1acfba8449eed5f30a893e01cba3e:e137bd8361ab92339437f3a5c40c987ad0277d9cbc7ce59657efe8be92f50926": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.006795402641989898,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:83a68e889e809d72724a1b08feae14e165f2c94bcd9edc7f43b33e31ee967f23:142bd99f2b8e0a3c337d03f34447f56a3ecbae330291443c827c9557a53a95bf": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.000282285788108728,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:spike:1a46e9dce6984f56d2e05c05dbad46677fc3d0e61b2fea23e5d57c78f8cd34b8:fab86bca6fcc544c7068fc7a2b1c4614be011817c105e818318f83911091e730": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.1107968446072825,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:missing_block:54409bba8779dee8b614b9a6f440ed106392fdc401505a5d840e4d1c7d8b8ded:a77528aef88cfd952fd8e8cfc75ec32058518496d91a4f1bccf641fc3c5c2e50": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.0008698024092572736,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:cc3e5e920b5958a9b8ddfe132c462aba089a31e84924db73746d700610da8483:839763dc9b90165d2573d6336e8fac97eefd3077fe2059a9bc183b006ba63f37": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0005778006898940845,
+   "true_loss": 0.0
+  },
+  "Crypto:contaminated:spike:68252e875826e5e567580e21ee5353a37327d3f7ada27ee78ab2102066dc2e1d:6e8e0f8605ddb10d5474b757b28aef93840e3422011b6d0eb205dcb244e8bdf6": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 1.0396100623492421,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:f00c41648cafa89c6ab019966cf05fa92ee8232834a543ddfd9e7f1380571f11:451d972b534854e21fd3bedaa6cba452a4269e0ace0e18cbdc0f9937b116624f": {
+   "family": "BRIDGE_LONG",
+   "rung": "moment_reconstruct",
+   "proposer": "moment",
+   "true_repair_gain": 0.06241738426918503,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:bd47b202e7c6cfdaf90918982ad6b1570dc169027cd07d06c1b5e1bb11987473:abbadf2546c4d89ddbe44b1760283dafa0bdf8532b0ff0bcdabac4270a2230d8": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.2408128763430981,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:spike:fcc456dd78d5cd90fe17aa2018c0fe4503cb2c4dd2579beb602b109fbf5dd0d1:dd1a643637163faccdac8f0a396a5bb7cf4cdfe689f642a0c6ca164c9b6e763f": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 1.0193535384770005,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:005467e400ee35a780dbc7bc5da35fd87827f10e4e43ba403a6ca51e588e7248:d592861fe3ef4d25a3984991887ad54db9569b31a30ccfb26742b57e48e51f66": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.258125332232715,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:0257baed7b4c5f5b15748920d554f58e74842992cabca300cdf925279a364e09:08247f3ef8f209bf140c77f9a3e0c72d2cc7ad400479f4f4becc61397ce729af": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.012279003401837466,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:80d202797218a9de6c40a98e7a8432e506ce60c029751ad4c97bbea68fdf4190:d9e332b3e547ac8d6b6c8793b8bb2d23454c789d8f6b508b8c09178ddb8df7ea": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.033196617628799906,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:afb16fea1b909cb8be0a35f0ec44b99610e16e4653eaee2858b609f5d980ad6c:64c45fb699c7f99eaa5d6ec64eb59b8cadfde57e4c8761584177b259d4aeef23": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.02995170727736668,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:48128f985edeabbc69fe3393014481a1b865b24691cf50fcbc9c26ffc83fded2:d38fa36f77f54d5c4157161450005854bfd61790b1cdfb253ae82641e04c048a": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.9638288473767919,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:11cf81149d30bed640620e2bb9fbb601db4d2042963b473ba26954b647776150:be4fa5364d59c35c55e7e23e2f802bcf537508dca010cc274057de457f81a934": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0002464475407282807,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:bb758adc24aee9d84a0789b545c653f5ebe771be9d5a7856862ac6f261ecb7a4:0eeb55d92d164bba98a20ab71ce671ba795672f598e3e8306be61dd43a7d7522": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.8186966734512662,
+   "true_loss": 0.0
+  },
+  "Crypto:contaminated:noise:fe9f484c32b067647bd69e6a64bde22fe90f9b445223452d4608c0086df5a2c9:cffa053673b797adcd87f94c573c0bec970de08a66f35048ca0d4daff5175265": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.666701396219578,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_scattered:ac43b2e208412ab05b64f577541c0241b920b99a9db5abfe443ee8022a5c861b:8b71d981a21c955439a28a4f4402bdd60bf682e9534769cbe1d0dc3f198b019f": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.010433641418341263,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:spike:4d4d927561942f167e04a01bafbba6d5eb68ceabcf9442c822d5135207ef9ccc:c9d64111250f9904960120fddc24c311f5b25fb55c752bbf2730da0fe5a8704f": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 0.6375850873176072,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:spike:fbb2fd365ed26d1bfea6d8fdd08a4b3ee2db2e14ecf8330b9b3724b7841e9ff5:5ba56f3c3f38eb13fd6e26eeda8b870f45c69182205fe951f160da8c026dc634": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.7997970637196488,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:d03aa292a2cc11bbdf5766c7270afc76ce75613dfe37feee40e9edc0a8737266:fe7aeadcbf6c020feb7f3b590f9be5e9864dac853a0516df5dd22e338763e87c": {
+   "family": "BRIDGE_LONG",
+   "rung": "moment_reconstruct",
+   "proposer": "moment",
+   "true_repair_gain": 0.0013785400405584448,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:749ad6a79cdaa7d3521280204cf95516c88e1aa29b2f9cfbcdbc25ca07b1b9bd:0807191eff7a4d6175b7acd3e851c0e4b6953bb54a96769af6c6cdace7157b88": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.590936428506714,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:ecf73872c4635bf919cc2441599455561532779f1e4f0e0af0f711f810cd578a:71f019c2e4ae3b3c77115534da4cd91c9066d8f0147f2c753652a1c56074cafd": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00024409230362665635,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:spike:ded1c4e535c3eb83de59518a53e372c6259f4b13ec669bf374095604d588f3b0:ce8e2685bc9dadb89cfe4aa796b19c642930972bb3840012a33c3e029726df28": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 0.7608253258591559,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:spike:18d6c5b6308741bcf7b454cf0f6ecb6080137baac1f7cd239b91af2a1eb42c2b:20506c2332c71b106f23f3f5739492bb8aa289b860689126084ce67e52ba78ef": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.238629551842589,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:noise:cfbe2510572f61fc2069ced8cb241ce9faaf5f2f1700f5c55f51129a61f9372f:20a3b797d8c68c243aee1b90ecc6032aa21d84f50de959d538fcb680d94a1ed3": {
+   "family": "DENOISE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.22026181324696992,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:2491a7f503a3141dca2f66b3a2c2a4d7343b8d3c6ba6c0def3c7a1409b3bee57:3c8f427563346655ee17bfa727ded1c78bf5dadc83f7e22a631d4aa379bcecff": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 2.078717289424997,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:noise:43d28b79b10416b5f4491a54e3135259efb1d2e3bcd41f7d74fd58e5a7aa846e:3e3ab54ff9da32033c4b411ae3fe57019f06651b755289e7707e990e31cf132f": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.9569739516777688,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:43c250de28e23814eac88d54533556c82fb04dade6188b61db2960752527e7b8:f9db9508cd5bdbf7b87617ae444cc028f83b3f59237cd0753930b1cc45ae5617": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.005205672832661596,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:356a9825c44d6609980f517e448383af96941c6b109df3cc3bf4ae7100d287f0:cf9d17b37a5ea0696acc8461bf6363aee089bc9a226581cdf968bb07403a9084": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.0001986183493969426,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:b64259aeb1474110ac238b90fedd4b58b90cff2fd1446ef062abc9e2bd407c27:7885bac477ecdd789196cfb42217c1f843f0e3bb7ae189cbd4e661a70a8cdb33": {
+   "family": "BRIDGE_LONG",
+   "rung": "fm_mean",
+   "proposer": "fm_mean",
+   "true_repair_gain": 0.010204765717180344,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:noise:7dd314fe701fb28c730f8434d6b350b5c98ce319546cb562f0f828afd3e60be8:75fe20de0813bc34c725bc27408b5cee76a46d1627e18ff426199aaad6da61b4": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.2934834168356713,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:noise:320e2bda4b72a5b60d16e03eb1d39eda8260c9d60492055ce6f0a87a69dd876c:9cbe9e375ac5b94e25e7f42601892ed5030d7f3d8b3e877373552f1f225ac480": {
+   "family": "DENOISE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.24097873468104097,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:spike:071a977a5b9e3b184298c44449088e655bce8087af1f2c97efe9b23dd165ed66:2b98dfd52a86a31f1fb9309914741a61b48dd3527fad13473e2264d313167bc0": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 0.7218432032293265,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:b197814e674d6b3564615154b5b79b143cc8f21670042d7fb7c8baa1cf2fff6e:64f5ad48b089cc6605635030cf1026e4bcd812105651390ac497b6c8907ccda9": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.9588716292698015,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:spike:84d1d5d06fe6b630364074ff3c9e424ab20a52fc49b8eb5444847a7d0aaa4e79:26c534a5200de92bffa5baf2580ad12d46c2316bd35e010743000c7d75b91866": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 1.2499205791998125,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:e81e4c4677ae0cb4b507804dab9c161a0de64cc2d884adeac6f67da15831be76:d4b38969d872a3700227a49b9d10315d00df223d74cb30d9e14bc4644abe6a72": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.689408914114363,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:a2bcd0ede0589bab9370f5c05d32295f9b5be1ea10fe84e4e89f8cd749635ba7:43f081482156de01b6c53e1ca1037a4bb099102cee370c73a7eccd255546f2ff": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.6195820659331441,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:noise:934994ea4d6df66aa4fbcf77701f637a1b451fd0deb5a1afe09d67fde32719c4:659bc01d2d83f8ef2a10848da2c1d83764cb7bed3071ad2a3e85f9daf4a46f6f": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.8719186993669665,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:c41ee3c0d66332a28ebad0a73cb98a51ad6462d9b872a499be290b44dc29008c:61c31ffd7a181d128ec5df9c20aa41b36e84567a51f0e92422ebcbd633a1fc75": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0004094831779376225,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:a6c552d9cde6ff146d4d5b540d6651a02806491ce9780fbdb9064fca575c5a76:6271559ec1401db46ea6ce2acdb0ecee4a73778fdcbd7e95dac16340a4998032": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00013709217972677953,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:spike:5951658c59809cd886709c73bfa9513a47179fe487be8280d5ce8bae210061ae:72d2793b8441ccac433ff1c14c99ace311a5d6ec080a1de404fbdc6c0ff93bb8": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 1.2122012163201699,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:60732e03dff4b8b5a5ee88ca1f0e034a747544d578d846f59d1b2308cb87342a:bd2f3f53efb5247f8d60643614f8377b4f208961d007e3cc95f9d667733a0da8": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.1841233869211139,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:afc5be6ef76f223a9fbea4eed72b078bfdb9fea9db4232ef791b7d6220f417d0:fad60aecad6284e7d370fac424ec5ff3489d9fc0ba20ea30e960bd0528034e03": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.2538645550726142,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:4e544ebe6545ea755a462ad3a38de06375812ec816c05fa0817b44581f4ffc23:4c4707f50bd0fc9e21581672436094cbacaffeb87980b8b744af1efc69ff16d8": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.877490839858668,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:spike:546fb49707585015fe2f61291c281098da7346202b6e3a002133e7810a73735f:fa5a23f6d3f4f3862dcc7536bbaf64fafc6063d9f87bde00e784f76f07308f69": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.8038141863559114,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:spike:3a27c541647f4e17909afe0a94152bd0a9c3c9d8b460f79bbe7b258b61812429:ca36c4804f7d02ca46bff647917136c6839864187e4983cc248828fc9e6f43e0": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.3689573426734882,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:0521488e4e2c853ab8d3546b50ea62c4c357c8345b5bddd06e4fd926dae61af5:0b7c9b2ecf7135722503dd1b23f9892843d7611e6b7897f809f633880d8d62bc": {
+   "family": "BRIDGE_LONG",
+   "rung": "moment_reconstruct",
+   "proposer": "moment",
+   "true_repair_gain": 0.11235981874905349,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:c6a7855afc137f0c01319cd81316d8094ca655b0f0877e1fd5c1755ebb68510d:16286e340b7a87f6631ae6b71542dba8abb746bc4d639d86e6e5ff303a7a422a": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.00345184380441599,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:spike:89d883bed95acc3ac834b09b2fabcf47137a4d5f6a50cdfec7c55e7c42a38c93:bc5c82a99ff752f40a7c7d0901711225fa837d394f0d60f260f88eadcbf99ab7": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 0.6034332000704118,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_scattered:bbd3515727b5285997421da103f2faaa18b388239a6baee2e46e2d278de57dfb:376bba637492b46066e48760c4959027c543ce7b70ca1251cf3588fc943da746": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.004464004922978458,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_block:ddc2e95e8ca2026c1551371545aa2d5ffb355a0e37c013ee8daa0ea4bcfb57c4:1d53859a08c5b0c322a5a2911bf13b5d10cd0bdbfe50cfb23585d8bd9867562e": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.23340517100949917,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:47b2efdb7667b5bce14431c2c502b43d29e9c7a8109dca9b3ee1d98dda2e5653:c6cc2343add18473c2130647f65bb7aaf812257e6559c20b45850698d7e361bc": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.4201193515044124,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:314cb73ce0655eb702136fef73fe145e3d5d2780a09ba95723fd7adbb39dd057:949c1ef07f5361fefc004e18770d1763fa6d88d7636f3e76b0882b890b7c2473": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0008920277892610572,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:80681e2462e2d27c15eaae389263ab820e25524d193908fbe15f37cceb49b5e0:481fd3cea4a1643fb41b8359fd9f4df417edc747e87b976d0f8f1a70904d9ed7": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.754064225160875,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:noise:346c50687f41d62c972e5c9fb7b430dc05106891df46cad041eb0c837d34aa71:801386bc27250865722f6a737743abb875ee3e133710665557c72d5d709b9c26": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.90267627560166,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:76ca3472d294da6c9e0aa08446f1106612cd28473939fe36557f41520d8da1c1:ef69f760d2797137b34266b8da654e9034af7f91ba916dd8514355f105aafd8a": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.2236847776786202,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:0fe198cc5ce360a8ab459083a2a7e1ebf96135f3ed69d0c4aed65fb5f126c3d1:461d178846113bcd9f0a0e05c79940e4c1678fa19a8d50ff62de7f1e51b73f5c": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 3.1600225672985753e-06,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:noise:487a67d3084ffa146aa2cc0c8c826f1c5bd766a452135753cab9d33046a12a29:e04ff44634ac498ef40705b6844d9f252fd420a2ff8e74ba07a341ccf0addd4d": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.9612745670206201,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:spike:51dae711f68a170d35c84f8639ad4a2f65313a574a30c6db93ce5d215a699e96:361f1021ce7e69fc34944bd4ae61ffaf1ed61c59e23dbe209f274875d8ea998e": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.6033067735536125,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:spike:7f8eadedb73721b13cc8a68326bda15bd1d05413545a2479ace1c5457b19e9d5:f08764a76abfb6d7b31802771f3a8fd0498d0356d3eb4424f38cca7b6fd01e1c": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.6797457270132681,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:2996dcbb8683c67057284bc2ffbffc6c80498603fc30b5f67f56bf234238a708:b1596985953b5b602876bd477a6ab4ad465410e58349685cc15e914da036e98c": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 1.607620390655024e-05,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:spike:cf5bba2354999d98ed1b7d75ccaabc0473fddfab42b55e4e53eff2baf2b53325:b34c14fca1a5d0b4ef5a788b2fe5fb6627d000b4e3693573d7e6b4784af95b72": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.5706234368964125,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:4c3f826c36ac41504e340a8c788ccdba5f4e16498a686a89a6dd1b9d3ae9cdbc:578210073edeccd9793b4152c354c25e7303f5ff37b7e2e82df1d4a987da0aac": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.8561516672755576,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:noise:85ea0c30dbb8a8d8527096205ee4c29f1a6b3beda4799442fc227837d38661a9:eb3b52a66f5ea72f4fac6bce9f830c1248ab29b44e67b3bf8d4f7f736d698b30": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.7628139421957543,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:noise:5a898cd2f60bdc9a36d23744d279db3537f8f7ec9daaa18214a8f871cf5c1856:25d5b974cb08b22db4042641c271f87c36d5364d2c1ceead27b403fb3a72392b": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.6690956323260305,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:noise:6c2367efd6d2b58da99b04805a78d4bdefc0a2b83899bf6c98b15749a156a766:26585a7ad730b001517bb2c21867b2d5e770d697c5f880b472949c9bdfa031b3": {
+   "family": "DENOISE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 0.3118968849693214,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_block:16c8061611118982b8f7b6624454346ffc85c147ed65c14769698b4483de825e:3ea2bf36a0ad95df3b799add59d233d69831ab9c4bd14344a7aad15083e94379": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.11102599867095082,
+   "true_loss": 0.0
+  },
+  "Crypto:contaminated:missing_scattered:ea975b9d86c208e8a4f58c56c813be5a56a84d3c85b1f8cd680738dca2ed572c:3e866735d9d7f9ddff793fbf8cdc58ee1676c7eef55e77c4257dbdc29df3ffee": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 7.590070089768049e-05,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:noise:ab99ab3a3d01639e8af46ae5b1a201d9f8b2a93d8e25a05e512d711a08cdaf3e:e1ccc7b76912d0bb477691610cddb5294445035ba2b2274b533350e90ea94008": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.6334517899399228,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:58254c9354d3b3065c35dfa3cac3c66da5a923128ae909c5d74f6a5cf09905e6:b8ff70bcd6da47a331c6cd6cf7f3bd8881bfd7b45c4f987f89b8670a190b4b0b": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.0184620203220005,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:spike:b70205f9a6d7f9749fe4b00fdc4e72ccf6098eb0d64725583c23e150e64b3547:5f9cbc1d06860b72c7c1e1f02448fc40cda7a94d7f6b2d042ddcfc4a36c3fe43": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.0838025117002426,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:spike:f78a53232e4ca44ed330c7cbad00f53e08cda246631b52642fcd9ccc78e11f4e:06bf0d3330951173858e395c385752dc1542f730442b6307cd93ef3aa990e269": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 0.532890910939699,
+   "true_loss": 0.0
+  },
+  "Crypto:contaminated:spike:f58213944baa4551af0ac95f67b2b1d0bb7de371a533971fbd99f30430e9171a:83b45835d8ae6eee775987fec8486b9149dbb8a6f6ca94768a906a22a9cacee6": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.5403802921859734,
+   "true_loss": 0.0
+  },
+  "Crypto:contaminated:spike:ec844d7346bdff86a211d4b365840670782bdf79dd341037db1d8122ecd6bc61:bbe2fb370e16b4e59afd93e232ee199fa74a71843ccf226b41799bcaf7ae3cf2": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 1.0430621654411458,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:spike:6b3eeb6f32e10b59262eacca8ef277c0b9e3b1a5be78b863ba169cb6a001b5e5:4c362a85cfb15b40615628ab80013bba72cf30d2da3ac9056095c3921f929b42": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 1.1409027370442402,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:267192c0fd88f2e29c755a154c89690939687a756f8bae08f7db3b62fa0f4e6f:c05849ffac1751a7c004df7113da361396d0438b96c32242565f8401c46d3476": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 4.9498546023062105e-05,
+   "true_loss": 0.0
+  },
+  "Crypto:contaminated:noise:cb9c705a9dad46bf45b1050cb564a7957cf5060102253f8c62e3d0afee392540:d263f873723b087b0598ae1253dcb3d4f0188257056f75ba456f10027f6937cc": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.6937528140262088,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:0cd90c3e0f1685e6a4706e26b0dfbfdc5aaae978d662865d04aa3a465bbf683a:031ffbf07ef1d5908ce9f0af08b1f4f6bc986544b2f6cd1a77facdf4420a37fd": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 1.3500626952236157,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:noise:a91be7d7b3a70c7882cd528a934708dc343b4086dce4cd187f3c25d6ec9a69d3:f762115e2b7f1ffb1b22446bce1d0503500eb4a5d131013d332daeb203ac852e": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.0960757675974733,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:noise:154b80416a8fa8d7de295298b6bda7e54d4aa7361291e51d64a83ba08b80d3a7:4775a9dcd699fbe40643f1dc48ea121c32d56042995d8a2a5a60f38d38ac9cc2": {
+   "family": "DENOISE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 0.22291716765477038,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:noise:9205d5b5a096be92b0d3eff2da9822ba3e68be00d1a55644b7c7360f8f89967a:b3adfb0aa9d657b36f09c67ee187735e2c52d3e774b3d335251188bfbe7c751a": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.9054576791457571,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_block:9edec0b6c06830485157da697f6f0d95a67278448ca9b4bcd7dfd2b6d6aa781f:7fad52dadfd320e9ffe90a02108a922fa28cbb041e5b569b00cddb974d10fdeb": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.006403108382595408,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:8098f4771e9c20eb88b892554454bad3f4e70ff62aca9bde9ecca22421a4e2b4:2daf5f3223d7aecbb21ba2e5dafd5590f1d9a77a9bf2cba27d15612c9e277ba0": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.5226921236094828,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:spike:59515b6647a652593fe9b0b294d243ab934f969f59eb4f78a151f967bd2c2a36:40b6afc293c0357472f2b0520cc08a415894b073897260d2d227c06aa2fef6bf": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 0.7365113099973766,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_block:f049db56221d05ab800ce86259a760d44117badaece8d2eca893d9ed767e6955:a3bee5295d0183603cb0c9f83c4b7d1d505040b8868b65daf5992fbcb8bc6fb9": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.03322544857541875,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:noise:fb8d1679528243e4bc6315d3e01361e4be1fa7dddd21970c417ff7fd90ef28cd:164893552f430de1bd669479f96dde7f7de519dd9a619ee3b067ced816ab5a66": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.8789605544222193,
+   "true_loss": 0.0
+  },
+  "Crypto:contaminated:noise:40f0ce96fef8e368db8e3c2d40c1db9285d78c4287094eb7638173d766c4165f:17a2005a15a8dc31e4adb8e2c94cc467fdc66ba2862521fd0a5d5720e67e539f": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 0.673202744937167,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:spike:c4a81e8c93a394abb2277d27656b0c6b53f8d4418bc8c7580cb44561be9aaf0d:067e056dd1d88786a36206adb79fcd3b245f41dbdae268a1e84a7063bd6fd6d3": {
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "proposer": null,
+   "true_repair_gain": 0.669567472725152,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:noise:5494e0fb77b6ba944b2584fd5db51d368594b60f4393e1408a7bc59c30347df9:69d7804bbe32277c10de291f4d5c1665eb74fed4715fe53d36aa216a6b799e7c": {
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.0066073695788087,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:spike:e3b6b5959ac2ef8d9a45ecfaca6340509e9359f44a69a4237c3b18552ed4aaac:70f5c35bce8a27e21193a27f40517a0039dfb21e963b068412b95db13633d012": {
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "proposer": null,
+   "true_repair_gain": 1.0254521334526767,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:spike:e52b8b0c8e77e3df652c1ecea8a8de2bae86c7dc9abc663256ab186e6c964cf6:114dbbcf00d04330ad58bb0a371c17a1680e67cac41f8eac93b6375a4055acdc": {
+   "family": "DESPIKE",
+   "rung": "default",
+   "proposer": null,
+   "true_repair_gain": 1.3531027272373897,
+   "true_loss": 0.0
+  },
+  "Crypto:contaminated:missing_scattered:5ed36f706dfd5e23db9621c35d675a72534fcc124dd8b5f7ff1e9cbf0fb23678:cdd0583b2aacc5fbb18cf9c5013cd72fbcac44599abbc6abf271e9087cc01ad8": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0019902596892585707,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:15bfcd86935262903d7a0123a27a7422a79eddaf35a619ac50903d0e03e7b9bf:ffed33fb708ef1948de1c9ce8e9a1f5379c0b3cfd5106c24235c4f015432accf": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.014301070848992833,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:43700038ed4eab0c37f1b5e8b84cb0c317772813c2b4c46c102906ae967066f6:2fe8fc374e65fe4cde757b7142c2815a96fb6a643e6da19c0cb234038188976e": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0024003847271824672,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:4ed538209be1192219f5d2cdd56a6c988b4667da9e34a161038fd4b50a4bd2bc:bdcb886ddab4ece0148555a47d7551757e31230a77712287119a56f93f8f252f": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0006294108626337322,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:603dc2291f9b88e23bb0ce6f34fa68331548c5988d0d2815f0c64158adc6012c:be1c2d61f100ae2736277b9d52b0ffa286739944eb0bedbd6652303d3ab47235": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.009209729856662758,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:7057dbba9daf90e8ce1b4d155560feca1946cd2f20ae31a58b872566b5e66ef3:42db09d1cf3af6e1e9d557c8cb62608d8b437f238abe1a1bd1a06f5789902bd6": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0006043873545947681,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:ace82c9ad9578c32c9f629f2d51590eab222619284a0a03b806af5e1af71a079:7234c9128f1a232fcae2a1b20290ca07672f7a3bdfa98891689f9825d1175abe": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0012064886556236551,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:afcd1b9049f3c77ef68c4bdc1a71dc5ae8d1eaeb2974d37d5f34ce4923be0554:b8e0ebdf9c52be790a1edd3661f2f57eabc3674f30e32677f68c5008d320d10d": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.005671933624560348,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:b10691b63060d96dc53b414bf9020958c91ec8a70ca39cbbedc730614e0c5cbe:f242eb21845b80ca36328c2b5fbdb48d51310593b1b4ddf07b77c4ab8de659d7": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.001840894969805449,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:d0d3499b98dc8cb138d12cd9fb286a3086e081a447f22959e027a777ae58bf3f:100b8adeb74d3dff893efc7cafdb55247d1ff25b9cd212724bdf03f977a903e4": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 1.715396554295874e-05,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:ea17f6291a55aa6e3e41770b604af706189454c07ed9c03b50bb4e2246448f08:4678ab95dad72d33b645490ef0fe43403788bb096d2c904bf2989fb99b9171b2": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.006400893584771538,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_scattered:f1f4f2c433e059c5a8a6c2311a701e38c40338fe401a7c854408b92c8b0d8f1b:8e742601370b8d71c12321c48fbb5a340381fc87901274562f8a059624357d2d": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.005563442097525768,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_scattered:102ee841df3b3088966e4f530ac50c9710df5b53db6aae299b589bc305a50271:c3f119854da72048b96f8654a57fd6235d16ce8361e8ca1117c9d2d8fa6d3c41": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.006143715017751373,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_scattered:55fb9a7537a7134005d8dec6124bae8ac0909ea30c072dd1fad618398adc38b1:26d17ba3497068d2a92c86160a36b9ca2f28d72632c27ed1951cb5021969a3a1": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.001443772594782019,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_scattered:9539df9e1edd294a6bf69fbe3ba5708620b4114b5ae5aed3fe7ddcb0504d492c:ec554215f0f2b2d9fdcbed70d8841a4dfc1e72763ce1c2515318587d481f2feb": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.007526847385617728,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_scattered:a8098774b5ec9f17fb8dc3f8a4537c28c2e8298c64461f51f7c296ca476899fc:2e9a93b98ee5daf54c62a747c36eb0b0d3c6cff750074353979bc3b72a7ff9f2": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0051684993996843984,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_scattered:be0820193274d9e72e0e31928f26575f73c72a1ae5954ffca7a2f3c07f99807f:57c4b622e76f4b21992fa40dbbaed0a4eec25659f4a36343b93be836bc7e863c": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0025968394062990275,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_scattered:c3c15007bea7e2adde6e24277555120c0ff56d27a6ed30aed4b5b7b12c32238a:e1fa5ac455a48bdaf533afa28ba5192448ab18ad803979242796121a6aa82103": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0024896681235277753,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_scattered:c786f523e3e6ae69312a55647038157d9b3f46746c1f353fcd0aef78af9fa6a9:2750f316509afd35c38526afad9da8a9256a77cd4bd6a9f236b1311d8184daaa": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.007698848358652854,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_scattered:f9f213aa144747039c49724c1cae3fe4bd4f3f39b9ce40c91b64ad71e1e599d0:814edbe6c6fe7fc4c3eaaeb781a5e66b95a52f42e19802a4411b38fb2972c378": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00023597920817637727,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_scattered:012be7fcca1ff2f555a6bc431094740b0ae5ba9a5b29a956a86194b37bc45df9:af89a192596d2d7e1b93088dc2285c1d80ef7e0bdc014c766a282b234c960381": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0020902541525848715,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_scattered:1ab974a02141481f88931433f35e148e5ef433d410ce1ebcdd0db022c538499a:a0487a56ba59899bb693719c15e6d81da3d38d458493e654f5f37a56185780bf": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0005268429111913067,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_scattered:313e4b051adeb058d727deac8f37c33b57c4631f16513d7f6fa374095bfce403:a1255fbe2bdc4bc737b8580e9c16beb2f561b42e76da295b090913eb223f72ce": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 1.742216055951155e-05,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_scattered:493a1c1952327401a301c9eb79d4a105a90b1c0c5674245860ebd2cceb587441:4d2c15e80d63df4ad2f795e3fd1863ab6b25dab5fe1370baea30788388567f0f": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0002807527447976389,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_scattered:87c0920c15778792121e004c5fe33682b1f59055016e3ad6a6f0ea6a08dc77cb:32532cbfe11c3d4eacf9fc74cd2d6e8ae2fe716696d448aa09722823c62759e2": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00084733348723391,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_scattered:cb3ab4d9568584554562a75065d9891ef021767dd0855cca61afde5bd5bff35c:6f78cd9ae0a61220f08e4246dc904d30c4ed38413fb69ca7731a927b91035eb1": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.000914599410105724,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_scattered:dd9a96bb70de2e85c3bd5f6d2e168cd26d86150d745a61684aec02286ba7d74e:4e77843af326343c244a832a50879e9bc15d57cc204264980b0a01a28996a068": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00523594515451375,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_scattered:f8502602e5c953e63eac6acba5ddcf8a9934c5177ff416e45b7060399a8c63a8:bf4a5b2bb717bf8641fc69d7f42a11245e986cc486e3e64e6f5229f08af16875": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0011113982667773992,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:missing_scattered:fe5bec427693a5a6e48a1b66660ff8fa7ea00f18b636293e88b6e271755248dd:a77e4666833fdfad5fa151232e746f132ef205069d2463e5e35989a41371886c": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 1.1729632833597796e-05,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:0236303a7a0ccdc40805b7d457df201d077b033e6fa59ab5fe4499967496208e:4596c974f2a8c1626590ced760e0439f3e12877a9d910854a65b3f9907183c78": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 5.507300674753239e-05,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:11045ffbc48f7dfb8f6a38a1bc40f9d56e74349fb40d1c7deb6305f9a70113f8:19fd861288d415c6c34acaa5b890a0ed88a7f6e86080ea13a58d1632cce8dbde": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0015707716558270356,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:11a16b93da195c8fffebfd2ba63a17d5625a9a8c41dcd07647498ec51b15fdfe:34870cb373fe1bd796b798c167de8a937d184b19bc2bba9526c55c79cffcca4f": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00013335631318731265,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:2ac2ae8934945bf830e253845922f97a5ec6b111f1ded409c633aeab72a39a84:8aeb29e4946a75fec760b06f08f83ea658cc4713db15da2edec008e0d5464190": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0010146662909321703,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:2df8a82d6af9921068fd52d4593be79c86aef4df106bfc696bb56ce592a909e3:be61806c8c2a411d9351ec4f7a0f31e7f3ab608826f33e1b415472cef9a3becc": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 7.693538835588876e-05,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:31b4a9777dd395da2a2bfe0a21d01e68999ee95bf441ff62cdd070c5dc370665:1001fd0bd2d535e48b0adf6e9f3ba0a5ef7d66e3de04b31b090f786a60e2f1e1": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00019405875514898183,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:3524bf8542d62ed0f404f5e4a00a9ecdff36f74d12b1db236d5dd091dc268fb9:430871293a99b4642129c7bdb5e4fab0674f89d84fffa8260e425eb163a8d6e2": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 8.483299483319853e-05,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:3e520f39f180adbfc95ee169a5e1ec8eb85306d92b2829b0f84e59478beaeffb:bcfa8348e12edc495248677472c2bbb38bcbc9645239f917f6c0b6d274fb5b30": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0008219726320078831,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:3f93aae62977eae770e604fe1975f33cdde03fef1175bd10cad0bb7b382e25a3:5e4dab9f17be5800daef12359f3b2cc4e7187d222770ea8552cb5e6319962499": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 4.903237059166119e-05,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:40ac79c1936903ccef7e99d6326bd1c29dfd73045d9a6fe201e8a0473d04e5fd:2acb20295907189f7911631934b190c7aba6fda26fcd0f0737a913c430aa6d14": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00021170482719698263,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:4c6a058f0083a8f323a648fc13677c31c3bf90b4ec6d283e93004ed1f781f0e3:40ed6ae64062c655842ed2aef2db3164d6ab9ca8b966b6bab52acea162bb1cb2": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 7.6937488863688e-05,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:5ebdc5c1e879f2f4e34f84e8d3d2ad41258c80d03ee37e9c376d214ae308cd2e:71c68b7cf98f65423e90c32b7ad4cab50adaa1e081523d930224855bc218766a": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0003529551457673955,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:5f42a7ae4311f1aa5c65ae79b68c4ee60e9b848c3913b441b7fecd6d42f2d4e4:d3a08f9f9d64f75545036bdeebea86f46e39655bd1c8e136712d8e61098483ff": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.000707412760367925,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:6b1ef8fd66cddb4380a346f4cf4b723cd53fed9e1b87bd9a9a3b4175116d8db7:d1a4e2252581fc60cb2519110ef4b42e73bc9587b0667940c6ff913239612f50": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 5.12256118611145e-05,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:7787ab825bae7b9d6294ea551ee404dbaeb875d3046702eaee4f644a0b9f280a:0062e9058197fd151aa92e943e73a88689589d2986deff242dd52b3da7706dcf": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 5.4687136462433205e-05,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:7f30862c66e554a55c503c261334b6de8bf4b935427c6c614205009b8e9c6571:ded73b5951cfebee64086016b7659ba4a7e87d31d5581486f538e8e8d62f987e": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.0009861485674281232,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:8971da11071c618069a65b466cb6768e1e5f2a1fbdb442ff196e88afd0d09dcb:2b7c65ab0f6985bd7c0aac81fad96a37cbb91b6e6e10a42c974a506430caff29": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00035010072971844853,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:8c03b655d411e18299622745c04a10a93365c25d3a71e92794d673a41d242b00:100caa5026f7e24193513af3b23c62f3b8a6862ac76a32a395c6823304c284af": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00013381036438483808,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:8ca1f2127c62356112e7596142511665d7f5cc2b64e3b2e8aa94a0a8462e5457:de1105cc104bc66be60a5300b23983167b4e58d3a91375d7d1ef058897ed1603": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 7.74797062608533e-05,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:999b1f6dc099ba4bc584ad5595844c37bfb2f0723d446dd5203a94a752e07183:d7582a1ce7ac170421269399762a48ce529aa5e96fc995ffd35328e0278cd352": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 6.572724372864114e-05,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:9cc622b88972cc8d03f4cbbb498c70319f7be20ed83f2bd40a59c19186d11307:3321490da9322b31cb7d4d8f69a3bc0f1903065a1a721cac14e2df2bc248cf50": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 5.416822665887559e-05,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:9ebf55e3e0cd6de38db67d359353af218d461b59cbfb570de838a8e12f178367:f79d93e663e8e876f322403b81d7acea19704e7ce4a7409ffdbc1dd0f755d9b4": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00015682688735061632,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:a8779053f85c84b4c9d2b8deb484676be5d40a70d50c61fa108c56569956048f:840a6f45abb2c45e1a6d943275e1245f5f2a308df20e1390abfce0be73eaea08": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 9.518460808525438e-05,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:a9ffff0d29536a3b756a23fceff01fa5385c3245691452426199fadf50d9a16a:014feec37190e78f4b0e70fa548445cd0d4c091cf1580f517390f4e06438de0f": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00028914468508155753,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:beed9df74f79fdf4bc513576e72c2a1eaf8ae9120739b8cbbb33aedb1b759314:3d2bf816a2742eb1b1c9d9ad930ad32ded5c3cf1d1c55b3a5d841981fa57fce5": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00023291128155425298,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:c28116200b74ae3f1ac0e5ffa6e7e298e6e7fa800539ed75269707ee62811107:9e717b0cc51c5104a4190c5f9383c32aec4f33c6cc7292de533c45ee27f40c70": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00019878857417834114,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:c30c400c801add583a615ba275ad3246d980f1f387bb18256338ed7d1ffbbb58:587c11c174cf2b127d78d79480df1df3328f6c8a65e718dd53585e147882c081": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 5.720135570106028e-06,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:d3572983f9b909742907b2d85450435d0e35f887a77036394c5882dec716b478:1dcf5fa5274d06d971c8367270a13f45e49ed7c8213e88a7e8253d241a3f4a5a": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00018301250018047367,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_scattered:fd177dac4506a7c1992e34ee28db547280d4a12f797bf562fa30c2a2bcda3e19:ab284b82094c02249643e325d59560d6a237a1bdcdad29b16bcb320296d81fa8": {
+   "family": "FACT_SHORT",
+   "rung": "fact_short",
+   "proposer": null,
+   "true_repair_gain": 0.00010807883123366705,
+   "true_loss": 0.0
+  },
+  "Crypto:contaminated:missing_block:24ca2d2ff53da493fd4d709aca546a18b4643c55debd253d826cddc7e5a6e8f0:ee0a3c9805f1d2fca6a77ce668c1bab9cf404e68a5716d5ce9ff7bd57e360521": {
+   "family": "BRIDGE_LONG",
+   "rung": "openfim_pointwise",
+   "proposer": "openfim",
+   "true_repair_gain": 0.006330774718812458,
+   "true_loss": 0.0
+  },
+  "Crypto:contaminated:missing_block:7137ed637a9c1c47ae179e2a440bc9f5fa358c9781dffb9250df1d3f5c8ce0b7:3e3f11a255261f781305f892bbeab46552848e6d2fc7128e3518332d16736598": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.011828672373093985,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_block:0be832129ccfc7cf7a551ccfe2c1802129185d9433823aa07cc2bcf715522975:637b973fcada2f8fa3d5e191c5d2e73ce0b95027e7f497d374060214488cd1e6": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.045954692587818376,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_block:48ffa8eb9b6edb48da78d03db14655102cce91312de959e5a23621567d967ba0:0614dbd4b59385980663ac5ec5338b954ca0cc22b2c006184d6ac6d6c29d4db2": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.16908802785850752,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_block:5d0afc97e3206122551d656ceb3b19856288c0b36d91a59ac36ebbe27036634c:87044841df01384c9e68a0fd5f05f9a0ff97c937875bdac52d390be158dc0b8b": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.023181733203602214,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_block:5db5b3b38ccd2c005bc267f43bcae19c4367ec8483b950d18e91e7f78c63d15c:8ff46446c35e63f1f845fba59b3a0545e5bf6a6279b8ddf6bb740ebcf20bc6b5": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.8384196840348204,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_block:775b8e404ab0e134ee16623f0ddb0fc60ca112c87e1a0d5d99a4d8c33ee57dcb:6033c66f47aa816d121d65ffc8c0b1712f6052cd8126a75b61da20dd2fb4b3e3": {
+   "family": "BRIDGE_LONG",
+   "rung": "fm_mean",
+   "proposer": "fm_mean",
+   "true_repair_gain": 0.5390749742463106,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_block:8524cf8845589e30b9856bdc80daa3125ad3bea2e87abd4b1e52437656688ee7:3c46288e38487af3599a3cc2af6228495d3fe49b747b042983555d4174c1ad17": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.478236260685493,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_block:8818cca651d681bc0e35227187154358c4c889312275caa69c228da81125c2e2:b55bbc3bedc6e5e520cd6c0c5574b49d0b76dde76c876d9adabca27dbd891561": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.07816995249905653,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_block:8f38c6b1624e60a07beb3aa30bc575b9e30fc4fdc73e28471a54b818492dcf7c:371dc8e846b9f2bad8fd33553ae38b996a72e5e8197ae2a03220decc316ce64c": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.02881648172463215,
+   "true_loss": 0.0
+  },
+  "ETTh1:contaminated:missing_block:cc9abefee89feca7e22714853be99d00a97990839a2e384381a82de50bf99d04:5437f6cef00b1468474812d8564d42e13a03da8becb7c58986c25b454454a0c0": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.05882796770258395,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_block:6883a2e3c3e15250ab327f4a06c8cadc82717abd69dc38b8dd16bd8bbeae8934:744c4743f86564bd70b637a0f58ac7c8b0a0caae175723d3396f2148265aa9ce": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.03338220421730128,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_block:6e7085840791e78cba12509338ba56121b21cd7572f0abc5469a22e49d3cfbfe:bcfe0ab6c74f30f5c097b07d7039c2525070b3188996f0e61dbbba11937fa108": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.013824489308092809,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_block:70e9ae70f98727d98edfd128cb8f74fdd1262363b0c1f7acf8f28845b3e7cb6a:26a7b1bf7f2f6b6461a8bd34fc2df566313b33f147bfb4fbf20e5f280f173908": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.03434420636970045,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_block:cc1a446af66cae95e3470822be040fd358d7c9310a7c67fe4a6ec8b89b34c1a5:f3cf768574d0f8c7d6410eecbdd9d77ed4e4f027faf93d9ddfb952cd7b84c484": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.2763306701579531,
+   "true_loss": 0.0
+  },
+  "ETTh2:contaminated:missing_block:dc1fbe9a937b89dadace5df3440c9d42d421a4982a543afc306705bc4d6849a3:c2da5876b2ec7a8da0ddef5f4a3aa5de71fdcb26fa93c7798e80c821ad295bf8": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.020283766850545965,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:11acf65c0dd0ada0f9907e919d1ebba8a410333b5e7e16dc08e56427b612b2fe:72e7f02962c08db12d57a3721b139c7dfd9c5b86bcddc94322110f8c0c3613bc": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.04443235486763279,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:13ec463aebfb7ae22d584872380e0f8520668cf3a49ad4b36aa9b5e2058ae1f5:0b2153d5b2ea6c20f464782df029d248cbbec4059329e9cf429f6a3c5d504082": {
+   "family": "BRIDGE_LONG",
+   "rung": "moment_reconstruct",
+   "proposer": "moment",
+   "true_repair_gain": 0.25309862897820234,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:17c42a10e9531a8a90e4035de6bd682726647f97e3c534c2e7ce80300f3da6b7:d102cf2e974c7e592a81c6cc34b30ba0d7b1d4b367f8fb712cdc5d22c74377ee": {
+   "family": "BRIDGE_LONG",
+   "rung": "openfim_pointwise",
+   "proposer": "openfim",
+   "true_repair_gain": 0.05854834090748702,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:2cc4f9c5abbb6a160601431be198c6f90512f90400885645cd97df04322d6b2a:ae91187815057f4531c080383e8d9d6794abfdfa1290755af836f77c9e00cf82": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.2517211791665037,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:5ff614565a4112bfe08fe36faece1e0bebca94b236fe081b5fb9f7e1f597048f:1074a7d51c1c67fb64e41ecd841e4cbd7c3278864c52e384a9aa0e6278da7c8a": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.3864276802560717,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:840e4561e0e86c4baf6b43f56174601c20e91243a415d8e8493dce8cd12662d7:e8a881326499b21e0de58b0e43ed0166f28a1fc4027e226c19e9f99445b43155": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.044084139795159884,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:9bd44abf91291361306c2150d3978134db2cf0eb3186b0604f796bea1b3a4fd2:53cd154afdadd1fc56140bfe4e745558262ce185f63c22703eabf9d0b3098fdb": {
+   "family": "BRIDGE_LONG",
+   "rung": "moment_reconstruct",
+   "proposer": "moment",
+   "true_repair_gain": 0.9142445041539738,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:c38792ba738e5a84be6886e30b7082d93a523d4e94c85dca5f44470d5f1d838b:dcc947271f3c74f7b6a226c8c647f2a5372a92fc7ba2c3f0bcf774e7887525d4": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.05359755222214242,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:db8550263d498c2a546f778ac27c07f04f7eea905c0b1840308c8926d7ce424b:2be4db35b7c6be2e991e4af8fe86320342ce63d4d97e038da1808080d34d0ce8": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.21895742581185199,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:dda489aa5cd467e3d2e584676eada20769d732c75f2f238b0031f15845809fcd:83dde9e85cde141878c2f2aa547d0212a9146342dc3d80dec12d8adac07041ef": {
+   "family": "BRIDGE_LONG",
+   "rung": "moment_reconstruct",
+   "proposer": "moment",
+   "true_repair_gain": 0.27846639950888347,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:ec0e5f6cef1f72d05722259ef0b379e25b50afec9f5f97f8f806c0085f2faa32:33a294828bc70385ecf458aa60220cc7b0170ee00d286fbcb39b219b49e01bfa": {
+   "family": "BRIDGE_LONG",
+   "rung": "openfim_pointwise",
+   "proposer": "openfim",
+   "true_repair_gain": 0.02418071604095573,
+   "true_loss": 0.0
+  },
+  "ETTm1:contaminated:missing_block:fec07e7e40ca034ff879f7bfbdc14c7ec4586c382ce9b842f920fef54ad909dd:08619fab1e5e27eaaae786d968f3f5c95b519a84e0a3a01673286d28da618a8e": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.4166889754857982,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:missing_block:0f729526e703938cb7c8d9824a0285031ef3e375fc7af47c2d7b29c71ac2bc73:3f34519837215b23c7e00e53fd3ee2151b7b940459d5017133c9cd2a56e19056": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.10937323203470012,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:missing_block:7cfd2bddbb2664c0947aee744662558011dac50c67ed229ef06950f9c4baec59:7534aed8b66907f864fabb5ea6b6b2c1598195fec873c1fa4f4bbcc99f9df96b": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.020810917184258152,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:missing_block:c8a163886493cb53dfc7aa3b151937212de31e6a40c585b7f4c554da7c3365a7:2bf801067094aaad37b0b54b92e649508ecd928e40332b1e1c2f466e495facdd": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.023830813879245565,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:missing_block:d5d8c3f43c19748df83b483c26ff24cf7f9161473b07e719f30877be1d870c93:60bc9ae6561f160afbfabe921fbf7dc3485e92a3c0bcc3ff274f0906b1099b32": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.10926502453248937,
+   "true_loss": 0.0
+  },
+  "Oil Price:contaminated:missing_block:f7da9e626db5cf5072935d8687b68dbe70e543f9683a652f5922b84e4df91ba3:c13a01fead349faddec55522f0f1c1ce03b5fc20280e0af50700e7308c7dcba9": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.02293274365949822,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:0d3d05a66931652d8915ddcfd678551bdd37ae83166c19f9e0a4acdeaf4382b5:f910324ba9615d4d856e561375772593b680b7c90a855a674fa77ff641057eaf": {
+   "family": "BRIDGE_LONG",
+   "rung": "fm_mean",
+   "proposer": "fm_mean",
+   "true_repair_gain": 0.045834579124815394,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:1dd9fcd5dbb394871752aff895b6adb266686ce1186ce2a1a0ccefcfe1b155c8:153c20bfee2b425966c4eacc4d6904c48977cbf916f2eb3d91bd0d99b26fbec2": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.01435527166804175,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:2b05135a9bdea0ef2ea0aa93e82f43fc0026ebd0824187e964b9678709cb4d07:2d48eb71fc868316fd1804883de1b84074460c1ae9899ef7f0faba7512ff2129": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.000951291457546276,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:2ea49890d304b270b83d603e0feee8e05ce8633444aee87ac628be1edc518eaa:664d8e45aacf6e826229545f700bcefa65c4ddbfbbd214b7e0f240d8a75b0deb": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.004559586277073826,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:35667cc89717a742538ff1f1bd347b5f33be3afeb609859eaf3dc329c1034166:0a97b584632badc377b5a184bc4c17db225085e6b7fb3fc3efd01fca7dc60511": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 6.269239682055836e-06,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:4b6ebb9f01c46f6426321e6683142a1e4285ae6a5aa6d8283ca691af0a84c68b:13b132192b81b6f9b460a1c8361d42c2a1eb02ea508435432effc52e0bad5dda": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.004755419546381241,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:4ebccb70c8f634050de9e5dde14b0424852e8f1b2a5c72e9e3de4d0618773020:e8588063f894eb07aa0565c86d9fc27dd3f67c92c0abaed287cf17cef6ce941a": {
+   "family": "BRIDGE_LONG",
+   "rung": "fm_mean",
+   "proposer": "fm_mean",
+   "true_repair_gain": 0.21061967558630948,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:56882c6a4b2851afc3d84c9e8178b745a6ad3652d28397e5d1b390133ac84ef0:7c076f672ecfc206230c1b64fec40a304fbb24c5a14c8806d150eebc548fb480": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.002239497022599981,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:57c89adb379aba7f5f0afa2fd7879d6cd1b5fecf35eeb3cbd13b826d7d1ace5c:dd62f911e3bb4a4aca4cc091d33323ab8e2e070b50e2c153daeb5b077c21072e": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.012253526795277959,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:5f2fdc5b2f536ddfb12b3a7059d9d48cb53c35bae4743b6dc21d2d7d8140fa5c:881f2f6a5426dc1cb641c5ac2e9b25cb86e529aea7f7450595e5bee224258c23": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.14586790870428967,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:67a48d4cf5c61e99a828e34bc5acf54fded357f6e1862c0951ae0bfa14cf538f:303c10ce2a28f36c88449e22c1ca4406545f9a02a98f2f1fdcc6fbf926fa172f": {
+   "family": "BRIDGE_LONG",
+   "rung": "moment_reconstruct",
+   "proposer": "moment",
+   "true_repair_gain": 0.05063444443093565,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:6986d2da828a9e9ba52c121e99aefa5f5e21d41cdca9a1b88b8030cd7381625a:310521b9cbb53949a76a1e6423c5cbffec7f2319fc8e31432aaa64848f4ead5e": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 9.284905381432289e-06,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:69d6f3642f4a5361ce897d2412aac7d18843af5490e2a08e79a7e0650c161570:cefef27abccfb4cc9dfc0bc458f9b4d99c21e01795a476848ea1fc8c24c46515": {
+   "family": "BRIDGE_LONG",
+   "rung": "moment_reconstruct",
+   "proposer": "moment",
+   "true_repair_gain": 0.055045150477978276,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:6f20c40e14bbfcebcd1e808242394af423fef9500be7664e46dd00919f8eca7e:c74efd3a959efe9ec2a204327679837460c40f8f91b78f26b35e6a76a9ff35fc": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.010070887609771055,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:74dec7a9ad57d7213512fb508ebf31c4f7b42655ff11d69ff4607434f696b9be:d6e72b8818bbf1d704bd0867248f0ad2daeedd7a2c8123dd842ea25e19747a81": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.3938045809811835,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:78440f5ef02157145e89f390d77e93ca5539c7806ab92ab5d4d14d3cb7dec9ef:b961c86b482b5eda5ed6e6f85087ccd0276ebf14d80c698f0ed76b98a9571c45": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.07003489209051414,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:789af197dbcf714dcfb8b4fcd9459bf229bce4b6acdf214f512961f880277d42:c11663f46a7c59c653dd897a4981f1e0cbd308c33dcdaa04e4c096f41dca8f7c": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.006660787940429304,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:818c135b44246474cd004e49456a78e0bb21d458dd127fa0e5463c597cf12d05:09b0f6465a862260e5eb5c389cc827c15e39983a1bf28e3d6645ea9edc7fa819": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.0003343554022741703,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:8a777c476873cc82d7cd61feb8206fa897bcbd7958a8acbca64c0206e968ad5f:14e20edaf3e41c0ea54956d09397caa5b3f49aa5fcacbb85b756f8e502452bbf": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.3199524578821108,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:9513baa02429cee74a7e6c28de94bfdfd8fe655df8750e2670c20c18d5793cf8:f4063d6d09f4a05ac52bab9f9c77dfc43146d76402c843101215456edfe9dea4": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.03609675829617119,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:a08a59171b693283bf12ad75816f567c023a4367f60de34ca9fea9725fee8bfb:74370ebc390550101f2689fb28aec05c9476523a261ffbd7dc22d244d0975876": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.02513613329209024,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:a6ded25cc4b3ceefdcd8a7453b1dfa17dbe5ec5fcaa575db23b5c7152a8c570b:32fd71509044788a51dfa0044e7375d1ce330909dbfa811e18965480ba90545c": {
+   "family": "BRIDGE_LONG",
+   "rung": "fm_mean",
+   "proposer": "fm_mean",
+   "true_repair_gain": 0.0022405402256524317,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:ad2e4ae0b16f9da07b4e4e82e859e6ca66a9b80234026d93466b55117ac7cb87:b1fd225b0a6e024c10607f32133f41be9e8ff938565419238b34822d8a9dd855": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.007854957744188377,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:b1e758d44bf381647c6e87cdd9e0b9265fac8987e1c140de49379b5bccbb318a:c230210c8bc53c2dad6d7500f92ca11edfb95d8900c62bed21b5f7d4a4dcaf0d": {
+   "family": "BRIDGE_LONG",
+   "rung": "openfim_pointwise",
+   "proposer": "openfim",
+   "true_repair_gain": 0.00356001001631068,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:bc054d64a4c625afe76dd4712a30b67ca0813a843ca822d9f0b1e6af65984ebe:1dbbef01fabbf1d43063f886cf5b97a0545c3385aba801e89b6db570fe2c7731": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.0024610803265498445,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:f23c58c2967ac73a96de5875b49bbb16c3c7dba4dadc2d6d51b1f06a2d2457c8:00c7b794e2e9d66fa1427190579db9cd9d6c98e16fce8f98199938c1e1e17428": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.02597374530674074,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:fb6ce8d79e1d9075389f6e6ba92d45c934e88d320e519be1b43b9bd72e75a93b:ff1b71a8e0e1069edb1a9624d6443225c8570d4620ffa8dcb5c490aa16bcb219": {
+   "family": "BRIDGE_LONG",
+   "rung": "tsicl_median",
+   "proposer": "tsicl",
+   "true_repair_gain": 0.0016402246779942961,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:fc6cdca366defea692bccd4fff94c00ffbb27594b750dd89c1a148d15abaf324:9f21f45d5e4cce935a72b43cceffb404cc8e9cd938eb95ad3e4fd51e259e9167": {
+   "family": "BRIDGE_LONG",
+   "rung": "linear_bridge",
+   "proposer": "linear_bridge",
+   "true_repair_gain": 0.09699554336462934,
+   "true_loss": 0.0
+  },
+  "US Term Structure:contaminated:missing_block:fd94f1d767f14fdac661c4c69ad35f8b3abb6dd5192ad2a677d929e94226135e:c46eb384ead10f0b456b8ac42719bbcaf93b6c176f451ac8135f274030f702ee": {
+   "family": "BRIDGE_LONG",
+   "rung": "fm_mean",
+   "proposer": "fm_mean",
+   "true_repair_gain": 0.057970365336120815,
+   "true_loss": 0.0
+  }
+ },
+ "gate": {
+  "rule": "joint unrestricted oracle: bcov >= 0.32, gain >= 0.105, CHR == 0.0 (771-window frame, KEEP placeholders)",
+  "bcov": {
+   "value": 0.5545454545454546,
+   "threshold": 0.32,
+   "pass": true
+  },
+  "gain": {
+   "value": 0.19497789939446003,
+   "threshold": 0.105,
+   "pass": true
+  },
+  "chr": {
+   "value": 0.0,
+   "threshold": 0.0,
+   "pass": true
+  },
+  "pass": true
+ }
+}

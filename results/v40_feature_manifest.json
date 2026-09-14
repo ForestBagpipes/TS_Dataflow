@@ -1,0 +1,81 @@
+{
+ "phase": "v4.0 Phase 2.1 feature cache manifest (docs/v4_0_counteract_preregistration.md §11.3 F1-F3)",
+ "n_rows": 16227,
+ "n_episodes": 4200,
+ "sequence_channels": [
+  "dirty_materialised_norm",
+  "repaired_norm",
+  "repair_delta_norm",
+  "raw_missing_mask",
+  "touched_support_mask"
+ ],
+ "struct_features": [
+  "raw_nan_frac",
+  "longest_nan_run_frac",
+  "n_nan_runs_frac",
+  "touched_frac",
+  "n_filled_frac",
+  "support_ratio",
+  "scale_over_std",
+  "iqr_over_std",
+  "delta_l1_over_scale",
+  "delta_linf_over_scale",
+  "delta_nonzero_frac",
+  "gap_touches_edge",
+  "mean_nan_run_frac"
+ ],
+ "normalisation": "window-local: median and IQR/1.349 from the dirty window's finite points only, shared by the three numeric channels; no cross-window, cross-source or cross-fold statistics",
+ "tsfm": {
+  "model": "AutonLab/MOMENT-1-large",
+  "revision": "ca58581bc7bea2ebed4e80dc0a3e4b8b609c6ecc",
+  "dim": 1024,
+  "pooling": "mean over patch axis (embed reduction='none')",
+  "input": "materialised dirty / candidate output, raw scale (MOMENT applies its own instance norm)",
+  "frozen": true,
+  "batch": 64,
+  "device": "cuda",
+  "keep_after_equals_before": true
+ },
+ "forbidden_input_keys_absent": [
+  "after_nmse",
+  "before_nmse",
+  "beneficial_and_safe",
+  "clean",
+  "clean_hash",
+  "clean_parent_uid",
+  "clean_series",
+  "dataset",
+  "gain",
+  "harmful",
+  "labels",
+  "protected",
+  "sample_uid",
+  "source",
+  "source_id",
+  "source_idx_input",
+  "true_kind",
+  "true_loss"
+ ],
+ "grouping_only_arrays": [
+  "src_idx",
+  "mech_idx",
+  "sev_idx",
+  "ep_idx"
+ ],
+ "array_sha256": {
+  "seq": "cadcc240d91039a92f9cbdf431ddda410c3d1a1f613750d1772492f2cb395772",
+  "struct": "a92cb1abc92ac1d6a871877b939d03bfdc2ed0d8417e809b80a705c6694e91b1",
+  "emb_before": "155ff1a1a26ff986cf8ffaafe1cd9e816db0c752a0cfae93a941aa249ef0e663",
+  "emb_after": "18bafc38019a0e6e55ac461e4471db267595fea731bf16d9cfc80612f06fd772",
+  "action_idx": "0681d3e591c617c8dbdcd024512d45f2c24238bf270f3ac05b2899a8acc92e20",
+  "y_gain": "4abd8d49a2894836508bd62572e94591dfe50f0557b5043592329a97b413377f",
+  "y_harm": "3c5a34bf02693f4bb1b308b18f7c7e9dd082a432946478140e381d93aecab570",
+  "y_prot": "cfe2202a900c93f9f23cf30ddf98b82642896eb55d98d2d2ef78925478c9d193"
+ },
+ "cache_file": "v40_feature_cache.npz",
+ "rows_file": "v40_feature_cache_rows.jsonl",
+ "rows_sha256": "ded15306143ae9d569f55a1460a8886f9b76d8489a9814a48346558591fd0ea7",
+ "gpu_peak_mib": 1643.10498046875,
+ "seed": 20260904,
+ "runtime_sec": 60.5505633354187
+}

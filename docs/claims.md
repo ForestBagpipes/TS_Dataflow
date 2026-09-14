@@ -1,5 +1,14 @@
 # The claims, and the measurement behind each
 
+> **2026-09-02 staleness notice.** This file predates the corrected damage
+> definition and the v2/v3 line of experiments. Every number below that rests
+> on the old centered `audit._nmse` or on v1's pre-correction damage is
+> **stale** and must not be quoted without the reconciliation in
+> `docs/version_ledger.md`. The training-dynamics triage claim is **blocked**
+> (formal probe AUROC 0.5794, red). The v3-pre contextual shield is a
+> **stopped candidate**: it failed its pre-registered gates, see
+> `docs/v3_contextual_conformal_shield.md`.
+
 Rewritten after the gating result. The previous version put our agent at the
 centre; this one puts the acceptance layer there, because that is what the
 evidence supports.

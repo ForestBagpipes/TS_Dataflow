@@ -1,0 +1,32 @@
+{
+ "n_parents": 5250,
+ "parent_uid_unique": true,
+ "intersect_manifest_1599_uids": [],
+ "intersect_eval_771_uids": [],
+ "n_parent_series_hash_in_manifest": 0,
+ "split_disjoint_violations": {
+  "train_val": [],
+  "train_test": [],
+  "val_test": []
+ },
+ "pass": true,
+ "per_source": {
+  "ETTh1": 875,
+  "ETTh2": 875,
+  "ETTm1": 875,
+  "Crypto": 875,
+  "US Term Structure": 875,
+  "Oil Price": 875
+ },
+ "per_split": {
+  "train": 4172,
+  "val": 537,
+  "test": 541
+ },
+ "banned_keys": 1687,
+ "output_sha256": {
+  "v40_bank_parents.npz": "b870c22d1efa3b336be5156ec5a758dd3874bff145c64f2497ff09b06842d3ca",
+  "v40_bank_parents.jsonl": "3598c057893f2b8e580616591dd4bd9f23cd229cdf4502aec496216cbc6befab"
+ },
+ "runtime_sec": 12.715105295181274
+}

@@ -1,0 +1,695 @@
+{
+  "meta": {
+    "created_utc": "2026-08-31T17:52:28.151212+00:00",
+    "inputs": {
+      "smoke_v2": "/root/autodl-tmp/work2/results/smoke_v2.json",
+      "counterfactual_routing": "/root/autodl-tmp/work2/results/counterfactual_routing.json",
+      "family_scores": "/root/autodl-tmp/work2/results/family_scores.jsonl"
+    },
+    "data_limitation": "experiments/smoke_v2.py did not save per-window/per-candidate traces; this attribution uses the aggregate funnel_v2 and operators_v2 tables from smoke_v2.json plus per-candidate calibration-pool records from family_scores.jsonl. It can report family x layer veto shares and calibration-pool family x stratum x true_kind distributions, but not the per-candidate damage/repair gain table for smoke350 itself."
+  },
+  "coverage_gap": {
+    "calibration_coverage_upper_bound": 0.4849,
+    "smoke_coverage_rate": 0.0154,
+    "smoke_coverage_wilson_95": [
+      0.0042,
+      0.0544
+    ],
+    "gap": 0.4695,
+    "by_family_ub": {
+      "IMPUTE": {
+        "coverage_ub_contaminated": 0.4111,
+        "admitted_rate_calibrated": 0.2262,
+        "lambda": 0.02,
+        "structural_admitted": 261
+      },
+      "RESEGMENT": {
+        "coverage_ub_contaminated": 0.0352,
+        "admitted_rate_calibrated": 0.0475,
+        "lambda": 0.4,
+        "structural_admitted": 36
+      },
+      "DESPIKE": {
+        "coverage_ub_contaminated": 0.0,
+        "admitted_rate_calibrated": 0.0,
+        "lambda": 0.0,
+        "structural_admitted": 0
+      },
+      "DENOISE": {
+        "coverage_ub_contaminated": 0.0386,
+        "admitted_rate_calibrated": 0.0936,
+        "lambda": 0.1,
+        "structural_admitted": 25
+      }
+    }
+  },
+  "smoke_funnel": [
+    {
+      "family": "IMPUTE",
+      "layer": "protected",
+      "candidates": 78,
+      "no_op": 21,
+      "no_op_share": 0.2692,
+      "failed_utility": 29,
+      "failed_utility_share_executed": 0.5088,
+      "failed_structure": 25,
+      "failed_structure_share_executed": 0.4386,
+      "failed_risk": 2,
+      "failed_risk_share_executed": 0.0351,
+      "accepted": 1,
+      "accepted_share_executed": 0.0175
+    },
+    {
+      "family": "IMPUTE",
+      "layer": "contaminated",
+      "candidates": 195,
+      "no_op": 11,
+      "no_op_share": 0.0564,
+      "failed_utility": 83,
+      "failed_utility_share_executed": 0.4511,
+      "failed_structure": 80,
+      "failed_structure_share_executed": 0.4348,
+      "failed_risk": 21,
+      "failed_risk_share_executed": 0.1141,
+      "accepted": 0,
+      "accepted_share_executed": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "layer": "protected",
+      "candidates": 291,
+      "no_op": 209,
+      "no_op_share": 0.7182,
+      "failed_utility": 27,
+      "failed_utility_share_executed": 0.3293,
+      "failed_structure": 53,
+      "failed_structure_share_executed": 0.6463,
+      "failed_risk": 0,
+      "failed_risk_share_executed": 0.0,
+      "accepted": 2,
+      "accepted_share_executed": 0.0244
+    },
+    {
+      "family": "RESEGMENT",
+      "layer": "contaminated",
+      "candidates": 189,
+      "no_op": 125,
+      "no_op_share": 0.6614,
+      "failed_utility": 32,
+      "failed_utility_share_executed": 0.5,
+      "failed_structure": 31,
+      "failed_structure_share_executed": 0.4844,
+      "failed_risk": 0,
+      "failed_risk_share_executed": 0.0,
+      "accepted": 1,
+      "accepted_share_executed": 0.0156
+    },
+    {
+      "family": "DESPIKE",
+      "layer": "protected",
+      "candidates": 6,
+      "no_op": 1,
+      "no_op_share": 0.1667,
+      "failed_utility": 3,
+      "failed_utility_share_executed": 0.6,
+      "failed_structure": 2,
+      "failed_structure_share_executed": 0.4,
+      "failed_risk": 0,
+      "failed_risk_share_executed": 0.0,
+      "accepted": 0,
+      "accepted_share_executed": 0.0
+    },
+    {
+      "family": "DESPIKE",
+      "layer": "contaminated",
+      "candidates": 36,
+      "no_op": 0,
+      "no_op_share": 0.0,
+      "failed_utility": 2,
+      "failed_utility_share_executed": 0.0556,
+      "failed_structure": 34,
+      "failed_structure_share_executed": 0.9444,
+      "failed_risk": 0,
+      "failed_risk_share_executed": 0.0,
+      "accepted": 0,
+      "accepted_share_executed": 0.0
+    },
+    {
+      "family": "DENOISE",
+      "layer": "protected",
+      "candidates": 24,
+      "no_op": 0,
+      "no_op_share": 0.0,
+      "failed_utility": 5,
+      "failed_utility_share_executed": 0.2083,
+      "failed_structure": 17,
+      "failed_structure_share_executed": 0.7083,
+      "failed_risk": 2,
+      "failed_risk_share_executed": 0.0833,
+      "accepted": 0,
+      "accepted_share_executed": 0.0
+    },
+    {
+      "family": "DENOISE",
+      "layer": "contaminated",
+      "candidates": 23,
+      "no_op": 3,
+      "no_op_share": 0.1304,
+      "failed_utility": 0,
+      "failed_utility_share_executed": 0.0,
+      "failed_structure": 17,
+      "failed_structure_share_executed": 0.85,
+      "failed_risk": 2,
+      "failed_risk_share_executed": 0.1,
+      "accepted": 1,
+      "accepted_share_executed": 0.05
+    }
+  ],
+  "smoke_verdicts": {
+    "IMPUTE": {
+      "attempts": 273,
+      "accepted": 1,
+      "on_protected": 1,
+      "verdicts": {
+        "ROLLED_BACK_STRUCTURE": 105,
+        "ROLLED_BACK_UTILITY": 112,
+        "ROLLED_BACK_RISK": 23,
+        "NO_OP": 32,
+        "ACCEPTED": 1
+      },
+      "verdict_shares": {
+        "ROLLED_BACK_STRUCTURE": 0.3846,
+        "ROLLED_BACK_UTILITY": 0.4103,
+        "ROLLED_BACK_RISK": 0.0842,
+        "NO_OP": 0.1172,
+        "ACCEPTED": 0.0037
+      }
+    },
+    "RESEGMENT": {
+      "attempts": 480,
+      "accepted": 3,
+      "on_protected": 0,
+      "verdicts": {
+        "NO_OP": 334,
+        "ACCEPTED": 3,
+        "ROLLED_BACK_UTILITY": 59,
+        "ROLLED_BACK_STRUCTURE": 84
+      },
+      "verdict_shares": {
+        "NO_OP": 0.6958,
+        "ACCEPTED": 0.0063,
+        "ROLLED_BACK_UTILITY": 0.1229,
+        "ROLLED_BACK_STRUCTURE": 0.175
+      }
+    },
+    "DESPIKE": {
+      "attempts": 42,
+      "accepted": 0,
+      "on_protected": 0,
+      "verdicts": {
+        "ROLLED_BACK_STRUCTURE": 36,
+        "ROLLED_BACK_UTILITY": 5,
+        "NO_OP": 1
+      },
+      "verdict_shares": {
+        "ROLLED_BACK_STRUCTURE": 0.8571,
+        "ROLLED_BACK_UTILITY": 0.119,
+        "NO_OP": 0.0238
+      }
+    },
+    "DENOISE": {
+      "attempts": 47,
+      "accepted": 1,
+      "on_protected": 0,
+      "verdicts": {
+        "ROLLED_BACK_STRUCTURE": 34,
+        "NO_OP": 3,
+        "ROLLED_BACK_RISK": 4,
+        "ACCEPTED": 1,
+        "ROLLED_BACK_UTILITY": 5
+      },
+      "verdict_shares": {
+        "ROLLED_BACK_STRUCTURE": 0.7234,
+        "NO_OP": 0.0638,
+        "ROLLED_BACK_RISK": 0.0851,
+        "ACCEPTED": 0.0213,
+        "ROLLED_BACK_UTILITY": 0.1064
+      }
+    }
+  },
+  "smoke_repair_by_kind": {
+    "missing_block": {
+      "n": 20,
+      "edited": 0,
+      "improved": 0,
+      "coverage": 0.0,
+      "coverage_wilson_95": [
+        0.0,
+        0.1611
+      ]
+    },
+    "level_shift": {
+      "n": 19,
+      "edited": 1,
+      "improved": 1,
+      "coverage": 0.0526,
+      "coverage_wilson_95": [
+        0.0094,
+        0.2464
+      ]
+    },
+    "missing_scattered": {
+      "n": 19,
+      "edited": 0,
+      "improved": 0,
+      "coverage": 0.0,
+      "coverage_wilson_95": [
+        0.0,
+        0.1682
+      ]
+    },
+    "noise": {
+      "n": 15,
+      "edited": 1,
+      "improved": 1,
+      "coverage": 0.0667,
+      "coverage_wilson_95": [
+        0.0119,
+        0.2982
+      ]
+    },
+    "flatline": {
+      "n": 19,
+      "edited": 0,
+      "improved": 0,
+      "coverage": 0.0,
+      "coverage_wilson_95": [
+        0.0,
+        0.1682
+      ]
+    },
+    "spike": {
+      "n": 19,
+      "edited": 0,
+      "improved": 0,
+      "coverage": 0.0,
+      "coverage_wilson_95": [
+        0.0,
+        0.1682
+      ]
+    },
+    "duplicate": {
+      "n": 19,
+      "edited": 0,
+      "improved": 0,
+      "coverage": 0.0,
+      "coverage_wilson_95": [
+        0.0,
+        0.1682
+      ]
+    }
+  },
+  "calibration_pool_stratum_table": [
+    {
+      "family": "DENOISE",
+      "stratum": "changepoint",
+      "true_kind": "null",
+      "n_candidates": 3,
+      "mean_distortion": 0.1429,
+      "mean_delta_utility": 0.6242,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "DENOISE",
+      "stratum": "clean",
+      "true_kind": "null",
+      "n_candidates": 6,
+      "mean_distortion": 0.1993,
+      "mean_delta_utility": 0.4374,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "DENOISE",
+      "stratum": "clean_ood",
+      "true_kind": "null",
+      "n_candidates": 123,
+      "mean_distortion": 0.3203,
+      "mean_delta_utility": 10.8012,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "DENOISE",
+      "stratum": "contaminated",
+      "true_kind": "duplicate",
+      "n_candidates": 6,
+      "mean_distortion": 0.0918,
+      "mean_delta_utility": 0.5584,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "DENOISE",
+      "stratum": "contaminated",
+      "true_kind": "level_shift",
+      "n_candidates": 3,
+      "mean_distortion": 0.1536,
+      "mean_delta_utility": 0.6043,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "DENOISE",
+      "stratum": "contaminated",
+      "true_kind": "noise",
+      "n_candidates": 123,
+      "mean_distortion": 0.2057,
+      "mean_delta_utility": 0.5798,
+      "mean_loss": 0.0081,
+      "share_loss_le_0_03": 0.9919
+    },
+    {
+      "family": "DENOISE",
+      "stratum": "contaminated",
+      "true_kind": "spike",
+      "n_candidates": 3,
+      "mean_distortion": 0.441,
+      "mean_delta_utility": 1.167,
+      "mean_loss": 0.0,
+      "share_loss_le_0_03": 1.0
+    },
+    {
+      "family": "DESPIKE",
+      "stratum": "changepoint",
+      "true_kind": "null",
+      "n_candidates": 6,
+      "mean_distortion": 0.016,
+      "mean_delta_utility": 0.0289,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "DESPIKE",
+      "stratum": "clean",
+      "true_kind": "null",
+      "n_candidates": 12,
+      "mean_distortion": 0.0329,
+      "mean_delta_utility": 0.061,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "DESPIKE",
+      "stratum": "clean_ood",
+      "true_kind": "null",
+      "n_candidates": 47,
+      "mean_distortion": 0.0706,
+      "mean_delta_utility": 30.2247,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "DESPIKE",
+      "stratum": "contaminated",
+      "true_kind": "duplicate",
+      "n_candidates": 6,
+      "mean_distortion": 0.0589,
+      "mean_delta_utility": 0.0649,
+      "mean_loss": 0.8333,
+      "share_loss_le_0_03": 0.1667
+    },
+    {
+      "family": "DESPIKE",
+      "stratum": "contaminated",
+      "true_kind": "missing_block",
+      "n_candidates": 11,
+      "mean_distortion": 0.023,
+      "mean_delta_utility": 0.0727,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "DESPIKE",
+      "stratum": "contaminated",
+      "true_kind": "missing_scattered",
+      "n_candidates": 12,
+      "mean_distortion": 0.0303,
+      "mean_delta_utility": 0.1149,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "DESPIKE",
+      "stratum": "contaminated",
+      "true_kind": "noise",
+      "n_candidates": 3,
+      "mean_distortion": 0.0098,
+      "mean_delta_utility": 0.0081,
+      "mean_loss": 0.6667,
+      "share_loss_le_0_03": 0.3333
+    },
+    {
+      "family": "DESPIKE",
+      "stratum": "contaminated",
+      "true_kind": "spike",
+      "n_candidates": 132,
+      "mean_distortion": 0.0164,
+      "mean_delta_utility": 2.2598,
+      "mean_loss": 0.0152,
+      "share_loss_le_0_03": 0.9848
+    },
+    {
+      "family": "DESPIKE",
+      "stratum": "rare_valid",
+      "true_kind": "null",
+      "n_candidates": 6,
+      "mean_distortion": 0.0059,
+      "mean_delta_utility": 0.2613,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "IMPUTE",
+      "stratum": "changepoint",
+      "true_kind": "null",
+      "n_candidates": 66,
+      "mean_distortion": 0.1411,
+      "mean_delta_utility": -0.0047,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "IMPUTE",
+      "stratum": "clean",
+      "true_kind": "null",
+      "n_candidates": 91,
+      "mean_distortion": 0.1298,
+      "mean_delta_utility": 0.0717,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "IMPUTE",
+      "stratum": "contaminated",
+      "true_kind": "duplicate",
+      "n_candidates": 33,
+      "mean_distortion": 0.1456,
+      "mean_delta_utility": 0.2029,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "IMPUTE",
+      "stratum": "contaminated",
+      "true_kind": "flatline",
+      "n_candidates": 213,
+      "mean_distortion": 0.1182,
+      "mean_delta_utility": 0.069,
+      "mean_loss": 0.4131,
+      "share_loss_le_0_03": 0.5869
+    },
+    {
+      "family": "IMPUTE",
+      "stratum": "contaminated",
+      "true_kind": "level_shift",
+      "n_candidates": 34,
+      "mean_distortion": 0.1376,
+      "mean_delta_utility": 0.111,
+      "mean_loss": 0.5294,
+      "share_loss_le_0_03": 0.4706
+    },
+    {
+      "family": "IMPUTE",
+      "stratum": "contaminated",
+      "true_kind": "missing_block",
+      "n_candidates": 267,
+      "mean_distortion": 0.1234,
+      "mean_delta_utility": 0.0467,
+      "mean_loss": 0.397,
+      "share_loss_le_0_03": 0.603
+    },
+    {
+      "family": "IMPUTE",
+      "stratum": "contaminated",
+      "true_kind": "missing_scattered",
+      "n_candidates": 264,
+      "mean_distortion": 0.0163,
+      "mean_delta_utility": -0.0078,
+      "mean_loss": 0.0758,
+      "share_loss_le_0_03": 0.9242
+    },
+    {
+      "family": "IMPUTE",
+      "stratum": "contaminated",
+      "true_kind": "spike",
+      "n_candidates": 19,
+      "mean_distortion": 0.1277,
+      "mean_delta_utility": -0.0987,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "IMPUTE",
+      "stratum": "hard",
+      "true_kind": "null",
+      "n_candidates": 55,
+      "mean_distortion": 0.1796,
+      "mean_delta_utility": 0.1414,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "IMPUTE",
+      "stratum": "rare_valid",
+      "true_kind": "null",
+      "n_candidates": 112,
+      "mean_distortion": 0.1077,
+      "mean_delta_utility": 0.0781,
+      "mean_loss": 1.0,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "stratum": "changepoint",
+      "true_kind": "null",
+      "n_candidates": 195,
+      "mean_distortion": 0.8239,
+      "mean_delta_utility": 0.122,
+      "mean_loss": 0.8239,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "stratum": "clean",
+      "true_kind": "null",
+      "n_candidates": 109,
+      "mean_distortion": 0.7785,
+      "mean_delta_utility": 1.2125,
+      "mean_loss": 0.7785,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "stratum": "clean_ood",
+      "true_kind": "null",
+      "n_candidates": 44,
+      "mean_distortion": 0.8749,
+      "mean_delta_utility": 5.8073,
+      "mean_loss": 0.8749,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "stratum": "contaminated",
+      "true_kind": "duplicate",
+      "n_candidates": 28,
+      "mean_distortion": 0.7921,
+      "mean_delta_utility": 2.5312,
+      "mean_loss": 0.913,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "stratum": "contaminated",
+      "true_kind": "flatline",
+      "n_candidates": 23,
+      "mean_distortion": 0.7731,
+      "mean_delta_utility": 0.8598,
+      "mean_loss": 0.8863,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "stratum": "contaminated",
+      "true_kind": "level_shift",
+      "n_candidates": 128,
+      "mean_distortion": 0.803,
+      "mean_delta_utility": 0.2177,
+      "mean_loss": 0.803,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "stratum": "contaminated",
+      "true_kind": "missing_block",
+      "n_candidates": 30,
+      "mean_distortion": 0.8217,
+      "mean_delta_utility": 0.2268,
+      "mean_loss": 0.9164,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "stratum": "contaminated",
+      "true_kind": "missing_scattered",
+      "n_candidates": 26,
+      "mean_distortion": 0.8056,
+      "mean_delta_utility": 0.4829,
+      "mean_loss": 0.861,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "stratum": "contaminated",
+      "true_kind": "noise",
+      "n_candidates": 29,
+      "mean_distortion": 0.5325,
+      "mean_delta_utility": 0.1054,
+      "mean_loss": 0.7511,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "stratum": "contaminated",
+      "true_kind": "spike",
+      "n_candidates": 50,
+      "mean_distortion": 0.6538,
+      "mean_delta_utility": -0.3646,
+      "mean_loss": 0.9076,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "stratum": "hard",
+      "true_kind": "null",
+      "n_candidates": 65,
+      "mean_distortion": 0.9038,
+      "mean_delta_utility": 0.551,
+      "mean_loss": 0.9038,
+      "share_loss_le_0_03": 0.0
+    },
+    {
+      "family": "RESEGMENT",
+      "stratum": "rare_valid",
+      "true_kind": "null",
+      "n_candidates": 31,
+      "mean_distortion": 0.7537,
+      "mean_delta_utility": 1.3944,
+      "mean_loss": 0.7537,
+      "share_loss_le_0_03": 0.0
+    }
+  ],
+  "root_cause_summary": "Calibration coverage upper bound is 0.4849; smoke350 coverage is 0.0154.\nThe gap is not a routing-only problem: routing replay shows that even if every routed candidate were accepted, coverage could only reach ~0.485. In smoke350 the shield and NO_OP conditions remove almost all candidates before acceptance.\nIMPUTE: 195 contaminated candidates; 5.6% NO_OP; of executed, 45.1% utility veto, 43.5% structure veto, 11.4% risk veto, 0.0% accepted.\nRESEGMENT: 189 contaminated candidates; 66.1% NO_OP; of executed, 50.0% utility veto, 48.4% structure veto, 0.0% risk veto, 1.6% accepted.\nDESPIKE: 36 contaminated candidates; 0.0% NO_OP; of executed, 5.6% utility veto, 94.4% structure veto, 0.0% risk veto, 0.0% accepted.\nDENOISE: 23 contaminated candidates; 13.0% NO_OP; of executed, 0.0% utility veto, 85.0% structure veto, 10.0% risk veto, 5.0% accepted.\n\nDominant code conditions per family (from verify.py + actions.py):\nIMPUTE: most candidates fail either delta_utility > epsilon (re-probe did not improve) or struct_distortion < 0.02 (patch/footprint/spread too large). The calibrated lambda=0.02 is the binding structural gate.\nRESEGMENT: two thirds of contaminated candidates are NO_OP because op_resegment returns applicable=False ('no changepoint' or 'would discard too much'). Of those that execute, structural distortion (often discard_distortion) and utility veto remove almost all.\nDESPIKE: lambda_star=0.0 means the structural threshold admits nothing; every executed candidate is structurally vetoed. NO_OP is rare because spikes are detected, but the family threshold is zero by calibration.\nDENOISE: executed candidates are mostly structurally vetoed against tau=0.10; only 1/23 contaminated candidates is accepted.\n\nConclusion: the 0.4849 -> 0.0154 collapse is driven by (1) RESEGMENT's operator refusing to act on most level_shift windows, (2) IMPUTE's low structural threshold rejecting almost all fills, and (3) DESPIKE's calibrated zero threshold. Routing purity (counterfactual_routing.json) already showed the proposer itself is not the primary bottleneck once the shield is applied."
+}

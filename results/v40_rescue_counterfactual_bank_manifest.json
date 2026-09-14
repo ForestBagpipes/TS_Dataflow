@@ -1,0 +1,277 @@
+{
+ "phase": "v4.0 counterfactual action bank design manifest (frozen before generation; docs/v4_0_counteract_preregistration.md §2-§3)",
+ "frozen_at_epoch": 1788459879.249928,
+ "bank_seed": 20260903,
+ "window_len": 512,
+ "corruption": {
+  "mechanisms": [
+   "missing_scattered",
+   "missing_block",
+   "spike",
+   "noise",
+   "flatline",
+   "duplicate",
+   "level_shift"
+  ],
+  "severities": [
+   "low",
+   "mid",
+   "high"
+  ],
+  "severity_ranges": {
+   "missing_scattered": {
+    "low": [
+     0.01,
+     0.02
+    ],
+    "mid": [
+     0.03,
+     0.05
+    ],
+    "high": [
+     0.06,
+     0.1
+    ]
+   },
+   "missing_block": {
+    "low": [
+     0.05,
+     0.12
+    ],
+    "mid": [
+     0.15,
+     0.3
+    ],
+    "high": [
+     0.35,
+     0.5
+    ]
+   },
+   "spike": {
+    "low": [
+     2,
+     4,
+     3.0,
+     5.0
+    ],
+    "mid": [
+     5,
+     8,
+     4.0,
+     8.0
+    ],
+    "high": [
+     9,
+     14,
+     6.0,
+     10.0
+    ]
+   },
+   "noise": {
+    "low": [
+     0.2,
+     0.4
+    ],
+    "mid": [
+     0.5,
+     0.9
+    ],
+    "high": [
+     1.0,
+     1.5
+    ]
+   },
+   "flatline": {
+    "low": [
+     0.03,
+     0.06
+    ],
+    "mid": [
+     0.08,
+     0.14
+    ],
+    "high": [
+     0.16,
+     0.25
+    ]
+   },
+   "duplicate": {
+    "low": [
+     0.05,
+     0.1
+    ],
+    "mid": [
+     0.12,
+     0.2
+    ],
+    "high": [
+     0.22,
+     0.33
+    ]
+   },
+   "level_shift": {
+    "low": [
+     1.5,
+     2.5
+    ],
+    "mid": [
+     2.5,
+     4.0
+    ],
+    "high": [
+     4.0,
+     6.0
+    ]
+   }
+  },
+  "mixed_share": 0.15,
+  "mixed_components": "2 distinct mechanisms per mixed episode, severities drawn per component, masks unioned; components fixed in the plan",
+  "clean_control_share": 0.1,
+  "missing_block_extension": "block lengths cover 5%-50% of the 512-window; the frozen evaluation injector writes 25-63/512 (~5%-12%). The extension is an intentional training-distribution widening, pre-registered here; the evaluation corpus is untouched"
+ },
+ "actions": {
+  "set": [
+   "keep",
+   "fact_short",
+   "tsicl_long",
+   "impute_seasonal",
+   "impute_linear_default",
+   "impute_linear_conservative",
+   "despike",
+   "denoise"
+  ],
+  "family": {
+   "keep": "KEEP",
+   "fact_short": "FACT_SHORT",
+   "tsicl_long": "TSICL_LONG",
+   "impute_seasonal": "IMPUTE",
+   "impute_linear_default": "IMPUTE",
+   "impute_linear_conservative": "IMPUTE",
+   "despike": "DESPIKE",
+   "denoise": "DENOISE"
+  },
+  "label_family": {
+   "keep": "KEEP",
+   "fact_short": "IMPUTE",
+   "tsicl_long": "IMPUTE",
+   "impute_seasonal": "IMPUTE",
+   "impute_linear_default": "IMPUTE",
+   "impute_linear_conservative": "IMPUTE",
+   "despike": "DESPIKE",
+   "denoise": "DENOISE"
+  },
+  "fact_short": {
+   "max_gap": 3,
+   "definition": "raw-NaN runs 1-3, two finite anchors, linear interpolation, observed support unchanged"
+  },
+  "tsicl_long": {
+   "min_run": 4,
+   "checkpoint": "third_party/checkpoints/tsicl/tsicl-v1.ckpt",
+   "checkpoint_sha256": "a67ae9f694c2a83cfc8e7ec41745ff4f41a4a76ee2b17172ec3430d8d29da431",
+   "point_estimator": "median",
+   "contract": "only raw-NaN positions written; observed-support drift exactly 0"
+  },
+  "impute_params": {
+   "impute_seasonal": {
+    "method": "seasonal",
+    "min_run": 8
+   },
+   "impute_linear_default": {
+    "method": "linear",
+    "min_run": 16
+   },
+   "impute_linear_conservative": {
+    "method": "linear",
+    "min_run": 32
+   }
+  },
+  "semantic_gating": "candidates are generated only when the action is semantically applicable; every applicable action is executed per episode"
+ },
+ "episode_counts": {
+  "n_per_mechanism_severity_cell": 750,
+  "n_mixed": 3150,
+  "n_clean_control": 2100,
+  "n_total": 21000,
+  "max_episodes_per_parent": 4,
+  "n_parents_planned": 5250
+ },
+ "sources": [
+  {
+   "source": "ETTh1",
+   "role": "development (LODO-isolated)",
+   "provenance": "frozen corpus pipeline (experiments/datasets.py)"
+  },
+  {
+   "source": "ETTh2",
+   "role": "development (LODO-isolated)",
+   "provenance": "frozen corpus pipeline (experiments/datasets.py)"
+  },
+  {
+   "source": "ETTm1",
+   "role": "development (LODO-isolated)",
+   "provenance": "frozen corpus pipeline (experiments/datasets.py)"
+  },
+  {
+   "source": "Crypto",
+   "role": "development (LODO-isolated)",
+   "provenance": "frozen corpus pipeline (experiments/datasets.py)"
+  },
+  {
+   "source": "US Term Structure",
+   "role": "development (LODO-isolated)",
+   "provenance": "frozen corpus pipeline (experiments/datasets.py)"
+  },
+  {
+   "source": "Oil Price",
+   "role": "development (LODO-isolated)",
+   "provenance": "frozen corpus pipeline (experiments/datasets.py)"
+  },
+  {
+   "source": "pub:electricity",
+   "role": "training-only public source",
+   "url": "https://raw.githubusercontent.com/laiguokun/multivariate-time-series-data/master/electricity/electricity.txt.gz",
+   "origin": "UCI ElectricityLoadDiagrams20112014 (2011-2014, hourly, 321 clients)",
+   "license": "CC BY 4.0 at the UCI origin; redistributed via the laiguokun/multivariate-time-series-data GitHub mirror (repository carries no explicit license)",
+   "file": "data/electricity.txt.gz",
+   "error": "_FetchTimeout: hard 35s alarm (DNS/connect stall, not caught by socket.setdefaulttimeout)",
+   "obtained": true
+  },
+  {
+   "source": "pub:traffic",
+   "role": "training-only public source",
+   "url": "https://raw.githubusercontent.com/laiguokun/multivariate-time-series-data/master/traffic/traffic.txt.gz",
+   "origin": "Caltrans PeMS traffic occupancy (San Francisco Bay Area freeways, 5-minute, 862 sensors)",
+   "license": "Caltrans PeMS public data; redistributed via the laiguokun/multivariate-time-series-data GitHub mirror (repository carries no explicit license)",
+   "file": "data/traffic.txt.gz",
+   "error": "_FetchTimeout: hard 35s alarm (DNS/connect stall, not caught by socket.setdefaulttimeout)",
+   "obtained": true
+  }
+ ],
+ "isolation": {
+  "eval_frame_excluded": "771 frozen real evaluation windows",
+  "corpus_excluded": "1599 manifest windows (content hash + first-16-value position guard)",
+  "split": "hash split by clean_parent_uid, 80/10/10; a parent never crosses train/val/test",
+  "assertion_file": "v40_rescue_bank_isolation.json"
+ },
+ "red_line": {
+  "freeze_before_labels": "candidates are written and digested (v40_bank_freeze.json) before compute_action_labels is called",
+  "label_path": "experiments/v33_labels.py::compute_action_labels over metrics_common.canonical_nmse -- the frozen v3.3 action-semantic path; no new NMSE",
+  "evaluation_namespace": [
+   "after_nmse",
+   "before_nmse",
+   "beneficial_and_safe",
+   "gain",
+   "harmful",
+   "labels",
+   "true_loss"
+  ],
+  "forbidden_model_inputs": "true_kind/clean/source_id/sample_uid never enter model-input fields; source is a Group-DRO label only"
+ },
+ "code_hashes": {
+  "experiments/v40_counterfactual_bank.py": "7653a56ce16907922121c15f1f9d32eca4dc2630d7443ecf3320f1660db76596",
+  "experiments/v33_labels.py": "0a701300cde415e206bee15970a4b88d0ac9c8a45bc771ad4ef11d70b52df7bb",
+  "experiments/metrics_common.py": "39ae64c163c3e783a12fbebbf17c1647c0cf5be84516eb47d528db8f54894229",
+  "experiments/corpus.py": "ee906b17985c9b8d38dfc681a30ac955f57029afa86bf01b08404f7e2e7d41b2",
+  "src/introact_ts/actions.py": "f94ba0e5d453c9fd0e139d887b96e450a0d4aeda85d2cad5978678550f44cdf2"
+ }
+}

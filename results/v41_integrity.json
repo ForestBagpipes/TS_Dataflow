@@ -1,0 +1,56 @@
+{
+ "phase": "v4.1 Phase 0 integrity (docs/v4_1_mask_counteract_preregistration.md §3)",
+ "checks": {
+  "frozen89_labels": {
+   "n_windows": 89,
+   "n_bs": 75,
+   "n_harmful": 14,
+   "expected": [
+    75,
+    14
+   ],
+   "match": true
+  },
+  "stat_only_score_replay": {
+   "harm_auroc_recomputed": 0.8771428571428571,
+   "harm_auroc_v40": 0.8771428571428571,
+   "match": true
+  },
+  "headroom_frontier_57": {
+   "recomputed": {
+    "tau": 0.5027364492416382,
+    "n_commits": 57,
+    "n_bs": 55,
+    "n_harmful": 2,
+    "chr": 0.03508771929824561,
+    "chr_cp95_upper": 0.10636302593795688
+   },
+   "expected": {
+    "n_commits": 57,
+    "n_bs": 55,
+    "n_harmful": 2,
+    "chr": 0.0351
+   },
+   "match": true,
+   "role": "headroom evidence only; never used to pick a threshold"
+  },
+  "rescue_bank": {
+   "n_episodes": 21000,
+   "n_records": 168000,
+   "record_digest_sha256": "366eb37648af7b0f4e30baab493e416c6a28361721e1c2f104a91b20e45658fc"
+  },
+  "artifact_sha256": {
+   "v40_frozen89_decision.json": "b00be3448131d1bc2b6683d35dcacfdac5e3aa2271894e1df516a34c6e077555",
+   "v40_frozen89_rows.jsonl": "5a48161a262ef141aa54f095e140782c5b0e9065cfa0908fab2070412337db09",
+   "v40_critic_checkpoints.json": "0898b08b2349bf7e472b78eb19e1b2ee85cfd98f7a21d889f3919c6fb961492b",
+   "v40_feature_cache_rows.jsonl": "ded15306143ae9d569f55a1460a8886f9b76d8489a9814a48346558591fd0ea7",
+   "v40_bank_records.jsonl": "b910eb427e353e4e8c52a3b5bb7932bc47bffa292f9c2846ae594ea007041519",
+   "v39_longgap_candidates.jsonl": "44a0327ecdd136b167a818994ac17191562fe348aaac386acd53b4288c6f4af6",
+   "v39_longgap_probe.json": "53cfd4908f959e44756eb2b1abba8ef543f9ccaed6cdec3539d811770eae9c00",
+   "v40_rescue_bank_records.jsonl": "1621d8c7fffd683a4f8819aa501661b88cbd119db1fb92f36879c81cfe65c860"
+  }
+ },
+ "all_pass": true,
+ "frozen89_role": "development decision set only; from v4.1 onward it is NOT the paper's final test set",
+ "runtime_sec": 134.89709854125977
+}

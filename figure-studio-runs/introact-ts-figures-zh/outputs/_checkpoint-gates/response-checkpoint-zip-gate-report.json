@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "gate": "response_checkpoint_zip_gate",
+  "created_at": "2026-08-21T05:56:13Z",
+  "run_dir": "F:\\work\\Time-research\\work2\\figure-studio-runs\\introact-ts-figures-zh",
+  "stage": "S0-PAPER-FOUNDATION",
+  "state_path": "F:\\work\\Time-research\\work2\\figure-studio-runs\\introact-ts-figures-zh\\state\\project-state.json",
+  "state_loaded": true,
+  "state_read_error": null,
+  "included_roots_expected": [
+    "state",
+    "inputs",
+    "outputs/S0-paper-foundation"
+  ],
+  "required_existing_asset_count": 6,
+  "build_if_missing": true,
+  "candidate_zip_count_before_repair": 0,
+  "zip_validations_before_repair": [],
+  "generic_repair_attempt": {
+    "command": [
+      "python.exe",
+      "C:\\Users\\lzfd\\.codex\\skills\\paper-framework-figure-studio-pro\\scripts\\figure_studio_cumulative_checkpoint_repair.py",
+      "--run-dir",
+      "F:\\work\\Time-research\\work2\\figure-studio-runs\\introact-ts-figures-zh",
+      "--stage",
+      "S0-PAPER-FOUNDATION",
+      "--repair",
+      "--report",
+      "F:\\work\\Time-research\\work2\\figure-studio-runs\\introact-ts-figures-zh\\outputs\\_checkpoint-gates\\response-checkpoint-zip-gate-report.generic-repair.json"
+    ],
+    "returncode": 0,
+    "stdout_tail": "{\n  \"created_at\": \"2026-08-21T05:56:13Z\",\n  \"run_dir\": \"F:\\\\work\\\\Time-research\\\\work2\\\\figure-studio-runs\\\\introact-ts-figures-zh\",\n  \"stages\": [\n    {\n      \"stage\": \"S0-PAPER-FOUNDATION\",\n      \"latest_before\": {\n        \"status\": \"MISSING\",\n        \"zip_path\": null\n      },\n      \"repair_created\": \"checkpoints/S0-PAPER-FOUNDATION/stage-final-0001-generic-cumulative-repair.zip\",\n      \"repair_integrity\": {\n        \"schema_version\": 2,\n        \"stage\": \"S0-PAPER-FOUNDATION\",\n        \"created_at\": \"2026-08-21T05:56:13Z\",\n        \"checkpoint_scope\": \"cumulative_from_workflow_start_to_current_stage_or_substage\",\n        \"included_roots\": [\n          \"state\",\n          \"inputs\",\n          \"outputs/S0-paper-foundation\"\n        ],\n        \"required_existing_asset_count\": 6,\n        \"required_existing_image_count\": 2,\n        \"pending_future_image_count\": 0,\n        \"missing_asset_count\": 0,\n        \"missing_image_count\": 0,\n        \"checkpoint_integrity_status\": \"complete_restore_ready\",\n        \"post_write_validation_status\": \"PASS\",\n        \"missing_after_write_count\": 0,\n        \"missing_metadata_after_write\": [],\n        \"zip_sha256\": \"7273c1bb5c207d81a3b0e72da1154436f944da00aa83d535833bd09bcfdb5f0c\"\n      },\n      \"repair_validation\": {\n        \"zip_path\": \"checkpoints/S0-PAPER-FOUNDATION/stage-final-0001-generic-cumulative-repair.zip\",\n        \"metadata_present\": {\n          \"checkpoint-cumulative-integrity.json\": true,\n          \"checkpoint-manifest.json\": true,\n          \"checkpoint-integrity-audit.json\": true\n        },\n        \"required_count\": 6,\n        \"member_count\": 9,\n        \"missing_count\": 0,\n        \"missing_first_20\": [],\n        \"status\": \"PASS\"\n      }\n    }\n  ]\n}\n",
+    "stderr_tail": "",
+    "repair_report": {
+      "created_at": "2026-08-21T05:56:13Z",
+      "run_dir": "F:\\work\\Time-research\\work2\\figure-studio-runs\\introact-ts-figures-zh",
+      "stages": [
+        {
+          "stage": "S0-PAPER-FOUNDATION",
+          "latest_before": {
+            "status": "MISSING",
+            "zip_path": null
+          },
+          "repair_created": "checkpoints/S0-PAPER-FOUNDATION/stage-final-0001-generic-cumulative-repair.zip",
+          "repair_integrity": {
+            "schema_version": 2,
+            "stage": "S0-PAPER-FOUNDATION",
+            "created_at": "2026-08-21T05:56:13Z",
+            "checkpoint_scope": "cumulative_from_workflow_start_to_current_stage_or_substage",
+            "included_roots": [
+              "state",
+              "inputs",
+              "outputs/S0-paper-foundation"
+            ],
+            "required_existing_asset_count": 6,
+            "required_existing_image_count": 2,
+            "pending_future_image_count": 0,
+            "missing_asset_count": 0,
+            "missing_image_count": 0,
+            "checkpoint_integrity_status": "complete_restore_ready",
+            "post_write_validation_status": "PASS",
+            "missing_after_write_count": 0,
+            "missing_metadata_after_write": [],
+            "zip_sha256": "7273c1bb5c207d81a3b0e72da1154436f944da00aa83d535833bd09bcfdb5f0c"
+          },
+          "repair_validation": {
+            "zip_path": "checkpoints/S0-PAPER-FOUNDATION/stage-final-0001-generic-cumulative-repair.zip",
+            "metadata_present": {
+              "checkpoint-cumulative-integrity.json": true,
+              "checkpoint-manifest.json": true,
+              "checkpoint-integrity-audit.json": true
+            },
+            "required_count": 6,
+            "member_count": 9,
+            "missing_count": 0,
+            "missing_first_20": [],
+            "status": "PASS"
+          }
+        }
+      ]
+    }
+  },
+  "candidate_zip_count_after_repair": 1,
+  "zip_validations_after_repair": [
+    {
+      "zip_path": "F:\\work\\Time-research\\work2\\figure-studio-runs\\introact-ts-figures-zh\\checkpoints\\S0-PAPER-FOUNDATION\\stage-final-0001-generic-cumulative-repair.zip",
+      "status": "PASS",
+      "usable_as_cumulative_response_checkpoint": true,
+      "included_roots_expected": [
+        "state",
+        "inputs",
+        "outputs/S0-paper-foundation"
+      ],
+      "required_existing_asset_count": 6,
+      "member_count": 9,
+      "metadata_present": {
+        "checkpoint-cumulative-integrity.json": true,
+        "checkpoint-integrity-audit.json": true,
+        "checkpoint-manifest.json": true
+      },
+      "checkpoint_scope": "cumulative_from_workflow_start_to_current_stage_or_substage",
+      "missing_metadata": [],
+      "missing_required_asset_count": 0,
+      "missing_required_asset_first_30": [],
+      "embedded_integrity_status": "complete_restore_ready",
+      "embedded_audit_status": "complete_restore_ready",
+      "failures": []
+    }
+  ],
+  "status": "PASS",
+  "checkpoint_status": "complete_restore_ready",
+  "usable_checkpoint_zip": "F:\\work\\Time-research\\work2\\figure-studio-runs\\introact-ts-figures-zh\\checkpoints\\S0-PAPER-FOUNDATION\\stage-final-0001-generic-cumulative-repair.zip",
+  "user_facing_checkpoint_link_allowed": true
+}

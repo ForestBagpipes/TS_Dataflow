@@ -1,0 +1,30 @@
+{
+  "environment": "w2-core",
+  "python": "3.11.16 (main, Sep  2 2026, 23:39:52) [GCC 15.3.0]",
+  "executable": "/home/vipuser/work2-envs/w2-core/bin/python",
+  "platform": "Linux-7.0.0-28-generic-x86_64-with-glibc2.39",
+  "imports": [
+    "numpy",
+    "scipy",
+    "pandas",
+    "sklearn",
+    "statsmodels.api",
+    "ruptures",
+    "pyarrow",
+    "introact_ts.backends",
+    "pytest",
+    "yaml",
+    "joblib",
+    "psutil",
+    "matplotlib"
+  ],
+  "versions": {
+    "numpy": "1.26.4"
+  },
+  "status": "passed",
+  "checked_at": "2026-09-14T09:34:40.600242+00:00",
+  "model_inference": "not_performed",
+  "gpu": {
+    "status": "not_applicable"
+  }
+}

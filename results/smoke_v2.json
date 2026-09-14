@@ -1,0 +1,302 @@
+{
+ "thresholds": {
+  "DENOISE": 0.1,
+  "DESPIKE": 0.0,
+  "IMPUTE": 0.02,
+  "RESEGMENT": 0.4
+ },
+ "checks": {
+  "a_resegment_protected": true,
+  "a_level_shift_repair": true,
+  "b_denoise_not_zero": true,
+  "c_impute_up": true,
+  "d_despike_refused_structurally": true,
+  "e_damage_down": false
+ },
+ "v1": {
+  "protected_mis_edits": 1,
+  "n_protected_windows": 183,
+  "protected_mis_edit_rate": 0.00546448087431694,
+  "probe_layer_mis_edits": 0,
+  "n_probe_windows": 37,
+  "damage_rate": 0.1111111111111111,
+  "repair_nrmsd": 1.5223988907681432,
+  "repair_nrmsd_median": 0.28280903317538975,
+  "n_injected_scored": 130,
+  "repair_gain": 0.03575645771971625,
+  "committed_edits": 9,
+  "mean_protected_damage": 0.00041430847612163117
+ },
+ "v2": {
+  "protected_mis_edits": 1,
+  "n_protected_windows": 183,
+  "protected_mis_edit_rate": 0.00546448087431694,
+  "probe_layer_mis_edits": 2,
+  "n_probe_windows": 37,
+  "damage_rate": 0.8,
+  "repair_nrmsd": 1.5445874494588092,
+  "repair_nrmsd_median": 0.4647939313882845,
+  "n_injected_scored": 130,
+  "repair_gain": 0.07096328448846534,
+  "committed_edits": 5,
+  "mean_protected_damage": 0.00041430847612163117
+ },
+ "n_windows": 350,
+ "slice_seed": 202,
+ "funnel_v2": {
+  "IMPUTE": {
+   "contaminated": {
+    "candidates": 195,
+    "no_op": 11,
+    "failed_utility": 83,
+    "failed_structure": 80,
+    "failed_risk": 21,
+    "accepted": 0
+   },
+   "protected": {
+    "candidates": 78,
+    "no_op": 21,
+    "failed_utility": 29,
+    "failed_structure": 25,
+    "failed_risk": 2,
+    "accepted": 1
+   }
+  },
+  "RESEGMENT": {
+   "contaminated": {
+    "candidates": 189,
+    "no_op": 125,
+    "failed_utility": 32,
+    "failed_structure": 31,
+    "failed_risk": 0,
+    "accepted": 1
+   },
+   "protected": {
+    "candidates": 291,
+    "no_op": 209,
+    "failed_utility": 27,
+    "failed_structure": 53,
+    "failed_risk": 0,
+    "accepted": 2
+   }
+  },
+  "DESPIKE": {
+   "contaminated": {
+    "candidates": 36,
+    "no_op": 0,
+    "failed_utility": 2,
+    "failed_structure": 34,
+    "failed_risk": 0,
+    "accepted": 0
+   },
+   "protected": {
+    "candidates": 6,
+    "no_op": 1,
+    "failed_utility": 3,
+    "failed_structure": 2,
+    "failed_risk": 0,
+    "accepted": 0
+   }
+  },
+  "DENOISE": {
+   "contaminated": {
+    "candidates": 23,
+    "no_op": 3,
+    "failed_utility": 0,
+    "failed_structure": 17,
+    "failed_risk": 2,
+    "accepted": 1
+   },
+   "protected": {
+    "candidates": 24,
+    "no_op": 0,
+    "failed_utility": 5,
+    "failed_structure": 17,
+    "failed_risk": 2,
+    "accepted": 0
+   }
+  }
+ },
+ "coverage": {
+  "improved": 2,
+  "edited": 2,
+  "n_injected": 130,
+  "rate": 0.015384615384615385,
+  "wilson": [
+   0.0042291172310416104,
+   0.054359542796931754
+  ]
+ },
+ "damage_wilson": [
+  0.3755282641185388,
+  0.9637768390302125
+ ],
+ "branch": {
+  "safety_pass": false,
+  "xl_approved": null
+ },
+ "operators_v1": {
+  "IMPUTE": {
+   "attempts": 168,
+   "accepted": 1,
+   "on_protected": 1,
+   "verdicts": {
+    "ROLLED_BACK_STRUCTURE": 73,
+    "ROLLED_BACK_UTILITY": 80,
+    "ROLLED_BACK_RISK": 14,
+    "ACCEPTED": 1
+   }
+  },
+  "RESEGMENT": {
+   "attempts": 159,
+   "accepted": 0,
+   "on_protected": 0,
+   "verdicts": {
+    "NO_OP": 125,
+    "ROLLED_BACK_UTILITY": 12,
+    "ROLLED_BACK_STRUCTURE": 22
+   }
+  },
+  "DESPIKE": {
+   "attempts": 14,
+   "accepted": 8,
+   "on_protected": 0,
+   "verdicts": {
+    "ROLLED_BACK_STRUCTURE": 5,
+    "ACCEPTED": 8,
+    "ROLLED_BACK_UTILITY": 1
+   }
+  },
+  "DENOISE": {
+   "attempts": 27,
+   "accepted": 0,
+   "on_protected": 0,
+   "verdicts": {
+    "ROLLED_BACK_STRUCTURE": 23,
+    "NO_OP": 1,
+    "ROLLED_BACK_UTILITY": 3
+   }
+  }
+ },
+ "operators_v2": {
+  "IMPUTE": {
+   "attempts": 273,
+   "accepted": 1,
+   "on_protected": 1,
+   "verdicts": {
+    "ROLLED_BACK_STRUCTURE": 105,
+    "ROLLED_BACK_UTILITY": 112,
+    "ROLLED_BACK_RISK": 23,
+    "NO_OP": 32,
+    "ACCEPTED": 1
+   }
+  },
+  "RESEGMENT": {
+   "attempts": 480,
+   "accepted": 3,
+   "on_protected": 0,
+   "verdicts": {
+    "NO_OP": 334,
+    "ACCEPTED": 3,
+    "ROLLED_BACK_UTILITY": 59,
+    "ROLLED_BACK_STRUCTURE": 84
+   }
+  },
+  "DESPIKE": {
+   "attempts": 42,
+   "accepted": 0,
+   "on_protected": 0,
+   "verdicts": {
+    "ROLLED_BACK_STRUCTURE": 36,
+    "ROLLED_BACK_UTILITY": 5,
+    "NO_OP": 1
+   }
+  },
+  "DENOISE": {
+   "attempts": 47,
+   "accepted": 1,
+   "on_protected": 0,
+   "verdicts": {
+    "ROLLED_BACK_STRUCTURE": 34,
+    "NO_OP": 3,
+    "ROLLED_BACK_RISK": 4,
+    "ACCEPTED": 1,
+    "ROLLED_BACK_UTILITY": 5
+   }
+  }
+ },
+ "repair_v1": {
+  "missing_block": {
+   "n": 20,
+   "edited": 0,
+   "improved": 0
+  },
+  "level_shift": {
+   "n": 19,
+   "edited": 0,
+   "improved": 0
+  },
+  "missing_scattered": {
+   "n": 19,
+   "edited": 0,
+   "improved": 0
+  },
+  "noise": {
+   "n": 15,
+   "edited": 0,
+   "improved": 0
+  },
+  "flatline": {
+   "n": 19,
+   "edited": 0,
+   "improved": 0
+  },
+  "spike": {
+   "n": 19,
+   "edited": 8,
+   "improved": 8
+  },
+  "duplicate": {
+   "n": 19,
+   "edited": 0,
+   "improved": 0
+  }
+ },
+ "repair_v2": {
+  "missing_block": {
+   "n": 20,
+   "edited": 0,
+   "improved": 0
+  },
+  "level_shift": {
+   "n": 19,
+   "edited": 1,
+   "improved": 1
+  },
+  "missing_scattered": {
+   "n": 19,
+   "edited": 0,
+   "improved": 0
+  },
+  "noise": {
+   "n": 15,
+   "edited": 1,
+   "improved": 1
+  },
+  "flatline": {
+   "n": 19,
+   "edited": 0,
+   "improved": 0
+  },
+  "spike": {
+   "n": 19,
+   "edited": 0,
+   "improved": 0
+  },
+  "duplicate": {
+   "n": 19,
+   "edited": 0,
+   "improved": 0
+  }
+ }
+}

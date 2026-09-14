@@ -1,0 +1,46 @@
+{
+ "phase": "v3.8 Phase 0 integrity manifest",
+ "preregistration": "docs/v3_8_fact_preregistration.md §3 (Phase-0 完整性门)",
+ "gates": {
+  "replay_all_exact_1e-9": {
+   "pass": true,
+   "r1_pass": true,
+   "r2_pass": true,
+   "r3_pass": true,
+   "replay_file": "v3.8 Phase 0 Part A: exact replay of the three reference arms (docs/v3_8_fact_preregistration.md §1, §3)"
+  },
+  "corpus_1599_uids_and_hashes_match_manifest": {
+   "n_rebuilt": 1599,
+   "n_manifest": 1599,
+   "uids_match": true,
+   "n_hash_mismatch": 0,
+   "hash_mismatch_uids": [],
+   "pass": true
+  },
+  "non_impute_output_hash_no_drift": {
+   "n_non_impute_checked": 1260,
+   "n_drift": 0,
+   "drift_examples": [],
+   "n_impute_drift": 0,
+   "impute_drift_examples": [],
+   "pass": true
+  },
+  "raw_mask_two_process_hash_identical": {
+   "in_process_sha256": "62a411c06a99713aefd38a66037711e2e648a60f7cb0b40bd09556167657f134",
+   "in_process_n_windows": 1599,
+   "pass": true,
+   "process_a_sha256": "62a411c06a99713aefd38a66037711e2e648a60f7cb0b40bd09556167657f134",
+   "process_b_sha256": "62a411c06a99713aefd38a66037711e2e648a60f7cb0b40bd09556167657f134",
+   "a_equals_b": true,
+   "a_equals_in_process": true
+  }
+ },
+ "candidate_table_join_ok": true,
+ "all_pass": true,
+ "output_sha256": {
+  "results/v38_oracle_replay.json": "21d2126adde772dd818c1f55e824ca2944b3d531dff8b92c5fc62f0751cdcc59",
+  "results/v38_impute_mask_audit.json": "a2b2586bfb84ef8e1727a797f639132a953bdc5ae0493753f67e6873cfc52491",
+  "results/v38_impute_mask_records.jsonl": "6d1a56c1986d0d921f9eb06f2cb8637be77a9fcf65ef1cae498b614223f1a9d3"
+ },
+ "runtime_sec": 13.687429189682007
+}

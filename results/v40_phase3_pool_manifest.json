@@ -1,0 +1,38 @@
+{
+ "phase": "v4.0 Phase 3 candidate pool",
+ "n_rows": 1833,
+ "per_family": {
+  "IMPUTE": 1154,
+  "DENOISE": 267,
+  "DESPIKE": 235,
+  "FACT_SHORT": 88,
+  "TSICL_LONG": 89
+ },
+ "per_token": {
+  "impute_linear_default": 445,
+  "impute_linear_conservative": 264,
+  "impute_seasonal": 445,
+  "denoise": 89,
+  "denoise:offgrid": 178,
+  "despike": 82,
+  "despike:offgrid": 153,
+  "fact_short": 88,
+  "tsicl_long": 89
+ },
+ "excluded_families": [
+  "RESEGMENT"
+ ],
+ "offgrid_rungs_scored_under_family_token": {
+  "denoise:offgrid": 178,
+  "despike:offgrid": 153
+ },
+ "fact_short_semantics_note": "the deployed FACT_SHORT is the v3.8 'wide' variant (max_gap 16) while the bank trained the fact_short token on 1-3 point gaps (FACT_SHORT_MAX_GAP=3); the critic still sees the real candidate's series, delta and masks, only the action token is coarser than the operator",
+ "tsicl_labels": "recomputed on the canonical compute_action_labels path at pool time (the frozen candidates carry no labels); cross-checked against the frozen 75/14",
+ "array_sha256": {
+  "seq": "f32450ac5a3b6f4bf7a92bdab672ca0b34b43df2bdbc881369c50263ccc1183f",
+  "struct": "ac3ca77c5e7d48108fbcf51dc43ebbb8b3a88c888b039fcae42c16f3fa669ce4",
+  "emb_before": "581c2d4080d1fb3ca0f4eecdf966fd3a7ae50f6d4b858b45f97eb784990ae3eb",
+  "emb_after": "6f1dba9e459b0e996526ce14b71d08755a42c7b9b8666f9779b6501a9cd514f1"
+ },
+ "runtime_sec": 30.213658094406128
+}

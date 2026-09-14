@@ -1,0 +1,25 @@
+{
+ "phase": "v4.0 public training-source registry",
+ "fetched_at_epoch": 1788445105.2090468,
+ "mirror_revision": "7f402f185cc2435b5e66aed13a3b560ed142e023",
+ "time_budget_sec": 600,
+ "sources": {
+  "pub:electricity": {
+   "url": "https://raw.githubusercontent.com/laiguokun/multivariate-time-series-data/master/electricity/electricity.txt.gz",
+   "origin": "UCI ElectricityLoadDiagrams20112014 (2011-2014, hourly, 321 clients)",
+   "license": "CC BY 4.0 at the UCI origin; redistributed via the laiguokun/multivariate-time-series-data GitHub mirror (repository carries no explicit license)",
+   "file": "data/electricity.txt.gz",
+   "error": "_FetchTimeout: hard 35s alarm (DNS/connect stall, not caught by socket.setdefaulttimeout)"
+  },
+  "pub:traffic": {
+   "url": "https://raw.githubusercontent.com/laiguokun/multivariate-time-series-data/master/traffic/traffic.txt.gz",
+   "origin": "Caltrans PeMS traffic occupancy (San Francisco Bay Area freeways, 5-minute, 862 sensors)",
+   "license": "Caltrans PeMS public data; redistributed via the laiguokun/multivariate-time-series-data GitHub mirror (repository carries no explicit license)",
+   "file": "data/traffic.txt.gz",
+   "error": "_FetchTimeout: hard 35s alarm (DNS/connect stall, not caught by socket.setdefaulttimeout)"
+  }
+ },
+ "n_obtained": 0,
+ "fallback": true,
+ "fallback_note": "pilot proceeds on the 6 development sources with UID-isolated resampling, as pre-registered"
+}

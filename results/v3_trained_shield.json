@@ -1,0 +1,223 @@
+{
+ "folds": {
+  "Crypto": {
+   "n_train": 1875,
+   "n_cal": 440,
+   "n_test": 99,
+   "thresholds": {
+    "DENOISE": 0.8618916632733608,
+    "DESPIKE": 0.7883385668771627,
+    "IMPUTE": 0.334205560604642,
+    "RESEGMENT": 0.0139204884091085
+   },
+   "global_threshold": 0.33925054573634655,
+   "test_metrics": {
+    "n_windows": 31.0,
+    "committed": 15.0,
+    "window_loss": 6.623046875,
+    "window_gain": 3.618614435274808,
+    "beneficial_commit": 5.0,
+    "protected": 11.0,
+    "protected_mis_edit": 5.0,
+    "protected_harmful": 5.0,
+    "contaminated": 20.0,
+    "contaminated_commit": 10.0,
+    "contaminated_bs_commit": 5.0,
+    "damage": 0.21364667338709678,
+    "damage_per_commit": 0.4415364583333333,
+    "protected_mis_edit_rate": 0.45454545454545453,
+    "protected_harmful_rate": 0.45454545454545453,
+    "coverage": 0.5,
+    "beneficial_coverage": 0.25,
+    "mean_repair_gain_contaminated": 0.1809307217637404,
+    "commit_rate": 0.4838709677419355,
+    "cand_n": 99.0,
+    "cand_accept_rate": 0.43434343434343436,
+    "cand_accept_harmful_rate": 0.5348837209302325
+   }
+  },
+  "ETTh1": {
+   "n_train": 1589,
+   "n_cal": 366,
+   "n_test": 459,
+   "thresholds": {
+    "DENOISE": 0.4623714663288669,
+    "IMPUTE": 0.6254203116951564,
+    "RESEGMENT": 0.017139311124949628
+   },
+   "global_threshold": 0.6074695297676965,
+   "test_metrics": {
+    "n_windows": 167.0,
+    "committed": 19.0,
+    "window_loss": 4.91015625,
+    "window_gain": -12.22639408976956,
+    "beneficial_commit": 9.0,
+    "protected": 95.0,
+    "protected_mis_edit": 3.0,
+    "protected_harmful": 3.0,
+    "contaminated": 72.0,
+    "contaminated_commit": 16.0,
+    "contaminated_bs_commit": 9.0,
+    "damage": 0.029402133233532933,
+    "damage_per_commit": 0.2584292763157895,
+    "protected_mis_edit_rate": 0.031578947368421054,
+    "protected_harmful_rate": 0.031578947368421054,
+    "coverage": 0.2222222222222222,
+    "beneficial_coverage": 0.125,
+    "mean_repair_gain_contaminated": -0.16981102902457723,
+    "commit_rate": 0.11377245508982035,
+    "cand_n": 459.0,
+    "cand_accept_rate": 0.10021786492374728,
+    "cand_accept_harmful_rate": 0.3695652173913043
+   }
+  },
+  "ETTh2": {
+   "n_train": 1611,
+   "n_cal": 397,
+   "n_test": 406,
+   "thresholds": {
+    "DENOISE": 0.6223747429790695,
+    "DESPIKE": 0.9094020191654478,
+    "IMPUTE": 0.5494237324079742,
+    "RESEGMENT": 0.023475322826122608
+   },
+   "global_threshold": 0.5082496129325733,
+   "test_metrics": {
+    "n_windows": 116.0,
+    "committed": 17.0,
+    "window_loss": 9.052734375,
+    "window_gain": 2.5537909359216155,
+    "beneficial_commit": 7.0,
+    "protected": 53.0,
+    "protected_mis_edit": 6.0,
+    "protected_harmful": 6.0,
+    "contaminated": 63.0,
+    "contaminated_commit": 11.0,
+    "contaminated_bs_commit": 7.0,
+    "damage": 0.0780408135775862,
+    "damage_per_commit": 0.5325137867647058,
+    "protected_mis_edit_rate": 0.11320754716981132,
+    "protected_harmful_rate": 0.11320754716981132,
+    "coverage": 0.1746031746031746,
+    "beneficial_coverage": 0.1111111111111111,
+    "mean_repair_gain_contaminated": 0.057571205108652504,
+    "commit_rate": 0.14655172413793102,
+    "cand_n": 406.0,
+    "cand_accept_rate": 0.10344827586206896,
+    "cand_accept_harmful_rate": 0.5238095238095238
+   }
+  },
+  "ETTm1": {
+   "n_train": 1686,
+   "n_cal": 412,
+   "n_test": 316,
+   "thresholds": {
+    "DENOISE": 0.8178704039321875,
+    "DESPIKE": 0.8039170637053409,
+    "IMPUTE": 0.47608884934568035,
+    "RESEGMENT": 0.014493800924735574
+   },
+   "global_threshold": 0.47608884934568035,
+   "test_metrics": {
+    "n_windows": 106.0,
+    "committed": 11.0,
+    "window_loss": 0.150390625,
+    "window_gain": 10.088272271187872,
+    "beneficial_commit": 10.0,
+    "protected": 34.0,
+    "protected_mis_edit": 1.0,
+    "protected_harmful": 1.0,
+    "contaminated": 72.0,
+    "contaminated_commit": 10.0,
+    "contaminated_bs_commit": 10.0,
+    "damage": 0.0014187794811320754,
+    "damage_per_commit": 0.013671875,
+    "protected_mis_edit_rate": 0.029411764705882353,
+    "protected_harmful_rate": 0.029411764705882353,
+    "coverage": 0.1388888888888889,
+    "beneficial_coverage": 0.1388888888888889,
+    "mean_repair_gain_contaminated": 0.14011489265538712,
+    "commit_rate": 0.10377358490566038,
+    "cand_n": 316.0,
+    "cand_accept_rate": 0.07278481012658228,
+    "cand_accept_harmful_rate": 0.043478260869565216
+   }
+  },
+  "Oil Price": {
+   "n_train": 1769,
+   "n_cal": 425,
+   "n_test": 220,
+   "thresholds": {
+    "DENOISE": 0.8123223020438385,
+    "DESPIKE": 0.8181507549138181,
+    "IMPUTE": 0.5158216716415895,
+    "RESEGMENT": 0.021199594583712046
+   },
+   "global_threshold": 0.4189885662457667,
+   "test_metrics": {
+    "n_windows": 86.0,
+    "committed": 8.0,
+    "window_loss": 0.0,
+    "window_gain": 6.362639774691093,
+    "beneficial_commit": 8.0,
+    "protected": 54.0,
+    "protected_mis_edit": 0.0,
+    "protected_harmful": 0.0,
+    "contaminated": 32.0,
+    "contaminated_commit": 8.0,
+    "contaminated_bs_commit": 8.0,
+    "damage": 0.0,
+    "damage_per_commit": 0.0,
+    "protected_mis_edit_rate": 0.0,
+    "protected_harmful_rate": 0.0,
+    "coverage": 0.25,
+    "beneficial_coverage": 0.25,
+    "mean_repair_gain_contaminated": 0.19883249295909666,
+    "commit_rate": 0.09302325581395349,
+    "cand_n": 220.0,
+    "cand_accept_rate": 0.1,
+    "cand_accept_harmful_rate": 0.0
+   }
+  },
+  "US Term Structure": {
+   "n_train": 1390,
+   "n_cal": 324,
+   "n_test": 700,
+   "thresholds": {
+    "DESPIKE": 0.7021871670447298,
+    "IMPUTE": 0.3233082350493056,
+    "RESEGMENT": 0.0428702112072832
+   },
+   "global_threshold": 0.3233082350493056,
+   "test_metrics": {
+    "n_windows": 265.0,
+    "committed": 44.0,
+    "window_loss": 9.0,
+    "window_gain": 32.70613014627126,
+    "beneficial_commit": 35.0,
+    "protected": 84.0,
+    "protected_mis_edit": 0.0,
+    "protected_harmful": 0.0,
+    "contaminated": 181.0,
+    "contaminated_commit": 44.0,
+    "contaminated_bs_commit": 35.0,
+    "damage": 0.033962264150943396,
+    "damage_per_commit": 0.20454545454545456,
+    "protected_mis_edit_rate": 0.0,
+    "protected_harmful_rate": 0.0,
+    "coverage": 0.2430939226519337,
+    "beneficial_coverage": 0.19337016574585636,
+    "mean_repair_gain_contaminated": 0.1806968516368578,
+    "commit_rate": 0.1660377358490566,
+    "cand_n": 700.0,
+    "cand_accept_rate": 0.18571428571428572,
+    "cand_accept_harmful_rate": 0.2
+   }
+  }
+ },
+ "aggregate": {
+  "protected_mis_edit_rate": 0.10479061896492821,
+  "damage": 0.05941177730504856,
+  "coverage": 0.25480136806103654
+ }
+}

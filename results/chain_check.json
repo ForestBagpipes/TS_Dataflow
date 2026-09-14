@@ -81,27 +81,27 @@
   {
    "check": "scores:timeinf:id_overlap",
    "ok": true,
-   "detail": "overlap 0.622 (1238 of 1991)"
+   "detail": "overlap 0.623 (1240 of 1991)"
   },
   {
    "check": "scores:data_oob:id_overlap",
    "ok": true,
-   "detail": "overlap 0.622 (1238 of 1991)"
+   "detail": "overlap 0.623 (1240 of 1991)"
   },
   {
-   "check": "scores:data_shapley:id_overlap",
-   "ok": true,
-   "detail": "overlap 0.622 (1238 of 1991)"
+   "check": "scores:data_shapley",
+   "ok": false,
+   "detail": "not in file"
   },
   {
    "check": "scores:ltsv:id_overlap",
    "ok": true,
-   "detail": "overlap 0.622 (1238 of 1991)"
+   "detail": "overlap 0.623 (1240 of 1991)"
   },
   {
    "check": "scores_corpus_identity",
-   "ok": false,
-   "detail": "0 of 1779 windows match on content (0.0000), anything below one means the score file predates a corpus change"
+   "ok": true,
+   "detail": "1779 of 1779 windows match on content (1.0000), anything below one means the score file predates a corpus change"
   }
  ]
 }

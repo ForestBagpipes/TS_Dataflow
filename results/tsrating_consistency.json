@@ -13,14 +13,14 @@
  "seed": 42,
  "calls": 2400,
  "prompt_tokens": 3186080,
- "completion_tokens": 2414,
- "cached_prompt_tokens": 2969600,
- "cache_hit_fraction": 0.9320544368000804,
- "seconds": 433.35823583602905,
+ "completion_tokens": 2415,
+ "cached_prompt_tokens": 2951936,
+ "cache_hit_fraction": 0.9265103198915281,
+ "seconds": 2992.938192844391,
  "overall": {
-  "scored": 59,
-  "flips": 30,
-  "flip_rate": 0.5084745762711864
+  "scored": 60,
+  "flips": 28,
+  "flip_rate": 0.4666666666666667
  },
  "by_dimension": {
   "trend": {
@@ -45,30 +45,30 @@
    "hc_rate": 0.26666666666666666
   },
   "pattern": {
-   "scored": 14,
-   "flips": 5,
-   "flip_rate": 0.35714285714285715,
-   "high_confidence": 10,
-   "hc_rate": 0.6666666666666666
+   "scored": 15,
+   "flips": 3,
+   "flip_rate": 0.2,
+   "high_confidence": 12,
+   "hc_rate": 0.8
   }
  },
  "rows": [
   {
    "dimension": "trend",
    "pair": 0,
-   "p_ab": 0.05,
-   "p_ba": 0.15789473684210525,
+   "p_ab": 0.0,
+   "p_ba": 0.1,
    "votes_ab": [
-    19,
-    1
+    20,
+    0
    ],
    "votes_ba": [
-    16,
-    3
+    18,
+    2
    ],
    "stratum_a": "rare_valid",
    "stratum_b": "clean_ood",
-   "calibrated": 0.44605263157894737,
+   "calibrated": 0.45,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -76,19 +76,19 @@
   {
    "dimension": "trend",
    "pair": 1,
-   "p_ab": 0.1,
-   "p_ba": 0.8,
+   "p_ab": 0.2,
+   "p_ba": 0.85,
    "votes_ab": [
-    18,
-    2
+    16,
+    4
    ],
    "votes_ba": [
-    4,
-    16
+    3,
+    17
    ],
    "stratum_a": "contaminated",
    "stratum_b": "rare_valid",
-   "calibrated": 0.14999999999999997,
+   "calibrated": 0.17500000000000002,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -97,18 +97,18 @@
    "dimension": "trend",
    "pair": 2,
    "p_ab": 0.0,
-   "p_ba": 0.55,
+   "p_ba": 0.65,
    "votes_ab": [
     20,
     0
    ],
    "votes_ba": [
-    9,
-    11
+    7,
+    13
    ],
    "stratum_a": "changepoint",
    "stratum_b": "hard",
-   "calibrated": 0.22499999999999998,
+   "calibrated": 0.175,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -116,11 +116,11 @@
   {
    "dimension": "trend",
    "pair": 3,
-   "p_ab": 0.21052631578947367,
+   "p_ab": 0.3,
    "p_ba": 0.0,
    "votes_ab": [
-    15,
-    4
+    14,
+    6
    ],
    "votes_ba": [
     20,
@@ -128,7 +128,7 @@
    ],
    "stratum_a": "hard",
    "stratum_b": "clean",
-   "calibrated": 0.6052631578947368,
+   "calibrated": 0.65,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -136,19 +136,19 @@
   {
    "dimension": "trend",
    "pair": 4,
-   "p_ab": 0.1,
-   "p_ba": 0.05,
+   "p_ab": 0.0,
+   "p_ba": 0.0,
    "votes_ab": [
-    18,
-    2
+    19,
+    0
    ],
    "votes_ba": [
-    19,
-    1
+    20,
+    0
    ],
    "stratum_a": "rare_valid",
    "stratum_b": "contaminated",
-   "calibrated": 0.525,
+   "calibrated": 0.5,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -157,18 +157,18 @@
    "dimension": "trend",
    "pair": 5,
    "p_ab": 0.0,
-   "p_ba": 0.85,
+   "p_ba": 0.65,
    "votes_ab": [
     20,
     0
    ],
    "votes_ba": [
-    3,
-    17
+    7,
+    13
    ],
    "stratum_a": "contaminated",
    "stratum_b": "contaminated",
-   "calibrated": 0.07500000000000001,
+   "calibrated": 0.175,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -177,18 +177,18 @@
    "dimension": "trend",
    "pair": 6,
    "p_ab": 0.0,
-   "p_ba": 1.0,
+   "p_ba": 0.95,
    "votes_ab": [
     20,
     0
    ],
    "votes_ba": [
-    0,
-    20
+    1,
+    19
    ],
    "stratum_a": "changepoint",
    "stratum_b": "contaminated",
-   "calibrated": 0.0,
+   "calibrated": 0.025000000000000022,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -196,19 +196,19 @@
   {
    "dimension": "trend",
    "pair": 7,
-   "p_ab": 0.25,
-   "p_ba": 0.0,
+   "p_ab": 0.1,
+   "p_ba": 0.1,
    "votes_ab": [
-    15,
-    5
+    18,
+    2
    ],
    "votes_ba": [
-    20,
-    0
+    18,
+    2
    ],
    "stratum_a": "contaminated",
    "stratum_b": "clean",
-   "calibrated": 0.625,
+   "calibrated": 0.5,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -256,19 +256,19 @@
   {
    "dimension": "trend",
    "pair": 10,
-   "p_ab": 0.2,
-   "p_ba": 0.05,
+   "p_ab": 0.05,
+   "p_ba": 0.0,
    "votes_ab": [
-    16,
-    4
-   ],
-   "votes_ba": [
     19,
     1
    ],
+   "votes_ba": [
+    20,
+    0
+   ],
    "stratum_a": "clean",
    "stratum_b": "clean",
-   "calibrated": 0.575,
+   "calibrated": 0.525,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -297,18 +297,18 @@
    "dimension": "trend",
    "pair": 12,
    "p_ab": 0.0,
-   "p_ba": 0.15,
+   "p_ba": 0.05263157894736842,
    "votes_ab": [
     20,
     0
    ],
    "votes_ba": [
-    17,
-    3
+    18,
+    1
    ],
    "stratum_a": "clean",
    "stratum_b": "rare_valid",
-   "calibrated": 0.425,
+   "calibrated": 0.4736842105263158,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -357,18 +357,18 @@
    "dimension": "frequency",
    "pair": 0,
    "p_ab": 0.0,
-   "p_ba": 0.8,
+   "p_ba": 0.6,
    "votes_ab": [
     20,
     0
    ],
    "votes_ba": [
-    4,
-    16
+    8,
+    12
    ],
    "stratum_a": "rare_valid",
    "stratum_b": "clean_ood",
-   "calibrated": 0.09999999999999998,
+   "calibrated": 0.2,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -377,18 +377,18 @@
    "dimension": "frequency",
    "pair": 1,
    "p_ab": 0.0,
-   "p_ba": 0.75,
+   "p_ba": 0.7,
    "votes_ab": [
     20,
     0
    ],
    "votes_ba": [
-    5,
-    15
+    6,
+    14
    ],
    "stratum_a": "contaminated",
    "stratum_b": "rare_valid",
-   "calibrated": 0.125,
+   "calibrated": 0.15000000000000002,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -397,18 +397,18 @@
    "dimension": "frequency",
    "pair": 2,
    "p_ab": 0.0,
-   "p_ba": 0.2,
+   "p_ba": 0.10526315789473684,
    "votes_ab": [
     19,
     0
    ],
    "votes_ba": [
-    16,
-    4
+    17,
+    2
    ],
    "stratum_a": "changepoint",
    "stratum_b": "hard",
-   "calibrated": 0.4,
+   "calibrated": 0.4473684210526316,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -416,19 +416,19 @@
   {
    "dimension": "frequency",
    "pair": 3,
-   "p_ab": 0.5263157894736842,
+   "p_ab": 0.8421052631578947,
    "p_ba": 0.0,
    "votes_ab": [
-    9,
-    10
+    3,
+    16
    ],
    "votes_ba": [
-    19,
+    20,
     0
    ],
    "stratum_a": "hard",
    "stratum_b": "clean",
-   "calibrated": 0.763157894736842,
+   "calibrated": 0.9210526315789473,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -436,19 +436,19 @@
   {
    "dimension": "frequency",
    "pair": 4,
-   "p_ab": 0.2,
-   "p_ba": 0.15,
+   "p_ab": 0.1,
+   "p_ba": 0.1,
    "votes_ab": [
-    16,
-    4
+    18,
+    2
    ],
    "votes_ba": [
-    17,
-    3
+    18,
+    2
    ],
    "stratum_a": "rare_valid",
    "stratum_b": "contaminated",
-   "calibrated": 0.525,
+   "calibrated": 0.5,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -457,18 +457,18 @@
    "dimension": "frequency",
    "pair": 5,
    "p_ab": 0.0,
-   "p_ba": 0.75,
+   "p_ba": 0.85,
    "votes_ab": [
-    20,
+    19,
     0
    ],
    "votes_ba": [
-    5,
-    15
+    3,
+    17
    ],
    "stratum_a": "contaminated",
    "stratum_b": "contaminated",
-   "calibrated": 0.125,
+   "calibrated": 0.07500000000000001,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -484,7 +484,7 @@
    ],
    "votes_ba": [
     0,
-    19
+    20
    ],
    "stratum_a": "changepoint",
    "stratum_b": "contaminated",
@@ -499,11 +499,11 @@
    "p_ab": 0.0,
    "p_ba": 0.0,
    "votes_ab": [
-    19,
+    20,
     0
    ],
    "votes_ba": [
-    19,
+    18,
     0
    ],
    "stratum_a": "contaminated",
@@ -516,11 +516,11 @@
   {
    "dimension": "frequency",
    "pair": 8,
-   "p_ab": 0.0,
+   "p_ab": 0.05,
    "p_ba": 0.0,
    "votes_ab": [
-    20,
-    0
+    19,
+    1
    ],
    "votes_ba": [
     20,
@@ -528,7 +528,7 @@
    ],
    "stratum_a": "hard",
    "stratum_b": "rare_valid",
-   "calibrated": 0.5,
+   "calibrated": 0.525,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -537,18 +537,18 @@
    "dimension": "frequency",
    "pair": 9,
    "p_ab": 0.05,
-   "p_ba": 0.1,
+   "p_ba": 0.05,
    "votes_ab": [
     19,
     1
    ],
    "votes_ba": [
-    18,
-    2
+    19,
+    1
    ],
    "stratum_a": "clean",
    "stratum_b": "clean",
-   "calibrated": 0.47500000000000003,
+   "calibrated": 0.5,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -596,11 +596,11 @@
   {
    "dimension": "frequency",
    "pair": 12,
-   "p_ab": 0.0,
+   "p_ab": 0.05,
    "p_ba": 0.0,
    "votes_ab": [
-    20,
-    0
+    19,
+    1
    ],
    "votes_ba": [
     20,
@@ -608,7 +608,7 @@
    ],
    "stratum_a": "clean",
    "stratum_b": "rare_valid",
-   "calibrated": 0.5,
+   "calibrated": 0.525,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -617,18 +617,18 @@
    "dimension": "frequency",
    "pair": 13,
    "p_ab": 0.0,
-   "p_ba": 1.0,
+   "p_ba": 0.95,
    "votes_ab": [
     20,
     0
    ],
    "votes_ba": [
-    0,
-    20
+    1,
+    19
    ],
    "stratum_a": "contaminated",
    "stratum_b": "contaminated",
-   "calibrated": 0.0,
+   "calibrated": 0.025000000000000022,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -644,7 +644,7 @@
    ],
    "votes_ba": [
     0,
-    20
+    19
    ],
    "stratum_a": "contaminated",
    "stratum_b": "contaminated",
@@ -656,11 +656,11 @@
   {
    "dimension": "amplitude",
    "pair": 0,
-   "p_ab": 0.25,
+   "p_ab": 0.1,
    "p_ba": 0.0,
    "votes_ab": [
-    15,
-    5
+    18,
+    2
    ],
    "votes_ba": [
     20,
@@ -668,7 +668,7 @@
    ],
    "stratum_a": "rare_valid",
    "stratum_b": "clean_ood",
-   "calibrated": 0.625,
+   "calibrated": 0.55,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -676,11 +676,11 @@
   {
    "dimension": "amplitude",
    "pair": 1,
-   "p_ab": 0.05,
+   "p_ab": 0.15,
    "p_ba": 0.0,
    "votes_ab": [
-    19,
-    1
+    17,
+    3
    ],
    "votes_ba": [
     20,
@@ -688,7 +688,7 @@
    ],
    "stratum_a": "contaminated",
    "stratum_b": "rare_valid",
-   "calibrated": 0.525,
+   "calibrated": 0.575,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -736,11 +736,11 @@
   {
    "dimension": "amplitude",
    "pair": 4,
-   "p_ab": 0.05,
+   "p_ab": 0.0,
    "p_ba": 0.0,
    "votes_ab": [
-    19,
-    1
+    20,
+    0
    ],
    "votes_ba": [
     20,
@@ -748,7 +748,7 @@
    ],
    "stratum_a": "rare_valid",
    "stratum_b": "contaminated",
-   "calibrated": 0.525,
+   "calibrated": 0.5,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -797,18 +797,18 @@
    "dimension": "amplitude",
    "pair": 7,
    "p_ab": 0.0,
-   "p_ba": 0.35,
+   "p_ba": 0.15,
    "votes_ab": [
     20,
     0
    ],
    "votes_ba": [
-    13,
-    7
+    17,
+    3
    ],
    "stratum_a": "contaminated",
    "stratum_b": "clean",
-   "calibrated": 0.325,
+   "calibrated": 0.425,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -937,26 +937,6 @@
    "dimension": "amplitude",
    "pair": 14,
    "p_ab": 0.0,
-   "p_ba": 0.9,
-   "votes_ab": [
-    20,
-    0
-   ],
-   "votes_ba": [
-    2,
-    18
-   ],
-   "stratum_a": "contaminated",
-   "stratum_b": "contaminated",
-   "calibrated": 0.04999999999999999,
-   "tie": false,
-   "agree": true,
-   "high_confidence": true
-  },
-  {
-   "dimension": "pattern",
-   "pair": 0,
-   "p_ab": 0.0,
    "p_ba": 1.0,
    "votes_ab": [
     20,
@@ -966,9 +946,29 @@
     0,
     20
    ],
+   "stratum_a": "contaminated",
+   "stratum_b": "contaminated",
+   "calibrated": 0.0,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 0,
+   "p_ab": 0.05,
+   "p_ba": 0.95,
+   "votes_ab": [
+    19,
+    1
+   ],
+   "votes_ba": [
+    1,
+    19
+   ],
    "stratum_a": "rare_valid",
    "stratum_b": "clean_ood",
-   "calibrated": 0.0,
+   "calibrated": 0.050000000000000024,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -977,18 +977,18 @@
    "dimension": "pattern",
    "pair": 1,
    "p_ab": 0.2,
-   "p_ba": 0.95,
+   "p_ba": 0.9,
    "votes_ab": [
     16,
     4
    ],
    "votes_ba": [
-    1,
-    19
+    2,
+    18
    ],
    "stratum_a": "contaminated",
    "stratum_b": "rare_valid",
-   "calibrated": 0.12500000000000003,
+   "calibrated": 0.15,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -996,46 +996,6 @@
   {
    "dimension": "pattern",
    "pair": 2,
-   "p_ab": 0.0,
-   "p_ba": 0.45,
-   "votes_ab": [
-    19,
-    0
-   ],
-   "votes_ba": [
-    11,
-    9
-   ],
-   "stratum_a": "changepoint",
-   "stratum_b": "hard",
-   "calibrated": 0.275,
-   "tie": false,
-   "agree": false,
-   "high_confidence": false
-  },
-  {
-   "dimension": "pattern",
-   "pair": 3,
-   "p_ab": 0.9,
-   "p_ba": 0.1,
-   "votes_ab": [
-    2,
-    18
-   ],
-   "votes_ba": [
-    18,
-    2
-   ],
-   "stratum_a": "hard",
-   "stratum_b": "clean",
-   "calibrated": 0.9,
-   "tie": false,
-   "agree": true,
-   "high_confidence": true
-  },
-  {
-   "dimension": "pattern",
-   "pair": 4,
    "p_ab": 0.05,
    "p_ba": 0.55,
    "votes_ab": [
@@ -1046,9 +1006,49 @@
     9,
     11
    ],
+   "stratum_a": "changepoint",
+   "stratum_b": "hard",
+   "calibrated": 0.24999999999999997,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 3,
+   "p_ab": 0.95,
+   "p_ba": 0.0,
+   "votes_ab": [
+    1,
+    19
+   ],
+   "votes_ba": [
+    19,
+    0
+   ],
+   "stratum_a": "hard",
+   "stratum_b": "clean",
+   "calibrated": 0.975,
+   "tie": false,
+   "agree": true,
+   "high_confidence": true
+  },
+  {
+   "dimension": "pattern",
+   "pair": 4,
+   "p_ab": 0.15,
+   "p_ba": 0.7,
+   "votes_ab": [
+    17,
+    3
+   ],
+   "votes_ba": [
+    6,
+    14
+   ],
    "stratum_a": "rare_valid",
    "stratum_b": "contaminated",
-   "calibrated": 0.24999999999999997,
+   "calibrated": 0.22500000000000003,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -1057,18 +1057,18 @@
    "dimension": "pattern",
    "pair": 5,
    "p_ab": 0.0,
-   "p_ba": 0.75,
+   "p_ba": 0.65,
    "votes_ab": [
     20,
     0
    ],
    "votes_ba": [
-    5,
-    15
+    7,
+    13
    ],
    "stratum_a": "contaminated",
    "stratum_b": "contaminated",
-   "calibrated": 0.125,
+   "calibrated": 0.175,
    "tie": false,
    "agree": true,
    "high_confidence": true
@@ -1096,19 +1096,19 @@
   {
    "dimension": "pattern",
    "pair": 7,
-   "p_ab": 0.3157894736842105,
+   "p_ab": 0.2,
    "p_ba": 0.0,
    "votes_ab": [
-    13,
-    6
+    16,
+    4
    ],
    "votes_ba": [
-    17,
+    20,
     0
    ],
    "stratum_a": "contaminated",
    "stratum_b": "clean",
-   "calibrated": 0.6578947368421053,
+   "calibrated": 0.6,
    "tie": false,
    "agree": false,
    "high_confidence": false
@@ -1116,11 +1116,11 @@
   {
    "dimension": "pattern",
    "pair": 8,
-   "p_ab": 0.5,
+   "p_ab": 0.8,
    "p_ba": 0.0,
    "votes_ab": [
-    10,
-    10
+    4,
+    16
    ],
    "votes_ba": [
     20,
@@ -1128,23 +1128,23 @@
    ],
    "stratum_a": "hard",
    "stratum_b": "rare_valid",
-   "calibrated": 0.75,
-   "tie": true,
-   "agree": false,
+   "calibrated": 0.9,
+   "tie": false,
+   "agree": true,
    "high_confidence": true
   },
   {
    "dimension": "pattern",
    "pair": 9,
-   "p_ab": 0.25,
-   "p_ba": 0.1,
+   "p_ab": 0.2,
+   "p_ba": 0.05,
    "votes_ab": [
-    15,
-    5
+    16,
+    4
    ],
    "votes_ba": [
-    18,
-    2
+    19,
+    1
    ],
    "stratum_a": "clean",
    "stratum_b": "clean",
@@ -1156,22 +1156,22 @@
   {
    "dimension": "pattern",
    "pair": 10,
-   "p_ab": 0.3,
-   "p_ba": 0.15,
+   "p_ab": 0.6,
+   "p_ba": 0.05,
    "votes_ab": [
-    14,
-    6
+    8,
+    12
    ],
    "votes_ba": [
-    17,
-    3
+    19,
+    1
    ],
    "stratum_a": "clean",
    "stratum_b": "clean",
-   "calibrated": 0.575,
+   "calibrated": 0.7749999999999999,
    "tie": false,
-   "agree": false,
-   "high_confidence": false
+   "agree": true,
+   "high_confidence": true
   },
   {
    "dimension": "pattern",
@@ -1217,18 +1217,18 @@
    "dimension": "pattern",
    "pair": 13,
    "p_ab": 0.0,
-   "p_ba": 0.8947368421052632,
+   "p_ba": 0.9,
    "votes_ab": [
     20,
     0
    ],
    "votes_ba": [
     2,
-    17
+    18
    ],
    "stratum_a": "contaminated",
    "stratum_b": "contaminated",
-   "calibrated": 0.05263157894736842,
+   "calibrated": 0.04999999999999999,
    "tie": false,
    "agree": true,
    "high_confidence": true

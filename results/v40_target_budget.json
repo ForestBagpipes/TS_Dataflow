@@ -1,0 +1,30 @@
+{
+ "phase": "v4.0 COUNTERACT-TS target budget (carried over from the frozen v3.9 budget, docs/v4_0_counteract_preregistration.md §2)",
+ "carried_from": "results/v39_target_budget.json",
+ "carried_from_sha256": "5ec5e719c2875c3c528d95ce6ec0def12237621edb862302e7e1c9d68a1509b6",
+ "verified_v39_numbers": {
+  "baseline_arm": "D_fact_short_first",
+  "baseline_improved": 117,
+  "baseline_gain_sum": 38.36811314541032,
+  "baseline_committed": 132,
+  "baseline_harmful": 15,
+  "baseline_prot_edit": 2,
+  "n_contaminated": 440,
+  "n_frame": 771,
+  "n_protected": 331
+ },
+ "v40_targets": {
+  "new_beneficial_and_safe_windows_min": 15,
+  "gain_sum_increase_min": 5.6318868545896805,
+  "net_protected_edits_removed_min": 1,
+  "harmful_commits_must_decrease_below": 15,
+  "rationale": "max_new_harmful_commits_at_required_beneficial = -1 and pme_headroom_edits = -1: the CHR/pme targets cannot be met by adding commits, so COUNTERACT must also remove at least 1 protected edit and reduce harmful commits relative to the v3.9 D baseline"
+ },
+ "targets_unchanged": {
+  "bcov": 0.3,
+  "gain": 0.1,
+  "chr": 0.1,
+  "pme": 0.0055,
+  "damage": 0.0402
+ }
+}

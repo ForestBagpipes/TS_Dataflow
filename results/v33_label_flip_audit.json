@@ -1,0 +1,412 @@
+{
+ "n_impute_shared": 1154,
+ "transition_counts": {
+  "(0, 1, 0)->(0, 0, 0)": 1,
+  "(0, 1, 0)->(0, 1, 0)": 622,
+  "(0, 1, 0)->(1, 0, 1)": 395,
+  "(1, 0, 1)->(1, 0, 1)": 136
+ },
+ "by_true_kind": {
+  "duplicate|(0, 1, 0)->(0, 1, 0)": 33,
+  "flatline|(0, 1, 0)->(0, 1, 0)": 84,
+  "flatline|(1, 0, 1)->(1, 0, 1)": 129,
+  "level_shift|(0, 1, 0)->(0, 1, 0)": 27,
+  "level_shift|(1, 0, 1)->(1, 0, 1)": 7,
+  "missing_block|(0, 1, 0)->(0, 0, 0)": 1,
+  "missing_block|(0, 1, 0)->(0, 1, 0)": 78,
+  "missing_block|(0, 1, 0)->(1, 0, 1)": 188,
+  "missing_scattered|(0, 1, 0)->(0, 1, 0)": 57,
+  "missing_scattered|(0, 1, 0)->(1, 0, 1)": 207,
+  "null|(0, 1, 0)->(0, 1, 0)": 324,
+  "spike|(0, 1, 0)->(0, 1, 0)": 19
+ },
+ "by_dataset": {
+  "Crypto|(0, 1, 0)->(0, 1, 0)": 2,
+  "Crypto|(0, 1, 0)->(1, 0, 1)": 15,
+  "Crypto|(1, 0, 1)->(1, 0, 1)": 7,
+  "ETTh1|(0, 1, 0)->(0, 1, 0)": 245,
+  "ETTh1|(0, 1, 0)->(1, 0, 1)": 60,
+  "ETTh1|(1, 0, 1)->(1, 0, 1)": 17,
+  "ETTh2|(0, 1, 0)->(0, 0, 0)": 1,
+  "ETTh2|(0, 1, 0)->(0, 1, 0)": 169,
+  "ETTh2|(0, 1, 0)->(1, 0, 1)": 37,
+  "ETTh2|(1, 0, 1)->(1, 0, 1)": 10,
+  "ETTm1|(0, 1, 0)->(0, 1, 0)": 121,
+  "ETTm1|(0, 1, 0)->(1, 0, 1)": 54,
+  "ETTm1|(1, 0, 1)->(1, 0, 1)": 28,
+  "Oil Price|(0, 1, 0)->(0, 1, 0)": 13,
+  "Oil Price|(0, 1, 0)->(1, 0, 1)": 23,
+  "Oil Price|(1, 0, 1)->(1, 0, 1)": 8,
+  "US Term Structure|(0, 1, 0)->(0, 1, 0)": 72,
+  "US Term Structure|(0, 1, 0)->(1, 0, 1)": 206,
+  "US Term Structure|(1, 0, 1)->(1, 0, 1)": 66
+ },
+ "by_rung": {
+  "aggressive|(0, 1, 0)->(0, 1, 0)": 276,
+  "aggressive|(0, 1, 0)->(1, 0, 1)": 120,
+  "aggressive|(1, 0, 1)->(1, 0, 1)": 49,
+  "conservative|(0, 1, 0)->(0, 0, 0)": 1,
+  "conservative|(0, 1, 0)->(0, 1, 0)": 86,
+  "conservative|(0, 1, 0)->(1, 0, 1)": 143,
+  "conservative|(1, 0, 1)->(1, 0, 1)": 34,
+  "default|(0, 1, 0)->(0, 1, 0)": 260,
+  "default|(0, 1, 0)->(1, 0, 1)": 132,
+  "default|(1, 0, 1)->(1, 0, 1)": 53
+ },
+ "nmse_shift": {
+  "before_old": {
+   "n": 1154,
+   "mean": 0.34094278627942604,
+   "median": 0.0,
+   "p90": 0.10703181263684328
+  },
+  "before_new": {
+   "n": 1154,
+   "mean": 0.36867062306401827,
+   "median": 0.003805144624437638,
+   "p90": 0.256547142905615
+  },
+  "after_old": {
+   "n": 1154,
+   "mean": 0.41740773795795705,
+   "median": 0.012767067953530541,
+   "p90": 0.3046607645840272
+  },
+  "after_new": {
+   "n": 1154,
+   "mean": 0.41740773795795705,
+   "median": 0.012767067953530541,
+   "p90": 0.3046607645840272
+  }
+ },
+ "oracle_headroom_new_labels": {
+  "IMPUTE": {
+   "routed": 1154,
+   "contaminated_routed": 830,
+   "safe": 532.0,
+   "beneficial": 531.0,
+   "beneficial_and_safe": 531,
+   "contaminated_bs_rate": 0.6397590361445783,
+   "windows_with_bs": 203,
+   "oracle_window_coverage": 0.46136363636363636,
+   "max_coverage_at_damage_0.03": 0.46136363636363636
+  },
+  "RESEGMENT": {
+   "routed": 758,
+   "contaminated_routed": 314,
+   "safe": 0.0,
+   "beneficial": 111.0,
+   "beneficial_and_safe": 0,
+   "contaminated_bs_rate": 0.0,
+   "windows_with_bs": 0,
+   "oracle_window_coverage": 0.0,
+   "max_coverage_at_damage_0.03": 0.0
+  },
+  "DENOISE": {
+   "routed": 267,
+   "contaminated_routed": 135,
+   "safe": 126.0,
+   "beneficial": 126.0,
+   "beneficial_and_safe": 126,
+   "contaminated_bs_rate": 0.9333333333333333,
+   "windows_with_bs": 42,
+   "oracle_window_coverage": 0.09545454545454546,
+   "max_coverage_at_damage_0.03": 0.09545454545454546
+  },
+  "DESPIKE": {
+   "routed": 235,
+   "contaminated_routed": 164,
+   "safe": 133.0,
+   "beneficial": 133.0,
+   "beneficial_and_safe": 133,
+   "contaminated_bs_rate": 0.8109756097560976,
+   "windows_with_bs": 46,
+   "oracle_window_coverage": 0.10454545454545454,
+   "max_coverage_at_damage_0.03": 0.10454545454545454
+  }
+ },
+ "contaminated_windows_total": 440,
+ "old_missing_harmful_commit_fates": [
+  {
+   "sample_uid": "US Term Structure:contaminated:missing_block:03aacc880150442d5f06a9925f2821e81088d6c28de6b2e1a9ce5272ed252fbc:9df220636c62c68a847f757a2c5a528f439db08c7fd818fabcb15daba01ba3c0",
+   "dataset": "US Term Structure",
+   "true_kind": "missing_block",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0,
+    "after_nmse": 0.0027800392412967376,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.005269213416352402,
+    "after_nmse": 0.0027800392412967376,
+    "true_loss": 0.0,
+    "true_repair_gain": 0.0024891741750556647,
+    "beneficial": 1.0,
+    "safe": 1.0,
+    "harmful": 0.0,
+    "beneficial_and_safe": 1.0
+   }
+  },
+  {
+   "sample_uid": "Crypto:contaminated:missing_block:95ca043d7a8192eaa07d07e8d67da5cdfc47b3b8eddb1fcc4b9da952544cfcbd:0d0620c6e694cdbb974da4825f76eac9ef8b2aa784937b02e2498df2ddbe8106",
+   "dataset": "Crypto",
+   "true_kind": "missing_block",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0,
+    "after_nmse": 0.03415420324097196,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.08201942269640955,
+    "after_nmse": 0.03415420324097196,
+    "true_loss": 0.0,
+    "true_repair_gain": 0.04786521945543759,
+    "beneficial": 1.0,
+    "safe": 1.0,
+    "harmful": 0.0,
+    "beneficial_and_safe": 1.0
+   }
+  },
+  {
+   "sample_uid": "US Term Structure:contaminated:missing_block:0d3d05a66931652d8915ddcfd678551bdd37ae83166c19f9e0a4acdeaf4382b5:f910324ba9615d4d856e561375772593b680b7c90a855a674fa77ff641057eaf",
+   "dataset": "US Term Structure",
+   "true_kind": "missing_block",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0,
+    "after_nmse": 0.024758042272011706,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.05436988107903814,
+    "after_nmse": 0.024758042272011706,
+    "true_loss": 0.0,
+    "true_repair_gain": 0.029611838807026433,
+    "beneficial": 1.0,
+    "safe": 1.0,
+    "harmful": 0.0,
+    "beneficial_and_safe": 1.0
+   }
+  },
+  {
+   "sample_uid": "US Term Structure:contaminated:missing_block:fb6ce8d79e1d9075389f6e6ba92d45c934e88d320e519be1b43b9bd72e75a93b:ff1b71a8e0e1069edb1a9624d6443225c8570d4620ffa8dcb5c490aa16bcb219",
+   "dataset": "US Term Structure",
+   "true_kind": "missing_block",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0,
+    "after_nmse": 0.0080658852141002,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.00869574053911954,
+    "after_nmse": 0.0080658852141002,
+    "true_loss": 0.0,
+    "true_repair_gain": 0.0006298553250193399,
+    "beneficial": 1.0,
+    "safe": 1.0,
+    "harmful": 0.0,
+    "beneficial_and_safe": 1.0
+   }
+  },
+  {
+   "sample_uid": "US Term Structure:contaminated:missing_block:bc054d64a4c625afe76dd4712a30b67ca0813a843ca822d9f0b1e6af65984ebe:1dbbef01fabbf1d43063f886cf5b97a0545c3385aba801e89b6db570fe2c7731",
+   "dataset": "US Term Structure",
+   "true_kind": "missing_block",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0,
+    "after_nmse": 0.003986450462191203,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.006447530788741047,
+    "after_nmse": 0.003986450462191203,
+    "true_loss": 0.0,
+    "true_repair_gain": 0.0024610803265498445,
+    "beneficial": 1.0,
+    "safe": 1.0,
+    "harmful": 0.0,
+    "beneficial_and_safe": 1.0
+   }
+  },
+  {
+   "sample_uid": "US Term Structure:contaminated:missing_block:356a9825c44d6609980f517e448383af96941c6b109df3cc3bf4ae7100d287f0:cf9d17b37a5ea0696acc8461bf6363aee089bc9a226581cdf968bb07403a9084",
+   "dataset": "US Term Structure",
+   "true_kind": "missing_block",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0,
+    "after_nmse": 0.0018053401519692292,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.0019901138841116493,
+    "after_nmse": 0.0018053401519692292,
+    "true_loss": 0.0,
+    "true_repair_gain": 0.0001847737321424201,
+    "beneficial": 1.0,
+    "safe": 1.0,
+    "harmful": 0.0,
+    "beneficial_and_safe": 1.0
+   }
+  },
+  {
+   "sample_uid": "US Term Structure:contaminated:missing_block:4b6ebb9f01c46f6426321e6683142a1e4285ae6a5aa6d8283ca691af0a84c68b:13b132192b81b6f9b460a1c8361d42c2a1eb02ea508435432effc52e0bad5dda",
+   "dataset": "US Term Structure",
+   "true_kind": "missing_block",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0,
+    "after_nmse": 0.0008137103647577886,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.00556912991113903,
+    "after_nmse": 0.0008137103647577886,
+    "true_loss": 0.0,
+    "true_repair_gain": 0.004755419546381241,
+    "beneficial": 1.0,
+    "safe": 1.0,
+    "harmful": 0.0,
+    "beneficial_and_safe": 1.0
+   }
+  },
+  {
+   "sample_uid": "US Term Structure:contaminated:missing_block:ee52a0239fdbc2183f38e78e598d6103e0ffefd981e1bd669d085343cff77f22:f62c387728022075c5e3513d0472bccb996dac411f8d11f0ba5922e90917fd01",
+   "dataset": "US Term Structure",
+   "true_kind": "missing_block",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0,
+    "after_nmse": 0.0011982946179051334,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.0011287257140166899,
+    "after_nmse": 0.0011982946179051334,
+    "true_loss": 1.0,
+    "true_repair_gain": -6.956890388844358e-05,
+    "beneficial": 0.0,
+    "safe": 0.0,
+    "harmful": 1.0,
+    "beneficial_and_safe": 0.0
+   }
+  },
+  {
+   "sample_uid": "US Term Structure:contaminated:missing_block:00cf09102d2b23ebf4debdceb9e7cba106629da864aaeec08f83d8506e7db6ba:d48928fac7385cc7feeb74d44e084598dc39651110ee257aef6d1c36c2169b61",
+   "dataset": "US Term Structure",
+   "true_kind": "missing_block",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0,
+    "after_nmse": 0.005603424759435584,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.0053444497468144855,
+    "after_nmse": 0.005603424759435584,
+    "true_loss": 1.0,
+    "true_repair_gain": -0.00025897501262109844,
+    "beneficial": 0.0,
+    "safe": 0.0,
+    "harmful": 1.0,
+    "beneficial_and_safe": 0.0
+   }
+  },
+  {
+   "sample_uid": "US Term Structure:contaminated:flatline:a13321224934ba51780aa539182b71f696a0da1ea27df54b0140fbc47f807a7d:a97c21d563d49e70c59dbd047e07684ae7e54fa87d498f8e8ce0bc6daf07409c",
+   "dataset": "US Term Structure",
+   "true_kind": "flatline",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0037353230763129217,
+    "after_nmse": 0.0047599593754659554,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.0037353230763129217,
+    "after_nmse": 0.0047599593754659554,
+    "true_loss": 1.0,
+    "true_repair_gain": -0.0010246362991530337,
+    "beneficial": 0.0,
+    "safe": 0.0,
+    "harmful": 1.0,
+    "beneficial_and_safe": 0.0
+   }
+  },
+  {
+   "sample_uid": "US Term Structure:contaminated:flatline:171ab509627e7368234539cf086db2bf254fdd019698e22dc62549819e73762f:7e9a230db7070704b4b6724e24a00d83a68ea93dcb3d3ff54864898303c57b45",
+   "dataset": "US Term Structure",
+   "true_kind": "flatline",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0023861984874338185,
+    "after_nmse": 0.0024122613937148448,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.0023861984874338185,
+    "after_nmse": 0.0024122613937148448,
+    "true_loss": 1.0,
+    "true_repair_gain": -2.6062906281026227e-05,
+    "beneficial": 0.0,
+    "safe": 0.0,
+    "harmful": 1.0,
+    "beneficial_and_safe": 0.0
+   }
+  },
+  {
+   "sample_uid": "US Term Structure:contaminated:missing_block:a10666ec4d768e30f5bb0bd429dc6f924f3191b4d1424d7c0f45abb8c6d30433:f5a19c10b77671589f2f6c8bc90a5fd60c0eb3c09964e662b92365f0749cec00",
+   "dataset": "US Term Structure",
+   "true_kind": "missing_block",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0,
+    "after_nmse": 0.0011284779337301799,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.001032747967849544,
+    "after_nmse": 0.0011284779337301799,
+    "true_loss": 1.0,
+    "true_repair_gain": -9.57299658806358e-05,
+    "beneficial": 0.0,
+    "safe": 0.0,
+    "harmful": 1.0,
+    "beneficial_and_safe": 0.0
+   }
+  },
+  {
+   "sample_uid": "US Term Structure:contaminated:missing_block:67a48d4cf5c61e99a828e34bc5acf54fded357f6e1862c0951ae0bfa14cf538f:303c10ce2a28f36c88449e22c1ca4406545f9a02a98f2f1fdcc6fbf926fa172f",
+   "dataset": "US Term Structure",
+   "true_kind": "missing_block",
+   "rung": "default",
+   "old": {
+    "before_nmse": 0.0,
+    "after_nmse": 0.047216377341125784,
+    "true_loss": 1.0
+   },
+   "new": {
+    "before_nmse": 0.05763909062375804,
+    "after_nmse": 0.047216377341125784,
+    "true_loss": 0.0,
+    "true_repair_gain": 0.010422713282632258,
+    "beneficial": 1.0,
+    "safe": 1.0,
+    "harmful": 0.0,
+    "beneficial_and_safe": 1.0
+   }
+  }
+ ],
+ "us_term_structure": {
+  "n_impute": 344,
+  "transitions": {
+   "(0, 1, 0)->(0, 1, 0)": 72,
+   "(0, 1, 0)->(1, 0, 1)": 206,
+   "(1, 0, 1)->(1, 0, 1)": 66
+  }
+ }
+}

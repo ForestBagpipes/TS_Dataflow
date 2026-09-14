@@ -1,0 +1,1468 @@
+{
+ "meta": {
+  "sample_seed": 42,
+  "n_sample": 50,
+  "n_records": 50,
+  "models": [
+   "amazon/chronos-bolt-base",
+   "google/timesfm-2.5-200m-pytorch",
+   "amazon/chronos-bolt-small"
+  ]
+ },
+ "summaries": {
+  "n_records": 50,
+  "by_accepted": {
+   "True": {
+    "mask_context_stability": 0.19626360702436788,
+    "cross_model_agreement": 0.13409579333261404,
+    "outside_support_drift": 1.086318505447921,
+    "masked_reconstruction_preference": -0.7257459039292687,
+    "seam_error": 0.9583489590483486,
+    "forecast_backcast_agreement": 2.174486554881184
+   },
+   "False": {
+    "masked_reconstruction_preference": -0.5263148207780167,
+    "forecast_backcast_agreement": 1.9918728414157532,
+    "mask_context_stability": 0.17920145169598573,
+    "cross_model_agreement": 0.09407396797592052,
+    "seam_error": 0.778403829466073,
+    "outside_support_drift": 0.7880004411839647
+   }
+  },
+  "by_level_shift": {
+   "False": {
+    "mask_context_stability": 0.19188735649798386,
+    "cross_model_agreement": 0.11893380336867918,
+    "outside_support_drift": 1.00630202150004,
+    "masked_reconstruction_preference": -0.6837604127395315,
+    "seam_error": 0.9183611524745098,
+    "forecast_backcast_agreement": 2.0831796981484687
+   },
+   "True": {
+    "mask_context_stability": 0.14075310775799363,
+    "cross_model_agreement": 0.17480569236118704,
+    "outside_support_drift": 0.16879357608808282
+   }
+  },
+  "by_protected": {
+   "False": {
+    "mask_context_stability": 0.21527880086121481,
+    "cross_model_agreement": 0.13506640597545447,
+    "outside_support_drift": 0.7381316894536689,
+    "masked_reconstruction_preference": -0.8410308439633398,
+    "seam_error": 1.036531987730339,
+    "forecast_backcast_agreement": 3.1064397085638205
+   },
+   "True": {
+    "masked_reconstruction_preference": 0.15501522045411287,
+    "forecast_backcast_agreement": 1.059919687733117,
+    "mask_context_stability": 0.10823429209388162,
+    "cross_model_agreement": 0.07315896041268206,
+    "seam_error": 0.3275069761953631,
+    "outside_support_drift": 1.777349930825907
+   }
+  }
+ },
+ "records": [
+  {
+   "window_id": 38,
+   "dataset": "ETTh1",
+   "stratum": "contaminated",
+   "true_kind": "missing_block",
+   "family": "RESEGMENT",
+   "rung": "aggressive",
+   "distortion": 0.9471639304163889,
+   "delta_utility_ledger": 0.044967998945277365,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.09606354290112226,
+    "cross_model_agreement": 0.016624403116395237,
+    "seam_error": null,
+    "outside_support_drift": 0.4542852161086968
+   },
+   "shield_signals": {
+    "delta_utility": 0.044967998945277365,
+    "struct_distortion": 0.9471639304163889,
+    "risk": 0.6082043445696442,
+    "confidence": 0.5907781256299903,
+    "posterior_entropy": 1.1470455900822842
+   }
+  },
+  {
+   "window_id": 563,
+   "dataset": "Oil Price",
+   "stratum": "contaminated",
+   "true_kind": "noise",
+   "family": "DENOISE",
+   "rung": "conservative",
+   "distortion": 0.2095671041254405,
+   "delta_utility_ledger": 0.3703061846693414,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -0.029641514444164407,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.05312098842348256,
+    "cross_model_agreement": 0.003714798887548443,
+    "seam_error": null,
+    "outside_support_drift": 0.09372816921671867
+   },
+   "shield_signals": {
+    "delta_utility": 0.3703061846693414,
+    "struct_distortion": 0.2095671041254405,
+    "risk": 0.5315391694408542,
+    "confidence": 0.41347407481374726,
+    "posterior_entropy": 1.380055199996128
+   }
+  },
+  {
+   "window_id": 349,
+   "dataset": "US Term Structure",
+   "stratum": "contaminated",
+   "true_kind": "spike",
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "distortion": 0.01581939720521988,
+   "delta_utility_ledger": 5.855894935126461,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": null,
+    "cross_model_agreement": null,
+    "seam_error": 1.1413099513646123,
+    "outside_support_drift": null
+   },
+   "shield_signals": {
+    "delta_utility": 5.855894935126461,
+    "struct_distortion": 0.01581939720521988,
+    "risk": 0.3308957359831601,
+    "confidence": 0.7015927425093436,
+    "posterior_entropy": 0.9574918594003714
+   }
+  },
+  {
+   "window_id": 92,
+   "dataset": "Crypto",
+   "stratum": "contaminated",
+   "true_kind": "missing_block",
+   "family": "IMPUTE",
+   "rung": "default",
+   "distortion": 0.08785809168251285,
+   "delta_utility_ledger": 0.15134801691939437,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": NaN,
+    "forecast_backcast_agreement": 3.5899063183996542,
+    "mask_context_stability": 0.16237797832889858,
+    "cross_model_agreement": null,
+    "seam_error": 0.05666621924290636,
+    "outside_support_drift": NaN
+   },
+   "shield_signals": {
+    "delta_utility": 0.15134801691939437,
+    "struct_distortion": 0.08785809168251285,
+    "risk": 0.46250467126234407,
+    "confidence": 0.6324794492409991,
+    "posterior_entropy": 1.10438320603506
+   }
+  },
+  {
+   "window_id": 572,
+   "dataset": "Oil Price",
+   "stratum": "contaminated",
+   "true_kind": "level_shift",
+   "family": "RESEGMENT",
+   "rung": "aggressive",
+   "distortion": 0.9759370366287976,
+   "delta_utility_ledger": 1.802173293298838,
+   "loss": 0.9759370366287976,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.14075310775799363,
+    "cross_model_agreement": 0.17480569236118704,
+    "seam_error": null,
+    "outside_support_drift": 0.16879357608808282
+   },
+   "shield_signals": {
+    "delta_utility": 1.802173293298838,
+    "struct_distortion": 0.9759370366287976,
+    "risk": 0.3577845982142857,
+    "confidence": 0.5464651029509019,
+    "posterior_entropy": 1.2749123210050084
+   }
+  },
+  {
+   "window_id": 532,
+   "dataset": "US Term Structure",
+   "stratum": "contaminated",
+   "true_kind": "noise",
+   "family": "DENOISE",
+   "rung": "conservative",
+   "distortion": 0.11085007850974103,
+   "delta_utility_ledger": 0.4900019973737373,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": 0.07110055836093193,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.0326781084676459,
+    "cross_model_agreement": 0.000504188167430808,
+    "seam_error": null,
+    "outside_support_drift": 0.07551720354721514
+   },
+   "shield_signals": {
+    "delta_utility": 0.4900019973737373,
+    "struct_distortion": 0.11085007850974103,
+    "risk": 0.5103094245754618,
+    "confidence": 0.46238119250204074,
+    "posterior_entropy": 1.3563613822878389
+   }
+  },
+  {
+   "window_id": 467,
+   "dataset": "ETTh1",
+   "stratum": "contaminated",
+   "true_kind": "noise",
+   "family": "DENOISE",
+   "rung": "default",
+   "distortion": 0.1372320870683068,
+   "delta_utility_ledger": 0.4888922762422214,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -0.197399832536147,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.09159110591779847,
+    "cross_model_agreement": 0.008783200423216009,
+    "seam_error": null,
+    "outside_support_drift": 0.0644478180675615
+   },
+   "shield_signals": {
+    "delta_utility": 0.4888922762422214,
+    "struct_distortion": 0.1372320870683068,
+    "risk": 0.6069870780059904,
+    "confidence": 0.4437939645940787,
+    "posterior_entropy": 1.3835637858889718
+   }
+  },
+  {
+   "window_id": 492,
+   "dataset": "US Term Structure",
+   "stratum": "contaminated",
+   "true_kind": "noise",
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "distortion": 0.3355560177132849,
+   "delta_utility_ledger": 0.4799631639805093,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -0.0035961518783695218,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.030864010605645684,
+    "cross_model_agreement": 0.0043648406882224045,
+    "seam_error": null,
+    "outside_support_drift": 0.08761127004928637
+   },
+   "shield_signals": {
+    "delta_utility": 0.4799631639805093,
+    "struct_distortion": 0.3355560177132849,
+    "risk": 0.5115660962158,
+    "confidence": 0.3588537001691841,
+    "posterior_entropy": 1.4495250816795284
+   }
+  },
+  {
+   "window_id": 380,
+   "dataset": "ETTm1",
+   "stratum": "contaminated",
+   "true_kind": "spike",
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "distortion": 0.03459902608836576,
+   "delta_utility_ledger": 0.49534821351179326,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": null,
+    "cross_model_agreement": null,
+    "seam_error": 0.8655585301066527,
+    "outside_support_drift": null
+   },
+   "shield_signals": {
+    "delta_utility": 0.49534821351179326,
+    "struct_distortion": 0.03459902608836576,
+    "risk": 0.44733870719172353,
+    "confidence": 0.705974074119574,
+    "posterior_entropy": 0.957849570467277
+   }
+  },
+  {
+   "window_id": 351,
+   "dataset": "ETTh1",
+   "stratum": "contaminated",
+   "true_kind": "spike",
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "distortion": 0.019974858335718135,
+   "delta_utility_ledger": 0.8735985859590794,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": null,
+    "cross_model_agreement": null,
+    "seam_error": 1.44985100614064,
+    "outside_support_drift": null
+   },
+   "shield_signals": {
+    "delta_utility": 0.8735985859590794,
+    "struct_distortion": 0.019974858335718135,
+    "risk": 0.4165874609680128,
+    "confidence": 0.4137877439924173,
+    "posterior_entropy": 1.4368919302676009
+   }
+  },
+  {
+   "window_id": 296,
+   "dataset": "ETTm1",
+   "stratum": "contaminated",
+   "true_kind": "flatline",
+   "family": "IMPUTE",
+   "rung": "aggressive",
+   "distortion": 0.027749999999999997,
+   "delta_utility_ledger": 0.21240014942115337,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -0.14819203414763124,
+    "forecast_backcast_agreement": 1.1231475348455164,
+    "mask_context_stability": 0.05317252931323287,
+    "cross_model_agreement": 0.008904033928757604,
+    "seam_error": 0.0560779665873232,
+    "outside_support_drift": 0.0
+   },
+   "shield_signals": {
+    "delta_utility": 0.21240014942115337,
+    "struct_distortion": 0.027749999999999997,
+    "risk": 0.5712983769685085,
+    "confidence": 0.6914129969851524,
+    "posterior_entropy": 0.9983218306494033
+   }
+  },
+  {
+   "window_id": 337,
+   "dataset": "US Term Structure",
+   "stratum": "contaminated",
+   "true_kind": "flatline",
+   "family": "RESEGMENT",
+   "rung": "aggressive",
+   "distortion": 0.9328634687246742,
+   "delta_utility_ledger": 0.9769584804220264,
+   "loss": 0.9328634687246742,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.6588858699325466,
+    "cross_model_agreement": 0.06324552102661263,
+    "seam_error": null,
+    "outside_support_drift": 3.6998303404838326
+   },
+   "shield_signals": {
+    "delta_utility": 0.9769584804220264,
+    "struct_distortion": 0.9328634687246742,
+    "risk": 0.5123147764842925,
+    "confidence": 0.581701448022489,
+    "posterior_entropy": 1.1863067330827932
+   }
+  },
+  {
+   "window_id": 137,
+   "dataset": "Crypto",
+   "stratum": "contaminated",
+   "true_kind": "missing_scattered",
+   "family": "IMPUTE",
+   "rung": "conservative",
+   "distortion": 0.018730873202581724,
+   "delta_utility_ledger": -0.038650540816032475,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -1.718054298887055,
+    "forecast_backcast_agreement": 4.606265272446289,
+    "mask_context_stability": 0.0802461824271314,
+    "cross_model_agreement": 0.06326790978628416,
+    "seam_error": 1.9737439920599302,
+    "outside_support_drift": 0.0
+   },
+   "shield_signals": {
+    "delta_utility": -0.038650540816032475,
+    "struct_distortion": 0.018730873202581724,
+    "risk": 0.6371645839645489,
+    "confidence": 0.6571117181003947,
+    "posterior_entropy": 1.108425726723891
+   }
+  },
+  {
+   "window_id": 448,
+   "dataset": "ETTm1",
+   "stratum": "contaminated",
+   "true_kind": "spike",
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "distortion": 0.01950563465710465,
+   "delta_utility_ledger": 0.35168921678812204,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -0.023008081212098602,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.2797415418859714,
+    "cross_model_agreement": 0.023110043943504577,
+    "seam_error": 1.1204612650703134,
+    "outside_support_drift": 0.0
+   },
+   "shield_signals": {
+    "delta_utility": 0.35168921678812204,
+    "struct_distortion": 0.01950563465710465,
+    "risk": 0.41226401811262214,
+    "confidence": 0.467500545851977,
+    "posterior_entropy": 1.387973164100153
+   }
+  },
+  {
+   "window_id": 365,
+   "dataset": "Oil Price",
+   "stratum": "contaminated",
+   "true_kind": "spike",
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "distortion": 0.009623351824012017,
+   "delta_utility_ledger": 4.072016990122096,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": null,
+    "cross_model_agreement": null,
+    "seam_error": 1.253058116493161,
+    "outside_support_drift": null
+   },
+   "shield_signals": {
+    "delta_utility": 4.072016990122096,
+    "struct_distortion": 0.009623351824012017,
+    "risk": 0.39491512032028875,
+    "confidence": 0.6767905789160419,
+    "posterior_entropy": 0.9906769756417937
+   }
+  },
+  {
+   "window_id": 379,
+   "dataset": "Crypto",
+   "stratum": "contaminated",
+   "true_kind": "spike",
+   "family": "RESEGMENT",
+   "rung": "conservative",
+   "distortion": 0.8408027327688082,
+   "delta_utility_ledger": -1.280538421202368,
+   "loss": 0.8408027327688082,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.03933870284018652,
+    "cross_model_agreement": 0.0001688249919989948,
+    "seam_error": null,
+    "outside_support_drift": -0.2988165084015737
+   },
+   "shield_signals": {
+    "delta_utility": -1.280538421202368,
+    "struct_distortion": 0.8408027327688082,
+    "risk": 0.45284511294793905,
+    "confidence": 0.3943722349547031,
+    "posterior_entropy": 1.404386668222192
+   }
+  },
+  {
+   "window_id": 403,
+   "dataset": "Crypto",
+   "stratum": "contaminated",
+   "true_kind": "spike",
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "distortion": 0.008387196537780993,
+   "delta_utility_ledger": 6.50258769144815,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": 1.9874759832137139,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": null,
+    "cross_model_agreement": null,
+    "seam_error": 1.2185980855461793,
+    "outside_support_drift": null
+   },
+   "shield_signals": {
+    "delta_utility": 6.50258769144815,
+    "struct_distortion": 0.008387196537780993,
+    "risk": 0.27288578474359676,
+    "confidence": 0.3960598424661869,
+    "posterior_entropy": 1.389446002898709
+   }
+  },
+  {
+   "window_id": 403,
+   "dataset": "Crypto",
+   "stratum": "contaminated",
+   "true_kind": "spike",
+   "family": "DESPIKE",
+   "rung": "default",
+   "distortion": 0.008387196537780993,
+   "delta_utility_ledger": 6.50258769144815,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -1.2025746876481498,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": null,
+    "cross_model_agreement": null,
+    "seam_error": 1.2185980855461793,
+    "outside_support_drift": null
+   },
+   "shield_signals": {
+    "delta_utility": 6.50258769144815,
+    "struct_distortion": 0.008387196537780993,
+    "risk": 0.27288578474359676,
+    "confidence": 0.3960598424661869,
+    "posterior_entropy": 1.389446002898709
+   }
+  },
+  {
+   "window_id": 462,
+   "dataset": "ETTm1",
+   "stratum": "contaminated",
+   "true_kind": "noise",
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "distortion": 0.21957106430201245,
+   "delta_utility_ledger": 0.7143386827607907,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -1.5892625665841904,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.07196512814026586,
+    "cross_model_agreement": 0.0039874848292368315,
+    "seam_error": null,
+    "outside_support_drift": -0.06032566276975049
+   },
+   "shield_signals": {
+    "delta_utility": 0.7143386827607907,
+    "struct_distortion": 0.21957106430201245,
+    "risk": 0.5142346045279952,
+    "confidence": 0.3495696135744069,
+    "posterior_entropy": 1.490697018960157
+   }
+  },
+  {
+   "window_id": 50,
+   "dataset": "ETTh2",
+   "stratum": "contaminated",
+   "true_kind": "missing_block",
+   "family": "DESPIKE",
+   "rung": "conservative",
+   "distortion": 0.06758158385726894,
+   "delta_utility_ledger": 0.00593318462074599,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": null,
+    "cross_model_agreement": null,
+    "seam_error": 0.3944183215635872,
+    "outside_support_drift": null
+   },
+   "shield_signals": {
+    "delta_utility": 0.00593318462074599,
+    "struct_distortion": 0.06758158385726894,
+    "risk": 0.6138531485432289,
+    "confidence": 0.5783534182523927,
+    "posterior_entropy": 1.170818973096313
+   }
+  },
+  {
+   "window_id": 125,
+   "dataset": "Oil Price",
+   "stratum": "contaminated",
+   "true_kind": "missing_scattered",
+   "family": "IMPUTE",
+   "rung": "default",
+   "distortion": 0.014250000000000011,
+   "delta_utility_ledger": -0.13558337087360783,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": null,
+    "cross_model_agreement": null,
+    "seam_error": 0.16039736213218342,
+    "outside_support_drift": null
+   },
+   "shield_signals": {
+    "delta_utility": -0.13558337087360783,
+    "struct_distortion": 0.014250000000000011,
+    "risk": 0.7127434796706223,
+    "confidence": 0.6786491632333453,
+    "posterior_entropy": 1.0326675055288448
+   }
+  },
+  {
+   "window_id": 501,
+   "dataset": "Crypto",
+   "stratum": "contaminated",
+   "true_kind": "noise",
+   "family": "DENOISE",
+   "rung": "conservative",
+   "distortion": 0.09295708404462064,
+   "delta_utility_ledger": 0.11820001452089768,
+   "loss": 0.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -9.60728573324673,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.025378310812016976,
+    "cross_model_agreement": 0.0005421164284682423,
+    "seam_error": null,
+    "outside_support_drift": 0.03896033972634272
+   },
+   "shield_signals": {
+    "delta_utility": 0.11820001452089768,
+    "struct_distortion": 0.09295708404462064,
+    "risk": 0.5819516559508479,
+    "confidence": 0.43056377132858004,
+    "posterior_entropy": 1.4046522329734377
+   }
+  },
+  {
+   "window_id": 942,
+   "dataset": "ETTh1",
+   "stratum": "clean",
+   "true_kind": null,
+   "family": "IMPUTE",
+   "rung": "default",
+   "distortion": 0.14337902444904968,
+   "delta_utility_ledger": -0.03897557869656909,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -0.19329631737655478,
+    "forecast_backcast_agreement": 0.22093245660465552,
+    "mask_context_stability": 0.15923688294197413,
+    "cross_model_agreement": 0.11230197096919636,
+    "seam_error": 0.020233632280733396,
+    "outside_support_drift": 0.0
+   },
+   "shield_signals": {
+    "delta_utility": -0.03897557869656909,
+    "struct_distortion": 0.14337902444904968,
+    "risk": 0.5804693439136883,
+    "confidence": 0.7584535556065494,
+    "posterior_entropy": 0.8683541751568762
+   }
+  },
+  {
+   "window_id": 995,
+   "dataset": "Crypto",
+   "stratum": "clean",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "default",
+   "distortion": 0.9146528967317282,
+   "delta_utility_ledger": 2.023286377376098,
+   "loss": 0.9146528967317282,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.05309918069623535,
+    "cross_model_agreement": 0.029956658594592733,
+    "seam_error": null,
+    "outside_support_drift": 9.194886073899053
+   },
+   "shield_signals": {
+    "delta_utility": 2.023286377376098,
+    "struct_distortion": 0.9146528967317282,
+    "risk": 0.255878307881227,
+    "confidence": 0.39737320003121385,
+    "posterior_entropy": 1.3678992216287726
+   }
+  },
+  {
+   "window_id": 1127,
+   "dataset": "US Term Structure",
+   "stratum": "clean",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "aggressive",
+   "distortion": 0.49380844503691934,
+   "delta_utility_ledger": -0.4189642959402944,
+   "loss": 0.49380844503691934,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.09293290764617454,
+    "cross_model_agreement": 0.014416301035319434,
+    "seam_error": null,
+    "outside_support_drift": 3.149775395884099
+   },
+   "shield_signals": {
+    "delta_utility": -0.4189642959402944,
+    "struct_distortion": 0.49380844503691934,
+    "risk": 0.5078065193277321,
+    "confidence": 0.5771211886288206,
+    "posterior_entropy": 1.2373201547152681
+   }
+  },
+  {
+   "window_id": 922,
+   "dataset": "ETTh2",
+   "stratum": "clean",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "conservative",
+   "distortion": 0.4917616545857434,
+   "delta_utility_ledger": -0.033485548871663884,
+   "loss": 0.4917616545857434,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.08784981466641527,
+    "cross_model_agreement": 0.005608696100045885,
+    "seam_error": null,
+    "outside_support_drift": 0.25025181067198154
+   },
+   "shield_signals": {
+    "delta_utility": -0.033485548871663884,
+    "struct_distortion": 0.4917616545857434,
+    "risk": 0.6326568258998165,
+    "confidence": 0.6306214826859197,
+    "posterior_entropy": 1.089712622905121
+   }
+  },
+  {
+   "window_id": 1077,
+   "dataset": "ETTm1",
+   "stratum": "clean",
+   "true_kind": null,
+   "family": "IMPUTE",
+   "rung": "conservative",
+   "distortion": 0.18127901403742436,
+   "delta_utility_ledger": 0.040116629363389666,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": 0.9175451504742775,
+    "forecast_backcast_agreement": 1.8104058113983812,
+    "mask_context_stability": 0.2166423793008348,
+    "cross_model_agreement": 0.020854732729867154,
+    "seam_error": 0.0030469649139106963,
+    "outside_support_drift": 0.0
+   },
+   "shield_signals": {
+    "delta_utility": 0.040116629363389666,
+    "struct_distortion": 0.18127901403742436,
+    "risk": 0.6112130965121977,
+    "confidence": 0.7019837289861246,
+    "posterior_entropy": 0.9832250712854282
+   }
+  },
+  {
+   "window_id": 1306,
+   "dataset": "Oil Price",
+   "stratum": "hard",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "aggressive",
+   "distortion": 0.9109643153721932,
+   "delta_utility_ledger": -0.7805108943489629,
+   "loss": 0.9109643153721932,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.15267011070395264,
+    "cross_model_agreement": 0.3079781381239468,
+    "seam_error": null,
+    "outside_support_drift": 0.93025000643037
+   },
+   "shield_signals": {
+    "delta_utility": -0.7805108943489629,
+    "struct_distortion": 0.9109643153721932,
+    "risk": 0.6707697776926961,
+    "confidence": 0.5269475791442632,
+    "posterior_entropy": 1.2694048715582804
+   }
+  },
+  {
+   "window_id": 1590,
+   "dataset": "ETTh1",
+   "stratum": "rare_valid",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "default",
+   "distortion": 0.6321776325266575,
+   "delta_utility_ledger": 0.900639411143286,
+   "loss": 0.6321776325266575,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.03908477825430517,
+    "cross_model_agreement": 0.01846445049371681,
+    "seam_error": null,
+    "outside_support_drift": 0.37161168483184126
+   },
+   "shield_signals": {
+    "delta_utility": 0.900639411143286,
+    "struct_distortion": 0.6321776325266575,
+    "risk": 0.5390701439546872,
+    "confidence": 0.3848802816182791,
+    "posterior_entropy": 1.4388434389492337
+   }
+  },
+  {
+   "window_id": 1523,
+   "dataset": "ETTh2",
+   "stratum": "rare_valid",
+   "true_kind": null,
+   "family": "IMPUTE",
+   "rung": "aggressive",
+   "distortion": 0.024963287253546088,
+   "delta_utility_ledger": -0.08928699053069478,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -0.2592031717353842,
+    "forecast_backcast_agreement": 1.1484207951963143,
+    "mask_context_stability": 0.12097039839529761,
+    "cross_model_agreement": 0.14002658835373571,
+    "seam_error": 0.9592403313914454,
+    "outside_support_drift": 0.0
+   },
+   "shield_signals": {
+    "delta_utility": -0.08928699053069478,
+    "struct_distortion": 0.024963287253546088,
+    "risk": 0.6711546378626955,
+    "confidence": 0.6366082019732761,
+    "posterior_entropy": 1.079424456344899
+   }
+  },
+  {
+   "window_id": 1856,
+   "dataset": "ETTm1",
+   "stratum": "changepoint",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "aggressive",
+   "distortion": 0.7143820076721897,
+   "delta_utility_ledger": -0.26588802284274693,
+   "loss": 0.7143820076721897,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.05162217623974493,
+    "cross_model_agreement": 0.008823107313717715,
+    "seam_error": null,
+    "outside_support_drift": 2.0993744057158206
+   },
+   "shield_signals": {
+    "delta_utility": -0.26588802284274693,
+    "struct_distortion": 0.7143820076721897,
+    "risk": 0.4592430685040271,
+    "confidence": 0.4411980066350582,
+    "posterior_entropy": 1.3757084315014478
+   }
+  },
+  {
+   "window_id": 2103,
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "DENOISE",
+   "rung": "conservative",
+   "distortion": 0.23309980815225362,
+   "delta_utility_ledger": -0.4017317972042882,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": 0.06529450488692715,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 1.1522714465052968,
+    "cross_model_agreement": 0.04795518549260136,
+    "seam_error": null,
+    "outside_support_drift": 0.3133739346146085
+   },
+   "shield_signals": {
+    "delta_utility": -0.4017317972042882,
+    "struct_distortion": 0.23309980815225362,
+    "risk": 0.6048631964130754,
+    "confidence": 0.6289323441680219,
+    "posterior_entropy": 1.131879237696142
+   }
+  },
+  {
+   "window_id": 2120,
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "distortion": 0.06681123502552533,
+   "delta_utility_ledger": 49.72712356476219,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": null,
+    "cross_model_agreement": null,
+    "seam_error": 1.5256107171397872,
+    "outside_support_drift": null
+   },
+   "shield_signals": {
+    "delta_utility": 49.72712356476219,
+    "struct_distortion": 0.06681123502552533,
+    "risk": 0.07068917410714287,
+    "confidence": 0.7874765339965799,
+    "posterior_entropy": 0.7679628888847989
+   }
+  },
+  {
+   "window_id": 2108,
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "distortion": 0.5581662761955508,
+   "delta_utility_ledger": 39.59409091566687,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -0.3042135813985565,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.8308551968806823,
+    "cross_model_agreement": 1.7750930406724363,
+    "seam_error": null,
+    "outside_support_drift": -0.0038353023990644886
+   },
+   "shield_signals": {
+    "delta_utility": 39.59409091566687,
+    "struct_distortion": 0.5581662761955508,
+    "risk": 0.15714285714285714,
+    "confidence": 0.7617208318625852,
+    "posterior_entropy": 0.8193508251232275
+   }
+  },
+  {
+   "window_id": 2090,
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "conservative",
+   "distortion": 0.8470492623465216,
+   "delta_utility_ledger": 0.16636521270312876,
+   "loss": 0.8470492623465216,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.0628252607224199,
+    "cross_model_agreement": 0.031664272487054834,
+    "seam_error": null,
+    "outside_support_drift": 1.085639651481718
+   },
+   "shield_signals": {
+    "delta_utility": 0.16636521270312876,
+    "struct_distortion": 0.8470492623465216,
+    "risk": 0.5611214573746466,
+    "confidence": 0.5185474166253501,
+    "posterior_entropy": 1.274849094360645
+   }
+  },
+  {
+   "window_id": 2140,
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "distortion": 0.09894150896017978,
+   "delta_utility_ledger": 59.50168706113734,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": null,
+    "cross_model_agreement": null,
+    "seam_error": 1.4454712685486117,
+    "outside_support_drift": null
+   },
+   "shield_signals": {
+    "delta_utility": 59.50168706113734,
+    "struct_distortion": 0.09894150896017978,
+    "risk": 0.05219029017857142,
+    "confidence": 0.7684653641178142,
+    "posterior_entropy": 0.797968081613997
+   }
+  },
+  {
+   "window_id": 1942,
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "conservative",
+   "distortion": 0.8163859005464668,
+   "delta_utility_ledger": 0.6005840922826908,
+   "loss": 0.8163859005464668,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.13404987431898585,
+    "cross_model_agreement": 0.02967945639886682,
+    "seam_error": null,
+    "outside_support_drift": 2.0994684641873893
+   },
+   "shield_signals": {
+    "delta_utility": 0.6005840922826908,
+    "struct_distortion": 0.8163859005464668,
+    "risk": 0.2442940848214286,
+    "confidence": 0.5079610734370633,
+    "posterior_entropy": 1.2997030268369503
+   }
+  },
+  {
+   "window_id": 1938,
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "aggressive",
+   "distortion": 0.9500688135949155,
+   "delta_utility_ledger": 0.530468242968714,
+   "loss": 0.9500688135949155,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.025170848969639597,
+    "cross_model_agreement": 0.025823524804743814,
+    "seam_error": null,
+    "outside_support_drift": 3.83257660962416
+   },
+   "shield_signals": {
+    "delta_utility": 0.530468242968714,
+    "struct_distortion": 0.9500688135949155,
+    "risk": 0.5983639056061113,
+    "confidence": 0.3964066996923791,
+    "posterior_entropy": 1.4285959303566764
+   }
+  },
+  {
+   "window_id": 2102,
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "conservative",
+   "distortion": 0.7507331669387614,
+   "delta_utility_ledger": -0.5615803629080895,
+   "loss": 0.7507331669387614,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.08248340195737874,
+    "cross_model_agreement": 0.0863999956017697,
+    "seam_error": null,
+    "outside_support_drift": 1.0980992593230177
+   },
+   "shield_signals": {
+    "delta_utility": -0.5615803629080895,
+    "struct_distortion": 0.7507331669387614,
+    "risk": 0.5854131211164268,
+    "confidence": 0.42271399498859524,
+    "posterior_entropy": 1.3758250466035962
+   }
+  },
+  {
+   "window_id": 2091,
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "aggressive",
+   "distortion": 0.9702291521378248,
+   "delta_utility_ledger": 0.7933925020395005,
+   "loss": 0.9702291521378248,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.13925277801050664,
+    "cross_model_agreement": 0.01298165413404706,
+    "seam_error": null,
+    "outside_support_drift": 6.848717938451689
+   },
+   "shield_signals": {
+    "delta_utility": 0.7933925020395005,
+    "struct_distortion": 0.9702291521378248,
+    "risk": 0.26083984375,
+    "confidence": 0.5091684659777259,
+    "posterior_entropy": 1.116044513865185
+   }
+  },
+  {
+   "window_id": 2022,
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "conservative",
+   "distortion": 0.8758924706050788,
+   "delta_utility_ledger": -0.20563051536551846,
+   "loss": 0.8758924706050788,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.030576055055383036,
+    "cross_model_agreement": 0.0011421378357777678,
+    "seam_error": null,
+    "outside_support_drift": -0.05894236060700064
+   },
+   "shield_signals": {
+    "delta_utility": -0.20563051536551846,
+    "struct_distortion": 0.8758924706050788,
+    "risk": 0.5015517621999114,
+    "confidence": 0.5449674357048863,
+    "posterior_entropy": 1.2376515848856113
+   }
+  },
+  {
+   "window_id": 2050,
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "aggressive",
+   "distortion": 0.9238291786204402,
+   "delta_utility_ledger": 0.5724190101505631,
+   "loss": 0.9238291786204402,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.21121927086271525,
+    "cross_model_agreement": 0.013639391124362521,
+    "seam_error": null,
+    "outside_support_drift": 1.5636986879305375
+   },
+   "shield_signals": {
+    "delta_utility": 0.5724190101505631,
+    "struct_distortion": 0.9238291786204402,
+    "risk": 0.48708549512054156,
+    "confidence": 0.4347912133038307,
+    "posterior_entropy": 1.3838883148664851
+   }
+  },
+  {
+   "window_id": 1968,
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "DESPIKE",
+   "rung": "aggressive",
+   "distortion": 0.09067220713018376,
+   "delta_utility_ledger": 48.674318464204305,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": null,
+    "cross_model_agreement": null,
+    "seam_error": 1.6681589284130163,
+    "outside_support_drift": null
+   },
+   "shield_signals": {
+    "delta_utility": 48.674318464204305,
+    "struct_distortion": 0.09067220713018376,
+    "risk": 0.05121372767857142,
+    "confidence": 0.7718045577658191,
+    "posterior_entropy": 0.7914689085600426
+   }
+  },
+  {
+   "window_id": 2136,
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "distortion": 0.565265536718397,
+   "delta_utility_ledger": 45.85986011842583,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -0.4197222740871963,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.23617182065247114,
+    "cross_model_agreement": 0.11254418608814087,
+    "seam_error": null,
+    "outside_support_drift": -0.997422409286834
+   },
+   "shield_signals": {
+    "delta_utility": 45.85986011842583,
+    "struct_distortion": 0.565265536718397,
+    "risk": 0.1785714285714286,
+    "confidence": 0.7981144401266363,
+    "posterior_entropy": 0.7370589839402377
+   }
+  },
+  {
+   "window_id": 2115,
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "default",
+   "distortion": 0.9893696401263665,
+   "delta_utility_ledger": 9.36354289076711,
+   "loss": 0.9893696401263665,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.5929159112397857,
+    "cross_model_agreement": 0.4797895211512945,
+    "seam_error": null,
+    "outside_support_drift": 5.986646359507905
+   },
+   "shield_signals": {
+    "delta_utility": 9.36354289076711,
+    "struct_distortion": 0.9893696401263665,
+    "risk": 0.10931919642857142,
+    "confidence": 0.6383253965665786,
+    "posterior_entropy": 1.0272894871706972
+   }
+  },
+  {
+   "window_id": 2115,
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "DENOISE",
+   "rung": "aggressive",
+   "distortion": 0.2699812344962993,
+   "delta_utility_ledger": 3.066109108468515,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -0.27975404175683855,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.5929159112397857,
+    "cross_model_agreement": 0.4797895211512945,
+    "seam_error": null,
+    "outside_support_drift": -0.504776587345975
+   },
+   "shield_signals": {
+    "delta_utility": 3.066109108468515,
+    "struct_distortion": 0.2699812344962993,
+    "risk": 0.15714285714285714,
+    "confidence": 0.6383253965665786,
+    "posterior_entropy": 1.0272894871706972
+   }
+  },
+  {
+   "window_id": 2098,
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "conservative",
+   "distortion": 0.7775216360865115,
+   "delta_utility_ledger": -0.4862958107081572,
+   "loss": 0.7775216360865115,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.24889799536803198,
+    "cross_model_agreement": 0.3831697454728413,
+    "seam_error": null,
+    "outside_support_drift": 0.9218715757544633
+   },
+   "shield_signals": {
+    "delta_utility": -0.4862958107081572,
+    "struct_distortion": 0.7775216360865115,
+    "risk": 0.5341991535175996,
+    "confidence": 0.46578989528170295,
+    "posterior_entropy": 1.336337146059714
+   }
+  },
+  {
+   "window_id": 2119,
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "conservative",
+   "distortion": 0.9636974304571094,
+   "delta_utility_ledger": 7.973488167062177,
+   "loss": 0.9636974304571094,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.18376349267765174,
+    "cross_model_agreement": 0.002010686207695511,
+    "seam_error": null,
+    "outside_support_drift": -6.947116034242816
+   },
+   "shield_signals": {
+    "delta_utility": 7.973488167062177,
+    "struct_distortion": 0.9636974304571094,
+    "risk": 0.2037109375,
+    "confidence": 0.7739630459612995,
+    "posterior_entropy": 0.8001671180178841
+   }
+  },
+  {
+   "window_id": 1990,
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "RESEGMENT",
+   "rung": "default",
+   "distortion": 0.7920751050249397,
+   "delta_utility_ledger": -0.2545294746847153,
+   "loss": 0.7920751050249397,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": null,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.030522797300847032,
+    "cross_model_agreement": 0.051702982609731496,
+    "seam_error": null,
+    "outside_support_drift": 1.8387682160057535
+   },
+   "shield_signals": {
+    "delta_utility": -0.2545294746847153,
+    "struct_distortion": 0.7920751050249397,
+    "risk": 0.6243315515246392,
+    "confidence": 0.42264149918776567,
+    "posterior_entropy": 1.4121180196082304
+   }
+  },
+  {
+   "window_id": 2059,
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "true_kind": null,
+   "family": "DENOISE",
+   "rung": "default",
+   "distortion": 0.26522031707758864,
+   "delta_utility_ledger": 0.502903078079715,
+   "loss": 1.0,
+   "applicable": true,
+   "note": "",
+   "tsfm_signals": {
+    "masked_reconstruction_preference": -0.05765975204788333,
+    "forecast_backcast_agreement": null,
+    "mask_context_stability": 0.08829485632092564,
+    "cross_model_agreement": 0.011517413476658023,
+    "seam_error": null,
+    "outside_support_drift": 0.005019229040434836
+   },
+   "shield_signals": {
+    "delta_utility": 0.502903078079715,
+    "struct_distortion": 0.26522031707758864,
+    "risk": 0.5006809070051399,
+    "confidence": 0.533152561328074,
+    "posterior_entropy": 1.1720578653708165
+   }
+  }
+ ]
+}

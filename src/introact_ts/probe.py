@@ -90,8 +90,10 @@ def reference_scale(series: np.ndarray, n_blocks: int = 8) -> float:
     return max(robust_scale(series, n_blocks=n_blocks), 1e-6)
 
 
-def _naive_fill(series: np.ndarray) -> np.ndarray:
-    """Forward-fill NaNs so the model can be queried at all.
+def materialize_for_probe(series: np.ndarray) -> np.ndarray:
+    """The queryable series the frozen TSFM actually sees.
+
+    Forward-fill NaNs so the model can be queried at all.
 
     The choice of filler is not incidental. Interpolating here would have the
     probe quietly perform the repair itself: IMPUTE would then produce a
@@ -100,6 +102,11 @@ def _naive_fill(series: np.ndarray) -> np.ndarray:
     for failing to help. Forward-fill instead reproduces what a model actually
     meets when nobody curated the data -- a gap frozen at its last observation
     -- so a real imputation has something to improve on.
+
+    This is also the KEEP counterfactual for action-semantic labels: an IMPUTE
+    candidate must beat what the TSFM would have seen unedited, which is this
+    materialised series, not the raw array with NaNs (v3.3 pre-registration,
+    `docs/v3_3_mast_pics_design.md` §1).
     """
     series = np.asarray(series, dtype=np.float64).copy()
     bad = ~np.isfinite(series)
@@ -115,8 +122,9 @@ def _naive_fill(series: np.ndarray) -> np.ndarray:
     return series[prev]
 
 
-#: Retained under the old name for callers that only need "queryable series".
-_nan_safe = _naive_fill
+#: Retained under the old names for callers that only need "queryable series".
+_naive_fill = materialize_for_probe
+_nan_safe = materialize_for_probe
 
 
 def _acf1(x: np.ndarray) -> float:
@@ -175,7 +183,7 @@ def probe_window(
     """
     cfg = cfg or ProbeConfig()
     judge = models[0]
-    x = _naive_fill(series)
+    x = materialize_for_probe(series)
     T = len(x)
     scale = max(float(scale), 1e-6)
     rng = np.random.RandomState(cfg.seed)

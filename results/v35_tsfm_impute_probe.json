@@ -1,0 +1,141 @@
+{
+ "phase": "v3.5 Phase 2 TSFM_RECONSTRUCT_IMPUTE gate evaluation",
+ "preregistration": "docs/v3_5_acv_preregistration.md \u00a73, \u00a76",
+ "records_file": "/root/autodl-tmp/work2/results/v35_tsfm_impute_records.jsonl",
+ "records_sha256": "82535ebaa1d419ff13cd73625c54c9668b8d08b2796bc2c00fee47a26ceaec27",
+ "n_records": 1154,
+ "n_windows": 445,
+ "model_status": {
+  "proposer": "moment:AutonLab/MOMENT-1-large",
+  "revisions": {
+   "chronos:amazon/chronos-bolt-base": "5d9f166d69f47aef3401367a7b842e78fe97b121",
+   "moment:AutonLab/MOMENT-1-large": "ca58581bc7bea2ebed4e80dc0a3e4b8b609c6ecc",
+   "timesfm:google/timesfm-2.5-200m-pytorch": "1d952420fba87f3c6dee4f240de0f1a0fbc790e3"
+  },
+  "status": "cross-model verification, single native-reconstruction backend",
+  "verifiers": [
+   "chronos:amazon/chronos-bolt-base",
+   "timesfm:google/timesfm-2.5-200m-pytorch"
+  ]
+ },
+ "config_hash": "a115ad97bc714e06f0c0eab6a56803604ace7ec49969c81df3a3c45ddd926f3d",
+ "arm_stats": {
+  "keep": {
+   "harmful_rate": 0.0,
+   "bs_rate": 0.0,
+   "median_true_loss": 0.0,
+   "mean_after_nmse": 0.3686706230640183
+  },
+  "default": {
+   "harmful_rate": 0.537261698440208,
+   "bs_rate": 0.462738301559792,
+   "median_true_loss": 1.0,
+   "mean_after_nmse": 0.4075866171165456
+  },
+  "candidate": {
+   "harmful_rate": 0.5389948006932409,
+   "bs_rate": 0.46013864818024264,
+   "median_true_loss": 1.0,
+   "mean_after_nmse": 0.417407737957957
+  },
+  "tsfm": {
+   "harmful_rate": 0.2885615251299827,
+   "bs_rate": 0.17157712305025996,
+   "median_true_loss": 0.0,
+   "mean_after_nmse": 0.35712034082873234
+  }
+ },
+ "verifier_disagreement": {
+  "chronos:amazon/chronos-bolt-base": {
+   "n_windows": 531,
+   "mean": 0.7490016432044801,
+   "median": 0.4243162708269861
+  },
+  "timesfm:google/timesfm-2.5-200m-pytorch": {
+   "n_windows": 531,
+   "mean": 0.6983782040840159,
+   "median": 0.4208334419158169
+  }
+ },
+ "oracle_window_coverage": {
+  "definition": "share of routed-IMPUTE windows with >=1 beneficial_and_safe arm",
+  "candidate_only": 0.45617977528089887,
+  "with_tsfm": 0.4764044943820225
+ },
+ "gates": {
+  "gate1_harm_rel_reduction": {
+   "pass": true,
+   "harm_rate_candidate": 0.5389948006932409,
+   "harm_rate_tsfm": 0.2885615251299827,
+   "relative_reduction": 0.4646302250803858,
+   "threshold": 0.25
+  },
+  "gate2_bs_rate_not_below": {
+   "pass": false,
+   "bs_rate_candidate": 0.46013864818024264,
+   "bs_rate_tsfm": 0.17157712305025996
+  },
+  "gate3_median_true_loss_down": {
+   "pass": true,
+   "median_candidate": 1.0,
+   "median_tsfm": 0.0
+  },
+  "gate4_source_direction": {
+   "pass": true,
+   "n_sources_direction_ok": 3,
+   "threshold": 3,
+   "per_source": {
+    "Crypto": {
+     "n_rows": 24,
+     "harm_rate_candidate": 0.08333333333333333,
+     "harm_rate_tsfm": 0.375,
+     "direction_ok": false
+    },
+    "ETTh1": {
+     "n_rows": 322,
+     "harm_rate_candidate": 0.7608695652173914,
+     "harm_rate_tsfm": 0.11180124223602485,
+     "direction_ok": true
+    },
+    "ETTh2": {
+     "n_rows": 217,
+     "harm_rate_candidate": 0.7788018433179723,
+     "harm_rate_tsfm": 0.0967741935483871,
+     "direction_ok": true
+    },
+    "ETTm1": {
+     "n_rows": 203,
+     "harm_rate_candidate": 0.5960591133004927,
+     "harm_rate_tsfm": 0.20689655172413793,
+     "direction_ok": true
+    },
+    "Oil Price": {
+     "n_rows": 44,
+     "harm_rate_candidate": 0.29545454545454547,
+     "harm_rate_tsfm": 0.6136363636363636,
+     "direction_ok": false
+    },
+    "US Term Structure": {
+     "n_rows": 344,
+     "harm_rate_candidate": 0.20930232558139536,
+     "harm_rate_tsfm": 0.5755813953488372,
+     "direction_ok": false
+    }
+   }
+  },
+  "gate5_observed_finite_untouched": {
+   "pass": true,
+   "violations": 0
+  },
+  "gate6_oracle_coverage": {
+   "pass": false,
+   "coverage_candidate_only": 0.45617977528089887,
+   "coverage_with_tsfm": 0.4764044943820225,
+   "coverage_gain": 0.02022471910112361,
+   "threshold_gain": 0.03,
+   "fallback": "equal coverage with harmful-rate relative reduction >= 25%"
+  }
+ },
+ "verdict": "not_green",
+ "elapsed_seconds": 24.97214150428772
+}

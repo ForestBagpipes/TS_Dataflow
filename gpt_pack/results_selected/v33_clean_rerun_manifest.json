@@ -1,0 +1,31 @@
+{
+ "phase": "v3.4 Phase 0 clean rerun manifest",
+ "created": "2026-09-02T07:43:15Z",
+ "command": "python experiments/v33_compare_arms.py --out results/v33_clean_rerun.json --harmful-out results/v33_clean_rerun_harmful.json --ood-out results/v33_clean_rerun_ood.json --frontier-out results/v33_clean_rerun_frontier.json --support-out results/v33_clean_rerun_support.json",
+ "log": "logs/v33_clean_rerun.log",
+ "inputs": {
+  "results/v33_training_data.jsonl": "84ab59d9e63048586ba7ddbc44398a729d927fe924411b8bc345b6ad97e282ef",
+  "results/v33_ood_candidates.jsonl": "c3758e3537f53ad89fbaebaf0afd18b52067778717a27e6d1055f59d66b99c67",
+  "results/v33_ood_manifest.json": "d5b1cc9dc5881ac6da44ef1a4daa52cbc2bdfc23eceaec2752cb6856ef47ce3e",
+  "results/p0_corpus_manifest_a.json": "6d7d05a506745a5f6da9114ef08ac37b58e102b6cbee6b740ae5247c42d9b15e"
+ },
+ "code": {
+  "experiments/v33_compare_arms.py": "f61b37fd42596fb6e4da93bff9fc2daff45844b09a49dbe000969e8409aecb20",
+  "experiments/v32_compare_arms.py": "1ee6584f15e854084041efb03bca406d4f72922997d9051878b3fb5728cf7d87",
+  "experiments/metrics_common.py": "39ae64c163c3e783a12fbebbf17c1647c0cf5be84516eb47d528db8f54894229",
+  "src/introact_ts/pics.py": "f6dad0febd24675fcb649bd77a3733004dcb4410c9d3a55c9c25a01ba9adae43",
+  "src/introact_ts/mast_pics.py": "6972c16d4172bb479039730f854121446540bae581a9c72e1a8066944da0b6bc",
+  "src/introact_ts/contextual_shield.py": "b97d25172aa0e7ea72d5e953bfb2a410a1091e918f37edb18f3086c2f60b4ab3",
+  "src/introact_ts/verify.py": "ea9bd20560ba49b2ab151890d4ae3f5344cb56363e1b28ded6941fb4c84fb49a",
+  "src/introact_ts/probe.py": "22ded3d21137d958d823d6dd91c8d15a756548712b2a437e69a04b5498ee6af4",
+  "src/introact_ts/calibration.py": "2a115be10eb500ae32682d11fec4dea4d8bb4fd3f5d43da07e1903d3dee0a5aa",
+  "src/introact_ts/conformal.py": "1ca418c84bfe3b638d33d813a346948390ee9e57d50c2f25860b2c56f1827e5a"
+ },
+ "outputs": {
+  "results/v33_clean_rerun.json": "976780a3d74756a1bd295c4af8ba2b5aa589c7959de4c7db62f95f0ff677311b",
+  "results/v33_clean_rerun_harmful.json": "ae87c2bdd73c52f402d8d0e9b70853bac240901bd44a94bfe6833866917ca5fa",
+  "results/v33_clean_rerun_ood.json": "d312c4df30e1415198d26387cb6b184ec0b5c83c9335efddd830f3a26d06658c",
+  "results/v33_clean_rerun_frontier.json": "3139edac8e5ecb2d947d8b39af2ff7f9bd2f673d96cb512b9f419f10828e4c56",
+  "results/v33_clean_rerun_support.json": "0fee505cdef746ef2cafdb92ea8615aa8a579afc21a00ffd28758769163e13ae"
+ }
+}

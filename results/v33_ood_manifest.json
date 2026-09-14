@@ -1,0 +1,785 @@
+{
+ "seed": 313,
+ "n_clean_ood": 64,
+ "n_real_ood": 32,
+ "window_len": 512,
+ "overlap_with_calibration_or_deployment": 0,
+ "forms": {
+  "ood:pulse_train": 16,
+  "ood:staircase": 16,
+  "ood:solar": 30,
+  "ood:sawtooth": 16,
+  "ood:random_walk": 16,
+  "ood:exchange": 2
+ },
+ "records": [
+  {
+   "window_id": 19,
+   "sample_uid": "ood:pulse_train:clean_ood:null:b82520a7bb36eeb023915b1c80229ec3e156d36b16136c43519b58c6f17fd04d:b82520a7bb36eeb023915b1c80229ec3e156d36b16136c43519b58c6f17fd04d",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "b82520a7bb36eeb023915b1c80229ec3e156d36b16136c43519b58c6f17fd04d",
+   "clean_hash": "b82520a7bb36eeb023915b1c80229ec3e156d36b16136c43519b58c6f17fd04d"
+  },
+  {
+   "window_id": 18,
+   "sample_uid": "ood:staircase:clean_ood:null:a5aeb33b683bbb6729c145ddcb51c28bacb5b7419f6a7c52f03f8979a96169b9:a5aeb33b683bbb6729c145ddcb51c28bacb5b7419f6a7c52f03f8979a96169b9",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "a5aeb33b683bbb6729c145ddcb51c28bacb5b7419f6a7c52f03f8979a96169b9",
+   "clean_hash": "a5aeb33b683bbb6729c145ddcb51c28bacb5b7419f6a7c52f03f8979a96169b9"
+  },
+  {
+   "window_id": 71,
+   "sample_uid": "ood:solar:real_ood:null:932f821ce664f48145f6ec6c66431b646152aeae82dff63434dded4e96ed65ac:932f821ce664f48145f6ec6c66431b646152aeae82dff63434dded4e96ed65ac",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "932f821ce664f48145f6ec6c66431b646152aeae82dff63434dded4e96ed65ac",
+   "clean_hash": "932f821ce664f48145f6ec6c66431b646152aeae82dff63434dded4e96ed65ac"
+  },
+  {
+   "window_id": 94,
+   "sample_uid": "ood:solar:real_ood:null:b07cc86089062b3fe61277b7aeaaf263dbb6db2d08a1debd04b86fdcc84da09a:b07cc86089062b3fe61277b7aeaaf263dbb6db2d08a1debd04b86fdcc84da09a",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "b07cc86089062b3fe61277b7aeaaf263dbb6db2d08a1debd04b86fdcc84da09a",
+   "clean_hash": "b07cc86089062b3fe61277b7aeaaf263dbb6db2d08a1debd04b86fdcc84da09a"
+  },
+  {
+   "window_id": 6,
+   "sample_uid": "ood:staircase:clean_ood:null:d79ddcf15a66d967a5c4f55638e81e2cbc9d926886b5432b1c6958e4111eb356:d79ddcf15a66d967a5c4f55638e81e2cbc9d926886b5432b1c6958e4111eb356",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "d79ddcf15a66d967a5c4f55638e81e2cbc9d926886b5432b1c6958e4111eb356",
+   "clean_hash": "d79ddcf15a66d967a5c4f55638e81e2cbc9d926886b5432b1c6958e4111eb356"
+  },
+  {
+   "window_id": 24,
+   "sample_uid": "ood:sawtooth:clean_ood:null:c9a0c27b379cf065dfc2313993495316548644798535e3bc3f4d3d3a0564ad44:c9a0c27b379cf065dfc2313993495316548644798535e3bc3f4d3d3a0564ad44",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "c9a0c27b379cf065dfc2313993495316548644798535e3bc3f4d3d3a0564ad44",
+   "clean_hash": "c9a0c27b379cf065dfc2313993495316548644798535e3bc3f4d3d3a0564ad44"
+  },
+  {
+   "window_id": 7,
+   "sample_uid": "ood:pulse_train:clean_ood:null:1386a6a16e0f48be8442a45a1b3f9aa6fd857f5fde0dde55427d14749d1a6a11:1386a6a16e0f48be8442a45a1b3f9aa6fd857f5fde0dde55427d14749d1a6a11",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "1386a6a16e0f48be8442a45a1b3f9aa6fd857f5fde0dde55427d14749d1a6a11",
+   "clean_hash": "1386a6a16e0f48be8442a45a1b3f9aa6fd857f5fde0dde55427d14749d1a6a11"
+  },
+  {
+   "window_id": 48,
+   "sample_uid": "ood:sawtooth:clean_ood:null:ad0a36769ea9f88a970f9070a167f06da2250d4bbd87bef04d8ebcfc7bc4f048:ad0a36769ea9f88a970f9070a167f06da2250d4bbd87bef04d8ebcfc7bc4f048",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "ad0a36769ea9f88a970f9070a167f06da2250d4bbd87bef04d8ebcfc7bc4f048",
+   "clean_hash": "ad0a36769ea9f88a970f9070a167f06da2250d4bbd87bef04d8ebcfc7bc4f048"
+  },
+  {
+   "window_id": 75,
+   "sample_uid": "ood:solar:real_ood:null:0e7d9548c017e8414e87cd3e2888f2dd362357baa6c488480381b54f1d4c47b6:0e7d9548c017e8414e87cd3e2888f2dd362357baa6c488480381b54f1d4c47b6",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "0e7d9548c017e8414e87cd3e2888f2dd362357baa6c488480381b54f1d4c47b6",
+   "clean_hash": "0e7d9548c017e8414e87cd3e2888f2dd362357baa6c488480381b54f1d4c47b6"
+  },
+  {
+   "window_id": 11,
+   "sample_uid": "ood:pulse_train:clean_ood:null:42131ee47eb0455c951f5530616c2f7a7ba089840f7586bff44907358f83bb75:42131ee47eb0455c951f5530616c2f7a7ba089840f7586bff44907358f83bb75",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "42131ee47eb0455c951f5530616c2f7a7ba089840f7586bff44907358f83bb75",
+   "clean_hash": "42131ee47eb0455c951f5530616c2f7a7ba089840f7586bff44907358f83bb75"
+  },
+  {
+   "window_id": 84,
+   "sample_uid": "ood:solar:real_ood:null:a322fab1591a00737a5848aadca1830c5e37bf1a990d26317e7797d406bd36ad:a322fab1591a00737a5848aadca1830c5e37bf1a990d26317e7797d406bd36ad",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "a322fab1591a00737a5848aadca1830c5e37bf1a990d26317e7797d406bd36ad",
+   "clean_hash": "a322fab1591a00737a5848aadca1830c5e37bf1a990d26317e7797d406bd36ad"
+  },
+  {
+   "window_id": 40,
+   "sample_uid": "ood:sawtooth:clean_ood:null:0ba2ee2f7b91faed18c5aabbed639a72fe8cd7bd11ef9905ead37cb9c437473b:0ba2ee2f7b91faed18c5aabbed639a72fe8cd7bd11ef9905ead37cb9c437473b",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "0ba2ee2f7b91faed18c5aabbed639a72fe8cd7bd11ef9905ead37cb9c437473b",
+   "clean_hash": "0ba2ee2f7b91faed18c5aabbed639a72fe8cd7bd11ef9905ead37cb9c437473b"
+  },
+  {
+   "window_id": 5,
+   "sample_uid": "ood:random_walk:clean_ood:null:e5ee17945573a25332593a4ffeae4b4aa6e43dbb7a13e5374ff5d08545355af1:e5ee17945573a25332593a4ffeae4b4aa6e43dbb7a13e5374ff5d08545355af1",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "e5ee17945573a25332593a4ffeae4b4aa6e43dbb7a13e5374ff5d08545355af1",
+   "clean_hash": "e5ee17945573a25332593a4ffeae4b4aa6e43dbb7a13e5374ff5d08545355af1"
+  },
+  {
+   "window_id": 29,
+   "sample_uid": "ood:random_walk:clean_ood:null:a8f585a06f565cd9363b94f8c06797be9515ba92e0819e6319f5ab3cc77a824b:a8f585a06f565cd9363b94f8c06797be9515ba92e0819e6319f5ab3cc77a824b",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "a8f585a06f565cd9363b94f8c06797be9515ba92e0819e6319f5ab3cc77a824b",
+   "clean_hash": "a8f585a06f565cd9363b94f8c06797be9515ba92e0819e6319f5ab3cc77a824b"
+  },
+  {
+   "window_id": 16,
+   "sample_uid": "ood:sawtooth:clean_ood:null:d49809f6bf2b9253c05c7a4c7cf0c97976ecaea6e454020dc712f8797b0a0ecf:d49809f6bf2b9253c05c7a4c7cf0c97976ecaea6e454020dc712f8797b0a0ecf",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "d49809f6bf2b9253c05c7a4c7cf0c97976ecaea6e454020dc712f8797b0a0ecf",
+   "clean_hash": "d49809f6bf2b9253c05c7a4c7cf0c97976ecaea6e454020dc712f8797b0a0ecf"
+  },
+  {
+   "window_id": 56,
+   "sample_uid": "ood:sawtooth:clean_ood:null:bdda417383c564c968b97500f535aa0160cf5c0c678787c1ee83d3ccba44be70:bdda417383c564c968b97500f535aa0160cf5c0c678787c1ee83d3ccba44be70",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "bdda417383c564c968b97500f535aa0160cf5c0c678787c1ee83d3ccba44be70",
+   "clean_hash": "bdda417383c564c968b97500f535aa0160cf5c0c678787c1ee83d3ccba44be70"
+  },
+  {
+   "window_id": 87,
+   "sample_uid": "ood:solar:real_ood:null:30c7e0f442701757e9da93993b29e7a5e684dc90dbdb7dcdb7796018ddcc7e99:30c7e0f442701757e9da93993b29e7a5e684dc90dbdb7dcdb7796018ddcc7e99",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "30c7e0f442701757e9da93993b29e7a5e684dc90dbdb7dcdb7796018ddcc7e99",
+   "clean_hash": "30c7e0f442701757e9da93993b29e7a5e684dc90dbdb7dcdb7796018ddcc7e99"
+  },
+  {
+   "window_id": 20,
+   "sample_uid": "ood:sawtooth:clean_ood:null:93e464b1d483417d4161d10ff1c80d3351c38b22f13247a9a2b0c076cf6b7dbb:93e464b1d483417d4161d10ff1c80d3351c38b22f13247a9a2b0c076cf6b7dbb",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "93e464b1d483417d4161d10ff1c80d3351c38b22f13247a9a2b0c076cf6b7dbb",
+   "clean_hash": "93e464b1d483417d4161d10ff1c80d3351c38b22f13247a9a2b0c076cf6b7dbb"
+  },
+  {
+   "window_id": 10,
+   "sample_uid": "ood:staircase:clean_ood:null:e5fac4221cdbf8edd89499c94e35902a18f65a76f536773dd10811a2a6f22228:e5fac4221cdbf8edd89499c94e35902a18f65a76f536773dd10811a2a6f22228",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "e5fac4221cdbf8edd89499c94e35902a18f65a76f536773dd10811a2a6f22228",
+   "clean_hash": "e5fac4221cdbf8edd89499c94e35902a18f65a76f536773dd10811a2a6f22228"
+  },
+  {
+   "window_id": 68,
+   "sample_uid": "ood:solar:real_ood:null:c9f3ab562e681e22952be237fa37e768ba51cf2e2026d183e2b7e2c63674db86:c9f3ab562e681e22952be237fa37e768ba51cf2e2026d183e2b7e2c63674db86",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "c9f3ab562e681e22952be237fa37e768ba51cf2e2026d183e2b7e2c63674db86",
+   "clean_hash": "c9f3ab562e681e22952be237fa37e768ba51cf2e2026d183e2b7e2c63674db86"
+  },
+  {
+   "window_id": 49,
+   "sample_uid": "ood:random_walk:clean_ood:null:1b36da05b7883375b816a48d4f143f8cb4f37662dab6fd52e9aebcf5cdc367d8:1b36da05b7883375b816a48d4f143f8cb4f37662dab6fd52e9aebcf5cdc367d8",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "1b36da05b7883375b816a48d4f143f8cb4f37662dab6fd52e9aebcf5cdc367d8",
+   "clean_hash": "1b36da05b7883375b816a48d4f143f8cb4f37662dab6fd52e9aebcf5cdc367d8"
+  },
+  {
+   "window_id": 57,
+   "sample_uid": "ood:random_walk:clean_ood:null:be91c5dc96252204dd57f32363bfdefda4cd44f2aa866b51a92ffd375b01a063:be91c5dc96252204dd57f32363bfdefda4cd44f2aa866b51a92ffd375b01a063",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "be91c5dc96252204dd57f32363bfdefda4cd44f2aa866b51a92ffd375b01a063",
+   "clean_hash": "be91c5dc96252204dd57f32363bfdefda4cd44f2aa866b51a92ffd375b01a063"
+  },
+  {
+   "window_id": 22,
+   "sample_uid": "ood:staircase:clean_ood:null:b5a552d743ab88ab628a4194637523b5cf02f3d320d21be62320aafec8e2423a:b5a552d743ab88ab628a4194637523b5cf02f3d320d21be62320aafec8e2423a",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "b5a552d743ab88ab628a4194637523b5cf02f3d320d21be62320aafec8e2423a",
+   "clean_hash": "b5a552d743ab88ab628a4194637523b5cf02f3d320d21be62320aafec8e2423a"
+  },
+  {
+   "window_id": 30,
+   "sample_uid": "ood:staircase:clean_ood:null:572a5dc3aa50a785de9c889767602434bb72fec1f53b07d6c43244f0195f9d14:572a5dc3aa50a785de9c889767602434bb72fec1f53b07d6c43244f0195f9d14",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "572a5dc3aa50a785de9c889767602434bb72fec1f53b07d6c43244f0195f9d14",
+   "clean_hash": "572a5dc3aa50a785de9c889767602434bb72fec1f53b07d6c43244f0195f9d14"
+  },
+  {
+   "window_id": 82,
+   "sample_uid": "ood:solar:real_ood:null:f269eb07f048924088c5ebc6d7cd75f155f2499e93a7d6a8607f75e6c976bebd:f269eb07f048924088c5ebc6d7cd75f155f2499e93a7d6a8607f75e6c976bebd",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "f269eb07f048924088c5ebc6d7cd75f155f2499e93a7d6a8607f75e6c976bebd",
+   "clean_hash": "f269eb07f048924088c5ebc6d7cd75f155f2499e93a7d6a8607f75e6c976bebd"
+  },
+  {
+   "window_id": 37,
+   "sample_uid": "ood:random_walk:clean_ood:null:ffb48e16699ed6c971a2119cca5f2744423dbf12a8634534d7eb9fbbbb23954e:ffb48e16699ed6c971a2119cca5f2744423dbf12a8634534d7eb9fbbbb23954e",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "ffb48e16699ed6c971a2119cca5f2744423dbf12a8634534d7eb9fbbbb23954e",
+   "clean_hash": "ffb48e16699ed6c971a2119cca5f2744423dbf12a8634534d7eb9fbbbb23954e"
+  },
+  {
+   "window_id": 39,
+   "sample_uid": "ood:pulse_train:clean_ood:null:e71ae520bf649d1e9a30ec088f6ea9ce9660e69f8699abab93c5005b88454762:e71ae520bf649d1e9a30ec088f6ea9ce9660e69f8699abab93c5005b88454762",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "e71ae520bf649d1e9a30ec088f6ea9ce9660e69f8699abab93c5005b88454762",
+   "clean_hash": "e71ae520bf649d1e9a30ec088f6ea9ce9660e69f8699abab93c5005b88454762"
+  },
+  {
+   "window_id": 31,
+   "sample_uid": "ood:pulse_train:clean_ood:null:81c2f7c9d69bec3189ad8cd15a0b972daf90ce0ce5fa0b194827608edc7d79cd:81c2f7c9d69bec3189ad8cd15a0b972daf90ce0ce5fa0b194827608edc7d79cd",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "81c2f7c9d69bec3189ad8cd15a0b972daf90ce0ce5fa0b194827608edc7d79cd",
+   "clean_hash": "81c2f7c9d69bec3189ad8cd15a0b972daf90ce0ce5fa0b194827608edc7d79cd"
+  },
+  {
+   "window_id": 8,
+   "sample_uid": "ood:sawtooth:clean_ood:null:1fe1eaefbf4caf3a7d184a81ce12c6938113f5d1e67bcf8c1845bfadf91829b8:1fe1eaefbf4caf3a7d184a81ce12c6938113f5d1e67bcf8c1845bfadf91829b8",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "1fe1eaefbf4caf3a7d184a81ce12c6938113f5d1e67bcf8c1845bfadf91829b8",
+   "clean_hash": "1fe1eaefbf4caf3a7d184a81ce12c6938113f5d1e67bcf8c1845bfadf91829b8"
+  },
+  {
+   "window_id": 58,
+   "sample_uid": "ood:staircase:clean_ood:null:03aa41a28689a1d394f3b77fe9b1179800e30f5ebf53740dd331e3ab6ab5978a:03aa41a28689a1d394f3b77fe9b1179800e30f5ebf53740dd331e3ab6ab5978a",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "03aa41a28689a1d394f3b77fe9b1179800e30f5ebf53740dd331e3ab6ab5978a",
+   "clean_hash": "03aa41a28689a1d394f3b77fe9b1179800e30f5ebf53740dd331e3ab6ab5978a"
+  },
+  {
+   "window_id": 93,
+   "sample_uid": "ood:solar:real_ood:null:22ac3393cdfc6b4da2e78c401b07fe6ca71d8e5ac014589cac7e62a79311eff7:22ac3393cdfc6b4da2e78c401b07fe6ca71d8e5ac014589cac7e62a79311eff7",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "22ac3393cdfc6b4da2e78c401b07fe6ca71d8e5ac014589cac7e62a79311eff7",
+   "clean_hash": "22ac3393cdfc6b4da2e78c401b07fe6ca71d8e5ac014589cac7e62a79311eff7"
+  },
+  {
+   "window_id": 67,
+   "sample_uid": "ood:solar:real_ood:null:9d188c8d84654042c54b7fde020a9f15c8765d9ee22a4735d796193fb767dae8:9d188c8d84654042c54b7fde020a9f15c8765d9ee22a4735d796193fb767dae8",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "9d188c8d84654042c54b7fde020a9f15c8765d9ee22a4735d796193fb767dae8",
+   "clean_hash": "9d188c8d84654042c54b7fde020a9f15c8765d9ee22a4735d796193fb767dae8"
+  },
+  {
+   "window_id": 80,
+   "sample_uid": "ood:solar:real_ood:null:35e9c31649c3a733d8b515f2694c6134ef411a5e3471e58f92a59e432f81409f:35e9c31649c3a733d8b515f2694c6134ef411a5e3471e58f92a59e432f81409f",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "35e9c31649c3a733d8b515f2694c6134ef411a5e3471e58f92a59e432f81409f",
+   "clean_hash": "35e9c31649c3a733d8b515f2694c6134ef411a5e3471e58f92a59e432f81409f"
+  },
+  {
+   "window_id": 77,
+   "sample_uid": "ood:solar:real_ood:null:26701b8b80efdbcf5dfe460dc9878aa972861479861291cfae7875ff01098819:26701b8b80efdbcf5dfe460dc9878aa972861479861291cfae7875ff01098819",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "26701b8b80efdbcf5dfe460dc9878aa972861479861291cfae7875ff01098819",
+   "clean_hash": "26701b8b80efdbcf5dfe460dc9878aa972861479861291cfae7875ff01098819"
+  },
+  {
+   "window_id": 34,
+   "sample_uid": "ood:staircase:clean_ood:null:354a979d07b20c2ef5a50c2b99ce80b097ffb7f1ecbb6ff4df23330da356511f:354a979d07b20c2ef5a50c2b99ce80b097ffb7f1ecbb6ff4df23330da356511f",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "354a979d07b20c2ef5a50c2b99ce80b097ffb7f1ecbb6ff4df23330da356511f",
+   "clean_hash": "354a979d07b20c2ef5a50c2b99ce80b097ffb7f1ecbb6ff4df23330da356511f"
+  },
+  {
+   "window_id": 51,
+   "sample_uid": "ood:pulse_train:clean_ood:null:067ee05c779c81ef029575da18aa59eb081c11c65b6c8a98ee9a5644ab6a0856:067ee05c779c81ef029575da18aa59eb081c11c65b6c8a98ee9a5644ab6a0856",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "067ee05c779c81ef029575da18aa59eb081c11c65b6c8a98ee9a5644ab6a0856",
+   "clean_hash": "067ee05c779c81ef029575da18aa59eb081c11c65b6c8a98ee9a5644ab6a0856"
+  },
+  {
+   "window_id": 73,
+   "sample_uid": "ood:exchange:real_ood:null:eabbe9a5c00a4af51f7da4da5cf0df18c8b3c34a19edbf5b16ee3090bf219591:eabbe9a5c00a4af51f7da4da5cf0df18c8b3c34a19edbf5b16ee3090bf219591",
+   "dataset": "ood:exchange",
+   "stratum": "real_ood",
+   "corrupted_hash": "eabbe9a5c00a4af51f7da4da5cf0df18c8b3c34a19edbf5b16ee3090bf219591",
+   "clean_hash": "eabbe9a5c00a4af51f7da4da5cf0df18c8b3c34a19edbf5b16ee3090bf219591"
+  },
+  {
+   "window_id": 25,
+   "sample_uid": "ood:random_walk:clean_ood:null:2bd51cbbe21c18524daeec2946378a3b337d5e50fc9826a87f5357764837a3c6:2bd51cbbe21c18524daeec2946378a3b337d5e50fc9826a87f5357764837a3c6",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "2bd51cbbe21c18524daeec2946378a3b337d5e50fc9826a87f5357764837a3c6",
+   "clean_hash": "2bd51cbbe21c18524daeec2946378a3b337d5e50fc9826a87f5357764837a3c6"
+  },
+  {
+   "window_id": 17,
+   "sample_uid": "ood:random_walk:clean_ood:null:8eb78356554d4e6d4b47b86b632727d7e80ed78e799ed6cfb6bb06f7fbce0211:8eb78356554d4e6d4b47b86b632727d7e80ed78e799ed6cfb6bb06f7fbce0211",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "8eb78356554d4e6d4b47b86b632727d7e80ed78e799ed6cfb6bb06f7fbce0211",
+   "clean_hash": "8eb78356554d4e6d4b47b86b632727d7e80ed78e799ed6cfb6bb06f7fbce0211"
+  },
+  {
+   "window_id": 59,
+   "sample_uid": "ood:pulse_train:clean_ood:null:30b4951b1f9f5a4c0cffeefaace826895562e232fdbbfbb2b3e79f8df0fcc737:30b4951b1f9f5a4c0cffeefaace826895562e232fdbbfbb2b3e79f8df0fcc737",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "30b4951b1f9f5a4c0cffeefaace826895562e232fdbbfbb2b3e79f8df0fcc737",
+   "clean_hash": "30b4951b1f9f5a4c0cffeefaace826895562e232fdbbfbb2b3e79f8df0fcc737"
+  },
+  {
+   "window_id": 47,
+   "sample_uid": "ood:pulse_train:clean_ood:null:59baac2d381523d6f813c8603e287f4527b720bf92565603be7c57257e9f44ec:59baac2d381523d6f813c8603e287f4527b720bf92565603be7c57257e9f44ec",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "59baac2d381523d6f813c8603e287f4527b720bf92565603be7c57257e9f44ec",
+   "clean_hash": "59baac2d381523d6f813c8603e287f4527b720bf92565603be7c57257e9f44ec"
+  },
+  {
+   "window_id": 1,
+   "sample_uid": "ood:random_walk:clean_ood:null:88a626a9003bc4678870696e7772f19bd2f7d1f6779c4388759299c4c4209cb6:88a626a9003bc4678870696e7772f19bd2f7d1f6779c4388759299c4c4209cb6",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "88a626a9003bc4678870696e7772f19bd2f7d1f6779c4388759299c4c4209cb6",
+   "clean_hash": "88a626a9003bc4678870696e7772f19bd2f7d1f6779c4388759299c4c4209cb6"
+  },
+  {
+   "window_id": 36,
+   "sample_uid": "ood:sawtooth:clean_ood:null:107f7e2ac877a0fe8b962c18baa8919c24658ebc83899babaaa964d4201994fb:107f7e2ac877a0fe8b962c18baa8919c24658ebc83899babaaa964d4201994fb",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "107f7e2ac877a0fe8b962c18baa8919c24658ebc83899babaaa964d4201994fb",
+   "clean_hash": "107f7e2ac877a0fe8b962c18baa8919c24658ebc83899babaaa964d4201994fb"
+  },
+  {
+   "window_id": 69,
+   "sample_uid": "ood:solar:real_ood:null:e8d43a834681b1081014111ba7f4400f7e108b9fca3a8e7f2b35b2b75da1624e:e8d43a834681b1081014111ba7f4400f7e108b9fca3a8e7f2b35b2b75da1624e",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "e8d43a834681b1081014111ba7f4400f7e108b9fca3a8e7f2b35b2b75da1624e",
+   "clean_hash": "e8d43a834681b1081014111ba7f4400f7e108b9fca3a8e7f2b35b2b75da1624e"
+  },
+  {
+   "window_id": 54,
+   "sample_uid": "ood:staircase:clean_ood:null:68bac9559de3308814fad065cfbd52521a156a2d68403c12cb27933edec420be:68bac9559de3308814fad065cfbd52521a156a2d68403c12cb27933edec420be",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "68bac9559de3308814fad065cfbd52521a156a2d68403c12cb27933edec420be",
+   "clean_hash": "68bac9559de3308814fad065cfbd52521a156a2d68403c12cb27933edec420be"
+  },
+  {
+   "window_id": 78,
+   "sample_uid": "ood:solar:real_ood:null:16d6ef7b8c4d4d7bae554d91151a559dc3953871fca0ed5240abaa98119e94a3:16d6ef7b8c4d4d7bae554d91151a559dc3953871fca0ed5240abaa98119e94a3",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "16d6ef7b8c4d4d7bae554d91151a559dc3953871fca0ed5240abaa98119e94a3",
+   "clean_hash": "16d6ef7b8c4d4d7bae554d91151a559dc3953871fca0ed5240abaa98119e94a3"
+  },
+  {
+   "window_id": 38,
+   "sample_uid": "ood:staircase:clean_ood:null:ab20b8da1f1ce2b46178f6663cf63abf62247f30196c5bf5ce049fe45dfed8e2:ab20b8da1f1ce2b46178f6663cf63abf62247f30196c5bf5ce049fe45dfed8e2",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "ab20b8da1f1ce2b46178f6663cf63abf62247f30196c5bf5ce049fe45dfed8e2",
+   "clean_hash": "ab20b8da1f1ce2b46178f6663cf63abf62247f30196c5bf5ce049fe45dfed8e2"
+  },
+  {
+   "window_id": 85,
+   "sample_uid": "ood:solar:real_ood:null:05dd1fd228a878f873396f56d8a51772a692345d649f6148d55ee22c494043dc:05dd1fd228a878f873396f56d8a51772a692345d649f6148d55ee22c494043dc",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "05dd1fd228a878f873396f56d8a51772a692345d649f6148d55ee22c494043dc",
+   "clean_hash": "05dd1fd228a878f873396f56d8a51772a692345d649f6148d55ee22c494043dc"
+  },
+  {
+   "window_id": 4,
+   "sample_uid": "ood:sawtooth:clean_ood:null:35191d110f9ce3818175cbfccf9b9987c53110041c3f98143315bfcb5c42c0b9:35191d110f9ce3818175cbfccf9b9987c53110041c3f98143315bfcb5c42c0b9",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "35191d110f9ce3818175cbfccf9b9987c53110041c3f98143315bfcb5c42c0b9",
+   "clean_hash": "35191d110f9ce3818175cbfccf9b9987c53110041c3f98143315bfcb5c42c0b9"
+  },
+  {
+   "window_id": 86,
+   "sample_uid": "ood:solar:real_ood:null:a09e7a3ce1b263ee7bbe2a3f4307d56bab3262ed5de3177d7da8d4c77b1518b5:a09e7a3ce1b263ee7bbe2a3f4307d56bab3262ed5de3177d7da8d4c77b1518b5",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "a09e7a3ce1b263ee7bbe2a3f4307d56bab3262ed5de3177d7da8d4c77b1518b5",
+   "clean_hash": "a09e7a3ce1b263ee7bbe2a3f4307d56bab3262ed5de3177d7da8d4c77b1518b5"
+  },
+  {
+   "window_id": 15,
+   "sample_uid": "ood:pulse_train:clean_ood:null:468842f86cc4fafc95bfa3c1fde2a5af03c7f43755372d206a32c45c876d4080:468842f86cc4fafc95bfa3c1fde2a5af03c7f43755372d206a32c45c876d4080",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "468842f86cc4fafc95bfa3c1fde2a5af03c7f43755372d206a32c45c876d4080",
+   "clean_hash": "468842f86cc4fafc95bfa3c1fde2a5af03c7f43755372d206a32c45c876d4080"
+  },
+  {
+   "window_id": 12,
+   "sample_uid": "ood:sawtooth:clean_ood:null:2372e69a4e0ee313633c663700993a5ee936e640afddb20fc1550fd8a743c1c8:2372e69a4e0ee313633c663700993a5ee936e640afddb20fc1550fd8a743c1c8",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "2372e69a4e0ee313633c663700993a5ee936e640afddb20fc1550fd8a743c1c8",
+   "clean_hash": "2372e69a4e0ee313633c663700993a5ee936e640afddb20fc1550fd8a743c1c8"
+  },
+  {
+   "window_id": 60,
+   "sample_uid": "ood:sawtooth:clean_ood:null:a3b9a6396a5bf355672e5be22e4e86416fc1f05366e3c24f48c6cdb47288ab86:a3b9a6396a5bf355672e5be22e4e86416fc1f05366e3c24f48c6cdb47288ab86",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "a3b9a6396a5bf355672e5be22e4e86416fc1f05366e3c24f48c6cdb47288ab86",
+   "clean_hash": "a3b9a6396a5bf355672e5be22e4e86416fc1f05366e3c24f48c6cdb47288ab86"
+  },
+  {
+   "window_id": 13,
+   "sample_uid": "ood:random_walk:clean_ood:null:8be8ff2c15b68880d0d328af0228e821c56be9c6ef0bb303c10e9900e2523966:8be8ff2c15b68880d0d328af0228e821c56be9c6ef0bb303c10e9900e2523966",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "8be8ff2c15b68880d0d328af0228e821c56be9c6ef0bb303c10e9900e2523966",
+   "clean_hash": "8be8ff2c15b68880d0d328af0228e821c56be9c6ef0bb303c10e9900e2523966"
+  },
+  {
+   "window_id": 26,
+   "sample_uid": "ood:staircase:clean_ood:null:751110f40c54729f1e9f14421e6aceb83684b755f736176efc0724e50e71f7d0:751110f40c54729f1e9f14421e6aceb83684b755f736176efc0724e50e71f7d0",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "751110f40c54729f1e9f14421e6aceb83684b755f736176efc0724e50e71f7d0",
+   "clean_hash": "751110f40c54729f1e9f14421e6aceb83684b755f736176efc0724e50e71f7d0"
+  },
+  {
+   "window_id": 95,
+   "sample_uid": "ood:solar:real_ood:null:a55f9869ef7fa72090a88857eed052bb64b410d618155dee6ec738809ba9f525:a55f9869ef7fa72090a88857eed052bb64b410d618155dee6ec738809ba9f525",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "a55f9869ef7fa72090a88857eed052bb64b410d618155dee6ec738809ba9f525",
+   "clean_hash": "a55f9869ef7fa72090a88857eed052bb64b410d618155dee6ec738809ba9f525"
+  },
+  {
+   "window_id": 33,
+   "sample_uid": "ood:random_walk:clean_ood:null:272a4ac9f0df6717919d18eb659620acd4f5a743db286f83cf8ae3fe3b6230c9:272a4ac9f0df6717919d18eb659620acd4f5a743db286f83cf8ae3fe3b6230c9",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "272a4ac9f0df6717919d18eb659620acd4f5a743db286f83cf8ae3fe3b6230c9",
+   "clean_hash": "272a4ac9f0df6717919d18eb659620acd4f5a743db286f83cf8ae3fe3b6230c9"
+  },
+  {
+   "window_id": 27,
+   "sample_uid": "ood:pulse_train:clean_ood:null:ca70d600ce7b00d7d563957a7f993b4b9aa74990827251bc398fefea60a7ad50:ca70d600ce7b00d7d563957a7f993b4b9aa74990827251bc398fefea60a7ad50",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "ca70d600ce7b00d7d563957a7f993b4b9aa74990827251bc398fefea60a7ad50",
+   "clean_hash": "ca70d600ce7b00d7d563957a7f993b4b9aa74990827251bc398fefea60a7ad50"
+  },
+  {
+   "window_id": 35,
+   "sample_uid": "ood:pulse_train:clean_ood:null:e1ccf7e4d4e6b7b266a64a709550204c96c8c7c66ddb426bd20b39a998569622:e1ccf7e4d4e6b7b266a64a709550204c96c8c7c66ddb426bd20b39a998569622",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "e1ccf7e4d4e6b7b266a64a709550204c96c8c7c66ddb426bd20b39a998569622",
+   "clean_hash": "e1ccf7e4d4e6b7b266a64a709550204c96c8c7c66ddb426bd20b39a998569622"
+  },
+  {
+   "window_id": 70,
+   "sample_uid": "ood:solar:real_ood:null:6eaa03b41cdca705356755e3c7a9ce079af05e32eff1269cefa74cc7883957d2:6eaa03b41cdca705356755e3c7a9ce079af05e32eff1269cefa74cc7883957d2",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "6eaa03b41cdca705356755e3c7a9ce079af05e32eff1269cefa74cc7883957d2",
+   "clean_hash": "6eaa03b41cdca705356755e3c7a9ce079af05e32eff1269cefa74cc7883957d2"
+  },
+  {
+   "window_id": 74,
+   "sample_uid": "ood:solar:real_ood:null:0b63b1d39629cab1e693b6f90e84a8ac0d4e1f5b055a70403b3df99acc9aa7f9:0b63b1d39629cab1e693b6f90e84a8ac0d4e1f5b055a70403b3df99acc9aa7f9",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "0b63b1d39629cab1e693b6f90e84a8ac0d4e1f5b055a70403b3df99acc9aa7f9",
+   "clean_hash": "0b63b1d39629cab1e693b6f90e84a8ac0d4e1f5b055a70403b3df99acc9aa7f9"
+  },
+  {
+   "window_id": 21,
+   "sample_uid": "ood:random_walk:clean_ood:null:7803f548c32b6b3ba43ff8985dd7fda3fcb7c540575d6c5c101f0f50e981c554:7803f548c32b6b3ba43ff8985dd7fda3fcb7c540575d6c5c101f0f50e981c554",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "7803f548c32b6b3ba43ff8985dd7fda3fcb7c540575d6c5c101f0f50e981c554",
+   "clean_hash": "7803f548c32b6b3ba43ff8985dd7fda3fcb7c540575d6c5c101f0f50e981c554"
+  },
+  {
+   "window_id": 90,
+   "sample_uid": "ood:solar:real_ood:null:c08fcb01a92ce0d779a97bd6cc7b75bdd5eb2b664807fcad8c4b80ced9015c36:c08fcb01a92ce0d779a97bd6cc7b75bdd5eb2b664807fcad8c4b80ced9015c36",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "c08fcb01a92ce0d779a97bd6cc7b75bdd5eb2b664807fcad8c4b80ced9015c36",
+   "clean_hash": "c08fcb01a92ce0d779a97bd6cc7b75bdd5eb2b664807fcad8c4b80ced9015c36"
+  },
+  {
+   "window_id": 42,
+   "sample_uid": "ood:staircase:clean_ood:null:78aa124394a2f09dfe818c857e7567783bab1b9304981bb0e4f49d40f94bcd5d:78aa124394a2f09dfe818c857e7567783bab1b9304981bb0e4f49d40f94bcd5d",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "78aa124394a2f09dfe818c857e7567783bab1b9304981bb0e4f49d40f94bcd5d",
+   "clean_hash": "78aa124394a2f09dfe818c857e7567783bab1b9304981bb0e4f49d40f94bcd5d"
+  },
+  {
+   "window_id": 52,
+   "sample_uid": "ood:sawtooth:clean_ood:null:3e5bab793bc1646e3de068401f163401c3c40145356af52c08638f40cf97009a:3e5bab793bc1646e3de068401f163401c3c40145356af52c08638f40cf97009a",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "3e5bab793bc1646e3de068401f163401c3c40145356af52c08638f40cf97009a",
+   "clean_hash": "3e5bab793bc1646e3de068401f163401c3c40145356af52c08638f40cf97009a"
+  },
+  {
+   "window_id": 63,
+   "sample_uid": "ood:pulse_train:clean_ood:null:4a81337bf0d9a5e87188cbb6003555a49b62ff9a0b9d5f4b5c9d08da6c6c0fb4:4a81337bf0d9a5e87188cbb6003555a49b62ff9a0b9d5f4b5c9d08da6c6c0fb4",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "4a81337bf0d9a5e87188cbb6003555a49b62ff9a0b9d5f4b5c9d08da6c6c0fb4",
+   "clean_hash": "4a81337bf0d9a5e87188cbb6003555a49b62ff9a0b9d5f4b5c9d08da6c6c0fb4"
+  },
+  {
+   "window_id": 23,
+   "sample_uid": "ood:pulse_train:clean_ood:null:907590a86d15364f678f49e7a5ff8c286cd2d689ac434efacd2ef1628bf0c624:907590a86d15364f678f49e7a5ff8c286cd2d689ac434efacd2ef1628bf0c624",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "907590a86d15364f678f49e7a5ff8c286cd2d689ac434efacd2ef1628bf0c624",
+   "clean_hash": "907590a86d15364f678f49e7a5ff8c286cd2d689ac434efacd2ef1628bf0c624"
+  },
+  {
+   "window_id": 83,
+   "sample_uid": "ood:solar:real_ood:null:8418d243e3d0c6166443a1b83604b72461a8ed6e11a84fbbbab3d94a3b888ae9:8418d243e3d0c6166443a1b83604b72461a8ed6e11a84fbbbab3d94a3b888ae9",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "8418d243e3d0c6166443a1b83604b72461a8ed6e11a84fbbbab3d94a3b888ae9",
+   "clean_hash": "8418d243e3d0c6166443a1b83604b72461a8ed6e11a84fbbbab3d94a3b888ae9"
+  },
+  {
+   "window_id": 45,
+   "sample_uid": "ood:random_walk:clean_ood:null:f4c88195bf0c2fdf32e0274ca77ffa7d6e7f6cca920e5934c6bf08d4f0787854:f4c88195bf0c2fdf32e0274ca77ffa7d6e7f6cca920e5934c6bf08d4f0787854",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "f4c88195bf0c2fdf32e0274ca77ffa7d6e7f6cca920e5934c6bf08d4f0787854",
+   "clean_hash": "f4c88195bf0c2fdf32e0274ca77ffa7d6e7f6cca920e5934c6bf08d4f0787854"
+  },
+  {
+   "window_id": 65,
+   "sample_uid": "ood:solar:real_ood:null:f9ed4d0ab0d43978ba058b62865af07a9a2b7f225eb742f42037355e1ee3d44e:f9ed4d0ab0d43978ba058b62865af07a9a2b7f225eb742f42037355e1ee3d44e",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "f9ed4d0ab0d43978ba058b62865af07a9a2b7f225eb742f42037355e1ee3d44e",
+   "clean_hash": "f9ed4d0ab0d43978ba058b62865af07a9a2b7f225eb742f42037355e1ee3d44e"
+  },
+  {
+   "window_id": 66,
+   "sample_uid": "ood:solar:real_ood:null:96a518754a3d9c7d756961d73f9b0bf5a69b22fb7adfaf578099417ac4714e0f:96a518754a3d9c7d756961d73f9b0bf5a69b22fb7adfaf578099417ac4714e0f",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "96a518754a3d9c7d756961d73f9b0bf5a69b22fb7adfaf578099417ac4714e0f",
+   "clean_hash": "96a518754a3d9c7d756961d73f9b0bf5a69b22fb7adfaf578099417ac4714e0f"
+  },
+  {
+   "window_id": 44,
+   "sample_uid": "ood:sawtooth:clean_ood:null:bc84f91e9d9af45e00c294e4cd2ff6d0fa0071bac9124300eccc026e19aa375d:bc84f91e9d9af45e00c294e4cd2ff6d0fa0071bac9124300eccc026e19aa375d",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "bc84f91e9d9af45e00c294e4cd2ff6d0fa0071bac9124300eccc026e19aa375d",
+   "clean_hash": "bc84f91e9d9af45e00c294e4cd2ff6d0fa0071bac9124300eccc026e19aa375d"
+  },
+  {
+   "window_id": 96,
+   "sample_uid": "ood:solar:real_ood:null:b3c3157e8bbb5b295b543b763c5d144858fa69f1221a5dfb4d3e4d23fb479768:b3c3157e8bbb5b295b543b763c5d144858fa69f1221a5dfb4d3e4d23fb479768",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "b3c3157e8bbb5b295b543b763c5d144858fa69f1221a5dfb4d3e4d23fb479768",
+   "clean_hash": "b3c3157e8bbb5b295b543b763c5d144858fa69f1221a5dfb4d3e4d23fb479768"
+  },
+  {
+   "window_id": 41,
+   "sample_uid": "ood:random_walk:clean_ood:null:5703838e21f654ec823a3e753bcf6818cd0e400373aaf6d9dd6c651a1816ae01:5703838e21f654ec823a3e753bcf6818cd0e400373aaf6d9dd6c651a1816ae01",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "5703838e21f654ec823a3e753bcf6818cd0e400373aaf6d9dd6c651a1816ae01",
+   "clean_hash": "5703838e21f654ec823a3e753bcf6818cd0e400373aaf6d9dd6c651a1816ae01"
+  },
+  {
+   "window_id": 89,
+   "sample_uid": "ood:solar:real_ood:null:39283fe5434d72b5648831987153fa74fc06f83cdc050389b1694b636f82d332:39283fe5434d72b5648831987153fa74fc06f83cdc050389b1694b636f82d332",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "39283fe5434d72b5648831987153fa74fc06f83cdc050389b1694b636f82d332",
+   "clean_hash": "39283fe5434d72b5648831987153fa74fc06f83cdc050389b1694b636f82d332"
+  },
+  {
+   "window_id": 62,
+   "sample_uid": "ood:staircase:clean_ood:null:5b6f3bc195bac354a5b0e43c4d428852ddcd4ae168f036cdd0a01461f7028e1a:5b6f3bc195bac354a5b0e43c4d428852ddcd4ae168f036cdd0a01461f7028e1a",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "5b6f3bc195bac354a5b0e43c4d428852ddcd4ae168f036cdd0a01461f7028e1a",
+   "clean_hash": "5b6f3bc195bac354a5b0e43c4d428852ddcd4ae168f036cdd0a01461f7028e1a"
+  },
+  {
+   "window_id": 88,
+   "sample_uid": "ood:exchange:real_ood:null:ea0db3f3cce7c212fd09234c2b94961e63a242b9185085b9dddce932695f9809:ea0db3f3cce7c212fd09234c2b94961e63a242b9185085b9dddce932695f9809",
+   "dataset": "ood:exchange",
+   "stratum": "real_ood",
+   "corrupted_hash": "ea0db3f3cce7c212fd09234c2b94961e63a242b9185085b9dddce932695f9809",
+   "clean_hash": "ea0db3f3cce7c212fd09234c2b94961e63a242b9185085b9dddce932695f9809"
+  },
+  {
+   "window_id": 2,
+   "sample_uid": "ood:staircase:clean_ood:null:b7078c5e4f96cb663e0b7ff40a99367b1f738dab55933d45c5372876a79c1911:b7078c5e4f96cb663e0b7ff40a99367b1f738dab55933d45c5372876a79c1911",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "b7078c5e4f96cb663e0b7ff40a99367b1f738dab55933d45c5372876a79c1911",
+   "clean_hash": "b7078c5e4f96cb663e0b7ff40a99367b1f738dab55933d45c5372876a79c1911"
+  },
+  {
+   "window_id": 46,
+   "sample_uid": "ood:staircase:clean_ood:null:952cd8396e5898bc0eb64a131e27f85ef88e03ee4a546122488ce316ac5994b9:952cd8396e5898bc0eb64a131e27f85ef88e03ee4a546122488ce316ac5994b9",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "952cd8396e5898bc0eb64a131e27f85ef88e03ee4a546122488ce316ac5994b9",
+   "clean_hash": "952cd8396e5898bc0eb64a131e27f85ef88e03ee4a546122488ce316ac5994b9"
+  },
+  {
+   "window_id": 32,
+   "sample_uid": "ood:sawtooth:clean_ood:null:1eaa6e0158055126db530e04d65462eb327f637b229ac497afdb3821efd281b2:1eaa6e0158055126db530e04d65462eb327f637b229ac497afdb3821efd281b2",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "1eaa6e0158055126db530e04d65462eb327f637b229ac497afdb3821efd281b2",
+   "clean_hash": "1eaa6e0158055126db530e04d65462eb327f637b229ac497afdb3821efd281b2"
+  },
+  {
+   "window_id": 81,
+   "sample_uid": "ood:solar:real_ood:null:cde6d72a2f454e402f3683053ebc8111daf03de02e9afb621caf79782965eaba:cde6d72a2f454e402f3683053ebc8111daf03de02e9afb621caf79782965eaba",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "cde6d72a2f454e402f3683053ebc8111daf03de02e9afb621caf79782965eaba",
+   "clean_hash": "cde6d72a2f454e402f3683053ebc8111daf03de02e9afb621caf79782965eaba"
+  },
+  {
+   "window_id": 9,
+   "sample_uid": "ood:random_walk:clean_ood:null:dfc50d56dc8099625fd4042e5681396d5e1ac31b078a34e68e4af0ffd7c2d95b:dfc50d56dc8099625fd4042e5681396d5e1ac31b078a34e68e4af0ffd7c2d95b",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "dfc50d56dc8099625fd4042e5681396d5e1ac31b078a34e68e4af0ffd7c2d95b",
+   "clean_hash": "dfc50d56dc8099625fd4042e5681396d5e1ac31b078a34e68e4af0ffd7c2d95b"
+  },
+  {
+   "window_id": 50,
+   "sample_uid": "ood:staircase:clean_ood:null:82811940f2ea002d4a5aef82240ccc079d23daf36377c3e9cfc515fb94a30e19:82811940f2ea002d4a5aef82240ccc079d23daf36377c3e9cfc515fb94a30e19",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "82811940f2ea002d4a5aef82240ccc079d23daf36377c3e9cfc515fb94a30e19",
+   "clean_hash": "82811940f2ea002d4a5aef82240ccc079d23daf36377c3e9cfc515fb94a30e19"
+  },
+  {
+   "window_id": 72,
+   "sample_uid": "ood:solar:real_ood:null:d0693d90fd1659a033ea9d4e40222eef486fc0e37fe707725d3f806efab308e0:d0693d90fd1659a033ea9d4e40222eef486fc0e37fe707725d3f806efab308e0",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "d0693d90fd1659a033ea9d4e40222eef486fc0e37fe707725d3f806efab308e0",
+   "clean_hash": "d0693d90fd1659a033ea9d4e40222eef486fc0e37fe707725d3f806efab308e0"
+  },
+  {
+   "window_id": 91,
+   "sample_uid": "ood:solar:real_ood:null:c37c30a49b87bbfae8930f42db474c81a04a6093b757ea28d7e19a9487cc16ea:c37c30a49b87bbfae8930f42db474c81a04a6093b757ea28d7e19a9487cc16ea",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "c37c30a49b87bbfae8930f42db474c81a04a6093b757ea28d7e19a9487cc16ea",
+   "clean_hash": "c37c30a49b87bbfae8930f42db474c81a04a6093b757ea28d7e19a9487cc16ea"
+  },
+  {
+   "window_id": 28,
+   "sample_uid": "ood:sawtooth:clean_ood:null:a8d92af1cd1b090fef7f1d3be6815106f7475d60bec7cb56313ceab47575e575:a8d92af1cd1b090fef7f1d3be6815106f7475d60bec7cb56313ceab47575e575",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "a8d92af1cd1b090fef7f1d3be6815106f7475d60bec7cb56313ceab47575e575",
+   "clean_hash": "a8d92af1cd1b090fef7f1d3be6815106f7475d60bec7cb56313ceab47575e575"
+  },
+  {
+   "window_id": 14,
+   "sample_uid": "ood:staircase:clean_ood:null:2a50f187eb1f892faa20a9b1e1bc65557f758a42979b113ecb5cbbd8b3f599cd:2a50f187eb1f892faa20a9b1e1bc65557f758a42979b113ecb5cbbd8b3f599cd",
+   "dataset": "ood:staircase",
+   "stratum": "clean_ood",
+   "corrupted_hash": "2a50f187eb1f892faa20a9b1e1bc65557f758a42979b113ecb5cbbd8b3f599cd",
+   "clean_hash": "2a50f187eb1f892faa20a9b1e1bc65557f758a42979b113ecb5cbbd8b3f599cd"
+  },
+  {
+   "window_id": 55,
+   "sample_uid": "ood:pulse_train:clean_ood:null:2215ea40b9aaba0ef086c1e4985e2dd892cd81de1ba859ac6607b89541d5b378:2215ea40b9aaba0ef086c1e4985e2dd892cd81de1ba859ac6607b89541d5b378",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "2215ea40b9aaba0ef086c1e4985e2dd892cd81de1ba859ac6607b89541d5b378",
+   "clean_hash": "2215ea40b9aaba0ef086c1e4985e2dd892cd81de1ba859ac6607b89541d5b378"
+  },
+  {
+   "window_id": 64,
+   "sample_uid": "ood:sawtooth:clean_ood:null:b7531a2ce3e8acb888d4dec1d4d4a8480ed8c387df292d9698396d14d2d905f2:b7531a2ce3e8acb888d4dec1d4d4a8480ed8c387df292d9698396d14d2d905f2",
+   "dataset": "ood:sawtooth",
+   "stratum": "clean_ood",
+   "corrupted_hash": "b7531a2ce3e8acb888d4dec1d4d4a8480ed8c387df292d9698396d14d2d905f2",
+   "clean_hash": "b7531a2ce3e8acb888d4dec1d4d4a8480ed8c387df292d9698396d14d2d905f2"
+  },
+  {
+   "window_id": 43,
+   "sample_uid": "ood:pulse_train:clean_ood:null:60e7e5bba7e5c39ffe4ea31d789e8055937e39a256ca98bb4781d72c8a4fbf10:60e7e5bba7e5c39ffe4ea31d789e8055937e39a256ca98bb4781d72c8a4fbf10",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "60e7e5bba7e5c39ffe4ea31d789e8055937e39a256ca98bb4781d72c8a4fbf10",
+   "clean_hash": "60e7e5bba7e5c39ffe4ea31d789e8055937e39a256ca98bb4781d72c8a4fbf10"
+  },
+  {
+   "window_id": 92,
+   "sample_uid": "ood:solar:real_ood:null:0c77d8d97bf9d7b6baf27d180b8fdff3ef673a55f3346c157e472ee024d34ce9:0c77d8d97bf9d7b6baf27d180b8fdff3ef673a55f3346c157e472ee024d34ce9",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "0c77d8d97bf9d7b6baf27d180b8fdff3ef673a55f3346c157e472ee024d34ce9",
+   "clean_hash": "0c77d8d97bf9d7b6baf27d180b8fdff3ef673a55f3346c157e472ee024d34ce9"
+  },
+  {
+   "window_id": 76,
+   "sample_uid": "ood:solar:real_ood:null:7d5c3606ad3b4993926c77b9608a39c59501354fe33784fa587f9d0caf8a630e:7d5c3606ad3b4993926c77b9608a39c59501354fe33784fa587f9d0caf8a630e",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "7d5c3606ad3b4993926c77b9608a39c59501354fe33784fa587f9d0caf8a630e",
+   "clean_hash": "7d5c3606ad3b4993926c77b9608a39c59501354fe33784fa587f9d0caf8a630e"
+  },
+  {
+   "window_id": 79,
+   "sample_uid": "ood:solar:real_ood:null:228eedb3410cb2bafeb13d1ebed152bc1c78d77365e0751fb5562621c211a279:228eedb3410cb2bafeb13d1ebed152bc1c78d77365e0751fb5562621c211a279",
+   "dataset": "ood:solar",
+   "stratum": "real_ood",
+   "corrupted_hash": "228eedb3410cb2bafeb13d1ebed152bc1c78d77365e0751fb5562621c211a279",
+   "clean_hash": "228eedb3410cb2bafeb13d1ebed152bc1c78d77365e0751fb5562621c211a279"
+  },
+  {
+   "window_id": 3,
+   "sample_uid": "ood:pulse_train:clean_ood:null:1ea130c4753c4339700b39afa1a6d8f7c46b5f5aaf2d42f03f835e10b89b4199:1ea130c4753c4339700b39afa1a6d8f7c46b5f5aaf2d42f03f835e10b89b4199",
+   "dataset": "ood:pulse_train",
+   "stratum": "clean_ood",
+   "corrupted_hash": "1ea130c4753c4339700b39afa1a6d8f7c46b5f5aaf2d42f03f835e10b89b4199",
+   "clean_hash": "1ea130c4753c4339700b39afa1a6d8f7c46b5f5aaf2d42f03f835e10b89b4199"
+  },
+  {
+   "window_id": 61,
+   "sample_uid": "ood:random_walk:clean_ood:null:077e6798acfcaced35c64931e75c586464416633e2d0b83a31e4bfe34ad50970:077e6798acfcaced35c64931e75c586464416633e2d0b83a31e4bfe34ad50970",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "077e6798acfcaced35c64931e75c586464416633e2d0b83a31e4bfe34ad50970",
+   "clean_hash": "077e6798acfcaced35c64931e75c586464416633e2d0b83a31e4bfe34ad50970"
+  },
+  {
+   "window_id": 53,
+   "sample_uid": "ood:random_walk:clean_ood:null:e38e46696bf1e8c9df0c6b38ad555901b8a9514eb445b941fa2d5ef1944dc96b:e38e46696bf1e8c9df0c6b38ad555901b8a9514eb445b941fa2d5ef1944dc96b",
+   "dataset": "ood:random_walk",
+   "stratum": "clean_ood",
+   "corrupted_hash": "e38e46696bf1e8c9df0c6b38ad555901b8a9514eb445b941fa2d5ef1944dc96b",
+   "clean_hash": "e38e46696bf1e8c9df0c6b38ad555901b8a9514eb445b941fa2d5ef1944dc96b"
+  }
+ ]
+}

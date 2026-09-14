@@ -1,0 +1,1858 @@
+{
+ "arms": {
+  "v2_frozen_relabel": {
+   "n_windows": 771,
+   "committed": 27,
+   "commit_rate": 0.03501945525291829,
+   "damage": 0.01999229896238651,
+   "conditional_harm_rate": 0.6666666666666666,
+   "cond_damage": 0.6666666666666666,
+   "conditional_mean_loss": 0.5708912037037037,
+   "conditional_loss_p90": 1.0,
+   "conditional_loss_p95": 1.0,
+   "beneficial_commits": 9,
+   "protected_mis_edit_rate": 0.027190332326283987,
+   "protected_stratum_edit": {
+    "clean": 0.04716981132075472,
+    "hard": 0.0,
+    "rare_valid": 0.03278688524590164,
+    "changepoint": 0.017699115044247787
+   },
+   "coverage": 0.04090909090909091,
+   "beneficial_coverage": 0.025,
+   "mean_repair_gain_contaminated": -0.05322157426401225,
+   "max_dataset_bs_share": 0.4444444444444444
+  },
+  "oracle_relabel": {
+   "n_windows": 771,
+   "committed": 290,
+   "commit_rate": 0.3761348897535668,
+   "damage": 0.0,
+   "conditional_harm_rate": 0.0,
+   "cond_damage": 0.0,
+   "conditional_mean_loss": 0.0,
+   "conditional_loss_p90": 0.0,
+   "conditional_loss_p95": 0.0,
+   "beneficial_commits": 290,
+   "protected_mis_edit_rate": 0.0,
+   "protected_stratum_edit": {
+    "clean": 0.0,
+    "hard": 0.0,
+    "rare_valid": 0.0,
+    "changepoint": 0.0
+   },
+   "coverage": 0.6590909090909091,
+   "beneficial_coverage": 0.6590909090909091,
+   "mean_repair_gain_contaminated": 0.19692616236243382,
+   "max_dataset_bs_share": 0.4413793103448276
+  },
+  "v3_2_bugfix_relabel": {
+   "n_windows": 771,
+   "committed": 164,
+   "commit_rate": 0.2127107652399481,
+   "damage": 0.058365758754863814,
+   "conditional_harm_rate": 0.27439024390243905,
+   "cond_damage": 0.27439024390243905,
+   "conditional_mean_loss": 0.27439024390243905,
+   "conditional_loss_p90": 1.0,
+   "conditional_loss_p95": 1.0,
+   "beneficial_commits": 119,
+   "protected_mis_edit_rate": 0.04229607250755287,
+   "protected_stratum_edit": {
+    "clean": 0.03773584905660377,
+    "hard": 0.0,
+    "rare_valid": 0.06557377049180328,
+    "changepoint": 0.05309734513274336
+   },
+   "coverage": 0.3409090909090909,
+   "beneficial_coverage": 0.27045454545454545,
+   "mean_repair_gain_contaminated": 0.1358865731587899,
+   "max_dataset_bs_share": 0.44537815126050423
+  },
+  "PICS_joint_relabel": {
+   "n_windows": 771,
+   "committed": 151,
+   "commit_rate": 0.19584954604409857,
+   "damage": 0.040207522697795074,
+   "conditional_harm_rate": 0.2052980132450331,
+   "cond_damage": 0.2052980132450331,
+   "conditional_mean_loss": 0.2052980132450331,
+   "conditional_loss_p90": 1.0,
+   "conditional_loss_p95": 1.0,
+   "beneficial_commits": 120,
+   "protected_mis_edit_rate": 0.00906344410876133,
+   "protected_stratum_edit": {
+    "clean": 0.009433962264150943,
+    "hard": 0.0,
+    "rare_valid": 0.03278688524590164,
+    "changepoint": 0.0
+   },
+   "coverage": 0.33636363636363636,
+   "beneficial_coverage": 0.2727272727272727,
+   "mean_repair_gain_contaminated": 0.09189960143728719,
+   "max_dataset_bs_share": 0.6333333333333333
+  },
+  "PICS_TSFM_relabel": {
+   "n_windows": 771,
+   "committed": 60,
+   "commit_rate": 0.07782101167315175,
+   "damage": 0.01297016861219196,
+   "conditional_harm_rate": 0.16666666666666666,
+   "cond_damage": 0.16666666666666666,
+   "conditional_mean_loss": 0.16666666666666666,
+   "conditional_loss_p90": 1.0,
+   "conditional_loss_p95": 1.0,
+   "beneficial_commits": 50,
+   "protected_mis_edit_rate": 0.012084592145015106,
+   "protected_stratum_edit": {
+    "clean": 0.018867924528301886,
+    "hard": 0.0,
+    "rare_valid": 0.03278688524590164,
+    "changepoint": 0.0
+   },
+   "coverage": 0.12727272727272726,
+   "beneficial_coverage": 0.11363636363636363,
+   "mean_repair_gain_contaminated": 0.08712980016145748,
+   "max_dataset_bs_share": 0.44
+  },
+  "MAST_no_support": {
+   "n_windows": 771,
+   "committed": 120,
+   "commit_rate": 0.1556420233463035,
+   "damage": 0.04539559014267185,
+   "conditional_harm_rate": 0.2916666666666667,
+   "cond_damage": 0.2916666666666667,
+   "conditional_mean_loss": 0.2916666666666667,
+   "conditional_loss_p90": 1.0,
+   "conditional_loss_p95": 1.0,
+   "beneficial_commits": 85,
+   "protected_mis_edit_rate": 0.021148036253776436,
+   "protected_stratum_edit": {
+    "clean": 0.03773584905660377,
+    "hard": 0.0,
+    "rare_valid": 0.01639344262295082,
+    "changepoint": 0.017699115044247787
+   },
+   "coverage": 0.25681818181818183,
+   "beneficial_coverage": 0.19318181818181818,
+   "mean_repair_gain_contaminated": 0.09843938131081537,
+   "max_dataset_bs_share": 0.35294117647058826
+  },
+  "MAST_support_consequence": {
+   "n_windows": 771,
+   "committed": 102,
+   "commit_rate": 0.13229571984435798,
+   "damage": 0.040207522697795074,
+   "conditional_harm_rate": 0.30392156862745096,
+   "cond_damage": 0.30392156862745096,
+   "conditional_mean_loss": 0.30392156862745096,
+   "conditional_loss_p90": 1.0,
+   "conditional_loss_p95": 1.0,
+   "beneficial_commits": 71,
+   "protected_mis_edit_rate": 0.02416918429003021,
+   "protected_stratum_edit": {
+    "clean": 0.03773584905660377,
+    "hard": 0.0,
+    "rare_valid": 0.01639344262295082,
+    "changepoint": 0.02654867256637168
+   },
+   "coverage": 0.21363636363636362,
+   "beneficial_coverage": 0.16136363636363638,
+   "mean_repair_gain_contaminated": 0.07342287304448092,
+   "max_dataset_bs_share": 0.39436619718309857
+  },
+  "MAST_v2_hard_structure": {
+   "n_windows": 771,
+   "committed": 0,
+   "commit_rate": 0.0,
+   "damage": 0.0,
+   "conditional_harm_rate": NaN,
+   "cond_damage": NaN,
+   "conditional_mean_loss": NaN,
+   "conditional_loss_p90": NaN,
+   "conditional_loss_p95": NaN,
+   "beneficial_commits": 0,
+   "protected_mis_edit_rate": 0.0,
+   "protected_stratum_edit": {
+    "clean": 0.0,
+    "hard": 0.0,
+    "rare_valid": 0.0,
+    "changepoint": 0.0
+   },
+   "coverage": 0.0,
+   "beneficial_coverage": 0.0,
+   "mean_repair_gain_contaminated": 0.0,
+   "max_dataset_bs_share": 0.0
+  }
+ },
+ "folds": {
+  "v3_2_bugfix_relabel": {
+   "Crypto": {
+    "n_windows": 31,
+    "committed": 6,
+    "commit_rate": 0.1935483870967742,
+    "damage": 0.0,
+    "conditional_harm_rate": 0.0,
+    "cond_damage": 0.0,
+    "conditional_mean_loss": 0.0,
+    "conditional_loss_p90": 0.0,
+    "conditional_loss_p95": 0.0,
+    "beneficial_commits": 6,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.3,
+    "beneficial_coverage": 0.3,
+    "mean_repair_gain_contaminated": 0.20844305083183814,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh1": {
+    "n_windows": 167,
+    "committed": 11,
+    "commit_rate": 0.0658682634730539,
+    "damage": 0.017964071856287425,
+    "conditional_harm_rate": 0.2727272727272727,
+    "cond_damage": 0.2727272727272727,
+    "conditional_mean_loss": 0.2727272727272727,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 8,
+    "protected_mis_edit_rate": 0.010526315789473684,
+    "protected_stratum_edit": {
+     "clean": 0.043478260869565216,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.1388888888888889,
+    "beneficial_coverage": 0.1111111111111111,
+    "mean_repair_gain_contaminated": 0.052570086578561694,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh2": {
+    "n_windows": 116,
+    "committed": 40,
+    "commit_rate": 0.3448275862068966,
+    "damage": 0.19827586206896552,
+    "conditional_harm_rate": 0.575,
+    "cond_damage": 0.575,
+    "conditional_mean_loss": 0.575,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 17,
+    "protected_mis_edit_rate": 0.16981132075471697,
+    "protected_stratum_edit": {
+     "clean": 0.14285714285714285,
+     "hard": 0.0,
+     "rare_valid": 0.25,
+     "changepoint": 0.21428571428571427
+    },
+    "coverage": 0.49206349206349204,
+    "beneficial_coverage": 0.2698412698412698,
+    "mean_repair_gain_contaminated": 0.07171129025621499,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTm1": {
+    "n_windows": 106,
+    "committed": 38,
+    "commit_rate": 0.3584905660377358,
+    "damage": 0.11320754716981132,
+    "conditional_harm_rate": 0.3157894736842105,
+    "cond_damage": 0.3157894736842105,
+    "conditional_mean_loss": 0.3157894736842105,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 26,
+    "protected_mis_edit_rate": 0.11764705882352941,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.3333333333333333,
+     "changepoint": 0.21428571428571427
+    },
+    "coverage": 0.4722222222222222,
+    "beneficial_coverage": 0.3611111111111111,
+    "mean_repair_gain_contaminated": 0.15508572856407385,
+    "max_dataset_bs_share": 1.0
+   },
+   "Oil Price": {
+    "n_windows": 86,
+    "committed": 10,
+    "commit_rate": 0.11627906976744186,
+    "damage": 0.011627906976744186,
+    "conditional_harm_rate": 0.1,
+    "cond_damage": 0.1,
+    "conditional_mean_loss": 0.1,
+    "conditional_loss_p90": 0.09999999999999964,
+    "conditional_loss_p95": 0.5499999999999989,
+    "beneficial_commits": 9,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.3125,
+    "beneficial_coverage": 0.28125,
+    "mean_repair_gain_contaminated": 0.1991942307702778,
+    "max_dataset_bs_share": 1.0
+   },
+   "US Term Structure": {
+    "n_windows": 265,
+    "committed": 59,
+    "commit_rate": 0.22264150943396227,
+    "damage": 0.022641509433962263,
+    "conditional_harm_rate": 0.1016949152542373,
+    "cond_damage": 0.1016949152542373,
+    "conditional_mean_loss": 0.1016949152542373,
+    "conditional_loss_p90": 0.20000000000000284,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 53,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.3259668508287293,
+    "beneficial_coverage": 0.292817679558011,
+    "mean_repair_gain_contaminated": 0.16451925863077685,
+    "max_dataset_bs_share": 1.0
+   }
+  },
+  "PICS_joint_relabel": {
+   "Crypto": {
+    "n_windows": 31,
+    "committed": 4,
+    "commit_rate": 0.12903225806451613,
+    "damage": 0.0,
+    "conditional_harm_rate": 0.0,
+    "cond_damage": 0.0,
+    "conditional_mean_loss": 0.0,
+    "conditional_loss_p90": 0.0,
+    "conditional_loss_p95": 0.0,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.2,
+    "beneficial_coverage": 0.2,
+    "mean_repair_gain_contaminated": 0.14497716655854503,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh1": {
+    "n_windows": 167,
+    "committed": 5,
+    "commit_rate": 0.029940119760479042,
+    "damage": 0.005988023952095809,
+    "conditional_harm_rate": 0.2,
+    "cond_damage": 0.2,
+    "conditional_mean_loss": 0.2,
+    "conditional_loss_p90": 0.6000000000000001,
+    "conditional_loss_p95": 0.7999999999999998,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.06944444444444445,
+    "beneficial_coverage": 0.05555555555555555,
+    "mean_repair_gain_contaminated": 0.04214756981455784,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh2": {
+    "n_windows": 116,
+    "committed": 13,
+    "commit_rate": 0.11206896551724138,
+    "damage": 0.05172413793103448,
+    "conditional_harm_rate": 0.46153846153846156,
+    "cond_damage": 0.46153846153846156,
+    "conditional_mean_loss": 0.46153846153846156,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 7,
+    "protected_mis_edit_rate": 0.05660377358490566,
+    "protected_stratum_edit": {
+     "clean": 0.047619047619047616,
+     "hard": 0.0,
+     "rare_valid": 0.16666666666666666,
+     "changepoint": 0.0
+    },
+    "coverage": 0.15873015873015872,
+    "beneficial_coverage": 0.1111111111111111,
+    "mean_repair_gain_contaminated": 0.0370086597030689,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTm1": {
+    "n_windows": 106,
+    "committed": 33,
+    "commit_rate": 0.3113207547169811,
+    "damage": 0.08490566037735849,
+    "conditional_harm_rate": 0.2727272727272727,
+    "cond_damage": 0.2727272727272727,
+    "conditional_mean_loss": 0.2727272727272727,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 24,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.4583333333333333,
+    "beneficial_coverage": 0.3333333333333333,
+    "mean_repair_gain_contaminated": 0.14263483410928948,
+    "max_dataset_bs_share": 1.0
+   },
+   "Oil Price": {
+    "n_windows": 86,
+    "committed": 7,
+    "commit_rate": 0.08139534883720931,
+    "damage": 0.023255813953488372,
+    "conditional_harm_rate": 0.2857142857142857,
+    "cond_damage": 0.2857142857142857,
+    "conditional_mean_loss": 0.2857142857142857,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 5,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.21875,
+    "beneficial_coverage": 0.15625,
+    "mean_repair_gain_contaminated": 0.12886433876243764,
+    "max_dataset_bs_share": 1.0
+   },
+   "US Term Structure": {
+    "n_windows": 265,
+    "committed": 89,
+    "commit_rate": 0.33584905660377357,
+    "damage": 0.04905660377358491,
+    "conditional_harm_rate": 0.14606741573033707,
+    "cond_damage": 0.14606741573033707,
+    "conditional_mean_loss": 0.14606741573033707,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 76,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.49171270718232046,
+    "beneficial_coverage": 0.4198895027624309,
+    "mean_repair_gain_contaminated": 0.09821405423771888,
+    "max_dataset_bs_share": 1.0
+   }
+  },
+  "PICS_TSFM_relabel": {
+   "Crypto": {
+    "n_windows": 31,
+    "committed": 4,
+    "commit_rate": 0.12903225806451613,
+    "damage": 0.0,
+    "conditional_harm_rate": 0.0,
+    "cond_damage": 0.0,
+    "conditional_mean_loss": 0.0,
+    "conditional_loss_p90": 0.0,
+    "conditional_loss_p95": 0.0,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.2,
+    "beneficial_coverage": 0.2,
+    "mean_repair_gain_contaminated": 0.14497716655854503,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh1": {
+    "n_windows": 167,
+    "committed": 5,
+    "commit_rate": 0.029940119760479042,
+    "damage": 0.005988023952095809,
+    "conditional_harm_rate": 0.2,
+    "cond_damage": 0.2,
+    "conditional_mean_loss": 0.2,
+    "conditional_loss_p90": 0.6000000000000001,
+    "conditional_loss_p95": 0.7999999999999998,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.06944444444444445,
+    "beneficial_coverage": 0.05555555555555555,
+    "mean_repair_gain_contaminated": 0.04214756981455784,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh2": {
+    "n_windows": 116,
+    "committed": 12,
+    "commit_rate": 0.10344827586206896,
+    "damage": 0.0603448275862069,
+    "conditional_harm_rate": 0.5833333333333334,
+    "cond_damage": 0.5833333333333334,
+    "conditional_mean_loss": 0.5833333333333334,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 5,
+    "protected_mis_edit_rate": 0.05660377358490566,
+    "protected_stratum_edit": {
+     "clean": 0.09523809523809523,
+     "hard": 0.0,
+     "rare_valid": 0.08333333333333333,
+     "changepoint": 0.0
+    },
+    "coverage": 0.14285714285714285,
+    "beneficial_coverage": 0.07936507936507936,
+    "mean_repair_gain_contaminated": 0.036383017864807625,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTm1": {
+    "n_windows": 106,
+    "committed": 11,
+    "commit_rate": 0.10377358490566038,
+    "damage": 0.009433962264150943,
+    "conditional_harm_rate": 0.09090909090909091,
+    "cond_damage": 0.09090909090909091,
+    "conditional_mean_loss": 0.09090909090909091,
+    "conditional_loss_p90": 0.0,
+    "conditional_loss_p95": 0.5,
+    "beneficial_commits": 10,
+    "protected_mis_edit_rate": 0.029411764705882353,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.3333333333333333,
+     "changepoint": 0.0
+    },
+    "coverage": 0.1388888888888889,
+    "beneficial_coverage": 0.1388888888888889,
+    "mean_repair_gain_contaminated": 0.13227958563191416,
+    "max_dataset_bs_share": 1.0
+   },
+   "Oil Price": {
+    "n_windows": 86,
+    "committed": 5,
+    "commit_rate": 0.05813953488372093,
+    "damage": 0.0,
+    "conditional_harm_rate": 0.0,
+    "cond_damage": 0.0,
+    "conditional_mean_loss": 0.0,
+    "conditional_loss_p90": 0.0,
+    "conditional_loss_p95": 0.0,
+    "beneficial_commits": 5,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.15625,
+    "beneficial_coverage": 0.15625,
+    "mean_repair_gain_contaminated": 0.1293604948189693,
+    "max_dataset_bs_share": 1.0
+   },
+   "US Term Structure": {
+    "n_windows": 265,
+    "committed": 23,
+    "commit_rate": 0.08679245283018867,
+    "damage": 0.0037735849056603774,
+    "conditional_harm_rate": 0.043478260869565216,
+    "cond_damage": 0.043478260869565216,
+    "conditional_mean_loss": 0.043478260869565216,
+    "conditional_loss_p90": 0.0,
+    "conditional_loss_p95": 0.0,
+    "beneficial_commits": 22,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.1270718232044199,
+    "beneficial_coverage": 0.12154696132596685,
+    "mean_repair_gain_contaminated": 0.0908682187184227,
+    "max_dataset_bs_share": 1.0
+   }
+  },
+  "MAST_no_support": {
+   "Crypto": {
+    "n_windows": 31,
+    "committed": 5,
+    "commit_rate": 0.16129032258064516,
+    "damage": 0.0,
+    "conditional_harm_rate": 0.0,
+    "cond_damage": 0.0,
+    "conditional_mean_loss": 0.0,
+    "conditional_loss_p90": 0.0,
+    "conditional_loss_p95": 0.0,
+    "beneficial_commits": 5,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.25,
+    "beneficial_coverage": 0.25,
+    "mean_repair_gain_contaminated": 0.14737042753131693,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh1": {
+    "n_windows": 167,
+    "committed": 7,
+    "commit_rate": 0.041916167664670656,
+    "damage": 0.005988023952095809,
+    "conditional_harm_rate": 0.14285714285714285,
+    "cond_damage": 0.14285714285714285,
+    "conditional_mean_loss": 0.14285714285714285,
+    "conditional_loss_p90": 0.40000000000000036,
+    "conditional_loss_p95": 0.6999999999999993,
+    "beneficial_commits": 6,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.09722222222222222,
+    "beneficial_coverage": 0.08333333333333333,
+    "mean_repair_gain_contaminated": 0.04218388208213976,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh2": {
+    "n_windows": 116,
+    "committed": 31,
+    "commit_rate": 0.2672413793103448,
+    "damage": 0.15517241379310345,
+    "conditional_harm_rate": 0.5806451612903226,
+    "cond_damage": 0.5806451612903226,
+    "conditional_mean_loss": 0.5806451612903226,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 13,
+    "protected_mis_edit_rate": 0.1320754716981132,
+    "protected_stratum_edit": {
+     "clean": 0.19047619047619047,
+     "hard": 0.0,
+     "rare_valid": 0.08333333333333333,
+     "changepoint": 0.14285714285714285
+    },
+    "coverage": 0.38095238095238093,
+    "beneficial_coverage": 0.20634920634920634,
+    "mean_repair_gain_contaminated": 0.06879872382156761,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTm1": {
+    "n_windows": 106,
+    "committed": 33,
+    "commit_rate": 0.3113207547169811,
+    "damage": 0.09433962264150944,
+    "conditional_harm_rate": 0.30303030303030304,
+    "cond_damage": 0.30303030303030304,
+    "conditional_mean_loss": 0.30303030303030304,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 23,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.4583333333333333,
+    "beneficial_coverage": 0.3194444444444444,
+    "mean_repair_gain_contaminated": 0.14259222246494685,
+    "max_dataset_bs_share": 1.0
+   },
+   "Oil Price": {
+    "n_windows": 86,
+    "committed": 10,
+    "commit_rate": 0.11627906976744186,
+    "damage": 0.023255813953488372,
+    "conditional_harm_rate": 0.2,
+    "cond_damage": 0.2,
+    "conditional_mean_loss": 0.2,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 8,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.3125,
+    "beneficial_coverage": 0.25,
+    "mean_repair_gain_contaminated": 0.13268434903159096,
+    "max_dataset_bs_share": 1.0
+   },
+   "US Term Structure": {
+    "n_windows": 265,
+    "committed": 34,
+    "commit_rate": 0.12830188679245283,
+    "damage": 0.01509433962264151,
+    "conditional_harm_rate": 0.11764705882352941,
+    "cond_damage": 0.11764705882352941,
+    "conditional_mean_loss": 0.11764705882352941,
+    "conditional_loss_p90": 0.6999999999999993,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 30,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.1878453038674033,
+    "beneficial_coverage": 0.16574585635359115,
+    "mean_repair_gain_contaminated": 0.10210950789487575,
+    "max_dataset_bs_share": 1.0
+   }
+  },
+  "MAST_support_consequence": {
+   "Crypto": {
+    "n_windows": 31,
+    "committed": 1,
+    "commit_rate": 0.03225806451612903,
+    "damage": 0.0,
+    "conditional_harm_rate": 0.0,
+    "cond_damage": 0.0,
+    "conditional_mean_loss": 0.0,
+    "conditional_loss_p90": 0.0,
+    "conditional_loss_p95": 0.0,
+    "beneficial_commits": 1,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.05,
+    "beneficial_coverage": 0.05,
+    "mean_repair_gain_contaminated": 0.0023932609727718795,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh1": {
+    "n_windows": 167,
+    "committed": 4,
+    "commit_rate": 0.023952095808383235,
+    "damage": 0.0,
+    "conditional_harm_rate": 0.0,
+    "cond_damage": 0.0,
+    "conditional_mean_loss": 0.0,
+    "conditional_loss_p90": 0.0,
+    "conditional_loss_p95": 0.0,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.05555555555555555,
+    "beneficial_coverage": 0.05555555555555555,
+    "mean_repair_gain_contaminated": 0.020403314203377914,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh2": {
+    "n_windows": 116,
+    "committed": 29,
+    "commit_rate": 0.25,
+    "damage": 0.14655172413793102,
+    "conditional_harm_rate": 0.5862068965517241,
+    "cond_damage": 0.5862068965517241,
+    "conditional_mean_loss": 0.5862068965517241,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 12,
+    "protected_mis_edit_rate": 0.1509433962264151,
+    "protected_stratum_edit": {
+     "clean": 0.19047619047619047,
+     "hard": 0.0,
+     "rare_valid": 0.08333333333333333,
+     "changepoint": 0.21428571428571427
+    },
+    "coverage": 0.3333333333333333,
+    "beneficial_coverage": 0.19047619047619047,
+    "mean_repair_gain_contaminated": 0.07179774615695396,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTm1": {
+    "n_windows": 106,
+    "committed": 29,
+    "commit_rate": 0.27358490566037735,
+    "damage": 0.08490566037735849,
+    "conditional_harm_rate": 0.3103448275862069,
+    "cond_damage": 0.3103448275862069,
+    "conditional_mean_loss": 0.3103448275862069,
+    "conditional_loss_p90": 1.0,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 20,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.4027777777777778,
+    "beneficial_coverage": 0.2777777777777778,
+    "mean_repair_gain_contaminated": 0.12470635841620571,
+    "max_dataset_bs_share": 1.0
+   },
+   "Oil Price": {
+    "n_windows": 86,
+    "committed": 7,
+    "commit_rate": 0.08139534883720931,
+    "damage": 0.011627906976744186,
+    "conditional_harm_rate": 0.14285714285714285,
+    "cond_damage": 0.14285714285714285,
+    "conditional_mean_loss": 0.14285714285714285,
+    "conditional_loss_p90": 0.40000000000000036,
+    "conditional_loss_p95": 0.6999999999999993,
+    "beneficial_commits": 6,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.21875,
+    "beneficial_coverage": 0.1875,
+    "mean_repair_gain_contaminated": 0.05766507527895755,
+    "max_dataset_bs_share": 1.0
+   },
+   "US Term Structure": {
+    "n_windows": 265,
+    "committed": 32,
+    "commit_rate": 0.12075471698113208,
+    "damage": 0.01509433962264151,
+    "conditional_harm_rate": 0.125,
+    "cond_damage": 0.125,
+    "conditional_mean_loss": 0.125,
+    "conditional_loss_p90": 0.9000000000000021,
+    "conditional_loss_p95": 1.0,
+    "beneficial_commits": 28,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.17679558011049723,
+    "beneficial_coverage": 0.15469613259668508,
+    "mean_repair_gain_contaminated": 0.08531360262260441,
+    "max_dataset_bs_share": 1.0
+   }
+  },
+  "MAST_v2_hard_structure": {
+   "Crypto": {
+    "n_windows": 31,
+    "committed": 0,
+    "commit_rate": 0.0,
+    "damage": 0.0,
+    "conditional_harm_rate": NaN,
+    "cond_damage": NaN,
+    "conditional_mean_loss": NaN,
+    "conditional_loss_p90": NaN,
+    "conditional_loss_p95": NaN,
+    "beneficial_commits": 0,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.0,
+    "beneficial_coverage": 0.0,
+    "mean_repair_gain_contaminated": 0.0,
+    "max_dataset_bs_share": 0.0
+   },
+   "ETTh1": {
+    "n_windows": 167,
+    "committed": 0,
+    "commit_rate": 0.0,
+    "damage": 0.0,
+    "conditional_harm_rate": NaN,
+    "cond_damage": NaN,
+    "conditional_mean_loss": NaN,
+    "conditional_loss_p90": NaN,
+    "conditional_loss_p95": NaN,
+    "beneficial_commits": 0,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.0,
+    "beneficial_coverage": 0.0,
+    "mean_repair_gain_contaminated": 0.0,
+    "max_dataset_bs_share": 0.0
+   },
+   "ETTh2": {
+    "n_windows": 116,
+    "committed": 0,
+    "commit_rate": 0.0,
+    "damage": 0.0,
+    "conditional_harm_rate": NaN,
+    "cond_damage": NaN,
+    "conditional_mean_loss": NaN,
+    "conditional_loss_p90": NaN,
+    "conditional_loss_p95": NaN,
+    "beneficial_commits": 0,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.0,
+    "beneficial_coverage": 0.0,
+    "mean_repair_gain_contaminated": 0.0,
+    "max_dataset_bs_share": 0.0
+   },
+   "ETTm1": {
+    "n_windows": 106,
+    "committed": 0,
+    "commit_rate": 0.0,
+    "damage": 0.0,
+    "conditional_harm_rate": NaN,
+    "cond_damage": NaN,
+    "conditional_mean_loss": NaN,
+    "conditional_loss_p90": NaN,
+    "conditional_loss_p95": NaN,
+    "beneficial_commits": 0,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.0,
+    "beneficial_coverage": 0.0,
+    "mean_repair_gain_contaminated": 0.0,
+    "max_dataset_bs_share": 0.0
+   },
+   "Oil Price": {
+    "n_windows": 86,
+    "committed": 0,
+    "commit_rate": 0.0,
+    "damage": 0.0,
+    "conditional_harm_rate": NaN,
+    "cond_damage": NaN,
+    "conditional_mean_loss": NaN,
+    "conditional_loss_p90": NaN,
+    "conditional_loss_p95": NaN,
+    "beneficial_commits": 0,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "rare_valid": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.0,
+    "beneficial_coverage": 0.0,
+    "mean_repair_gain_contaminated": 0.0,
+    "max_dataset_bs_share": 0.0
+   },
+   "US Term Structure": {
+    "n_windows": 265,
+    "committed": 0,
+    "commit_rate": 0.0,
+    "damage": 0.0,
+    "conditional_harm_rate": NaN,
+    "cond_damage": NaN,
+    "conditional_mean_loss": NaN,
+    "conditional_loss_p90": NaN,
+    "conditional_loss_p95": NaN,
+    "beneficial_commits": 0,
+    "protected_mis_edit_rate": 0.0,
+    "protected_stratum_edit": {
+     "clean": 0.0,
+     "hard": 0.0,
+     "changepoint": 0.0
+    },
+    "coverage": 0.0,
+    "beneficial_coverage": 0.0,
+    "mean_repair_gain_contaminated": 0.0,
+    "max_dataset_bs_share": 0.0
+   }
+  }
+ },
+ "ood_stress": {
+  "v3_2_bugfix_relabel": {
+   "formal": {
+    "ood:exchange": {
+     "stratum": "real_ood",
+     "n_windows": 2,
+     "proposal_rate": 0.5,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.5625,
+     "edited": 7,
+     "edit_rate": 0.4375,
+     "accept_given_proposal": 0.7777777777777778,
+     "edit_families": {
+      "DENOISE": 3,
+      "DESPIKE": 4
+     },
+     "mean_var_ratio_of_edits": 0.3539201909685694
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:sawtooth": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:solar": {
+     "stratum": "real_ood",
+     "n_windows": 30,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   },
+   "synthetic_overall": {
+    "n_windows": 64,
+    "edited": 7,
+    "edit_rate": 0.109375
+   },
+   "collision_free": {
+    "n_windows": 32,
+    "edited": 7,
+    "edit_rate": 0.21875
+   },
+   "real_ood": {
+    "n_windows": 32,
+    "edited": 0,
+    "edit_rate": 0.0
+   },
+   "historical_dev": {
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 26,
+     "proposal_rate": 1.0,
+     "edited": 18,
+     "edit_rate": 0.6923076923076923,
+     "accept_given_proposal": 0.6923076923076923,
+     "edit_families": {
+      "DENOISE": 9,
+      "DESPIKE": 9
+     },
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 13,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 17,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   }
+  },
+  "PICS_joint_relabel": {
+   "formal": {
+    "ood:exchange": {
+     "stratum": "real_ood",
+     "n_windows": 2,
+     "proposal_rate": 0.5,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.5625,
+     "edited": 4,
+     "edit_rate": 0.25,
+     "accept_given_proposal": 0.4444444444444444,
+     "edit_families": {
+      "DESPIKE": 4
+     },
+     "mean_var_ratio_of_edits": 0.001110769302078511
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:sawtooth": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:solar": {
+     "stratum": "real_ood",
+     "n_windows": 30,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   },
+   "synthetic_overall": {
+    "n_windows": 64,
+    "edited": 4,
+    "edit_rate": 0.0625
+   },
+   "collision_free": {
+    "n_windows": 32,
+    "edited": 4,
+    "edit_rate": 0.125
+   },
+   "real_ood": {
+    "n_windows": 32,
+    "edited": 0,
+    "edit_rate": 0.0
+   },
+   "historical_dev": {
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 26,
+     "proposal_rate": 1.0,
+     "edited": 18,
+     "edit_rate": 0.6923076923076923,
+     "accept_given_proposal": 0.6923076923076923,
+     "edit_families": {
+      "DESPIKE": 18
+     },
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 13,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 17,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   }
+  },
+  "PICS_TSFM_relabel": {
+   "formal": {
+    "ood:exchange": {
+     "stratum": "real_ood",
+     "n_windows": 2,
+     "proposal_rate": 0.5,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.5625,
+     "edited": 4,
+     "edit_rate": 0.25,
+     "accept_given_proposal": 0.4444444444444444,
+     "edit_families": {
+      "DESPIKE": 4
+     },
+     "mean_var_ratio_of_edits": 0.001110769302078511
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:sawtooth": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:solar": {
+     "stratum": "real_ood",
+     "n_windows": 30,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   },
+   "synthetic_overall": {
+    "n_windows": 64,
+    "edited": 4,
+    "edit_rate": 0.0625
+   },
+   "collision_free": {
+    "n_windows": 32,
+    "edited": 4,
+    "edit_rate": 0.125
+   },
+   "real_ood": {
+    "n_windows": 32,
+    "edited": 0,
+    "edit_rate": 0.0
+   },
+   "historical_dev": {
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 26,
+     "proposal_rate": 1.0,
+     "edited": 19,
+     "edit_rate": 0.7307692307692307,
+     "accept_given_proposal": 0.7307692307692307,
+     "edit_families": {
+      "DESPIKE": 19
+     },
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 13,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 17,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   }
+  },
+  "MAST_no_support": {
+   "formal": {
+    "ood:exchange": {
+     "stratum": "real_ood",
+     "n_windows": 2,
+     "proposal_rate": 0.5,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.5625,
+     "edited": 4,
+     "edit_rate": 0.25,
+     "accept_given_proposal": 0.4444444444444444,
+     "edit_families": {
+      "DESPIKE": 4
+     },
+     "mean_var_ratio_of_edits": 0.001110769302078511
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:sawtooth": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:solar": {
+     "stratum": "real_ood",
+     "n_windows": 30,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   },
+   "synthetic_overall": {
+    "n_windows": 64,
+    "edited": 4,
+    "edit_rate": 0.0625
+   },
+   "collision_free": {
+    "n_windows": 32,
+    "edited": 4,
+    "edit_rate": 0.125
+   },
+   "real_ood": {
+    "n_windows": 32,
+    "edited": 0,
+    "edit_rate": 0.0
+   },
+   "historical_dev": {
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 26,
+     "proposal_rate": 1.0,
+     "edited": 19,
+     "edit_rate": 0.7307692307692307,
+     "accept_given_proposal": 0.7307692307692307,
+     "edit_families": {
+      "DESPIKE": 19
+     },
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 13,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 17,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   }
+  },
+  "MAST_support_consequence": {
+   "formal": {
+    "ood:exchange": {
+     "stratum": "real_ood",
+     "n_windows": 2,
+     "proposal_rate": 0.5,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.5625,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:sawtooth": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:solar": {
+     "stratum": "real_ood",
+     "n_windows": 30,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   },
+   "synthetic_overall": {
+    "n_windows": 64,
+    "edited": 0,
+    "edit_rate": 0.0
+   },
+   "collision_free": {
+    "n_windows": 32,
+    "edited": 0,
+    "edit_rate": 0.0
+   },
+   "real_ood": {
+    "n_windows": 32,
+    "edited": 0,
+    "edit_rate": 0.0
+   },
+   "historical_dev": {
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 26,
+     "proposal_rate": 1.0,
+     "edited": 3,
+     "edit_rate": 0.11538461538461539,
+     "accept_given_proposal": 0.11538461538461539,
+     "edit_families": {
+      "DESPIKE": 3
+     },
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 13,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 17,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   }
+  },
+  "MAST_v2_hard_structure": {
+   "formal": {
+    "ood:exchange": {
+     "stratum": "real_ood",
+     "n_windows": 2,
+     "proposal_rate": 0.5,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.5625,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:sawtooth": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:solar": {
+     "stratum": "real_ood",
+     "n_windows": 30,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   },
+   "synthetic_overall": {
+    "n_windows": 64,
+    "edited": 0,
+    "edit_rate": 0.0
+   },
+   "collision_free": {
+    "n_windows": 32,
+    "edited": 0,
+    "edit_rate": 0.0
+   },
+   "real_ood": {
+    "n_windows": 32,
+    "edited": 0,
+    "edit_rate": 0.0
+   },
+   "historical_dev": {
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 26,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 13,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 17,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   }
+  },
+  "v2_frozen_relabel": {
+   "formal": {
+    "ood:exchange": {
+     "stratum": "real_ood",
+     "n_windows": 2,
+     "proposal_rate": 0.5,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:pulse_train": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.5625,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:random_walk": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:sawtooth": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:solar": {
+     "stratum": "real_ood",
+     "n_windows": 30,
+     "proposal_rate": 1.0,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    },
+    "ood:staircase": {
+     "stratum": "clean_ood",
+     "n_windows": 16,
+     "proposal_rate": 0.3125,
+     "edited": 0,
+     "edit_rate": 0.0,
+     "accept_given_proposal": 0.0,
+     "edit_families": {},
+     "mean_var_ratio_of_edits": null
+    }
+   },
+   "synthetic_overall": {
+    "n_windows": 64,
+    "edited": 0,
+    "edit_rate": 0.0
+   },
+   "collision_free": {
+    "n_windows": 32,
+    "edited": 0,
+    "edit_rate": 0.0
+   },
+   "real_ood": {
+    "n_windows": 32,
+    "edited": 0,
+    "edit_rate": 0.0
+   }
+  }
+ },
+ "paired_bootstrap": {
+  "bcov_formal_minus_pics": {
+   "diff": -0.06355382619974059,
+   "ci": [
+    -0.08560311284046693,
+    -0.041504539559014265
+   ]
+  },
+  "damage_formal_minus_pics": {
+   "diff": 0.0,
+   "ci": [
+    -0.01297016861219196,
+    0.01297016861219196
+   ]
+  },
+  "pme_formal_minus_pics": {
+   "diff": 0.006485084306095979,
+   "ci": [
+    0.0,
+    0.014267185473411154
+   ]
+  },
+  "bcov_formal_minus_v2": {
+   "diff": 0.07782101167315175,
+   "ci": [
+    0.055771725032425425,
+    0.09987029831387809
+   ]
+  },
+  "bcov_pics_minus_v2": {
+   "diff": 0.14137483787289234,
+   "ci": [
+    0.11413748378728923,
+    0.16861219195849547
+   ]
+  }
+ },
+ "cond_mean_loss_bootstrap": {
+  "diff_ci": [
+   0.02607063443934274,
+   0.17579625637712146
+  ]
+ },
+ "chr_ci_formal": [
+  0.21359223300970873,
+  0.39814814814814814
+ ],
+ "gates": {
+  "pme<=0.0055": false,
+  "synthetic_ood_edit<=0.05": true,
+  "real_ood_edit<=0.05": true,
+  "CHR<=0.10": false,
+  "cond_mean_loss<pics": false,
+  "max_dataset_bs_share<=0.50": true,
+  "protected_strata_not_worse": false,
+  "bcov>=1.10*pics": false,
+  "beneficial_commits>=10": true,
+  "cont_mean_gain>=pics": false,
+  "coverage>v2_frozen": true,
+  "pareto_strict_improvement": false,
+  "three_synthetic_forms<=0.05": true,
+  "collision_free<=0.05": true
+ },
+ "gates_pass": false,
+ "config": {
+  "alpha": 0.03,
+  "split": "leave-one-dataset-out",
+  "split_seed": 20260901,
+  "bootstrap": 10000,
+  "labels": "v3.3 action-semantic (IMPUTE materialised KEEP)",
+  "alias_note": "cond_damage is the v3.2 name for conditional_harm_rate",
+  "eligible_families": [
+   "DENOISE",
+   "DESPIKE",
+   "IMPUTE"
+  ],
+  "mast_benefit_target": "beneficial",
+  "mast_harm_target": "harmful"
+ }
+}

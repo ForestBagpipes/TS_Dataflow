@@ -1,0 +1,640 @@
+{
+ "phase": "v3.5 Phase 0 ACV support audit (structural, no TSFM)",
+ "preregistration": "docs/v3_5_acv_preregistration.md \u00a72, \u00a74",
+ "anchor_rule": {
+  "horizons": [
+   8,
+   16,
+   32
+  ],
+  "max_anchors": 3,
+  "horizon_choice": "multi-horizon (adopted): one anchor per feasible horizon per support run, tried in order 8, 16, 32; legacy Phase-0 reading (largest feasible per run) reported under anchor_readings.legacy_per_run",
+  "cap_rule": "sha256(sample_uid|acv-anchor|run_lo|run_hi|horizon) ordering; deterministic in (uid, support) only",
+  "eligibility": "finite in corrupted series AND outside changed support AND inside retained span (RESEGMENT keeps [lo,hi); all others keep the whole window)"
+ },
+ "keep_handling": {
+  "keep_in_candidate_table": false,
+  "rule": "KEEP is implicit and always legal; empty support, no anchors of its own, prequential_supported=0, support_conformity_supported=0; it borrows other candidates' anchors as the baseline arm (\u00a72.4 shared target/anchor/context) and its tournament score is fixed at 0 (\u00a77)."
+ },
+ "conformity_criterion": {
+  "min_context_points": 8,
+  "rule": "support non-empty AND at least MIN_CONFORMITY_CONTEXT finite, untouched, retained context points exist"
+ },
+ "reconstruction": {
+  "method": "build_calibration.build(n=1600, seed=101, source='mixed') rebuilt the frozen corpus; windows matched to candidates by corrupted_hash and re-verified against the p0 manifest",
+  "n_windows_rebuilt": 1599,
+  "n_windows_matched": 827,
+  "n_unmatched_uids": 0,
+  "n_hash_mismatches": 0,
+  "manifest_sha256_of_file": "6d7d05a506745a5f6da9114ef08ac37b58e102b6cbee6b740ae5247c42d9b15e"
+ },
+ "population": {
+  "n_candidates": 2414,
+  "n_windows": 827,
+  "family_counts": {
+   "RESEGMENT": 758,
+   "IMPUTE": 1154,
+   "DENOISE": 267,
+   "DESPIKE": 235
+  },
+  "rung_counts": {
+   "RESEGMENT/aggressive": 284,
+   "RESEGMENT/conservative": 292,
+   "RESEGMENT/default": 182,
+   "IMPUTE/aggressive": 445,
+   "IMPUTE/conservative": 264,
+   "IMPUTE/default": 445,
+   "DENOISE/aggressive": 89,
+   "DENOISE/conservative": 89,
+   "DENOISE/default": 89,
+   "DESPIKE/aggressive": 82,
+   "DESPIKE/conservative": 71,
+   "DESPIKE/default": 82
+  },
+  "source_counts": {
+   "Crypto": 99,
+   "ETTh1": 459,
+   "ETTh2": 406,
+   "ETTm1": 316,
+   "Oil Price": 220,
+   "US Term Structure": 700,
+   "ood:pulse_train": 125,
+   "ood:random_walk": 17,
+   "ood:staircase": 72
+  },
+  "geometry_counts": {
+   "block": 2160,
+   "scattered": 254
+  },
+  "n_eligible_nonempty_support": 2414
+ },
+ "coverage": {
+  "all_candidates": {
+   "n": 2414,
+   "n_support_nonempty": 2414,
+   "n_anchors_ge1": 1842,
+   "n_anchors_ge2": 1826,
+   "n_anchors_ge3": 1814,
+   "share_anchors_ge1": 0.7630488815244407,
+   "share_anchors_ge2": 0.7564208782104391,
+   "share_anchors_ge3": 0.7514498757249378,
+   "n_prequential_supported": 1842,
+   "n_conformity_supported": 2149,
+   "n_either_supported": 2149
+  },
+  "eligible": {
+   "n": 2414,
+   "n_support_nonempty": 2414,
+   "n_anchors_ge1": 1842,
+   "n_anchors_ge2": 1826,
+   "n_anchors_ge3": 1814,
+   "share_anchors_ge1": 0.7630488815244407,
+   "share_anchors_ge2": 0.7564208782104391,
+   "share_anchors_ge3": 0.7514498757249378,
+   "n_prequential_supported": 1842,
+   "n_conformity_supported": 2149,
+   "n_either_supported": 2149
+  },
+  "per_family": {
+   "IMPUTE": {
+    "n": 1154,
+    "n_support_nonempty": 1154,
+    "n_anchors_ge1": 1135,
+    "n_anchors_ge2": 1129,
+    "n_anchors_ge3": 1122,
+    "share_anchors_ge1": 0.9835355285961872,
+    "share_anchors_ge2": 0.9783362218370883,
+    "share_anchors_ge3": 0.9722703639514731,
+    "n_prequential_supported": 1135,
+    "n_conformity_supported": 1154,
+    "n_either_supported": 1154
+   },
+   "DESPIKE": {
+    "n": 235,
+    "n_support_nonempty": 235,
+    "n_anchors_ge1": 234,
+    "n_anchors_ge2": 233,
+    "n_anchors_ge3": 232,
+    "share_anchors_ge1": 0.9957446808510638,
+    "share_anchors_ge2": 0.9914893617021276,
+    "share_anchors_ge3": 0.9872340425531915,
+    "n_prequential_supported": 234,
+    "n_conformity_supported": 235,
+    "n_either_supported": 235
+   },
+   "DENOISE": {
+    "n": 267,
+    "n_support_nonempty": 267,
+    "n_anchors_ge1": 2,
+    "n_anchors_ge2": 1,
+    "n_anchors_ge3": 0,
+    "share_anchors_ge1": 0.00749063670411985,
+    "share_anchors_ge2": 0.003745318352059925,
+    "share_anchors_ge3": 0.0,
+    "n_prequential_supported": 2,
+    "n_conformity_supported": 2,
+    "n_either_supported": 2
+   },
+   "RESEGMENT": {
+    "n": 758,
+    "n_support_nonempty": 758,
+    "n_anchors_ge1": 471,
+    "n_anchors_ge2": 463,
+    "n_anchors_ge3": 460,
+    "share_anchors_ge1": 0.6213720316622692,
+    "share_anchors_ge2": 0.6108179419525066,
+    "share_anchors_ge3": 0.6068601583113457,
+    "n_prequential_supported": 471,
+    "n_conformity_supported": 758,
+    "n_either_supported": 758
+   }
+  },
+  "eligible_per_family": {
+   "IMPUTE": {
+    "n": 1154,
+    "n_support_nonempty": 1154,
+    "n_anchors_ge1": 1135,
+    "n_anchors_ge2": 1129,
+    "n_anchors_ge3": 1122,
+    "share_anchors_ge1": 0.9835355285961872,
+    "share_anchors_ge2": 0.9783362218370883,
+    "share_anchors_ge3": 0.9722703639514731,
+    "n_prequential_supported": 1135,
+    "n_conformity_supported": 1154,
+    "n_either_supported": 1154
+   },
+   "DESPIKE": {
+    "n": 235,
+    "n_support_nonempty": 235,
+    "n_anchors_ge1": 234,
+    "n_anchors_ge2": 233,
+    "n_anchors_ge3": 232,
+    "share_anchors_ge1": 0.9957446808510638,
+    "share_anchors_ge2": 0.9914893617021276,
+    "share_anchors_ge3": 0.9872340425531915,
+    "n_prequential_supported": 234,
+    "n_conformity_supported": 235,
+    "n_either_supported": 235
+   },
+   "DENOISE": {
+    "n": 267,
+    "n_support_nonempty": 267,
+    "n_anchors_ge1": 2,
+    "n_anchors_ge2": 1,
+    "n_anchors_ge3": 0,
+    "share_anchors_ge1": 0.00749063670411985,
+    "share_anchors_ge2": 0.003745318352059925,
+    "share_anchors_ge3": 0.0,
+    "n_prequential_supported": 2,
+    "n_conformity_supported": 2,
+    "n_either_supported": 2
+   },
+   "RESEGMENT": {
+    "n": 758,
+    "n_support_nonempty": 758,
+    "n_anchors_ge1": 471,
+    "n_anchors_ge2": 463,
+    "n_anchors_ge3": 460,
+    "share_anchors_ge1": 0.6213720316622692,
+    "share_anchors_ge2": 0.6108179419525066,
+    "share_anchors_ge3": 0.6068601583113457,
+    "n_prequential_supported": 471,
+    "n_conformity_supported": 758,
+    "n_either_supported": 758
+   }
+  },
+  "per_source": {
+   "Crypto": {
+    "n": 99,
+    "n_support_nonempty": 99,
+    "n_anchors_ge1": 61,
+    "n_anchors_ge2": 61,
+    "n_anchors_ge3": 61,
+    "share_anchors_ge1": 0.6161616161616161,
+    "share_anchors_ge2": 0.6161616161616161,
+    "share_anchors_ge3": 0.6161616161616161,
+    "n_prequential_supported": 61,
+    "n_conformity_supported": 90,
+    "n_either_supported": 90
+   },
+   "ETTh1": {
+    "n": 459,
+    "n_support_nonempty": 459,
+    "n_anchors_ge1": 403,
+    "n_anchors_ge2": 396,
+    "n_anchors_ge3": 388,
+    "share_anchors_ge1": 0.8779956427015251,
+    "share_anchors_ge2": 0.8627450980392157,
+    "share_anchors_ge3": 0.8453159041394336,
+    "n_prequential_supported": 403,
+    "n_conformity_supported": 441,
+    "n_either_supported": 441
+   },
+   "ETTh2": {
+    "n": 406,
+    "n_support_nonempty": 406,
+    "n_anchors_ge1": 337,
+    "n_anchors_ge2": 336,
+    "n_anchors_ge3": 335,
+    "share_anchors_ge1": 0.8300492610837439,
+    "share_anchors_ge2": 0.8275862068965517,
+    "share_anchors_ge3": 0.8251231527093597,
+    "n_prequential_supported": 337,
+    "n_conformity_supported": 375,
+    "n_either_supported": 375
+   },
+   "ETTm1": {
+    "n": 316,
+    "n_support_nonempty": 316,
+    "n_anchors_ge1": 272,
+    "n_anchors_ge2": 272,
+    "n_anchors_ge3": 271,
+    "share_anchors_ge1": 0.8607594936708861,
+    "share_anchors_ge2": 0.8607594936708861,
+    "share_anchors_ge3": 0.8575949367088608,
+    "n_prequential_supported": 272,
+    "n_conformity_supported": 298,
+    "n_either_supported": 298
+   },
+   "Oil Price": {
+    "n": 220,
+    "n_support_nonempty": 220,
+    "n_anchors_ge1": 143,
+    "n_anchors_ge2": 143,
+    "n_anchors_ge3": 143,
+    "share_anchors_ge1": 0.65,
+    "share_anchors_ge2": 0.65,
+    "share_anchors_ge3": 0.65,
+    "n_prequential_supported": 143,
+    "n_conformity_supported": 205,
+    "n_either_supported": 205
+   },
+   "US Term Structure": {
+    "n": 700,
+    "n_support_nonempty": 700,
+    "n_anchors_ge1": 548,
+    "n_anchors_ge2": 541,
+    "n_anchors_ge3": 539,
+    "share_anchors_ge1": 0.7828571428571428,
+    "share_anchors_ge2": 0.7728571428571429,
+    "share_anchors_ge3": 0.77,
+    "n_prequential_supported": 548,
+    "n_conformity_supported": 649,
+    "n_either_supported": 649
+   },
+   "ood:pulse_train": {
+    "n": 125,
+    "n_support_nonempty": 125,
+    "n_anchors_ge1": 46,
+    "n_anchors_ge2": 45,
+    "n_anchors_ge3": 45,
+    "share_anchors_ge1": 0.368,
+    "share_anchors_ge2": 0.36,
+    "share_anchors_ge3": 0.36,
+    "n_prequential_supported": 46,
+    "n_conformity_supported": 47,
+    "n_either_supported": 47
+   },
+   "ood:random_walk": {
+    "n": 17,
+    "n_support_nonempty": 17,
+    "n_anchors_ge1": 10,
+    "n_anchors_ge2": 10,
+    "n_anchors_ge3": 10,
+    "share_anchors_ge1": 0.5882352941176471,
+    "share_anchors_ge2": 0.5882352941176471,
+    "share_anchors_ge3": 0.5882352941176471,
+    "n_prequential_supported": 10,
+    "n_conformity_supported": 17,
+    "n_either_supported": 17
+   },
+   "ood:staircase": {
+    "n": 72,
+    "n_support_nonempty": 72,
+    "n_anchors_ge1": 22,
+    "n_anchors_ge2": 22,
+    "n_anchors_ge3": 22,
+    "share_anchors_ge1": 0.3055555555555556,
+    "share_anchors_ge2": 0.3055555555555556,
+    "share_anchors_ge3": 0.3055555555555556,
+    "n_prequential_supported": 22,
+    "n_conformity_supported": 27,
+    "n_either_supported": 27
+   }
+  },
+  "per_geometry": {
+   "block": {
+    "n": 2160,
+    "n_support_nonempty": 2160,
+    "n_anchors_ge1": 1597,
+    "n_anchors_ge2": 1589,
+    "n_anchors_ge3": 1581,
+    "share_anchors_ge1": 0.7393518518518518,
+    "share_anchors_ge2": 0.7356481481481482,
+    "share_anchors_ge3": 0.7319444444444444,
+    "n_prequential_supported": 1597,
+    "n_conformity_supported": 1895,
+    "n_either_supported": 1895
+   },
+   "scattered": {
+    "n": 254,
+    "n_support_nonempty": 254,
+    "n_anchors_ge1": 245,
+    "n_anchors_ge2": 237,
+    "n_anchors_ge3": 233,
+    "share_anchors_ge1": 0.9645669291338582,
+    "share_anchors_ge2": 0.9330708661417323,
+    "share_anchors_ge3": 0.9173228346456693,
+    "n_prequential_supported": 245,
+    "n_conformity_supported": 254,
+    "n_either_supported": 254
+   }
+  }
+ },
+ "window_structure": {
+  "candidates_per_window": {
+   "1": 115,
+   "2": 178,
+   "3": 362,
+   "4": 57,
+   "5": 61,
+   "6": 54
+  },
+  "distinct_families_per_window": {
+   "1": 642,
+   "2": 185
+  },
+  "tournament_by_stratum": {
+   "changepoint": {
+    "n_windows": 113,
+    "n_windows_ge2_candidates": 83,
+    "n_windows_ge2_candidates_with_anchor": 46
+   },
+   "clean": {
+    "n_windows": 106,
+    "n_windows_ge2_candidates": 69,
+    "n_windows_ge2_candidates_with_anchor": 58
+   },
+   "clean_ood": {
+    "n_windows": 56,
+    "n_windows_ge2_candidates": 45,
+    "n_windows_ge2_candidates_with_anchor": 26
+   },
+   "contaminated": {
+    "n_windows": 440,
+    "n_windows_ge2_candidates": 416,
+    "n_windows_ge2_candidates_with_anchor": 363
+   },
+   "hard": {
+    "n_windows": 51,
+    "n_windows_ge2_candidates": 39,
+    "n_windows_ge2_candidates_with_anchor": 31
+   },
+   "rare_valid": {
+    "n_windows": 61,
+    "n_windows_ge2_candidates": 60,
+    "n_windows_ge2_candidates_with_anchor": 57
+   }
+  }
+ },
+ "anchor_failure": {
+  "n_eligible_no_anchor": 572,
+  "share_of_eligible": 0.23695111847555925,
+  "reasons": {
+   "support_reaches_window_end": 572
+  },
+  "by_family": {
+   "RESEGMENT": 287,
+   "DENOISE": 265,
+   "IMPUTE": 19,
+   "DESPIKE": 1
+  },
+  "note": "support_reaches_window_end = support extends to the window tail leaving < min(horizons) real observations; fragmented_tail = eligible points exist after the support but no contiguous block reaches horizon 8"
+ },
+ "evidence_coverage": {
+  "n_candidates": 2414,
+  "n_prequential_supported": 1842,
+  "n_conformity_supported": 2149,
+  "n_either_supported": 2149,
+  "share_either_supported": 0.8902236951118475
+ },
+ "anchor_readings": {
+  "adopted": "multi_horizon",
+  "multi_horizon": {
+   "rule": "n_anchors = min(3, sum of feasible horizons over runs)",
+   "share_ge1": 0.7630488815244407,
+   "share_ge2": 0.7564208782104391,
+   "share_ge3": 0.7514498757249378,
+   "per_family": {
+    "IMPUTE": {
+     "n": 1154,
+     "share_ge1": 0.9835355285961872,
+     "share_ge2": 0.9783362218370883
+    },
+    "DESPIKE": {
+     "n": 235,
+     "share_ge1": 0.9957446808510638,
+     "share_ge2": 0.9914893617021276
+    },
+    "DENOISE": {
+     "n": 267,
+     "share_ge1": 0.00749063670411985,
+     "share_ge2": 0.003745318352059925
+    },
+    "RESEGMENT": {
+     "n": 758,
+     "share_ge1": 0.6213720316622692,
+     "share_ge2": 0.6108179419525066
+    }
+   }
+  },
+  "legacy_per_run": {
+   "rule": "n_anchors = min(3, n_runs with any feasible horizon, largest horizon each)",
+   "share_ge1": 0.7630488815244407,
+   "share_ge2": 0.2328086164043082,
+   "share_ge3": 0.2087821043910522,
+   "per_family": {
+    "IMPUTE": {
+     "n": 1154,
+     "share_ge1": 0.9835355285961872,
+     "share_ge2": 0.29636048526863085
+    },
+    "DESPIKE": {
+     "n": 235,
+     "share_ge1": 0.9957446808510638,
+     "share_ge2": 0.9361702127659575
+    },
+    "DENOISE": {
+     "n": 267,
+     "share_ge1": 0.00749063670411985,
+     "share_ge2": 0.0
+    },
+    "RESEGMENT": {
+     "n": 758,
+     "share_ge1": 0.6213720316622692,
+     "share_ge2": 0.0
+    }
+   }
+  },
+  "note": "Phase 0 froze legacy_per_run; the main agent adopted the multi-horizon reading of \u00a72.3 (2026-09). Gate 2 (>=85% with >=1 anchor) FAILS under both readings (76.3%): the bottleneck is DENOISE whole-window rewrites and RESEGMENT tail cuts -- the prequential applicability boundary, pre-registered as non-stopping (\u00a74)."
+ },
+ "prequential_applicability_boundary": {
+  "family": {
+   "DENOISE": {
+    "n_eligible": 267,
+    "share_no_anchor": 0.9925093632958801,
+    "excluded": true
+   },
+   "DESPIKE": {
+    "n_eligible": 235,
+    "share_no_anchor": 0.00425531914893617,
+    "excluded": false
+   },
+   "IMPUTE": {
+    "n_eligible": 1154,
+    "share_no_anchor": 0.016464471403812825,
+    "excluded": false
+   },
+   "RESEGMENT": {
+    "n_eligible": 758,
+    "share_no_anchor": 0.3786279683377309,
+    "excluded": false
+   }
+  },
+  "source": {
+   "Crypto": {
+    "n_eligible": 99,
+    "share_no_anchor": 0.3838383838383838,
+    "excluded": false
+   },
+   "ETTh1": {
+    "n_eligible": 459,
+    "share_no_anchor": 0.12200435729847495,
+    "excluded": false
+   },
+   "ETTh2": {
+    "n_eligible": 406,
+    "share_no_anchor": 0.16995073891625614,
+    "excluded": false
+   },
+   "ETTm1": {
+    "n_eligible": 316,
+    "share_no_anchor": 0.13924050632911392,
+    "excluded": false
+   },
+   "Oil Price": {
+    "n_eligible": 220,
+    "share_no_anchor": 0.35,
+    "excluded": false
+   },
+   "US Term Structure": {
+    "n_eligible": 700,
+    "share_no_anchor": 0.21714285714285714,
+    "excluded": false
+   },
+   "ood:pulse_train": {
+    "n_eligible": 125,
+    "share_no_anchor": 0.632,
+    "excluded": true
+   },
+   "ood:random_walk": {
+    "n_eligible": 17,
+    "share_no_anchor": 0.4117647058823529,
+    "excluded": false
+   },
+   "ood:staircase": {
+    "n_eligible": 72,
+    "share_no_anchor": 0.6944444444444444,
+    "excluded": true
+   }
+  },
+  "geometry": {
+   "block": {
+    "n_eligible": 2160,
+    "share_no_anchor": 0.26064814814814813,
+    "excluded": false
+   },
+   "scattered": {
+    "n_eligible": 254,
+    "share_no_anchor": 0.03543307086614173,
+    "excluded": false
+   }
+  },
+  "family_x_geometry": {
+   "DENOISE|block": {
+    "n_eligible": 267,
+    "share_no_anchor": 0.9925093632958801,
+    "excluded": true
+   },
+   "DESPIKE|block": {
+    "n_eligible": 232,
+    "share_no_anchor": 0.004310344827586207,
+    "excluded": false
+   },
+   "DESPIKE|scattered": {
+    "n_eligible": 3,
+    "share_no_anchor": 0.0,
+    "excluded": false
+   },
+   "IMPUTE|block": {
+    "n_eligible": 929,
+    "share_no_anchor": 0.02045209903121636,
+    "excluded": false
+   },
+   "IMPUTE|scattered": {
+    "n_eligible": 225,
+    "share_no_anchor": 0.0,
+    "excluded": false
+   },
+   "RESEGMENT|block": {
+    "n_eligible": 732,
+    "share_no_anchor": 0.3797814207650273,
+    "excluded": false
+   },
+   "RESEGMENT|scattered": {
+    "n_eligible": 26,
+    "share_no_anchor": 0.34615384615384615,
+    "excluded": false
+   }
+  }
+ },
+ "gates": {
+  "gate1_support_verifiable": {
+   "pass": true,
+   "n_candidates": 2414,
+   "n_output_hash_mismatches": 0,
+   "mismatches_by_family": {},
+   "uncovered_families": []
+  },
+  "gate2_anchor_coverage_ge1": {
+   "pass": false,
+   "share": 0.7630488815244407,
+   "threshold": 0.85,
+   "n_eligible": 2414,
+   "eligible_definition": "candidates with non-empty changed support (KEEP implicit, no support, excluded from the denominator)"
+  },
+  "gate3_anchor_coverage_ge2": {
+   "pass": true,
+   "share": 0.7564208782104391,
+   "threshold": 0.7,
+   "n_eligible": 2414
+  },
+  "gate4_anchor_support_disjoint": {
+   "pass": true,
+   "note": "anchor target intersects changed support for no candidate (asserted per candidate and re-verified here)"
+  },
+  "gate5_anchor_targets_finite": {
+   "pass": true,
+   "note": "every anchor target point is an original finite observation of the corrupted window; no materialised NaN is ever a target"
+  }
+ },
+ "verdict": "FAIL",
+ "code_hashes": {
+  "experiments/v35_acv_support_audit.py": "875add751c99e389673524a943b6fb3792e8bcebeb6827463c1be717c112255d",
+  "experiments/v35_acv_common.py": "c6c5f174c0c1bc52f783d908b351b58bc28b328002dad3fd3868f49f52d0b216",
+  "src/introact_ts/actions.py": "f94ba0e5d453c9fd0e139d887b96e450a0d4aeda85d2cad5978678550f44cdf2",
+  "src/introact_ts/probe.py": "22ded3d21137d958d823d6dd91c8d15a756548712b2a437e69a04b5498ee6af4",
+  "experiments/v33_labels.py": "0a701300cde415e206bee15970a4b88d0ac9c8a45bc771ad4ef11d70b52df7bb"
+ },
+ "elapsed_seconds": 14.245340347290039
+}

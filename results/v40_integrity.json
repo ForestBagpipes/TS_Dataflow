@@ -1,0 +1,130 @@
+{
+ "phase": "v4.0 Phase 0 integrity (docs/v4_0_counteract_preregistration.md §2)",
+ "checks": {
+  "input_hashes": {
+   "results/v33_training_data.jsonl": {
+    "recorded_by_v39": "84ab59d9e63048586ba7ddbc44398a729d927fe924411b8bc345b6ad97e282ef",
+    "recomputed": "84ab59d9e63048586ba7ddbc44398a729d927fe924411b8bc345b6ad97e282ef",
+    "match": true
+   },
+   "results/v33_clean_rerun.json": {
+    "recorded_by_v39": "976780a3d74756a1bd295c4af8ba2b5aa589c7959de4c7db62f95f0ff677311b",
+    "recomputed": "976780a3d74756a1bd295c4af8ba2b5aa589c7959de4c7db62f95f0ff677311b",
+    "match": true
+   },
+   "results/v38_oracle_replay.json": {
+    "recorded_by_v39": "21d2126adde772dd818c1f55e824ca2944b3d531dff8b92c5fc62f0751cdcc59",
+    "recomputed": "21d2126adde772dd818c1f55e824ca2944b3d531dff8b92c5fc62f0751cdcc59",
+    "match": true
+   },
+   "results/v38_impute_mask_records.jsonl": {
+    "recorded_by_v39": "6d1a56c1986d0d921f9eb06f2cb8637be77a9fcf65ef1cae498b614223f1a9d3",
+    "recomputed": "6d1a56c1986d0d921f9eb06f2cb8637be77a9fcf65ef1cae498b614223f1a9d3",
+    "match": true
+   },
+   "results/v38_explicit_impute_records.jsonl": {
+    "recorded_by_v39": "78e733696298352b717024443f57617c4597c79ea416478a9e30d1e0924a0a58",
+    "recomputed": "78e733696298352b717024443f57617c4597c79ea416478a9e30d1e0924a0a58",
+    "match": true
+   },
+   "results/v38_explicit_impute_probe.json": {
+    "recorded_by_v39": null,
+    "recomputed": "99b6ddba4da7eec59e41087dff5ec138f395f3d1425c53d2307cffe836583aa5",
+    "match": null
+   },
+   "results/p0_corpus_manifest_a.json": {
+    "recorded_by_v39": "6d7d05a506745a5f6da9114ef08ac37b58e102b6cbee6b740ae5247c42d9b15e",
+    "recomputed": "6d7d05a506745a5f6da9114ef08ac37b58e102b6cbee6b740ae5247c42d9b15e",
+    "match": true
+   },
+   "results/v39_phase0_replay.json": {
+    "recorded_by_v39": "48e02de69f0538cd19abe92ada266f15a2ea1b12ae80109a8ffc490626baad23",
+    "recomputed": "48e02de69f0538cd19abe92ada266f15a2ea1b12ae80109a8ffc490626baad23",
+    "match": true
+   },
+   "results/v39_phase0_records.jsonl": {
+    "recorded_by_v39": "50b4606840f4c9dbde77599c64521ed1b510136e6326381c36d712b68f9cef80",
+    "recomputed": "50b4606840f4c9dbde77599c64521ed1b510136e6326381c36d712b68f9cef80",
+    "match": true
+   },
+   "results/v39_target_budget.json": {
+    "recorded_by_v39": "5ec5e719c2875c3c528d95ce6ec0def12237621edb862302e7e1c9d68a1509b6",
+    "recomputed": "5ec5e719c2875c3c528d95ce6ec0def12237621edb862302e7e1c9d68a1509b6",
+    "match": true
+   },
+   "results/v39_longgap_candidates.jsonl": {
+    "recorded_by_v39": "44a0327ecdd136b167a818994ac17191562fe348aaac386acd53b4288c6f4af6",
+    "recomputed": "44a0327ecdd136b167a818994ac17191562fe348aaac386acd53b4288c6f4af6",
+    "match": true
+   },
+   "results/v39_longgap_probe.json": {
+    "recorded_by_v39": null,
+    "recomputed": "53cfd4908f959e44756eb2b1abba8ef543f9ccaed6cdec3539d811770eae9c00",
+    "match": null
+   },
+   "results/v39_longgap_oracle.json": {
+    "recorded_by_v39": null,
+    "recomputed": "f687d2c8bc4d1a492787c0966b221eeadb59b6e4e342c03cad008efec81b098c",
+    "match": null
+   },
+   "results/v39_model_manifest.json": {
+    "recorded_by_v39": null,
+    "recomputed": "a57cb5f05660fbf5c70291a409d58015f4bcaeefb90f70942806a187352f800a",
+    "match": null
+   }
+  },
+  "eval_frame": {
+   "n_eval_uids": 771,
+   "n_longgap_uids": 89,
+   "longgap_subset_of_eval": true,
+   "n_longgap_candidate_records": 801
+  },
+  "corpus_manifest": {
+   "n_records": 1599,
+   "uids_unique": true
+  },
+  "incumbent_spotcheck": {
+   "beneficial_coverage": {
+    "expected_4dp": 0.2727,
+    "frozen": 0.2727272727272727,
+    "match_4dp": true
+   },
+   "conditional_harm_rate": {
+    "expected_4dp": 0.2053,
+    "frozen": 0.2052980132450331,
+    "match_4dp": true
+   },
+   "protected_mis_edit_rate": {
+    "expected_4dp": 0.0091,
+    "frozen": 0.00906344410876133,
+    "match_4dp": true
+   },
+   "mean_repair_gain_contaminated": {
+    "expected_4dp": 0.0919,
+    "frozen": 0.09189960143728719,
+    "match_4dp": true
+   },
+   "damage": {
+    "expected_4dp": 0.0402,
+    "frozen": 0.040207522697795074,
+    "match_4dp": true
+   }
+  },
+  "uid_isolation_plan": {
+   "bank_uid_namespaces": [
+    "v40parent:",
+    "v40ep-"
+   ],
+   "namespace_collision_possible": false,
+   "content_isolation": "parent series sha256 must not occur among the 1599 manifest clean/corrupted hashes; parent first-16-value md5 must not collide with any rebuilt corpus window (position-collision guard)",
+   "concrete_assertion_file": "v40_bank_isolation.json",
+   "concrete_assertion_status": "pending parents stage",
+   "clean_parent_uid_partition": "parent_split(): sha256(parent_uid) first byte <204 train, <230 val, else test; a parent uid maps to exactly one split by construction",
+   "lodo_rule": "the 6 development sources stay LODO-isolated: in a leave-one-source-out fold, bank windows derived from the held-out source never enter training; the 2 new public sources are training-only",
+   "longgap_89_rule": "the 89 frozen long-gap windows are evaluation only: no training, no threshold selection"
+  }
+ },
+ "n_hash_mismatch": 0,
+ "all_pass": true,
+ "runtime_sec": 0.19194388389587402
+}

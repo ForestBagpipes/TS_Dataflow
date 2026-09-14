@@ -14,7 +14,7 @@ from .actions import ActionOutcome, apply_action
 from .agent import AgentConfig, IntroActAgent
 from .calibration import PeerCalibration, calibrate, ood_scores, recalibrate_one
 from .policy import PolicyConfig, propose_actions
-from .probe import ProbeConfig, SIGNAL_NAMES, probe_window, reference_scale
+from .probe import ProbeConfig, SIGNAL_NAMES, materialize_for_probe, probe_window, reference_scale
 from .profiling import extract_statistical_profile
 from .risk import RiskState, build_risk_state, statistical_evidence
 from .structure import structure_distortion
@@ -54,6 +54,7 @@ __all__ = [
     "calibrate",
     "extract_statistical_profile",
     "make_model_pool",
+    "materialize_for_probe",
     "ood_scores",
     "probe_window",
     "propose_actions",

@@ -1,0 +1,88 @@
+{
+ "n_windows": 1599,
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "epochs": 40,
+ "signature_by_stratum": {
+  "changepoint": {
+   "n": 169,
+   "learn_speed": 0.27499999999999997,
+   "aulc": 0.2310038500511115,
+   "forget_n": 2.6666666666666665,
+   "el2n_early": 1.738805850346883,
+   "tail_slope": -0.008453658522479758,
+   "final_loss": 0.9789455731709799,
+   "seed_var": 0.005912493531083578
+  },
+  "clean": {
+   "n": 338,
+   "learn_speed": 0.25833333333333336,
+   "aulc": 0.14027681565974115,
+   "forget_n": 2.6666666666666665,
+   "el2n_early": 1.5464777747790017,
+   "tail_slope": -0.008827797757369627,
+   "final_loss": 0.9242965512805515,
+   "seed_var": 0.004465208634306456
+  },
+  "clean_ood": {
+   "n": 169,
+   "learn_speed": 0.19166666666666665,
+   "aulc": 0.2781833664319927,
+   "forget_n": 2.3333333333333335,
+   "el2n_early": 1.4884497721989949,
+   "tail_slope": -0.007036704050404931,
+   "final_loss": 1.1151166160901387,
+   "seed_var": 0.005887304772742565
+  },
+  "contaminated": {
+   "n": 596,
+   "learn_speed": 0.25,
+   "aulc": 0.29824383187478964,
+   "forget_n": 3.6666666666666665,
+   "el2n_early": 1.6619653105735779,
+   "tail_slope": -0.007377899268446937,
+   "final_loss": 1.1841151979234483,
+   "seed_var": 0.005529634692237729
+  },
+  "hard": {
+   "n": 169,
+   "learn_speed": 0.35000000000000003,
+   "aulc": 0.2820544566699043,
+   "forget_n": 2.6666666666666665,
+   "el2n_early": 1.6934545437494914,
+   "tail_slope": -0.012480626826779974,
+   "final_loss": 1.0493292080031502,
+   "seed_var": 0.007075314903735152
+  },
+  "rare_valid": {
+   "n": 158,
+   "learn_speed": 0.16666666666666666,
+   "aulc": -0.07970427044943236,
+   "forget_n": 4.0,
+   "el2n_early": 1.0536602636178336,
+   "tail_slope": -0.007523106741118395,
+   "final_loss": 0.7955394950177934,
+   "seed_var": 0.0022097796567506407
+  }
+ },
+ "single_auroc": {
+  "learn_speed": 0.5507478262875066,
+  "aulc": 0.4045526880232478,
+  "forget_n": 0.39895696395212066,
+  "el2n_early": 0.46304688761272167,
+  "tail_slope": 0.45956721787864113,
+  "final_loss": 0.35238070527456816,
+  "seed_var": 0.48387877949214697
+ },
+ "combined_auroc": 0.5793664521783252,
+ "combined_auroc_random_split": 0.678728752969395,
+ "architecture": "PatchTST as registered",
+ "cv": "grouped by source dataset",
+ "verdict": "red, do not build the v3 design on this signal",
+ "clean_ood_auroc": 0.30038521107183985,
+ "n_positive": 582,
+ "n_negative": 596
+}

@@ -23,9 +23,9 @@ from pathlib import Path
 import paramiko
 
 HOST = "connect.bjb2.seetacloud.com"
-PORT = 44405
+PORT = 22499
 USER = "root"
-PASSWORD = "xReODsFqxx71"
+PASSWORD = "cgC8Kexaws6L"
 
 #: Repository root on the node. It is synced by file copy and carries no .git,
 #: which is why long runs there pass --allow-dirty-tree and lean on the code

@@ -1,0 +1,48 @@
+{
+  "created_at": "2026-08-21T05:56:13Z",
+  "run_dir": "F:\\work\\Time-research\\work2\\figure-studio-runs\\introact-ts-figures-zh",
+  "stages": [
+    {
+      "stage": "S0-PAPER-FOUNDATION",
+      "latest_before": {
+        "status": "MISSING",
+        "zip_path": null
+      },
+      "repair_created": "checkpoints/S0-PAPER-FOUNDATION/stage-final-0001-generic-cumulative-repair.zip",
+      "repair_integrity": {
+        "schema_version": 2,
+        "stage": "S0-PAPER-FOUNDATION",
+        "created_at": "2026-08-21T05:56:13Z",
+        "checkpoint_scope": "cumulative_from_workflow_start_to_current_stage_or_substage",
+        "included_roots": [
+          "state",
+          "inputs",
+          "outputs/S0-paper-foundation"
+        ],
+        "required_existing_asset_count": 6,
+        "required_existing_image_count": 2,
+        "pending_future_image_count": 0,
+        "missing_asset_count": 0,
+        "missing_image_count": 0,
+        "checkpoint_integrity_status": "complete_restore_ready",
+        "post_write_validation_status": "PASS",
+        "missing_after_write_count": 0,
+        "missing_metadata_after_write": [],
+        "zip_sha256": "7273c1bb5c207d81a3b0e72da1154436f944da00aa83d535833bd09bcfdb5f0c"
+      },
+      "repair_validation": {
+        "zip_path": "checkpoints/S0-PAPER-FOUNDATION/stage-final-0001-generic-cumulative-repair.zip",
+        "metadata_present": {
+          "checkpoint-cumulative-integrity.json": true,
+          "checkpoint-manifest.json": true,
+          "checkpoint-integrity-audit.json": true
+        },
+        "required_count": 6,
+        "member_count": 9,
+        "missing_count": 0,
+        "missing_first_20": [],
+        "status": "PASS"
+      }
+    }
+  ]
+}

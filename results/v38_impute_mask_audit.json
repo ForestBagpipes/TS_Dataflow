@@ -1,0 +1,3351 @@
+{
+ "phase": "v3.8 Phase 0 Part B: IMPUTE candidate mask-semantics audit",
+ "preregistration": "docs/v3_8_fact_preregistration.md §2-§3",
+ "definitions": {
+  "flatline_k": 16,
+  "flatline_eps": 1e-12,
+  "flatline_k_derivation": "k=16 matches MIN_FLATLINE_RUN (src/introact_ts/actions.py:25), the sensitivity at which the production IMPUTE mask actually operates; injected corpus flatlines are 24..50 long (experiments/corpus.py:118-122), so all of them clear k with margin",
+  "layers": "mutually exclusive, window-level, from the RAW corrupted series: actual_nan_only / finite_flatline_only / mixed / neither",
+  "harmful": "true_loss > 0.03",
+  "mask_origin": "composition of the candidate's missing_mask (recomputed on the raw series at the candidate's own min_run) against raw_nan / finite_flatline / other_finite points"
+ },
+ "reconstruction": {
+  "method": "build_calibration.build(n=1600, seed=101, source='mixed'); windows matched to candidates by corrupted_hash AND sample_uid",
+  "n_windows_rebuilt": 1599,
+  "n_candidate_windows_matched": 827,
+  "join_problems": [],
+  "manifest_gate": {
+   "n_rebuilt": 1599,
+   "n_manifest": 1599,
+   "uids_match": true,
+   "n_hash_mismatch": 0,
+   "hash_mismatch_uids": [],
+   "pass": true
+  }
+ },
+ "materialization_erasure_evidence": {
+  "n_candidates_with_raw_nan": 531,
+  "n_candidates_materialized_has_zero_nan": 1154,
+  "n_touched_mask_differs_on_materialized": 530,
+  "n_raw_nan_erased_on_materialized": 275,
+  "note": "masks in this audit always come from the raw corrupted series; materialize_for_probe forward-fills NaN (src/introact_ts/probe.py:93-122), which is exactly why the materialised series is never used for mask semantics"
+ },
+ "n_impute_candidates": 1154,
+ "layers": {
+  "actual_nan_only": {
+   "n_candidates": 447,
+   "n_unique_windows": 149,
+   "by_source": {
+    "Crypto": 15,
+    "ETTh1": 54,
+    "ETTh2": 30,
+    "ETTm1": 75,
+    "Oil Price": 30,
+    "US Term Structure": 243
+   },
+   "by_true_corruption": {
+    "missing_block": 228,
+    "missing_scattered": 219
+   },
+   "by_rung": {
+    "default": 149,
+    "conservative": 149,
+    "aggressive": 149
+   },
+   "by_operator_mode": {
+    "{\"method\": \"linear\", \"min_run\": 16}": 149,
+    "{\"method\": \"linear\", \"min_run\": 32}": 149,
+    "{\"method\": \"seasonal\", \"min_run\": 8}": 149
+   },
+   "by_mask_origin": {
+    "raw_nan": 445,
+    "raw_nan+other_finite": 2
+   },
+   "bs_rate": 0.8120805369127517,
+   "harmful_rate": 0.18791946308724833,
+   "mean_gain": 0.02022968389804404,
+   "median_gain": 0.0008698024092572737,
+   "mean_loss": 0.18791946308724833,
+   "median_loss": 0.0,
+   "impute_only_candidate_oracle": {
+    "n_contaminated_windows": 149,
+    "bcov": 0.8456375838926175,
+    "gain": 0.028119332593235964,
+    "n_oracle_commits": 126
+   }
+  },
+  "finite_flatline_only": {
+   "n_candidates": 623,
+   "n_unique_windows": 268,
+   "by_source": {
+    "Crypto": 9,
+    "ETTh1": 238,
+    "ETTh2": 151,
+    "ETTm1": 110,
+    "Oil Price": 14,
+    "US Term Structure": 101
+   },
+   "by_true_corruption": {
+    "flatline": 213,
+    "null": 324,
+    "duplicate": 33,
+    "level_shift": 34,
+    "spike": 19
+   },
+   "by_rung": {
+    "default": 268,
+    "conservative": 87,
+    "aggressive": 268
+   },
+   "by_operator_mode": {
+    "{\"method\": \"linear\", \"min_run\": 16}": 268,
+    "{\"method\": \"linear\", \"min_run\": 32}": 87,
+    "{\"method\": \"seasonal\", \"min_run\": 8}": 268
+   },
+   "by_mask_origin": {
+    "finite_flatline": 600,
+    "finite_flatline+other_finite": 23
+   },
+   "bs_rate": 0.21829855537720708,
+   "harmful_rate": 0.7817014446227929,
+   "mean_gain": -0.09598742171044827,
+   "median_gain": -0.009819209348754741,
+   "mean_loss": 0.7817014446227929,
+   "median_loss": 1.0,
+   "impute_only_candidate_oracle": {
+    "n_contaminated_windows": 119,
+    "bcov": 0.48739495798319327,
+    "gain": 0.02920209940097814,
+    "n_oracle_commits": 58
+   }
+  },
+  "mixed": {
+   "n_candidates": 84,
+   "n_unique_windows": 28,
+   "by_source": {
+    "ETTh1": 30,
+    "ETTh2": 36,
+    "ETTm1": 18
+   },
+   "by_true_corruption": {
+    "missing_block": 39,
+    "missing_scattered": 45
+   },
+   "by_rung": {
+    "default": 28,
+    "conservative": 28,
+    "aggressive": 28
+   },
+   "by_operator_mode": {
+    "{\"method\": \"linear\", \"min_run\": 16}": 28,
+    "{\"method\": \"linear\", \"min_run\": 32}": 28,
+    "{\"method\": \"seasonal\", \"min_run\": 8}": 28
+   },
+   "by_mask_origin": {
+    "raw_nan+finite_flatline": 46,
+    "raw_nan": 31,
+    "raw_nan+finite_flatline+other_finite": 6,
+    "raw_nan+other_finite": 1
+   },
+   "bs_rate": 0.38095238095238093,
+   "harmful_rate": 0.6071428571428571,
+   "mean_gain": -0.06529923290978229,
+   "median_gain": -0.002260937823883216,
+   "mean_loss": 0.6071428571428571,
+   "median_loss": 1.0,
+   "impute_only_candidate_oracle": {
+    "n_contaminated_windows": 28,
+    "bcov": 0.6785714285714286,
+    "gain": 0.061362748300372756,
+    "n_oracle_commits": 19
+   }
+  },
+  "neither": {
+   "n_candidates": 0,
+   "n_unique_windows": 0,
+   "by_source": {},
+   "by_true_corruption": {},
+   "by_rung": {},
+   "by_operator_mode": {},
+   "by_mask_origin": {},
+   "bs_rate": null,
+   "harmful_rate": null,
+   "mean_gain": null,
+   "median_gain": null,
+   "mean_loss": null,
+   "median_loss": null,
+   "impute_only_candidate_oracle": {
+    "n_contaminated_windows": 0,
+    "bcov": null,
+    "gain": null,
+    "n_oracle_commits": 0
+   }
+  }
+ },
+ "answers": {
+  "q1": {
+   "question": "missing_mask/op_impute candidates: actual NaN vs finite flatline",
+   "code_refs": {
+    "missing_mask": "src/introact_ts/actions.py:82-119 (NaN at line 99; frozen-run detection at 100-119)",
+    "MIN_FLATLINE_RUN": "src/introact_ts/actions.py:25 (=16)",
+    "op_impute": "src/introact_ts/actions.py:262-329 (mask at line 280, linear fill at 290-291, seasonal at 293-314)",
+    "flatline_injection": "experiments/corpus.py:118-122 (length 24..50 at T=512)"
+   },
+   "candidates_by_window_layer": {
+    "actual_nan_only": 447,
+    "finite_flatline_only": 623,
+    "mixed": 84,
+    "neither": 0
+   },
+   "n_candidates_touched_mask_contains_raw_nan": 531,
+   "n_candidates_touched_mask_contains_finite_flatline": 675,
+   "mask_origin_distribution": {
+    "finite_flatline": 600,
+    "raw_nan": 476,
+    "finite_flatline+other_finite": 23,
+    "raw_nan+finite_flatline": 46,
+    "raw_nan+other_finite": 3,
+    "raw_nan+finite_flatline+other_finite": 6
+   }
+  },
+  "q2": {
+   "question": "v3.6's 23 harmful IMPUTE commits: layer placement",
+   "source": "results/v36_pair_probe.json attribution.harmful_commit_ledger (family == IMPUTE); ledger written by experiments/v36_pair_ranker_probe.py main (decision arm PAIR_episode_relative/hgb)",
+   "n_ledger": 23,
+   "layer_distribution": {
+    "finite_flatline_only": 16,
+    "mixed": 4,
+    "actual_nan_only": 3
+   },
+   "mask_origin_distribution": {
+    "finite_flatline": 16,
+    "raw_nan": 7
+   },
+   "entries": [
+    {
+     "sample_uid": "ETTh1:clean:null:3475ed68de0fd6038276f191b6d494716355f9370403196ef9272cdb8e9c0c74:3475ed68de0fd6038276f191b6d494716355f9370403196ef9272cdb8e9c0c74",
+     "dataset": "ETTh1",
+     "stratum": "clean",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.024012008776213588,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh1:clean:null:80362b134275af1a54db1b7019241eab8b9d10e9481333edf5cd52b5659881b4:80362b134275af1a54db1b7019241eab8b9d10e9481333edf5cd52b5659881b4",
+     "dataset": "ETTh1",
+     "stratum": "clean",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.0687725979658857,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh1:clean:null:d461831c97181d9d01caea3e51eea643f4f8f8e2954bf984f6910b6356f4f742:d461831c97181d9d01caea3e51eea643f4f8f8e2954bf984f6910b6356f4f742",
+     "dataset": "ETTh1",
+     "stratum": "clean",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.010184432846537842,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh1:clean:null:eff921852ad586b6944f108e24d8fd549e9bb99bfd8b54e4e50eae6eaa8eddb1:eff921852ad586b6944f108e24d8fd549e9bb99bfd8b54e4e50eae6eaa8eddb1",
+     "dataset": "ETTh1",
+     "stratum": "clean",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.04857161899502296,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh1:contaminated:missing_scattered:be018350557828b7074ba60d46e3ddb29a5fe6d30e5f6385d129b6679efb318d:aa1fda26c365f4a3d7778cc6a33ab8e1693be633b5ebcb139b0a7ec693a9ddc3",
+     "dataset": "ETTh1",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.00011123215945255596,
+     "matched_audit_record": true,
+     "layer": "mixed",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 8,
+     "finite_flatline_n": 16,
+     "touched_n": 8,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 60,
+       "hi": 61,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 90,
+       "hi": 91,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 246,
+       "hi": 247,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 280,
+       "hi": 281,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 293,
+       "hi": 294,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 373,
+       "hi": 374,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 444,
+       "hi": 445,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 450,
+       "hi": 451,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTh1:rare_valid:null:0927287fae86ddd5eda3c8113f718aeca304e897b4165e9542d41d4048fd4767:0927287fae86ddd5eda3c8113f718aeca304e897b4165e9542d41d4048fd4767",
+     "dataset": "ETTh1",
+     "stratum": "rare_valid",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.025853191449979662,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh1:rare_valid:null:225a1ef92cfa605bdc1f984cef48b10447a6b8ed6c5ef23c3a9fd188ca878bd5:225a1ef92cfa605bdc1f984cef48b10447a6b8ed6c5ef23c3a9fd188ca878bd5",
+     "dataset": "ETTh1",
+     "stratum": "rare_valid",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.008847107919002405,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh1:rare_valid:null:5431a7dc14c8640eb179caf71e3f1a99e8b97391203006468539ae8835a43738:5431a7dc14c8640eb179caf71e3f1a99e8b97391203006468539ae8835a43738",
+     "dataset": "ETTh1",
+     "stratum": "rare_valid",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.09424735765414484,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh1:rare_valid:null:56512eae66aa28882562e355b337972b9e1088c05e9e8e380961d8473c5820c8:56512eae66aa28882562e355b337972b9e1088c05e9e8e380961d8473c5820c8",
+     "dataset": "ETTh1",
+     "stratum": "rare_valid",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.02874339151008712,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh1:rare_valid:null:6a8ed6eea742a9f2a9e601191d6dbfee1f4ed769186e2a411e4c132f1c4a4604:6a8ed6eea742a9f2a9e601191d6dbfee1f4ed769186e2a411e4c132f1c4a4604",
+     "dataset": "ETTh1",
+     "stratum": "rare_valid",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.009387441381761204,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh1:rare_valid:null:7cf157b04cec9fef2bc0da2eeaa3ce0c36200aef66139f1f2b1476584228a926:7cf157b04cec9fef2bc0da2eeaa3ce0c36200aef66139f1f2b1476584228a926",
+     "dataset": "ETTh1",
+     "stratum": "rare_valid",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.07452662830299142,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh1:rare_valid:null:9de63d0e2f020191af66910f53946981d9e33716f18dfae88a37f86038f006a8:9de63d0e2f020191af66910f53946981d9e33716f18dfae88a37f86038f006a8",
+     "dataset": "ETTh1",
+     "stratum": "rare_valid",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.034716360112233835,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh1:rare_valid:null:d932a1e58cd3fbe11ade584978e197355fb2eaf25429529eb94b3c3f0149022d:d932a1e58cd3fbe11ade584978e197355fb2eaf25429529eb94b3c3f0149022d",
+     "dataset": "ETTh1",
+     "stratum": "rare_valid",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.10103679025176095,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh2:changepoint:null:b0e56b0acb1a13dc441d165277d1c9e4af0364989a83d5f0d9b9b65023110153:b0e56b0acb1a13dc441d165277d1c9e4af0364989a83d5f0d9b9b65023110153",
+     "dataset": "ETTh2",
+     "stratum": "changepoint",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.028300159177276473,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh2:clean:null:7982789e6da0819ec1820b4e6150c3a769f99924934340087f365ef85f2c4492:7982789e6da0819ec1820b4e6150c3a769f99924934340087f365ef85f2c4492",
+     "dataset": "ETTh2",
+     "stratum": "clean",
+     "true_kind": "null",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.015296220734430127,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh2:contaminated:duplicate:e11347f91099d251499c607b883013a0e45fe6e6fa30d697be41d01c28a97a60:d618c8360dd76009c462a772a3bdc7251beb5cc5b817d1ee90cd63f6f4645338",
+     "dataset": "ETTh2",
+     "stratum": "contaminated",
+     "true_kind": "duplicate",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.030081187138292442,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 24,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh2:contaminated:missing_scattered:31d34c3da34b889acad8045dbf507192f8ae82c0ee2fb75eebade8c02e76a5c0:71817f8e459e3a69bb63d5df4c286c618b15a6fdeb61e96e17fbfb5c612ec3a4",
+     "dataset": "ETTh2",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "conservative",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 32}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.0032770639136085397,
+     "matched_audit_record": true,
+     "layer": "mixed",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 10,
+     "finite_flatline_n": 24,
+     "touched_n": 10,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 82,
+       "hi": 83,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 161,
+       "hi": 162,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 206,
+       "hi": 207,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 226,
+       "hi": 227,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 291,
+       "hi": 292,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 367,
+       "hi": 368,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 383,
+       "hi": 384,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 388,
+       "hi": 389,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 405,
+       "hi": 406,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 442,
+       "hi": 443,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTh2:contaminated:missing_scattered:7a1e8c8f61ede3accca7500b7f2a814d0a9d294ebda8ed2fc04a896bcc3cf587:1bb695ce4ba99254a2eaf28c7323f870e2ecbe1ab34bc617b559e779ea32ad90",
+     "dataset": "ETTh2",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "conservative",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 32}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.028329158324681587,
+     "matched_audit_record": true,
+     "layer": "mixed",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 11,
+     "finite_flatline_n": 380,
+     "touched_n": 11,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      2
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 76,
+       "hi": 77,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 122,
+       "hi": 123,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 166,
+       "hi": 167,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 180,
+       "hi": 181,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 183,
+       "hi": 185,
+       "length": 2,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 203,
+       "hi": 204,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 362,
+       "hi": 363,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 398,
+       "hi": 399,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 435,
+       "hi": 437,
+       "length": 2,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTm1:changepoint:null:47e86a3cca28a4f488b20ea459d01db33fc5ee7131d00b9720138a54bfb42ab8:47e86a3cca28a4f488b20ea459d01db33fc5ee7131d00b9720138a54bfb42ab8",
+     "dataset": "ETTm1",
+     "stratum": "changepoint",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.022888695977008496,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 19,
+     "touched_n": 19,
+     "touched_finite_flatline_n": 19,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_scattered:16433e958a255ad7957949dd0ae6cf2faa420235287aafdea0727d278be51e8d:42ec17d69948710f1ed3ce35cf12899d730bf2d8aad025b49586afda54fbd11d",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.000508382415895747,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 12,
+     "finite_flatline_n": 0,
+     "touched_n": 12,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 91,
+       "hi": 92,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 139,
+       "hi": 140,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 190,
+       "hi": 191,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 226,
+       "hi": 227,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 263,
+       "hi": 264,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 267,
+       "hi": 268,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 324,
+       "hi": 326,
+       "length": 2,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 419,
+       "hi": 420,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 430,
+       "hi": 431,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 454,
+       "hi": 455,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 459,
+       "hi": 460,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_scattered:7f906953b96ea409f4eafd955d7de097c71557d49e4b800fe0433af36b52ca88:d6cd9446f866f1943a99e1c46565cc01a3d2631b78af8f28c66afd7522d22ad5",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.000870855664877877,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 15,
+     "finite_flatline_n": 0,
+     "touched_n": 15,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 58,
+       "hi": 59,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 99,
+       "hi": 100,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 114,
+       "hi": 115,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 136,
+       "hi": 137,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 138,
+       "hi": 139,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 199,
+       "hi": 200,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 213,
+       "hi": 214,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 222,
+       "hi": 223,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 226,
+       "hi": 227,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 249,
+       "hi": 250,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 251,
+       "hi": 252,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 325,
+       "hi": 326,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 415,
+       "hi": 416,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 418,
+       "hi": 419,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 432,
+       "hi": 433,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_scattered:a4f4280197d729983768a5a2917777e0f5b6ba0711849f0cbed4ecf4e62ce66c:585105251df989606c73d8824271a07b0bf5c0f2f524c9991b0445ae85485e8b",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.0008016971557930587,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 10,
+     "finite_flatline_n": 0,
+     "touched_n": 10,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 96,
+       "hi": 97,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 116,
+       "hi": 117,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 124,
+       "hi": 125,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 134,
+       "hi": 135,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 319,
+       "hi": 320,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 333,
+       "hi": 334,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 366,
+       "hi": 367,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 368,
+       "hi": 369,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 370,
+       "hi": 371,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 435,
+       "hi": 436,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_scattered:d258faa18bbdea4f6500be9ddb2903523d60f13161472ed71e81303ec256ad5e:1641f18b7109fcdff132f1664bf2de89a02e208e9099fc59d66fedcdc0a620ef",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.00014962251764735063,
+     "matched_audit_record": true,
+     "layer": "mixed",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 12,
+     "finite_flatline_n": 96,
+     "touched_n": 12,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 60,
+       "hi": 61,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 65,
+       "hi": 66,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 80,
+       "hi": 81,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 145,
+       "hi": 146,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 204,
+       "hi": 205,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 212,
+       "hi": 213,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 239,
+       "hi": 240,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 249,
+       "hi": 250,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 286,
+       "hi": 287,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 357,
+       "hi": 358,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 359,
+       "hi": 360,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 448,
+       "hi": 449,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    }
+   ]
+  },
+  "q3": {
+   "question": "where the unrestricted oracle's gain comes from",
+   "oracle_rule": "per window max true_repair_gain among beneficial_and_safe, family in EPISODE_FAMILY_ORDER (v33_compare_arms._decisions, 'oracle' branch)",
+   "decomposition": {
+    "n_oracle_commits": 290,
+    "total_gain_mass": 86.64751143947083,
+    "by_family": {
+     "DENOISE": {
+      "n_commits": 41,
+      "gain_mass": 36.062401791717136,
+      "gain_share": 0.4161966246071495
+     },
+     "DESPIKE": {
+      "n_commits": 46,
+      "gain_mass": 41.202122310234735,
+      "gain_share": 0.4755142026094681
+     },
+     "IMPUTE": {
+      "n_commits": 203,
+      "gain_mass": 9.382987337519003,
+      "gain_share": 0.10828917278338289
+     }
+    },
+    "by_source": {
+     "Crypto": {
+      "n_commits": 15,
+      "gain_mass": 5.02292931939423,
+      "gain_share": 0.05796968933035182
+     },
+     "ETTh1": {
+      "n_commits": 43,
+      "gain_mass": 8.026249300963771,
+      "gain_share": 0.09263104234182941
+     },
+     "ETTh2": {
+      "n_commits": 36,
+      "gain_mass": 7.235880786878956,
+      "gain_share": 0.08350938955625643
+     },
+     "ETTm1": {
+      "n_commits": 47,
+      "gain_mass": 19.42134392546736,
+      "gain_share": 0.2241419701826577
+     },
+     "Oil Price": {
+      "n_commits": 21,
+      "gain_mass": 8.211481115935165,
+      "gain_share": 0.09476880500684018
+     },
+     "US Term Structure": {
+      "n_commits": 128,
+      "gain_mass": 38.729626990831385,
+      "gain_share": 0.4469791035820649
+     }
+    },
+    "by_window_layer": {
+     "actual_nan_only": {
+      "n_commits": 126,
+      "gain_mass": 4.189780556392157,
+      "gain_share": 0.04835430916350094
+     },
+     "finite_flatline_only": {
+      "n_commits": 65,
+      "gain_mass": 6.780019887795256,
+      "gain_share": 0.07824829328804855
+     },
+     "mixed": {
+      "n_commits": 19,
+      "gain_mass": 1.7181569524104372,
+      "gain_share": 0.019829270614548308
+     },
+     "no_impute_candidate": {
+      "n_commits": 80,
+      "gain_mass": 73.95955404287301,
+      "gain_share": 0.8535681269339025
+     }
+    },
+    "impute_commits_by_mask_origin": {
+     "finite_flatline": {
+      "n_commits": 57,
+      "gain_mass": 2.6849376551334014,
+      "gain_share": 0.03098689864865897
+     },
+     "finite_flatline+other_finite": {
+      "n_commits": 1,
+      "gain_mass": 0.7901121735829975,
+      "gain_share": 0.009118694356674565
+     },
+     "raw_nan": {
+      "n_commits": 143,
+      "gain_mass": 5.141776664854325,
+      "gain_share": 0.05934130801259312
+     },
+     "raw_nan+finite_flatline": {
+      "n_commits": 2,
+      "gain_mass": 0.7661608439482708,
+      "gain_share": 0.00884227176545614
+     }
+    }
+   },
+   "crosscheck_vs_partA_replay": {
+    "pass": true,
+    "n_mismatch": 0,
+    "mismatch_uids": [],
+    "note": "Part B recomputed picks vs Part A replay picks, per sample_uid"
+   }
+  },
+  "q4": {
+   "question": "are PICS harmful IMPUTE commits mainly caused by mask semantics mixing",
+   "source": "results/v33_clean_rerun_harmful.json PICS_joint_relabel.harmful_commits (family == IMPUTE, 27 commits)",
+   "n_ledger": 27,
+   "layer_distribution": {
+    "actual_nan_only": 19,
+    "mixed": 4,
+    "finite_flatline_only": 4
+   },
+   "mask_origin_distribution": {
+    "raw_nan": 20,
+    "raw_nan+finite_flatline": 2,
+    "finite_flatline": 3,
+    "raw_nan+finite_flatline+other_finite": 1,
+    "finite_flatline+other_finite": 1
+   },
+   "n_touched_mask_includes_finite_or_other": 7,
+   "n_window_without_any_raw_nan": 4,
+   "entries": [
+    {
+     "sample_uid": "US Term Structure:contaminated:missing_block:a6ded25cc4b3ceefdcd8a7453b1dfa17dbe5ec5fcaa575db23b5c7152a8c570b:32fd71509044788a51dfa0044e7375d1ce330909dbfa811e18965480ba90545c",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "missing_block",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.004133724939326658,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 43,
+     "finite_flatline_n": 0,
+     "touched_n": 43,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      43
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 360,
+       "hi": 403,
+       "length": 43,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_scattered:313e4b051adeb058d727deac8f37c33b57c4631f16513d7f6fa374095bfce403:a1255fbe2bdc4bc737b8580e9c16beb2f561b42e76da295b090913eb223f72ce",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.008136946094813906,
+     "matched_audit_record": true,
+     "layer": "mixed",
+     "mask_origin": "raw_nan+finite_flatline",
+     "raw_nan_n": 15,
+     "finite_flatline_n": 26,
+     "touched_n": 41,
+     "touched_finite_flatline_n": 26,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 72,
+       "hi": 73,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 76,
+       "hi": 77,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 183,
+       "hi": 184,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 187,
+       "hi": 188,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 195,
+       "hi": 196,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 226,
+       "hi": 227,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 250,
+       "hi": 251,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 254,
+       "hi": 255,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 259,
+       "hi": 260,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 265,
+       "hi": 266,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 281,
+       "hi": 282,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 315,
+       "hi": 316,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 329,
+       "hi": 330,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 367,
+       "hi": 368,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 459,
+       "hi": 460,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_block:cfd3034c1a7ced89aedb5a2f46da0d46eb1fb137ddeae6ec0d1d08c5de4bed4b:a9c58e91e5d4808e40d69d5e8f37d4f00ca054fec7ba1ea6bafd7751866dbfdd",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_block",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.009456125693433522,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 48,
+     "finite_flatline_n": 0,
+     "touched_n": 48,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      48
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 387,
+       "hi": 435,
+       "length": 48,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_scattered:7f906953b96ea409f4eafd955d7de097c71557d49e4b800fe0433af36b52ca88:d6cd9446f866f1943a99e1c46565cc01a3d2631b78af8f28c66afd7522d22ad5",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.000870855664877877,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 15,
+     "finite_flatline_n": 0,
+     "touched_n": 15,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 58,
+       "hi": 59,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 99,
+       "hi": 100,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 114,
+       "hi": 115,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 136,
+       "hi": 137,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 138,
+       "hi": 139,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 199,
+       "hi": 200,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 213,
+       "hi": 214,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 222,
+       "hi": 223,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 226,
+       "hi": 227,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 249,
+       "hi": 250,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 251,
+       "hi": 252,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 325,
+       "hi": 326,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 415,
+       "hi": 416,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 418,
+       "hi": 419,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 432,
+       "hi": 433,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "US Term Structure:contaminated:missing_block:8e634fdeed5e33503acfcffb29910c9e178eea5fcdba58eeb81aa509c20cd3e5:a5fe42d5369e767b11753ee88a96ccea304350b26f2889e8057295eac100de20",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "missing_block",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -3.3954459740654394e-05,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 27,
+     "finite_flatline_n": 0,
+     "touched_n": 27,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      27
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 352,
+       "hi": 379,
+       "length": 27,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_scattered:f6f64871f92b5e96d690381783a527a42d228f24f970a25f957a9fd9c0314383:edfeac61a8c181eed7a9c39b8a5ca6d205263e9385eb9e0fd8273e5a4914c4f9",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.0015768695018812825,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 10,
+     "finite_flatline_n": 0,
+     "touched_n": 10,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 63,
+       "hi": 64,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 98,
+       "hi": 99,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 241,
+       "hi": 242,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 248,
+       "hi": 249,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 307,
+       "hi": 308,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 311,
+       "hi": 313,
+       "length": 2,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 327,
+       "hi": 328,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 355,
+       "hi": 356,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 397,
+       "hi": 398,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTh2:contaminated:missing_scattered:f9f213aa144747039c49724c1cae3fe4bd4f3f39b9ce40c91b64ad71e1e599d0:814edbe6c6fe7fc4c3eaaeb781a5e66b95a52f42e19802a4411b38fb2972c378",
+     "dataset": "ETTh2",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.0008772151535619572,
+     "matched_audit_record": true,
+     "layer": "mixed",
+     "mask_origin": "raw_nan+finite_flatline",
+     "raw_nan_n": 11,
+     "finite_flatline_n": 24,
+     "touched_n": 35,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 72,
+       "hi": 73,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 115,
+       "hi": 116,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 129,
+       "hi": 130,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 136,
+       "hi": 137,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 161,
+       "hi": 162,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 227,
+       "hi": 228,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 230,
+       "hi": 231,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 245,
+       "hi": 246,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 249,
+       "hi": 250,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 443,
+       "hi": 445,
+       "length": 2,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "US Term Structure:contaminated:missing_block:1ba78be7e6705bb270229a34b5dd3b0b0a0da297dea0f426f60c1f77901abc04:e5b58b677d3c6587a596b6d22fe64cf053f191593e16de0db0c6e1a95b532a25",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "missing_block",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.0023049785673158255,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 52,
+     "finite_flatline_n": 0,
+     "touched_n": 52,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      52
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 316,
+       "hi": 368,
+       "length": 52,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "US Term Structure:contaminated:missing_block:d03aa292a2cc11bbdf5766c7270afc76ce75613dfe37feee40e9edc0a8737266:fe7aeadcbf6c020feb7f3b590f9be5e9864dac853a0516df5dd22e338763e87c",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "missing_block",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.0026460330318863736,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 62,
+     "finite_flatline_n": 0,
+     "touched_n": 62,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      62
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 270,
+       "hi": 332,
+       "length": 62,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_block:43c250de28e23814eac88d54533556c82fb04dade6188b61db2960752527e7b8:f9db9508cd5bdbf7b87617ae444cc028f83b3f59237cd0753930b1cc45ae5617",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_block",
+     "rung": "conservative",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 32}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.07887991685450392,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 50,
+     "finite_flatline_n": 0,
+     "touched_n": 50,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      50
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 265,
+       "hi": 315,
+       "length": 50,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "US Term Structure:contaminated:missing_scattered:c032d8b06cd5314d9536f60b7ee291d7b579a9fd09471ab964df9ff8b255623c:f71168995a6f334e00a4436ed99349959c569b9c83662be64a0ffc53726ce5b8",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -1.716246141490361e-05,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 17,
+     "finite_flatline_n": 0,
+     "touched_n": 17,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 59,
+       "hi": 60,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 92,
+       "hi": 93,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 154,
+       "hi": 155,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 158,
+       "hi": 159,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 167,
+       "hi": 168,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 175,
+       "hi": 176,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 215,
+       "hi": 216,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 229,
+       "hi": 230,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 270,
+       "hi": 271,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 283,
+       "hi": 284,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 305,
+       "hi": 306,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 313,
+       "hi": 314,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 357,
+       "hi": 358,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 362,
+       "hi": 363,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 388,
+       "hi": 389,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 448,
+       "hi": 449,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 457,
+       "hi": 458,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "US Term Structure:contaminated:missing_block:ee52a0239fdbc2183f38e78e598d6103e0ffefd981e1bd669d085343cff77f22:f62c387728022075c5e3513d0472bccb996dac411f8d11f0ba5922e90917fd01",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "missing_block",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -6.956890388844358e-05,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 34,
+     "finite_flatline_n": 0,
+     "touched_n": 34,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      34
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 239,
+       "hi": 273,
+       "length": 34,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "US Term Structure:contaminated:missing_block:00cf09102d2b23ebf4debdceb9e7cba106629da864aaeec08f83d8506e7db6ba:d48928fac7385cc7feeb74d44e084598dc39651110ee257aef6d1c36c2169b61",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "missing_block",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.00025897501262109844,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 46,
+     "finite_flatline_n": 0,
+     "touched_n": 46,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      46
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 215,
+       "hi": 261,
+       "length": 46,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "US Term Structure:contaminated:flatline:a13321224934ba51780aa539182b71f696a0da1ea27df54b0140fbc47f807a7d:a97c21d563d49e70c59dbd047e07684ae7e54fa87d498f8e8ce0bc6daf07409c",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "flatline",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.0010246362991530337,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 34,
+     "touched_n": 34,
+     "touched_finite_flatline_n": 34,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_scattered:c67c6b7246e44cb246e5b7f920a424cba3dbc2f16052e19fdb85f2435aed4ee8:34bb1769cade388d1d67fe6ca10fdb68708e9a5de779dc1ccc864f7989e87b30",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.00030243517148920065,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 15,
+     "finite_flatline_n": 0,
+     "touched_n": 15,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 57,
+       "hi": 58,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 68,
+       "hi": 69,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 75,
+       "hi": 76,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 126,
+       "hi": 127,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 176,
+       "hi": 177,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 198,
+       "hi": 199,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 243,
+       "hi": 244,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 249,
+       "hi": 250,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 301,
+       "hi": 302,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 313,
+       "hi": 314,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 401,
+       "hi": 402,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 408,
+       "hi": 409,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 426,
+       "hi": 427,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 437,
+       "hi": 438,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 459,
+       "hi": 460,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "Oil Price:contaminated:flatline:6a54c6bf5fde55485edc32faa97955ca5a32774a8bfa4a327c6748154d66b290:59c59fea2e52c665bf4501e38af355732bfb5dc0648e6297f0c1a4d9763c4044",
+     "dataset": "Oil Price",
+     "stratum": "contaminated",
+     "true_kind": "flatline",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.015854204473704905,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 40,
+     "touched_n": 40,
+     "touched_finite_flatline_n": 40,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_scattered:d258faa18bbdea4f6500be9ddb2903523d60f13161472ed71e81303ec256ad5e:1641f18b7109fcdff132f1664bf2de89a02e208e9099fc59d66fedcdc0a620ef",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.00014962251764735063,
+     "matched_audit_record": true,
+     "layer": "mixed",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 12,
+     "finite_flatline_n": 96,
+     "touched_n": 12,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 60,
+       "hi": 61,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 65,
+       "hi": 66,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 80,
+       "hi": 81,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 145,
+       "hi": 146,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 204,
+       "hi": 205,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 212,
+       "hi": 213,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 239,
+       "hi": 240,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 249,
+       "hi": 250,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 286,
+       "hi": 287,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 357,
+       "hi": 358,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 359,
+       "hi": 360,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 448,
+       "hi": 449,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTh2:contaminated:missing_scattered:bbd3515727b5285997421da103f2faaa18b388239a6baee2e46e2d278de57dfb:376bba637492b46066e48760c4959027c543ce7b70ca1251cf3588fc943da746",
+     "dataset": "ETTh2",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.23128328081553132,
+     "matched_audit_record": true,
+     "layer": "mixed",
+     "mask_origin": "raw_nan+finite_flatline+other_finite",
+     "raw_nan_n": 14,
+     "finite_flatline_n": 46,
+     "touched_n": 53,
+     "touched_finite_flatline_n": 30,
+     "touched_other_finite_n": 9,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 83,
+       "hi": 84,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 111,
+       "hi": 112,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 138,
+       "hi": 139,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 182,
+       "hi": 183,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 192,
+       "hi": 193,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 292,
+       "hi": 293,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 300,
+       "hi": 301,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 302,
+       "hi": 303,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 326,
+       "hi": 327,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 328,
+       "hi": 329,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 348,
+       "hi": 350,
+       "length": 2,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 353,
+       "hi": 354,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 392,
+       "hi": 393,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_scattered:a4f4280197d729983768a5a2917777e0f5b6ba0711849f0cbed4ecf4e62ce66c:585105251df989606c73d8824271a07b0bf5c0f2f524c9991b0445ae85485e8b",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.0008016971557930587,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 10,
+     "finite_flatline_n": 0,
+     "touched_n": 10,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 96,
+       "hi": 97,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 116,
+       "hi": 117,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 124,
+       "hi": 125,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 134,
+       "hi": 135,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 319,
+       "hi": 320,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 333,
+       "hi": 334,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 366,
+       "hi": 367,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 368,
+       "hi": 369,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 370,
+       "hi": 371,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 435,
+       "hi": 436,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "US Term Structure:contaminated:missing_scattered:34406a0f6efe78ca0cb9b60c3930183343a681a0e9d6a790c03903b356dd0969:c6bff359a9963b540b12e31b35eeac14cc963ecfac5a957936f51b7c6c9d4f36",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -3.4094265278293604e-05,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 9,
+     "finite_flatline_n": 0,
+     "touched_n": 9,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 74,
+       "hi": 75,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 96,
+       "hi": 97,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 105,
+       "hi": 106,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 166,
+       "hi": 167,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 215,
+       "hi": 216,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 305,
+       "hi": 306,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 317,
+       "hi": 318,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 395,
+       "hi": 396,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 447,
+       "hi": 448,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "ETTm1:contaminated:missing_scattered:16433e958a255ad7957949dd0ae6cf2faa420235287aafdea0727d278be51e8d:42ec17d69948710f1ed3ce35cf12899d730bf2d8aad025b49586afda54fbd11d",
+     "dataset": "ETTm1",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.000508382415895747,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 12,
+     "finite_flatline_n": 0,
+     "touched_n": 12,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 91,
+       "hi": 92,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 139,
+       "hi": 140,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 190,
+       "hi": 191,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 226,
+       "hi": 227,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 263,
+       "hi": 264,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 267,
+       "hi": 268,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 324,
+       "hi": 326,
+       "length": 2,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 419,
+       "hi": 420,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 430,
+       "hi": 431,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 454,
+       "hi": 455,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 459,
+       "hi": 460,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "US Term Structure:contaminated:missing_block:3cb10ece52e9267539f3ec428c58a01e13727804f3d2cfe8d863daf9390b4c01:927867ff24b5ca78eacbfb227b8d1de2d98f95604e573206e92b85e226a98e95",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "missing_block",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.004989424078749884,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 43,
+     "finite_flatline_n": 0,
+     "touched_n": 43,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      43
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 76,
+       "hi": 119,
+       "length": 43,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "Oil Price:contaminated:missing_scattered:590223b632e2ec23df8ac2ecd4bf357ff256daae505843643b71ff4c243e2c87:3f2834e581f4c148ae37b8ac9a77b410520112ba741afcaad0c04e4cdc0c17ae",
+     "dataset": "Oil Price",
+     "stratum": "contaminated",
+     "true_kind": "missing_scattered",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -2.2789335308415177e-05,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 19,
+     "finite_flatline_n": 0,
+     "touched_n": 19,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 111,
+       "hi": 112,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 128,
+       "hi": 129,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 197,
+       "hi": 198,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 232,
+       "hi": 233,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 252,
+       "hi": 253,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 259,
+       "hi": 261,
+       "length": 2,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 276,
+       "hi": 277,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 294,
+       "hi": 295,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 296,
+       "hi": 297,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 298,
+       "hi": 299,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 314,
+       "hi": 315,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 345,
+       "hi": 346,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 359,
+       "hi": 360,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 370,
+       "hi": 371,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 381,
+       "hi": 382,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 437,
+       "hi": 438,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 442,
+       "hi": 443,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      },
+      {
+       "lo": 448,
+       "hi": 449,
+       "length": 1,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "US Term Structure:contaminated:missing_block:56882c6a4b2851afc3d84c9e8178b745a6ad3652d28397e5d1b390133ac84ef0:7c076f672ecfc206230c1b64fec40a304fbb24c5a14c8806d150eebc548fb480",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "missing_block",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.0005895901344267901,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 45,
+     "finite_flatline_n": 0,
+     "touched_n": 45,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      45
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 65,
+       "hi": 110,
+       "length": 45,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "US Term Structure:contaminated:missing_block:35667cc89717a742538ff1f1bd347b5f33be3afeb609859eaf3dc329c1034166:0a97b584632badc377b5a184bc4c17db225085e6b7fb3fc3efd01fca7dc60511",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "missing_block",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -6.0161784335878156e-06,
+     "matched_audit_record": true,
+     "layer": "actual_nan_only",
+     "mask_origin": "raw_nan",
+     "raw_nan_n": 31,
+     "finite_flatline_n": 0,
+     "touched_n": 31,
+     "touched_finite_flatline_n": 0,
+     "touched_other_finite_n": 0,
+     "gap_runs": [
+      31
+     ],
+     "anchor_geometry": [
+      {
+       "lo": 376,
+       "hi": 407,
+       "length": 31,
+       "left_anchor": true,
+       "right_anchor": true
+      }
+     ]
+    },
+    {
+     "sample_uid": "US Term Structure:contaminated:flatline:ffe46ac602cddfd42c21ad4a2e049a7240f494e2aa84dfbfd2439abde29c77b5:218a79ebd473150f19eecc8ab0c938e5f5fea399827e4dea10dc1539b546026e",
+     "dataset": "US Term Structure",
+     "stratum": "contaminated",
+     "true_kind": "flatline",
+     "rung": "default",
+     "params_key": "{\"method\": \"linear\", \"min_run\": 16}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.0035089190824142288,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 41,
+     "touched_n": 41,
+     "touched_finite_flatline_n": 41,
+     "touched_other_finite_n": 0,
+     "gap_runs": [],
+     "anchor_geometry": []
+    },
+    {
+     "sample_uid": "ETTh2:rare_valid:null:00fe32b6b833f4f7e2c232b5bb4ff22e0cdc63f78d3b2e0eecc287998bbe8801:00fe32b6b833f4f7e2c232b5bb4ff22e0cdc63f78d3b2e0eecc287998bbe8801",
+     "dataset": "ETTh2",
+     "stratum": "rare_valid",
+     "true_kind": "null",
+     "rung": "aggressive",
+     "params_key": "{\"method\": \"seasonal\", \"min_run\": 8}",
+     "true_loss": 1.0,
+     "true_repair_gain": -0.6640708022466549,
+     "matched_audit_record": true,
+     "layer": "finite_flatline_only",
+     "mask_origin": "finite_flatline+other_finite",
+     "raw_nan_n": 0,
+     "finite_flatline_n": 24,
+     "touched_n": 36,
+     "touched_finite_flatline_n": 24,
+     "touched_other_finite_n": 12,
+     "gap_runs": [],
+     "anchor_geometry": []
+    }
+   ],
+   "interpretation": "7/27 PICS harmful IMPUTE commits have a touched mask that reaches beyond raw NaN (finite flatline or other finite points), and 4/27 sit in windows with no raw NaN at all; see layer_distribution for the mutually exclusive placement."
+  }
+ },
+ "input_hashes": {
+  "v33_training_data": "84ab59d9e63048586ba7ddbc44398a729d927fe924411b8bc345b6ad97e282ef",
+  "p0_corpus_manifest_a": "6d7d05a506745a5f6da9114ef08ac37b58e102b6cbee6b740ae5247c42d9b15e",
+  "v36_pair_probe": "1c11873f702dc8530127c45c9c7d9933d3e33bc1ca820787276d4e0a5b6bc6db",
+  "v33_clean_rerun_harmful": "ae87c2bdd73c52f402d8d0e9b70853bac240901bd44a94bfe6833866917ca5fa"
+ },
+ "code_hashes": {
+  "experiments/v38_impute_mask_audit.py": "7353c3ff3a4afae76f2d4f20521380882ecadec6af7ba864cc92b2846afafc0c",
+  "src/introact_ts/actions.py": "f94ba0e5d453c9fd0e139d887b96e450a0d4aeda85d2cad5978678550f44cdf2",
+  "src/introact_ts/probe.py": "22ded3d21137d958d823d6dd91c8d15a756548712b2a437e69a04b5498ee6af4",
+  "experiments/corpus.py": "ee906b17985c9b8d38dfc681a30ac955f57029afa86bf01b08404f7e2e7d41b2",
+  "experiments/build_calibration.py": "b36443b88fefab9fe0866e3be9bf90169bbd5a102e58c36728b3820b6cff68d5"
+ },
+ "runtime_sec": 13.68260931968689
+}

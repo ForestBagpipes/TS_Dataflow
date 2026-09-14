@@ -1,0 +1,69 @@
+{
+ "phase": "v4.2 Phase 0-A arm-B integration replay (docs/v4_2_portfolio_act_preregistration.md §3.1)",
+ "role": "diagnostic arm; forms no version even if positive",
+ "v39_D_baseline": {
+  "n_committed": 132,
+  "beneficial_commits": 117,
+  "harmful_commits": 15,
+  "gain_sum": 38.123774242967556,
+  "bcov": 0.26590909090909093,
+  "gain": 0.0872002571486598,
+  "chr": 0.11363636363636363,
+  "pme": 0.006042296072507553,
+  "damage": 0.019455252918287938,
+  "chr_cp95_upper": 0.16957684612412802
+ },
+ "integrated": {
+  "n_committed": 157,
+  "beneficial_commits": 141,
+  "harmful_commits": 16,
+  "gain_sum": 41.34314276727653,
+  "bcov": 0.32045454545454544,
+  "gain": 0.09451700379481656,
+  "chr": 0.10191082802547771,
+  "pme": 0.006042296072507553,
+  "damage": 0.020752269779507133,
+  "chr_cp95_upper": 0.15066603871789522
+ },
+ "delta_vs_v39_D": {
+  "new_bs": 24,
+  "gain_sum_increase": 3.219368524308976,
+  "harmful_delta": 1,
+  "armB_added_windows": 25,
+  "armB_added_gain_sum": 3.2193685243089756,
+  "armB_added_bs": 24,
+  "armB_added_harmful": 1,
+  "conflicts_first_commit": 0
+ },
+ "remaining_gap_to_v42_gates": {
+  "new_bs_needed": 0,
+  "gain_sum_increase_needed": 2.412531475691024,
+  "harmful_must_reach": 14,
+  "harmful_now": 16,
+  "bcov_gap": -0.020454545454545447,
+  "gain_gap": 0.0054829962051834435,
+  "chr_excess": 0.0019108280254777066,
+  "pme_excess": 0.0005422960725075532,
+  "damage_excess": 0.0012522697795071328
+ },
+ "v42_gates": {
+  "new_bs_min": 15,
+  "gain_sum_increase_min": 5.6319,
+  "harmful_max": 14,
+  "protected_edits_max": 1,
+  "bcov_min": 0.3,
+  "gain_min": 0.1,
+  "chr_max": 0.1,
+  "chr_cp95_upper_max": 0.15,
+  "pme_max": 0.0055,
+  "damage_max": 0.0195
+ },
+ "conflicts": [],
+ "skipped": [],
+ "input_sha256": {
+  "v39_phase0_records.jsonl": "50b4606840f4c9dbde77599c64521ed1b510136e6326381c36d712b68f9cef80",
+  "v41_selector_rows.jsonl": "a9ebdbe07c245d4a43ba3c8f0f5187533a85de91de50c1d19bf579d13bb00685",
+  "v40_phase3_pool.jsonl": "90ab31eca4597c88a76c554c1546ecce921ca577578dab89370bf2cc6146e7ef"
+ },
+ "runtime_sec": 0.10601401329040527
+}

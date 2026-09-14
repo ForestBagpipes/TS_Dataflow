@@ -1,0 +1,2724 @@
+{
+ "phase": "v3.4 Phase 2 shadow certificate signal probe",
+ "preregistration": "docs/v3_4_scrc_pics_preregistration.md \u00a72.1, \u00a76",
+ "error_definition": "per-trial canonical uncentered finite-mask NMSE restricted to the pseudo-gap points; normaliser = metrics_common.ref_var of the window's observed (finite, non-evidence) values; raw MSE when ref_var < 1e-12. KEEP baseline = materialize_for_probe of the shadowed series, same formula.",
+ "primary_feature": "shadow_gain_mean",
+ "constants": {
+  "n_replicas": 3,
+  "evidence_min_run": 8,
+  "block_min_run": 4,
+  "clearance": 8,
+  "block_len_clip": [
+   4,
+   32
+  ],
+  "scatter_k_clip": [
+   4,
+   32
+  ],
+  "default_block_len": 8,
+  "min_valid_trials": 2,
+  "min_harmful_for_source_gate": 5
+ },
+ "reconstruction": {
+  "method": "build_calibration.build(n=1600, seed=101, source='mixed') rebuilt the frozen corpus; windows matched to candidates by corrupted_hash; hash_array of the rebuilt series re-verified against the candidate table and the p0 manifest",
+  "n_windows_rebuilt": 1599,
+  "n_windows_matched": 445,
+  "n_unmatched_uids": 0,
+  "n_hash_mismatches": 0,
+  "manifest_hash": "6d7d05a506745a5f6da9114ef08ac37b58e102b6cbee6b740ae5247c42d9b15e",
+  "manifest_sha256_of_file": "6d7d05a506745a5f6da9114ef08ac37b58e102b6cbee6b740ae5247c42d9b15e"
+ },
+ "operator_consistency": {
+  "n_formal_output_hash_mismatches": 0,
+  "note": "certificate_operator dispatches apply_action(., IMPUTE, **params); every candidate's output on the corrupted series was re-hashed and compared to output_hash in the frozen candidate table"
+ },
+ "n_impute_candidates": 1154,
+ "n_records": 1154,
+ "geometry_counts": {
+  "block": 929,
+  "scattered": 225
+ },
+ "evaluation": {
+  "population": {
+   "n_pics_accepted_impute": 106,
+   "n_joined": 106,
+   "n_unmatched": 0,
+   "unmatched_uids": [],
+   "n_harmful": 27,
+   "n_beneficial_and_safe": 79
+  },
+  "gates": {
+   "gate1_auroc": {
+    "pass": false,
+    "auroc": 0.35114861697140176,
+    "threshold": 0.75,
+    "primary_feature": "shadow_gain_mean (score = -gain_mean, shadow_support==0 ranked most suspicious)"
+   },
+   "gate2_auprc_improvement": {
+    "pass": false,
+    "auprc_shadow": 0.2062516101894745,
+    "auprc_pics_harm_score": 0.1985726357061588,
+    "improvement": 0.007678974483315698,
+    "min_improvement": 0.05
+   },
+   "gate3_recall_at_frr20": {
+    "pass": false,
+    "harmful_recall": 0.07407407407407407,
+    "min_recall": 0.7,
+    "bs_false_reject_rate": 0.10126582278481013,
+    "bs_false_reject_max": 0.2,
+    "threshold": -0.001242398325943762,
+    "n_rejected": 10,
+    "per_source": {
+     "ETTh2": 0.0,
+     "ETTm1": 0.0,
+     "US Term Structure": 0.07692307692307693,
+     "other": 0.5
+    },
+    "gated_sources": [
+     "ETTm1",
+     "US Term Structure"
+    ],
+    "min_harmful_for_source_gate": 5,
+    "source_gate_min_recall": 0.5,
+    "gate3_overall_pass": false,
+    "gate3_sources_pass": false
+   },
+   "gate4_trial_coverage": {
+    "pass": true,
+    "share_valid_trials_ge2": 0.9974003466204506,
+    "n_records": 1154,
+    "n_with_valid_trials_ge2": 1151,
+    "min_coverage": 0.9
+   }
+  },
+  "n_gates_failed": 3,
+  "verdict": "DIAGNOSTIC_FAILURE",
+  "per_source": {
+   "ETTh2": {
+    "n_accepted_impute": 6,
+    "n_harmful": 3,
+    "n_beneficial_and_safe": 3,
+    "harmful_recall_at_working_point": 0.0,
+    "auroc": 0.4444444444444445,
+    "support1_share": 1.0
+   },
+   "ETTm1": {
+    "n_accepted_impute": 24,
+    "n_harmful": 9,
+    "n_beneficial_and_safe": 15,
+    "harmful_recall_at_working_point": 0.0,
+    "auroc": 0.5555555555555556,
+    "support1_share": 1.0
+   },
+   "US Term Structure": {
+    "n_accepted_impute": 74,
+    "n_harmful": 13,
+    "n_beneficial_and_safe": 61,
+    "harmful_recall_at_working_point": 0.07692307692307693,
+    "auroc": 0.35687263556116017,
+    "support1_share": 1.0
+   },
+   "other": {
+    "n_accepted_impute": 2,
+    "n_harmful": 2,
+    "n_beneficial_and_safe": 0,
+    "harmful_recall_at_working_point": 0.5,
+    "auroc": null,
+    "support1_share": 1.0
+   }
+  },
+  "report_only_feature_aurocs": {
+   "shadow_candidate_error_mean": 0.6526019690576652,
+   "shadow_candidate_error_q90": 0.6586966713548992,
+   "shadow_candidate_error_std": 0.6769807782466011,
+   "shadow_keep_error_mean": 0.6643225503984997,
+   "shadow_gain_mean": 0.35114861697140176,
+   "shadow_gain_worst": 0.5208626347866854,
+   "shadow_stability": 0.6788560712611346
+  },
+  "joined": [
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:8a777c476873cc82d7cd61feb8206fa897bcbd7958a8acbca64c0206e968ad5f:14e20edaf3e41c0ea54956d09397caa5b3f49aa5fcacbb85b756f8e502452bbf",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4762387297755825,
+    "shadow_score": -2.049799361846065,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 1.7473671470279006,
+     "shadow_candidate_error_q90": 3.3645679244761526,
+     "shadow_candidate_error_std": 1.59334170142305,
+     "shadow_keep_error_mean": 3.7971665088739655,
+     "shadow_gain_mean": 2.049799361846065,
+     "shadow_gain_worst": -0.9456709611220422,
+     "shadow_stability": 1.0357927827631332,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:57c89adb379aba7f5f0afa2fd7879d6cd1b5fecf35eeb3cbd13b826d7d1ace5c:dd62f911e3bb4a4aca4cc091d33323ab8e2e070b50e2c153daeb5b077c21072e",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5711740099927801,
+    "shadow_score": -0.03980699606371176,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.06568662272066879,
+     "shadow_candidate_error_q90": 0.07306633988042924,
+     "shadow_candidate_error_std": 0.0072675142140223,
+     "shadow_keep_error_mean": 0.10549361878438053,
+     "shadow_gain_mean": 0.03980699606371176,
+     "shadow_gain_worst": -0.02174647996272988,
+     "shadow_stability": 1.8285646948111307,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:1ab974a02141481f88931433f35e148e5ef433d410ce1ebcdd0db022c538499a:a0487a56ba59899bb693719c15e6d81da3d38d458493e654f5f37a56185780bf",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.10283440282139504,
+    "shadow_score": -0.08801561257619493,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.09480293439775446,
+     "shadow_candidate_error_q90": 0.14431308411821314,
+     "shadow_candidate_error_std": 0.048553281506861785,
+     "shadow_keep_error_mean": 0.1828185469739494,
+     "shadow_gain_mean": 0.08801561257619493,
+     "shadow_gain_worst": 0.024848612728416167,
+     "shadow_stability": 0.5214523504662478,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:a6ded25cc4b3ceefdcd8a7453b1dfa17dbe5ec5fcaa575db23b5c7152a8c570b:32fd71509044788a51dfa0044e7375d1ce330909dbfa811e18965480ba90545c",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.4920676227294152,
+    "shadow_score": -0.35575077238370395,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.12145999963406258,
+     "shadow_candidate_error_q90": 0.18431149392558466,
+     "shadow_candidate_error_std": 0.06309882569508456,
+     "shadow_keep_error_mean": 0.47721077201776657,
+     "shadow_gain_mean": 0.35575077238370395,
+     "shadow_gain_worst": -0.0449361347109878,
+     "shadow_stability": 1.5106621888845384,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:beed9df74f79fdf4bc513576e72c2a1eaf8ae9120739b8cbbb33aedb1b759314:3d2bf816a2742eb1b1c9d9ad930ad32ded5c3cf1d1c55b3a5d841981fa57fce5",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4558039172806335,
+    "shadow_score": -0.016397935496028578,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.010507198375445568,
+     "shadow_candidate_error_q90": 0.015516029958043732,
+     "shadow_candidate_error_std": 0.004956434299741988,
+     "shadow_keep_error_mean": 0.026905133871474144,
+     "shadow_gain_mean": 0.016397935496028578,
+     "shadow_gain_worst": 0.006642955036243857,
+     "shadow_stability": 0.42367960700854407,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:flatline:6dc06e418993bcea38d094d064c33f20ceb1e3d845870349f4090023c9005431:1ffcfdcf9503edbdc94f0ca06765a2ac0744b2429c83b9777c7ff4906f2607e3",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5284845723136089,
+    "shadow_score": -0.06768697444033099,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.1134217899357499,
+     "shadow_candidate_error_q90": 0.14999166118201157,
+     "shadow_candidate_error_std": 0.0369850855909172,
+     "shadow_keep_error_mean": 0.1811087643760809,
+     "shadow_gain_mean": 0.06768697444033099,
+     "shadow_gain_worst": -0.03629652977905703,
+     "shadow_stability": 1.3124569032860067,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:d3572983f9b909742907b2d85450435d0e35f887a77036394c5882dec716b478:1dcf5fa5274d06d971c8367270a13f45e49ed7c8213e88a7e8253d241a3f4a5a",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5827332723386281,
+    "shadow_score": -0.008591077017602537,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0029642397348453573,
+     "shadow_candidate_error_q90": 0.004156937525384818,
+     "shadow_candidate_error_std": 0.0011752928939841923,
+     "shadow_keep_error_mean": 0.011555316752447893,
+     "shadow_gain_mean": 0.008591077017602537,
+     "shadow_gain_worst": 0.004853639591207183,
+     "shadow_stability": 0.3145033406245375,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:74dec7a9ad57d7213512fb508ebf31c4f7b42655ff11d69ff4607434f696b9be:d6e72b8818bbf1d704bd0867248f0ad2daeedd7a2c8123dd842ea25e19747a81",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.48592136179371365,
+    "shadow_score": -0.5773830382721594,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.11445858312353609,
+     "shadow_candidate_error_q90": 0.1309606572253714,
+     "shadow_candidate_error_std": 0.016898486178182768,
+     "shadow_keep_error_mean": 0.6918416213956955,
+     "shadow_gain_mean": 0.5773830382721594,
+     "shadow_gain_worst": 0.04117100601708866,
+     "shadow_stability": 1.2837171059100585,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:313e4b051adeb058d727deac8f37c33b57c4631f16513d7f6fa374095bfce403:a1255fbe2bdc4bc737b8580e9c16beb2f561b42e76da295b090913eb223f72ce",
+    "dataset": "ETTm1",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.42159574914041703,
+    "shadow_score": -1.4048321579652672,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.141501468262568,
+     "shadow_candidate_error_q90": 0.212324773731404,
+     "shadow_candidate_error_std": 0.08008171035977224,
+     "shadow_keep_error_mean": 1.5463336262278353,
+     "shadow_gain_mean": 1.4048321579652672,
+     "shadow_gain_worst": 0.3739843258275328,
+     "shadow_stability": 0.637469260600358,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:11045ffbc48f7dfb8f6a38a1bc40f9d56e74349fb40d1c7deb6305f9a70113f8:19fd861288d415c6c34acaa5b890a0ed88a7f6e86080ea13a58d1632cce8dbde",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5291457653193374,
+    "shadow_score": -0.04119060977858525,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.016397720555308904,
+     "shadow_candidate_error_q90": 0.019773878295241423,
+     "shadow_candidate_error_std": 0.0034539743835036874,
+     "shadow_keep_error_mean": 0.057588330333894155,
+     "shadow_gain_mean": 0.04119060977858525,
+     "shadow_gain_worst": 0.01605752687798434,
+     "shadow_stability": 0.6635086080046563,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_block:cfd3034c1a7ced89aedb5a2f46da0d46eb1fb137ddeae6ec0d1d08c5de4bed4b:a9c58e91e5d4808e40d69d5e8f37d4f00ca054fec7ba1ea6bafd7751866dbfdd",
+    "dataset": "ETTm1",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.4970110397626297,
+    "shadow_score": -0.026210620345052057,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.10383803698609646,
+     "shadow_candidate_error_q90": 0.1062369140127642,
+     "shadow_candidate_error_std": 0.0026237709866802046,
+     "shadow_keep_error_mean": 0.13004865733114854,
+     "shadow_gain_mean": 0.026210620345052057,
+     "shadow_gain_worst": 0.004154498519826771,
+     "shadow_stability": 0.5971348362821708,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:2df8a82d6af9921068fd52d4593be79c86aef4df106bfc696bb56ce592a909e3:be61806c8c2a411d9351ec4f7a0f31e7f3ab608826f33e1b415472cef9a3becc",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4761058584650722,
+    "shadow_score": -0.0013656247307296209,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.002431470000705263,
+     "shadow_candidate_error_q90": 0.0028601465504948702,
+     "shadow_candidate_error_std": 0.0004987222226491829,
+     "shadow_keep_error_mean": 0.0037970947314348836,
+     "shadow_gain_mean": 0.0013656247307296209,
+     "shadow_gain_worst": 0.0004765204338127876,
+     "shadow_stability": 0.7310581788998176,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:03aacc880150442d5f06a9925f2821e81088d6c28de6b2e1a9ce5272ed252fbc:9df220636c62c68a847f757a2c5a528f439db08c7fd818fabcb15daba01ba3c0",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4759692883282547,
+    "shadow_score": -0.026092774653338535,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.30300578807151834,
+     "shadow_candidate_error_q90": 0.6507010784778285,
+     "shadow_candidate_error_std": 0.3471845160309697,
+     "shadow_keep_error_mean": 0.3290985627248569,
+     "shadow_gain_mean": 0.026092774653338535,
+     "shadow_gain_worst": -0.3046210518087033,
+     "shadow_stability": 10.14351313555939,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:9513baa02429cee74a7e6c28de94bfdfd8fe655df8750e2670c20c18d5793cf8:f4063d6d09f4a05ac52bab9f9c77dfc43146d76402c843101215456edfe9dea4",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5499537276444468,
+    "shadow_score": -0.050455483198578156,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.02678262370290772,
+     "shadow_candidate_error_q90": 0.03311851753938712,
+     "shadow_candidate_error_std": 0.006230099653510491,
+     "shadow_keep_error_mean": 0.07723810690148587,
+     "shadow_gain_mean": 0.050455483198578156,
+     "shadow_gain_worst": 0.013836119524438098,
+     "shadow_stability": 0.5718069879252803,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:6b1ef8fd66cddb4380a346f4cf4b723cd53fed9e1b87bd9a9a3b4175116d8db7:d1a4e2252581fc60cb2519110ef4b42e73bc9587b0667940c6ff913239612f50",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.3053342695154801,
+    "shadow_score": -0.003097799413222668,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0014589584143857009,
+     "shadow_candidate_error_q90": 0.002298977519814164,
+     "shadow_candidate_error_std": 0.0008311406779870838,
+     "shadow_keep_error_mean": 0.004556757827608369,
+     "shadow_gain_mean": 0.003097799413222668,
+     "shadow_gain_worst": 0.0013020681237475417,
+     "shadow_stability": 0.4164547083674546,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:3e520f39f180adbfc95ee169a5e1ec8eb85306d92b2829b0f84e59478beaeffb:bcfa8348e12edc495248677472c2bbb38bcbc9645239f917f6c0b6d274fb5b30",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5273697544033478,
+    "shadow_score": -0.008949129806578937,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.010535213950976265,
+     "shadow_candidate_error_q90": 0.011488817554415038,
+     "shadow_candidate_error_std": 0.0011801382157243848,
+     "shadow_keep_error_mean": 0.0194843437575552,
+     "shadow_gain_mean": 0.008949129806578937,
+     "shadow_gain_worst": 0.0038109303919364266,
+     "shadow_stability": 0.5453056142409564,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:7f906953b96ea409f4eafd955d7de097c71557d49e4b800fe0433af36b52ca88:d6cd9446f866f1943a99e1c46565cc01a3d2631b78af8f28c66afd7522d22ad5",
+    "dataset": "ETTm1",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.07155447960346933,
+    "shadow_score": -0.04762238197754584,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.148151243578442,
+     "shadow_candidate_error_q90": 0.16185365072351712,
+     "shadow_candidate_error_std": 0.01376489279649423,
+     "shadow_keep_error_mean": 0.19577362555598785,
+     "shadow_gain_mean": 0.04762238197754584,
+     "shadow_gain_worst": -0.0488511199289825,
+     "shadow_stability": 1.5023092485771594,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:3524bf8542d62ed0f404f5e4a00a9ecdff36f74d12b1db236d5dd091dc268fb9:430871293a99b4642129c7bdb5e4fab0674f89d84fffa8260e425eb163a8d6e2",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.33292724217327424,
+    "shadow_score": -0.0021739335042482524,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0018895965819598541,
+     "shadow_candidate_error_q90": 0.0026988707883930253,
+     "shadow_candidate_error_std": 0.0008010394338809715,
+     "shadow_keep_error_mean": 0.004063530086208107,
+     "shadow_gain_mean": 0.0021739335042482524,
+     "shadow_gain_worst": 0.00032962910593527196,
+     "shadow_stability": 0.6062516246358557,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:8e634fdeed5e33503acfcffb29910c9e178eea5fcdba58eeb81aa509c20cd3e5:a5fe42d5369e767b11753ee88a96ccea304350b26f2889e8057295eac100de20",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.39379517718077023,
+    "shadow_score": -0.36705068977058225,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.03206582172783134,
+     "shadow_candidate_error_q90": 0.041486901065567745,
+     "shadow_candidate_error_std": 0.011230178495713552,
+     "shadow_keep_error_mean": 0.3991165114984136,
+     "shadow_gain_mean": 0.36705068977058225,
+     "shadow_gain_worst": 0.1991370980052161,
+     "shadow_stability": 0.5570904367907116,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTh2:contaminated:flatline:deebdb047f2ee32fbf93d0e063a857f6ffdd47c7d2aaa47afbc2534200d20385:5091b1d77f2c21099f2a6e44f8d027023017171ff61c8c7589e7eeccf1ec0cd7",
+    "dataset": "ETTh2",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.35292228790514446,
+    "shadow_score": -0.9684193173064087,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.8054373147304705,
+     "shadow_candidate_error_q90": 0.883095910800929,
+     "shadow_candidate_error_std": 0.07759561058268671,
+     "shadow_keep_error_mean": 1.7738566320368792,
+     "shadow_gain_mean": 0.9684193173064087,
+     "shadow_gain_worst": -0.36711913786600375,
+     "shadow_stability": 0.9780640802172508,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:83a68e889e809d72724a1b08feae14e165f2c94bcd9edc7f43b33e31ee967f23:142bd99f2b8e0a3c337d03f34447f56a3ecbae330291443c827c9557a53a95bf",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.42200097771458867,
+    "shadow_score": -0.012930771678518862,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.008996544759792259,
+     "shadow_candidate_error_q90": 0.010925913238872367,
+     "shadow_candidate_error_std": 0.0020758311767978678,
+     "shadow_keep_error_mean": 0.021927316438311122,
+     "shadow_gain_mean": 0.012930771678518862,
+     "shadow_gain_worst": 0.002973574692454387,
+     "shadow_stability": 0.5942292225576404,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:f6f64871f92b5e96d690381783a527a42d228f24f970a25f957a9fd9c0314383:edfeac61a8c181eed7a9c39b8a5ca6d205263e9385eb9e0fd8273e5a4914c4f9",
+    "dataset": "ETTm1",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.08835638361986235,
+    "shadow_score": -0.31544365664745716,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.16422607549587373,
+     "shadow_candidate_error_q90": 0.28706389476506855,
+     "shadow_candidate_error_std": 0.12072348904491435,
+     "shadow_keep_error_mean": 0.4796697321433308,
+     "shadow_gain_mean": 0.31544365664745716,
+     "shadow_gain_worst": 0.0848462013076724,
+     "shadow_stability": 0.8629483693590516,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTh2:contaminated:missing_scattered:f9f213aa144747039c49724c1cae3fe4bd4f3f39b9ce40c91b64ad71e1e599d0:814edbe6c6fe7fc4c3eaaeb781a5e66b95a52f42e19802a4411b38fb2972c378",
+    "dataset": "ETTh2",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.24693228516923968,
+    "shadow_score": -0.055873780854937515,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.6402906130408922,
+     "shadow_candidate_error_q90": 1.254510691021874,
+     "shadow_candidate_error_std": 0.6023790876333187,
+     "shadow_keep_error_mean": 0.6961643938958297,
+     "shadow_gain_mean": 0.055873780854937515,
+     "shadow_gain_worst": -0.07103890147199254,
+     "shadow_stability": 2.3198079913353786,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:dd9a96bb70de2e85c3bd5f6d2e168cd26d86150d745a61684aec02286ba7d74e:4e77843af326343c244a832a50879e9bc15d57cc204264980b0a01a28996a068",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.12082094972454611,
+    "shadow_score": -0.1231893437437836,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.07205199020858993,
+     "shadow_candidate_error_q90": 0.09974654755156553,
+     "shadow_candidate_error_std": 0.02768110686042355,
+     "shadow_keep_error_mean": 0.19524133395237353,
+     "shadow_gain_mean": 0.1231893437437836,
+     "shadow_gain_worst": 0.004093983292660287,
+     "shadow_stability": 0.9689747226221134,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:5ebdc5c1e879f2f4e34f84e8d3d2ad41258c80d03ee37e9c376d214ae308cd2e:71c68b7cf98f65423e90c32b7ad4cab50adaa1e081523d930224855bc218766a",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.39970577034155136,
+    "shadow_score": -0.007418321188472223,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0031165078111561294,
+     "shadow_candidate_error_q90": 0.0039244093942563925,
+     "shadow_candidate_error_std": 0.0008139155933407234,
+     "shadow_keep_error_mean": 0.01053482899962835,
+     "shadow_gain_mean": 0.007418321188472223,
+     "shadow_gain_worst": 0.003660322311229254,
+     "shadow_stability": 0.5883257714874975,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:0d3d05a66931652d8915ddcfd678551bdd37ae83166c19f9e0a4acdeaf4382b5:f910324ba9615d4d856e561375772593b680b7c90a855a674fa77ff641057eaf",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.28613566909613725,
+    "shadow_score": -0.0996395517584166,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.03420803999728989,
+     "shadow_candidate_error_q90": 0.05378562303203552,
+     "shadow_candidate_error_std": 0.019580882650066064,
+     "shadow_keep_error_mean": 0.1338475917557065,
+     "shadow_gain_mean": 0.0996395517584166,
+     "shadow_gain_worst": 0.009539716541151218,
+     "shadow_stability": 0.70992021092144,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:flatline:762111177ae8afd2b4e9750fd019285618f1eee72570e54271fb39aa0ca45f90:60b8871cfd49d3454258c375f83af1e631b9679d87937c6c244fbd4ebf535d7a",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5488869858452704,
+    "shadow_score": -0.3712137503289948,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.06734931742518084,
+     "shadow_candidate_error_q90": 0.08662732963210698,
+     "shadow_candidate_error_std": 0.018904421264455105,
+     "shadow_keep_error_mean": 0.43856306775417564,
+     "shadow_gain_mean": 0.3712137503289948,
+     "shadow_gain_worst": 0.005667501984649291,
+     "shadow_stability": 0.7284554176976274,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:a8779053f85c84b4c9d2b8deb484676be5d40a70d50c61fa108c56569956048f:840a6f45abb2c45e1a6d943275e1245f5f2a308df20e1390abfce0be73eaea08",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4639395561513409,
+    "shadow_score": -0.0012337334378662332,
+    "rejected_at_working_point": true,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0017832797884974304,
+     "shadow_candidate_error_q90": 0.0024219465207376,
+     "shadow_candidate_error_std": 0.0006420350671304532,
+     "shadow_keep_error_mean": 0.003017013226363664,
+     "shadow_gain_mean": 0.0012337334378662332,
+     "shadow_gain_worst": -0.00028527973365653726,
+     "shadow_stability": 1.4424369566980593,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:8971da11071c618069a65b466cb6768e1e5f2a1fbdb442ff196e88afd0d09dcb:2b7c65ab0f6985bd7c0aac81fad96a37cbb91b6e6e10a42c974a506430caff29",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.35946724380679296,
+    "shadow_score": -0.007094605462602418,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.004301368367602498,
+     "shadow_candidate_error_q90": 0.00496397864667313,
+     "shadow_candidate_error_std": 0.0006698521614835089,
+     "shadow_keep_error_mean": 0.011395973830204915,
+     "shadow_gain_mean": 0.007094605462602418,
+     "shadow_gain_worst": 0.0030144128434793187,
+     "shadow_stability": 0.4340769181684283,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:2ac2ae8934945bf830e253845922f97a5ec6b111f1ded409c633aeab72a39a84:8aeb29e4946a75fec760b06f08f83ea658cc4713db15da2edec008e0d5464190",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.366265136115751,
+    "shadow_score": -0.030498563856549588,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.019905543859100986,
+     "shadow_candidate_error_q90": 0.02902727776048574,
+     "shadow_candidate_error_std": 0.00894459937262596,
+     "shadow_keep_error_mean": 0.05040410771565058,
+     "shadow_gain_mean": 0.030498563856549588,
+     "shadow_gain_worst": 0.027958453812648082,
+     "shadow_stability": 0.0949252328081566,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:1ba78be7e6705bb270229a34b5dd3b0b0a0da297dea0f426f60c1f77901abc04:e5b58b677d3c6587a596b6d22fe64cf053f191593e16de0db0c6e1a95b532a25",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.4036225625817432,
+    "shadow_score": -0.014876450468086055,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.00919971047546323,
+     "shadow_candidate_error_q90": 0.011812714309292892,
+     "shadow_candidate_error_std": 0.002915263369912746,
+     "shadow_keep_error_mean": 0.02407616094354929,
+     "shadow_gain_mean": 0.014876450468086055,
+     "shadow_gain_worst": 0.00020401299774430812,
+     "shadow_stability": 1.044236417498543,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:40ac79c1936903ccef7e99d6326bd1c29dfd73045d9a6fe201e8a0473d04e5fd:2acb20295907189f7911631934b190c7aba6fda26fcd0f0737a913c430aa6d14",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5506287416888407,
+    "shadow_score": -0.010338538250712457,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.006528928599975431,
+     "shadow_candidate_error_q90": 0.009541936082238653,
+     "shadow_candidate_error_std": 0.0029749013355493507,
+     "shadow_keep_error_mean": 0.01686746685068789,
+     "shadow_gain_mean": 0.010338538250712457,
+     "shadow_gain_worst": 0.0014203184056756002,
+     "shadow_stability": 0.7798082243666168,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:0236303a7a0ccdc40805b7d457df201d077b033e6fa59ab5fe4499967496208e:4596c974f2a8c1626590ced760e0439f3e12877a9d910854a65b3f9907183c78",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4048897802281707,
+    "shadow_score": -0.002132717851006409,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0017898801350436592,
+     "shadow_candidate_error_q90": 0.002236298999442557,
+     "shadow_candidate_error_std": 0.0004387334195033639,
+     "shadow_keep_error_mean": 0.003922597986050068,
+     "shadow_gain_mean": 0.002132717851006409,
+     "shadow_gain_worst": 0.0013220992623572995,
+     "shadow_stability": 0.47786898523095156,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:11cf81149d30bed640620e2bb9fbb601db4d2042963b473ba26954b647776150:be4fa5364d59c35c55e7e23e2f802bcf537508dca010cc274057de457f81a934",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.3822751620406747,
+    "shadow_score": -0.005984766866452301,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0016859742339765127,
+     "shadow_candidate_error_q90": 0.0026883059454823124,
+     "shadow_candidate_error_std": 0.0009834166853006148,
+     "shadow_keep_error_mean": 0.0076707411004288155,
+     "shadow_gain_mean": 0.005984766866452301,
+     "shadow_gain_worst": 0.003957103792280736,
+     "shadow_stability": 0.46710240555694865,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:ac43b2e208412ab05b64f577541c0241b920b99a9db5abfe443ee8022a5c861b:8b71d981a21c955439a28a4f4402bdd60bf682e9534769cbe1d0dc3f198b019f",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.21219153991108944,
+    "shadow_score": -0.10958492226250212,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.2671479860169126,
+     "shadow_candidate_error_q90": 0.32045407081359684,
+     "shadow_candidate_error_std": 0.06875894245321747,
+     "shadow_keep_error_mean": 0.3767329082794147,
+     "shadow_gain_mean": 0.10958492226250212,
+     "shadow_gain_worst": 0.08171362470417737,
+     "shadow_stability": 0.2620918315949387,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:d03aa292a2cc11bbdf5766c7270afc76ce75613dfe37feee40e9edc0a8737266:fe7aeadcbf6c020feb7f3b590f9be5e9864dac853a0516df5dd22e338763e87c",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.4568195127672716,
+    "shadow_score": -0.012915014707599261,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.019079904177267574,
+     "shadow_candidate_error_q90": 0.021507922404928503,
+     "shadow_candidate_error_std": 0.0023820519611645052,
+     "shadow_keep_error_mean": 0.03199491888486684,
+     "shadow_gain_mean": 0.012915014707599261,
+     "shadow_gain_worst": 0.004842010353026588,
+     "shadow_stability": 0.47469765926838076,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:789af197dbcf714dcfb8b4fcd9459bf229bce4b6acdf214f512961f880277d42:c11663f46a7c59c653dd897a4981f1e0cbd308c33dcdaa04e4c096f41dca8f7c",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.32848678510920326,
+    "shadow_score": -0.00010502230358392627,
+    "rejected_at_working_point": true,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.04274251298578022,
+     "shadow_candidate_error_q90": 0.05967209799865098,
+     "shadow_candidate_error_std": 0.01675239938521785,
+     "shadow_keep_error_mean": 0.04284753528936414,
+     "shadow_gain_mean": 0.00010502230358392627,
+     "shadow_gain_worst": -0.02022379584758357,
+     "shadow_stability": 138.31729932678928,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:bc054d64a4c625afe76dd4712a30b67ca0813a843ca822d9f0b1e6af65984ebe:1dbbef01fabbf1d43063f886cf5b97a0545c3385aba801e89b6db570fe2c7731",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4079017443236166,
+    "shadow_score": -0.04694256328314503,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.05567882015171907,
+     "shadow_candidate_error_q90": 0.09244323645652142,
+     "shadow_candidate_error_std": 0.036272342304515565,
+     "shadow_keep_error_mean": 0.1026213834348641,
+     "shadow_gain_mean": 0.04694256328314503,
+     "shadow_gain_worst": -0.056130150456135224,
+     "shadow_stability": 2.6410055485237143,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:ecf73872c4635bf919cc2441599455561532779f1e4f0e0af0f711f810cd578a:71f019c2e4ae3b3c77115534da4cd91c9066d8f0147f2c753652a1c56074cafd",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5233396611384118,
+    "shadow_score": -0.012977206977047925,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.005221241308730404,
+     "shadow_candidate_error_q90": 0.006974688033271917,
+     "shadow_candidate_error_std": 0.0017326196912290806,
+     "shadow_keep_error_mean": 0.018198448285778327,
+     "shadow_gain_mean": 0.012977206977047925,
+     "shadow_gain_worst": 0.010937429777429009,
+     "shadow_stability": 0.13733001890571014,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_block:43c250de28e23814eac88d54533556c82fb04dade6188b61db2960752527e7b8:f9db9508cd5bdbf7b87617ae444cc028f83b3f59237cd0753930b1cc45ae5617",
+    "dataset": "ETTm1",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.39098639823414233,
+    "shadow_score": -0.8689619028713419,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.33320552836496664,
+     "shadow_candidate_error_q90": 0.43343707976225604,
+     "shadow_candidate_error_std": 0.1280111430562442,
+     "shadow_keep_error_mean": 1.2021674312363084,
+     "shadow_gain_mean": 0.8689619028713419,
+     "shadow_gain_worst": -0.33624083203878613,
+     "shadow_stability": 1.4444352943688248,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:c28116200b74ae3f1ac0e5ffa6e7e298e6e7fa800539ed75269707ee62811107:9e717b0cc51c5104a4190c5f9383c32aec4f33c6cc7292de533c45ee27f40c70",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.3965964977190758,
+    "shadow_score": -0.006483139821156905,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0062406995108600675,
+     "shadow_candidate_error_q90": 0.00861570659402009,
+     "shadow_candidate_error_std": 0.0030366594729553985,
+     "shadow_keep_error_mean": 0.012723839332016972,
+     "shadow_gain_mean": 0.006483139821156905,
+     "shadow_gain_worst": -0.00015817060372174882,
+     "shadow_stability": 0.8846755178438697,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:4b6ebb9f01c46f6426321e6683142a1e4285ae6a5aa6d8283ca691af0a84c68b:13b132192b81b6f9b460a1c8361d42c2a1eb02ea508435432effc52e0bad5dda",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4797884046705228,
+    "shadow_score": 0.003662148470859661,
+    "rejected_at_working_point": true,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.027018686970727863,
+     "shadow_candidate_error_q90": 0.03856980862739282,
+     "shadow_candidate_error_std": 0.012953722181997945,
+     "shadow_keep_error_mean": 0.023356538499868202,
+     "shadow_gain_mean": -0.003662148470859661,
+     "shadow_gain_worst": -0.005836832668484587,
+     "shadow_stability": 0.7019040535300795,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:b64259aeb1474110ac238b90fedd4b58b90cff2fd1446ef062abc9e2bd407c27:7885bac477ecdd789196cfb42217c1f843f0e3bb7ae189cbd4e661a70a8cdb33",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4055112987551946,
+    "shadow_score": -0.05584303161270096,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.02782263379430561,
+     "shadow_candidate_error_q90": 0.05176156164712433,
+     "shadow_candidate_error_std": 0.023940573015315245,
+     "shadow_keep_error_mean": 0.08366566540700658,
+     "shadow_gain_mean": 0.05584303161270096,
+     "shadow_gain_worst": 0.002801201839931211,
+     "shadow_stability": 0.8664110604588945,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:4c6a058f0083a8f323a648fc13677c31c3bf90b4ec6d283e93004ed1f781f0e3:40ed6ae64062c655842ed2aef2db3164d6ab9ca8b966b6bab52acea162bb1cb2",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4527263683310366,
+    "shadow_score": -0.003560982181045575,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0031122595500863138,
+     "shadow_candidate_error_q90": 0.0038358993147221015,
+     "shadow_candidate_error_std": 0.0007685974922514659,
+     "shadow_keep_error_mean": 0.00667324173113189,
+     "shadow_gain_mean": 0.003560982181045575,
+     "shadow_gain_worst": 0.00047666868021231656,
+     "shadow_stability": 0.6887928551055066,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:fd177dac4506a7c1992e34ee28db547280d4a12f797bf562fa30c2a2bcda3e19:ab284b82094c02249643e325d59560d6a237a1bdcdad29b16bcb320296d81fa8",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.27930361180974467,
+    "shadow_score": -0.0017145452336431125,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0024824816639648782,
+     "shadow_candidate_error_q90": 0.00376113658602786,
+     "shadow_candidate_error_std": 0.0012634797848914603,
+     "shadow_keep_error_mean": 0.004197026897607991,
+     "shadow_gain_mean": 0.0017145452336431125,
+     "shadow_gain_worst": 0.00029660094410711296,
+     "shadow_stability": 0.6290324919140508,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:c032d8b06cd5314d9536f60b7ee291d7b579a9fd09471ab964df9ff8b255623c:f71168995a6f334e00a4436ed99349959c569b9c83662be64a0ffc53726ce5b8",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.4299648367564759,
+    "shadow_score": -0.01514658837331039,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.008825101440113841,
+     "shadow_candidate_error_q90": 0.009961270964409625,
+     "shadow_candidate_error_std": 0.0015042010032291434,
+     "shadow_keep_error_mean": 0.02397168981342423,
+     "shadow_gain_mean": 0.01514658837331039,
+     "shadow_gain_worst": 0.007026352605076554,
+     "shadow_stability": 0.7471372475638651,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:ee52a0239fdbc2183f38e78e598d6103e0ffefd981e1bd669d085343cff77f22:f62c387728022075c5e3513d0472bccb996dac411f8d11f0ba5922e90917fd01",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.5518595861720376,
+    "shadow_score": -0.17562028698039236,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.031037972712675454,
+     "shadow_candidate_error_q90": 0.041520179864979245,
+     "shadow_candidate_error_std": 0.014124494330776156,
+     "shadow_keep_error_mean": 0.20665825969306784,
+     "shadow_gain_mean": 0.17562028698039236,
+     "shadow_gain_worst": 0.004085734208763129,
+     "shadow_stability": 0.9178199637433376,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:00cf09102d2b23ebf4debdceb9e7cba106629da864aaeec08f83d8506e7db6ba:d48928fac7385cc7feeb74d44e084598dc39651110ee257aef6d1c36c2169b61",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.441718443570931,
+    "shadow_score": -0.18234019899387513,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.040638925758033455,
+     "shadow_candidate_error_q90": 0.05376882249882321,
+     "shadow_candidate_error_std": 0.016328119642976268,
+     "shadow_keep_error_mean": 0.22297912475190854,
+     "shadow_gain_mean": 0.18234019899387513,
+     "shadow_gain_worst": -0.029888132052437,
+     "shadow_stability": 1.422693812994082,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_block:c38792ba738e5a84be6886e30b7082d93a523d4e94c85dca5f44470d5f1d838b:dcc947271f3c74f7b6a226c8c647f2a5372a92fc7ba2c3f0bcf774e7887525d4",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.36880135041898954,
+    "shadow_score": -0.08683459340526516,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.1761222177319952,
+     "shadow_candidate_error_q90": 0.2220655900965642,
+     "shadow_candidate_error_std": 0.046098584088858065,
+     "shadow_keep_error_mean": 0.2629568111372604,
+     "shadow_gain_mean": 0.08683459340526516,
+     "shadow_gain_worst": -0.06538114725196295,
+     "shadow_stability": 1.3339337699356004,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:a08a59171b693283bf12ad75816f567c023a4367f60de34ca9fea9725fee8bfb:74370ebc390550101f2689fb28aec05c9476523a261ffbd7dc22d244d0975876",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.43189481581812417,
+    "shadow_score": -1.6880539515898458,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.1235329787319706,
+     "shadow_candidate_error_q90": 0.19982439748061537,
+     "shadow_candidate_error_std": 0.07503886067527955,
+     "shadow_keep_error_mean": 1.8115869303218162,
+     "shadow_gain_mean": 1.6880539515898458,
+     "shadow_gain_worst": 0.0073284559574745,
+     "shadow_stability": 1.1619713257637168,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:flatline:a13321224934ba51780aa539182b71f696a0da1ea27df54b0140fbc47f807a7d:a97c21d563d49e70c59dbd047e07684ae7e54fa87d498f8e8ce0bc6daf07409c",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.3967193340593691,
+    "shadow_score": -0.24650187450516636,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.05825248193373165,
+     "shadow_candidate_error_q90": 0.12331469369756837,
+     "shadow_candidate_error_std": 0.06513905480793139,
+     "shadow_keep_error_mean": 0.304754356438898,
+     "shadow_gain_mean": 0.24650187450516636,
+     "shadow_gain_worst": 0.08452388529164004,
+     "shadow_stability": 0.8233600611888763,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:flatline:d9757923e68ac1ce29343d9639218b61060f8a21a48bc22ae81793701a754e06:55ac560b7aecd23858503694513eb04d9d83231cf46cebd4654220bdd1b91464",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5541581196626144,
+    "shadow_score": -0.04562139095425675,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.06781363796063747,
+     "shadow_candidate_error_q90": 0.1393864863517246,
+     "shadow_candidate_error_std": 0.07086370764152813,
+     "shadow_keep_error_mean": 0.11343502891489422,
+     "shadow_gain_mean": 0.04562139095425675,
+     "shadow_gain_worst": -0.036527241071201255,
+     "shadow_stability": 1.2875425213455853,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:flatline:780fcf4cf9b3beddc44bb26cf676aa1bd5be00cd8ecc9dc384fc62da7bc13cf6:4fa583aad6d8b1d35c8d5d38d7e6543f0f7bd55a75cebe3f9715f11c5fac91fe",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4127606263969909,
+    "shadow_score": -0.14835895160037837,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0450425887804111,
+     "shadow_candidate_error_q90": 0.05478543246651254,
+     "shadow_candidate_error_std": 0.009602471071421582,
+     "shadow_keep_error_mean": 0.19340154038078947,
+     "shadow_gain_mean": 0.14835895160037837,
+     "shadow_gain_worst": 0.13466276730522153,
+     "shadow_stability": 0.10728381271693924,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:c67c6b7246e44cb246e5b7f920a424cba3dbc2f16052e19fdb85f2435aed4ee8:34bb1769cade388d1d67fe6ca10fdb68708e9a5de779dc1ccc864f7989e87b30",
+    "dataset": "ETTm1",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.12814493029653576,
+    "shadow_score": -0.08742584022853306,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.11869537941981055,
+     "shadow_candidate_error_q90": 0.15566490521226373,
+     "shadow_candidate_error_std": 0.036365846820471524,
+     "shadow_keep_error_mean": 0.2061212196483436,
+     "shadow_gain_mean": 0.08742584022853306,
+     "shadow_gain_worst": 0.02508560407799515,
+     "shadow_stability": 0.7146795073138711,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:c41ee3c0d66332a28ebad0a73cb98a51ad6462d9b872a499be290b44dc29008c:61c31ffd7a181d128ec5df9c20aa41b36e84567a51f0e92422ebcbd633a1fc75",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.2813960765654626,
+    "shadow_score": -0.010339943035480062,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.007234028863280031,
+     "shadow_candidate_error_q90": 0.008008915127556672,
+     "shadow_candidate_error_std": 0.00088542791541973,
+     "shadow_keep_error_mean": 0.01757397189876009,
+     "shadow_gain_mean": 0.010339943035480062,
+     "shadow_gain_worst": 0.007706972263691728,
+     "shadow_stability": 0.24820929484765303,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:999b1f6dc099ba4bc584ad5595844c37bfb2f0723d446dd5203a94a752e07183:d7582a1ce7ac170421269399762a48ce529aa5e96fc995ffd35328e0278cd352",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5036538149869575,
+    "shadow_score": -0.005867969786630474,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0036999420290871003,
+     "shadow_candidate_error_q90": 0.004339963876261596,
+     "shadow_candidate_error_std": 0.0006655585285509871,
+     "shadow_keep_error_mean": 0.009567911815717573,
+     "shadow_gain_mean": 0.005867969786630474,
+     "shadow_gain_worst": 0.0006531539094960931,
+     "shadow_stability": 0.7460948622471372,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:a6c552d9cde6ff146d4d5b540d6651a02806491ce9780fbdb9064fca575c5a76:6271559ec1401db46ea6ce2acdb0ecee4a73778fdcbd7e95dac16340a4998032",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5417813528018687,
+    "shadow_score": -0.00216315405442621,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.001423758030237884,
+     "shadow_candidate_error_q90": 0.001868414634954299,
+     "shadow_candidate_error_std": 0.0004403363548562285,
+     "shadow_keep_error_mean": 0.003586912084664094,
+     "shadow_gain_mean": 0.00216315405442621,
+     "shadow_gain_worst": 0.001703104899458032,
+     "shadow_stability": 0.20700516913646003,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "Oil Price:contaminated:flatline:6a54c6bf5fde55485edc32faa97955ca5a32774a8bfa4a327c6748154d66b290:59c59fea2e52c665bf4501e38af355732bfb5dc0648e6297f0c1a4d9763c4044",
+    "dataset": "Oil Price",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.3204386644966335,
+    "shadow_score": -0.8778975394303336,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.14323604656839986,
+     "shadow_candidate_error_q90": 0.20024094585974972,
+     "shadow_candidate_error_std": 0.07129310497125867,
+     "shadow_keep_error_mean": 1.0211335859987332,
+     "shadow_gain_mean": 0.8778975394303336,
+     "shadow_gain_worst": 0.02070145512843327,
+     "shadow_stability": 1.356805847260946,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:f8502602e5c953e63eac6acba5ddcf8a9934c5177ff416e45b7060399a8c63a8:bf4a5b2bb717bf8641fc69d7f42a11245e986cc486e3e64e6f5229f08af16875",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.1525615242971413,
+    "shadow_score": -0.07204902492918154,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.1364987822192905,
+     "shadow_candidate_error_q90": 0.20053846175254605,
+     "shadow_candidate_error_std": 0.06299277420993057,
+     "shadow_keep_error_mean": 0.20854780714847201,
+     "shadow_gain_mean": 0.07204902492918154,
+     "shadow_gain_worst": 0.04124360239784128,
+     "shadow_stability": 0.30702518479056173,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:d258faa18bbdea4f6500be9ddb2903523d60f13161472ed71e81303ec256ad5e:1641f18b7109fcdff132f1664bf2de89a02e208e9099fc59d66fedcdc0a620ef",
+    "dataset": "ETTm1",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.11977690124576494,
+    "shadow_score": -0.15359687449600243,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.057834211198899955,
+     "shadow_candidate_error_q90": 0.10012281114409735,
+     "shadow_candidate_error_std": 0.041501488989343374,
+     "shadow_keep_error_mean": 0.21143108569490235,
+     "shadow_gain_mean": 0.15359687449600243,
+     "shadow_gain_worst": 0.03621225519784255,
+     "shadow_stability": 1.05526160635877,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:0521488e4e2c853ab8d3546b50ea62c4c357c8345b5bddd06e4fd926dae61af5:0b7c9b2ecf7135722503dd1b23f9892843d7611e6b7897f809f633880d8d62bc",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5606880597782238,
+    "shadow_score": -0.8524257925119026,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.1880537664342696,
+     "shadow_candidate_error_q90": 0.2555607772773695,
+     "shadow_candidate_error_std": 0.06989962080296554,
+     "shadow_keep_error_mean": 1.0404795589461722,
+     "shadow_gain_mean": 0.8524257925119026,
+     "shadow_gain_worst": -0.04949431401682264,
+     "shadow_stability": 1.2118893210342447,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:c30c400c801add583a615ba275ad3246d980f1f387bb18256338ed7d1ffbbb58:587c11c174cf2b127d78d79480df1df3328f6c8a65e718dd53585e147882c081",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.3022184511579738,
+    "shadow_score": -0.000466054202208407,
+    "rejected_at_working_point": true,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0002882518606501585,
+     "shadow_candidate_error_q90": 0.0003781760128702937,
+     "shadow_candidate_error_std": 9.06288969030349e-05,
+     "shadow_keep_error_mean": 0.0007543060628585656,
+     "shadow_gain_mean": 0.000466054202208407,
+     "shadow_gain_worst": 0.00021763700690515626,
+     "shadow_stability": 0.6804115788591456,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:c6a7855afc137f0c01319cd81316d8094ca655b0f0877e1fd5c1755ebb68510d:16286e340b7a87f6631ae6b71542dba8abb746bc4d639d86e6e5ff303a7a422a",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.40998175949342086,
+    "shadow_score": -0.5273084831197917,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.02722250553221983,
+     "shadow_candidate_error_q90": 0.03741077394552193,
+     "shadow_candidate_error_std": 0.011206790747899226,
+     "shadow_keep_error_mean": 0.5545309886520116,
+     "shadow_gain_mean": 0.5273084831197917,
+     "shadow_gain_worst": 0.02673083271234815,
+     "shadow_stability": 0.6977099001350728,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:flatline:8c8d6d027670ab1ba7dab26af59813deb78a8d9de06b2c52d686703a6ea6de79:e117f3e247dbde9e1109743fa798605493a008b3fe57483de3896777aa564a4d",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.35237398067657755,
+    "shadow_score": 0.23556810048061017,
+    "rejected_at_working_point": true,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.5418557648284217,
+     "shadow_candidate_error_q90": 1.2323561334733433,
+     "shadow_candidate_error_std": 0.6930090807578064,
+     "shadow_keep_error_mean": 0.3062876643478116,
+     "shadow_gain_mean": -0.23556810048061017,
+     "shadow_gain_worst": -1.3640771100499898,
+     "shadow_stability": 3.5908292116720215,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTh2:contaminated:missing_scattered:bbd3515727b5285997421da103f2faaa18b388239a6baee2e46e2d278de57dfb:376bba637492b46066e48760c4959027c543ce7b70ca1251cf3588fc943da746",
+    "dataset": "ETTh2",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.37764188958433437,
+    "shadow_score": -0.5303263633846151,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 1.0438531204869659,
+     "shadow_candidate_error_q90": 1.159674069067782,
+     "shadow_candidate_error_std": 0.11489768948505162,
+     "shadow_keep_error_mean": 1.574179483871581,
+     "shadow_gain_mean": 0.5303263633846151,
+     "shadow_gain_worst": -0.39264787191906614,
+     "shadow_stability": 1.230645801323273,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:4ebccb70c8f634050de9e5dde14b0424852e8f1b2a5c72e9e3de4d0618773020:e8588063f894eb07aa0565c86d9fc27dd3f67c92c0abaed287cf17cef6ce941a",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5759249809222524,
+    "shadow_score": -0.2703921846979309,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.25526615981142736,
+     "shadow_candidate_error_q90": 0.41264478927820863,
+     "shadow_candidate_error_std": 0.15852918399944868,
+     "shadow_keep_error_mean": 0.5256583445093582,
+     "shadow_gain_mean": 0.2703921846979309,
+     "shadow_gain_worst": -0.00680157311290025,
+     "shadow_stability": 0.8500444804475252,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:cb3ab4d9568584554562a75065d9891ef021767dd0855cca61afde5bd5bff35c:6f78cd9ae0a61220f08e4246dc904d30c4ed38413fb69ca7731a927b91035eb1",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.30518369746100416,
+    "shadow_score": -0.1636117484533756,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.1839022901738092,
+     "shadow_candidate_error_q90": 0.22707058687182918,
+     "shadow_candidate_error_std": 0.042973833096061155,
+     "shadow_keep_error_mean": 0.34751403862718483,
+     "shadow_gain_mean": 0.1636117484533756,
+     "shadow_gain_worst": 0.056194492422768666,
+     "shadow_stability": 0.4982423277003927,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:a4f4280197d729983768a5a2917777e0f5b6ba0711849f0cbed4ecf4e62ce66c:585105251df989606c73d8824271a07b0bf5c0f2f524c9991b0445ae85485e8b",
+    "dataset": "ETTm1",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.12431250794094341,
+    "shadow_score": -0.5905191695855075,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.8656940315751314,
+     "shadow_candidate_error_q90": 1.7137165055663515,
+     "shadow_candidate_error_std": 0.8315649514042243,
+     "shadow_keep_error_mean": 1.4562132011606386,
+     "shadow_gain_mean": 0.5905191695855075,
+     "shadow_gain_worst": 0.13359254963795353,
+     "shadow_stability": 0.6487965674400483,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:fd94f1d767f14fdac661c4c69ad35f8b3abb6dd5192ad2a677d929e94226135e:c46eb384ead10f0b456b8ac42719bbcaf93b6c176f451ac8135f274030f702ee",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5544332903349677,
+    "shadow_score": -0.2540944013443839,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.04907458159176037,
+     "shadow_candidate_error_q90": 0.08061844150865344,
+     "shadow_candidate_error_std": 0.031067112740578863,
+     "shadow_keep_error_mean": 0.30316898293614425,
+     "shadow_gain_mean": 0.2540944013443839,
+     "shadow_gain_worst": -0.025929396677040282,
+     "shadow_stability": 0.8129827623356356,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:34406a0f6efe78ca0cb9b60c3930183343a681a0e9d6a790c03903b356dd0969:c6bff359a9963b540b12e31b35eeac14cc963ecfac5a957936f51b7c6c9d4f36",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.3702696111355116,
+    "shadow_score": -0.0030812873628633074,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0022059919633538156,
+     "shadow_candidate_error_q90": 0.003191330015565669,
+     "shadow_candidate_error_std": 0.0010422428839704915,
+     "shadow_keep_error_mean": 0.0052872793262171225,
+     "shadow_gain_mean": 0.0030812873628633074,
+     "shadow_gain_worst": -3.849900798913778e-05,
+     "shadow_stability": 0.7220848694850873,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:flatline:97869a363f3b1f34426b816355f06266bb529b36d78207043cb5dc02b21da6cc:8e09ca3ccffefb836d356bca9c08d808165b9fdb947f377dec0197572e4f8f54",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.563087347859653,
+    "shadow_score": -0.3565790617347057,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.1660125198170227,
+     "shadow_candidate_error_q90": 0.26916792229741904,
+     "shadow_candidate_error_std": 0.10263422458780899,
+     "shadow_keep_error_mean": 0.5225915815517284,
+     "shadow_gain_mean": 0.3565790617347057,
+     "shadow_gain_worst": -0.1602799955372238,
+     "shadow_stability": 1.136915643725271,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:0fe198cc5ce360a8ab459083a2a7e1ebf96135f3ed69d0c4aed65fb5f126c3d1:461d178846113bcd9f0a0e05c79940e4c1678fa19a8d50ff62de7f1e51b73f5c",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.1979989251653195,
+    "shadow_score": -0.0005721370664544648,
+    "rejected_at_working_point": true,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.00021170957091735387,
+     "shadow_candidate_error_q90": 0.00026903425031054397,
+     "shadow_candidate_error_std": 6.496505383752919e-05,
+     "shadow_keep_error_mean": 0.0007838466373718186,
+     "shadow_gain_mean": 0.0005721370664544648,
+     "shadow_gain_worst": 0.00023219915174100744,
+     "shadow_stability": 0.5791356116141002,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_block:dda489aa5cd467e3d2e584676eada20769d732c75f2f238b0031f15845809fcd:83dde9e85cde141878c2f2aa547d0212a9146342dc3d80dec12d8adac07041ef",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.45111525222416277,
+    "shadow_score": -3.301481458330017,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.25535899402322687,
+     "shadow_candidate_error_q90": 0.3226724060184766,
+     "shadow_candidate_error_std": 0.07027642911147933,
+     "shadow_keep_error_mean": 3.5568404523532444,
+     "shadow_gain_mean": 3.301481458330017,
+     "shadow_gain_worst": 0.5968653668443451,
+     "shadow_stability": 1.1405137980253996,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_block:db8550263d498c2a546f778ac27c07f04f7eea905c0b1840308c8926d7ce424b:2be4db35b7c6be2e991e4af8fe86320342ce63d4d97e038da1808080d34d0ce8",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4260295925229752,
+    "shadow_score": -1.2314563619198762,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.1595225737899261,
+     "shadow_candidate_error_q90": 0.24208624541360046,
+     "shadow_candidate_error_std": 0.08559376341183661,
+     "shadow_keep_error_mean": 1.3909789357098024,
+     "shadow_gain_mean": 1.2314563619198762,
+     "shadow_gain_worst": 0.0027626980009504143,
+     "shadow_stability": 0.7177061696860503,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_block:2cc4f9c5abbb6a160601431be198c6f90512f90400885645cd97df04322d6b2a:ae91187815057f4531c080383e8d9d6794abfdfa1290755af836f77c9e00cf82",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.40935854009064687,
+    "shadow_score": -1.79813242817703,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 1.1633372270434201,
+     "shadow_candidate_error_q90": 2.373853699187912,
+     "shadow_candidate_error_std": 1.193923865825846,
+     "shadow_keep_error_mean": 2.96146965522045,
+     "shadow_gain_mean": 1.79813242817703,
+     "shadow_gain_worst": -0.06588062305475595,
+     "shadow_stability": 1.4202018443370525,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:8ca1f2127c62356112e7596142511665d7f5cc2b64e3b2e8aa94a0a8462e5457:de1105cc104bc66be60a5300b23983167b4e58d3a91375d7d1ef058897ed1603",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.27457135995236226,
+    "shadow_score": -0.0012121171297358433,
+    "rejected_at_working_point": true,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.000752896670742893,
+     "shadow_candidate_error_q90": 0.0009603277314918226,
+     "shadow_candidate_error_std": 0.00020717525535220345,
+     "shadow_keep_error_mean": 0.0019650138004787365,
+     "shadow_gain_mean": 0.0012121171297358433,
+     "shadow_gain_worst": 0.00038410630090643253,
+     "shadow_stability": 0.9148341159475426,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:8c03b655d411e18299622745c04a10a93365c25d3a71e92794d673a41d242b00:100caa5026f7e24193513af3b23c62f3b8a6862ac76a32a395c6823304c284af",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.45457495787249874,
+    "shadow_score": -0.006340374714382971,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.006066311514336638,
+     "shadow_candidate_error_q90": 0.00874443403555811,
+     "shadow_candidate_error_std": 0.0028292183749241136,
+     "shadow_keep_error_mean": 0.012406686228719608,
+     "shadow_gain_mean": 0.006340374714382971,
+     "shadow_gain_worst": 0.0021968188362921533,
+     "shadow_stability": 0.6056603238658667,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:2996dcbb8683c67057284bc2ffbffc6c80498603fc30b5f67f56bf234238a708:b1596985953b5b602876bd477a6ab4ad465410e58349685cc15e914da036e98c",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5804620413571687,
+    "shadow_score": -0.004213337618433518,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.001745814819799841,
+     "shadow_candidate_error_q90": 0.0026651049184969744,
+     "shadow_candidate_error_std": 0.0009069494390713071,
+     "shadow_keep_error_mean": 0.005959152438233359,
+     "shadow_gain_mean": 0.004213337618433518,
+     "shadow_gain_worst": 0.002761478604221993,
+     "shadow_stability": 0.24570743515659813,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:flatline:61f58b67ece537c8a5aa09d03847dd1fd4049691d7a08acd8b7385532e57f25c:fe4b5313ac10c459f387e9c43985a62bde4a4d59883e757a0f6709d89bf20c86",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5538913714092466,
+    "shadow_score": -0.690035637140635,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.16336331535533916,
+     "shadow_candidate_error_q90": 0.33759051392187117,
+     "shadow_candidate_error_std": 0.173717225692147,
+     "shadow_keep_error_mean": 0.8533989524959743,
+     "shadow_gain_mean": 0.690035637140635,
+     "shadow_gain_worst": 0.47954080647234787,
+     "shadow_stability": 0.22204632903321747,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:78440f5ef02157145e89f390d77e93ca5539c7806ab92ab5d4d14d3cb7dec9ef:b961c86b482b5eda5ed6e6f85087ccd0276ebf14d80c698f0ed76b98a9571c45",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.41404101621300204,
+    "shadow_score": -0.06974725838210095,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.1415524584598137,
+     "shadow_candidate_error_q90": 0.2763875796666803,
+     "shadow_candidate_error_std": 0.13221950916012273,
+     "shadow_keep_error_mean": 0.21129971684191462,
+     "shadow_gain_mean": 0.06974725838210095,
+     "shadow_gain_worst": -0.12542946704527977,
+     "shadow_stability": 2.736738134931544,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:1dd9fcd5dbb394871752aff895b6adb266686ce1186ce2a1a0ccefcfe1b155c8:153c20bfee2b425966c4eacc4d6904c48977cbf916f2eb3d91bd0d99b26fbec2",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.42723018876519675,
+    "shadow_score": -0.3152886641252902,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.06127929031974014,
+     "shadow_candidate_error_q90": 0.11441227136206092,
+     "shadow_candidate_error_std": 0.05273728236249409,
+     "shadow_keep_error_mean": 0.3765679544450304,
+     "shadow_gain_mean": 0.3152886641252902,
+     "shadow_gain_worst": 0.0030087392473710783,
+     "shadow_stability": 0.7495258024398144,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:16433e958a255ad7957949dd0ae6cf2faa420235287aafdea0727d278be51e8d:42ec17d69948710f1ed3ce35cf12899d730bf2d8aad025b49586afda54fbd11d",
+    "dataset": "ETTm1",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.12246927988447333,
+    "shadow_score": -0.05273306479709814,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.06467223931508294,
+     "shadow_candidate_error_q90": 0.15245390663341205,
+     "shadow_candidate_error_std": 0.0884440690389477,
+     "shadow_keep_error_mean": 0.11740530411218109,
+     "shadow_gain_mean": 0.05273306479709814,
+     "shadow_gain_worst": 0.013329610199524555,
+     "shadow_stability": 1.027491286050755,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:3cb10ece52e9267539f3ec428c58a01e13727804f3d2cfe8d863daf9390b4c01:927867ff24b5ca78eacbfb227b8d1de2d98f95604e573206e92b85e226a98e95",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.45538535727489066,
+    "shadow_score": -0.08455158122758871,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.12724689977319226,
+     "shadow_candidate_error_q90": 0.191699365121136,
+     "shadow_candidate_error_std": 0.0721884432985291,
+     "shadow_keep_error_mean": 0.211798481000781,
+     "shadow_gain_mean": 0.08455158122758871,
+     "shadow_gain_worst": -0.06713770492821708,
+     "shadow_stability": 1.2979898314101053,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "Oil Price:contaminated:missing_scattered:590223b632e2ec23df8ac2ecd4bf357ff256daae505843643b71ff4c243e2c87:3f2834e581f4c148ae37b8ac9a77b410520112ba741afcaad0c04e4cdc0c17ae",
+    "dataset": "Oil Price",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.15849896578168662,
+    "shadow_score": -0.001242398325943762,
+    "rejected_at_working_point": true,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.012815889318802766,
+     "shadow_candidate_error_q90": 0.018626637423564664,
+     "shadow_candidate_error_std": 0.005706199184838251,
+     "shadow_keep_error_mean": 0.014058287644746528,
+     "shadow_gain_mean": 0.001242398325943762,
+     "shadow_gain_worst": -0.006991616345597652,
+     "shadow_stability": 4.772091174270298,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:9ebf55e3e0cd6de38db67d359353af218d461b59cbfb570de838a8e12f178367:f79d93e663e8e876f322403b81d7acea19704e7ce4a7409ffdbc1dd0f755d9b4",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.3964386616017135,
+    "shadow_score": -0.004575345356356984,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.002179956097572468,
+     "shadow_candidate_error_q90": 0.0026817903637902465,
+     "shadow_candidate_error_std": 0.0004925095743132508,
+     "shadow_keep_error_mean": 0.006755301453929452,
+     "shadow_gain_mean": 0.004575345356356984,
+     "shadow_gain_worst": 0.0027243968429312712,
+     "shadow_stability": 0.5084196923513631,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:493a1c1952327401a301c9eb79d4a105a90b1c0c5674245860ebd2cceb587441:4d2c15e80d63df4ad2f795e3fd1863ab6b25dab5fe1370baea30788388567f0f",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.1541976143917073,
+    "shadow_score": -0.050967164725162044,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.23110486975012123,
+     "shadow_candidate_error_q90": 0.26512084917926215,
+     "shadow_candidate_error_std": 0.03417176704231568,
+     "shadow_keep_error_mean": 0.2820720344752833,
+     "shadow_gain_mean": 0.050967164725162044,
+     "shadow_gain_worst": -0.05377078467005181,
+     "shadow_stability": 1.6844963754818771,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:flatline:ba887d99d725cff206f7a930438e3d32358f59af874944092636a54d2990bbbf:786d82fddca9ab564448f47f4b60bb2674a0d77abcbf33b872ca23a564df10a6",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5101589071664938,
+    "shadow_score": 0.017115505919267197,
+    "rejected_at_working_point": true,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.13250217119665972,
+     "shadow_candidate_error_q90": 0.2169700175256854,
+     "shadow_candidate_error_std": 0.08317548492815066,
+     "shadow_keep_error_mean": 0.11538666527739254,
+     "shadow_gain_mean": -0.017115505919267197,
+     "shadow_gain_worst": -0.07164202929149374,
+     "shadow_stability": 2.274980706573258,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:267192c0fd88f2e29c755a154c89690939687a756f8bae08f7db3b62fa0f4e6f:c05849ffac1751a7c004df7113da361396d0438b96c32242565f8401c46d3476",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.2208531988775384,
+    "shadow_score": -0.0024451078507182395,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0017483344538547169,
+     "shadow_candidate_error_q90": 0.002347813252151404,
+     "shadow_candidate_error_std": 0.0007966775123792025,
+     "shadow_keep_error_mean": 0.004193442304572957,
+     "shadow_gain_mean": 0.0024451078507182395,
+     "shadow_gain_worst": 0.0009428348606240852,
+     "shadow_stability": 0.5605581621425819,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:flatline:ad9e3fbd2e9af5bf0332aa8d9d3f0003618ac30802d6afe2cf39877c053ff782:59f638fa67af0a9c4bf158d04db335bf07f0aa49c81d6fa1478cd67a4fed3b9e",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.3685554991459793,
+    "shadow_score": -0.3404087304407722,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.031021855579419614,
+     "shadow_candidate_error_q90": 0.0423343941797059,
+     "shadow_candidate_error_std": 0.011811598418080363,
+     "shadow_keep_error_mean": 0.37143058602019186,
+     "shadow_gain_mean": 0.3404087304407722,
+     "shadow_gain_worst": 0.02293740451177047,
+     "shadow_stability": 0.6912525609754901,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:56882c6a4b2851afc3d84c9e8178b745a6ad3652d28397e5d1b390133ac84ef0:7c076f672ecfc206230c1b64fec40a304fbb24c5a14c8806d150eebc548fb480",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.5365910209896784,
+    "shadow_score": -0.20007127278349887,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.27717378050256153,
+     "shadow_candidate_error_q90": 0.5082377886571333,
+     "shadow_candidate_error_std": 0.22708955812374235,
+     "shadow_keep_error_mean": 0.47724505328606037,
+     "shadow_gain_mean": 0.20007127278349887,
+     "shadow_gain_worst": -0.1313112010527417,
+     "shadow_stability": 1.3705959296983183,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:87c0920c15778792121e004c5fe33682b1f59055016e3ad6a6f0ea6a08dc77cb:32532cbfe11c3d4eacf9fc74cd2d6e8ae2fe716696d448aa09722823c62759e2",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.27050309521551147,
+    "shadow_score": -0.10364903216390914,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.14059259686071754,
+     "shadow_candidate_error_q90": 0.15279575549007043,
+     "shadow_candidate_error_std": 0.013968410802698497,
+     "shadow_keep_error_mean": 0.24424162902462668,
+     "shadow_gain_mean": 0.10364903216390914,
+     "shadow_gain_worst": 0.04257301808021419,
+     "shadow_stability": 0.47502934161487054,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:2ea49890d304b270b83d603e0feee8e05ce8633444aee87ac628be1edc518eaa:664d8e45aacf6e826229545f700bcefa65c4ddbfbbd214b7e0f240d8a75b0deb",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.39015073542719386,
+    "shadow_score": -0.1319595818570448,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.017842988372672428,
+     "shadow_candidate_error_q90": 0.023830376213182146,
+     "shadow_candidate_error_std": 0.005921963480831884,
+     "shadow_keep_error_mean": 0.1498025702297172,
+     "shadow_gain_mean": 0.1319595818570448,
+     "shadow_gain_worst": 0.005314514716785609,
+     "shadow_stability": 0.8706208902704472,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:flatline:6f555b9608d3b8ea17b837e8cced40d04689adb3733fb846d8a2f73345f6332c:666445731195c336cf78f297c32eba8435ce9cd4267bd3eb6125d530f4667e7f",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4596234941968085,
+    "shadow_score": -2.450094411589442,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 1.7748966940016597,
+     "shadow_candidate_error_q90": 3.371314579537922,
+     "shadow_candidate_error_std": 1.5844963897601596,
+     "shadow_keep_error_mean": 4.224991105591101,
+     "shadow_gain_mean": 2.450094411589442,
+     "shadow_gain_worst": 1.2123289391912917,
+     "shadow_stability": 0.37676564301532484,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:012be7fcca1ff2f555a6bc431094740b0ae5ba9a5b29a956a86194b37bc45df9:af89a192596d2d7e1b93088dc2285c1d80ef7e0bdc014c766a282b234c960381",
+    "dataset": "ETTm1",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.33184802808551156,
+    "shadow_score": -0.15579236518741948,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.2096840694415567,
+     "shadow_candidate_error_q90": 0.2550442438123753,
+     "shadow_candidate_error_std": 0.06242806427288461,
+     "shadow_keep_error_mean": 0.3654764346289762,
+     "shadow_gain_mean": 0.15579236518741948,
+     "shadow_gain_worst": 0.012224188573732586,
+     "shadow_stability": 1.1870802483537353,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:35667cc89717a742538ff1f1bd347b5f33be3afeb609859eaf3dc329c1034166:0a97b584632badc377b5a184bc4c17db225085e6b7fb3fc3efd01fca7dc60511",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.3918392165693429,
+    "shadow_score": 0.010777258242693774,
+    "rejected_at_working_point": true,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.02594175833402929,
+     "shadow_candidate_error_q90": 0.034770286981377026,
+     "shadow_candidate_error_std": 0.011977342516322723,
+     "shadow_keep_error_mean": 0.015164500091335518,
+     "shadow_gain_mean": -0.010777258242693774,
+     "shadow_gain_worst": -0.015569028839577944,
+     "shadow_stability": 0.5452065283126509,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:31b4a9777dd395da2a2bfe0a21d01e68999ee95bf441ff62cdd070c5dc370665:1001fd0bd2d535e48b0adf6e9f3ba0a5ef7d66e3de04b31b090f786a60e2f1e1",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.3298379752619197,
+    "shadow_score": -0.004995881803341091,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.004822775937171579,
+     "shadow_candidate_error_q90": 0.006470794687553186,
+     "shadow_candidate_error_std": 0.0021414087970484997,
+     "shadow_keep_error_mean": 0.00981865774051267,
+     "shadow_gain_mean": 0.004995881803341091,
+     "shadow_gain_worst": -0.0004542707683327426,
+     "shadow_stability": 0.9464468864176349,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:ad2e4ae0b16f9da07b4e4e82e859e6ca66a9b80234026d93466b55117ac7cb87:b1fd225b0a6e024c10607f32133f41be9e8ff938565419238b34822d8a9dd855",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5804838450909455,
+    "shadow_score": -0.050035216781705714,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.04090555081924243,
+     "shadow_candidate_error_q90": 0.04981413475293866,
+     "shadow_candidate_error_std": 0.010701162098410637,
+     "shadow_keep_error_mean": 0.09094076760094814,
+     "shadow_gain_mean": 0.050035216781705714,
+     "shadow_gain_worst": -0.011730227203270965,
+     "shadow_stability": 1.4780678504323703,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:7787ab825bae7b9d6294ea551ee404dbaeb875d3046702eaee4f644a0b9f280a:0062e9058197fd151aa92e943e73a88689589d2986deff242dd52b3da7706dcf",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.4926059750745773,
+    "shadow_score": -0.0018819566426141476,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0018479440849031319,
+     "shadow_candidate_error_q90": 0.002042148531226337,
+     "shadow_candidate_error_std": 0.00019074880497386255,
+     "shadow_keep_error_mean": 0.003729900727517279,
+     "shadow_gain_mean": 0.0018819566426141476,
+     "shadow_gain_worst": 0.0012234020893094452,
+     "shadow_stability": 0.4188796203174945,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:7f30862c66e554a55c503c261334b6de8bf4b935427c6c614205009b8e9c6571:ded73b5951cfebee64086016b7659ba4a7e87d31d5581486f538e8e8d62f987e",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.3935114033244397,
+    "shadow_score": -0.013805874414885106,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.016612288046678234,
+     "shadow_candidate_error_q90": 0.019269504311227863,
+     "shadow_candidate_error_std": 0.0026107632549963898,
+     "shadow_keep_error_mean": 0.03041816246156334,
+     "shadow_gain_mean": 0.013805874414885106,
+     "shadow_gain_worst": 0.004018720928136189,
+     "shadow_stability": 0.5401479674044902,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:5f42a7ae4311f1aa5c65ae79b68c4ee60e9b848c3913b441b7fecd6d42f2d4e4:d3a08f9f9d64f75545036bdeebea86f46e39655bd1c8e136712d8e61098483ff",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.3713020883065804,
+    "shadow_score": -0.013887809165445858,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.013708770237238058,
+     "shadow_candidate_error_q90": 0.01608856331542677,
+     "shadow_candidate_error_std": 0.002441965428160741,
+     "shadow_keep_error_mean": 0.027596579402683914,
+     "shadow_gain_mean": 0.013887809165445858,
+     "shadow_gain_worst": 0.008356109604685193,
+     "shadow_stability": 0.29138071586719133,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTh2:contaminated:flatline:fba694085c0b1132ee83419d32b8f293ce501956452705ea5f76ef1869f4bbb0:c5f3c0731bcd87c7801239f160dd5d4e2be2394a1dc4125f9571899a74e4226d",
+    "dataset": "ETTh2",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.3901995887514316,
+    "shadow_score": -0.05877718681263346,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.3356424322652574,
+     "shadow_candidate_error_q90": 0.36840052633401615,
+     "shadow_candidate_error_std": 0.03265077994835405,
+     "shadow_keep_error_mean": 0.39441961907789086,
+     "shadow_gain_mean": 0.05877718681263346,
+     "shadow_gain_worst": -0.02856151775784843,
+     "shadow_stability": 1.6953414105617335,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:67a48d4cf5c61e99a828e34bc5acf54fded357f6e1862c0951ae0bfa14cf538f:303c10ce2a28f36c88449e22c1ca4406545f9a02a98f2f1fdcc6fbf926fa172f",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.5165317065054047,
+    "shadow_score": -1.9611764475119902,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.2500802392370887,
+     "shadow_candidate_error_q90": 0.34227854970069393,
+     "shadow_candidate_error_std": 0.09230618584582204,
+     "shadow_keep_error_mean": 2.211256686749079,
+     "shadow_gain_mean": 1.9611764475119902,
+     "shadow_gain_worst": 1.3213562223596935,
+     "shadow_stability": 0.2733971511360925,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:flatline:ffe46ac602cddfd42c21ad4a2e049a7240f494e2aa84dfbfd2439abde29c77b5:218a79ebd473150f19eecc8ab0c938e5f5fea399827e4dea10dc1539b546026e",
+    "dataset": "US Term Structure",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.35235936656606265,
+    "shadow_score": -0.18796385693233283,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.036616698612115715,
+     "shadow_candidate_error_q90": 0.0720432619058323,
+     "shadow_candidate_error_std": 0.035768702400727784,
+     "shadow_keep_error_mean": 0.22458055554444856,
+     "shadow_gain_mean": 0.18796385693233283,
+     "shadow_gain_worst": 0.00038853094779968227,
+     "shadow_stability": 0.8252251476064774,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:3f93aae62977eae770e604fe1975f33cdde03fef1175bd10cad0bb7b382e25a3:5e4dab9f17be5800daef12359f3b2cc4e7187d222770ea8552cb5e6319962499",
+    "dataset": "US Term Structure",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.599318570302039,
+    "shadow_score": -0.002733221242910601,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0014205943084648093,
+     "shadow_candidate_error_q90": 0.0014847227125408835,
+     "shadow_candidate_error_std": 8.583220196401414e-05,
+     "shadow_keep_error_mean": 0.0041538155513754105,
+     "shadow_gain_mean": 0.002733221242910601,
+     "shadow_gain_worst": 0.002111738075954178,
+     "shadow_stability": 0.25944797451887736,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTh2:contaminated:missing_scattered:a8098774b5ec9f17fb8dc3f8a4537c28c2e8298c64461f51f7c296ca476899fc:2e9a93b98ee5daf54c62a747c36eb0b0d3c6cff750074353979bc3b72a7ff9f2",
+    "dataset": "ETTh2",
+    "harmful": false,
+    "beneficial_and_safe": true,
+    "pics_harm_score": 0.3386533215051512,
+    "shadow_score": -0.03896801394650052,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.004945751537081232,
+     "shadow_candidate_error_q90": 0.007095958987934077,
+     "shadow_candidate_error_std": 0.002109623724322934,
+     "shadow_keep_error_mean": 0.043913765483581745,
+     "shadow_gain_mean": 0.03896801394650052,
+     "shadow_gain_worst": 0.01883946450560707,
+     "shadow_stability": 0.37138657406492326,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTh2:rare_valid:null:00fe32b6b833f4f7e2c232b5bb4ff22e0cdc63f78d3b2e0eecc287998bbe8801:00fe32b6b833f4f7e2c232b5bb4ff22e0cdc63f78d3b2e0eecc287998bbe8801",
+    "dataset": "ETTh2",
+    "harmful": true,
+    "beneficial_and_safe": false,
+    "pics_harm_score": 0.3708677331004023,
+    "shadow_score": -0.8495605816113913,
+    "rejected_at_working_point": false,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 2.138527644370709,
+     "shadow_candidate_error_q90": 4.082619238550736,
+     "shadow_candidate_error_std": 1.921206770739464,
+     "shadow_keep_error_mean": 2.9880882259821004,
+     "shadow_gain_mean": 0.8495605816113913,
+     "shadow_gain_worst": -4.21339262340593,
+     "shadow_stability": 4.851393043244714,
+     "shadow_support": 1
+    }
+   }
+  ],
+  "failure_samples": [
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:a6ded25cc4b3ceefdcd8a7453b1dfa17dbe5ec5fcaa575db23b5c7152a8c570b:32fd71509044788a51dfa0044e7375d1ce330909dbfa811e18965480ba90545c",
+    "dataset": "US Term Structure",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.35575077238370395,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.12145999963406258,
+     "shadow_candidate_error_q90": 0.18431149392558466,
+     "shadow_candidate_error_std": 0.06309882569508456,
+     "shadow_keep_error_mean": 0.47721077201776657,
+     "shadow_gain_mean": 0.35575077238370395,
+     "shadow_gain_worst": -0.0449361347109878,
+     "shadow_stability": 1.5106621888845384,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:313e4b051adeb058d727deac8f37c33b57c4631f16513d7f6fa374095bfce403:a1255fbe2bdc4bc737b8580e9c16beb2f561b42e76da295b090913eb223f72ce",
+    "dataset": "ETTm1",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -1.4048321579652672,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.141501468262568,
+     "shadow_candidate_error_q90": 0.212324773731404,
+     "shadow_candidate_error_std": 0.08008171035977224,
+     "shadow_keep_error_mean": 1.5463336262278353,
+     "shadow_gain_mean": 1.4048321579652672,
+     "shadow_gain_worst": 0.3739843258275328,
+     "shadow_stability": 0.637469260600358,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_block:cfd3034c1a7ced89aedb5a2f46da0d46eb1fb137ddeae6ec0d1d08c5de4bed4b:a9c58e91e5d4808e40d69d5e8f37d4f00ca054fec7ba1ea6bafd7751866dbfdd",
+    "dataset": "ETTm1",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.026210620345052057,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.10383803698609646,
+     "shadow_candidate_error_q90": 0.1062369140127642,
+     "shadow_candidate_error_std": 0.0026237709866802046,
+     "shadow_keep_error_mean": 0.13004865733114854,
+     "shadow_gain_mean": 0.026210620345052057,
+     "shadow_gain_worst": 0.004154498519826771,
+     "shadow_stability": 0.5971348362821708,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:7f906953b96ea409f4eafd955d7de097c71557d49e4b800fe0433af36b52ca88:d6cd9446f866f1943a99e1c46565cc01a3d2631b78af8f28c66afd7522d22ad5",
+    "dataset": "ETTm1",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.04762238197754584,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.148151243578442,
+     "shadow_candidate_error_q90": 0.16185365072351712,
+     "shadow_candidate_error_std": 0.01376489279649423,
+     "shadow_keep_error_mean": 0.19577362555598785,
+     "shadow_gain_mean": 0.04762238197754584,
+     "shadow_gain_worst": -0.0488511199289825,
+     "shadow_stability": 1.5023092485771594,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:8e634fdeed5e33503acfcffb29910c9e178eea5fcdba58eeb81aa509c20cd3e5:a5fe42d5369e767b11753ee88a96ccea304350b26f2889e8057295eac100de20",
+    "dataset": "US Term Structure",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.36705068977058225,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.03206582172783134,
+     "shadow_candidate_error_q90": 0.041486901065567745,
+     "shadow_candidate_error_std": 0.011230178495713552,
+     "shadow_keep_error_mean": 0.3991165114984136,
+     "shadow_gain_mean": 0.36705068977058225,
+     "shadow_gain_worst": 0.1991370980052161,
+     "shadow_stability": 0.5570904367907116,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:f6f64871f92b5e96d690381783a527a42d228f24f970a25f957a9fd9c0314383:edfeac61a8c181eed7a9c39b8a5ca6d205263e9385eb9e0fd8273e5a4914c4f9",
+    "dataset": "ETTm1",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.31544365664745716,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.16422607549587373,
+     "shadow_candidate_error_q90": 0.28706389476506855,
+     "shadow_candidate_error_std": 0.12072348904491435,
+     "shadow_keep_error_mean": 0.4796697321433308,
+     "shadow_gain_mean": 0.31544365664745716,
+     "shadow_gain_worst": 0.0848462013076724,
+     "shadow_stability": 0.8629483693590516,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTh2:contaminated:missing_scattered:f9f213aa144747039c49724c1cae3fe4bd4f3f39b9ce40c91b64ad71e1e599d0:814edbe6c6fe7fc4c3eaaeb781a5e66b95a52f42e19802a4411b38fb2972c378",
+    "dataset": "ETTh2",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.055873780854937515,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.6402906130408922,
+     "shadow_candidate_error_q90": 1.254510691021874,
+     "shadow_candidate_error_std": 0.6023790876333187,
+     "shadow_keep_error_mean": 0.6961643938958297,
+     "shadow_gain_mean": 0.055873780854937515,
+     "shadow_gain_worst": -0.07103890147199254,
+     "shadow_stability": 2.3198079913353786,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:1ba78be7e6705bb270229a34b5dd3b0b0a0da297dea0f426f60c1f77901abc04:e5b58b677d3c6587a596b6d22fe64cf053f191593e16de0db0c6e1a95b532a25",
+    "dataset": "US Term Structure",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.014876450468086055,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.00919971047546323,
+     "shadow_candidate_error_q90": 0.011812714309292892,
+     "shadow_candidate_error_std": 0.002915263369912746,
+     "shadow_keep_error_mean": 0.02407616094354929,
+     "shadow_gain_mean": 0.014876450468086055,
+     "shadow_gain_worst": 0.00020401299774430812,
+     "shadow_stability": 1.044236417498543,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:d03aa292a2cc11bbdf5766c7270afc76ce75613dfe37feee40e9edc0a8737266:fe7aeadcbf6c020feb7f3b590f9be5e9864dac853a0516df5dd22e338763e87c",
+    "dataset": "US Term Structure",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.012915014707599261,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.019079904177267574,
+     "shadow_candidate_error_q90": 0.021507922404928503,
+     "shadow_candidate_error_std": 0.0023820519611645052,
+     "shadow_keep_error_mean": 0.03199491888486684,
+     "shadow_gain_mean": 0.012915014707599261,
+     "shadow_gain_worst": 0.004842010353026588,
+     "shadow_stability": 0.47469765926838076,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_block:43c250de28e23814eac88d54533556c82fb04dade6188b61db2960752527e7b8:f9db9508cd5bdbf7b87617ae444cc028f83b3f59237cd0753930b1cc45ae5617",
+    "dataset": "ETTm1",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.8689619028713419,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.33320552836496664,
+     "shadow_candidate_error_q90": 0.43343707976225604,
+     "shadow_candidate_error_std": 0.1280111430562442,
+     "shadow_keep_error_mean": 1.2021674312363084,
+     "shadow_gain_mean": 0.8689619028713419,
+     "shadow_gain_worst": -0.33624083203878613,
+     "shadow_stability": 1.4444352943688248,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:c032d8b06cd5314d9536f60b7ee291d7b579a9fd09471ab964df9ff8b255623c:f71168995a6f334e00a4436ed99349959c569b9c83662be64a0ffc53726ce5b8",
+    "dataset": "US Term Structure",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.01514658837331039,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.008825101440113841,
+     "shadow_candidate_error_q90": 0.009961270964409625,
+     "shadow_candidate_error_std": 0.0015042010032291434,
+     "shadow_keep_error_mean": 0.02397168981342423,
+     "shadow_gain_mean": 0.01514658837331039,
+     "shadow_gain_worst": 0.007026352605076554,
+     "shadow_stability": 0.7471372475638651,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:ee52a0239fdbc2183f38e78e598d6103e0ffefd981e1bd669d085343cff77f22:f62c387728022075c5e3513d0472bccb996dac411f8d11f0ba5922e90917fd01",
+    "dataset": "US Term Structure",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.17562028698039236,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.031037972712675454,
+     "shadow_candidate_error_q90": 0.041520179864979245,
+     "shadow_candidate_error_std": 0.014124494330776156,
+     "shadow_keep_error_mean": 0.20665825969306784,
+     "shadow_gain_mean": 0.17562028698039236,
+     "shadow_gain_worst": 0.004085734208763129,
+     "shadow_stability": 0.9178199637433376,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:00cf09102d2b23ebf4debdceb9e7cba106629da864aaeec08f83d8506e7db6ba:d48928fac7385cc7feeb74d44e084598dc39651110ee257aef6d1c36c2169b61",
+    "dataset": "US Term Structure",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.18234019899387513,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.040638925758033455,
+     "shadow_candidate_error_q90": 0.05376882249882321,
+     "shadow_candidate_error_std": 0.016328119642976268,
+     "shadow_keep_error_mean": 0.22297912475190854,
+     "shadow_gain_mean": 0.18234019899387513,
+     "shadow_gain_worst": -0.029888132052437,
+     "shadow_stability": 1.422693812994082,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:flatline:a13321224934ba51780aa539182b71f696a0da1ea27df54b0140fbc47f807a7d:a97c21d563d49e70c59dbd047e07684ae7e54fa87d498f8e8ce0bc6daf07409c",
+    "dataset": "US Term Structure",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.24650187450516636,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.05825248193373165,
+     "shadow_candidate_error_q90": 0.12331469369756837,
+     "shadow_candidate_error_std": 0.06513905480793139,
+     "shadow_keep_error_mean": 0.304754356438898,
+     "shadow_gain_mean": 0.24650187450516636,
+     "shadow_gain_worst": 0.08452388529164004,
+     "shadow_stability": 0.8233600611888763,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:c67c6b7246e44cb246e5b7f920a424cba3dbc2f16052e19fdb85f2435aed4ee8:34bb1769cade388d1d67fe6ca10fdb68708e9a5de779dc1ccc864f7989e87b30",
+    "dataset": "ETTm1",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.08742584022853306,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.11869537941981055,
+     "shadow_candidate_error_q90": 0.15566490521226373,
+     "shadow_candidate_error_std": 0.036365846820471524,
+     "shadow_keep_error_mean": 0.2061212196483436,
+     "shadow_gain_mean": 0.08742584022853306,
+     "shadow_gain_worst": 0.02508560407799515,
+     "shadow_stability": 0.7146795073138711,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "Oil Price:contaminated:flatline:6a54c6bf5fde55485edc32faa97955ca5a32774a8bfa4a327c6748154d66b290:59c59fea2e52c665bf4501e38af355732bfb5dc0648e6297f0c1a4d9763c4044",
+    "dataset": "Oil Price",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.8778975394303336,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.14323604656839986,
+     "shadow_candidate_error_q90": 0.20024094585974972,
+     "shadow_candidate_error_std": 0.07129310497125867,
+     "shadow_keep_error_mean": 1.0211335859987332,
+     "shadow_gain_mean": 0.8778975394303336,
+     "shadow_gain_worst": 0.02070145512843327,
+     "shadow_stability": 1.356805847260946,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:d258faa18bbdea4f6500be9ddb2903523d60f13161472ed71e81303ec256ad5e:1641f18b7109fcdff132f1664bf2de89a02e208e9099fc59d66fedcdc0a620ef",
+    "dataset": "ETTm1",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.15359687449600243,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.057834211198899955,
+     "shadow_candidate_error_q90": 0.10012281114409735,
+     "shadow_candidate_error_std": 0.041501488989343374,
+     "shadow_keep_error_mean": 0.21143108569490235,
+     "shadow_gain_mean": 0.15359687449600243,
+     "shadow_gain_worst": 0.03621225519784255,
+     "shadow_stability": 1.05526160635877,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTh2:contaminated:missing_scattered:bbd3515727b5285997421da103f2faaa18b388239a6baee2e46e2d278de57dfb:376bba637492b46066e48760c4959027c543ce7b70ca1251cf3588fc943da746",
+    "dataset": "ETTh2",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.5303263633846151,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 1.0438531204869659,
+     "shadow_candidate_error_q90": 1.159674069067782,
+     "shadow_candidate_error_std": 0.11489768948505162,
+     "shadow_keep_error_mean": 1.574179483871581,
+     "shadow_gain_mean": 0.5303263633846151,
+     "shadow_gain_worst": -0.39264787191906614,
+     "shadow_stability": 1.230645801323273,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:a4f4280197d729983768a5a2917777e0f5b6ba0711849f0cbed4ecf4e62ce66c:585105251df989606c73d8824271a07b0bf5c0f2f524c9991b0445ae85485e8b",
+    "dataset": "ETTm1",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.5905191695855075,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.8656940315751314,
+     "shadow_candidate_error_q90": 1.7137165055663515,
+     "shadow_candidate_error_std": 0.8315649514042243,
+     "shadow_keep_error_mean": 1.4562132011606386,
+     "shadow_gain_mean": 0.5905191695855075,
+     "shadow_gain_worst": 0.13359254963795353,
+     "shadow_stability": 0.6487965674400483,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:34406a0f6efe78ca0cb9b60c3930183343a681a0e9d6a790c03903b356dd0969:c6bff359a9963b540b12e31b35eeac14cc963ecfac5a957936f51b7c6c9d4f36",
+    "dataset": "US Term Structure",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.0030812873628633074,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.0022059919633538156,
+     "shadow_candidate_error_q90": 0.003191330015565669,
+     "shadow_candidate_error_std": 0.0010422428839704915,
+     "shadow_keep_error_mean": 0.0052872793262171225,
+     "shadow_gain_mean": 0.0030812873628633074,
+     "shadow_gain_worst": -3.849900798913778e-05,
+     "shadow_stability": 0.7220848694850873,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:16433e958a255ad7957949dd0ae6cf2faa420235287aafdea0727d278be51e8d:42ec17d69948710f1ed3ce35cf12899d730bf2d8aad025b49586afda54fbd11d",
+    "dataset": "ETTm1",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.05273306479709814,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.06467223931508294,
+     "shadow_candidate_error_q90": 0.15245390663341205,
+     "shadow_candidate_error_std": 0.0884440690389477,
+     "shadow_keep_error_mean": 0.11740530411218109,
+     "shadow_gain_mean": 0.05273306479709814,
+     "shadow_gain_worst": 0.013329610199524555,
+     "shadow_stability": 1.027491286050755,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:3cb10ece52e9267539f3ec428c58a01e13727804f3d2cfe8d863daf9390b4c01:927867ff24b5ca78eacbfb227b8d1de2d98f95604e573206e92b85e226a98e95",
+    "dataset": "US Term Structure",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.08455158122758871,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.12724689977319226,
+     "shadow_candidate_error_q90": 0.191699365121136,
+     "shadow_candidate_error_std": 0.0721884432985291,
+     "shadow_keep_error_mean": 0.211798481000781,
+     "shadow_gain_mean": 0.08455158122758871,
+     "shadow_gain_worst": -0.06713770492821708,
+     "shadow_stability": 1.2979898314101053,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_block:56882c6a4b2851afc3d84c9e8178b745a6ad3652d28397e5d1b390133ac84ef0:7c076f672ecfc206230c1b64fec40a304fbb24c5a14c8806d150eebc548fb480",
+    "dataset": "US Term Structure",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.20007127278349887,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.27717378050256153,
+     "shadow_candidate_error_q90": 0.5082377886571333,
+     "shadow_candidate_error_std": 0.22708955812374235,
+     "shadow_keep_error_mean": 0.47724505328606037,
+     "shadow_gain_mean": 0.20007127278349887,
+     "shadow_gain_worst": -0.1313112010527417,
+     "shadow_stability": 1.3705959296983183,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:flatline:ffe46ac602cddfd42c21ad4a2e049a7240f494e2aa84dfbfd2439abde29c77b5:218a79ebd473150f19eecc8ab0c938e5f5fea399827e4dea10dc1539b546026e",
+    "dataset": "US Term Structure",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.18796385693233283,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 0.036616698612115715,
+     "shadow_candidate_error_q90": 0.0720432619058323,
+     "shadow_candidate_error_std": 0.035768702400727784,
+     "shadow_keep_error_mean": 0.22458055554444856,
+     "shadow_gain_mean": 0.18796385693233283,
+     "shadow_gain_worst": 0.00038853094779968227,
+     "shadow_stability": 0.8252251476064774,
+     "shadow_support": 1
+    }
+   },
+   {
+    "sample_uid": "ETTh2:rare_valid:null:00fe32b6b833f4f7e2c232b5bb4ff22e0cdc63f78d3b2e0eecc287998bbe8801:00fe32b6b833f4f7e2c232b5bb4ff22e0cdc63f78d3b2e0eecc287998bbe8801",
+    "dataset": "ETTh2",
+    "label": "harmful",
+    "reason": "not rejected at working point",
+    "shadow_score": -0.8495605816113913,
+    "features": {
+     "shadow_valid_trials": 3,
+     "shadow_candidate_error_mean": 2.138527644370709,
+     "shadow_candidate_error_q90": 4.082619238550736,
+     "shadow_candidate_error_std": 1.921206770739464,
+     "shadow_keep_error_mean": 2.9880882259821004,
+     "shadow_gain_mean": 0.8495605816113913,
+     "shadow_gain_worst": -4.21339262340593,
+     "shadow_stability": 4.851393043244714,
+     "shadow_support": 1
+    }
+   }
+  ]
+ },
+ "code_hashes": {
+  "experiments/v34_shadow_certificate.py": "33ce62aa79686abc70907287ac450d5d83c0f6d6e9e936b2c2f3fa182c1fb989",
+  "src/introact_ts/actions.py": "f94ba0e5d453c9fd0e139d887b96e450a0d4aeda85d2cad5978678550f44cdf2",
+  "src/introact_ts/probe.py": "22ded3d21137d958d823d6dd91c8d15a756548712b2a437e69a04b5498ee6af4",
+  "experiments/metrics_common.py": "39ae64c163c3e783a12fbebbf17c1647c0cf5be84516eb47d528db8f54894229",
+  "experiments/v33_labels.py": "0a701300cde415e206bee15970a4b88d0ac9c8a45bc771ad4ef11d70b52df7bb"
+ },
+ "elapsed_seconds": 13.051824808120728
+}

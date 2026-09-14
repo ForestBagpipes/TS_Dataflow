@@ -1,0 +1,27 @@
+{
+ "phase": "v3.9 Phase 2 BRIDGE candidate/signal freeze (labels not yet joined)",
+ "frozen_at_epoch": 1788436703.5426478,
+ "n_candidates": 1780,
+ "n_signals": 1780,
+ "n_windows": 89,
+ "bases": [
+  "tsicl",
+  "openfim",
+  "fm_mean",
+  "moment"
+ ],
+ "etas": [
+  0.0,
+  0.25,
+  0.5,
+  0.75,
+  1.0
+ ],
+ "candidates_file": "v39_bridge_candidates.jsonl",
+ "candidates_sha256": "b2fd2c15ffdea17f200b72d5118ae9f6978f8d6612969639837028bebdce4771",
+ "signals_file": "v39_bridge_signals.jsonl",
+ "signals_sha256": "46c4c48a3269fb634875e4ee2babecfdeacf8b69748bd7ceb826994bb9fd4c70",
+ "candidate_digest_sha256": "7df55b256ca309e97af5f6a839396858578e8acd9107983e0aa3e9ceb386edfb",
+ "label_freeze_discipline": "candidate outputs, signals and hashes frozen before any clean/evaluation label is read; evaluate re-verifies every output hash from the stored fill values and cross-checks the eta=1 label sets against the Phase-1 probe",
+ "runtime_sec": 0.07287240028381348
+}

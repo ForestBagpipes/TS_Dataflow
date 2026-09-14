@@ -1,0 +1,85 @@
+{
+ "baseline": {
+  "improved": 117,
+  "gain_sum": 38.36811314541032,
+  "committed": 132,
+  "harmful": 15,
+  "prot_edit": 2,
+  "loss_sum": 15.0
+ },
+ "n_contaminated": 440,
+ "n_frame": 771,
+ "n_protected": 331,
+ "targets": {
+  "bcov": 0.3,
+  "gain": 0.1,
+  "chr": 0.1,
+  "pme": 0.0055,
+  "damage": 0.0402
+ },
+ "new_beneficial_commits_needed_for_bcov": 15,
+ "gain_deficit_sum": 5.6318868545896805,
+ "gain_deficit_mean_per_contaminated_window": 0.012799742851340183,
+ "required_mean_gain_per_new_beneficial_commit": 0.37545912363931205,
+ "max_new_harmful_commits_at_required_beneficial": -1,
+ "new_safe_commits_needed_for_chr_with_zero_new_harmful": 18,
+ "pme_protected_edit_budget": 1,
+ "pme_headroom_edits": -1,
+ "pme_note": "negative headroom means the pme target cannot be met by adding commits; protected edits must be removed",
+ "damage_loss_budget_sum": 30.9942,
+ "damage_headroom_sum": 15.9942,
+ "baseline_arm": "D_fact_short_first",
+ "baseline_selection_rule": "higher bcov, then higher gain, then lower action-conditional CHR",
+ "baseline_report": {
+  "n_windows": 771,
+  "proposal_coverage": 0.7509727626459144,
+  "applicability_coverage": 0.7509727626459144,
+  "n_proposed_windows": 579,
+  "n_applicable_windows": 579,
+  "action_conditional_bs_precision": 0.8863636363636364,
+  "action_conditional_chr": 0.11363636363636363,
+  "bcov": 0.26590909090909093,
+  "abstention_rate": 0.8287937743190661,
+  "gain": 0.08720025714865982,
+  "pme": 0.006042296072507553,
+  "damage": 0.019455252918287938,
+  "conditional_mean_loss": 0.11363636363636363,
+  "committed": 132,
+  "commit_rate": 0.17120622568093385,
+  "beneficial_commits": 117,
+  "harmful_commits": 15,
+  "commit_by_family": {
+   "FACT_SHORT": 88,
+   "DESPIKE": 44
+  }
+ },
+ "oracle_headroom_F": {
+  "report": {
+   "n_windows": 771,
+   "proposal_coverage": 1.0,
+   "applicability_coverage": 1.0,
+   "n_proposed_windows": 771,
+   "n_applicable_windows": 771,
+   "action_conditional_bs_precision": 1.0,
+   "action_conditional_chr": 0.0,
+   "bcov": 0.6613636363636364,
+   "abstention_rate": 0.622568093385214,
+   "gain": 0.19692759284166705,
+   "pme": 0.0,
+   "damage": 0.0,
+   "conditional_mean_loss": 0.0,
+   "committed": 291,
+   "commit_rate": 0.377431906614786,
+   "beneficial_commits": 291,
+   "harmful_commits": 0,
+   "commit_by_family": {
+    "IMPUTE": 203,
+    "DENOISE": 41,
+    "DESPIKE": 46,
+    "FACT_SHORT": 1
+   },
+   "two_path_xcheck_pass": true
+  },
+  "note": "target-label oracle: headroom measurement only, never a deployment rule (§2)"
+ }
+}

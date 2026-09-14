@@ -1,0 +1,518 @@
+{
+ "phase": "v4.0 Phase 2.0 label and group audit (docs/v4_0_counteract_preregistration.md §11.3)",
+ "bank_freeze_digest": "3e499b403de5f6a3122d07036bb2b5f97672c2aafa664d57a88685d7acace606",
+ "bank_records_sha256": "b910eb427e353e4e8c52a3b5bb7932bc47bffa292f9c2846ae594ea007041519",
+ "n_records": 33600,
+ "hard_checks": {
+  "action_set_shared": {
+   "n_episodes": 4200,
+   "n_rows": 33600,
+   "expected_rows": 33600,
+   "rows_match": true,
+   "n_episodes_missing_actions": 0,
+   "examples": {},
+   "inapplicable_are_explicit": true,
+   "pass": true
+  },
+  "parent_grouped_splits": {
+   "episodes_with_multiple_parents": 0,
+   "parents_crossing_phase1_split": 0,
+   "episodes_whose_actions_cross_split": 0,
+   "inner_split_is_parent_keyed": true,
+   "pass": true
+  },
+  "six_fold_lodo_primary": {
+   "n_folds": 6,
+   "per_fold": {
+    "ETTh1": {
+     "held_out_parents": 350,
+     "train_pool_parents": 1750,
+     "inner_train_parents": 1491,
+     "inner_val_parents": 259,
+     "inner_val_frac": 0.148,
+     "held_out_rows": 5600
+    },
+    "ETTh2": {
+     "held_out_parents": 350,
+     "train_pool_parents": 1750,
+     "inner_train_parents": 1487,
+     "inner_val_parents": 263,
+     "inner_val_frac": 0.15028571428571427,
+     "held_out_rows": 5600
+    },
+    "ETTm1": {
+     "held_out_parents": 350,
+     "train_pool_parents": 1750,
+     "inner_train_parents": 1474,
+     "inner_val_parents": 276,
+     "inner_val_frac": 0.15771428571428572,
+     "held_out_rows": 5600
+    },
+    "Crypto": {
+     "held_out_parents": 350,
+     "train_pool_parents": 1750,
+     "inner_train_parents": 1486,
+     "inner_val_parents": 264,
+     "inner_val_frac": 0.15085714285714286,
+     "held_out_rows": 5600
+    },
+    "US Term Structure": {
+     "held_out_parents": 350,
+     "train_pool_parents": 1750,
+     "inner_train_parents": 1490,
+     "inner_val_parents": 260,
+     "inner_val_frac": 0.14857142857142858,
+     "held_out_rows": 5600
+    },
+    "Oil Price": {
+     "held_out_parents": 350,
+     "train_pool_parents": 1750,
+     "inner_train_parents": 1497,
+     "inner_val_parents": 253,
+     "inner_val_frac": 0.14457142857142857,
+     "held_out_rows": 5600
+    }
+   },
+   "primary_evaluation": "six-fold leave-one-source-out",
+   "phase1_random_split_role": "bank-internal reporting only; not used for any Phase 2 decision",
+   "pass": true
+  },
+  "frozen_89_still_closed": {
+   "frozen_89_labels_opened": false,
+   "opened_by_stage": "decide (Phase 2.4) only",
+   "precondition": "six fold checkpoints, thresholds, configs and manifests written and sha256-registered first",
+   "bank_parent_uids_intersect_frozen_frame": [],
+   "pass": true
+  },
+  "protected_support": {
+   "n_protected_episodes": 420,
+   "n_protected_rows": 3360,
+   "n_protected_applicable_rows": 1159,
+   "n_protected_editing_rows": 739,
+   "sources_covered": [
+    "Crypto",
+    "ETTh1",
+    "ETTh2",
+    "ETTm1",
+    "Oil Price",
+    "US Term Structure"
+   ],
+   "threshold": "n>=100 editing rows AND >=3 sources",
+   "protection_head_role": "primary",
+   "pme_control": "critic protection head + frozen structural veto",
+   "pass": true
+  }
+ },
+ "all_hard_checks_pass": true,
+ "distributions": {
+  "by_source": {
+   "Crypto": {
+    "n_rows": 5600,
+    "n_applicable": 2544,
+    "n_inapplicable": 3056,
+    "n_bs": 1237,
+    "n_harmful": 607,
+    "n_neutral": 700,
+    "bs_rate": 0.48624213836477986,
+    "harmful_rate": 0.2386006289308176,
+    "n_protected_rows": 576
+   },
+   "ETTh1": {
+    "n_rows": 5600,
+    "n_applicable": 2929,
+    "n_inapplicable": 2671,
+    "n_bs": 1117,
+    "n_harmful": 1109,
+    "n_neutral": 703,
+    "bs_rate": 0.3813588255377262,
+    "harmful_rate": 0.37862751792420624,
+    "n_protected_rows": 520
+   },
+   "ETTh2": {
+    "n_rows": 5600,
+    "n_applicable": 2882,
+    "n_inapplicable": 2718,
+    "n_bs": 947,
+    "n_harmful": 1225,
+    "n_neutral": 710,
+    "bs_rate": 0.3285912560721721,
+    "harmful_rate": 0.4250520471894518,
+    "n_protected_rows": 688
+   },
+   "ETTm1": {
+    "n_rows": 5600,
+    "n_applicable": 2704,
+    "n_inapplicable": 2896,
+    "n_bs": 1132,
+    "n_harmful": 872,
+    "n_neutral": 700,
+    "bs_rate": 0.41863905325443784,
+    "harmful_rate": 0.3224852071005917,
+    "n_protected_rows": 592
+   },
+   "Oil Price": {
+    "n_rows": 5600,
+    "n_applicable": 2628,
+    "n_inapplicable": 2972,
+    "n_bs": 1311,
+    "n_harmful": 617,
+    "n_neutral": 700,
+    "bs_rate": 0.4988584474885845,
+    "harmful_rate": 0.234779299847793,
+    "n_protected_rows": 536
+   },
+   "US Term Structure": {
+    "n_rows": 5600,
+    "n_applicable": 2540,
+    "n_inapplicable": 3060,
+    "n_bs": 1369,
+    "n_harmful": 471,
+    "n_neutral": 700,
+    "bs_rate": 0.5389763779527559,
+    "harmful_rate": 0.18543307086614172,
+    "n_protected_rows": 448
+   }
+  },
+  "by_mechanism": {
+   "duplicate": {
+    "n_rows": 3600,
+    "n_applicable": 1214,
+    "n_inapplicable": 2386,
+    "n_bs": 160,
+    "n_harmful": 603,
+    "n_neutral": 451,
+    "bs_rate": 0.13179571663920922,
+    "harmful_rate": 0.49670510708401977,
+    "n_protected_rows": 0
+   },
+   "flatline": {
+    "n_rows": 3600,
+    "n_applicable": 2209,
+    "n_inapplicable": 1391,
+    "n_bs": 697,
+    "n_harmful": 1062,
+    "n_neutral": 450,
+    "bs_rate": 0.31552738795835217,
+    "harmful_rate": 0.48076052512449075,
+    "n_protected_rows": 0
+   },
+   "level_shift": {
+    "n_rows": 3600,
+    "n_applicable": 1115,
+    "n_inapplicable": 2485,
+    "n_bs": 299,
+    "n_harmful": 366,
+    "n_neutral": 450,
+    "bs_rate": 0.2681614349775785,
+    "harmful_rate": 0.32825112107623317,
+    "n_protected_rows": 0
+   },
+   "missing_block": {
+    "n_rows": 3600,
+    "n_applicable": 2408,
+    "n_inapplicable": 1192,
+    "n_bs": 1203,
+    "n_harmful": 749,
+    "n_neutral": 456,
+    "bs_rate": 0.4995847176079734,
+    "harmful_rate": 0.311046511627907,
+    "n_protected_rows": 0
+   },
+   "missing_scattered": {
+    "n_rows": 3600,
+    "n_applicable": 2428,
+    "n_inapplicable": 1172,
+    "n_bs": 1584,
+    "n_harmful": 394,
+    "n_neutral": 450,
+    "bs_rate": 0.6523887973640856,
+    "harmful_rate": 0.16227347611202636,
+    "n_protected_rows": 0
+   },
+   "mixed": {
+    "n_rows": 5040,
+    "n_applicable": 2954,
+    "n_inapplicable": 2086,
+    "n_bs": 1595,
+    "n_harmful": 723,
+    "n_neutral": 636,
+    "bs_rate": 0.539945836154367,
+    "harmful_rate": 0.24475287745429924,
+    "n_protected_rows": 0
+   },
+   "noise": {
+    "n_rows": 3600,
+    "n_applicable": 1250,
+    "n_inapplicable": 2350,
+    "n_bs": 714,
+    "n_harmful": 86,
+    "n_neutral": 450,
+    "bs_rate": 0.5712,
+    "harmful_rate": 0.0688,
+    "n_protected_rows": 0
+   },
+   "none": {
+    "n_rows": 3360,
+    "n_applicable": 1159,
+    "n_inapplicable": 2201,
+    "n_bs": 0,
+    "n_harmful": 739,
+    "n_neutral": 420,
+    "bs_rate": 0.0,
+    "harmful_rate": 0.637618636755824,
+    "n_protected_rows": 3360
+   },
+   "spike": {
+    "n_rows": 3600,
+    "n_applicable": 1490,
+    "n_inapplicable": 2110,
+    "n_bs": 861,
+    "n_harmful": 179,
+    "n_neutral": 450,
+    "bs_rate": 0.5778523489932886,
+    "harmful_rate": 0.12013422818791947,
+    "n_protected_rows": 0
+   }
+  },
+  "by_severity": {
+   "high": {
+    "n_rows": 8400,
+    "n_applicable": 4064,
+    "n_inapplicable": 4336,
+    "n_bs": 2008,
+    "n_harmful": 1004,
+    "n_neutral": 1052,
+    "bs_rate": 0.4940944881889764,
+    "harmful_rate": 0.2470472440944882,
+    "n_protected_rows": 0
+   },
+   "low": {
+    "n_rows": 8400,
+    "n_applicable": 3958,
+    "n_inapplicable": 4442,
+    "n_bs": 1608,
+    "n_harmful": 1297,
+    "n_neutral": 1053,
+    "bs_rate": 0.40626579080343606,
+    "harmful_rate": 0.3276907529055078,
+    "n_protected_rows": 0
+   },
+   "mid": {
+    "n_rows": 8400,
+    "n_applicable": 4092,
+    "n_inapplicable": 4308,
+    "n_bs": 1902,
+    "n_harmful": 1138,
+    "n_neutral": 1052,
+    "bs_rate": 0.46480938416422285,
+    "harmful_rate": 0.2781036168132942,
+    "n_protected_rows": 0
+   },
+   "mixed": {
+    "n_rows": 5040,
+    "n_applicable": 2954,
+    "n_inapplicable": 2086,
+    "n_bs": 1595,
+    "n_harmful": 723,
+    "n_neutral": 636,
+    "bs_rate": 0.539945836154367,
+    "harmful_rate": 0.24475287745429924,
+    "n_protected_rows": 0
+   },
+   "none": {
+    "n_rows": 3360,
+    "n_applicable": 1159,
+    "n_inapplicable": 2201,
+    "n_bs": 0,
+    "n_harmful": 739,
+    "n_neutral": 420,
+    "bs_rate": 0.0,
+    "harmful_rate": 0.637618636755824,
+    "n_protected_rows": 3360
+   }
+  },
+  "by_action": {
+   "denoise": {
+    "n_rows": 4200,
+    "n_applicable": 2968,
+    "n_inapplicable": 1232,
+    "n_bs": 1469,
+    "n_harmful": 1499,
+    "n_neutral": 0,
+    "bs_rate": 0.49494609164420483,
+    "harmful_rate": 0.5050539083557951,
+    "n_protected_rows": 420
+   },
+   "despike": {
+    "n_rows": 4200,
+    "n_applicable": 2099,
+    "n_inapplicable": 2101,
+    "n_bs": 1078,
+    "n_harmful": 1021,
+    "n_neutral": 0,
+    "bs_rate": 0.5135778942353502,
+    "harmful_rate": 0.48642210576464984,
+    "n_protected_rows": 420
+   },
+   "fact_short": {
+    "n_rows": 4200,
+    "n_applicable": 622,
+    "n_inapplicable": 3578,
+    "n_bs": 541,
+    "n_harmful": 79,
+    "n_neutral": 2,
+    "bs_rate": 0.8697749196141479,
+    "harmful_rate": 0.1270096463022508,
+    "n_protected_rows": 420
+   },
+   "impute_linear_conservative": {
+    "n_rows": 4200,
+    "n_applicable": 1625,
+    "n_inapplicable": 2575,
+    "n_bs": 1205,
+    "n_harmful": 415,
+    "n_neutral": 5,
+    "bs_rate": 0.7415384615384616,
+    "harmful_rate": 0.2553846153846154,
+    "n_protected_rows": 420
+   },
+   "impute_linear_default": {
+    "n_rows": 4200,
+    "n_applicable": 2032,
+    "n_inapplicable": 2168,
+    "n_bs": 1297,
+    "n_harmful": 732,
+    "n_neutral": 3,
+    "bs_rate": 0.6382874015748031,
+    "harmful_rate": 0.36023622047244097,
+    "n_protected_rows": 420
+   },
+   "impute_seasonal": {
+    "n_rows": 4200,
+    "n_applicable": 2032,
+    "n_inapplicable": 2168,
+    "n_bs": 994,
+    "n_harmful": 1035,
+    "n_neutral": 3,
+    "bs_rate": 0.4891732283464567,
+    "harmful_rate": 0.5093503937007874,
+    "n_protected_rows": 420
+   },
+   "keep": {
+    "n_rows": 4200,
+    "n_applicable": 4200,
+    "n_inapplicable": 0,
+    "n_bs": 0,
+    "n_harmful": 0,
+    "n_neutral": 4200,
+    "bs_rate": 0.0,
+    "harmful_rate": 0.0,
+    "n_protected_rows": 420
+   },
+   "tsicl_long": {
+    "n_rows": 4200,
+    "n_applicable": 649,
+    "n_inapplicable": 3551,
+    "n_bs": 529,
+    "n_harmful": 120,
+    "n_neutral": 0,
+    "bs_rate": 0.8151001540832049,
+    "harmful_rate": 0.18489984591679506,
+    "n_protected_rows": 420
+   }
+  },
+  "by_family": {
+   "DENOISE": {
+    "n_rows": 4200,
+    "n_applicable": 2968,
+    "n_inapplicable": 1232,
+    "n_bs": 1469,
+    "n_harmful": 1499,
+    "n_neutral": 0,
+    "bs_rate": 0.49494609164420483,
+    "harmful_rate": 0.5050539083557951,
+    "n_protected_rows": 420
+   },
+   "DESPIKE": {
+    "n_rows": 4200,
+    "n_applicable": 2099,
+    "n_inapplicable": 2101,
+    "n_bs": 1078,
+    "n_harmful": 1021,
+    "n_neutral": 0,
+    "bs_rate": 0.5135778942353502,
+    "harmful_rate": 0.48642210576464984,
+    "n_protected_rows": 420
+   },
+   "FACT_SHORT": {
+    "n_rows": 4200,
+    "n_applicable": 622,
+    "n_inapplicable": 3578,
+    "n_bs": 541,
+    "n_harmful": 79,
+    "n_neutral": 2,
+    "bs_rate": 0.8697749196141479,
+    "harmful_rate": 0.1270096463022508,
+    "n_protected_rows": 420
+   },
+   "IMPUTE": {
+    "n_rows": 12600,
+    "n_applicable": 5689,
+    "n_inapplicable": 6911,
+    "n_bs": 3496,
+    "n_harmful": 2182,
+    "n_neutral": 11,
+    "bs_rate": 0.6145192476709439,
+    "harmful_rate": 0.3835471963438214,
+    "n_protected_rows": 1260
+   },
+   "KEEP": {
+    "n_rows": 4200,
+    "n_applicable": 4200,
+    "n_inapplicable": 0,
+    "n_bs": 0,
+    "n_harmful": 0,
+    "n_neutral": 4200,
+    "bs_rate": 0.0,
+    "harmful_rate": 0.0,
+    "n_protected_rows": 420
+   },
+   "TSICL_LONG": {
+    "n_rows": 4200,
+    "n_applicable": 649,
+    "n_inapplicable": 3551,
+    "n_bs": 529,
+    "n_harmful": 120,
+    "n_neutral": 0,
+    "bs_rate": 0.8151001540832049,
+    "harmful_rate": 0.18489984591679506,
+    "n_protected_rows": 420
+   }
+  },
+  "by_stratum": {
+   "clean_control": {
+    "n_rows": 3360,
+    "n_applicable": 1159,
+    "n_inapplicable": 2201,
+    "n_bs": 0,
+    "n_harmful": 739,
+    "n_neutral": 420,
+    "bs_rate": 0.0,
+    "harmful_rate": 0.637618636755824,
+    "n_protected_rows": 3360
+   },
+   "contaminated": {
+    "n_rows": 30240,
+    "n_applicable": 15068,
+    "n_inapplicable": 15172,
+    "n_bs": 7113,
+    "n_harmful": 4162,
+    "n_neutral": 3793,
+    "bs_rate": 0.47205999469073534,
+    "harmful_rate": 0.27621449429254047,
+    "n_protected_rows": 0
+   }
+  }
+ },
+ "runtime_sec": 1.023667335510254
+}

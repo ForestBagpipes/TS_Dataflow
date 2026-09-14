@@ -1,0 +1,69 @@
+{
+ "phase": "v3.9 Phase 1 candidate freeze (labels not yet joined)",
+ "frozen_at_epoch": 1788435231.0835984,
+ "n_records": 801,
+ "n_windows": 89,
+ "proposers": [
+  "fm_mean",
+  "impute_conservative",
+  "impute_default",
+  "keep",
+  "linear_bridge",
+  "moment",
+  "openfim",
+  "seasonal_existing",
+  "tsicl"
+ ],
+ "per_file": {
+  "results/v39_longgap_cand_fm_mean.jsonl": {
+   "sha256": "d5aae2eec4e98f6db115f5b4cc0393f828b525ef0a4971f73691f3685eddf78c",
+   "n_records": 89,
+   "n_supported": 89
+  },
+  "results/v39_longgap_cand_impute_conservative.jsonl": {
+   "sha256": "e9a8a5bd3734c64445dd82ab840c309a84531fb328edd4dc252e5c1c249f2463",
+   "n_records": 89,
+   "n_supported": 86
+  },
+  "results/v39_longgap_cand_impute_default.jsonl": {
+   "sha256": "be9062c5221cb538cc6b98664a3a6a6dd6765368dd54e43a53710f4235c12aee",
+   "n_records": 89,
+   "n_supported": 76
+  },
+  "results/v39_longgap_cand_keep.jsonl": {
+   "sha256": "10993b255dc390e6d6e80164b191f5ee007218d52692f9fbda4141667633a24d",
+   "n_records": 89,
+   "n_supported": 89
+  },
+  "results/v39_longgap_cand_linear_bridge.jsonl": {
+   "sha256": "fdb48fb38e1cbeef07ecdef4842058aaae77f7c3e69d9b1b8fbc34cfa9bc792c",
+   "n_records": 89,
+   "n_supported": 89
+  },
+  "results/v39_longgap_cand_moment.jsonl": {
+   "sha256": "d76d313cc33ebb91796ad77edf013886befbb3a88781c833ae777788c8c81484",
+   "n_records": 89,
+   "n_supported": 89
+  },
+  "results/v39_longgap_cand_openfim.jsonl": {
+   "sha256": "abd47af680b7aa4374d2947c8bc1e1ca4a160d34ec94a06e33d2aab1cb9686d9",
+   "n_records": 89,
+   "n_supported": 89
+  },
+  "results/v39_longgap_cand_seasonal_existing.jsonl": {
+   "sha256": "001b15ff0fec53169324c7f69b6f821b60c7e233d76280cdca180edb7bc96df7",
+   "n_records": 89,
+   "n_supported": 75
+  },
+  "results/v39_longgap_cand_tsicl.jsonl": {
+   "sha256": "b4e1ae6119bde10c73f64b40fba5febcac52aaa6da4143fdd8f474be3d014937",
+   "n_records": 89,
+   "n_supported": 89
+  }
+ },
+ "merged_file": "results/v39_longgap_candidates.jsonl",
+ "merged_sha256": "44a0327ecdd136b167a818994ac17191562fe348aaac386acd53b4288c6f4af6",
+ "record_digest_sha256": "1d68297be8bbc7f2c8052567315fd4b246353facd0cd319ae34465569312ec9d",
+ "label_freeze_discipline": "all candidate outputs and hashes frozen before any clean/evaluation label is read; evaluate refuses to run without this file and re-verifies every output hash from the stored fill values",
+ "runtime_sec": 0.05187630653381348
+}

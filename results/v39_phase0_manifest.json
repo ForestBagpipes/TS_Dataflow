@@ -1,0 +1,216 @@
+{
+ "phase": "v3.9 Phase 0 integrity manifest",
+ "preregistration": "docs/v3_9_mirage_preregistration.md §2 (Phase-0 完整性门)",
+ "gates": {
+  "gate0_v38_replay_passed": {
+   "pass": true,
+   "source": "v38_oracle_replay.json"
+  },
+  "gate1_incumbent_replay_1e-9": {
+   "pass": true,
+   "max_abs_diff": 0.0,
+   "detail": {
+    "floats": {
+     "commit_rate": {
+      "got": 0.19584954604409857,
+      "ref": 0.19584954604409857,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "damage": {
+      "got": 0.040207522697795074,
+      "ref": 0.040207522697795074,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "conditional_harm_rate": {
+      "got": 0.2052980132450331,
+      "ref": 0.2052980132450331,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "cond_damage": {
+      "got": 0.2052980132450331,
+      "ref": 0.2052980132450331,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "conditional_mean_loss": {
+      "got": 0.2052980132450331,
+      "ref": 0.2052980132450331,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "conditional_loss_p90": {
+      "got": 1.0,
+      "ref": 1.0,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "conditional_loss_p95": {
+      "got": 1.0,
+      "ref": 1.0,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "protected_mis_edit_rate": {
+      "got": 0.00906344410876133,
+      "ref": 0.00906344410876133,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "coverage": {
+      "got": 0.33636363636363636,
+      "ref": 0.33636363636363636,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "beneficial_coverage": {
+      "got": 0.2727272727272727,
+      "ref": 0.2727272727272727,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "mean_repair_gain_contaminated": {
+      "got": 0.09189960143728719,
+      "ref": 0.09189960143728719,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "max_dataset_bs_share": {
+      "got": 0.6333333333333333,
+      "ref": 0.6333333333333333,
+      "abs_diff": 0.0,
+      "ok": true
+     }
+    },
+    "ints": {
+     "n_windows": {
+      "got": 771,
+      "ref": 771,
+      "ok": true
+     },
+     "committed": {
+      "got": 151,
+      "ref": 151,
+      "ok": true
+     },
+     "beneficial_commits": {
+      "got": 120,
+      "ref": 120,
+      "ok": true
+     }
+    },
+    "protected_stratum_edit": {
+     "keys_match": true,
+     "max_abs_diff": 0.0,
+     "per_key": {
+      "changepoint": {
+       "got": 0.0,
+       "ref": 0.0,
+       "abs_diff": 0.0,
+       "ok": true
+      },
+      "clean": {
+       "got": 0.009433962264150943,
+       "ref": 0.009433962264150943,
+       "abs_diff": 0.0,
+       "ok": true
+      },
+      "hard": {
+       "got": 0.0,
+       "ref": 0.0,
+       "abs_diff": 0.0,
+       "ok": true
+      },
+      "rare_valid": {
+       "got": 0.03278688524590164,
+       "ref": 0.03278688524590164,
+       "abs_diff": 0.0,
+       "ok": true
+      }
+     },
+     "ok": true
+    },
+    "max_abs_diff": 0.0,
+    "pass": true
+   }
+  },
+  "gate2_frame_771_fixed": {
+   "n_frame": 771,
+   "per_arm_n_windows": {
+    "A_pics_joint_relabel": 771,
+    "B_pics_non_impute": 771,
+    "C_fact_short_only": 771,
+    "D_fact_short_first": 771,
+    "E_pics_non_impute_first": 771,
+    "F_unrestricted_oracle": 771
+   },
+   "n_keep_placeholder_rows": {
+    "B": 327,
+    "C": 594,
+    "D_E": 327,
+    "F": 0
+   },
+   "pass": true
+  },
+  "gate3_fact_short_equals_v38_88_76_12": {
+   "n_windows_checked": 445,
+   "n_output_hash_mismatch_vs_wide": 0,
+   "hash_mismatch_uids": [],
+   "n_layer_mismatch_vs_v38": 0,
+   "n_actual_nan_windows": 177,
+   "n_filled": 88,
+   "n_bs": 76,
+   "n_harmful": 12,
+   "filled_set_matches_v38_wide": true,
+   "v38_probe_window_level": {
+    "no_raw_nan": 268,
+    "all_gaps_abstained": 89,
+    "full_fill": 88
+   },
+   "expected": {
+    "n_windows": 88,
+    "n_bs": 76,
+    "n_harmful": 12
+   },
+   "gap_length_note": "corpus raw-NaN run lengths are {1,2,3} u {25..63}, so max_gap=3 and max_gap=16 certify exactly the same runs; any hash mismatch above would falsify that distributional claim",
+   "pass": true
+  },
+  "gate4_two_process_digest_identical": {
+   "in_process_sha256": "419b46b5454d2f8f258ef9ade7afca0833122bd21e31d824702a7336c817a746",
+   "pass": true,
+   "process_a_sha256": "419b46b5454d2f8f258ef9ade7afca0833122bd21e31d824702a7336c817a746",
+   "process_b_sha256": "419b46b5454d2f8f258ef9ade7afca0833122bd21e31d824702a7336c817a746",
+   "a_equals_b": true,
+   "a_equals_in_process": true
+  }
+ },
+ "all_pass": true,
+ "input_hashes": {
+  "v33_training_data": "84ab59d9e63048586ba7ddbc44398a729d927fe924411b8bc345b6ad97e282ef",
+  "v33_clean_rerun": "976780a3d74756a1bd295c4af8ba2b5aa589c7959de4c7db62f95f0ff677311b",
+  "v38_oracle_replay": "21d2126adde772dd818c1f55e824ca2944b3d531dff8b92c5fc62f0751cdcc59",
+  "v38_impute_mask_records": "6d1a56c1986d0d921f9eb06f2cb8637be77a9fcf65ef1cae498b614223f1a9d3",
+  "v38_explicit_impute_records": "78e733696298352b717024443f57617c4597c79ea416478a9e30d1e0924a0a58",
+  "v38_explicit_impute_probe": "99b6ddba4da7eec59e41087dff5ec138f395f3d1425c53d2307cffe836583aa5",
+  "p0_corpus_manifest_a": "6d7d05a506745a5f6da9114ef08ac37b58e102b6cbee6b740ae5247c42d9b15e"
+ },
+ "code_hashes": {
+  "experiments/v39_phase0_replay.py": "fc50bfa98e87267beb77efe87b236c0d5f570d32e45902ccc1bb27b7b5329571",
+  "experiments/v33_compare_arms.py": "f61b37fd42596fb6e4da93bff9fc2daff45844b09a49dbe000969e8409aecb20",
+  "experiments/v38_oracle_replay.py": "89ce6f4c51901d461e55a0cb273ae696c89622c4eba53c2f8260b9a04ddc0ed2",
+  "experiments/v38_explicit_impute_probe.py": "94815dfb643d654c069df721b337bde2dba75d2303dd2f0f0216c8b0773a7220",
+  "experiments/v38_impute_mask_audit.py": "7353c3ff3a4afae76f2d4f20521380882ecadec6af7ba864cc92b2846afafc0c",
+  "experiments/v33_labels.py": "0a701300cde415e206bee15970a4b88d0ac9c8a45bc771ad4ef11d70b52df7bb",
+  "src/introact_ts/actions.py": "f94ba0e5d453c9fd0e139d887b96e450a0d4aeda85d2cad5978678550f44cdf2",
+  "src/introact_ts/probe.py": "22ded3d21137d958d823d6dd91c8d15a756548712b2a437e69a04b5498ee6af4"
+ },
+ "decision_digest_sha256": "419b46b5454d2f8f258ef9ade7afca0833122bd21e31d824702a7336c817a746",
+ "output_sha256": {
+  "results/v39_phase0_replay.json": "48e02de69f0538cd19abe92ada266f15a2ea1b12ae80109a8ffc490626baad23",
+  "results/v39_phase0_records.jsonl": "50b4606840f4c9dbde77599c64521ed1b510136e6326381c36d712b68f9cef80",
+  "results/v39_target_budget.json": "5ec5e719c2875c3c528d95ce6ec0def12237621edb862302e7e1c9d68a1509b6"
+ },
+ "runtime_sec": 158.14115142822266
+}

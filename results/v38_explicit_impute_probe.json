@@ -1,0 +1,1448 @@
+{
+ "phase": "v3.8 Phase 1: IMPUTE_EXPLICIT explicit-missing operator probe (docs/v3_8_fact_preregistration.md §2, §4)",
+ "definitions": {
+  "operator": "touched = ~isfinite(raw) exactly; observed support never modified; linear interpolation between two finite anchors; certified gaps only",
+  "gap_certificate_tiers": {
+   "tight": 4,
+   "medium": 8,
+   "wide": 16
+  },
+  "tiers_frozen": "fixed by the pre-registration before any held-out result was seen",
+  "main_variant": "wide (arm C IS the wide tier; the only fixed length cap defined in §4 is 16)",
+  "abstain_output": "deployment KEEP (materialize_for_probe forward-fill), so every output is finite",
+  "label_path": "experiments/v33_labels.py::compute_action_labels with family 'IMPUTE' (materialised KEEP counterfactual, canonical uncentered finite-mask NMSE, loss=damage(worse, discard), safe<=0.03, beneficial gain>1e-9)",
+  "harmful": "true_loss > 0.03",
+  "gate_populations": "gates 1/2/4/5 on actual-NaN windows (actual_nan_only + mixed); gate 3 on all EXPLICIT candidates; gate 6 on the FACT pool"
+ },
+ "integrity": {
+  "phase0_replay_pass": true,
+  "corpus_manifest_gate": {
+   "n_rebuilt": 1599,
+   "n_manifest": 1599,
+   "uids_match": true,
+   "n_hash_mismatch": 0,
+   "hash_mismatch_uids": [],
+   "pass": true
+  },
+  "touched_mask_mismatches": 0,
+  "records_digest_sha256": "4e9839b2cb401215999f5e917df80d4547186984f4b7c49c585a4476dda12f63",
+  "synthetic_battery_sha256": "497112420d8858fd7e948dd7883ca3163c4fc9d3871b04903e99e62e04abe1f6"
+ },
+ "n_windows_with_impute_candidate": 445,
+ "n_new_candidates": 1780,
+ "arms": {
+  "A_current_IMPUTE": {
+   "n_candidates": 1154,
+   "bs_rate": 0.46013864818024264,
+   "harmful_rate": 0.5389948006932409,
+   "mean_gain": -0.04873711489393875,
+   "median_gain": -0.000319694034348172,
+   "mean_loss": 0.5389948006932409,
+   "median_loss": 1.0,
+   "n_beneficial_unique_windows": 203,
+   "n_unique_windows": 445,
+   "window_oracle": {
+    "n_contaminated_windows": 296,
+    "bcov": 0.6858108108108109,
+    "gain": 0.031699281545672274,
+    "n_oracle_commits": 203
+   }
+  },
+  "B_materialized_KEEP": {
+   "n_candidates": 445,
+   "bs_rate": 0.0,
+   "harmful_rate": 0.0,
+   "mean_gain": 0.0,
+   "median_gain": 0.0,
+   "mean_loss": 0.0,
+   "median_loss": 0.0,
+   "n_beneficial_unique_windows": 0,
+   "n_unique_windows": 445,
+   "window_oracle": {
+    "n_contaminated_windows": 296,
+    "bcov": 0.0,
+    "gain": 0.0,
+    "n_oracle_commits": 0
+   }
+  },
+  "C_EXPLICIT_LINEAR_wide": {
+   "n_candidates": 445,
+   "bs_rate": 0.1707865168539326,
+   "harmful_rate": 0.02696629213483146,
+   "mean_gain": 0.0002963466178362925,
+   "median_gain": 0.0,
+   "mean_loss": 0.02696629213483146,
+   "median_loss": 0.0,
+   "n_beneficial_unique_windows": 76,
+   "n_unique_windows": 445,
+   "window_oracle": {
+    "n_contaminated_windows": 296,
+    "bcov": 0.25675675675675674,
+    "gain": 0.000567147323731348,
+    "n_oracle_commits": 76
+   }
+  },
+  "D_EXPLICIT_tight": {
+   "n_candidates": 445,
+   "bs_rate": 0.1707865168539326,
+   "harmful_rate": 0.02696629213483146,
+   "mean_gain": 0.0002963466178362925,
+   "median_gain": 0.0,
+   "mean_loss": 0.02696629213483146,
+   "median_loss": 0.0,
+   "n_beneficial_unique_windows": 76,
+   "n_unique_windows": 445,
+   "window_oracle": {
+    "n_contaminated_windows": 296,
+    "bcov": 0.25675675675675674,
+    "gain": 0.000567147323731348,
+    "n_oracle_commits": 76
+   }
+  },
+  "D_EXPLICIT_medium": {
+   "n_candidates": 445,
+   "bs_rate": 0.1707865168539326,
+   "harmful_rate": 0.02696629213483146,
+   "mean_gain": 0.0002963466178362925,
+   "median_gain": 0.0,
+   "mean_loss": 0.02696629213483146,
+   "median_loss": 0.0,
+   "n_beneficial_unique_windows": 76,
+   "n_unique_windows": 445,
+   "window_oracle": {
+    "n_contaminated_windows": 296,
+    "bcov": 0.25675675675675674,
+    "gain": 0.000567147323731348,
+    "n_oracle_commits": 76
+   }
+  },
+  "D_EXPLICIT_wide": {
+   "n_candidates": 445,
+   "bs_rate": 0.1707865168539326,
+   "harmful_rate": 0.02696629213483146,
+   "mean_gain": 0.0002963466178362925,
+   "median_gain": 0.0,
+   "mean_loss": 0.02696629213483146,
+   "median_loss": 0.0,
+   "n_beneficial_unique_windows": 76,
+   "n_unique_windows": 445,
+   "window_oracle": {
+    "n_contaminated_windows": 296,
+    "bcov": 0.25675675675675674,
+    "gain": 0.000567147323731348,
+    "n_oracle_commits": 76
+   }
+  },
+  "E_oracle_candidate_choice": {
+   "n_candidates": 2934,
+   "n_unique_windows": 445,
+   "window_oracle": {
+    "n_contaminated_windows": 296,
+    "bcov": 0.6891891891891891,
+    "gain": 0.03170140793372172,
+    "n_oracle_commits": 204
+   },
+   "pick_composition": {
+    "A_current_IMPUTE": 203,
+    "C_EXPLICIT_LINEAR_wide": 1
+   },
+   "note": "upper bound only: per-window max-gain beneficial_and_safe over A u C u D candidates"
+  }
+ },
+ "stratified": {
+  "A_current_IMPUTE": {
+   "by_layer": {
+    "actual_nan_only": {
+     "n_candidates": 447,
+     "bs_rate": 0.8120805369127517,
+     "harmful_rate": 0.18791946308724833,
+     "mean_gain": 0.02022968389804404,
+     "median_gain": 0.0008698024092572737,
+     "mean_loss": 0.18791946308724833,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 126
+    },
+    "finite_flatline_only": {
+     "n_candidates": 623,
+     "bs_rate": 0.21829855537720708,
+     "harmful_rate": 0.7817014446227929,
+     "mean_gain": -0.09598742171044827,
+     "median_gain": -0.009819209348754741,
+     "mean_loss": 0.7817014446227929,
+     "median_loss": 1.0,
+     "n_beneficial_unique_windows": 58
+    },
+    "mixed": {
+     "n_candidates": 84,
+     "bs_rate": 0.38095238095238093,
+     "harmful_rate": 0.6071428571428571,
+     "mean_gain": -0.06529923290978229,
+     "median_gain": -0.002260937823883216,
+     "mean_loss": 0.6071428571428571,
+     "median_loss": 1.0,
+     "n_beneficial_unique_windows": 19
+    }
+   },
+   "by_source": {
+    "Crypto": {
+     "n_candidates": 24,
+     "bs_rate": 0.9166666666666666,
+     "harmful_rate": 0.08333333333333333,
+     "mean_gain": 0.0010190566671281938,
+     "median_gain": 0.0019902596892585707,
+     "mean_loss": 0.08333333333333333,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 8
+    },
+    "ETTh1": {
+     "n_candidates": 322,
+     "bs_rate": 0.2391304347826087,
+     "harmful_rate": 0.7608695652173914,
+     "mean_gain": -0.04519838302804258,
+     "median_gain": -0.009481186634041933,
+     "mean_loss": 0.7608695652173914,
+     "median_loss": 1.0,
+     "n_beneficial_unique_windows": 33
+    },
+    "ETTh2": {
+     "n_candidates": 217,
+     "bs_rate": 0.21658986175115208,
+     "harmful_rate": 0.7788018433179723,
+     "mean_gain": -0.11829264473924117,
+     "median_gain": -0.01639978302486212,
+     "mean_loss": 0.7788018433179723,
+     "median_loss": 1.0,
+     "n_beneficial_unique_windows": 24
+    },
+    "ETTm1": {
+     "n_candidates": 203,
+     "bs_rate": 0.4039408866995074,
+     "harmful_rate": 0.5960591133004927,
+     "mean_gain": -0.10558629991852689,
+     "median_gain": -0.001541838997117309,
+     "mean_loss": 0.5960591133004927,
+     "median_loss": 1.0,
+     "n_beneficial_unique_windows": 31
+    },
+    "Oil Price": {
+     "n_candidates": 44,
+     "bs_rate": 0.7045454545454546,
+     "harmful_rate": 0.29545454545454547,
+     "mean_gain": 0.014775953067425967,
+     "median_gain": 0.0008698024092572737,
+     "mean_loss": 0.29545454545454547,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 11
+    },
+    "US Term Structure": {
+     "n_candidates": 344,
+     "bs_rate": 0.7906976744186046,
+     "harmful_rate": 0.20930232558139536,
+     "mean_gain": 0.013779570477682768,
+     "median_gain": 0.0002464475407282807,
+     "mean_loss": 0.20930232558139536,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 96
+    }
+   },
+   "by_true_corruption": {
+    "duplicate": {
+     "n_candidates": 33,
+     "bs_rate": 0.0,
+     "harmful_rate": 1.0,
+     "mean_gain": -0.20914188435301803,
+     "median_gain": -0.04953338688708964,
+     "mean_loss": 1.0,
+     "median_loss": 1.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "flatline": {
+     "n_candidates": 213,
+     "bs_rate": 0.6056338028169014,
+     "harmful_rate": 0.39436619718309857,
+     "mean_gain": 0.011507249468032252,
+     "median_gain": 0.0008818648699901742,
+     "mean_loss": 0.39436619718309857,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 54
+    },
+    "level_shift": {
+     "n_candidates": 34,
+     "bs_rate": 0.20588235294117646,
+     "harmful_rate": 0.7941176470588235,
+     "mean_gain": -0.2808322111258373,
+     "median_gain": -0.006896496103113492,
+     "mean_loss": 0.7941176470588235,
+     "median_loss": 1.0,
+     "n_beneficial_unique_windows": 4
+    },
+    "missing_block": {
+     "n_candidates": 267,
+     "bs_rate": 0.704119850187266,
+     "harmful_rate": 0.29213483146067415,
+     "mean_gain": 0.02659029896086947,
+     "median_gain": 0.007824372469693058,
+     "mean_loss": 0.29213483146067415,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 70
+    },
+    "missing_scattered": {
+     "n_candidates": 264,
+     "bs_rate": 0.7840909090909091,
+     "harmful_rate": 0.2159090909090909,
+     "mean_gain": -0.013416957138440056,
+     "median_gain": 0.00019878857417834114,
+     "mean_loss": 0.2159090909090909,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 75
+    },
+    "null": {
+     "n_candidates": 324,
+     "bs_rate": 0.0,
+     "harmful_rate": 1.0,
+     "mean_gain": -0.11678165609292203,
+     "median_gain": -0.02078957322231693,
+     "mean_loss": 1.0,
+     "median_loss": 1.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "spike": {
+     "n_candidates": 19,
+     "bs_rate": 0.0,
+     "harmful_rate": 1.0,
+     "mean_gain": -0.4191565224350186,
+     "median_gain": -0.08702374511127725,
+     "mean_loss": 1.0,
+     "median_loss": 1.0,
+     "n_beneficial_unique_windows": 0
+    }
+   },
+   "by_rung": {
+    "aggressive": {
+     "n_candidates": 445,
+     "bs_rate": 0.3797752808988764,
+     "harmful_rate": 0.6202247191011236,
+     "mean_gain": -0.07046321401818521,
+     "median_gain": -0.0062313584354059,
+     "mean_loss": 0.6202247191011236,
+     "median_loss": 1.0,
+     "n_beneficial_unique_windows": 169
+    },
+    "conservative": {
+     "n_candidates": 264,
+     "bs_rate": 0.6704545454545454,
+     "harmful_rate": 0.32575757575757575,
+     "mean_gain": -0.030285580455773543,
+     "median_gain": 0.000351527937742922,
+     "mean_loss": 0.32575757575757575,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 177
+    },
+    "default": {
+     "n_candidates": 445,
+     "bs_rate": 0.4157303370786517,
+     "harmful_rate": 0.5842696629213483,
+     "mean_gain": -0.03795754406559252,
+     "median_gain": -0.0008167722205824902,
+     "mean_loss": 0.5842696629213483,
+     "median_loss": 1.0,
+     "n_beneficial_unique_windows": 185
+    }
+   }
+  },
+  "EXPLICIT_keep_ff": {
+   "by_layer": {
+    "actual_nan_only": {
+     "n_candidates": 149,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "finite_flatline_only": {
+     "n_candidates": 268,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "mixed": {
+     "n_candidates": 28,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    }
+   },
+   "by_source": {
+    "Crypto": {
+     "n_candidates": 8,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "ETTh1": {
+     "n_candidates": 140,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "ETTh2": {
+     "n_candidates": 91,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "ETTm1": {
+     "n_candidates": 71,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "Oil Price": {
+     "n_candidates": 15,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "US Term Structure": {
+     "n_candidates": 120,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    }
+   },
+   "by_true_corruption": {
+    "duplicate": {
+     "n_candidates": 15,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "flatline": {
+     "n_candidates": 79,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "level_shift": {
+     "n_candidates": 16,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "missing_block": {
+     "n_candidates": 89,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "missing_scattered": {
+     "n_candidates": 88,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "null": {
+     "n_candidates": 149,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "spike": {
+     "n_candidates": 9,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    }
+   }
+  },
+  "EXPLICIT_tight": {
+   "by_layer": {
+    "actual_nan_only": {
+     "n_candidates": 149,
+     "bs_rate": 0.436241610738255,
+     "harmful_rate": 0.053691275167785234,
+     "mean_gain": 0.0007794096688280067,
+     "median_gain": 0.0,
+     "mean_loss": 0.053691275167785234,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 65
+    },
+    "finite_flatline_only": {
+     "n_candidates": 268,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "mixed": {
+     "n_candidates": 28,
+     "bs_rate": 0.39285714285714285,
+     "harmful_rate": 0.14285714285714285,
+     "mean_gain": 0.0005622215814920425,
+     "median_gain": 0.0,
+     "mean_loss": 0.14285714285714285,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 11
+    }
+   },
+   "by_source": {
+    "Crypto": {
+     "n_candidates": 8,
+     "bs_rate": 0.25,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0002582700487695314,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 2
+    },
+    "ETTh1": {
+     "n_candidates": 140,
+     "bs_rate": 0.10714285714285714,
+     "harmful_rate": 0.007142857142857143,
+     "mean_gain": 0.0006612839452396157,
+     "median_gain": 0.0,
+     "mean_loss": 0.007142857142857143,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 15
+    },
+    "ETTh2": {
+     "n_candidates": 91,
+     "bs_rate": 0.10989010989010989,
+     "harmful_rate": 0.02197802197802198,
+     "mean_gain": 0.00010365593282384976,
+     "median_gain": 0.0,
+     "mean_loss": 0.02197802197802198,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 10
+    },
+    "ETTm1": {
+     "n_candidates": 71,
+     "bs_rate": 0.1267605633802817,
+     "harmful_rate": 0.08450704225352113,
+     "mean_gain": 0.00024293418702142056,
+     "median_gain": 0.0,
+     "mean_loss": 0.08450704225352113,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 9
+    },
+    "Oil Price": {
+     "n_candidates": 15,
+     "bs_rate": 0.13333333333333333,
+     "harmful_rate": 0.06666666666666667,
+     "mean_gain": 1.5994040171028135e-05,
+     "median_gain": 0.0,
+     "mean_loss": 0.06666666666666667,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 2
+    },
+    "US Term Structure": {
+     "n_candidates": 120,
+     "bs_rate": 0.31666666666666665,
+     "harmful_rate": 0.016666666666666666,
+     "mean_gain": 8.5895037044926e-05,
+     "median_gain": 0.0,
+     "mean_loss": 0.016666666666666666,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 38
+    }
+   },
+   "by_true_corruption": {
+    "duplicate": {
+     "n_candidates": 15,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "flatline": {
+     "n_candidates": 79,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "level_shift": {
+     "n_candidates": 16,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "missing_block": {
+     "n_candidates": 89,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "missing_scattered": {
+     "n_candidates": 88,
+     "bs_rate": 0.8636363636363636,
+     "harmful_rate": 0.13636363636363635,
+     "mean_gain": 0.0014985709651948883,
+     "median_gain": 0.00024870892288426005,
+     "mean_loss": 0.13636363636363635,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 76
+    },
+    "null": {
+     "n_candidates": 149,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "spike": {
+     "n_candidates": 9,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    }
+   }
+  },
+  "EXPLICIT_medium": {
+   "by_layer": {
+    "actual_nan_only": {
+     "n_candidates": 149,
+     "bs_rate": 0.436241610738255,
+     "harmful_rate": 0.053691275167785234,
+     "mean_gain": 0.0007794096688280067,
+     "median_gain": 0.0,
+     "mean_loss": 0.053691275167785234,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 65
+    },
+    "finite_flatline_only": {
+     "n_candidates": 268,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "mixed": {
+     "n_candidates": 28,
+     "bs_rate": 0.39285714285714285,
+     "harmful_rate": 0.14285714285714285,
+     "mean_gain": 0.0005622215814920425,
+     "median_gain": 0.0,
+     "mean_loss": 0.14285714285714285,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 11
+    }
+   },
+   "by_source": {
+    "Crypto": {
+     "n_candidates": 8,
+     "bs_rate": 0.25,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0002582700487695314,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 2
+    },
+    "ETTh1": {
+     "n_candidates": 140,
+     "bs_rate": 0.10714285714285714,
+     "harmful_rate": 0.007142857142857143,
+     "mean_gain": 0.0006612839452396157,
+     "median_gain": 0.0,
+     "mean_loss": 0.007142857142857143,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 15
+    },
+    "ETTh2": {
+     "n_candidates": 91,
+     "bs_rate": 0.10989010989010989,
+     "harmful_rate": 0.02197802197802198,
+     "mean_gain": 0.00010365593282384976,
+     "median_gain": 0.0,
+     "mean_loss": 0.02197802197802198,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 10
+    },
+    "ETTm1": {
+     "n_candidates": 71,
+     "bs_rate": 0.1267605633802817,
+     "harmful_rate": 0.08450704225352113,
+     "mean_gain": 0.00024293418702142056,
+     "median_gain": 0.0,
+     "mean_loss": 0.08450704225352113,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 9
+    },
+    "Oil Price": {
+     "n_candidates": 15,
+     "bs_rate": 0.13333333333333333,
+     "harmful_rate": 0.06666666666666667,
+     "mean_gain": 1.5994040171028135e-05,
+     "median_gain": 0.0,
+     "mean_loss": 0.06666666666666667,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 2
+    },
+    "US Term Structure": {
+     "n_candidates": 120,
+     "bs_rate": 0.31666666666666665,
+     "harmful_rate": 0.016666666666666666,
+     "mean_gain": 8.5895037044926e-05,
+     "median_gain": 0.0,
+     "mean_loss": 0.016666666666666666,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 38
+    }
+   },
+   "by_true_corruption": {
+    "duplicate": {
+     "n_candidates": 15,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "flatline": {
+     "n_candidates": 79,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "level_shift": {
+     "n_candidates": 16,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "missing_block": {
+     "n_candidates": 89,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "missing_scattered": {
+     "n_candidates": 88,
+     "bs_rate": 0.8636363636363636,
+     "harmful_rate": 0.13636363636363635,
+     "mean_gain": 0.0014985709651948883,
+     "median_gain": 0.00024870892288426005,
+     "mean_loss": 0.13636363636363635,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 76
+    },
+    "null": {
+     "n_candidates": 149,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "spike": {
+     "n_candidates": 9,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    }
+   }
+  },
+  "EXPLICIT_wide": {
+   "by_layer": {
+    "actual_nan_only": {
+     "n_candidates": 149,
+     "bs_rate": 0.436241610738255,
+     "harmful_rate": 0.053691275167785234,
+     "mean_gain": 0.0007794096688280067,
+     "median_gain": 0.0,
+     "mean_loss": 0.053691275167785234,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 65
+    },
+    "finite_flatline_only": {
+     "n_candidates": 268,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "mixed": {
+     "n_candidates": 28,
+     "bs_rate": 0.39285714285714285,
+     "harmful_rate": 0.14285714285714285,
+     "mean_gain": 0.0005622215814920425,
+     "median_gain": 0.0,
+     "mean_loss": 0.14285714285714285,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 11
+    }
+   },
+   "by_source": {
+    "Crypto": {
+     "n_candidates": 8,
+     "bs_rate": 0.25,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0002582700487695314,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 2
+    },
+    "ETTh1": {
+     "n_candidates": 140,
+     "bs_rate": 0.10714285714285714,
+     "harmful_rate": 0.007142857142857143,
+     "mean_gain": 0.0006612839452396157,
+     "median_gain": 0.0,
+     "mean_loss": 0.007142857142857143,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 15
+    },
+    "ETTh2": {
+     "n_candidates": 91,
+     "bs_rate": 0.10989010989010989,
+     "harmful_rate": 0.02197802197802198,
+     "mean_gain": 0.00010365593282384976,
+     "median_gain": 0.0,
+     "mean_loss": 0.02197802197802198,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 10
+    },
+    "ETTm1": {
+     "n_candidates": 71,
+     "bs_rate": 0.1267605633802817,
+     "harmful_rate": 0.08450704225352113,
+     "mean_gain": 0.00024293418702142056,
+     "median_gain": 0.0,
+     "mean_loss": 0.08450704225352113,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 9
+    },
+    "Oil Price": {
+     "n_candidates": 15,
+     "bs_rate": 0.13333333333333333,
+     "harmful_rate": 0.06666666666666667,
+     "mean_gain": 1.5994040171028135e-05,
+     "median_gain": 0.0,
+     "mean_loss": 0.06666666666666667,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 2
+    },
+    "US Term Structure": {
+     "n_candidates": 120,
+     "bs_rate": 0.31666666666666665,
+     "harmful_rate": 0.016666666666666666,
+     "mean_gain": 8.5895037044926e-05,
+     "median_gain": 0.0,
+     "mean_loss": 0.016666666666666666,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 38
+    }
+   },
+   "by_true_corruption": {
+    "duplicate": {
+     "n_candidates": 15,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "flatline": {
+     "n_candidates": 79,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "level_shift": {
+     "n_candidates": 16,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "missing_block": {
+     "n_candidates": 89,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "missing_scattered": {
+     "n_candidates": 88,
+     "bs_rate": 0.8636363636363636,
+     "harmful_rate": 0.13636363636363635,
+     "mean_gain": 0.0014985709651948883,
+     "median_gain": 0.00024870892288426005,
+     "mean_loss": 0.13636363636363635,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 76
+    },
+    "null": {
+     "n_candidates": 149,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    },
+    "spike": {
+     "n_candidates": 9,
+     "bs_rate": 0.0,
+     "harmful_rate": 0.0,
+     "mean_gain": 0.0,
+     "median_gain": 0.0,
+     "mean_loss": 0.0,
+     "median_loss": 0.0,
+     "n_beneficial_unique_windows": 0
+    }
+   }
+  }
+ },
+ "diagnostics_by_tier": {
+  "tight": {
+   "n_windows_with_raw_nan": 177,
+   "missing_support_nmse_before_mean": 0.6702992269352304,
+   "missing_support_nmse_after_mean": 0.6445871835934474,
+   "missing_support_nrmse_after_median": 0.4478339627817764,
+   "observed_support_drift_max": 0.0,
+   "seam_jump_mean": 0.0878899604646349,
+   "seam_jump_max": 1.9737439920599302,
+   "filled_fraction_mean": 0.4971751412429379
+  },
+  "medium": {
+   "n_windows_with_raw_nan": 177,
+   "missing_support_nmse_before_mean": 0.6702992269352304,
+   "missing_support_nmse_after_mean": 0.6445871835934474,
+   "missing_support_nrmse_after_median": 0.4478339627817764,
+   "observed_support_drift_max": 0.0,
+   "seam_jump_mean": 0.0878899604646349,
+   "seam_jump_max": 1.9737439920599302,
+   "filled_fraction_mean": 0.4971751412429379
+  },
+  "wide": {
+   "n_windows_with_raw_nan": 177,
+   "missing_support_nmse_before_mean": 0.6702992269352304,
+   "missing_support_nmse_after_mean": 0.6445871835934474,
+   "missing_support_nrmse_after_median": 0.4478339627817764,
+   "observed_support_drift_max": 0.0,
+   "seam_jump_mean": 0.0878899604646349,
+   "seam_jump_max": 1.9737439920599302,
+   "filled_fraction_mean": 0.4971751412429379
+  }
+ },
+ "abstain_reasons": {
+  "tight": {
+   "gap_level": {
+    "overlong_gap": 89
+   },
+   "window_level": {
+    "no_raw_nan": 268,
+    "all_gaps_abstained": 89,
+    "full_fill": 88
+   }
+  },
+  "medium": {
+   "gap_level": {
+    "overlong_gap": 89
+   },
+   "window_level": {
+    "no_raw_nan": 268,
+    "all_gaps_abstained": 89,
+    "full_fill": 88
+   }
+  },
+  "wide": {
+   "gap_level": {
+    "overlong_gap": 89
+   },
+   "window_level": {
+    "no_raw_nan": 268,
+    "all_gaps_abstained": 89,
+    "full_fill": 88
+   }
+  }
+ },
+ "downstream_tsfm_gain": {
+  "scope": {
+   "backend": "chronos:amazon/chronos-bolt-base (judge of the multi-family curation preset), judge-only probe, CPU",
+   "definition": "probe_window(wide_output).utility - probe_window(raw_window).utility; the raw window is materialised (forward-filled) inside probe_window, so the baseline IS arm B",
+   "selection": "actual-NaN windows with wide n_filled>0, evenly spaced per source, <= ceil(n_subset/6) per source",
+   "n_requested": 24
+  },
+  "n_windows": 21,
+  "mean_gain": -0.007369244528141038,
+  "median_gain": -0.013777220778663946,
+  "frac_positive": 0.38095238095238093,
+  "per_window": [
+   {
+    "sample_uid": "Crypto:contaminated:missing_scattered:5ed36f706dfd5e23db9621c35d675a72534fcc124dd8b5f7ff1e9cbf0fb23678:cdd0583b2aacc5fbb18cf9c5013cd72fbcac44599abbc6abf271e9087cc01ad8",
+    "dataset": "Crypto",
+    "layer": "actual_nan_only",
+    "utility_before": -5.7724885471513865,
+    "utility_after": -5.812024108034134,
+    "tsfm_gain": -0.039535560882747234
+   },
+   {
+    "sample_uid": "Crypto:contaminated:missing_scattered:ea975b9d86c208e8a4f58c56c813be5a56a84d3c85b1f8cd680738dca2ed572c:3e866735d9d7f9ddff793fbf8cdc58ee1676c7eef55e77c4257dbdc29df3ffee",
+    "dataset": "Crypto",
+    "layer": "actual_nan_only",
+    "utility_before": -5.22784055910313,
+    "utility_after": -5.150774771309177,
+    "tsfm_gain": 0.0770657877939529
+   },
+   {
+    "sample_uid": "ETTh1:contaminated:missing_scattered:0257baed7b4c5f5b15748920d554f58e74842992cabca300cdf925279a364e09:08247f3ef8f209bf140c77f9a3e0c72d2cc7ad400479f4f4becc61397ce729af",
+    "dataset": "ETTh1",
+    "layer": "actual_nan_only",
+    "utility_before": -2.2650127175284744,
+    "utility_after": -2.244837039761328,
+    "tsfm_gain": 0.02017567776714646
+   },
+   {
+    "sample_uid": "ETTh1:contaminated:missing_scattered:603dc2291f9b88e23bb0ce6f34fa68331548c5988d0d2815f0c64158adc6012c:be1c2d61f100ae2736277b9d52b0ffa286739944eb0bedbd6652303d3ab47235",
+    "dataset": "ETTh1",
+    "layer": "actual_nan_only",
+    "utility_before": -1.5740509956109072,
+    "utility_after": -1.5670844227378942,
+    "tsfm_gain": 0.006966572873013055
+   },
+   {
+    "sample_uid": "ETTh1:contaminated:missing_scattered:b10691b63060d96dc53b414bf9020958c91ec8a70ca39cbbedc730614e0c5cbe:f242eb21845b80ca36328c2b5fbdb48d51310593b1b4ddf07b77c4ab8de659d7",
+    "dataset": "ETTh1",
+    "layer": "mixed",
+    "utility_before": -2.834560690284775,
+    "utility_after": -2.8578521612831747,
+    "tsfm_gain": -0.023291470998399788
+   },
+   {
+    "sample_uid": "ETTh1:contaminated:missing_scattered:f1f4f2c433e059c5a8a6c2311a701e38c40338fe401a7c854408b92c8b0d8f1b:8e742601370b8d71c12321c48fbb5a340381fc87901274562f8a059624357d2d",
+    "dataset": "ETTh1",
+    "layer": "actual_nan_only",
+    "utility_before": -2.0904448032737957,
+    "utility_after": -2.0877807141782365,
+    "tsfm_gain": 0.0026640890955591523
+   },
+   {
+    "sample_uid": "ETTh2:contaminated:missing_scattered:102ee841df3b3088966e4f530ac50c9710df5b53db6aae299b589bc305a50271:c3f119854da72048b96f8654a57fd6235d16ce8361e8ca1117c9d2d8fa6d3c41",
+    "dataset": "ETTh2",
+    "layer": "actual_nan_only",
+    "utility_before": -1.814649961986361,
+    "utility_after": -1.7957802308921063,
+    "tsfm_gain": 0.018869731094254716
+   },
+   {
+    "sample_uid": "ETTh2:contaminated:missing_scattered:7a1e8c8f61ede3accca7500b7f2a814d0a9d294ebda8ed2fc04a896bcc3cf587:1bb695ce4ba99254a2eaf28c7323f870e2ecbe1ab34bc617b559e779ea32ad90",
+    "dataset": "ETTh2",
+    "layer": "mixed",
+    "utility_before": -4.178261348151436,
+    "utility_after": -4.242074689681766,
+    "tsfm_gain": -0.06381334153032991
+   },
+   {
+    "sample_uid": "ETTh2:contaminated:missing_scattered:bbd3515727b5285997421da103f2faaa18b388239a6baee2e46e2d278de57dfb:376bba637492b46066e48760c4959027c543ce7b70ca1251cf3588fc943da746",
+    "dataset": "ETTh2",
+    "layer": "mixed",
+    "utility_before": -2.3870204431038746,
+    "utility_after": -2.3952150944570247,
+    "tsfm_gain": -0.008194651353150118
+   },
+   {
+    "sample_uid": "ETTh2:contaminated:missing_scattered:f9f213aa144747039c49724c1cae3fe4bd4f3f39b9ce40c91b64ad71e1e599d0:814edbe6c6fe7fc4c3eaaeb781a5e66b95a52f42e19802a4411b38fb2972c378",
+    "dataset": "ETTh2",
+    "layer": "mixed",
+    "utility_before": -3.146529297352405,
+    "utility_after": -3.047322110970836,
+    "tsfm_gain": 0.09920718638156911
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:012be7fcca1ff2f555a6bc431094740b0ae5ba9a5b29a956a86194b37bc45df9:af89a192596d2d7e1b93088dc2285c1d80ef7e0bdc014c766a282b234c960381",
+    "dataset": "ETTm1",
+    "layer": "actual_nan_only",
+    "utility_before": -1.6279991265052571,
+    "utility_after": -1.6313400393593311,
+    "tsfm_gain": -0.0033409128540740074
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:493a1c1952327401a301c9eb79d4a105a90b1c0c5674245860ebd2cceb587441:4d2c15e80d63df4ad2f795e3fd1863ab6b25dab5fe1370baea30788388567f0f",
+    "dataset": "ETTm1",
+    "layer": "actual_nan_only",
+    "utility_before": -1.647836803068446,
+    "utility_after": -1.6701098277381554,
+    "tsfm_gain": -0.022273024669709374
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:c67c6b7246e44cb246e5b7f920a424cba3dbc2f16052e19fdb85f2435aed4ee8:34bb1769cade388d1d67fe6ca10fdb68708e9a5de779dc1ccc864f7989e87b30",
+    "dataset": "ETTm1",
+    "layer": "actual_nan_only",
+    "utility_before": -2.2878503030765214,
+    "utility_after": -2.3016275238551853,
+    "tsfm_gain": -0.013777220778663946
+   },
+   {
+    "sample_uid": "ETTm1:contaminated:missing_scattered:f8502602e5c953e63eac6acba5ddcf8a9934c5177ff416e45b7060399a8c63a8:bf4a5b2bb717bf8641fc69d7f42a11245e986cc486e3e64e6f5229f08af16875",
+    "dataset": "ETTm1",
+    "layer": "actual_nan_only",
+    "utility_before": -2.0044064720651775,
+    "utility_after": -1.9909185639540252,
+    "tsfm_gain": 0.013487908111152302
+   },
+   {
+    "sample_uid": "Oil Price:contaminated:missing_scattered:590223b632e2ec23df8ac2ecd4bf357ff256daae505843643b71ff4c243e2c87:3f2834e581f4c148ae37b8ac9a77b410520112ba741afcaad0c04e4cdc0c17ae",
+    "dataset": "Oil Price",
+    "layer": "actual_nan_only",
+    "utility_before": -5.1322231087482315,
+    "utility_after": -5.089509653770178,
+    "tsfm_gain": 0.042713454978053456
+   },
+   {
+    "sample_uid": "Oil Price:contaminated:missing_scattered:843024500cdcfef72451c558955a9c25e23c9f6a20a94b012815ac25ab43bd66:0f370b8fdcc6fb5f3df619c1a91445836148ad0d56dbd010f99d099b4162fa9c",
+    "dataset": "Oil Price",
+    "layer": "actual_nan_only",
+    "utility_before": -2.288216257549897,
+    "utility_after": -2.3105030866419343,
+    "tsfm_gain": -0.022286829092037053
+   },
+   {
+    "sample_uid": "Oil Price:contaminated:missing_scattered:fe5bec427693a5a6e48a1b66660ff8fa7ea00f18b636293e88b6e271755248dd:a77e4666833fdfad5fa151232e746f132ef205069d2463e5e35989a41371886c",
+    "dataset": "Oil Price",
+    "layer": "actual_nan_only",
+    "utility_before": -3.3359451819706694,
+    "utility_after": -3.432053467344436,
+    "tsfm_gain": -0.09610828537376648
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:0236303a7a0ccdc40805b7d457df201d077b033e6fa59ab5fe4499967496208e:4596c974f2a8c1626590ced760e0439f3e12877a9d910854a65b3f9907183c78",
+    "dataset": "US Term Structure",
+    "layer": "actual_nan_only",
+    "utility_before": -2.203549086664683,
+    "utility_after": -2.235116107817464,
+    "tsfm_gain": -0.03156702115278076
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:3f93aae62977eae770e604fe1975f33cdde03fef1175bd10cad0bb7b382e25a3:5e4dab9f17be5800daef12359f3b2cc4e7187d222770ea8552cb5e6319962499",
+    "dataset": "US Term Structure",
+    "layer": "actual_nan_only",
+    "utility_before": -2.888663321924505,
+    "utility_after": -2.9305961059615426,
+    "tsfm_gain": -0.041932784037037596
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:9cc622b88972cc8d03f4cbbb498c70319f7be20ed83f2bd40a59c19186d11307:3321490da9322b31cb7d4d8f69a3bc0f1903065a1a721cac14e2df2bc248cf50",
+    "dataset": "US Term Structure",
+    "layer": "actual_nan_only",
+    "utility_before": -3.689046586735904,
+    "utility_after": -3.7376408059981876,
+    "tsfm_gain": -0.04859421926228347
+   },
+   {
+    "sample_uid": "US Term Structure:contaminated:missing_scattered:fd177dac4506a7c1992e34ee28db547280d4a12f797bf562fa30c2a2bcda3e19:ab284b82094c02249643e325d59560d6a237a1bdcdad29b16bcb320296d81fa8",
+    "dataset": "US Term Structure",
+    "layer": "actual_nan_only",
+    "utility_before": -2.0311213464318243,
+    "utility_after": -2.0523105676325075,
+    "tsfm_gain": -0.021189221200683228
+   }
+  ],
+  "runtime_sec": 69.11858439445496
+ },
+ "gates": {
+  "g1_bs_rate_actual_nan": {
+   "rule": "b&s rate of the wide variant on actual-NaN windows (layers ('actual_nan_only', 'mixed')) >= 0.8",
+   "value": 0.4293785310734463,
+   "threshold": 0.8,
+   "n_candidates": 177,
+   "pass": false
+  },
+  "g2_harmful_rate_actual_nan": {
+   "rule": "harmful rate (true_loss > 0.03) of the wide variant on actual-NaN windows <= 0.1",
+   "value": 0.06779661016949153,
+   "threshold": 0.1,
+   "pass": true
+  },
+  "g3_observed_drift_zero": {
+   "rule": "observed-support drift exactly 0 for every EXPLICIT candidate (all tiers, all 445 windows)",
+   "max_drift": 0.0,
+   "n_checked": 1335,
+   "pass": true
+  },
+  "g4_beneficial_unique_windows": {
+   "rule": ">= 30 unique actual-NaN windows with a beneficial wide candidate",
+   "value": 76,
+   "threshold": 30,
+   "pass": true
+  },
+  "g5_source_noninferiority": {
+   "rule": ">= 4/6 sources with bs_wide >= bs_IMPUTE AND harmful_wide <= harmful_IMPUTE (candidate-level rates on the source's actual-NaN windows)",
+   "n_noninferior": 0,
+   "threshold": 4,
+   "per_source": {
+    "Crypto": {
+     "wide_bs": 0.4,
+     "impute_bs": 1.0,
+     "wide_harmful": 0.0,
+     "impute_harmful": 0.0,
+     "n_wide": 5,
+     "n_impute": 15,
+     "noninferior": false
+    },
+    "ETTh1": {
+     "wide_bs": 0.5357142857142857,
+     "impute_bs": 0.7142857142857143,
+     "wide_harmful": 0.03571428571428571,
+     "impute_harmful": 0.2857142857142857,
+     "n_wide": 28,
+     "n_impute": 84,
+     "noninferior": false
+    },
+    "ETTh2": {
+     "wide_bs": 0.45454545454545453,
+     "impute_bs": 0.5606060606060606,
+     "wide_harmful": 0.09090909090909091,
+     "impute_harmful": 0.42424242424242425,
+     "n_wide": 22,
+     "n_impute": 66,
+     "noninferior": false
+    },
+    "ETTm1": {
+     "wide_bs": 0.2903225806451613,
+     "impute_bs": 0.5806451612903226,
+     "wide_harmful": 0.1935483870967742,
+     "impute_harmful": 0.41935483870967744,
+     "n_wide": 31,
+     "n_impute": 93,
+     "noninferior": false
+    },
+    "Oil Price": {
+     "wide_bs": 0.2,
+     "impute_bs": 0.7666666666666667,
+     "wide_harmful": 0.1,
+     "impute_harmful": 0.23333333333333334,
+     "n_wide": 10,
+     "n_impute": 30,
+     "noninferior": false
+    },
+    "US Term Structure": {
+     "wide_bs": 0.4691358024691358,
+     "impute_bs": 0.8477366255144033,
+     "wide_harmful": 0.024691358024691357,
+     "impute_harmful": 0.1522633744855967,
+     "n_wide": 81,
+     "n_impute": 243,
+     "noninferior": false
+    }
+   },
+   "pass": false
+  },
+  "g6_fact_pool_unrestricted_oracle": {
+   "rule": "FACT pool (inherited IMPUTE removed; IMPUTE_EXPLICIT tight/medium/wide added on actual-NaN windows; DENOISE/DESPIKE unchanged; RESEGMENT closed; windows left without candidates kept as no-commit KEEP placeholders so the frame stays the frozen 771 real windows) unrestricted per-window max-gain b&s oracle must reach bcov>=0.30, gain>=0.10, CHR<=0.10, pme<=0.0055, damage<=0.0402",
+   "checks": {
+    "bcov": {
+     "value": 0.3704545454545455,
+     "op": ">=",
+     "threshold": 0.3,
+     "pass": true
+    },
+    "gain": {
+     "value": 0.1759827266131281,
+     "op": ">=",
+     "threshold": 0.1,
+     "pass": true
+    },
+    "chr": {
+     "value": 0.0,
+     "op": "<=",
+     "threshold": 0.1,
+     "pass": true
+    },
+    "pme": {
+     "value": 0.0,
+     "op": "<=",
+     "threshold": 0.0055,
+     "pass": true
+    },
+    "damage": {
+     "value": 0.0,
+     "op": "<=",
+     "threshold": 0.0402,
+     "pass": true
+    }
+   },
+   "headline": {
+    "bcov": 0.3704545454545455,
+    "gain": 0.1759827266131281,
+    "chr": 0.0,
+    "pme": 0.0,
+    "damage": 0.0,
+    "n_windows": 771,
+    "committed": 163,
+    "commit_by_family": {
+     "DENOISE": 41,
+     "IMPUTE_EXPLICIT": 76,
+     "DESPIKE": 46
+    }
+   },
+   "pool": {
+    "n_rows": 1769,
+    "n_base_non_impute": 1046,
+    "n_explicit_added": 531,
+    "n_keep_placeholders": 192,
+    "frame": "all 771 real windows; windows left without candidates stay in the frame as no-commit KEEP placeholders",
+    "allowed_families": [
+     "DENOISE",
+     "DESPIKE",
+     "IMPUTE_EXPLICIT"
+    ]
+   },
+   "original_pool_xcheck_pass": true,
+   "pass": true
+  }
+ },
+ "gates_verdict": {
+  "all_pass": false,
+  "coverage_potential_rule": "wide b&s >= 0.6 and harmful <= 0.25 on actual-NaN windows (applies when any of gates 1-5 fails)",
+  "coverage_potential": false,
+  "verdict": "operator_retired"
+ },
+ "input_hashes": {
+  "v33_training_data": "84ab59d9e63048586ba7ddbc44398a729d927fe924411b8bc345b6ad97e282ef",
+  "p0_corpus_manifest_a": "6d7d05a506745a5f6da9114ef08ac37b58e102b6cbee6b740ae5247c42d9b15e",
+  "v38_oracle_replay": "21d2126adde772dd818c1f55e824ca2944b3d531dff8b92c5fc62f0751cdcc59",
+  "v38_impute_mask_records": "6d1a56c1986d0d921f9eb06f2cb8637be77a9fcf65ef1cae498b614223f1a9d3",
+  "v33_clean_rerun": "976780a3d74756a1bd295c4af8ba2b5aa589c7959de4c7db62f95f0ff677311b"
+ },
+ "code_hashes": {
+  "experiments/v38_explicit_impute_probe.py": "94815dfb643d654c069df721b337bde2dba75d2303dd2f0f0216c8b0773a7220",
+  "experiments/v33_labels.py": "0a701300cde415e206bee15970a4b88d0ac9c8a45bc771ad4ef11d70b52df7bb",
+  "src/introact_ts/probe.py": "22ded3d21137d958d823d6dd91c8d15a756548712b2a437e69a04b5498ee6af4",
+  "src/introact_ts/actions.py": "f94ba0e5d453c9fd0e139d887b96e450a0d4aeda85d2cad5978678550f44cdf2"
+ },
+ "output_sha256": {
+  "results/v38_explicit_impute_records.jsonl": "78e733696298352b717024443f57617c4597c79ea416478a9e30d1e0924a0a58"
+ },
+ "runtime_sec": 85.62957715988159
+}

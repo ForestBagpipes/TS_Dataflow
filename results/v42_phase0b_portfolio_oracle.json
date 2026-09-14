@@ -1,0 +1,135 @@
+{
+ "phase": "v4.2 Phase 0-B portfolio oracle headroom (docs/v4_2_portfolio_act_preregistration.md §3.2)",
+ "role": "development-label headroom only; the oracle must not select any deployed rule",
+ "n_windows": 89,
+ "per_proposer": {
+  "tsicl": {
+   "n_applicable": 89,
+   "n_bs": 75,
+   "n_harmful": 14
+  },
+  "linear_bridge": {
+   "n_applicable": 89,
+   "n_bs": 69,
+   "n_harmful": 19
+  },
+  "impute_current_best": {
+   "n_applicable": 86,
+   "n_bs": 69,
+   "n_harmful": 16
+  },
+  "impute_conservative": {
+   "n_applicable": 86,
+   "n_bs": 67,
+   "n_harmful": 18
+  },
+  "impute_default": {
+   "n_applicable": 76,
+   "n_bs": 59,
+   "n_harmful": 17
+  },
+  "fm_mean": {
+   "n_applicable": 89,
+   "n_bs": 57,
+   "n_harmful": 32
+  },
+  "seasonal_existing": {
+   "n_applicable": 75,
+   "n_bs": 51,
+   "n_harmful": 24
+  },
+  "moment": {
+   "n_applicable": 89,
+   "n_bs": 46,
+   "n_harmful": 43
+  },
+  "openfim": {
+   "n_applicable": 89,
+   "n_bs": 33,
+   "n_harmful": 56
+  }
+ },
+ "applicable_action_counts": {
+  "8": 75,
+  "6": 10,
+  "5": 3,
+  "7": 1
+ },
+ "windows_with_at_least_one_bs_action": 81,
+ "windows_with_no_bs_action": [
+  "ETTm1:contaminated:missing_block:cfd3034c1a7ced89aedb5a2f46da0d46eb1fb137ddeae6ec0d1d08c5de4bed4b:a9c58e91e5d4808e40d69d5e8f37d4f00ca054fec7ba1ea6bafd7751866dbfdd",
+  "Oil Price:contaminated:missing_block:7f05c8a3a1949e51590309f3548f4d41082642dfe130a23fca30dac87c2e320e:d80599e4d26b7946d9bbcbcbe0486c5aa21c09b9fe54a2fb497e066dc84beb45",
+  "US Term Structure:contaminated:missing_block:00cf09102d2b23ebf4debdceb9e7cba106629da864aaeec08f83d8506e7db6ba:d48928fac7385cc7feeb74d44e084598dc39651110ee257aef6d1c36c2169b61",
+  "US Term Structure:contaminated:missing_block:1ba78be7e6705bb270229a34b5dd3b0b0a0da297dea0f426f60c1f77901abc04:e5b58b677d3c6587a596b6d22fe64cf053f191593e16de0db0c6e1a95b532a25",
+  "US Term Structure:contaminated:missing_block:3cb10ece52e9267539f3ec428c58a01e13727804f3d2cfe8d863daf9390b4c01:927867ff24b5ca78eacbfb227b8d1de2d98f95604e573206e92b85e226a98e95",
+  "US Term Structure:contaminated:missing_block:8e634fdeed5e33503acfcffb29910c9e178eea5fcdba58eeb81aa509c20cd3e5:a5fe42d5369e767b11753ee88a96ccea304350b26f2889e8057295eac100de20",
+  "US Term Structure:contaminated:missing_block:a10666ec4d768e30f5bb0bd429dc6f924f3191b4d1424d7c0f45abb8c6d30433:f5a19c10b77671589f2f6c8bc90a5fd60c0eb3c09964e662b92365f0749cec00",
+  "US Term Structure:contaminated:missing_block:ee52a0239fdbc2183f38e78e598d6103e0ffefd981e1bd669d085343cff77f22:f62c387728022075c5e3513d0472bccb996dac411f8d11f0ba5922e90917fd01"
+ ],
+ "tsicl_harmful_windows": 14,
+ "tsicl_harmful_with_safe_alternative": 6,
+ "tsicl_bs_windows": 75,
+ "tsicl_bs_lost_if_no_action_available": 0,
+ "best_fixed_action": "tsicl",
+ "best_fixed_bs": 75,
+ "portfolio_oracle_bs": 81,
+ "portfolio_over_best_fixed": 6,
+ "oracle_pick_counts": {
+  "tsicl": 75,
+  "impute_conservative": 2,
+  "fm_mean": 3,
+  "moment": 1
+ },
+ "oracle_gain_sum": 7.823793692698828,
+ "tsicl_only_gain_sum": 7.823793692698828,
+ "integrated_with_v39_D": {
+  "n_committed": 206,
+  "beneficial_commits": 191,
+  "harmful_commits": 15,
+  "gain_sum": 45.94116482728379,
+  "bcov": 0.4340909090909091,
+  "gain": 0.1049670539311967,
+  "chr": 0.07281553398058252,
+  "pme": 0.006042296072507553,
+  "damage": 0.019455252918287938,
+  "n_added_from_portfolio": 74,
+  "added_without_gain_record": 6,
+  "chr_cp95_upper": 0.10990975505778265
+ },
+ "gates": {
+  "g1_windows_with_bs_action": {
+   "value": 81,
+   "min": 80,
+   "pass": true
+  },
+  "g2_harmful_tsicl_with_safe_alt": {
+   "value": 6,
+   "of": 14,
+   "min": 10,
+   "pass": false
+  },
+  "g3_portfolio_over_best_fixed": {
+   "value": 6,
+   "best_fixed": "tsicl",
+   "best_fixed_bs": 75,
+   "portfolio_bs": 81,
+   "min": 10,
+   "pass": false
+  },
+  "g4_integrated_oracle": {
+   "bcov": 0.4340909090909091,
+   "gain": 0.1049670539311967,
+   "chr": 0.07281553398058252,
+   "pme": 0.006042296072507553,
+   "damage": 0.019455252918287938,
+   "pass": false
+  },
+  "all_pass": false
+ },
+ "input_sha256": {
+  "v39_longgap_candidates.jsonl": "44a0327ecdd136b167a818994ac17191562fe348aaac386acd53b4288c6f4af6",
+  "v39_longgap_probe.json": "53cfd4908f959e44756eb2b1abba8ef543f9ccaed6cdec3539d811770eae9c00",
+  "v39_phase0_records.jsonl": "50b4606840f4c9dbde77599c64521ed1b510136e6326381c36d712b68f9cef80"
+ },
+ "runtime_sec": 0.4851541519165039
+}

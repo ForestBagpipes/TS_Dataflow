@@ -1,0 +1,592 @@
+{
+ "phase": "v3.9 Phase 0: MIRAGE-TS fast integration replay and target-gap budget (docs/v3_9_mirage_preregistration.md §2)",
+ "definitions": {
+  "fact_short": "raw-NaN runs of length 1-3 only, finite anchors on both sides, linear interpolation, observed finite support strictly unchanged; labels reused from the v3.8 wide tier after the per-window output-hash equivalence proof (gate 3)",
+  "arm_B": "the same fitted PICS models as arm A with every IMPUTE candidate removed from the decision pools; first-commit continues to the next non-IMPUTE candidate; windows left without candidates KEEP",
+  "five_quantities": "proposal/applicability coverage, action-conditional B&S precision (beneficial_commits/committed), action-conditional CHR, bcov, abstention rate (1 - commit_rate)",
+  "harmful": "true_loss > 0.03",
+  "frame": "frozen 771 real windows; removed actions stay as KEEP placeholders, the denominator never moves",
+  "arm_F": "unrestricted per-window max-gain beneficial_and_safe oracle over (full existing pool + FACT_SHORT), RESEGMENT closed; target-label headroom only"
+ },
+ "integrity_gates": {
+  "gate0_v38_replay_passed": {
+   "pass": true,
+   "source": "v38_oracle_replay.json"
+  },
+  "gate1_incumbent_replay_1e-9": {
+   "pass": true,
+   "max_abs_diff": 0.0,
+   "detail": {
+    "floats": {
+     "commit_rate": {
+      "got": 0.19584954604409857,
+      "ref": 0.19584954604409857,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "damage": {
+      "got": 0.040207522697795074,
+      "ref": 0.040207522697795074,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "conditional_harm_rate": {
+      "got": 0.2052980132450331,
+      "ref": 0.2052980132450331,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "cond_damage": {
+      "got": 0.2052980132450331,
+      "ref": 0.2052980132450331,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "conditional_mean_loss": {
+      "got": 0.2052980132450331,
+      "ref": 0.2052980132450331,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "conditional_loss_p90": {
+      "got": 1.0,
+      "ref": 1.0,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "conditional_loss_p95": {
+      "got": 1.0,
+      "ref": 1.0,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "protected_mis_edit_rate": {
+      "got": 0.00906344410876133,
+      "ref": 0.00906344410876133,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "coverage": {
+      "got": 0.33636363636363636,
+      "ref": 0.33636363636363636,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "beneficial_coverage": {
+      "got": 0.2727272727272727,
+      "ref": 0.2727272727272727,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "mean_repair_gain_contaminated": {
+      "got": 0.09189960143728719,
+      "ref": 0.09189960143728719,
+      "abs_diff": 0.0,
+      "ok": true
+     },
+     "max_dataset_bs_share": {
+      "got": 0.6333333333333333,
+      "ref": 0.6333333333333333,
+      "abs_diff": 0.0,
+      "ok": true
+     }
+    },
+    "ints": {
+     "n_windows": {
+      "got": 771,
+      "ref": 771,
+      "ok": true
+     },
+     "committed": {
+      "got": 151,
+      "ref": 151,
+      "ok": true
+     },
+     "beneficial_commits": {
+      "got": 120,
+      "ref": 120,
+      "ok": true
+     }
+    },
+    "protected_stratum_edit": {
+     "keys_match": true,
+     "max_abs_diff": 0.0,
+     "per_key": {
+      "changepoint": {
+       "got": 0.0,
+       "ref": 0.0,
+       "abs_diff": 0.0,
+       "ok": true
+      },
+      "clean": {
+       "got": 0.009433962264150943,
+       "ref": 0.009433962264150943,
+       "abs_diff": 0.0,
+       "ok": true
+      },
+      "hard": {
+       "got": 0.0,
+       "ref": 0.0,
+       "abs_diff": 0.0,
+       "ok": true
+      },
+      "rare_valid": {
+       "got": 0.03278688524590164,
+       "ref": 0.03278688524590164,
+       "abs_diff": 0.0,
+       "ok": true
+      }
+     },
+     "ok": true
+    },
+    "max_abs_diff": 0.0,
+    "pass": true
+   }
+  },
+  "gate2_frame_771_fixed": {
+   "n_frame": 771,
+   "per_arm_n_windows": {
+    "A_pics_joint_relabel": 771,
+    "B_pics_non_impute": 771,
+    "C_fact_short_only": 771,
+    "D_fact_short_first": 771,
+    "E_pics_non_impute_first": 771,
+    "F_unrestricted_oracle": 771
+   },
+   "n_keep_placeholder_rows": {
+    "B": 327,
+    "C": 594,
+    "D_E": 327,
+    "F": 0
+   },
+   "pass": true
+  },
+  "gate3_fact_short_equals_v38_88_76_12": {
+   "n_windows_checked": 445,
+   "n_output_hash_mismatch_vs_wide": 0,
+   "hash_mismatch_uids": [],
+   "n_layer_mismatch_vs_v38": 0,
+   "n_actual_nan_windows": 177,
+   "n_filled": 88,
+   "n_bs": 76,
+   "n_harmful": 12,
+   "filled_set_matches_v38_wide": true,
+   "v38_probe_window_level": {
+    "no_raw_nan": 268,
+    "all_gaps_abstained": 89,
+    "full_fill": 88
+   },
+   "expected": {
+    "n_windows": 88,
+    "n_bs": 76,
+    "n_harmful": 12
+   },
+   "gap_length_note": "corpus raw-NaN run lengths are {1,2,3} u {25..63}, so max_gap=3 and max_gap=16 certify exactly the same runs; any hash mismatch above would falsify that distributional claim",
+   "pass": true
+  },
+  "gate4_two_process_digest_identical": {
+   "in_process_sha256": "419b46b5454d2f8f258ef9ade7afca0833122bd21e31d824702a7336c817a746",
+   "pass": true,
+   "process_a_sha256": "419b46b5454d2f8f258ef9ade7afca0833122bd21e31d824702a7336c817a746",
+   "process_b_sha256": "419b46b5454d2f8f258ef9ade7afca0833122bd21e31d824702a7336c817a746",
+   "a_equals_b": true,
+   "a_equals_in_process": true
+  }
+ },
+ "all_gates_pass": true,
+ "arms": {
+  "A_pics_joint_relabel": {
+   "n_windows": 771,
+   "proposal_coverage": 0.6926070038910506,
+   "applicability_coverage": 0.6926070038910506,
+   "n_proposed_windows": 534,
+   "n_applicable_windows": 534,
+   "action_conditional_bs_precision": 0.7947019867549668,
+   "action_conditional_chr": 0.2052980132450331,
+   "bcov": 0.2727272727272727,
+   "abstention_rate": 0.8041504539559015,
+   "gain": 0.09189960143728719,
+   "pme": 0.00906344410876133,
+   "damage": 0.040207522697795074,
+   "conditional_mean_loss": 0.2052980132450331,
+   "committed": 151,
+   "commit_rate": 0.19584954604409857,
+   "beneficial_commits": 120,
+   "harmful_commits": 31,
+   "commit_by_family": {
+    "DESPIKE": 45,
+    "IMPUTE": 106
+   }
+  },
+  "B_pics_non_impute": {
+   "n_windows": 771,
+   "proposal_coverage": 0.5758754863813229,
+   "applicability_coverage": 0.5758754863813229,
+   "n_proposed_windows": 444,
+   "n_applicable_windows": 444,
+   "action_conditional_bs_precision": 0.8913043478260869,
+   "action_conditional_chr": 0.10869565217391304,
+   "bcov": 0.09318181818181819,
+   "abstention_rate": 0.940337224383917,
+   "gain": 0.08637629966536643,
+   "pme": 0.006042296072507553,
+   "damage": 0.00648508430609598,
+   "conditional_mean_loss": 0.10869565217391304,
+   "committed": 46,
+   "commit_rate": 0.05966277561608301,
+   "beneficial_commits": 41,
+   "harmful_commits": 5,
+   "commit_by_family": {
+    "DESPIKE": 46
+   }
+  },
+  "C_fact_short_only": {
+   "n_windows": 771,
+   "proposal_coverage": 0.22957198443579765,
+   "applicability_coverage": 0.11413748378728923,
+   "n_proposed_windows": 177,
+   "n_applicable_windows": 88,
+   "action_conditional_bs_precision": 0.8636363636363636,
+   "action_conditional_chr": 0.13636363636363635,
+   "bcov": 0.17272727272727273,
+   "abstention_rate": 0.8858625162127107,
+   "gain": 0.0002997141930389776,
+   "pme": 0.0,
+   "damage": 0.01556420233463035,
+   "conditional_mean_loss": 0.13636363636363635,
+   "committed": 88,
+   "commit_rate": 0.11413748378728923,
+   "beneficial_commits": 76,
+   "harmful_commits": 12,
+   "commit_by_family": {
+    "FACT_SHORT": 88
+   }
+  },
+  "D_fact_short_first": {
+   "n_windows": 771,
+   "proposal_coverage": 0.7509727626459144,
+   "applicability_coverage": 0.7509727626459144,
+   "n_proposed_windows": 579,
+   "n_applicable_windows": 579,
+   "action_conditional_bs_precision": 0.8863636363636364,
+   "action_conditional_chr": 0.11363636363636363,
+   "bcov": 0.26590909090909093,
+   "abstention_rate": 0.8287937743190661,
+   "gain": 0.08720025714865982,
+   "pme": 0.006042296072507553,
+   "damage": 0.019455252918287938,
+   "conditional_mean_loss": 0.11363636363636363,
+   "committed": 132,
+   "commit_rate": 0.17120622568093385,
+   "beneficial_commits": 117,
+   "harmful_commits": 15,
+   "commit_by_family": {
+    "FACT_SHORT": 88,
+    "DESPIKE": 44
+   }
+  },
+  "E_pics_non_impute_first": {
+   "n_windows": 771,
+   "proposal_coverage": 0.7509727626459144,
+   "applicability_coverage": 0.7509727626459144,
+   "n_proposed_windows": 579,
+   "n_applicable_windows": 579,
+   "action_conditional_bs_precision": 0.8712121212121212,
+   "action_conditional_chr": 0.12878787878787878,
+   "bcov": 0.26136363636363635,
+   "abstention_rate": 0.8287937743190661,
+   "gain": 0.0866379615667581,
+   "pme": 0.006042296072507553,
+   "damage": 0.02204928664072633,
+   "conditional_mean_loss": 0.12878787878787878,
+   "committed": 132,
+   "commit_rate": 0.17120622568093385,
+   "beneficial_commits": 115,
+   "harmful_commits": 17,
+   "commit_by_family": {
+    "FACT_SHORT": 86,
+    "DESPIKE": 46
+   }
+  },
+  "F_unrestricted_oracle": {
+   "n_windows": 771,
+   "proposal_coverage": 1.0,
+   "applicability_coverage": 1.0,
+   "n_proposed_windows": 771,
+   "n_applicable_windows": 771,
+   "action_conditional_bs_precision": 1.0,
+   "action_conditional_chr": 0.0,
+   "bcov": 0.6613636363636364,
+   "abstention_rate": 0.622568093385214,
+   "gain": 0.19692759284166705,
+   "pme": 0.0,
+   "damage": 0.0,
+   "conditional_mean_loss": 0.0,
+   "committed": 291,
+   "commit_rate": 0.377431906614786,
+   "beneficial_commits": 291,
+   "harmful_commits": 0,
+   "commit_by_family": {
+    "IMPUTE": 203,
+    "DENOISE": 41,
+    "DESPIKE": 46,
+    "FACT_SHORT": 1
+   },
+   "two_path_xcheck_pass": true
+  }
+ },
+ "decomposition": {
+  "A_pics_commits": {
+   "n_commits": 151,
+   "by_family": {
+    "DESPIKE": 45,
+    "IMPUTE": 106
+   },
+   "by_source": {
+    "Crypto": 4,
+    "ETTh1": 5,
+    "ETTh2": 13,
+    "ETTm1": 33,
+    "Oil Price": 7,
+    "US Term Structure": 89
+   },
+   "by_window_layer": {
+    "neither": 39,
+    "finite_flatline_only": 20,
+    "actual_nan_only": 86,
+    "mixed": 6
+   },
+   "impute_by_mask_origin": {
+    "finite_flatline": 15,
+    "raw_nan+finite_flatline": 2,
+    "raw_nan+finite_flatline+other_finite": 1,
+    "raw_nan": 87,
+    "finite_flatline+other_finite": 1
+   },
+   "harmful_by_family": {
+    "DESPIKE": 4,
+    "IMPUTE": 27
+   },
+   "harmful_by_source": {
+    "ETTh1": 1,
+    "ETTh2": 6,
+    "ETTm1": 9,
+    "Oil Price": 2,
+    "US Term Structure": 13
+   },
+   "harmful_impute_by_mask_origin": {
+    "raw_nan+finite_flatline": 2,
+    "raw_nan+finite_flatline+other_finite": 1,
+    "finite_flatline+other_finite": 1,
+    "raw_nan": 20,
+    "finite_flatline": 3
+   }
+  },
+  "B_pics_non_impute": {
+   "committed": 46,
+   "beneficial_commits": 41,
+   "harmful_commits": 5,
+   "gain": 0.08637629966536643,
+   "bcov": 0.09318181818181819,
+   "chr": 0.10869565217391304,
+   "by_family": {
+    "DESPIKE": 46
+   },
+   "n_impute_commits_removed_vs_A": 106
+  }
+ },
+ "conflict_analysis": {
+  "n_fact_applicable": 88,
+  "n_overlap_with_A_any_commit": 56,
+  "n_overlap_with_A_IMPUTE_commit": 55,
+  "n_conflict_with_B_commit": 2,
+  "conflict_fact_bs": 2,
+  "conflict_fact_harmful": 0,
+  "conflict_pics_bs": 0,
+  "conflict_pics_harmful": 2,
+  "conflicts": [
+   {
+    "sample_uid": "ETTh1:contaminated:missing_scattered:0257baed7b4c5f5b15748920d554f58e74842992cabca300cdf925279a364e09:08247f3ef8f209bf140c77f9a3e0c72d2cc7ad400479f4f4becc61397ce729af",
+    "dataset": "ETTh1",
+    "stratum": "contaminated",
+    "fact_short": {
+     "gain": 0.012279003401837466,
+     "loss": 0.0,
+     "beneficial_and_safe": true,
+     "harmful": false
+    },
+    "pics_non_impute": {
+     "family": "DESPIKE",
+     "rung": "default",
+     "params_key": "{\"max_width\": 3, \"n_sigma\": 4.0, \"window\": 11}",
+     "gain": -0.07892355126898543,
+     "loss": 1.0,
+     "beneficial_and_safe": false,
+     "harmful": true
+    },
+    "winner_D_fact_first": "FACT_SHORT",
+    "winner_E_pics_first": "PICS_non_IMPUTE"
+   },
+   {
+    "sample_uid": "ETTh2:contaminated:missing_scattered:bbd3515727b5285997421da103f2faaa18b388239a6baee2e46e2d278de57dfb:376bba637492b46066e48760c4959027c543ce7b70ca1251cf3588fc943da746",
+    "dataset": "ETTh2",
+    "stratum": "contaminated",
+    "fact_short": {
+     "gain": 0.004464004922978458,
+     "loss": 0.0,
+     "beneficial_and_safe": true,
+     "harmful": false
+    },
+    "pics_non_impute": {
+     "family": "DESPIKE",
+     "rung": "default",
+     "params_key": "{\"max_width\": 3, \"n_sigma\": 4.0, \"window\": 11}",
+     "gain": -0.1517434964429529,
+     "loss": 1.0,
+     "beneficial_and_safe": false,
+     "harmful": true
+    },
+    "winner_D_fact_first": "FACT_SHORT",
+    "winner_E_pics_first": "PICS_non_IMPUTE"
+   }
+  ],
+  "overlap_A_impute_uids": [
+   "ETTh2:contaminated:missing_scattered:a8098774b5ec9f17fb8dc3f8a4537c28c2e8298c64461f51f7c296ca476899fc:2e9a93b98ee5daf54c62a747c36eb0b0d3c6cff750074353979bc3b72a7ff9f2",
+   "ETTh2:contaminated:missing_scattered:bbd3515727b5285997421da103f2faaa18b388239a6baee2e46e2d278de57dfb:376bba637492b46066e48760c4959027c543ce7b70ca1251cf3588fc943da746",
+   "ETTh2:contaminated:missing_scattered:f9f213aa144747039c49724c1cae3fe4bd4f3f39b9ce40c91b64ad71e1e599d0:814edbe6c6fe7fc4c3eaaeb781a5e66b95a52f42e19802a4411b38fb2972c378",
+   "ETTm1:contaminated:missing_scattered:012be7fcca1ff2f555a6bc431094740b0ae5ba9a5b29a956a86194b37bc45df9:af89a192596d2d7e1b93088dc2285c1d80ef7e0bdc014c766a282b234c960381",
+   "ETTm1:contaminated:missing_scattered:16433e958a255ad7957949dd0ae6cf2faa420235287aafdea0727d278be51e8d:42ec17d69948710f1ed3ce35cf12899d730bf2d8aad025b49586afda54fbd11d",
+   "ETTm1:contaminated:missing_scattered:1ab974a02141481f88931433f35e148e5ef433d410ce1ebcdd0db022c538499a:a0487a56ba59899bb693719c15e6d81da3d38d458493e654f5f37a56185780bf",
+   "ETTm1:contaminated:missing_scattered:313e4b051adeb058d727deac8f37c33b57c4631f16513d7f6fa374095bfce403:a1255fbe2bdc4bc737b8580e9c16beb2f561b42e76da295b090913eb223f72ce",
+   "ETTm1:contaminated:missing_scattered:493a1c1952327401a301c9eb79d4a105a90b1c0c5674245860ebd2cceb587441:4d2c15e80d63df4ad2f795e3fd1863ab6b25dab5fe1370baea30788388567f0f",
+   "ETTm1:contaminated:missing_scattered:7f906953b96ea409f4eafd955d7de097c71557d49e4b800fe0433af36b52ca88:d6cd9446f866f1943a99e1c46565cc01a3d2631b78af8f28c66afd7522d22ad5",
+   "ETTm1:contaminated:missing_scattered:87c0920c15778792121e004c5fe33682b1f59055016e3ad6a6f0ea6a08dc77cb:32532cbfe11c3d4eacf9fc74cd2d6e8ae2fe716696d448aa09722823c62759e2",
+   "ETTm1:contaminated:missing_scattered:a4f4280197d729983768a5a2917777e0f5b6ba0711849f0cbed4ecf4e62ce66c:585105251df989606c73d8824271a07b0bf5c0f2f524c9991b0445ae85485e8b",
+   "ETTm1:contaminated:missing_scattered:ac43b2e208412ab05b64f577541c0241b920b99a9db5abfe443ee8022a5c861b:8b71d981a21c955439a28a4f4402bdd60bf682e9534769cbe1d0dc3f198b019f",
+   "ETTm1:contaminated:missing_scattered:c67c6b7246e44cb246e5b7f920a424cba3dbc2f16052e19fdb85f2435aed4ee8:34bb1769cade388d1d67fe6ca10fdb68708e9a5de779dc1ccc864f7989e87b30",
+   "ETTm1:contaminated:missing_scattered:cb3ab4d9568584554562a75065d9891ef021767dd0855cca61afde5bd5bff35c:6f78cd9ae0a61220f08e4246dc904d30c4ed38413fb69ca7731a927b91035eb1",
+   "ETTm1:contaminated:missing_scattered:d258faa18bbdea4f6500be9ddb2903523d60f13161472ed71e81303ec256ad5e:1641f18b7109fcdff132f1664bf2de89a02e208e9099fc59d66fedcdc0a620ef",
+   "ETTm1:contaminated:missing_scattered:dd9a96bb70de2e85c3bd5f6d2e168cd26d86150d745a61684aec02286ba7d74e:4e77843af326343c244a832a50879e9bc15d57cc204264980b0a01a28996a068",
+   "ETTm1:contaminated:missing_scattered:f6f64871f92b5e96d690381783a527a42d228f24f970a25f957a9fd9c0314383:edfeac61a8c181eed7a9c39b8a5ca6d205263e9385eb9e0fd8273e5a4914c4f9",
+   "ETTm1:contaminated:missing_scattered:f8502602e5c953e63eac6acba5ddcf8a9934c5177ff416e45b7060399a8c63a8:bf4a5b2bb717bf8641fc69d7f42a11245e986cc486e3e64e6f5229f08af16875",
+   "Oil Price:contaminated:missing_scattered:590223b632e2ec23df8ac2ecd4bf357ff256daae505843643b71ff4c243e2c87:3f2834e581f4c148ae37b8ac9a77b410520112ba741afcaad0c04e4cdc0c17ae",
+   "US Term Structure:contaminated:missing_scattered:0236303a7a0ccdc40805b7d457df201d077b033e6fa59ab5fe4499967496208e:4596c974f2a8c1626590ced760e0439f3e12877a9d910854a65b3f9907183c78",
+   "US Term Structure:contaminated:missing_scattered:0fe198cc5ce360a8ab459083a2a7e1ebf96135f3ed69d0c4aed65fb5f126c3d1:461d178846113bcd9f0a0e05c79940e4c1678fa19a8d50ff62de7f1e51b73f5c",
+   "US Term Structure:contaminated:missing_scattered:11045ffbc48f7dfb8f6a38a1bc40f9d56e74349fb40d1c7deb6305f9a70113f8:19fd861288d415c6c34acaa5b890a0ed88a7f6e86080ea13a58d1632cce8dbde",
+   "US Term Structure:contaminated:missing_scattered:11cf81149d30bed640620e2bb9fbb601db4d2042963b473ba26954b647776150:be4fa5364d59c35c55e7e23e2f802bcf537508dca010cc274057de457f81a934",
+   "US Term Structure:contaminated:missing_scattered:267192c0fd88f2e29c755a154c89690939687a756f8bae08f7db3b62fa0f4e6f:c05849ffac1751a7c004df7113da361396d0438b96c32242565f8401c46d3476",
+   "US Term Structure:contaminated:missing_scattered:2996dcbb8683c67057284bc2ffbffc6c80498603fc30b5f67f56bf234238a708:b1596985953b5b602876bd477a6ab4ad465410e58349685cc15e914da036e98c",
+   "US Term Structure:contaminated:missing_scattered:2ac2ae8934945bf830e253845922f97a5ec6b111f1ded409c633aeab72a39a84:8aeb29e4946a75fec760b06f08f83ea658cc4713db15da2edec008e0d5464190",
+   "US Term Structure:contaminated:missing_scattered:2df8a82d6af9921068fd52d4593be79c86aef4df106bfc696bb56ce592a909e3:be61806c8c2a411d9351ec4f7a0f31e7f3ab608826f33e1b415472cef9a3becc",
+   "US Term Structure:contaminated:missing_scattered:31b4a9777dd395da2a2bfe0a21d01e68999ee95bf441ff62cdd070c5dc370665:1001fd0bd2d535e48b0adf6e9f3ba0a5ef7d66e3de04b31b090f786a60e2f1e1",
+   "US Term Structure:contaminated:missing_scattered:34406a0f6efe78ca0cb9b60c3930183343a681a0e9d6a790c03903b356dd0969:c6bff359a9963b540b12e31b35eeac14cc963ecfac5a957936f51b7c6c9d4f36",
+   "US Term Structure:contaminated:missing_scattered:3524bf8542d62ed0f404f5e4a00a9ecdff36f74d12b1db236d5dd091dc268fb9:430871293a99b4642129c7bdb5e4fab0674f89d84fffa8260e425eb163a8d6e2",
+   "US Term Structure:contaminated:missing_scattered:3e520f39f180adbfc95ee169a5e1ec8eb85306d92b2829b0f84e59478beaeffb:bcfa8348e12edc495248677472c2bbb38bcbc9645239f917f6c0b6d274fb5b30",
+   "US Term Structure:contaminated:missing_scattered:3f93aae62977eae770e604fe1975f33cdde03fef1175bd10cad0bb7b382e25a3:5e4dab9f17be5800daef12359f3b2cc4e7187d222770ea8552cb5e6319962499",
+   "US Term Structure:contaminated:missing_scattered:40ac79c1936903ccef7e99d6326bd1c29dfd73045d9a6fe201e8a0473d04e5fd:2acb20295907189f7911631934b190c7aba6fda26fcd0f0737a913c430aa6d14",
+   "US Term Structure:contaminated:missing_scattered:4c6a058f0083a8f323a648fc13677c31c3bf90b4ec6d283e93004ed1f781f0e3:40ed6ae64062c655842ed2aef2db3164d6ab9ca8b966b6bab52acea162bb1cb2",
+   "US Term Structure:contaminated:missing_scattered:5ebdc5c1e879f2f4e34f84e8d3d2ad41258c80d03ee37e9c376d214ae308cd2e:71c68b7cf98f65423e90c32b7ad4cab50adaa1e081523d930224855bc218766a",
+   "US Term Structure:contaminated:missing_scattered:5f42a7ae4311f1aa5c65ae79b68c4ee60e9b848c3913b441b7fecd6d42f2d4e4:d3a08f9f9d64f75545036bdeebea86f46e39655bd1c8e136712d8e61098483ff",
+   "US Term Structure:contaminated:missing_scattered:6b1ef8fd66cddb4380a346f4cf4b723cd53fed9e1b87bd9a9a3b4175116d8db7:d1a4e2252581fc60cb2519110ef4b42e73bc9587b0667940c6ff913239612f50",
+   "US Term Structure:contaminated:missing_scattered:7787ab825bae7b9d6294ea551ee404dbaeb875d3046702eaee4f644a0b9f280a:0062e9058197fd151aa92e943e73a88689589d2986deff242dd52b3da7706dcf",
+   "US Term Structure:contaminated:missing_scattered:7f30862c66e554a55c503c261334b6de8bf4b935427c6c614205009b8e9c6571:ded73b5951cfebee64086016b7659ba4a7e87d31d5581486f538e8e8d62f987e",
+   "US Term Structure:contaminated:missing_scattered:83a68e889e809d72724a1b08feae14e165f2c94bcd9edc7f43b33e31ee967f23:142bd99f2b8e0a3c337d03f34447f56a3ecbae330291443c827c9557a53a95bf",
+   "US Term Structure:contaminated:missing_scattered:8971da11071c618069a65b466cb6768e1e5f2a1fbdb442ff196e88afd0d09dcb:2b7c65ab0f6985bd7c0aac81fad96a37cbb91b6e6e10a42c974a506430caff29",
+   "US Term Structure:contaminated:missing_scattered:8c03b655d411e18299622745c04a10a93365c25d3a71e92794d673a41d242b00:100caa5026f7e24193513af3b23c62f3b8a6862ac76a32a395c6823304c284af",
+   "US Term Structure:contaminated:missing_scattered:8ca1f2127c62356112e7596142511665d7f5cc2b64e3b2e8aa94a0a8462e5457:de1105cc104bc66be60a5300b23983167b4e58d3a91375d7d1ef058897ed1603",
+   "US Term Structure:contaminated:missing_scattered:999b1f6dc099ba4bc584ad5595844c37bfb2f0723d446dd5203a94a752e07183:d7582a1ce7ac170421269399762a48ce529aa5e96fc995ffd35328e0278cd352",
+   "US Term Structure:contaminated:missing_scattered:9ebf55e3e0cd6de38db67d359353af218d461b59cbfb570de838a8e12f178367:f79d93e663e8e876f322403b81d7acea19704e7ce4a7409ffdbc1dd0f755d9b4",
+   "US Term Structure:contaminated:missing_scattered:a6c552d9cde6ff146d4d5b540d6651a02806491ce9780fbdb9064fca575c5a76:6271559ec1401db46ea6ce2acdb0ecee4a73778fdcbd7e95dac16340a4998032",
+   "US Term Structure:contaminated:missing_scattered:a8779053f85c84b4c9d2b8deb484676be5d40a70d50c61fa108c56569956048f:840a6f45abb2c45e1a6d943275e1245f5f2a308df20e1390abfce0be73eaea08",
+   "US Term Structure:contaminated:missing_scattered:beed9df74f79fdf4bc513576e72c2a1eaf8ae9120739b8cbbb33aedb1b759314:3d2bf816a2742eb1b1c9d9ad930ad32ded5c3cf1d1c55b3a5d841981fa57fce5",
+   "US Term Structure:contaminated:missing_scattered:c032d8b06cd5314d9536f60b7ee291d7b579a9fd09471ab964df9ff8b255623c:f71168995a6f334e00a4436ed99349959c569b9c83662be64a0ffc53726ce5b8",
+   "US Term Structure:contaminated:missing_scattered:c28116200b74ae3f1ac0e5ffa6e7e298e6e7fa800539ed75269707ee62811107:9e717b0cc51c5104a4190c5f9383c32aec4f33c6cc7292de533c45ee27f40c70",
+   "US Term Structure:contaminated:missing_scattered:c30c400c801add583a615ba275ad3246d980f1f387bb18256338ed7d1ffbbb58:587c11c174cf2b127d78d79480df1df3328f6c8a65e718dd53585e147882c081",
+   "US Term Structure:contaminated:missing_scattered:c41ee3c0d66332a28ebad0a73cb98a51ad6462d9b872a499be290b44dc29008c:61c31ffd7a181d128ec5df9c20aa41b36e84567a51f0e92422ebcbd633a1fc75",
+   "US Term Structure:contaminated:missing_scattered:d3572983f9b909742907b2d85450435d0e35f887a77036394c5882dec716b478:1dcf5fa5274d06d971c8367270a13f45e49ed7c8213e88a7e8253d241a3f4a5a",
+   "US Term Structure:contaminated:missing_scattered:ecf73872c4635bf919cc2441599455561532779f1e4f0e0af0f711f810cd578a:71f019c2e4ae3b3c77115534da4cd91c9066d8f0147f2c753652a1c56074cafd",
+   "US Term Structure:contaminated:missing_scattered:fd177dac4506a7c1992e34ee28db547280d4a12f797bf562fa30c2a2bcda3e19:ab284b82094c02249643e325d59560d6a237a1bdcdad29b16bcb320296d81fa8"
+  ]
+ },
+ "d_vs_e": {
+  "D": {
+   "n_windows": 771,
+   "proposal_coverage": 0.7509727626459144,
+   "applicability_coverage": 0.7509727626459144,
+   "n_proposed_windows": 579,
+   "n_applicable_windows": 579,
+   "action_conditional_bs_precision": 0.8863636363636364,
+   "action_conditional_chr": 0.11363636363636363,
+   "bcov": 0.26590909090909093,
+   "abstention_rate": 0.8287937743190661,
+   "gain": 0.08720025714865982,
+   "pme": 0.006042296072507553,
+   "damage": 0.019455252918287938,
+   "conditional_mean_loss": 0.11363636363636363,
+   "committed": 132,
+   "commit_rate": 0.17120622568093385,
+   "beneficial_commits": 117,
+   "harmful_commits": 15,
+   "commit_by_family": {
+    "FACT_SHORT": 88,
+    "DESPIKE": 44
+   }
+  },
+  "E": {
+   "n_windows": 771,
+   "proposal_coverage": 0.7509727626459144,
+   "applicability_coverage": 0.7509727626459144,
+   "n_proposed_windows": 579,
+   "n_applicable_windows": 579,
+   "action_conditional_bs_precision": 0.8712121212121212,
+   "action_conditional_chr": 0.12878787878787878,
+   "bcov": 0.26136363636363635,
+   "abstention_rate": 0.8287937743190661,
+   "gain": 0.0866379615667581,
+   "pme": 0.006042296072507553,
+   "damage": 0.02204928664072633,
+   "conditional_mean_loss": 0.12878787878787878,
+   "committed": 132,
+   "commit_rate": 0.17120622568093385,
+   "beneficial_commits": 115,
+   "harmful_commits": 17,
+   "commit_by_family": {
+    "FACT_SHORT": 86,
+    "DESPIKE": 46
+   }
+  },
+  "delta_D_minus_E": {
+   "bcov": 0.004545454545454575,
+   "gain": 0.0005622955819017256,
+   "action_conditional_chr": -0.015151515151515152,
+   "pme": 0.0,
+   "damage": -0.002594033722438393,
+   "committed": 0,
+   "beneficial_commits": 2,
+   "harmful_commits": -2
+  },
+  "n_windows_differ": 2
+ },
+ "target_budget_file": "v39_target_budget.json",
+ "input_hashes": {
+  "v33_training_data": "84ab59d9e63048586ba7ddbc44398a729d927fe924411b8bc345b6ad97e282ef",
+  "v33_clean_rerun": "976780a3d74756a1bd295c4af8ba2b5aa589c7959de4c7db62f95f0ff677311b",
+  "v38_oracle_replay": "21d2126adde772dd818c1f55e824ca2944b3d531dff8b92c5fc62f0751cdcc59",
+  "v38_impute_mask_records": "6d1a56c1986d0d921f9eb06f2cb8637be77a9fcf65ef1cae498b614223f1a9d3",
+  "v38_explicit_impute_records": "78e733696298352b717024443f57617c4597c79ea416478a9e30d1e0924a0a58",
+  "v38_explicit_impute_probe": "99b6ddba4da7eec59e41087dff5ec138f395f3d1425c53d2307cffe836583aa5",
+  "p0_corpus_manifest_a": "6d7d05a506745a5f6da9114ef08ac37b58e102b6cbee6b740ae5247c42d9b15e"
+ },
+ "code_hashes": {
+  "experiments/v39_phase0_replay.py": "fc50bfa98e87267beb77efe87b236c0d5f570d32e45902ccc1bb27b7b5329571",
+  "experiments/v33_compare_arms.py": "f61b37fd42596fb6e4da93bff9fc2daff45844b09a49dbe000969e8409aecb20",
+  "experiments/v38_oracle_replay.py": "89ce6f4c51901d461e55a0cb273ae696c89622c4eba53c2f8260b9a04ddc0ed2",
+  "experiments/v38_explicit_impute_probe.py": "94815dfb643d654c069df721b337bde2dba75d2303dd2f0f0216c8b0773a7220",
+  "experiments/v38_impute_mask_audit.py": "7353c3ff3a4afae76f2d4f20521380882ecadec6af7ba864cc92b2846afafc0c",
+  "experiments/v33_labels.py": "0a701300cde415e206bee15970a4b88d0ac9c8a45bc771ad4ef11d70b52df7bb",
+  "src/introact_ts/actions.py": "f94ba0e5d453c9fd0e139d887b96e450a0d4aeda85d2cad5978678550f44cdf2",
+  "src/introact_ts/probe.py": "22ded3d21137d958d823d6dd91c8d15a756548712b2a437e69a04b5498ee6af4"
+ },
+ "decision_digest_sha256": "419b46b5454d2f8f258ef9ade7afca0833122bd21e31d824702a7336c817a746",
+ "runtime_sec": 158.13821172714233
+}

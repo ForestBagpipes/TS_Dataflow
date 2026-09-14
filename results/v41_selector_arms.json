@@ -1,0 +1,1360 @@
+{
+ "phase": "v4.1 Phase 1 selector (docs/v4_1_mask_counteract_preregistration.md §4)",
+ "seed": 20260904,
+ "calibration": {
+  "population": "21k rescue bank, applicable TSICL_LONG candidates",
+  "n_total": 3153,
+  "n_in_band": 1043,
+  "gap_band": [
+   0.05,
+   0.12
+  ],
+  "per_fold": {
+   "ETTh1": {
+    "n_calib_in_band": 853,
+    "ess": 766.994276460642,
+    "separability_auroc": 0.617200363554935,
+    "C": {
+     "tau": 0.5,
+     "n_committed": 290,
+     "n_harmful": 28,
+     "chr": 0.09655172413793103,
+     "chr_cp95_upper": 0.12997746959449474,
+     "weighted_bs_coverage": 0.3071512309495897
+    },
+    "D": {
+     "tau": 0.5,
+     "n_committed": 290,
+     "n_harmful": 28,
+     "chr": 0.09655172413793103,
+     "chr_cp95_upper": 0.12997746959449474,
+     "weighted_bs_coverage": 0.32277508192506793
+    },
+    "protected_rows_available": 0,
+    "protected_admitted_C": 0,
+    "protected_admitted_D": 0,
+    "v40_tau_h": 0.44
+   },
+   "ETTh2": {
+    "n_calib_in_band": 884,
+    "ess": 797.2484234677971,
+    "separability_auroc": 0.6186130459098073,
+    "C": {
+     "tau": 0.4,
+     "n_committed": 382,
+     "n_harmful": 43,
+     "chr": 0.112565445026178,
+     "chr_cp95_upper": 0.14274931851116393,
+     "weighted_bs_coverage": 0.3834841628959276
+    },
+    "D": {
+     "tau": 0.4,
+     "n_committed": 382,
+     "n_harmful": 43,
+     "chr": 0.112565445026178,
+     "chr_cp95_upper": 0.14274931851116393,
+     "weighted_bs_coverage": 0.3957837598482517
+    },
+    "protected_rows_available": 0,
+    "protected_admitted_C": 0,
+    "protected_admitted_D": 0,
+    "v40_tau_h": 0.32
+   },
+   "ETTm1": {
+    "n_calib_in_band": 855,
+    "ess": 771.4454475230739,
+    "separability_auroc": 0.6201458702937118,
+    "C": null,
+    "D": null,
+    "protected_rows_available": 0,
+    "protected_admitted_C": 0,
+    "protected_admitted_D": 0,
+    "v40_tau_h": 0.06
+   },
+   "Crypto": {
+    "n_calib_in_band": 872,
+    "ess": 795.9680684896327,
+    "separability_auroc": 0.6120245335532419,
+    "C": {
+     "tau": 0.48,
+     "n_committed": 388,
+     "n_harmful": 46,
+     "chr": 0.11855670103092783,
+     "chr_cp95_upper": 0.14903777517608838,
+     "weighted_bs_coverage": 0.3922018348623853
+    },
+    "D": {
+     "tau": 0.48,
+     "n_committed": 388,
+     "n_harmful": 46,
+     "chr": 0.11855670103092783,
+     "chr_cp95_upper": 0.14903777517608838,
+     "weighted_bs_coverage": 0.38187949570528407
+    },
+    "protected_rows_available": 0,
+    "protected_admitted_C": 0,
+    "protected_admitted_D": 0,
+    "v40_tau_h": 0.5
+   },
+   "US Term Structure": {
+    "n_calib_in_band": 863,
+    "ess": 778.0488218823889,
+    "separability_auroc": 0.6248519015193927,
+    "C": null,
+    "D": null,
+    "protected_rows_available": 0,
+    "protected_admitted_C": 0,
+    "protected_admitted_D": 0,
+    "v40_tau_h": 0.48
+   },
+   "Oil Price": {
+    "n_calib_in_band": 888,
+    "ess": 796.6709106359273,
+    "separability_auroc": 0.6243040793602591,
+    "C": null,
+    "D": null,
+    "protected_rows_available": 0,
+    "protected_admitted_C": 0,
+    "protected_admitted_D": 0,
+    "v40_tau_h": 0.6
+   }
+  }
+ },
+ "thresholds": {
+  "v40": {
+   "ETTh1": 0.44,
+   "ETTh2": 0.32,
+   "ETTm1": 0.06,
+   "Crypto": 0.5,
+   "US Term Structure": 0.48,
+   "Oil Price": 0.6
+  },
+  "C_restricted": {
+   "ETTh1": 0.5,
+   "ETTh2": 0.4,
+   "ETTm1": null,
+   "Crypto": 0.48,
+   "US Term Structure": null,
+   "Oil Price": null
+  },
+  "D_weighted": {
+   "ETTh1": 0.5,
+   "ETTh2": 0.4,
+   "ETTm1": null,
+   "Crypto": 0.48,
+   "US Term Structure": null,
+   "Oil Price": null
+  }
+ },
+ "arms": {
+  "A_v40_stat_q10_frozen": {
+   "n_commits": 14,
+   "bs_retained": 14,
+   "harmful": 0,
+   "bs_lost_of_75": 61,
+   "harmful_blocked_of_14": 14,
+   "chr": 0.0,
+   "chr_cp95_upper": 0.19263617565013527,
+   "coverage": 0.15730337078651685,
+   "bcov": 0.15730337078651685,
+   "protected_edits": 0,
+   "per_source": {
+    "Crypto": {
+     "n_windows": 3,
+     "n_commits": 1,
+     "bs_retained": 1,
+     "harmful": 0,
+     "raw_bs": 3,
+     "raw_harmful": 0
+    },
+    "ETTh1": {
+     "n_windows": 12,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 11,
+     "raw_harmful": 1
+    },
+    "ETTh2": {
+     "n_windows": 10,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 10,
+     "raw_harmful": 0
+    },
+    "ETTm1": {
+     "n_windows": 16,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 13,
+     "raw_harmful": 3
+    },
+    "Oil Price": {
+     "n_windows": 7,
+     "n_commits": 5,
+     "bs_retained": 5,
+     "harmful": 0,
+     "raw_bs": 6,
+     "raw_harmful": 1
+    },
+    "US Term Structure": {
+     "n_windows": 41,
+     "n_commits": 8,
+     "bs_retained": 8,
+     "harmful": 0,
+     "raw_bs": 32,
+     "raw_harmful": 9
+    }
+   },
+   "commit_uids": [
+    "Crypto:contaminated:missing_block:7137ed637a9c1c47ae179e2a440bc9f5fa358c9781dffb9250df1d3f5c8ce0b7:3e3f11a255261f781305f892bbeab46552848e6d2fc7128e3518332d16736598",
+    "Oil Price:contaminated:missing_block:0f729526e703938cb7c8d9824a0285031ef3e375fc7af47c2d7b29c71ac2bc73:3f34519837215b23c7e00e53fd3ee2151b7b940459d5017133c9cd2a56e19056",
+    "Oil Price:contaminated:missing_block:7cfd2bddbb2664c0947aee744662558011dac50c67ed229ef06950f9c4baec59:7534aed8b66907f864fabb5ea6b6b2c1598195fec873c1fa4f4bbcc99f9df96b",
+    "Oil Price:contaminated:missing_block:c8a163886493cb53dfc7aa3b151937212de31e6a40c585b7f4c554da7c3365a7:2bf801067094aaad37b0b54b92e649508ecd928e40332b1e1c2f466e495facdd",
+    "Oil Price:contaminated:missing_block:d5d8c3f43c19748df83b483c26ff24cf7f9161473b07e719f30877be1d870c93:60bc9ae6561f160afbfabe921fbf7dc3485e92a3c0bcc3ff274f0906b1099b32",
+    "Oil Price:contaminated:missing_block:f7da9e626db5cf5072935d8687b68dbe70e543f9683a652f5922b84e4df91ba3:c13a01fead349faddec55522f0f1c1ce03b5fc20280e0af50700e7308c7dcba9",
+    "US Term Structure:contaminated:missing_block:0521488e4e2c853ab8d3546b50ea62c4c357c8345b5bddd06e4fd926dae61af5:0b7c9b2ecf7135722503dd1b23f9892843d7611e6b7897f809f633880d8d62bc",
+    "US Term Structure:contaminated:missing_block:1dd9fcd5dbb394871752aff895b6adb266686ce1186ce2a1a0ccefcfe1b155c8:153c20bfee2b425966c4eacc4d6904c48977cbf916f2eb3d91bd0d99b26fbec2",
+    "US Term Structure:contaminated:missing_block:2ea49890d304b270b83d603e0feee8e05ce8633444aee87ac628be1edc518eaa:664d8e45aacf6e826229545f700bcefa65c4ddbfbbd214b7e0f240d8a75b0deb",
+    "US Term Structure:contaminated:missing_block:69d6f3642f4a5361ce897d2412aac7d18843af5490e2a08e79a7e0650c161570:cefef27abccfb4cc9dfc0bc458f9b4d99c21e01795a476848ea1fc8c24c46515",
+    "US Term Structure:contaminated:missing_block:6f20c40e14bbfcebcd1e808242394af423fef9500be7664e46dd00919f8eca7e:c74efd3a959efe9ec2a204327679837460c40f8f91b78f26b35e6a76a9ff35fc",
+    "US Term Structure:contaminated:missing_block:78440f5ef02157145e89f390d77e93ca5539c7806ab92ab5d4d14d3cb7dec9ef:b961c86b482b5eda5ed6e6f85087ccd0276ebf14d80c698f0ed76b98a9571c45",
+    "US Term Structure:contaminated:missing_block:f23c58c2967ac73a96de5875b49bbb16c3c7dba4dadc2d6d51b1f06a2d2457c8:00c7b794e2e9d66fa1427190579db9cd9d6c98e16fce8f98199938c1e1e17428",
+    "US Term Structure:contaminated:missing_block:fd94f1d767f14fdac661c4c69ad35f8b3abb6dd5192ad2a677d929e94226135e:c46eb384ead10f0b456b8ac42719bbcaf93b6c176f451ac8135f274030f702ee"
+   ]
+  },
+  "B_harm_only_unmatched": {
+   "n_commits": 25,
+   "bs_retained": 24,
+   "harmful": 1,
+   "bs_lost_of_75": 51,
+   "harmful_blocked_of_14": 13,
+   "chr": 0.04,
+   "chr_cp95_upper": 0.176120710604518,
+   "coverage": 0.2808988764044944,
+   "bcov": 0.2696629213483146,
+   "protected_edits": 0,
+   "per_source": {
+    "Crypto": {
+     "n_windows": 3,
+     "n_commits": 2,
+     "bs_retained": 2,
+     "harmful": 0,
+     "raw_bs": 3,
+     "raw_harmful": 0
+    },
+    "ETTh1": {
+     "n_windows": 12,
+     "n_commits": 3,
+     "bs_retained": 3,
+     "harmful": 0,
+     "raw_bs": 11,
+     "raw_harmful": 1
+    },
+    "ETTh2": {
+     "n_windows": 10,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 10,
+     "raw_harmful": 0
+    },
+    "ETTm1": {
+     "n_windows": 16,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 13,
+     "raw_harmful": 3
+    },
+    "Oil Price": {
+     "n_windows": 7,
+     "n_commits": 7,
+     "bs_retained": 6,
+     "harmful": 1,
+     "raw_bs": 6,
+     "raw_harmful": 1
+    },
+    "US Term Structure": {
+     "n_windows": 41,
+     "n_commits": 13,
+     "bs_retained": 13,
+     "harmful": 0,
+     "raw_bs": 32,
+     "raw_harmful": 9
+    }
+   },
+   "commit_uids": [
+    "Crypto:contaminated:missing_block:7137ed637a9c1c47ae179e2a440bc9f5fa358c9781dffb9250df1d3f5c8ce0b7:3e3f11a255261f781305f892bbeab46552848e6d2fc7128e3518332d16736598",
+    "Crypto:contaminated:missing_block:95ca043d7a8192eaa07d07e8d67da5cdfc47b3b8eddb1fcc4b9da952544cfcbd:0d0620c6e694cdbb974da4825f76eac9ef8b2aa784937b02e2498df2ddbe8106",
+    "ETTh1:contaminated:missing_block:48ffa8eb9b6edb48da78d03db14655102cce91312de959e5a23621567d967ba0:0614dbd4b59385980663ac5ec5338b954ca0cc22b2c006184d6ac6d6c29d4db2",
+    "ETTh1:contaminated:missing_block:5db5b3b38ccd2c005bc267f43bcae19c4367ec8483b950d18e91e7f78c63d15c:8ff46446c35e63f1f845fba59b3a0545e5bf6a6279b8ddf6bb740ebcf20bc6b5",
+    "ETTh1:contaminated:missing_block:8524cf8845589e30b9856bdc80daa3125ad3bea2e87abd4b1e52437656688ee7:3c46288e38487af3599a3cc2af6228495d3fe49b747b042983555d4174c1ad17",
+    "Oil Price:contaminated:missing_block:0f729526e703938cb7c8d9824a0285031ef3e375fc7af47c2d7b29c71ac2bc73:3f34519837215b23c7e00e53fd3ee2151b7b940459d5017133c9cd2a56e19056",
+    "Oil Price:contaminated:missing_block:54409bba8779dee8b614b9a6f440ed106392fdc401505a5d840e4d1c7d8b8ded:a77528aef88cfd952fd8e8cfc75ec32058518496d91a4f1bccf641fc3c5c2e50",
+    "Oil Price:contaminated:missing_block:7cfd2bddbb2664c0947aee744662558011dac50c67ed229ef06950f9c4baec59:7534aed8b66907f864fabb5ea6b6b2c1598195fec873c1fa4f4bbcc99f9df96b",
+    "Oil Price:contaminated:missing_block:7f05c8a3a1949e51590309f3548f4d41082642dfe130a23fca30dac87c2e320e:d80599e4d26b7946d9bbcbcbe0486c5aa21c09b9fe54a2fb497e066dc84beb45",
+    "Oil Price:contaminated:missing_block:c8a163886493cb53dfc7aa3b151937212de31e6a40c585b7f4c554da7c3365a7:2bf801067094aaad37b0b54b92e649508ecd928e40332b1e1c2f466e495facdd",
+    "Oil Price:contaminated:missing_block:d5d8c3f43c19748df83b483c26ff24cf7f9161473b07e719f30877be1d870c93:60bc9ae6561f160afbfabe921fbf7dc3485e92a3c0bcc3ff274f0906b1099b32",
+    "Oil Price:contaminated:missing_block:f7da9e626db5cf5072935d8687b68dbe70e543f9683a652f5922b84e4df91ba3:c13a01fead349faddec55522f0f1c1ce03b5fc20280e0af50700e7308c7dcba9",
+    "US Term Structure:contaminated:missing_block:0521488e4e2c853ab8d3546b50ea62c4c357c8345b5bddd06e4fd926dae61af5:0b7c9b2ecf7135722503dd1b23f9892843d7611e6b7897f809f633880d8d62bc",
+    "US Term Structure:contaminated:missing_block:1dd9fcd5dbb394871752aff895b6adb266686ce1186ce2a1a0ccefcfe1b155c8:153c20bfee2b425966c4eacc4d6904c48977cbf916f2eb3d91bd0d99b26fbec2",
+    "US Term Structure:contaminated:missing_block:2ea49890d304b270b83d603e0feee8e05ce8633444aee87ac628be1edc518eaa:664d8e45aacf6e826229545f700bcefa65c4ddbfbbd214b7e0f240d8a75b0deb",
+    "US Term Structure:contaminated:missing_block:4ebccb70c8f634050de9e5dde14b0424852e8f1b2a5c72e9e3de4d0618773020:e8588063f894eb07aa0565c86d9fc27dd3f67c92c0abaed287cf17cef6ce941a",
+    "US Term Structure:contaminated:missing_block:5f2fdc5b2f536ddfb12b3a7059d9d48cb53c35bae4743b6dc21d2d7d8140fa5c:881f2f6a5426dc1cb641c5ac2e9b25cb86e529aea7f7450595e5bee224258c23",
+    "US Term Structure:contaminated:missing_block:69d6f3642f4a5361ce897d2412aac7d18843af5490e2a08e79a7e0650c161570:cefef27abccfb4cc9dfc0bc458f9b4d99c21e01795a476848ea1fc8c24c46515",
+    "US Term Structure:contaminated:missing_block:6f20c40e14bbfcebcd1e808242394af423fef9500be7664e46dd00919f8eca7e:c74efd3a959efe9ec2a204327679837460c40f8f91b78f26b35e6a76a9ff35fc",
+    "US Term Structure:contaminated:missing_block:74dec7a9ad57d7213512fb508ebf31c4f7b42655ff11d69ff4607434f696b9be:d6e72b8818bbf1d704bd0867248f0ad2daeedd7a2c8123dd842ea25e19747a81",
+    "US Term Structure:contaminated:missing_block:78440f5ef02157145e89f390d77e93ca5539c7806ab92ab5d4d14d3cb7dec9ef:b961c86b482b5eda5ed6e6f85087ccd0276ebf14d80c698f0ed76b98a9571c45",
+    "US Term Structure:contaminated:missing_block:8a777c476873cc82d7cd61feb8206fa897bcbd7958a8acbca64c0206e968ad5f:14e20edaf3e41c0ea54956d09397caa5b3f49aa5fcacbb85b756f8e502452bbf",
+    "US Term Structure:contaminated:missing_block:f23c58c2967ac73a96de5875b49bbb16c3c7dba4dadc2d6d51b1f06a2d2457c8:00c7b794e2e9d66fa1427190579db9cd9d6c98e16fce8f98199938c1e1e17428",
+    "US Term Structure:contaminated:missing_block:fc6cdca366defea692bccd4fff94c00ffbb27594b750dd89c1a148d15abaf324:9f21f45d5e4cce935a72b43cceffb404cc8e9cd938eb95ad3e4fd51e259e9167",
+    "US Term Structure:contaminated:missing_block:fd94f1d767f14fdac661c4c69ad35f8b3abb6dd5192ad2a677d929e94226135e:c46eb384ead10f0b456b8ac42719bbcaf93b6c176f451ac8135f274030f702ee"
+   ]
+  },
+  "C_harm_only_mask_restricted": {
+   "n_commits": 13,
+   "bs_retained": 12,
+   "harmful": 1,
+   "bs_lost_of_75": 63,
+   "harmful_blocked_of_14": 13,
+   "chr": 0.07692307692307693,
+   "chr_cp95_upper": 0.31633976476272974,
+   "coverage": 0.14606741573033707,
+   "bcov": 0.1348314606741573,
+   "protected_edits": 0,
+   "per_source": {
+    "Crypto": {
+     "n_windows": 3,
+     "n_commits": 1,
+     "bs_retained": 1,
+     "harmful": 0,
+     "raw_bs": 3,
+     "raw_harmful": 0
+    },
+    "ETTh1": {
+     "n_windows": 12,
+     "n_commits": 7,
+     "bs_retained": 6,
+     "harmful": 1,
+     "raw_bs": 11,
+     "raw_harmful": 1
+    },
+    "ETTh2": {
+     "n_windows": 10,
+     "n_commits": 5,
+     "bs_retained": 5,
+     "harmful": 0,
+     "raw_bs": 10,
+     "raw_harmful": 0
+    },
+    "ETTm1": {
+     "n_windows": 16,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 13,
+     "raw_harmful": 3
+    },
+    "Oil Price": {
+     "n_windows": 7,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 6,
+     "raw_harmful": 1
+    },
+    "US Term Structure": {
+     "n_windows": 41,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 32,
+     "raw_harmful": 9
+    }
+   },
+   "commit_uids": [
+    "Crypto:contaminated:missing_block:95ca043d7a8192eaa07d07e8d67da5cdfc47b3b8eddb1fcc4b9da952544cfcbd:0d0620c6e694cdbb974da4825f76eac9ef8b2aa784937b02e2498df2ddbe8106",
+    "ETTh1:contaminated:missing_block:48ffa8eb9b6edb48da78d03db14655102cce91312de959e5a23621567d967ba0:0614dbd4b59385980663ac5ec5338b954ca0cc22b2c006184d6ac6d6c29d4db2",
+    "ETTh1:contaminated:missing_block:5d0afc97e3206122551d656ceb3b19856288c0b36d91a59ac36ebbe27036634c:87044841df01384c9e68a0fd5f05f9a0ff97c937875bdac52d390be158dc0b8b",
+    "ETTh1:contaminated:missing_block:5db5b3b38ccd2c005bc267f43bcae19c4367ec8483b950d18e91e7f78c63d15c:8ff46446c35e63f1f845fba59b3a0545e5bf6a6279b8ddf6bb740ebcf20bc6b5",
+    "ETTh1:contaminated:missing_block:775b8e404ab0e134ee16623f0ddb0fc60ca112c87e1a0d5d99a4d8c33ee57dcb:6033c66f47aa816d121d65ffc8c0b1712f6052cd8126a75b61da20dd2fb4b3e3",
+    "ETTh1:contaminated:missing_block:8524cf8845589e30b9856bdc80daa3125ad3bea2e87abd4b1e52437656688ee7:3c46288e38487af3599a3cc2af6228495d3fe49b747b042983555d4174c1ad17",
+    "ETTh1:contaminated:missing_block:8818cca651d681bc0e35227187154358c4c889312275caa69c228da81125c2e2:b55bbc3bedc6e5e520cd6c0c5574b49d0b76dde76c876d9adabca27dbd891561",
+    "ETTh1:contaminated:missing_block:ddc2e95e8ca2026c1551371545aa2d5ffb355a0e37c013ee8daa0ea4bcfb57c4:1d53859a08c5b0c322a5a2911bf13b5d10cd0bdbfe50cfb23585d8bd9867562e",
+    "ETTh2:contaminated:missing_block:16c8061611118982b8f7b6624454346ffc85c147ed65c14769698b4483de825e:3ea2bf36a0ad95df3b799add59d233d69831ab9c4bd14344a7aad15083e94379",
+    "ETTh2:contaminated:missing_block:45e7dfe1212fa6da8dd39a51a0b39e3b36577de95f9fe9285fa29c488c9ded85:e0f5d22c020da59c7457e7bad82937c6e336e7aa1ebd6496438316a9a6441dc6",
+    "ETTh2:contaminated:missing_block:70e9ae70f98727d98edfd128cb8f74fdd1262363b0c1f7acf8f28845b3e7cb6a:26a7b1bf7f2f6b6461a8bd34fc2df566313b33f147bfb4fbf20e5f280f173908",
+    "ETTh2:contaminated:missing_block:831b83cf95c06f1c0442c58ef6fa647fcf137875d0268eafbcf5e0aa27ec0415:77cdd023464982e628c44674937f09cf8eb3f527d6b4cade2e92c19ace2d47cb",
+    "ETTh2:contaminated:missing_block:cc1a446af66cae95e3470822be040fd358d7c9310a7c67fe4a6ec8b89b34c1a5:f3cf768574d0f8c7d6410eecbdd9d77ed4e4f027faf93d9ddfb952cd7b84c484"
+   ]
+  },
+  "D_MASK_COUNTERACT_primary": {
+   "n_commits": 13,
+   "bs_retained": 12,
+   "harmful": 1,
+   "bs_lost_of_75": 63,
+   "harmful_blocked_of_14": 13,
+   "chr": 0.07692307692307693,
+   "chr_cp95_upper": 0.31633976476272974,
+   "coverage": 0.14606741573033707,
+   "bcov": 0.1348314606741573,
+   "protected_edits": 0,
+   "per_source": {
+    "Crypto": {
+     "n_windows": 3,
+     "n_commits": 1,
+     "bs_retained": 1,
+     "harmful": 0,
+     "raw_bs": 3,
+     "raw_harmful": 0
+    },
+    "ETTh1": {
+     "n_windows": 12,
+     "n_commits": 7,
+     "bs_retained": 6,
+     "harmful": 1,
+     "raw_bs": 11,
+     "raw_harmful": 1
+    },
+    "ETTh2": {
+     "n_windows": 10,
+     "n_commits": 5,
+     "bs_retained": 5,
+     "harmful": 0,
+     "raw_bs": 10,
+     "raw_harmful": 0
+    },
+    "ETTm1": {
+     "n_windows": 16,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 13,
+     "raw_harmful": 3
+    },
+    "Oil Price": {
+     "n_windows": 7,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 6,
+     "raw_harmful": 1
+    },
+    "US Term Structure": {
+     "n_windows": 41,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 32,
+     "raw_harmful": 9
+    }
+   },
+   "commit_uids": [
+    "Crypto:contaminated:missing_block:95ca043d7a8192eaa07d07e8d67da5cdfc47b3b8eddb1fcc4b9da952544cfcbd:0d0620c6e694cdbb974da4825f76eac9ef8b2aa784937b02e2498df2ddbe8106",
+    "ETTh1:contaminated:missing_block:48ffa8eb9b6edb48da78d03db14655102cce91312de959e5a23621567d967ba0:0614dbd4b59385980663ac5ec5338b954ca0cc22b2c006184d6ac6d6c29d4db2",
+    "ETTh1:contaminated:missing_block:5d0afc97e3206122551d656ceb3b19856288c0b36d91a59ac36ebbe27036634c:87044841df01384c9e68a0fd5f05f9a0ff97c937875bdac52d390be158dc0b8b",
+    "ETTh1:contaminated:missing_block:5db5b3b38ccd2c005bc267f43bcae19c4367ec8483b950d18e91e7f78c63d15c:8ff46446c35e63f1f845fba59b3a0545e5bf6a6279b8ddf6bb740ebcf20bc6b5",
+    "ETTh1:contaminated:missing_block:775b8e404ab0e134ee16623f0ddb0fc60ca112c87e1a0d5d99a4d8c33ee57dcb:6033c66f47aa816d121d65ffc8c0b1712f6052cd8126a75b61da20dd2fb4b3e3",
+    "ETTh1:contaminated:missing_block:8524cf8845589e30b9856bdc80daa3125ad3bea2e87abd4b1e52437656688ee7:3c46288e38487af3599a3cc2af6228495d3fe49b747b042983555d4174c1ad17",
+    "ETTh1:contaminated:missing_block:8818cca651d681bc0e35227187154358c4c889312275caa69c228da81125c2e2:b55bbc3bedc6e5e520cd6c0c5574b49d0b76dde76c876d9adabca27dbd891561",
+    "ETTh1:contaminated:missing_block:ddc2e95e8ca2026c1551371545aa2d5ffb355a0e37c013ee8daa0ea4bcfb57c4:1d53859a08c5b0c322a5a2911bf13b5d10cd0bdbfe50cfb23585d8bd9867562e",
+    "ETTh2:contaminated:missing_block:16c8061611118982b8f7b6624454346ffc85c147ed65c14769698b4483de825e:3ea2bf36a0ad95df3b799add59d233d69831ab9c4bd14344a7aad15083e94379",
+    "ETTh2:contaminated:missing_block:45e7dfe1212fa6da8dd39a51a0b39e3b36577de95f9fe9285fa29c488c9ded85:e0f5d22c020da59c7457e7bad82937c6e336e7aa1ebd6496438316a9a6441dc6",
+    "ETTh2:contaminated:missing_block:70e9ae70f98727d98edfd128cb8f74fdd1262363b0c1f7acf8f28845b3e7cb6a:26a7b1bf7f2f6b6461a8bd34fc2df566313b33f147bfb4fbf20e5f280f173908",
+    "ETTh2:contaminated:missing_block:831b83cf95c06f1c0442c58ef6fa647fcf137875d0268eafbcf5e0aa27ec0415:77cdd023464982e628c44674937f09cf8eb3f527d6b4cade2e92c19ace2d47cb",
+    "ETTh2:contaminated:missing_block:cc1a446af66cae95e3470822be040fd358d7c9310a7c67fe4a6ec8b89b34c1a5:f3cf768574d0f8c7d6410eecbdd9d77ed4e4f027faf93d9ddfb952cd7b84c484"
+   ]
+  },
+  "E_MASK_COUNTERACT_no_benefit_rank": {
+   "n_commits": 13,
+   "bs_retained": 12,
+   "harmful": 1,
+   "bs_lost_of_75": 63,
+   "harmful_blocked_of_14": 13,
+   "chr": 0.07692307692307693,
+   "chr_cp95_upper": 0.31633976476272974,
+   "coverage": 0.14606741573033707,
+   "bcov": 0.1348314606741573,
+   "protected_edits": 0,
+   "per_source": {
+    "Crypto": {
+     "n_windows": 3,
+     "n_commits": 1,
+     "bs_retained": 1,
+     "harmful": 0,
+     "raw_bs": 3,
+     "raw_harmful": 0
+    },
+    "ETTh1": {
+     "n_windows": 12,
+     "n_commits": 7,
+     "bs_retained": 6,
+     "harmful": 1,
+     "raw_bs": 11,
+     "raw_harmful": 1
+    },
+    "ETTh2": {
+     "n_windows": 10,
+     "n_commits": 5,
+     "bs_retained": 5,
+     "harmful": 0,
+     "raw_bs": 10,
+     "raw_harmful": 0
+    },
+    "ETTm1": {
+     "n_windows": 16,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 13,
+     "raw_harmful": 3
+    },
+    "Oil Price": {
+     "n_windows": 7,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 6,
+     "raw_harmful": 1
+    },
+    "US Term Structure": {
+     "n_windows": 41,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "raw_bs": 32,
+     "raw_harmful": 9
+    }
+   },
+   "commit_uids": [
+    "Crypto:contaminated:missing_block:95ca043d7a8192eaa07d07e8d67da5cdfc47b3b8eddb1fcc4b9da952544cfcbd:0d0620c6e694cdbb974da4825f76eac9ef8b2aa784937b02e2498df2ddbe8106",
+    "ETTh1:contaminated:missing_block:48ffa8eb9b6edb48da78d03db14655102cce91312de959e5a23621567d967ba0:0614dbd4b59385980663ac5ec5338b954ca0cc22b2c006184d6ac6d6c29d4db2",
+    "ETTh1:contaminated:missing_block:5d0afc97e3206122551d656ceb3b19856288c0b36d91a59ac36ebbe27036634c:87044841df01384c9e68a0fd5f05f9a0ff97c937875bdac52d390be158dc0b8b",
+    "ETTh1:contaminated:missing_block:5db5b3b38ccd2c005bc267f43bcae19c4367ec8483b950d18e91e7f78c63d15c:8ff46446c35e63f1f845fba59b3a0545e5bf6a6279b8ddf6bb740ebcf20bc6b5",
+    "ETTh1:contaminated:missing_block:775b8e404ab0e134ee16623f0ddb0fc60ca112c87e1a0d5d99a4d8c33ee57dcb:6033c66f47aa816d121d65ffc8c0b1712f6052cd8126a75b61da20dd2fb4b3e3",
+    "ETTh1:contaminated:missing_block:8524cf8845589e30b9856bdc80daa3125ad3bea2e87abd4b1e52437656688ee7:3c46288e38487af3599a3cc2af6228495d3fe49b747b042983555d4174c1ad17",
+    "ETTh1:contaminated:missing_block:8818cca651d681bc0e35227187154358c4c889312275caa69c228da81125c2e2:b55bbc3bedc6e5e520cd6c0c5574b49d0b76dde76c876d9adabca27dbd891561",
+    "ETTh1:contaminated:missing_block:ddc2e95e8ca2026c1551371545aa2d5ffb355a0e37c013ee8daa0ea4bcfb57c4:1d53859a08c5b0c322a5a2911bf13b5d10cd0bdbfe50cfb23585d8bd9867562e",
+    "ETTh2:contaminated:missing_block:16c8061611118982b8f7b6624454346ffc85c147ed65c14769698b4483de825e:3ea2bf36a0ad95df3b799add59d233d69831ab9c4bd14344a7aad15083e94379",
+    "ETTh2:contaminated:missing_block:45e7dfe1212fa6da8dd39a51a0b39e3b36577de95f9fe9285fa29c488c9ded85:e0f5d22c020da59c7457e7bad82937c6e336e7aa1ebd6496438316a9a6441dc6",
+    "ETTh2:contaminated:missing_block:70e9ae70f98727d98edfd128cb8f74fdd1262363b0c1f7acf8f28845b3e7cb6a:26a7b1bf7f2f6b6461a8bd34fc2df566313b33f147bfb4fbf20e5f280f173908",
+    "ETTh2:contaminated:missing_block:831b83cf95c06f1c0442c58ef6fa647fcf137875d0268eafbcf5e0aa27ec0415:77cdd023464982e628c44674937f09cf8eb3f527d6b4cade2e92c19ace2d47cb",
+    "ETTh2:contaminated:missing_block:cc1a446af66cae95e3470822be040fd358d7c9310a7c67fe4a6ec8b89b34c1a5:f3cf768574d0f8c7d6410eecbdd9d77ed4e4f027faf93d9ddfb952cd7b84c484"
+   ],
+   "note": "identical to D on the standalone frozen-89 evaluation: one candidate per window leaves the benefit ranking inactive"
+  },
+  "F_oracle_frontier": {
+   "role": "upper bound only; never used to select a deployed threshold",
+   "n_points": 88,
+   "best_feasible": {
+    "tau": 0.5185511112213135,
+    "n_commits": 63,
+    "n_bs": 61,
+    "n_harmful": 2,
+    "coverage": 0.7078651685393258,
+    "chr": 0.031746031746031744
+   },
+   "n_feasible_points": 13
+  }
+ },
+ "references": {
+  "raw_tsicl": {
+   "n_commits": 89,
+   "bs_retained": 75,
+   "harmful": 14,
+   "chr": 0.15730337078651685,
+   "coverage": 1.0
+  },
+  "v40_stat_only": {
+   "bs_retained": 14,
+   "harmful": 0
+  }
+ },
+ "gates": {
+  "g1_bs_retained": {
+   "value": 12,
+   "min": 55,
+   "pass": false
+  },
+  "g2_harmful": {
+   "value": 1,
+   "max": 3,
+   "pass": true
+  },
+  "g3_chr": {
+   "value": 0.07692307692307693,
+   "max": 0.06,
+   "pass": false
+  },
+  "g4_chr_cp95": {
+   "value": 0.31633976476272974,
+   "max": 0.15,
+   "pass": false
+  },
+  "g5_protected_edits": {
+   "value": 0,
+   "max": 0,
+   "pass": true
+  },
+  "g6_sources_not_worse": {
+   "value": 3,
+   "sources": [
+    "Crypto",
+    "ETTh2",
+    "ETTm1"
+   ],
+   "min": 4,
+   "pass": false
+  },
+  "g7_pareto": {
+   "vs_v40_stat_only": {
+    "strict": false,
+    "ours": [
+     12,
+     1
+    ],
+    "ref": [
+     14,
+     0
+    ]
+   },
+   "vs_raw_tsicl": {
+    "strict": false,
+    "ours": [
+     12,
+     1
+    ],
+    "ref": [
+     75,
+     14
+    ]
+   },
+   "note": "on the (B&S retained, harmful) plane the two references sit on opposite sides of any risk-controlled operating point -- raw TS-ICL buys coverage with harm, v4.0 stat_only buys safety with abstention -- so a single point cannot strictly dominate both; the frontier comparison below is the informative one"
+  },
+  "g8_not_single_source": {
+   "max_source_share_of_bs": 0.5,
+   "pass": true
+  },
+  "all_pass": false
+ },
+ "paired_bootstrap": {
+  "D_vs_v40_stat_only": {
+   "mean_diff": -0.033707865168539325,
+   "ci95": [
+    -0.14606741573033707,
+    0.07865168539325842
+   ],
+   "p_gt_0": 0.2552
+  }
+ },
+ "frontier": [
+  {
+   "tau": 0.29217782616615295,
+   "n_commits": 1,
+   "n_bs": 1,
+   "n_harmful": 0,
+   "coverage": 0.011235955056179775,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.3510873317718506,
+   "n_commits": 2,
+   "n_bs": 2,
+   "n_harmful": 0,
+   "coverage": 0.02247191011235955,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.36656543612480164,
+   "n_commits": 3,
+   "n_bs": 3,
+   "n_harmful": 0,
+   "coverage": 0.033707865168539325,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.37960517406463623,
+   "n_commits": 4,
+   "n_bs": 4,
+   "n_harmful": 0,
+   "coverage": 0.0449438202247191,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.3834405839443207,
+   "n_commits": 5,
+   "n_bs": 5,
+   "n_harmful": 0,
+   "coverage": 0.056179775280898875,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.3906855881214142,
+   "n_commits": 6,
+   "n_bs": 6,
+   "n_harmful": 0,
+   "coverage": 0.06741573033707865,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.3907317817211151,
+   "n_commits": 7,
+   "n_bs": 7,
+   "n_harmful": 0,
+   "coverage": 0.07865168539325842,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.39091676473617554,
+   "n_commits": 8,
+   "n_bs": 8,
+   "n_harmful": 0,
+   "coverage": 0.0898876404494382,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.3935694396495819,
+   "n_commits": 9,
+   "n_bs": 9,
+   "n_harmful": 0,
+   "coverage": 0.10112359550561797,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.393969863653183,
+   "n_commits": 10,
+   "n_bs": 10,
+   "n_harmful": 0,
+   "coverage": 0.11235955056179775,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.40005800127983093,
+   "n_commits": 11,
+   "n_bs": 11,
+   "n_harmful": 0,
+   "coverage": 0.12359550561797752,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.40546080470085144,
+   "n_commits": 12,
+   "n_bs": 12,
+   "n_harmful": 0,
+   "coverage": 0.1348314606741573,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.4105611741542816,
+   "n_commits": 13,
+   "n_bs": 13,
+   "n_harmful": 0,
+   "coverage": 0.14606741573033707,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.41120466589927673,
+   "n_commits": 14,
+   "n_bs": 14,
+   "n_harmful": 0,
+   "coverage": 0.15730337078651685,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.4195467531681061,
+   "n_commits": 15,
+   "n_bs": 15,
+   "n_harmful": 0,
+   "coverage": 0.16853932584269662,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.4261055886745453,
+   "n_commits": 16,
+   "n_bs": 16,
+   "n_harmful": 0,
+   "coverage": 0.1797752808988764,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.4273484945297241,
+   "n_commits": 17,
+   "n_bs": 17,
+   "n_harmful": 0,
+   "coverage": 0.19101123595505617,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.4355478584766388,
+   "n_commits": 18,
+   "n_bs": 18,
+   "n_harmful": 0,
+   "coverage": 0.20224719101123595,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.4358994662761688,
+   "n_commits": 19,
+   "n_bs": 19,
+   "n_harmful": 0,
+   "coverage": 0.21348314606741572,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.44057607650756836,
+   "n_commits": 20,
+   "n_bs": 20,
+   "n_harmful": 0,
+   "coverage": 0.2247191011235955,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.4463774859905243,
+   "n_commits": 21,
+   "n_bs": 21,
+   "n_harmful": 0,
+   "coverage": 0.23595505617977527,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.44841232895851135,
+   "n_commits": 22,
+   "n_bs": 22,
+   "n_harmful": 0,
+   "coverage": 0.24719101123595505,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.4493204653263092,
+   "n_commits": 23,
+   "n_bs": 23,
+   "n_harmful": 0,
+   "coverage": 0.25842696629213485,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.45194485783576965,
+   "n_commits": 24,
+   "n_bs": 24,
+   "n_harmful": 0,
+   "coverage": 0.2696629213483146,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.4559946060180664,
+   "n_commits": 25,
+   "n_bs": 25,
+   "n_harmful": 0,
+   "coverage": 0.2808988764044944,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.45817697048187256,
+   "n_commits": 26,
+   "n_bs": 26,
+   "n_harmful": 0,
+   "coverage": 0.29213483146067415,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.45966827869415283,
+   "n_commits": 27,
+   "n_bs": 27,
+   "n_harmful": 0,
+   "coverage": 0.30337078651685395,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.4596690833568573,
+   "n_commits": 28,
+   "n_bs": 28,
+   "n_harmful": 0,
+   "coverage": 0.3146067415730337,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.46244990825653076,
+   "n_commits": 29,
+   "n_bs": 29,
+   "n_harmful": 0,
+   "coverage": 0.3258426966292135,
+   "chr": 0.0
+  },
+  {
+   "tau": 0.4640176594257355,
+   "n_commits": 30,
+   "n_bs": 29,
+   "n_harmful": 1,
+   "coverage": 0.33707865168539325,
+   "chr": 0.03333333333333333
+  },
+  {
+   "tau": 0.4649384915828705,
+   "n_commits": 31,
+   "n_bs": 30,
+   "n_harmful": 1,
+   "coverage": 0.34831460674157305,
+   "chr": 0.03225806451612903
+  },
+  {
+   "tau": 0.4669439494609833,
+   "n_commits": 32,
+   "n_bs": 31,
+   "n_harmful": 1,
+   "coverage": 0.3595505617977528,
+   "chr": 0.03125
+  },
+  {
+   "tau": 0.4685189127922058,
+   "n_commits": 33,
+   "n_bs": 32,
+   "n_harmful": 1,
+   "coverage": 0.3707865168539326,
+   "chr": 0.030303030303030304
+  },
+  {
+   "tau": 0.4711076617240906,
+   "n_commits": 34,
+   "n_bs": 33,
+   "n_harmful": 1,
+   "coverage": 0.38202247191011235,
+   "chr": 0.029411764705882353
+  },
+  {
+   "tau": 0.4731178283691406,
+   "n_commits": 35,
+   "n_bs": 34,
+   "n_harmful": 1,
+   "coverage": 0.39325842696629215,
+   "chr": 0.02857142857142857
+  },
+  {
+   "tau": 0.4732593894004822,
+   "n_commits": 36,
+   "n_bs": 35,
+   "n_harmful": 1,
+   "coverage": 0.4044943820224719,
+   "chr": 0.027777777777777776
+  },
+  {
+   "tau": 0.4774460792541504,
+   "n_commits": 37,
+   "n_bs": 36,
+   "n_harmful": 1,
+   "coverage": 0.4157303370786517,
+   "chr": 0.02702702702702703
+  },
+  {
+   "tau": 0.4810287356376648,
+   "n_commits": 38,
+   "n_bs": 37,
+   "n_harmful": 1,
+   "coverage": 0.42696629213483145,
+   "chr": 0.02631578947368421
+  },
+  {
+   "tau": 0.48137399554252625,
+   "n_commits": 39,
+   "n_bs": 38,
+   "n_harmful": 1,
+   "coverage": 0.43820224719101125,
+   "chr": 0.02564102564102564
+  },
+  {
+   "tau": 0.4814797639846802,
+   "n_commits": 40,
+   "n_bs": 39,
+   "n_harmful": 1,
+   "coverage": 0.449438202247191,
+   "chr": 0.025
+  },
+  {
+   "tau": 0.4814964532852173,
+   "n_commits": 41,
+   "n_bs": 40,
+   "n_harmful": 1,
+   "coverage": 0.4606741573033708,
+   "chr": 0.024390243902439025
+  },
+  {
+   "tau": 0.48276233673095703,
+   "n_commits": 42,
+   "n_bs": 41,
+   "n_harmful": 1,
+   "coverage": 0.47191011235955055,
+   "chr": 0.023809523809523808
+  },
+  {
+   "tau": 0.4830732047557831,
+   "n_commits": 43,
+   "n_bs": 42,
+   "n_harmful": 1,
+   "coverage": 0.48314606741573035,
+   "chr": 0.023255813953488372
+  },
+  {
+   "tau": 0.48468050360679626,
+   "n_commits": 44,
+   "n_bs": 43,
+   "n_harmful": 1,
+   "coverage": 0.4943820224719101,
+   "chr": 0.022727272727272728
+  },
+  {
+   "tau": 0.48512911796569824,
+   "n_commits": 45,
+   "n_bs": 44,
+   "n_harmful": 1,
+   "coverage": 0.5056179775280899,
+   "chr": 0.022222222222222223
+  },
+  {
+   "tau": 0.48661962151527405,
+   "n_commits": 46,
+   "n_bs": 45,
+   "n_harmful": 1,
+   "coverage": 0.5168539325842697,
+   "chr": 0.021739130434782608
+  },
+  {
+   "tau": 0.48756688833236694,
+   "n_commits": 47,
+   "n_bs": 45,
+   "n_harmful": 2,
+   "coverage": 0.5280898876404494,
+   "chr": 0.0425531914893617
+  },
+  {
+   "tau": 0.4887543320655823,
+   "n_commits": 48,
+   "n_bs": 46,
+   "n_harmful": 2,
+   "coverage": 0.5393258426966292,
+   "chr": 0.041666666666666664
+  },
+  {
+   "tau": 0.48889198899269104,
+   "n_commits": 49,
+   "n_bs": 47,
+   "n_harmful": 2,
+   "coverage": 0.550561797752809,
+   "chr": 0.04081632653061224
+  },
+  {
+   "tau": 0.4921296536922455,
+   "n_commits": 50,
+   "n_bs": 48,
+   "n_harmful": 2,
+   "coverage": 0.5617977528089888,
+   "chr": 0.04
+  },
+  {
+   "tau": 0.49310508370399475,
+   "n_commits": 51,
+   "n_bs": 49,
+   "n_harmful": 2,
+   "coverage": 0.5730337078651685,
+   "chr": 0.0392156862745098
+  },
+  {
+   "tau": 0.49349671602249146,
+   "n_commits": 52,
+   "n_bs": 50,
+   "n_harmful": 2,
+   "coverage": 0.5842696629213483,
+   "chr": 0.038461538461538464
+  },
+  {
+   "tau": 0.49526873230934143,
+   "n_commits": 53,
+   "n_bs": 51,
+   "n_harmful": 2,
+   "coverage": 0.5955056179775281,
+   "chr": 0.03773584905660377
+  },
+  {
+   "tau": 0.49548670649528503,
+   "n_commits": 54,
+   "n_bs": 52,
+   "n_harmful": 2,
+   "coverage": 0.6067415730337079,
+   "chr": 0.037037037037037035
+  },
+  {
+   "tau": 0.49985161423683167,
+   "n_commits": 55,
+   "n_bs": 53,
+   "n_harmful": 2,
+   "coverage": 0.6179775280898876,
+   "chr": 0.03636363636363636
+  },
+  {
+   "tau": 0.5005475878715515,
+   "n_commits": 56,
+   "n_bs": 54,
+   "n_harmful": 2,
+   "coverage": 0.6292134831460674,
+   "chr": 0.03571428571428571
+  },
+  {
+   "tau": 0.5027364492416382,
+   "n_commits": 57,
+   "n_bs": 55,
+   "n_harmful": 2,
+   "coverage": 0.6404494382022472,
+   "chr": 0.03508771929824561
+  },
+  {
+   "tau": 0.5080563426017761,
+   "n_commits": 58,
+   "n_bs": 56,
+   "n_harmful": 2,
+   "coverage": 0.651685393258427,
+   "chr": 0.034482758620689655
+  },
+  {
+   "tau": 0.5097105503082275,
+   "n_commits": 59,
+   "n_bs": 57,
+   "n_harmful": 2,
+   "coverage": 0.6629213483146067,
+   "chr": 0.03389830508474576
+  },
+  {
+   "tau": 0.5136019587516785,
+   "n_commits": 60,
+   "n_bs": 58,
+   "n_harmful": 2,
+   "coverage": 0.6741573033707865,
+   "chr": 0.03333333333333333
+  },
+  {
+   "tau": 0.5149332880973816,
+   "n_commits": 61,
+   "n_bs": 59,
+   "n_harmful": 2,
+   "coverage": 0.6853932584269663,
+   "chr": 0.03278688524590164
+  },
+  {
+   "tau": 0.5178720951080322,
+   "n_commits": 62,
+   "n_bs": 60,
+   "n_harmful": 2,
+   "coverage": 0.6966292134831461,
+   "chr": 0.03225806451612903
+  },
+  {
+   "tau": 0.5185511112213135,
+   "n_commits": 63,
+   "n_bs": 61,
+   "n_harmful": 2,
+   "coverage": 0.7078651685393258,
+   "chr": 0.031746031746031744
+  },
+  {
+   "tau": 0.5199453830718994,
+   "n_commits": 64,
+   "n_bs": 61,
+   "n_harmful": 3,
+   "coverage": 0.7191011235955056,
+   "chr": 0.046875
+  },
+  {
+   "tau": 0.5201213955879211,
+   "n_commits": 65,
+   "n_bs": 62,
+   "n_harmful": 3,
+   "coverage": 0.7303370786516854,
+   "chr": 0.046153846153846156
+  },
+  {
+   "tau": 0.5215882658958435,
+   "n_commits": 66,
+   "n_bs": 63,
+   "n_harmful": 3,
+   "coverage": 0.7415730337078652,
+   "chr": 0.045454545454545456
+  },
+  {
+   "tau": 0.523689866065979,
+   "n_commits": 67,
+   "n_bs": 64,
+   "n_harmful": 3,
+   "coverage": 0.7528089887640449,
+   "chr": 0.04477611940298507
+  },
+  {
+   "tau": 0.5330206751823425,
+   "n_commits": 68,
+   "n_bs": 65,
+   "n_harmful": 3,
+   "coverage": 0.7640449438202247,
+   "chr": 0.04411764705882353
+  },
+  {
+   "tau": 0.5351618528366089,
+   "n_commits": 69,
+   "n_bs": 66,
+   "n_harmful": 3,
+   "coverage": 0.7752808988764045,
+   "chr": 0.043478260869565216
+  },
+  {
+   "tau": 0.5352931022644043,
+   "n_commits": 70,
+   "n_bs": 66,
+   "n_harmful": 4,
+   "coverage": 0.7865168539325843,
+   "chr": 0.05714285714285714
+  },
+  {
+   "tau": 0.5373807549476624,
+   "n_commits": 71,
+   "n_bs": 67,
+   "n_harmful": 4,
+   "coverage": 0.797752808988764,
+   "chr": 0.056338028169014086
+  },
+  {
+   "tau": 0.5382735729217529,
+   "n_commits": 72,
+   "n_bs": 68,
+   "n_harmful": 4,
+   "coverage": 0.8089887640449438,
+   "chr": 0.05555555555555555
+  },
+  {
+   "tau": 0.5397269129753113,
+   "n_commits": 73,
+   "n_bs": 68,
+   "n_harmful": 5,
+   "coverage": 0.8202247191011236,
+   "chr": 0.0684931506849315
+  },
+  {
+   "tau": 0.5397964119911194,
+   "n_commits": 74,
+   "n_bs": 68,
+   "n_harmful": 6,
+   "coverage": 0.8314606741573034,
+   "chr": 0.08108108108108109
+  },
+  {
+   "tau": 0.5407988429069519,
+   "n_commits": 75,
+   "n_bs": 68,
+   "n_harmful": 7,
+   "coverage": 0.8426966292134831,
+   "chr": 0.09333333333333334
+  },
+  {
+   "tau": 0.5422590970993042,
+   "n_commits": 76,
+   "n_bs": 69,
+   "n_harmful": 7,
+   "coverage": 0.8539325842696629,
+   "chr": 0.09210526315789473
+  },
+  {
+   "tau": 0.5429567098617554,
+   "n_commits": 77,
+   "n_bs": 70,
+   "n_harmful": 7,
+   "coverage": 0.8651685393258427,
+   "chr": 0.09090909090909091
+  },
+  {
+   "tau": 0.5450875163078308,
+   "n_commits": 78,
+   "n_bs": 70,
+   "n_harmful": 8,
+   "coverage": 0.8764044943820225,
+   "chr": 0.10256410256410256
+  },
+  {
+   "tau": 0.5451748967170715,
+   "n_commits": 79,
+   "n_bs": 71,
+   "n_harmful": 8,
+   "coverage": 0.8876404494382022,
+   "chr": 0.10126582278481013
+  },
+  {
+   "tau": 0.546027660369873,
+   "n_commits": 80,
+   "n_bs": 72,
+   "n_harmful": 8,
+   "coverage": 0.898876404494382,
+   "chr": 0.1
+  },
+  {
+   "tau": 0.5462620258331299,
+   "n_commits": 81,
+   "n_bs": 73,
+   "n_harmful": 8,
+   "coverage": 0.9101123595505618,
+   "chr": 0.09876543209876543
+  },
+  {
+   "tau": 0.5472497344017029,
+   "n_commits": 82,
+   "n_bs": 73,
+   "n_harmful": 9,
+   "coverage": 0.9213483146067416,
+   "chr": 0.10975609756097561
+  },
+  {
+   "tau": 0.5489099025726318,
+   "n_commits": 83,
+   "n_bs": 73,
+   "n_harmful": 10,
+   "coverage": 0.9325842696629213,
+   "chr": 0.12048192771084337
+  },
+  {
+   "tau": 0.5505447387695312,
+   "n_commits": 84,
+   "n_bs": 74,
+   "n_harmful": 10,
+   "coverage": 0.9438202247191011,
+   "chr": 0.11904761904761904
+  },
+  {
+   "tau": 0.5518724918365479,
+   "n_commits": 85,
+   "n_bs": 75,
+   "n_harmful": 10,
+   "coverage": 0.9550561797752809,
+   "chr": 0.11764705882352941
+  },
+  {
+   "tau": 0.559952437877655,
+   "n_commits": 86,
+   "n_bs": 75,
+   "n_harmful": 11,
+   "coverage": 0.9662921348314607,
+   "chr": 0.12790697674418605
+  },
+  {
+   "tau": 0.5723938941955566,
+   "n_commits": 87,
+   "n_bs": 75,
+   "n_harmful": 12,
+   "coverage": 0.9775280898876404,
+   "chr": 0.13793103448275862
+  },
+  {
+   "tau": 0.5840358734130859,
+   "n_commits": 88,
+   "n_bs": 75,
+   "n_harmful": 13,
+   "coverage": 0.9887640449438202,
+   "chr": 0.14772727272727273
+  }
+ ],
+ "runtime_sec": 151.59963583946228
+}

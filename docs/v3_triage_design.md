@@ -1,7 +1,11 @@
 # v3, window level triage learned from training dynamics
 
-Design document. No code has been written against it and none should be until
-the trajectory probe returns a green light, which is defined in section 6.
+Design document, **halted 2026-09-01**. The trajectory probe was run under the
+registered protocol (PatchTST proxy learner, CV grouped by source dataset) and
+returned a combined AUROC of 0.5794, below the pre-registered 0.65 stop
+threshold. The earlier 0.7028/amber run used a three-layer MLP and random folds
+and is marked obsolete. No training-dynamics triage layer is being built; the
+rest of this document is kept as the failed pre-registration record.
 
 ## Why the signal has to come from somewhere else
 
@@ -147,6 +151,12 @@ ones, using the trajectory features under five fold cross validation with the
 test fold excluded from feature selection and threshold choice. Between 0.65 and
 0.80, the frozen model probing axis is added and it is measured once more.
 Below 0.65, this design is not built.
+
+**Result.** PatchTST, grouped by source dataset: combined AUROC 0.5794
+(random-split optimistic AUROC 0.6787); clean_ood vs contaminated 0.3004. This
+fails even the 0.65 continuation threshold, so the training-dynamics branch is
+stopped. The 0.7028 amber run (three-layer MLP, random folds) is obsolete and
+must not be cited.
 
 ## Relation to influence functions
 

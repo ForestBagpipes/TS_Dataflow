@@ -1,0 +1,20 @@
+{
+ "phase": "v4.0 sync note (server may be shut down)",
+ "all_small_and_medium_artifacts_pulled_and_sha256_verified": true,
+ "left_on_node_regenerable": {
+  "results/v40_feature_cache.npz": {
+   "sha256": "d403a93f1ebbbc26b5a65ea1fad9e54ea007eff4a4430356fb252f9bc68e3c01"
+  },
+  "results/v40_rescue_bank_candidates.jsonl": {
+   "sha256": "44cd46d8c636f698b9adf9890a39d046d77d6bbdad1724f3f216530b4eaf75b2"
+  },
+  "results/v40_rescue_bank_records.jsonl": {
+   "sha256": "1621d8c7fffd683a4f8819aa501661b88cbd119db1fb92f36879c81cfe65c860"
+  }
+ },
+ "why_left": "deterministic functions of the committed code plus the frozen inputs; the feature cache was verified bit-identical across two independent processes, and the rescue bank is reproducible from V40_BANK_SCALE=5 with seed 20260903",
+ "regenerate": {
+  "results/v40_feature_cache.npz": "python experiments/v40_action_critic.py features",
+  "results/v40_rescue_bank_*": "V40_BANK_SCALE=5 bash rescue_bank.sh (manifest->parents->candidates->tsicl->freeze->evaluate)"
+ }
+}

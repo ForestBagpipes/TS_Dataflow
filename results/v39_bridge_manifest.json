@@ -1,0 +1,65 @@
+{
+ "phase": "v3.9 Phase 2 BRIDGE integrity manifest",
+ "preregistration": "docs/v3_9_mirage_preregistration.md §4",
+ "grid": {
+  "risk_quantiles": [
+   0.2,
+   0.4,
+   0.6,
+   0.8
+  ],
+  "etas": [
+   0.0,
+   0.25,
+   0.5,
+   0.75,
+   1.0
+  ],
+  "bases": [
+   "tsicl",
+   "openfim",
+   "fm_mean",
+   "moment"
+  ],
+  "primary_base": "fm_mean",
+  "chr_calib_cp95_upper": 0.15,
+  "mad_floor_quantile": 0.1,
+  "ecdf_winsor": [
+   0.01,
+   0.99
+  ]
+ },
+ "signal_gates": {
+  "g1_harmful_auroc": false,
+  "g2_auprc_lift": true,
+  "g3_lodo_workpoint_commits": true,
+  "g4_heldout_chr": false,
+  "g5_source_noninferiority": false,
+  "g6_pareto_vs_best_single_proposer": false
+ },
+ "all_pass": false,
+ "verdict": "stop_signal_quality_insufficient",
+ "candidate_digest_sha256": "7df55b256ca309e97af5f6a839396858578e8acd9107983e0aa3e9ceb386edfb",
+ "input_hashes": {
+  "v39_longgap_candidates": "44a0327ecdd136b167a818994ac17191562fe348aaac386acd53b4288c6f4af6",
+  "v39_longgap_candidates_freeze": "8aaa9b223b01a1cabb29213f979991105f0b3333e5f968bf63a5e5812912297c",
+  "v39_longgap_probe": "53cfd4908f959e44756eb2b1abba8ef543f9ccaed6cdec3539d811770eae9c00",
+  "v33_training_data": "84ab59d9e63048586ba7ddbc44398a729d927fe924411b8bc345b6ad97e282ef",
+  "v38_explicit_impute_records": "78e733696298352b717024443f57617c4597c79ea416478a9e30d1e0924a0a58",
+  "p0_corpus_manifest_a": "6d7d05a506745a5f6da9114ef08ac37b58e102b6cbee6b740ae5247c42d9b15e"
+ },
+ "code_hashes": {
+  "experiments/v39_bridge_probe.py": "5cf79b919d26f37e27c51a3c17219018b1590a3eb555de097e17753df79a30af",
+  "experiments/v39_longgap_probe.py": "2ba76450fd8488c0ae9f412ff9531ca742843909676e86fc8157675e70b3ef8e",
+  "experiments/v33_labels.py": "0a701300cde415e206bee15970a4b88d0ac9c8a45bc771ad4ef11d70b52df7bb",
+  "experiments/v38_impute_mask_audit.py": "7353c3ff3a4afae76f2d4f20521380882ecadec6af7ba864cc92b2846afafc0c"
+ },
+ "output_sha256": {
+  "results/v39_bridge_candidates.jsonl": "b2fd2c15ffdea17f200b72d5118ae9f6978f8d6612969639837028bebdce4771",
+  "results/v39_bridge_signals.jsonl": "46c4c48a3269fb634875e4ee2babecfdeacf8b69748bd7ceb826994bb9fd4c70",
+  "results/v39_bridge_probe.json": "ef7b90222a4962c3ce37228d7c017b89c44f180d957cfc0f42a236344e464e4f"
+ },
+ "python": "3.12.3",
+ "numpy": "2.5.1",
+ "runtime_sec": 14.110978603363037
+}

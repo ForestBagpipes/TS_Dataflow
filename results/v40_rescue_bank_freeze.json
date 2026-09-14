@@ -1,0 +1,98 @@
+{
+ "phase": "v4.0 Phase 1 candidate freeze (labels not yet joined)",
+ "frozen_at_epoch": 1788460220.85259,
+ "per_file": {
+  "v40_rescue_bank_cand_keep.jsonl": {
+   "sha256": "d153dc0d8128dbcc3ef417bd156facd9c13674276e467507fa371d685741b685",
+   "n_records": 21000
+  },
+  "v40_rescue_bank_cand_fact_short.jsonl": {
+   "sha256": "a2e7e3821636e167e5b0aadefe76e5b470406311305fe214e897249b9084c4a6",
+   "n_records": 21000
+  },
+  "v40_rescue_bank_cand_tsicl_long.jsonl": {
+   "sha256": "55da6fa6e5a51dc83ef8958e3c68d1a11e9b56a45fd9d374124035006d49be35",
+   "n_records": 21000
+  },
+  "v40_rescue_bank_cand_impute_seasonal.jsonl": {
+   "sha256": "2ca18c65a7bd6da22c0cd29876a170e8d1a5759ccc35848b326728b11e6d8a70",
+   "n_records": 21000
+  },
+  "v40_rescue_bank_cand_impute_linear_default.jsonl": {
+   "sha256": "10952d2cbaa2646631e879470f8fa5ec24e0386d11d5d57117bde14039430d66",
+   "n_records": 21000
+  },
+  "v40_rescue_bank_cand_impute_linear_conservative.jsonl": {
+   "sha256": "19d89e569b8670b08868f0dab08de3eada0f4fae85712e7de20875e4fcfe63ec",
+   "n_records": 21000
+  },
+  "v40_rescue_bank_cand_despike.jsonl": {
+   "sha256": "7826f303810559a61b02088fbf7b9611d41fb3d3d54dd455b911bf55e605eeeb",
+   "n_records": 21000
+  },
+  "v40_rescue_bank_cand_denoise.jsonl": {
+   "sha256": "ae8d109882f2c03b031f2b532e86c2aa21256facabf8f53d077eed546a871f2c",
+   "n_records": 21000
+  }
+ },
+ "merged_file": "v40_rescue_bank_candidates.jsonl",
+ "merged_sha256": "44cd46d8c636f698b9adf9890a39d046d77d6bbdad1724f3f216530b4eaf75b2",
+ "record_digest_sha256": "366eb37648af7b0f4e30baab493e416c6a28361721e1c2f104a91b20e45658fc",
+ "distribution": {
+  "n_episodes": 21000,
+  "n_records": 168000,
+  "per_corruption": {
+   "noise": 2250,
+   "none": 2100,
+   "mixed": 3150,
+   "flatline": 2250,
+   "missing_scattered": 2250,
+   "level_shift": 2250,
+   "duplicate": 2250,
+   "spike": 2250,
+   "missing_block": 2250
+  },
+  "per_severity": {
+   "mid": 5250,
+   "low": 5250,
+   "none": 2100,
+   "mixed": 3150,
+   "high": 5250
+  },
+  "per_split": {
+   "train": 16688,
+   "val": 2148,
+   "test": 2164
+  },
+  "per_source": {
+   "ETTh1": 3500,
+   "ETTh2": 3500,
+   "ETTm1": 3500,
+   "Crypto": 3500,
+   "US Term Structure": 3500,
+   "Oil Price": 3500
+  },
+  "n_supported_per_action": {
+   "denoise": 14892,
+   "despike": 21000,
+   "keep": 21000,
+   "impute_linear_conservative": 10042,
+   "impute_linear_default": 10042,
+   "impute_seasonal": 10042,
+   "fact_short": 3141,
+   "tsicl_long": 3153
+  },
+  "n_applicable_per_action": {
+   "denoise": 14892,
+   "despike": 10405,
+   "keep": 21000,
+   "impute_linear_conservative": 8146,
+   "impute_linear_default": 10042,
+   "impute_seasonal": 10042,
+   "fact_short": 3141,
+   "tsicl_long": 3153
+  }
+ },
+ "label_freeze_discipline": "all candidate outputs and hashes are frozen here; evaluate refuses to run without this file and re-verifies every candidate hash by deterministic recomputation before any label is joined",
+ "runtime_sec": 5.445699691772461
+}

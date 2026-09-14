@@ -1,0 +1,5318 @@
+{
+ "phase": "v4.0 Phase 2.4 frozen-89 one-shot decision (docs/v4_0_counteract_preregistration.md §4 gates, §11.3 F10)",
+ "seed": 20260904,
+ "n_windows": 89,
+ "frozen_labels": {
+  "n_bs": 75,
+  "n_harmful": 14,
+  "source": "results/v39_longgap_probe.json proposer_tables.tsicl"
+ },
+ "references": {
+  "raw_tsicl": {
+   "n_commits": 89,
+   "n_bs": 75,
+   "n_harmful": 14,
+   "chr": 0.15730337078651685,
+   "bcov": 0.8426966292134831,
+   "coverage": 1.0
+  },
+  "v39_mirage": {
+   "n_commits": 47,
+   "n_bs": 34,
+   "n_harmful": 13,
+   "chr": 0.2765957446808511,
+   "bcov": 0.38202247191011235,
+   "coverage": 0.5280898876404494
+  }
+ },
+ "gate_thresholds": {
+  "g1_harm_auroc_min": 0.75,
+  "g2_auprc_lift_min": 0.1,
+  "g3_bs_retained_min": 55,
+  "g4_harmful_max": 3,
+  "g5_chr_cp95_upper_max": 0.15,
+  "g7_sources_not_degraded_min": 4
+ },
+ "arms": {
+  "stat_only": {
+   "n_commits": 14,
+   "n_bs_retained": 14,
+   "n_harmful": 0,
+   "n_abstained": 75,
+   "chr": 0.0,
+   "chr_cp95_upper": 0.19263617565013527,
+   "bcov": 0.15730337078651685,
+   "harmful_blocked_of_14": 14,
+   "bs_lost_of_75": 61,
+   "harm_auroc": 0.8771428571428571,
+   "harm_auprc": 0.662777503666941,
+   "gates": {
+    "g1_harm_auroc": {
+     "value": 0.8771428571428571,
+     "min": 0.75
+    },
+    "g2_auprc_lift": {
+     "value": 0.5054741328804242,
+     "auprc": 0.662777503666941,
+     "prevalence": 0.15730337078651685,
+     "min": 0.1
+    },
+    "g3_bs_retained": {
+     "value": 14,
+     "min": 55
+    },
+    "g4_harmful": {
+     "value": 0,
+     "max": 3
+    },
+    "g5_chr_cp95_upper": {
+     "value": 0.19263617565013527,
+     "max": 0.15
+    },
+    "g6_frontier": {
+     "dominates_raw_tsicl": false,
+     "dominates_mirage": true,
+     "n_dominating_points_vs_raw": 0,
+     "n_dominating_points_vs_mirage": 43
+    },
+    "g7_sources_not_degraded": {
+     "value": 3,
+     "sources": [
+      "Crypto",
+      "Oil Price",
+      "US Term Structure"
+     ],
+     "min": 4,
+     "predicate": "chr <= raw TS-ICL chr on that source AND at least one B&S commit retained where one was available (declared at decision time; the 4/6 count itself is pre-registered)"
+    },
+    "g8_no_source_identity": {
+     "value": true,
+     "evidence": "source is not an input tensor anywhere in the model (see MODEL inputs and FORBIDDEN_INPUT_KEYS); every window is scored by the fold whose training pool excluded its source"
+    }
+   },
+   "gate_pass": {
+    "g1": true,
+    "g2": true,
+    "g3": false,
+    "g4": true,
+    "g5": false,
+    "g6": false,
+    "g7": false,
+    "g8": true
+   },
+   "all_gates_pass": false,
+   "per_source": {
+    "Crypto": {
+     "n_windows": 3,
+     "raw_tsicl_bs": 3,
+     "raw_tsicl_harmful": 0,
+     "raw_tsicl_chr": 0.0,
+     "n_commits": 1,
+     "bs_retained": 1,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 0,
+     "bs_lost": 2
+    },
+    "ETTh1": {
+     "n_windows": 12,
+     "raw_tsicl_bs": 11,
+     "raw_tsicl_harmful": 1,
+     "raw_tsicl_chr": 0.08333333333333333,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 1,
+     "bs_lost": 11
+    },
+    "ETTh2": {
+     "n_windows": 10,
+     "raw_tsicl_bs": 10,
+     "raw_tsicl_harmful": 0,
+     "raw_tsicl_chr": 0.0,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 0,
+     "bs_lost": 10
+    },
+    "ETTm1": {
+     "n_windows": 16,
+     "raw_tsicl_bs": 13,
+     "raw_tsicl_harmful": 3,
+     "raw_tsicl_chr": 0.1875,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 3,
+     "bs_lost": 13
+    },
+    "Oil Price": {
+     "n_windows": 7,
+     "raw_tsicl_bs": 6,
+     "raw_tsicl_harmful": 1,
+     "raw_tsicl_chr": 0.14285714285714285,
+     "n_commits": 5,
+     "bs_retained": 5,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 1,
+     "bs_lost": 1
+    },
+    "US Term Structure": {
+     "n_windows": 41,
+     "raw_tsicl_bs": 32,
+     "raw_tsicl_harmful": 9,
+     "raw_tsicl_chr": 0.21951219512195122,
+     "n_commits": 8,
+     "bs_retained": 8,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 9,
+     "bs_lost": 24
+    }
+   },
+   "thresholds": {
+    "ETTh1": {
+     "tau_h": 0.44,
+     "delta": 0.0,
+     "tau_p": 1.0,
+     "val_counts": {
+      "n_episodes": 518,
+      "n_committed": 69,
+      "n_harmful_commits": 3,
+      "n_bs_commits": 66,
+      "n_protected_edits": 0,
+      "chr": 0.043478260869565216,
+      "chr_cp95_upper": 0.10855291465738341,
+      "bcov": 0.1274131274131274,
+      "abstention_rate": 0.8667953667953667
+     },
+     "no_calibrated_point": false
+    },
+    "ETTh2": {
+     "tau_h": 0.32,
+     "delta": 0.001,
+     "tau_p": 1.0,
+     "val_counts": {
+      "n_episodes": 526,
+      "n_committed": 50,
+      "n_harmful_commits": 2,
+      "n_bs_commits": 48,
+      "n_protected_edits": 0,
+      "chr": 0.04,
+      "chr_cp95_upper": 0.12061415542204412,
+      "bcov": 0.09125475285171103,
+      "abstention_rate": 0.9049429657794676
+     },
+     "no_calibrated_point": false
+    },
+    "ETTm1": {
+     "tau_h": 0.06,
+     "delta": 0.0,
+     "tau_p": 0.35,
+     "val_counts": {
+      "n_episodes": 552,
+      "n_committed": 37,
+      "n_harmful_commits": 1,
+      "n_bs_commits": 36,
+      "n_protected_edits": 0,
+      "chr": 0.02702702702702703,
+      "chr_cp95_upper": 0.12190489818825372,
+      "bcov": 0.06521739130434782,
+      "abstention_rate": 0.9329710144927537
+     },
+     "no_calibrated_point": false
+    },
+    "Crypto": {
+     "tau_h": 0.5,
+     "delta": 0.0,
+     "tau_p": 0.5,
+     "val_counts": {
+      "n_episodes": 528,
+      "n_committed": 154,
+      "n_harmful_commits": 15,
+      "n_bs_commits": 139,
+      "n_protected_edits": 0,
+      "chr": 0.09740259740259741,
+      "chr_cp95_upper": 0.14601704721427136,
+      "bcov": 0.26325757575757575,
+      "abstention_rate": 0.7083333333333333
+     },
+     "no_calibrated_point": false
+    },
+    "US Term Structure": {
+     "tau_h": 0.48,
+     "delta": 0.001,
+     "tau_p": 0.5,
+     "val_counts": {
+      "n_episodes": 520,
+      "n_committed": 144,
+      "n_harmful_commits": 14,
+      "n_bs_commits": 130,
+      "n_protected_edits": 0,
+      "chr": 0.09722222222222222,
+      "chr_cp95_upper": 0.14780836857820862,
+      "bcov": 0.25,
+      "abstention_rate": 0.7230769230769231
+     },
+     "no_calibrated_point": false
+    },
+    "Oil Price": {
+     "tau_h": 0.6,
+     "delta": 0.01,
+     "tau_p": 0.35,
+     "val_counts": {
+      "n_episodes": 506,
+      "n_committed": 166,
+      "n_harmful_commits": 17,
+      "n_bs_commits": 149,
+      "n_protected_edits": 0,
+      "chr": 0.10240963855421686,
+      "chr_cp95_upper": 0.14964897039958472,
+      "bcov": 0.29446640316205536,
+      "abstention_rate": 0.6719367588932806
+     },
+     "no_calibrated_point": false
+    }
+   },
+   "frontier": [
+    {
+     "tau": 0.29217782616615295,
+     "coverage": 0.011235955056179775,
+     "n_commits": 1,
+     "n_harmful": 0,
+     "n_bs": 1,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.95
+    },
+    {
+     "tau": 0.3510873317718506,
+     "coverage": 0.02247191011235955,
+     "n_commits": 2,
+     "n_harmful": 0,
+     "n_bs": 2,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.776393202250021
+    },
+    {
+     "tau": 0.36656543612480164,
+     "coverage": 0.033707865168539325,
+     "n_commits": 3,
+     "n_harmful": 0,
+     "n_bs": 3,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.6315968501359612
+    },
+    {
+     "tau": 0.37960517406463623,
+     "coverage": 0.0449438202247191,
+     "n_commits": 4,
+     "n_harmful": 0,
+     "n_bs": 4,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.527129195498412
+    },
+    {
+     "tau": 0.3834405839443207,
+     "coverage": 0.056179775280898875,
+     "n_commits": 5,
+     "n_harmful": 0,
+     "n_bs": 5,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.450719728346941
+    },
+    {
+     "tau": 0.3906855881214142,
+     "coverage": 0.06741573033707865,
+     "n_commits": 6,
+     "n_harmful": 0,
+     "n_bs": 6,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.39303776899708265
+    },
+    {
+     "tau": 0.3907317817211151,
+     "coverage": 0.07865168539325842,
+     "n_commits": 7,
+     "n_harmful": 0,
+     "n_bs": 7,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.34816365513116077
+    },
+    {
+     "tau": 0.39091676473617554,
+     "coverage": 0.0898876404494382,
+     "n_commits": 8,
+     "n_harmful": 0,
+     "n_bs": 8,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.3123439780663678
+    },
+    {
+     "tau": 0.3935694396495819,
+     "coverage": 0.10112359550561797,
+     "n_commits": 9,
+     "n_harmful": 0,
+     "n_bs": 9,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.28312883556311347
+    },
+    {
+     "tau": 0.393969863653183,
+     "coverage": 0.11235955056179775,
+     "n_commits": 10,
+     "n_harmful": 0,
+     "n_bs": 10,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.2588655508930522
+    },
+    {
+     "tau": 0.40005800127983093,
+     "coverage": 0.12359550561797752,
+     "n_commits": 11,
+     "n_harmful": 0,
+     "n_bs": 11,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.2384041903808526
+    },
+    {
+     "tau": 0.40546080470085144,
+     "coverage": 0.1348314606741573,
+     "n_commits": 12,
+     "n_harmful": 0,
+     "n_bs": 12,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.22092219194555585
+    },
+    {
+     "tau": 0.4105611741542816,
+     "coverage": 0.14606741573033707,
+     "n_commits": 13,
+     "n_harmful": 0,
+     "n_bs": 13,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.20581666518655062
+    },
+    {
+     "tau": 0.41120466589927673,
+     "coverage": 0.15730337078651685,
+     "n_commits": 14,
+     "n_harmful": 0,
+     "n_bs": 14,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.19263617565013527
+    },
+    {
+     "tau": 0.4195467531681061,
+     "coverage": 0.16853932584269662,
+     "n_commits": 15,
+     "n_harmful": 0,
+     "n_bs": 15,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.18103627252208462
+    },
+    {
+     "tau": 0.4261055886745453,
+     "coverage": 0.1797752808988764,
+     "n_commits": 16,
+     "n_harmful": 0,
+     "n_bs": 16,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.1707497229824809
+    },
+    {
+     "tau": 0.4273484945297241,
+     "coverage": 0.19101123595505617,
+     "n_commits": 17,
+     "n_harmful": 0,
+     "n_bs": 17,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.16156611126074005
+    },
+    {
+     "tau": 0.4355478584766388,
+     "coverage": 0.20224719101123595,
+     "n_commits": 18,
+     "n_harmful": 0,
+     "n_bs": 18,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.1533175539572782
+    },
+    {
+     "tau": 0.4358994662761688,
+     "coverage": 0.21348314606741572,
+     "n_commits": 19,
+     "n_harmful": 0,
+     "n_bs": 19,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.1458685033122434
+    },
+    {
+     "tau": 0.44057607650756836,
+     "coverage": 0.2247191011235955,
+     "n_commits": 20,
+     "n_harmful": 0,
+     "n_bs": 20,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.13910834066826516
+    },
+    {
+     "tau": 0.4463774859905243,
+     "coverage": 0.23595505617977527,
+     "n_commits": 21,
+     "n_harmful": 0,
+     "n_bs": 21,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.13294591102652337
+    },
+    {
+     "tau": 0.44841232895851135,
+     "coverage": 0.24719101123595505,
+     "n_commits": 22,
+     "n_harmful": 0,
+     "n_bs": 22,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.1273054316548387
+    },
+    {
+     "tau": 0.4493204653263092,
+     "coverage": 0.25842696629213485,
+     "n_commits": 23,
+     "n_harmful": 0,
+     "n_bs": 23,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.12212338890652302
+    },
+    {
+     "tau": 0.45194485783576965,
+     "coverage": 0.2696629213483146,
+     "n_commits": 24,
+     "n_harmful": 0,
+     "n_bs": 24,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.11734615615494873
+    },
+    {
+     "tau": 0.4559946060180664,
+     "coverage": 0.2808988764044944,
+     "n_commits": 25,
+     "n_harmful": 0,
+     "n_bs": 25,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.1129281450068432
+    },
+    {
+     "tau": 0.45817697048187256,
+     "coverage": 0.29213483146067415,
+     "n_commits": 26,
+     "n_harmful": 0,
+     "n_bs": 26,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.1088303557607848
+    },
+    {
+     "tau": 0.45966827869415283,
+     "coverage": 0.30337078651685395,
+     "n_commits": 27,
+     "n_harmful": 0,
+     "n_bs": 27,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.10501923017634426
+    },
+    {
+     "tau": 0.4596690833568573,
+     "coverage": 0.3146067415730337,
+     "n_commits": 28,
+     "n_harmful": 0,
+     "n_bs": 28,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.10146573557272467
+    },
+    {
+     "tau": 0.46244990825653076,
+     "coverage": 0.3258426966292135,
+     "n_commits": 29,
+     "n_harmful": 0,
+     "n_bs": 29,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.0981446276772957
+    },
+    {
+     "tau": 0.4640176594257355,
+     "coverage": 0.33707865168539325,
+     "n_commits": 30,
+     "n_harmful": 1,
+     "n_bs": 29,
+     "chr": 0.03333333333333333,
+     "chr_cp95_upper": 0.14859606865911312
+    },
+    {
+     "tau": 0.4649384915828705,
+     "coverage": 0.34831460674157305,
+     "n_commits": 31,
+     "n_harmful": 1,
+     "n_bs": 30,
+     "chr": 0.03225806451612903,
+     "chr_cp95_upper": 0.14409039131834475
+    },
+    {
+     "tau": 0.4669439494609833,
+     "coverage": 0.3595505617977528,
+     "n_commits": 32,
+     "n_harmful": 1,
+     "n_bs": 31,
+     "chr": 0.03125,
+     "chr_cp95_upper": 0.13984946027422598
+    },
+    {
+     "tau": 0.4685189127922058,
+     "coverage": 0.3707865168539326,
+     "n_commits": 33,
+     "n_harmful": 1,
+     "n_bs": 32,
+     "chr": 0.030303030303030304,
+     "chr_cp95_upper": 0.13585064679854747
+    },
+    {
+     "tau": 0.4711076617240906,
+     "coverage": 0.38202247191011235,
+     "n_commits": 34,
+     "n_harmful": 1,
+     "n_bs": 33,
+     "chr": 0.029411764705882353,
+     "chr_cp95_upper": 0.13207382513147803
+    },
+    {
+     "tau": 0.4731178283691406,
+     "coverage": 0.39325842696629215,
+     "n_commits": 35,
+     "n_harmful": 1,
+     "n_bs": 34,
+     "chr": 0.02857142857142857,
+     "chr_cp95_upper": 0.12850103634130067
+    },
+    {
+     "tau": 0.4732593894004822,
+     "coverage": 0.4044943820224719,
+     "n_commits": 36,
+     "n_harmful": 1,
+     "n_bs": 35,
+     "chr": 0.027777777777777776,
+     "chr_cp95_upper": 0.12511620483905223
+    },
+    {
+     "tau": 0.4774460792541504,
+     "coverage": 0.4157303370786517,
+     "n_commits": 37,
+     "n_harmful": 1,
+     "n_bs": 36,
+     "chr": 0.02702702702702703,
+     "chr_cp95_upper": 0.12190489818825372
+    },
+    {
+     "tau": 0.4810287356376648,
+     "coverage": 0.42696629213483145,
+     "n_commits": 38,
+     "n_harmful": 1,
+     "n_bs": 37,
+     "chr": 0.02631578947368421,
+     "chr_cp95_upper": 0.11885412270056078
+    },
+    {
+     "tau": 0.48137399554252625,
+     "coverage": 0.43820224719101125,
+     "n_commits": 39,
+     "n_harmful": 1,
+     "n_bs": 38,
+     "chr": 0.02564102564102564,
+     "chr_cp95_upper": 0.1159521487579241
+    },
+    {
+     "tau": 0.4814797639846802,
+     "coverage": 0.449438202247191,
+     "n_commits": 40,
+     "n_harmful": 1,
+     "n_bs": 39,
+     "chr": 0.025,
+     "chr_cp95_upper": 0.11318836094473754
+    },
+    {
+     "tau": 0.4814964532852173,
+     "coverage": 0.4606741573033708,
+     "n_commits": 41,
+     "n_harmful": 1,
+     "n_bs": 40,
+     "chr": 0.024390243902439025,
+     "chr_cp95_upper": 0.11055312897984333
+    },
+    {
+     "tau": 0.48276233673095703,
+     "coverage": 0.47191011235955055,
+     "n_commits": 42,
+     "n_harmful": 1,
+     "n_bs": 41,
+     "chr": 0.023809523809523808,
+     "chr_cp95_upper": 0.10803769616121207
+    },
+    {
+     "tau": 0.4830732047557831,
+     "coverage": 0.48314606741573035,
+     "n_commits": 43,
+     "n_harmful": 1,
+     "n_bs": 42,
+     "chr": 0.023255813953488372,
+     "chr_cp95_upper": 0.10563408261589403
+    },
+    {
+     "tau": 0.48468050360679626,
+     "coverage": 0.4943820224719101,
+     "n_commits": 44,
+     "n_harmful": 1,
+     "n_bs": 43,
+     "chr": 0.022727272727272728,
+     "chr_cp95_upper": 0.10333500111522377
+    },
+    {
+     "tau": 0.48512911796569824,
+     "coverage": 0.5056179775280899,
+     "n_commits": 45,
+     "n_harmful": 1,
+     "n_bs": 44,
+     "chr": 0.022222222222222223,
+     "chr_cp95_upper": 0.10113378359391359
+    },
+    {
+     "tau": 0.48661962151527405,
+     "coverage": 0.5168539325842697,
+     "n_commits": 46,
+     "n_harmful": 1,
+     "n_bs": 45,
+     "chr": 0.021739130434782608,
+     "chr_cp95_upper": 0.099024316819898
+    },
+    {
+     "tau": 0.48756688833236694,
+     "coverage": 0.5280898876404494,
+     "n_commits": 47,
+     "n_harmful": 2,
+     "n_bs": 45,
+     "chr": 0.0425531914893617,
+     "chr_cp95_upper": 0.12796053954565068
+    },
+    {
+     "tau": 0.4887543320655823,
+     "coverage": 0.5393258426966292,
+     "n_commits": 48,
+     "n_harmful": 2,
+     "n_bs": 46,
+     "chr": 0.041666666666666664,
+     "chr_cp95_upper": 0.12541440447448027
+    },
+    {
+     "tau": 0.48889198899269104,
+     "coverage": 0.550561797752809,
+     "n_commits": 49,
+     "n_harmful": 2,
+     "n_bs": 47,
+     "chr": 0.04081632653061224,
+     "chr_cp95_upper": 0.12296750440536461
+    },
+    {
+     "tau": 0.4921296536922455,
+     "coverage": 0.5617977528089888,
+     "n_commits": 50,
+     "n_harmful": 2,
+     "n_bs": 48,
+     "chr": 0.04,
+     "chr_cp95_upper": 0.12061415542204412
+    },
+    {
+     "tau": 0.49310508370399475,
+     "coverage": 0.5730337078651685,
+     "n_commits": 51,
+     "n_harmful": 2,
+     "n_bs": 49,
+     "chr": 0.0392156862745098,
+     "chr_cp95_upper": 0.11834909903946435
+    },
+    {
+     "tau": 0.49349671602249146,
+     "coverage": 0.5842696629213483,
+     "n_commits": 52,
+     "n_harmful": 2,
+     "n_bs": 50,
+     "chr": 0.038461538461538464,
+     "chr_cp95_upper": 0.11616746318033641
+    },
+    {
+     "tau": 0.49526873230934143,
+     "coverage": 0.5955056179775281,
+     "n_commits": 53,
+     "n_harmful": 2,
+     "n_bs": 51,
+     "chr": 0.03773584905660377,
+     "chr_cp95_upper": 0.11406472736424111
+    },
+    {
+     "tau": 0.49548670649528503,
+     "coverage": 0.6067415730337079,
+     "n_commits": 54,
+     "n_harmful": 2,
+     "n_bs": 52,
+     "chr": 0.037037037037037035,
+     "chr_cp95_upper": 0.11203669158882405
+    },
+    {
+     "tau": 0.49985161423683167,
+     "coverage": 0.6179775280898876,
+     "n_commits": 55,
+     "n_harmful": 2,
+     "n_bs": 53,
+     "chr": 0.03636363636363636,
+     "chr_cp95_upper": 0.11007944845474105
+    },
+    {
+     "tau": 0.5005475878715515,
+     "coverage": 0.6292134831460674,
+     "n_commits": 56,
+     "n_harmful": 2,
+     "n_bs": 54,
+     "chr": 0.03571428571428571,
+     "chr_cp95_upper": 0.1081893581470904
+    },
+    {
+     "tau": 0.5027364492416382,
+     "coverage": 0.6404494382022472,
+     "n_commits": 57,
+     "n_harmful": 2,
+     "n_bs": 55,
+     "chr": 0.03508771929824561,
+     "chr_cp95_upper": 0.10636302593795688
+    },
+    {
+     "tau": 0.5080563426017761,
+     "coverage": 0.651685393258427,
+     "n_commits": 58,
+     "n_harmful": 2,
+     "n_bs": 56,
+     "chr": 0.034482758620689655,
+     "chr_cp95_upper": 0.1045972819188962
+    },
+    {
+     "tau": 0.5097105503082275,
+     "coverage": 0.6629213483146067,
+     "n_commits": 59,
+     "n_harmful": 2,
+     "n_bs": 57,
+     "chr": 0.03389830508474576,
+     "chr_cp95_upper": 0.102889162709954
+    },
+    {
+     "tau": 0.5136019587516785,
+     "coverage": 0.6741573033707865,
+     "n_commits": 60,
+     "n_harmful": 2,
+     "n_bs": 58,
+     "chr": 0.03333333333333333,
+     "chr_cp95_upper": 0.10123589492416163
+    },
+    {
+     "tau": 0.5149332880973816,
+     "coverage": 0.6853932584269663,
+     "n_commits": 61,
+     "n_harmful": 2,
+     "n_bs": 59,
+     "chr": 0.03278688524590164,
+     "chr_cp95_upper": 0.0996348801942324
+    },
+    {
+     "tau": 0.5178720951080322,
+     "coverage": 0.6966292134831461,
+     "n_commits": 62,
+     "n_harmful": 2,
+     "n_bs": 60,
+     "chr": 0.03225806451612903,
+     "chr_cp95_upper": 0.09808368159210062
+    },
+    {
+     "tau": 0.5185511112213135,
+     "coverage": 0.7078651685393258,
+     "n_commits": 63,
+     "n_harmful": 2,
+     "n_bs": 61,
+     "chr": 0.031746031746031744,
+     "chr_cp95_upper": 0.0965800112925879
+    },
+    {
+     "tau": 0.5199453830718994,
+     "coverage": 0.7191011235955056,
+     "n_commits": 64,
+     "n_harmful": 3,
+     "n_bs": 61,
+     "chr": 0.046875,
+     "chr_cp95_upper": 0.11671658790335933
+    },
+    {
+     "tau": 0.5201213955879211,
+     "coverage": 0.7303370786516854,
+     "n_commits": 65,
+     "n_harmful": 3,
+     "n_bs": 62,
+     "chr": 0.046153846153846156,
+     "chr_cp95_upper": 0.11498716462527742
+    },
+    {
+     "tau": 0.5215882658958435,
+     "coverage": 0.7415730337078652,
+     "n_commits": 66,
+     "n_harmful": 3,
+     "n_bs": 63,
+     "chr": 0.045454545454545456,
+     "chr_cp95_upper": 0.11330819953922315
+    },
+    {
+     "tau": 0.523689866065979,
+     "coverage": 0.7528089887640449,
+     "n_commits": 67,
+     "n_harmful": 3,
+     "n_bs": 64,
+     "chr": 0.04477611940298507,
+     "chr_cp95_upper": 0.11167751809116283
+    },
+    {
+     "tau": 0.5330206751823425,
+     "coverage": 0.7640449438202247,
+     "n_commits": 68,
+     "n_harmful": 3,
+     "n_bs": 65,
+     "chr": 0.04411764705882353,
+     "chr_cp95_upper": 0.11009306879525159
+    },
+    {
+     "tau": 0.5351618528366089,
+     "coverage": 0.7752808988764045,
+     "n_commits": 69,
+     "n_harmful": 3,
+     "n_bs": 66,
+     "chr": 0.043478260869565216,
+     "chr_cp95_upper": 0.10855291465738341
+    },
+    {
+     "tau": 0.5352931022644043,
+     "coverage": 0.7865168539325843,
+     "n_commits": 70,
+     "n_harmful": 4,
+     "n_bs": 66,
+     "chr": 0.05714285714285714,
+     "chr_cp95_upper": 0.126008088864928
+    },
+    {
+     "tau": 0.5373807549476624,
+     "coverage": 0.797752808988764,
+     "n_commits": 71,
+     "n_harmful": 4,
+     "n_bs": 67,
+     "chr": 0.056338028169014086,
+     "chr_cp95_upper": 0.1242986103980352
+    },
+    {
+     "tau": 0.5382735729217529,
+     "coverage": 0.8089887640449438,
+     "n_commits": 72,
+     "n_harmful": 4,
+     "n_bs": 68,
+     "chr": 0.05555555555555555,
+     "chr_cp95_upper": 0.12263484945735338
+    },
+    {
+     "tau": 0.5397269129753113,
+     "coverage": 0.8202247191011236,
+     "n_commits": 73,
+     "n_harmful": 5,
+     "n_bs": 68,
+     "chr": 0.0684931506849315,
+     "chr_cp95_upper": 0.1386295877388401
+    },
+    {
+     "tau": 0.5397964119911194,
+     "coverage": 0.8314606741573034,
+     "n_commits": 74,
+     "n_harmful": 6,
+     "n_bs": 68,
+     "chr": 0.08108108108108109,
+     "chr_cp95_upper": 0.15376543821044722
+    },
+    {
+     "tau": 0.5407988429069519,
+     "coverage": 0.8426966292134831,
+     "n_commits": 75,
+     "n_harmful": 7,
+     "n_bs": 68,
+     "chr": 0.09333333333333334,
+     "chr_cp95_upper": 0.16816613941895397
+    },
+    {
+     "tau": 0.5422590970993042,
+     "coverage": 0.8539325842696629,
+     "n_commits": 76,
+     "n_harmful": 7,
+     "n_bs": 69,
+     "chr": 0.09210526315789473,
+     "chr_cp95_upper": 0.16604565480512423
+    },
+    {
+     "tau": 0.5429567098617554,
+     "coverage": 0.8651685393258427,
+     "n_commits": 77,
+     "n_harmful": 7,
+     "n_bs": 70,
+     "chr": 0.09090909090909091,
+     "chr_cp95_upper": 0.1639778950042559
+    },
+    {
+     "tau": 0.5450875163078308,
+     "coverage": 0.8764044943820225,
+     "n_commits": 78,
+     "n_harmful": 8,
+     "n_bs": 70,
+     "chr": 0.10256410256410256,
+     "chr_cp95_upper": 0.17745630657897152
+    },
+    {
+     "tau": 0.5451748967170715,
+     "coverage": 0.8876404494382022,
+     "n_commits": 79,
+     "n_harmful": 8,
+     "n_bs": 71,
+     "chr": 0.10126582278481013,
+     "chr_cp95_upper": 0.1753047377421078
+    },
+    {
+     "tau": 0.546027660369873,
+     "coverage": 0.898876404494382,
+     "n_commits": 80,
+     "n_harmful": 8,
+     "n_bs": 72,
+     "chr": 0.1,
+     "chr_cp95_upper": 0.17320462604366654
+    },
+    {
+     "tau": 0.5462620258331299,
+     "coverage": 0.9101123595505618,
+     "n_commits": 81,
+     "n_harmful": 8,
+     "n_bs": 73,
+     "chr": 0.09876543209876543,
+     "chr_cp95_upper": 0.17115415080348526
+    },
+    {
+     "tau": 0.5472497344017029,
+     "coverage": 0.9213483146067416,
+     "n_commits": 82,
+     "n_harmful": 9,
+     "n_bs": 73,
+     "chr": 0.10975609756097561,
+     "chr_cp95_upper": 0.18371095880486799
+    },
+    {
+     "tau": 0.5489099025726318,
+     "coverage": 0.9325842696629213,
+     "n_commits": 83,
+     "n_harmful": 10,
+     "n_bs": 73,
+     "chr": 0.12048192771084337,
+     "chr_cp95_upper": 0.19579182186736974
+    },
+    {
+     "tau": 0.5505447387695312,
+     "coverage": 0.9438202247191011,
+     "n_commits": 84,
+     "n_harmful": 10,
+     "n_bs": 74,
+     "chr": 0.11904761904761904,
+     "chr_cp95_upper": 0.1935619036973771
+    },
+    {
+     "tau": 0.5518724918365479,
+     "coverage": 0.9550561797752809,
+     "n_commits": 85,
+     "n_harmful": 10,
+     "n_bs": 75,
+     "chr": 0.11764705882352941,
+     "chr_cp95_upper": 0.1913821026489146
+    },
+    {
+     "tau": 0.559952437877655,
+     "coverage": 0.9662921348314607,
+     "n_commits": 86,
+     "n_harmful": 11,
+     "n_bs": 75,
+     "chr": 0.12790697674418605,
+     "chr_cp95_upper": 0.20282526395701664
+    },
+    {
+     "tau": 0.5723938941955566,
+     "coverage": 0.9775280898876404,
+     "n_commits": 87,
+     "n_harmful": 12,
+     "n_bs": 75,
+     "chr": 0.13793103448275862,
+     "chr_cp95_upper": 0.21388020624071172
+    },
+    {
+     "tau": 0.5840358734130859,
+     "coverage": 0.9887640449438202,
+     "n_commits": 88,
+     "n_harmful": 13,
+     "n_bs": 75,
+     "chr": 0.14772727272727273,
+     "chr_cp95_upper": 0.2245744968763139
+    },
+    {
+     "tau": 1.0,
+     "coverage": 1.0,
+     "n_commits": 89,
+     "n_harmful": 14,
+     "n_bs": 75,
+     "chr": 0.15730337078651685,
+     "chr_cp95_upper": 0.23493198308298377
+    }
+   ]
+  },
+  "TSFM_latent_only": {
+   "n_commits": 23,
+   "n_bs_retained": 21,
+   "n_harmful": 2,
+   "n_abstained": 66,
+   "chr": 0.08695652173913043,
+   "chr_cp95_upper": 0.24924874982025963,
+   "bcov": 0.23595505617977527,
+   "harmful_blocked_of_14": 12,
+   "bs_lost_of_75": 54,
+   "harm_auroc": 0.5752380952380952,
+   "harm_auprc": 0.19125857183523212,
+   "gates": {
+    "g1_harm_auroc": {
+     "value": 0.5752380952380952,
+     "min": 0.75
+    },
+    "g2_auprc_lift": {
+     "value": 0.03395520104871527,
+     "auprc": 0.19125857183523212,
+     "prevalence": 0.15730337078651685,
+     "min": 0.1
+    },
+    "g3_bs_retained": {
+     "value": 21,
+     "min": 55
+    },
+    "g4_harmful": {
+     "value": 2,
+     "max": 3
+    },
+    "g5_chr_cp95_upper": {
+     "value": 0.24924874982025963,
+     "max": 0.15
+    },
+    "g6_frontier": {
+     "dominates_raw_tsicl": false,
+     "dominates_mirage": true,
+     "n_dominating_points_vs_raw": 0,
+     "n_dominating_points_vs_mirage": 43
+    },
+    "g7_sources_not_degraded": {
+     "value": 6,
+     "sources": [
+      "Crypto",
+      "ETTh1",
+      "ETTh2",
+      "ETTm1",
+      "Oil Price",
+      "US Term Structure"
+     ],
+     "min": 4,
+     "predicate": "chr <= raw TS-ICL chr on that source AND at least one B&S commit retained where one was available (declared at decision time; the 4/6 count itself is pre-registered)"
+    },
+    "g8_no_source_identity": {
+     "value": true,
+     "evidence": "source is not an input tensor anywhere in the model (see MODEL inputs and FORBIDDEN_INPUT_KEYS); every window is scored by the fold whose training pool excluded its source"
+    }
+   },
+   "gate_pass": {
+    "g1": false,
+    "g2": false,
+    "g3": false,
+    "g4": true,
+    "g5": false,
+    "g6": false,
+    "g7": true,
+    "g8": true
+   },
+   "all_gates_pass": false,
+   "per_source": {
+    "Crypto": {
+     "n_windows": 3,
+     "raw_tsicl_bs": 3,
+     "raw_tsicl_harmful": 0,
+     "raw_tsicl_chr": 0.0,
+     "n_commits": 3,
+     "bs_retained": 3,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 0,
+     "bs_lost": 0
+    },
+    "ETTh1": {
+     "n_windows": 12,
+     "raw_tsicl_bs": 11,
+     "raw_tsicl_harmful": 1,
+     "raw_tsicl_chr": 0.08333333333333333,
+     "n_commits": 2,
+     "bs_retained": 2,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 1,
+     "bs_lost": 9
+    },
+    "ETTh2": {
+     "n_windows": 10,
+     "raw_tsicl_bs": 10,
+     "raw_tsicl_harmful": 0,
+     "raw_tsicl_chr": 0.0,
+     "n_commits": 4,
+     "bs_retained": 4,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 0,
+     "bs_lost": 6
+    },
+    "ETTm1": {
+     "n_windows": 16,
+     "raw_tsicl_bs": 13,
+     "raw_tsicl_harmful": 3,
+     "raw_tsicl_chr": 0.1875,
+     "n_commits": 2,
+     "bs_retained": 2,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 3,
+     "bs_lost": 11
+    },
+    "Oil Price": {
+     "n_windows": 7,
+     "raw_tsicl_bs": 6,
+     "raw_tsicl_harmful": 1,
+     "raw_tsicl_chr": 0.14285714285714285,
+     "n_commits": 1,
+     "bs_retained": 1,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 1,
+     "bs_lost": 5
+    },
+    "US Term Structure": {
+     "n_windows": 41,
+     "raw_tsicl_bs": 32,
+     "raw_tsicl_harmful": 9,
+     "raw_tsicl_chr": 0.21951219512195122,
+     "n_commits": 11,
+     "bs_retained": 9,
+     "harmful": 2,
+     "chr": 0.18181818181818182,
+     "harmful_blocked": 7,
+     "bs_lost": 23
+    }
+   },
+   "thresholds": {
+    "ETTh1": {
+     "tau_h": 0.5,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 518,
+      "n_committed": 162,
+      "n_harmful_commits": 10,
+      "n_bs_commits": 152,
+      "n_protected_edits": 0,
+      "chr": 0.06172839506172839,
+      "chr_cp95_upper": 0.10245547494538573,
+      "bcov": 0.29343629343629346,
+      "abstention_rate": 0.6872586872586872
+     },
+     "no_calibrated_point": false
+    },
+    "ETTh2": {
+     "tau_h": 0.26,
+     "delta": 0.0,
+     "tau_p": 1.0,
+     "val_counts": {
+      "n_episodes": 526,
+      "n_committed": 256,
+      "n_harmful_commits": 28,
+      "n_bs_commits": 228,
+      "n_protected_edits": 1,
+      "chr": 0.109375,
+      "chr_cp95_upper": 0.14687436197080103,
+      "bcov": 0.43346007604562736,
+      "abstention_rate": 0.5133079847908746
+     },
+     "no_calibrated_point": false
+    },
+    "ETTm1": {
+     "tau_h": 0.34,
+     "delta": 0.0,
+     "tau_p": 0.35,
+     "val_counts": {
+      "n_episodes": 552,
+      "n_committed": 141,
+      "n_harmful_commits": 6,
+      "n_bs_commits": 135,
+      "n_protected_edits": 0,
+      "chr": 0.0425531914893617,
+      "chr_cp95_upper": 0.08225602684489675,
+      "bcov": 0.24456521739130435,
+      "abstention_rate": 0.7445652173913043
+     },
+     "no_calibrated_point": false
+    },
+    "Crypto": {
+     "tau_h": 0.48,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 528,
+      "n_committed": 229,
+      "n_harmful_commits": 23,
+      "n_bs_commits": 206,
+      "n_protected_edits": 1,
+      "chr": 0.10043668122270742,
+      "chr_cp95_upper": 0.13928598417310448,
+      "bcov": 0.39015151515151514,
+      "abstention_rate": 0.5662878787878788
+     },
+     "no_calibrated_point": false
+    },
+    "US Term Structure": {
+     "tau_h": 0.48,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 520,
+      "n_committed": 194,
+      "n_harmful_commits": 15,
+      "n_bs_commits": 179,
+      "n_protected_edits": 0,
+      "chr": 0.07731958762886598,
+      "chr_cp95_upper": 0.11656233080194472,
+      "bcov": 0.34423076923076923,
+      "abstention_rate": 0.6269230769230769
+     },
+     "no_calibrated_point": false
+    },
+    "Oil Price": {
+     "tau_h": 0.38,
+     "delta": 0.0,
+     "tau_p": 0.35,
+     "val_counts": {
+      "n_episodes": 506,
+      "n_committed": 178,
+      "n_harmful_commits": 11,
+      "n_bs_commits": 167,
+      "n_protected_edits": 0,
+      "chr": 0.06179775280898876,
+      "chr_cp95_upper": 0.1002169361774569,
+      "bcov": 0.3300395256916996,
+      "abstention_rate": 0.6482213438735178
+     },
+     "no_calibrated_point": false
+    }
+   },
+   "frontier": [
+    {
+     "tau": 0.000727944599930197,
+     "coverage": 0.011235955056179775,
+     "n_commits": 1,
+     "n_harmful": 0,
+     "n_bs": 1,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.95
+    },
+    {
+     "tau": 0.000885219662450254,
+     "coverage": 0.02247191011235955,
+     "n_commits": 2,
+     "n_harmful": 0,
+     "n_bs": 2,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.776393202250021
+    },
+    {
+     "tau": 0.0013272908981889486,
+     "coverage": 0.033707865168539325,
+     "n_commits": 3,
+     "n_harmful": 0,
+     "n_bs": 3,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.6315968501359612
+    },
+    {
+     "tau": 0.0020652173552662134,
+     "coverage": 0.0449438202247191,
+     "n_commits": 4,
+     "n_harmful": 0,
+     "n_bs": 4,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.527129195498412
+    },
+    {
+     "tau": 0.0023896123748272657,
+     "coverage": 0.056179775280898875,
+     "n_commits": 5,
+     "n_harmful": 0,
+     "n_bs": 5,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.450719728346941
+    },
+    {
+     "tau": 0.0025685105938464403,
+     "coverage": 0.06741573033707865,
+     "n_commits": 6,
+     "n_harmful": 0,
+     "n_bs": 6,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.39303776899708265
+    },
+    {
+     "tau": 0.004249156452715397,
+     "coverage": 0.07865168539325842,
+     "n_commits": 7,
+     "n_harmful": 0,
+     "n_bs": 7,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.34816365513116077
+    },
+    {
+     "tau": 0.005218073260039091,
+     "coverage": 0.0898876404494382,
+     "n_commits": 8,
+     "n_harmful": 0,
+     "n_bs": 8,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.3123439780663678
+    },
+    {
+     "tau": 0.005344697739928961,
+     "coverage": 0.10112359550561797,
+     "n_commits": 9,
+     "n_harmful": 0,
+     "n_bs": 9,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.28312883556311347
+    },
+    {
+     "tau": 0.0076365345157682896,
+     "coverage": 0.11235955056179775,
+     "n_commits": 10,
+     "n_harmful": 0,
+     "n_bs": 10,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.2588655508930522
+    },
+    {
+     "tau": 0.010821877978742123,
+     "coverage": 0.12359550561797752,
+     "n_commits": 11,
+     "n_harmful": 0,
+     "n_bs": 11,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.2384041903808526
+    },
+    {
+     "tau": 0.012610911391675472,
+     "coverage": 0.1348314606741573,
+     "n_commits": 12,
+     "n_harmful": 0,
+     "n_bs": 12,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.22092219194555585
+    },
+    {
+     "tau": 0.012658421881496906,
+     "coverage": 0.14606741573033707,
+     "n_commits": 13,
+     "n_harmful": 1,
+     "n_bs": 12,
+     "chr": 0.07692307692307693,
+     "chr_cp95_upper": 0.31633976476272974
+    },
+    {
+     "tau": 0.01337167527526617,
+     "coverage": 0.15730337078651685,
+     "n_commits": 14,
+     "n_harmful": 1,
+     "n_bs": 13,
+     "chr": 0.07142857142857142,
+     "chr_cp95_upper": 0.29673423894887463
+    },
+    {
+     "tau": 0.013619804754853249,
+     "coverage": 0.16853932584269662,
+     "n_commits": 15,
+     "n_harmful": 1,
+     "n_bs": 14,
+     "chr": 0.06666666666666667,
+     "chr_cp95_upper": 0.2793961936128765
+    },
+    {
+     "tau": 0.014324030838906765,
+     "coverage": 0.1797752808988764,
+     "n_commits": 16,
+     "n_harmful": 1,
+     "n_bs": 15,
+     "chr": 0.0625,
+     "chr_cp95_upper": 0.2639573972885685
+    },
+    {
+     "tau": 0.014332637190818787,
+     "coverage": 0.19101123595505617,
+     "n_commits": 17,
+     "n_harmful": 1,
+     "n_bs": 16,
+     "chr": 0.058823529411764705,
+     "chr_cp95_upper": 0.2501244518664762
+    },
+    {
+     "tau": 0.014685573056340218,
+     "coverage": 0.20224719101123595,
+     "n_commits": 18,
+     "n_harmful": 2,
+     "n_bs": 16,
+     "chr": 0.1111111111111111,
+     "chr_cp95_upper": 0.31026273969821105
+    },
+    {
+     "tau": 0.022191576659679413,
+     "coverage": 0.21348314606741572,
+     "n_commits": 19,
+     "n_harmful": 2,
+     "n_bs": 17,
+     "chr": 0.10526315789473684,
+     "chr_cp95_upper": 0.29580201397505035
+    },
+    {
+     "tau": 0.02385714091360569,
+     "coverage": 0.2247191011235955,
+     "n_commits": 20,
+     "n_harmful": 2,
+     "n_bs": 18,
+     "chr": 0.1,
+     "chr_cp95_upper": 0.28261852488586087
+    },
+    {
+     "tau": 0.024181706830859184,
+     "coverage": 0.23595505617977527,
+     "n_commits": 21,
+     "n_harmful": 2,
+     "n_bs": 19,
+     "chr": 0.09523809523809523,
+     "chr_cp95_upper": 0.2705516993045313
+    },
+    {
+     "tau": 0.027025500312447548,
+     "coverage": 0.24719101123595505,
+     "n_commits": 22,
+     "n_harmful": 2,
+     "n_bs": 20,
+     "chr": 0.09090909090909091,
+     "chr_cp95_upper": 0.2594665322284372
+    },
+    {
+     "tau": 0.02722511813044548,
+     "coverage": 0.25842696629213485,
+     "n_commits": 23,
+     "n_harmful": 3,
+     "n_bs": 20,
+     "chr": 0.13043478260869565,
+     "chr_cp95_upper": 0.30363770155746167
+    },
+    {
+     "tau": 0.030097991228103638,
+     "coverage": 0.2696629213483146,
+     "n_commits": 24,
+     "n_harmful": 3,
+     "n_bs": 21,
+     "chr": 0.125,
+     "chr_cp95_upper": 0.29227319650798933
+    },
+    {
+     "tau": 0.030540334060788155,
+     "coverage": 0.2808988764044944,
+     "n_commits": 25,
+     "n_harmful": 3,
+     "n_bs": 22,
+     "chr": 0.12,
+     "chr_cp95_upper": 0.28172250797771403
+    },
+    {
+     "tau": 0.03621453791856766,
+     "coverage": 0.29213483146067415,
+     "n_commits": 26,
+     "n_harmful": 3,
+     "n_bs": 23,
+     "chr": 0.11538461538461539,
+     "chr_cp95_upper": 0.27190195515553406
+    },
+    {
+     "tau": 0.03809569776058197,
+     "coverage": 0.30337078651685395,
+     "n_commits": 27,
+     "n_harmful": 3,
+     "n_bs": 24,
+     "chr": 0.1111111111111111,
+     "chr_cp95_upper": 0.26273884307504114
+    },
+    {
+     "tau": 0.03884737193584442,
+     "coverage": 0.3146067415730337,
+     "n_commits": 28,
+     "n_harmful": 3,
+     "n_bs": 25,
+     "chr": 0.10714285714285714,
+     "chr_cp95_upper": 0.25416973645091434
+    },
+    {
+     "tau": 0.0429304875433445,
+     "coverage": 0.3258426966292135,
+     "n_commits": 29,
+     "n_harmful": 3,
+     "n_bs": 26,
+     "chr": 0.10344827586206896,
+     "chr_cp95_upper": 0.24613904495608416
+    },
+    {
+     "tau": 0.04393322765827179,
+     "coverage": 0.33707865168539325,
+     "n_commits": 30,
+     "n_harmful": 3,
+     "n_bs": 27,
+     "chr": 0.1,
+     "chr_cp95_upper": 0.23859785729325092
+    },
+    {
+     "tau": 0.044103145599365234,
+     "coverage": 0.34831460674157305,
+     "n_commits": 31,
+     "n_harmful": 3,
+     "n_bs": 28,
+     "chr": 0.0967741935483871,
+     "chr_cp95_upper": 0.23150297514336832
+    },
+    {
+     "tau": 0.049103032797575,
+     "coverage": 0.3595505617977528,
+     "n_commits": 32,
+     "n_harmful": 3,
+     "n_bs": 29,
+     "chr": 0.09375,
+     "chr_cp95_upper": 0.2248161085892257
+    },
+    {
+     "tau": 0.05181533098220825,
+     "coverage": 0.3707865168539326,
+     "n_commits": 33,
+     "n_harmful": 4,
+     "n_bs": 29,
+     "chr": 0.12121212121212122,
+     "chr_cp95_upper": 0.25625269182611793
+    },
+    {
+     "tau": 0.060647495090961456,
+     "coverage": 0.38202247191011235,
+     "n_commits": 34,
+     "n_harmful": 4,
+     "n_bs": 30,
+     "chr": 0.11764705882352941,
+     "chr_cp95_upper": 0.24930485598035296
+    },
+    {
+     "tau": 0.06990552693605423,
+     "coverage": 0.39325842696629215,
+     "n_commits": 35,
+     "n_harmful": 4,
+     "n_bs": 31,
+     "chr": 0.11428571428571428,
+     "chr_cp95_upper": 0.2427220681974498
+    },
+    {
+     "tau": 0.07441560924053192,
+     "coverage": 0.4044943820224719,
+     "n_commits": 36,
+     "n_harmful": 4,
+     "n_bs": 32,
+     "chr": 0.1111111111111111,
+     "chr_cp95_upper": 0.23647644369371146
+    },
+    {
+     "tau": 0.08128108084201813,
+     "coverage": 0.4157303370786517,
+     "n_commits": 37,
+     "n_harmful": 4,
+     "n_bs": 33,
+     "chr": 0.10810810810810811,
+     "chr_cp95_upper": 0.23054285080233342
+    },
+    {
+     "tau": 0.0854218453168869,
+     "coverage": 0.42696629213483145,
+     "n_commits": 38,
+     "n_harmful": 4,
+     "n_bs": 34,
+     "chr": 0.10526315789473684,
+     "chr_cp95_upper": 0.22489858159282952
+    },
+    {
+     "tau": 0.08822192996740341,
+     "coverage": 0.43820224719101125,
+     "n_commits": 39,
+     "n_harmful": 4,
+     "n_bs": 35,
+     "chr": 0.10256410256410256,
+     "chr_cp95_upper": 0.2195230683231269
+    },
+    {
+     "tau": 0.09046834707260132,
+     "coverage": 0.449438202247191,
+     "n_commits": 40,
+     "n_harmful": 4,
+     "n_bs": 36,
+     "chr": 0.1,
+     "chr_cp95_upper": 0.21439763851614463
+    },
+    {
+     "tau": 0.0919104516506195,
+     "coverage": 0.4606741573033708,
+     "n_commits": 41,
+     "n_harmful": 4,
+     "n_bs": 37,
+     "chr": 0.0975609756097561,
+     "chr_cp95_upper": 0.20950530270682408
+    },
+    {
+     "tau": 0.0940062403678894,
+     "coverage": 0.47191011235955055,
+     "n_commits": 42,
+     "n_harmful": 4,
+     "n_bs": 38,
+     "chr": 0.09523809523809523,
+     "chr_cp95_upper": 0.20483056992239726
+    },
+    {
+     "tau": 0.09818271547555923,
+     "coverage": 0.48314606741573035,
+     "n_commits": 43,
+     "n_harmful": 4,
+     "n_bs": 39,
+     "chr": 0.09302325581395349,
+     "chr_cp95_upper": 0.20035928678631953
+    },
+    {
+     "tau": 0.10078852623701096,
+     "coverage": 0.4943820224719101,
+     "n_commits": 44,
+     "n_harmful": 5,
+     "n_bs": 39,
+     "chr": 0.11363636363636363,
+     "chr_cp95_upper": 0.2242031631294326
+    },
+    {
+     "tau": 0.11056467145681381,
+     "coverage": 0.5056179775280899,
+     "n_commits": 45,
+     "n_harmful": 6,
+     "n_bs": 39,
+     "chr": 0.13333333333333333,
+     "chr_cp95_upper": 0.2462980660228803
+    },
+    {
+     "tau": 0.12798276543617249,
+     "coverage": 0.5168539325842697,
+     "n_commits": 46,
+     "n_harmful": 6,
+     "n_bs": 40,
+     "chr": 0.13043478260869565,
+     "chr_cp95_upper": 0.2412983099097635
+    },
+    {
+     "tau": 0.1317451000213623,
+     "coverage": 0.5280898876404494,
+     "n_commits": 47,
+     "n_harmful": 7,
+     "n_bs": 40,
+     "chr": 0.14893617021276595,
+     "chr_cp95_upper": 0.2616173520110007
+    },
+    {
+     "tau": 0.1320708990097046,
+     "coverage": 0.5393258426966292,
+     "n_commits": 48,
+     "n_harmful": 7,
+     "n_bs": 41,
+     "chr": 0.14583333333333334,
+     "chr_cp95_upper": 0.2565339722535966
+    },
+    {
+     "tau": 0.1499188393354416,
+     "coverage": 0.550561797752809,
+     "n_commits": 49,
+     "n_harmful": 7,
+     "n_bs": 42,
+     "chr": 0.14285714285714285,
+     "chr_cp95_upper": 0.2516434957746945
+    },
+    {
+     "tau": 0.16843169927597046,
+     "coverage": 0.5617977528089888,
+     "n_commits": 50,
+     "n_harmful": 7,
+     "n_bs": 43,
+     "chr": 0.14,
+     "chr_cp95_upper": 0.2469352017312092
+    },
+    {
+     "tau": 0.1687706857919693,
+     "coverage": 0.5730337078651685,
+     "n_commits": 51,
+     "n_harmful": 7,
+     "n_bs": 44,
+     "chr": 0.13725490196078433,
+     "chr_cp95_upper": 0.24239914471981838
+    },
+    {
+     "tau": 0.17434602975845337,
+     "coverage": 0.5842696629213483,
+     "n_commits": 52,
+     "n_harmful": 8,
+     "n_bs": 44,
+     "chr": 0.15384615384615385,
+     "chr_cp95_upper": 0.2605075076988168
+    },
+    {
+     "tau": 0.177260160446167,
+     "coverage": 0.5955056179775281,
+     "n_commits": 53,
+     "n_harmful": 8,
+     "n_bs": 45,
+     "chr": 0.1509433962264151,
+     "chr_cp95_upper": 0.25590725323421715
+    },
+    {
+     "tau": 0.18379126489162445,
+     "coverage": 0.6067415730337079,
+     "n_commits": 54,
+     "n_harmful": 8,
+     "n_bs": 46,
+     "chr": 0.14814814814814814,
+     "chr_cp95_upper": 0.2514659555422566
+    },
+    {
+     "tau": 0.18474087119102478,
+     "coverage": 0.6179775280898876,
+     "n_commits": 55,
+     "n_harmful": 8,
+     "n_bs": 47,
+     "chr": 0.14545454545454545,
+     "chr_cp95_upper": 0.24717555555320658
+    },
+    {
+     "tau": 0.22252462804317474,
+     "coverage": 0.6292134831460674,
+     "n_commits": 56,
+     "n_harmful": 8,
+     "n_bs": 48,
+     "chr": 0.14285714285714285,
+     "chr_cp95_upper": 0.24302852691968904
+    },
+    {
+     "tau": 0.23473204672336578,
+     "coverage": 0.6404494382022472,
+     "n_commits": 57,
+     "n_harmful": 9,
+     "n_bs": 48,
+     "chr": 0.15789473684210525,
+     "chr_cp95_upper": 0.2593598895364318
+    },
+    {
+     "tau": 0.2449696958065033,
+     "coverage": 0.651685393258427,
+     "n_commits": 58,
+     "n_harmful": 9,
+     "n_bs": 49,
+     "chr": 0.15517241379310345,
+     "chr_cp95_upper": 0.2551619834731897
+    },
+    {
+     "tau": 0.281610906124115,
+     "coverage": 0.6629213483146067,
+     "n_commits": 59,
+     "n_harmful": 9,
+     "n_bs": 50,
+     "chr": 0.15254237288135594,
+     "chr_cp95_upper": 0.2510972454817701
+    },
+    {
+     "tau": 0.3011680841445923,
+     "coverage": 0.6741573033707865,
+     "n_commits": 60,
+     "n_harmful": 9,
+     "n_bs": 51,
+     "chr": 0.15,
+     "chr_cp95_upper": 0.2471594674662178
+    },
+    {
+     "tau": 0.30826202034950256,
+     "coverage": 0.6853932584269663,
+     "n_commits": 61,
+     "n_harmful": 9,
+     "n_bs": 52,
+     "chr": 0.14754098360655737,
+     "chr_cp95_upper": 0.2433428192430699
+    },
+    {
+     "tau": 0.3624681830406189,
+     "coverage": 0.6966292134831461,
+     "n_commits": 62,
+     "n_harmful": 9,
+     "n_bs": 53,
+     "chr": 0.14516129032258066,
+     "chr_cp95_upper": 0.2396418203942678
+    },
+    {
+     "tau": 0.39288216829299927,
+     "coverage": 0.7078651685393258,
+     "n_commits": 63,
+     "n_harmful": 9,
+     "n_bs": 54,
+     "chr": 0.14285714285714285,
+     "chr_cp95_upper": 0.2360513145805704
+    },
+    {
+     "tau": 0.4182739555835724,
+     "coverage": 0.7191011235955056,
+     "n_commits": 64,
+     "n_harmful": 9,
+     "n_bs": 55,
+     "chr": 0.140625,
+     "chr_cp95_upper": 0.23256644607030164
+    },
+    {
+     "tau": 0.43439000844955444,
+     "coverage": 0.7303370786516854,
+     "n_commits": 65,
+     "n_harmful": 9,
+     "n_bs": 56,
+     "chr": 0.13846153846153847,
+     "chr_cp95_upper": 0.22918263826550034
+    },
+    {
+     "tau": 0.4564853608608246,
+     "coverage": 0.7415730337078652,
+     "n_commits": 66,
+     "n_harmful": 9,
+     "n_bs": 57,
+     "chr": 0.13636363636363635,
+     "chr_cp95_upper": 0.22589557403146387
+    },
+    {
+     "tau": 0.4571853578090668,
+     "coverage": 0.7528089887640449,
+     "n_commits": 67,
+     "n_harmful": 9,
+     "n_bs": 58,
+     "chr": 0.13432835820895522,
+     "chr_cp95_upper": 0.22270117765672032
+    },
+    {
+     "tau": 0.5112356543540955,
+     "coverage": 0.7640449438202247,
+     "n_commits": 68,
+     "n_harmful": 9,
+     "n_bs": 59,
+     "chr": 0.1323529411764706,
+     "chr_cp95_upper": 0.21959559828900235
+    },
+    {
+     "tau": 0.5126820802688599,
+     "coverage": 0.7752808988764045,
+     "n_commits": 69,
+     "n_harmful": 9,
+     "n_bs": 60,
+     "chr": 0.13043478260869565,
+     "chr_cp95_upper": 0.2165751947091531
+    },
+    {
+     "tau": 0.5453182458877563,
+     "coverage": 0.7865168539325843,
+     "n_commits": 70,
+     "n_harmful": 10,
+     "n_bs": 60,
+     "chr": 0.14285714285714285,
+     "chr_cp95_upper": 0.23026280629235504
+    },
+    {
+     "tau": 0.5478747487068176,
+     "coverage": 0.797752808988764,
+     "n_commits": 71,
+     "n_harmful": 10,
+     "n_bs": 61,
+     "chr": 0.14084507042253522,
+     "chr_cp95_upper": 0.2271873298818617
+    },
+    {
+     "tau": 0.5479727983474731,
+     "coverage": 0.8089887640449438,
+     "n_commits": 72,
+     "n_harmful": 11,
+     "n_bs": 61,
+     "chr": 0.1527777777777778,
+     "chr_cp95_upper": 0.24019054577246468
+    },
+    {
+     "tau": 0.5599097609519958,
+     "coverage": 0.8202247191011236,
+     "n_commits": 73,
+     "n_harmful": 12,
+     "n_bs": 61,
+     "chr": 0.1643835616438356,
+     "chr_cp95_upper": 0.2526901104635722
+    },
+    {
+     "tau": 0.5671672821044922,
+     "coverage": 0.8314606741573034,
+     "n_commits": 74,
+     "n_harmful": 12,
+     "n_bs": 62,
+     "chr": 0.16216216216216217,
+     "chr_cp95_upper": 0.24945854472170104
+    },
+    {
+     "tau": 0.5689129829406738,
+     "coverage": 0.8426966292134831,
+     "n_commits": 75,
+     "n_harmful": 12,
+     "n_bs": 63,
+     "chr": 0.16,
+     "chr_cp95_upper": 0.24630829299210152
+    },
+    {
+     "tau": 0.6372549533843994,
+     "coverage": 0.8539325842696629,
+     "n_commits": 76,
+     "n_harmful": 12,
+     "n_bs": 64,
+     "chr": 0.15789473684210525,
+     "chr_cp95_upper": 0.2432363368758445
+    },
+    {
+     "tau": 0.6677997708320618,
+     "coverage": 0.8651685393258427,
+     "n_commits": 77,
+     "n_harmful": 12,
+     "n_bs": 65,
+     "chr": 0.15584415584415584,
+     "chr_cp95_upper": 0.24023980483838528
+    },
+    {
+     "tau": 0.71473628282547,
+     "coverage": 0.8764044943820225,
+     "n_commits": 78,
+     "n_harmful": 12,
+     "n_bs": 66,
+     "chr": 0.15384615384615385,
+     "chr_cp95_upper": 0.2373159634331562
+    },
+    {
+     "tau": 0.7301903367042542,
+     "coverage": 0.8876404494382022,
+     "n_commits": 79,
+     "n_harmful": 12,
+     "n_bs": 67,
+     "chr": 0.1518987341772152,
+     "chr_cp95_upper": 0.23446220914307275
+    },
+    {
+     "tau": 0.7331978678703308,
+     "coverage": 0.898876404494382,
+     "n_commits": 80,
+     "n_harmful": 13,
+     "n_bs": 67,
+     "chr": 0.1625,
+     "chr_cp95_upper": 0.24588983226552474
+    },
+    {
+     "tau": 0.7394534349441528,
+     "coverage": 0.9101123595505618,
+     "n_commits": 81,
+     "n_harmful": 13,
+     "n_bs": 68,
+     "chr": 0.16049382716049382,
+     "chr_cp95_upper": 0.24300746787931504
+    },
+    {
+     "tau": 0.7408075332641602,
+     "coverage": 0.9213483146067416,
+     "n_commits": 82,
+     "n_harmful": 14,
+     "n_bs": 68,
+     "chr": 0.17073170731707318,
+     "chr_cp95_upper": 0.2539584817668054
+    },
+    {
+     "tau": 0.7550133466720581,
+     "coverage": 0.9325842696629213,
+     "n_commits": 83,
+     "n_harmful": 14,
+     "n_bs": 69,
+     "chr": 0.1686746987951807,
+     "chr_cp95_upper": 0.25105455356541234
+    },
+    {
+     "tau": 0.7903575897216797,
+     "coverage": 0.9438202247191011,
+     "n_commits": 84,
+     "n_harmful": 14,
+     "n_bs": 70,
+     "chr": 0.16666666666666666,
+     "chr_cp95_upper": 0.24821605378601702
+    },
+    {
+     "tau": 0.8117842078208923,
+     "coverage": 0.9550561797752809,
+     "n_commits": 85,
+     "n_harmful": 14,
+     "n_bs": 71,
+     "chr": 0.16470588235294117,
+     "chr_cp95_upper": 0.24544080462355658
+    },
+    {
+     "tau": 0.8529725670814514,
+     "coverage": 0.9662921348314607,
+     "n_commits": 86,
+     "n_harmful": 14,
+     "n_bs": 72,
+     "chr": 0.16279069767441862,
+     "chr_cp95_upper": 0.24272672342021587
+    },
+    {
+     "tau": 0.8639386296272278,
+     "coverage": 0.9775280898876404,
+     "n_commits": 87,
+     "n_harmful": 14,
+     "n_bs": 73,
+     "chr": 0.16091954022988506,
+     "chr_cp95_upper": 0.2400718175531783
+    },
+    {
+     "tau": 0.9345279335975647,
+     "coverage": 0.9887640449438202,
+     "n_commits": 88,
+     "n_harmful": 14,
+     "n_bs": 74,
+     "chr": 0.1590909090909091,
+     "chr_cp95_upper": 0.2374741796464156
+    },
+    {
+     "tau": 1.0,
+     "coverage": 1.0,
+     "n_commits": 89,
+     "n_harmful": 14,
+     "n_bs": 75,
+     "chr": 0.15730337078651685,
+     "chr_cp95_upper": 0.23493198308298377
+    }
+   ]
+  },
+  "delta_only": {
+   "n_commits": 3,
+   "n_bs_retained": 3,
+   "n_harmful": 0,
+   "n_abstained": 86,
+   "chr": 0.0,
+   "chr_cp95_upper": 0.6315968501359612,
+   "bcov": 0.033707865168539325,
+   "harmful_blocked_of_14": 14,
+   "bs_lost_of_75": 72,
+   "harm_auroc": 0.6095238095238096,
+   "harm_auprc": 0.21159229990434206,
+   "gates": {
+    "g1_harm_auroc": {
+     "value": 0.6095238095238096,
+     "min": 0.75
+    },
+    "g2_auprc_lift": {
+     "value": 0.05428892911782521,
+     "auprc": 0.21159229990434206,
+     "prevalence": 0.15730337078651685,
+     "min": 0.1
+    },
+    "g3_bs_retained": {
+     "value": 3,
+     "min": 55
+    },
+    "g4_harmful": {
+     "value": 0,
+     "max": 3
+    },
+    "g5_chr_cp95_upper": {
+     "value": 0.6315968501359612,
+     "max": 0.15
+    },
+    "g6_frontier": {
+     "dominates_raw_tsicl": false,
+     "dominates_mirage": true,
+     "n_dominating_points_vs_raw": 0,
+     "n_dominating_points_vs_mirage": 43
+    },
+    "g7_sources_not_degraded": {
+     "value": 3,
+     "sources": [
+      "ETTh2",
+      "ETTm1",
+      "US Term Structure"
+     ],
+     "min": 4,
+     "predicate": "chr <= raw TS-ICL chr on that source AND at least one B&S commit retained where one was available (declared at decision time; the 4/6 count itself is pre-registered)"
+    },
+    "g8_no_source_identity": {
+     "value": true,
+     "evidence": "source is not an input tensor anywhere in the model (see MODEL inputs and FORBIDDEN_INPUT_KEYS); every window is scored by the fold whose training pool excluded its source"
+    }
+   },
+   "gate_pass": {
+    "g1": false,
+    "g2": false,
+    "g3": false,
+    "g4": true,
+    "g5": false,
+    "g6": false,
+    "g7": false,
+    "g8": true
+   },
+   "all_gates_pass": false,
+   "per_source": {
+    "Crypto": {
+     "n_windows": 3,
+     "raw_tsicl_bs": 3,
+     "raw_tsicl_harmful": 0,
+     "raw_tsicl_chr": 0.0,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 0,
+     "bs_lost": 3
+    },
+    "ETTh1": {
+     "n_windows": 12,
+     "raw_tsicl_bs": 11,
+     "raw_tsicl_harmful": 1,
+     "raw_tsicl_chr": 0.08333333333333333,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 1,
+     "bs_lost": 11
+    },
+    "ETTh2": {
+     "n_windows": 10,
+     "raw_tsicl_bs": 10,
+     "raw_tsicl_harmful": 0,
+     "raw_tsicl_chr": 0.0,
+     "n_commits": 1,
+     "bs_retained": 1,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 0,
+     "bs_lost": 9
+    },
+    "ETTm1": {
+     "n_windows": 16,
+     "raw_tsicl_bs": 13,
+     "raw_tsicl_harmful": 3,
+     "raw_tsicl_chr": 0.1875,
+     "n_commits": 1,
+     "bs_retained": 1,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 3,
+     "bs_lost": 12
+    },
+    "Oil Price": {
+     "n_windows": 7,
+     "raw_tsicl_bs": 6,
+     "raw_tsicl_harmful": 1,
+     "raw_tsicl_chr": 0.14285714285714285,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 1,
+     "bs_lost": 6
+    },
+    "US Term Structure": {
+     "n_windows": 41,
+     "raw_tsicl_bs": 32,
+     "raw_tsicl_harmful": 9,
+     "raw_tsicl_chr": 0.21951219512195122,
+     "n_commits": 1,
+     "bs_retained": 1,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 9,
+     "bs_lost": 31
+    }
+   },
+   "thresholds": {
+    "ETTh1": {
+     "tau_h": 0.36,
+     "delta": 0.0,
+     "tau_p": 0.5,
+     "val_counts": {
+      "n_episodes": 518,
+      "n_committed": 115,
+      "n_harmful_commits": 9,
+      "n_bs_commits": 106,
+      "n_protected_edits": 1,
+      "chr": 0.0782608695652174,
+      "chr_cp95_upper": 0.13259161676296927,
+      "bcov": 0.20463320463320464,
+      "abstention_rate": 0.777992277992278
+     },
+     "no_calibrated_point": false
+    },
+    "ETTh2": {
+     "tau_h": 0.4,
+     "delta": 0.0,
+     "tau_p": 0.35,
+     "val_counts": {
+      "n_episodes": 526,
+      "n_committed": 134,
+      "n_harmful_commits": 2,
+      "n_bs_commits": 132,
+      "n_protected_edits": 0,
+      "chr": 0.014925373134328358,
+      "chr_cp95_upper": 0.04623606935229387,
+      "bcov": 0.2509505703422053,
+      "abstention_rate": 0.7452471482889733
+     },
+     "no_calibrated_point": false
+    },
+    "ETTm1": {
+     "tau_h": 0.3,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 552,
+      "n_committed": 140,
+      "n_harmful_commits": 12,
+      "n_bs_commits": 128,
+      "n_protected_edits": 0,
+      "chr": 0.08571428571428572,
+      "chr_cp95_upper": 0.13517588584536622,
+      "bcov": 0.2318840579710145,
+      "abstention_rate": 0.7463768115942029
+     },
+     "no_calibrated_point": false
+    },
+    "Crypto": {
+     "tau_h": 0.06,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 528,
+      "n_committed": 152,
+      "n_harmful_commits": 15,
+      "n_bs_commits": 137,
+      "n_protected_edits": 0,
+      "chr": 0.09868421052631579,
+      "chr_cp95_upper": 0.14788515183346862,
+      "bcov": 0.25946969696969696,
+      "abstention_rate": 0.7121212121212122
+     },
+     "no_calibrated_point": false
+    },
+    "US Term Structure": {
+     "tau_h": 0.46,
+     "delta": 0.01,
+     "tau_p": 0.35,
+     "val_counts": {
+      "n_episodes": 520,
+      "n_committed": 123,
+      "n_harmful_commits": 11,
+      "n_bs_commits": 112,
+      "n_protected_edits": 1,
+      "chr": 0.08943089430894309,
+      "chr_cp95_upper": 0.14368620257223602,
+      "bcov": 0.2153846153846154,
+      "abstention_rate": 0.7634615384615384
+     },
+     "no_calibrated_point": false
+    },
+    "Oil Price": {
+     "tau_h": 0.56,
+     "delta": 0.005,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 506,
+      "n_committed": 160,
+      "n_harmful_commits": 16,
+      "n_bs_commits": 144,
+      "n_protected_edits": 0,
+      "chr": 0.1,
+      "chr_cp95_upper": 0.14791735768024108,
+      "bcov": 0.2845849802371542,
+      "abstention_rate": 0.6837944664031621
+     },
+     "no_calibrated_point": false
+    }
+   },
+   "frontier": [
+    {
+     "tau": 0.053187109529972076,
+     "coverage": 0.011235955056179775,
+     "n_commits": 1,
+     "n_harmful": 0,
+     "n_bs": 1,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.95
+    },
+    {
+     "tau": 0.10876622051000595,
+     "coverage": 0.02247191011235955,
+     "n_commits": 2,
+     "n_harmful": 0,
+     "n_bs": 2,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.776393202250021
+    },
+    {
+     "tau": 0.1095404326915741,
+     "coverage": 0.033707865168539325,
+     "n_commits": 3,
+     "n_harmful": 0,
+     "n_bs": 3,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.6315968501359612
+    },
+    {
+     "tau": 0.11231415718793869,
+     "coverage": 0.0449438202247191,
+     "n_commits": 4,
+     "n_harmful": 0,
+     "n_bs": 4,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.527129195498412
+    },
+    {
+     "tau": 0.11840127408504486,
+     "coverage": 0.056179775280898875,
+     "n_commits": 5,
+     "n_harmful": 0,
+     "n_bs": 5,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.450719728346941
+    },
+    {
+     "tau": 0.12452976405620575,
+     "coverage": 0.06741573033707865,
+     "n_commits": 6,
+     "n_harmful": 0,
+     "n_bs": 6,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.39303776899708265
+    },
+    {
+     "tau": 0.1327206790447235,
+     "coverage": 0.07865168539325842,
+     "n_commits": 7,
+     "n_harmful": 0,
+     "n_bs": 7,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.34816365513116077
+    },
+    {
+     "tau": 0.13496923446655273,
+     "coverage": 0.0898876404494382,
+     "n_commits": 8,
+     "n_harmful": 0,
+     "n_bs": 8,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.3123439780663678
+    },
+    {
+     "tau": 0.14901316165924072,
+     "coverage": 0.10112359550561797,
+     "n_commits": 9,
+     "n_harmful": 0,
+     "n_bs": 9,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.28312883556311347
+    },
+    {
+     "tau": 0.1543925255537033,
+     "coverage": 0.11235955056179775,
+     "n_commits": 10,
+     "n_harmful": 0,
+     "n_bs": 10,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.2588655508930522
+    },
+    {
+     "tau": 0.1635526418685913,
+     "coverage": 0.12359550561797752,
+     "n_commits": 11,
+     "n_harmful": 0,
+     "n_bs": 11,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.2384041903808526
+    },
+    {
+     "tau": 0.1648409515619278,
+     "coverage": 0.1348314606741573,
+     "n_commits": 12,
+     "n_harmful": 0,
+     "n_bs": 12,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.22092219194555585
+    },
+    {
+     "tau": 0.1747230887413025,
+     "coverage": 0.14606741573033707,
+     "n_commits": 13,
+     "n_harmful": 0,
+     "n_bs": 13,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.20581666518655062
+    },
+    {
+     "tau": 0.1828586608171463,
+     "coverage": 0.15730337078651685,
+     "n_commits": 14,
+     "n_harmful": 0,
+     "n_bs": 14,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.19263617565013527
+    },
+    {
+     "tau": 0.19683563709259033,
+     "coverage": 0.16853932584269662,
+     "n_commits": 15,
+     "n_harmful": 0,
+     "n_bs": 15,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.18103627252208462
+    },
+    {
+     "tau": 0.21458202600479126,
+     "coverage": 0.1797752808988764,
+     "n_commits": 16,
+     "n_harmful": 0,
+     "n_bs": 16,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.1707497229824809
+    },
+    {
+     "tau": 0.21625104546546936,
+     "coverage": 0.19101123595505617,
+     "n_commits": 17,
+     "n_harmful": 0,
+     "n_bs": 17,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.16156611126074005
+    },
+    {
+     "tau": 0.21888615190982819,
+     "coverage": 0.20224719101123595,
+     "n_commits": 18,
+     "n_harmful": 0,
+     "n_bs": 18,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.1533175539572782
+    },
+    {
+     "tau": 0.22500832378864288,
+     "coverage": 0.21348314606741572,
+     "n_commits": 19,
+     "n_harmful": 0,
+     "n_bs": 19,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.1458685033122434
+    },
+    {
+     "tau": 0.2500826418399811,
+     "coverage": 0.2247191011235955,
+     "n_commits": 20,
+     "n_harmful": 0,
+     "n_bs": 20,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.13910834066826516
+    },
+    {
+     "tau": 0.26287713646888733,
+     "coverage": 0.23595505617977527,
+     "n_commits": 21,
+     "n_harmful": 0,
+     "n_bs": 21,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.13294591102652337
+    },
+    {
+     "tau": 0.28736791014671326,
+     "coverage": 0.24719101123595505,
+     "n_commits": 22,
+     "n_harmful": 1,
+     "n_bs": 21,
+     "chr": 0.045454545454545456,
+     "chr_cp95_upper": 0.19812213163688158
+    },
+    {
+     "tau": 0.2904485762119293,
+     "coverage": 0.25842696629213485,
+     "n_commits": 23,
+     "n_harmful": 2,
+     "n_bs": 21,
+     "chr": 0.08695652173913043,
+     "chr_cp95_upper": 0.24924874982025963
+    },
+    {
+     "tau": 0.29295557737350464,
+     "coverage": 0.2696629213483146,
+     "n_commits": 24,
+     "n_harmful": 2,
+     "n_bs": 22,
+     "chr": 0.08333333333333333,
+     "chr_cp95_upper": 0.23980101612880178
+    },
+    {
+     "tau": 0.29461297392845154,
+     "coverage": 0.2808988764044944,
+     "n_commits": 25,
+     "n_harmful": 2,
+     "n_bs": 23,
+     "chr": 0.08,
+     "chr_cp95_upper": 0.2310399339581441
+    },
+    {
+     "tau": 0.2985561788082123,
+     "coverage": 0.29213483146067415,
+     "n_commits": 26,
+     "n_harmful": 2,
+     "n_bs": 24,
+     "chr": 0.07692307692307693,
+     "chr_cp95_upper": 0.22289365499449812
+    },
+    {
+     "tau": 0.29917478561401367,
+     "coverage": 0.30337078651685395,
+     "n_commits": 27,
+     "n_harmful": 2,
+     "n_bs": 25,
+     "chr": 0.07407407407407407,
+     "chr_cp95_upper": 0.2152999611424539
+    },
+    {
+     "tau": 0.30658602714538574,
+     "coverage": 0.3146067415730337,
+     "n_commits": 28,
+     "n_harmful": 2,
+     "n_bs": 26,
+     "chr": 0.07142857142857142,
+     "chr_cp95_upper": 0.20820471317941197
+    },
+    {
+     "tau": 0.30959999561309814,
+     "coverage": 0.3258426966292135,
+     "n_commits": 29,
+     "n_harmful": 2,
+     "n_bs": 27,
+     "chr": 0.06896551724137931,
+     "chr_cp95_upper": 0.20156058792150391
+    },
+    {
+     "tau": 0.31173840165138245,
+     "coverage": 0.33707865168539325,
+     "n_commits": 30,
+     "n_harmful": 3,
+     "n_bs": 27,
+     "chr": 0.1,
+     "chr_cp95_upper": 0.23859785729325092
+    },
+    {
+     "tau": 0.3130858540534973,
+     "coverage": 0.34831460674157305,
+     "n_commits": 31,
+     "n_harmful": 3,
+     "n_bs": 28,
+     "chr": 0.0967741935483871,
+     "chr_cp95_upper": 0.23150297514336832
+    },
+    {
+     "tau": 0.3140266239643097,
+     "coverage": 0.3595505617977528,
+     "n_commits": 32,
+     "n_harmful": 3,
+     "n_bs": 29,
+     "chr": 0.09375,
+     "chr_cp95_upper": 0.2248161085892257
+    },
+    {
+     "tau": 0.3177521824836731,
+     "coverage": 0.3707865168539326,
+     "n_commits": 33,
+     "n_harmful": 4,
+     "n_bs": 29,
+     "chr": 0.12121212121212122,
+     "chr_cp95_upper": 0.25625269182611793
+    },
+    {
+     "tau": 0.32363688945770264,
+     "coverage": 0.38202247191011235,
+     "n_commits": 34,
+     "n_harmful": 4,
+     "n_bs": 30,
+     "chr": 0.11764705882352941,
+     "chr_cp95_upper": 0.24930485598035296
+    },
+    {
+     "tau": 0.3242368996143341,
+     "coverage": 0.39325842696629215,
+     "n_commits": 35,
+     "n_harmful": 4,
+     "n_bs": 31,
+     "chr": 0.11428571428571428,
+     "chr_cp95_upper": 0.2427220681974498
+    },
+    {
+     "tau": 0.3289344906806946,
+     "coverage": 0.4044943820224719,
+     "n_commits": 36,
+     "n_harmful": 4,
+     "n_bs": 32,
+     "chr": 0.1111111111111111,
+     "chr_cp95_upper": 0.23647644369371146
+    },
+    {
+     "tau": 0.3294456899166107,
+     "coverage": 0.4157303370786517,
+     "n_commits": 37,
+     "n_harmful": 4,
+     "n_bs": 33,
+     "chr": 0.10810810810810811,
+     "chr_cp95_upper": 0.23054285080233342
+    },
+    {
+     "tau": 0.3326670527458191,
+     "coverage": 0.42696629213483145,
+     "n_commits": 38,
+     "n_harmful": 5,
+     "n_bs": 33,
+     "chr": 0.13157894736842105,
+     "chr_cp95_upper": 0.25695829711197055
+    },
+    {
+     "tau": 0.3344050645828247,
+     "coverage": 0.43820224719101125,
+     "n_commits": 39,
+     "n_harmful": 5,
+     "n_bs": 34,
+     "chr": 0.1282051282051282,
+     "chr_cp95_upper": 0.2508533866712811
+    },
+    {
+     "tau": 0.33935075998306274,
+     "coverage": 0.449438202247191,
+     "n_commits": 40,
+     "n_harmful": 5,
+     "n_bs": 35,
+     "chr": 0.125,
+     "chr_cp95_upper": 0.24503051264971193
+    },
+    {
+     "tau": 0.34946557879447937,
+     "coverage": 0.4606741573033708,
+     "n_commits": 41,
+     "n_harmful": 5,
+     "n_bs": 36,
+     "chr": 0.12195121951219512,
+     "chr_cp95_upper": 0.2394706708183629
+    },
+    {
+     "tau": 0.35051947832107544,
+     "coverage": 0.47191011235955055,
+     "n_commits": 42,
+     "n_harmful": 5,
+     "n_bs": 37,
+     "chr": 0.11904761904761904,
+     "chr_cp95_upper": 0.23415651712012953
+    },
+    {
+     "tau": 0.35694172978401184,
+     "coverage": 0.48314606741573035,
+     "n_commits": 43,
+     "n_harmful": 5,
+     "n_bs": 38,
+     "chr": 0.11627906976744186,
+     "chr_cp95_upper": 0.22907219142939658
+    },
+    {
+     "tau": 0.35854849219322205,
+     "coverage": 0.4943820224719101,
+     "n_commits": 44,
+     "n_harmful": 5,
+     "n_bs": 39,
+     "chr": 0.11363636363636363,
+     "chr_cp95_upper": 0.2242031631294326
+    },
+    {
+     "tau": 0.36876699328422546,
+     "coverage": 0.5056179775280899,
+     "n_commits": 45,
+     "n_harmful": 5,
+     "n_bs": 40,
+     "chr": 0.1111111111111111,
+     "chr_cp95_upper": 0.21953609544733202
+    },
+    {
+     "tau": 0.37469711899757385,
+     "coverage": 0.5168539325842697,
+     "n_commits": 46,
+     "n_harmful": 5,
+     "n_bs": 41,
+     "chr": 0.10869565217391304,
+     "chr_cp95_upper": 0.21505872596224146
+    },
+    {
+     "tau": 0.3841029107570648,
+     "coverage": 0.5280898876404494,
+     "n_commits": 47,
+     "n_harmful": 6,
+     "n_bs": 41,
+     "chr": 0.1276595744680851,
+     "chr_cp95_upper": 0.23649669577918447
+    },
+    {
+     "tau": 0.3858230412006378,
+     "coverage": 0.5393258426966292,
+     "n_commits": 48,
+     "n_harmful": 6,
+     "n_bs": 42,
+     "chr": 0.125,
+     "chr_cp95_upper": 0.23188172593102926
+    },
+    {
+     "tau": 0.38780683279037476,
+     "coverage": 0.550561797752809,
+     "n_commits": 49,
+     "n_harmful": 7,
+     "n_bs": 42,
+     "chr": 0.14285714285714285,
+     "chr_cp95_upper": 0.2516434957746945
+    },
+    {
+     "tau": 0.41481590270996094,
+     "coverage": 0.5617977528089888,
+     "n_commits": 50,
+     "n_harmful": 7,
+     "n_bs": 43,
+     "chr": 0.14,
+     "chr_cp95_upper": 0.2469352017312092
+    },
+    {
+     "tau": 0.418852299451828,
+     "coverage": 0.5730337078651685,
+     "n_commits": 51,
+     "n_harmful": 7,
+     "n_bs": 44,
+     "chr": 0.13725490196078433,
+     "chr_cp95_upper": 0.24239914471981838
+    },
+    {
+     "tau": 0.4208366572856903,
+     "coverage": 0.5842696629213483,
+     "n_commits": 52,
+     "n_harmful": 7,
+     "n_bs": 45,
+     "chr": 0.1346153846153846,
+     "chr_cp95_upper": 0.23802608637451006
+    },
+    {
+     "tau": 0.42572516202926636,
+     "coverage": 0.5955056179775281,
+     "n_commits": 53,
+     "n_harmful": 7,
+     "n_bs": 46,
+     "chr": 0.1320754716981132,
+     "chr_cp95_upper": 0.2338074340236229
+    },
+    {
+     "tau": 0.4288344383239746,
+     "coverage": 0.6067415730337079,
+     "n_commits": 54,
+     "n_harmful": 7,
+     "n_bs": 47,
+     "chr": 0.12962962962962962,
+     "chr_cp95_upper": 0.2297351855784675
+    },
+    {
+     "tau": 0.434540331363678,
+     "coverage": 0.6179775280898876,
+     "n_commits": 55,
+     "n_harmful": 7,
+     "n_bs": 48,
+     "chr": 0.12727272727272726,
+     "chr_cp95_upper": 0.2258018799335397
+    },
+    {
+     "tau": 0.4379744231700897,
+     "coverage": 0.6292134831460674,
+     "n_commits": 56,
+     "n_harmful": 8,
+     "n_bs": 48,
+     "chr": 0.14285714285714285,
+     "chr_cp95_upper": 0.24302852691968904
+    },
+    {
+     "tau": 0.44784456491470337,
+     "coverage": 0.6404494382022472,
+     "n_commits": 57,
+     "n_harmful": 8,
+     "n_bs": 49,
+     "chr": 0.14035087719298245,
+     "chr_cp95_upper": 0.23901783299595597
+    },
+    {
+     "tau": 0.4481218159198761,
+     "coverage": 0.651685393258427,
+     "n_commits": 58,
+     "n_harmful": 8,
+     "n_bs": 50,
+     "chr": 0.13793103448275862,
+     "chr_cp95_upper": 0.2351368878887874
+    },
+    {
+     "tau": 0.4491458833217621,
+     "coverage": 0.6629213483146067,
+     "n_commits": 59,
+     "n_harmful": 8,
+     "n_bs": 51,
+     "chr": 0.13559322033898305,
+     "chr_cp95_upper": 0.23137952114139515
+    },
+    {
+     "tau": 0.44950613379478455,
+     "coverage": 0.6741573033707865,
+     "n_commits": 60,
+     "n_harmful": 9,
+     "n_bs": 51,
+     "chr": 0.15,
+     "chr_cp95_upper": 0.2471594674662178
+    },
+    {
+     "tau": 0.4553060531616211,
+     "coverage": 0.6853932584269663,
+     "n_commits": 61,
+     "n_harmful": 9,
+     "n_bs": 52,
+     "chr": 0.14754098360655737,
+     "chr_cp95_upper": 0.2433428192430699
+    },
+    {
+     "tau": 0.46188557147979736,
+     "coverage": 0.6966292134831461,
+     "n_commits": 62,
+     "n_harmful": 9,
+     "n_bs": 53,
+     "chr": 0.14516129032258066,
+     "chr_cp95_upper": 0.2396418203942678
+    },
+    {
+     "tau": 0.46290352940559387,
+     "coverage": 0.7078651685393258,
+     "n_commits": 63,
+     "n_harmful": 9,
+     "n_bs": 54,
+     "chr": 0.14285714285714285,
+     "chr_cp95_upper": 0.2360513145805704
+    },
+    {
+     "tau": 0.4749385118484497,
+     "coverage": 0.7191011235955056,
+     "n_commits": 64,
+     "n_harmful": 9,
+     "n_bs": 55,
+     "chr": 0.140625,
+     "chr_cp95_upper": 0.23256644607030164
+    },
+    {
+     "tau": 0.5001364946365356,
+     "coverage": 0.7303370786516854,
+     "n_commits": 65,
+     "n_harmful": 9,
+     "n_bs": 56,
+     "chr": 0.13846153846153847,
+     "chr_cp95_upper": 0.22918263826550034
+    },
+    {
+     "tau": 0.5027855038642883,
+     "coverage": 0.7415730337078652,
+     "n_commits": 66,
+     "n_harmful": 9,
+     "n_bs": 57,
+     "chr": 0.13636363636363635,
+     "chr_cp95_upper": 0.22589557403146387
+    },
+    {
+     "tau": 0.5044553279876709,
+     "coverage": 0.7528089887640449,
+     "n_commits": 67,
+     "n_harmful": 9,
+     "n_bs": 58,
+     "chr": 0.13432835820895522,
+     "chr_cp95_upper": 0.22270117765672032
+    },
+    {
+     "tau": 0.5289552807807922,
+     "coverage": 0.7640449438202247,
+     "n_commits": 68,
+     "n_harmful": 10,
+     "n_bs": 58,
+     "chr": 0.14705882352941177,
+     "chr_cp95_upper": 0.23666962889481707
+    },
+    {
+     "tau": 0.5326520800590515,
+     "coverage": 0.7752808988764045,
+     "n_commits": 69,
+     "n_harmful": 10,
+     "n_bs": 59,
+     "chr": 0.14492753623188406,
+     "chr_cp95_upper": 0.23342241066929942
+    },
+    {
+     "tau": 0.5330497026443481,
+     "coverage": 0.7865168539325843,
+     "n_commits": 70,
+     "n_harmful": 10,
+     "n_bs": 60,
+     "chr": 0.14285714285714285,
+     "chr_cp95_upper": 0.23026280629235504
+    },
+    {
+     "tau": 0.5414468050003052,
+     "coverage": 0.797752808988764,
+     "n_commits": 71,
+     "n_harmful": 10,
+     "n_bs": 61,
+     "chr": 0.14084507042253522,
+     "chr_cp95_upper": 0.2271873298818617
+    },
+    {
+     "tau": 0.5435304045677185,
+     "coverage": 0.8089887640449438,
+     "n_commits": 72,
+     "n_harmful": 10,
+     "n_bs": 62,
+     "chr": 0.1388888888888889,
+     "chr_cp95_upper": 0.22419267730344564
+    },
+    {
+     "tau": 0.5457066893577576,
+     "coverage": 0.8202247191011236,
+     "n_commits": 73,
+     "n_harmful": 10,
+     "n_bs": 63,
+     "chr": 0.136986301369863,
+     "chr_cp95_upper": 0.22127571453298386
+    },
+    {
+     "tau": 0.5572731494903564,
+     "coverage": 0.8314606741573034,
+     "n_commits": 74,
+     "n_harmful": 10,
+     "n_bs": 64,
+     "chr": 0.13513513513513514,
+     "chr_cp95_upper": 0.21843346689721085
+    },
+    {
+     "tau": 0.5585260987281799,
+     "coverage": 0.8426966292134831,
+     "n_commits": 75,
+     "n_harmful": 10,
+     "n_bs": 65,
+     "chr": 0.13333333333333333,
+     "chr_cp95_upper": 0.2156631091165696
+    },
+    {
+     "tau": 0.5631946325302124,
+     "coverage": 0.8539325842696629,
+     "n_commits": 76,
+     "n_harmful": 10,
+     "n_bs": 66,
+     "chr": 0.13157894736842105,
+     "chr_cp95_upper": 0.21296195608179203
+    },
+    {
+     "tau": 0.5633703470230103,
+     "coverage": 0.8651685393258427,
+     "n_commits": 77,
+     "n_harmful": 11,
+     "n_bs": 66,
+     "chr": 0.14285714285714285,
+     "chr_cp95_upper": 0.22536736043136843
+    },
+    {
+     "tau": 0.5634938478469849,
+     "coverage": 0.8764044943820225,
+     "n_commits": 78,
+     "n_harmful": 12,
+     "n_bs": 66,
+     "chr": 0.15384615384615385,
+     "chr_cp95_upper": 0.2373159634331562
+    },
+    {
+     "tau": 0.5898386240005493,
+     "coverage": 0.8876404494382022,
+     "n_commits": 79,
+     "n_harmful": 13,
+     "n_bs": 66,
+     "chr": 0.16455696202531644,
+     "chr_cp95_upper": 0.24884114538060184
+    },
+    {
+     "tau": 0.5988979339599609,
+     "coverage": 0.898876404494382,
+     "n_commits": 80,
+     "n_harmful": 13,
+     "n_bs": 67,
+     "chr": 0.1625,
+     "chr_cp95_upper": 0.24588983226552474
+    },
+    {
+     "tau": 0.6209364533424377,
+     "coverage": 0.9101123595505618,
+     "n_commits": 81,
+     "n_harmful": 13,
+     "n_bs": 68,
+     "chr": 0.16049382716049382,
+     "chr_cp95_upper": 0.24300746787931504
+    },
+    {
+     "tau": 0.6230137944221497,
+     "coverage": 0.9213483146067416,
+     "n_commits": 82,
+     "n_harmful": 13,
+     "n_bs": 69,
+     "chr": 0.15853658536585366,
+     "chr_cp95_upper": 0.24019167325456275
+    },
+    {
+     "tau": 0.6258885860443115,
+     "coverage": 0.9325842696629213,
+     "n_commits": 83,
+     "n_harmful": 13,
+     "n_bs": 70,
+     "chr": 0.1566265060240964,
+     "chr_cp95_upper": 0.23744017713928847
+    },
+    {
+     "tau": 0.6445154547691345,
+     "coverage": 0.9438202247191011,
+     "n_commits": 84,
+     "n_harmful": 13,
+     "n_bs": 71,
+     "chr": 0.15476190476190477,
+     "chr_cp95_upper": 0.23475080999988845
+    },
+    {
+     "tau": 0.6604214906692505,
+     "coverage": 0.9550561797752809,
+     "n_commits": 85,
+     "n_harmful": 14,
+     "n_bs": 71,
+     "chr": 0.16470588235294117,
+     "chr_cp95_upper": 0.24544080462355658
+    },
+    {
+     "tau": 0.6633884310722351,
+     "coverage": 0.9662921348314607,
+     "n_commits": 86,
+     "n_harmful": 14,
+     "n_bs": 72,
+     "chr": 0.16279069767441862,
+     "chr_cp95_upper": 0.24272672342021587
+    },
+    {
+     "tau": 0.7112102508544922,
+     "coverage": 0.9775280898876404,
+     "n_commits": 87,
+     "n_harmful": 14,
+     "n_bs": 73,
+     "chr": 0.16091954022988506,
+     "chr_cp95_upper": 0.2400718175531783
+    },
+    {
+     "tau": 0.8042700290679932,
+     "coverage": 0.9887640449438202,
+     "n_commits": 88,
+     "n_harmful": 14,
+     "n_bs": 74,
+     "chr": 0.1590909090909091,
+     "chr_cp95_upper": 0.2374741796464156
+    },
+    {
+     "tau": 1.0,
+     "coverage": 1.0,
+     "n_commits": 89,
+     "n_harmful": 14,
+     "n_bs": 75,
+     "chr": 0.15730337078651685,
+     "chr_cp95_upper": 0.23493198308298377
+    }
+   ]
+  },
+  "full_COUNTERACT": {
+   "n_commits": 16,
+   "n_bs_retained": 16,
+   "n_harmful": 0,
+   "n_abstained": 73,
+   "chr": 0.0,
+   "chr_cp95_upper": 0.1707497229824809,
+   "bcov": 0.1797752808988764,
+   "harmful_blocked_of_14": 14,
+   "bs_lost_of_75": 59,
+   "harm_auroc": 0.5285714285714286,
+   "harm_auprc": 0.204637132867756,
+   "gates": {
+    "g1_harm_auroc": {
+     "value": 0.5285714285714286,
+     "min": 0.75
+    },
+    "g2_auprc_lift": {
+     "value": 0.047333762081239156,
+     "auprc": 0.204637132867756,
+     "prevalence": 0.15730337078651685,
+     "min": 0.1
+    },
+    "g3_bs_retained": {
+     "value": 16,
+     "min": 55
+    },
+    "g4_harmful": {
+     "value": 0,
+     "max": 3
+    },
+    "g5_chr_cp95_upper": {
+     "value": 0.1707497229824809,
+     "max": 0.15
+    },
+    "g6_frontier": {
+     "dominates_raw_tsicl": false,
+     "dominates_mirage": true,
+     "n_dominating_points_vs_raw": 0,
+     "n_dominating_points_vs_mirage": 43
+    },
+    "g7_sources_not_degraded": {
+     "value": 4,
+     "sources": [
+      "ETTh1",
+      "ETTh2",
+      "ETTm1",
+      "US Term Structure"
+     ],
+     "min": 4,
+     "predicate": "chr <= raw TS-ICL chr on that source AND at least one B&S commit retained where one was available (declared at decision time; the 4/6 count itself is pre-registered)"
+    },
+    "g8_no_source_identity": {
+     "value": true,
+     "evidence": "source is not an input tensor anywhere in the model (see MODEL inputs and FORBIDDEN_INPUT_KEYS); every window is scored by the fold whose training pool excluded its source"
+    }
+   },
+   "gate_pass": {
+    "g1": false,
+    "g2": false,
+    "g3": false,
+    "g4": true,
+    "g5": false,
+    "g6": false,
+    "g7": true,
+    "g8": true
+   },
+   "all_gates_pass": false,
+   "per_source": {
+    "Crypto": {
+     "n_windows": 3,
+     "raw_tsicl_bs": 3,
+     "raw_tsicl_harmful": 0,
+     "raw_tsicl_chr": 0.0,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 0,
+     "bs_lost": 3
+    },
+    "ETTh1": {
+     "n_windows": 12,
+     "raw_tsicl_bs": 11,
+     "raw_tsicl_harmful": 1,
+     "raw_tsicl_chr": 0.08333333333333333,
+     "n_commits": 6,
+     "bs_retained": 6,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 1,
+     "bs_lost": 5
+    },
+    "ETTh2": {
+     "n_windows": 10,
+     "raw_tsicl_bs": 10,
+     "raw_tsicl_harmful": 0,
+     "raw_tsicl_chr": 0.0,
+     "n_commits": 2,
+     "bs_retained": 2,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 0,
+     "bs_lost": 8
+    },
+    "ETTm1": {
+     "n_windows": 16,
+     "raw_tsicl_bs": 13,
+     "raw_tsicl_harmful": 3,
+     "raw_tsicl_chr": 0.1875,
+     "n_commits": 1,
+     "bs_retained": 1,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 3,
+     "bs_lost": 12
+    },
+    "Oil Price": {
+     "n_windows": 7,
+     "raw_tsicl_bs": 6,
+     "raw_tsicl_harmful": 1,
+     "raw_tsicl_chr": 0.14285714285714285,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 1,
+     "bs_lost": 6
+    },
+    "US Term Structure": {
+     "n_windows": 41,
+     "raw_tsicl_bs": 32,
+     "raw_tsicl_harmful": 9,
+     "raw_tsicl_chr": 0.21951219512195122,
+     "n_commits": 7,
+     "bs_retained": 7,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 9,
+     "bs_lost": 25
+    }
+   },
+   "thresholds": {
+    "ETTh1": {
+     "tau_h": 0.24,
+     "delta": 0.005,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 518,
+      "n_committed": 290,
+      "n_harmful_commits": 33,
+      "n_bs_commits": 257,
+      "n_protected_edits": 1,
+      "chr": 0.11379310344827587,
+      "chr_cp95_upper": 0.14919311299877777,
+      "bcov": 0.49613899613899615,
+      "abstention_rate": 0.44015444015444016
+     },
+     "no_calibrated_point": false
+    },
+    "ETTh2": {
+     "tau_h": 0.3,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 526,
+      "n_committed": 119,
+      "n_harmful_commits": 1,
+      "n_bs_commits": 118,
+      "n_protected_edits": 0,
+      "chr": 0.008403361344537815,
+      "chr_cp95_upper": 0.03924277735630701,
+      "bcov": 0.22433460076045628,
+      "abstention_rate": 0.7737642585551331
+     },
+     "no_calibrated_point": false
+    },
+    "ETTm1": {
+     "tau_h": 0.46,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 552,
+      "n_committed": 245,
+      "n_harmful_commits": 22,
+      "n_bs_commits": 223,
+      "n_protected_edits": 0,
+      "chr": 0.08979591836734693,
+      "chr_cp95_upper": 0.12573877936103192,
+      "bcov": 0.40398550724637683,
+      "abstention_rate": 0.5561594202898551
+     },
+     "no_calibrated_point": false
+    },
+    "Crypto": {
+     "tau_h": 0.36,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 528,
+      "n_committed": 257,
+      "n_harmful_commits": 23,
+      "n_bs_commits": 234,
+      "n_protected_edits": 1,
+      "chr": 0.08949416342412451,
+      "chr_cp95_upper": 0.12440569325840642,
+      "bcov": 0.4431818181818182,
+      "abstention_rate": 0.5132575757575757
+     },
+     "no_calibrated_point": false
+    },
+    "US Term Structure": {
+     "tau_h": 0.04,
+     "delta": 0.005,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 520,
+      "n_committed": 191,
+      "n_harmful_commits": 18,
+      "n_bs_commits": 173,
+      "n_protected_edits": 0,
+      "chr": 0.09424083769633508,
+      "chr_cp95_upper": 0.13654492211795227,
+      "bcov": 0.3326923076923077,
+      "abstention_rate": 0.6326923076923077
+     },
+     "no_calibrated_point": false
+    },
+    "Oil Price": {
+     "tau_h": 0.54,
+     "delta": 0.0,
+     "tau_p": 0.35,
+     "val_counts": {
+      "n_episodes": 506,
+      "n_committed": 130,
+      "n_harmful_commits": 3,
+      "n_bs_commits": 127,
+      "n_protected_edits": 0,
+      "chr": 0.023076923076923078,
+      "chr_cp95_upper": 0.05856085194811996,
+      "bcov": 0.2509881422924901,
+      "abstention_rate": 0.7430830039525691
+     },
+     "no_calibrated_point": false
+    }
+   },
+   "frontier": [
+    {
+     "tau": 1.7412074157618918e-05,
+     "coverage": 0.011235955056179775,
+     "n_commits": 1,
+     "n_harmful": 0,
+     "n_bs": 1,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.95
+    },
+    {
+     "tau": 7.650493353139609e-05,
+     "coverage": 0.02247191011235955,
+     "n_commits": 2,
+     "n_harmful": 0,
+     "n_bs": 2,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.776393202250021
+    },
+    {
+     "tau": 9.657985356170684e-05,
+     "coverage": 0.033707865168539325,
+     "n_commits": 3,
+     "n_harmful": 0,
+     "n_bs": 3,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.6315968501359612
+    },
+    {
+     "tau": 0.00013390483218245208,
+     "coverage": 0.0449438202247191,
+     "n_commits": 4,
+     "n_harmful": 0,
+     "n_bs": 4,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.527129195498412
+    },
+    {
+     "tau": 0.00020842552476096898,
+     "coverage": 0.056179775280898875,
+     "n_commits": 5,
+     "n_harmful": 0,
+     "n_bs": 5,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.450719728346941
+    },
+    {
+     "tau": 0.0003810628259088844,
+     "coverage": 0.06741573033707865,
+     "n_commits": 6,
+     "n_harmful": 0,
+     "n_bs": 6,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.39303776899708265
+    },
+    {
+     "tau": 0.0007838752935640514,
+     "coverage": 0.07865168539325842,
+     "n_commits": 7,
+     "n_harmful": 0,
+     "n_bs": 7,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.34816365513116077
+    },
+    {
+     "tau": 0.0009619431220926344,
+     "coverage": 0.0898876404494382,
+     "n_commits": 8,
+     "n_harmful": 0,
+     "n_bs": 8,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.3123439780663678
+    },
+    {
+     "tau": 0.0010132610332220793,
+     "coverage": 0.10112359550561797,
+     "n_commits": 9,
+     "n_harmful": 1,
+     "n_bs": 8,
+     "chr": 0.1111111111111111,
+     "chr_cp95_upper": 0.42913554703143447
+    },
+    {
+     "tau": 0.0010332331294193864,
+     "coverage": 0.11235955056179775,
+     "n_commits": 10,
+     "n_harmful": 1,
+     "n_bs": 9,
+     "chr": 0.1,
+     "chr_cp95_upper": 0.39416330243650466
+    },
+    {
+     "tau": 0.0016541326185688376,
+     "coverage": 0.12359550561797752,
+     "n_commits": 11,
+     "n_harmful": 1,
+     "n_bs": 10,
+     "chr": 0.09090909090909091,
+     "chr_cp95_upper": 0.3643594892472425
+    },
+    {
+     "tau": 0.0016562269302085042,
+     "coverage": 0.1348314606741573,
+     "n_commits": 12,
+     "n_harmful": 1,
+     "n_bs": 11,
+     "chr": 0.08333333333333333,
+     "chr_cp95_upper": 0.3386806684340324
+    },
+    {
+     "tau": 0.001663937116973102,
+     "coverage": 0.14606741573033707,
+     "n_commits": 13,
+     "n_harmful": 1,
+     "n_bs": 12,
+     "chr": 0.07692307692307693,
+     "chr_cp95_upper": 0.31633976476272974
+    },
+    {
+     "tau": 0.0017128810286521912,
+     "coverage": 0.15730337078651685,
+     "n_commits": 14,
+     "n_harmful": 2,
+     "n_bs": 12,
+     "chr": 0.14285714285714285,
+     "chr_cp95_upper": 0.38538968236388205
+    },
+    {
+     "tau": 0.005216746591031551,
+     "coverage": 0.16853932584269662,
+     "n_commits": 15,
+     "n_harmful": 3,
+     "n_bs": 12,
+     "chr": 0.2,
+     "chr_cp95_upper": 0.43978443598155603
+    },
+    {
+     "tau": 0.0056512015871703625,
+     "coverage": 0.1797752808988764,
+     "n_commits": 16,
+     "n_harmful": 3,
+     "n_bs": 13,
+     "chr": 0.1875,
+     "chr_cp95_upper": 0.4165722807061528
+    },
+    {
+     "tau": 0.006686481647193432,
+     "coverage": 0.19101123595505617,
+     "n_commits": 17,
+     "n_harmful": 4,
+     "n_bs": 13,
+     "chr": 0.23529411764705882,
+     "chr_cp95_upper": 0.4605493598898329
+    },
+    {
+     "tau": 0.006970096845179796,
+     "coverage": 0.20224719101123595,
+     "n_commits": 18,
+     "n_harmful": 4,
+     "n_bs": 14,
+     "chr": 0.2222222222222222,
+     "chr_cp95_upper": 0.43888275821136097
+    },
+    {
+     "tau": 0.007810073904693127,
+     "coverage": 0.21348314606741572,
+     "n_commits": 19,
+     "n_harmful": 4,
+     "n_bs": 15,
+     "chr": 0.21052631578947367,
+     "chr_cp95_upper": 0.4191202289169427
+    },
+    {
+     "tau": 0.009232754819095135,
+     "coverage": 0.2247191011235955,
+     "n_commits": 20,
+     "n_harmful": 4,
+     "n_bs": 16,
+     "chr": 0.2,
+     "chr_cp95_upper": 0.4010281173319745
+    },
+    {
+     "tau": 0.011336717754602432,
+     "coverage": 0.23595505617977527,
+     "n_commits": 21,
+     "n_harmful": 5,
+     "n_bs": 16,
+     "chr": 0.23809523809523808,
+     "chr_cp95_upper": 0.4369763160312658
+    },
+    {
+     "tau": 0.011939292773604393,
+     "coverage": 0.24719101123595505,
+     "n_commits": 22,
+     "n_harmful": 5,
+     "n_bs": 17,
+     "chr": 0.22727272727272727,
+     "chr_cp95_upper": 0.4197999498701549
+    },
+    {
+     "tau": 0.01229618676006794,
+     "coverage": 0.25842696629213485,
+     "n_commits": 23,
+     "n_harmful": 5,
+     "n_bs": 18,
+     "chr": 0.21739130434782608,
+     "chr_cp95_upper": 0.4038988748746869
+    },
+    {
+     "tau": 0.01231019850820303,
+     "coverage": 0.2696629213483146,
+     "n_commits": 24,
+     "n_harmful": 5,
+     "n_bs": 19,
+     "chr": 0.20833333333333334,
+     "chr_cp95_upper": 0.38913934735989825
+    },
+    {
+     "tau": 0.017053483054041862,
+     "coverage": 0.2808988764044944,
+     "n_commits": 25,
+     "n_harmful": 5,
+     "n_bs": 20,
+     "chr": 0.2,
+     "chr_cp95_upper": 0.37540513512487816
+    },
+    {
+     "tau": 0.019125191494822502,
+     "coverage": 0.29213483146067415,
+     "n_commits": 26,
+     "n_harmful": 5,
+     "n_bs": 21,
+     "chr": 0.19230769230769232,
+     "chr_cp95_upper": 0.3625948619781563
+    },
+    {
+     "tau": 0.020051563158631325,
+     "coverage": 0.30337078651685395,
+     "n_commits": 27,
+     "n_harmful": 5,
+     "n_bs": 22,
+     "chr": 0.18518518518518517,
+     "chr_cp95_upper": 0.3506197906946669
+    },
+    {
+     "tau": 0.020274922251701355,
+     "coverage": 0.3146067415730337,
+     "n_commits": 28,
+     "n_harmful": 5,
+     "n_bs": 23,
+     "chr": 0.17857142857142858,
+     "chr_cp95_upper": 0.33940197136159084
+    },
+    {
+     "tau": 0.02103055641055107,
+     "coverage": 0.3258426966292135,
+     "n_commits": 29,
+     "n_harmful": 5,
+     "n_bs": 24,
+     "chr": 0.1724137931034483,
+     "chr_cp95_upper": 0.32887269243481687
+    },
+    {
+     "tau": 0.02244676649570465,
+     "coverage": 0.33707865168539325,
+     "n_commits": 30,
+     "n_harmful": 5,
+     "n_bs": 25,
+     "chr": 0.16666666666666666,
+     "chr_cp95_upper": 0.31897118194731505
+    },
+    {
+     "tau": 0.02365259639918804,
+     "coverage": 0.34831460674157305,
+     "n_commits": 31,
+     "n_harmful": 5,
+     "n_bs": 26,
+     "chr": 0.16129032258064516,
+     "chr_cp95_upper": 0.30964351535764695
+    },
+    {
+     "tau": 0.031957220286130905,
+     "coverage": 0.3595505617977528,
+     "n_commits": 32,
+     "n_harmful": 5,
+     "n_bs": 27,
+     "chr": 0.15625,
+     "chr_cp95_upper": 0.300841694265448
+    },
+    {
+     "tau": 0.0330304354429245,
+     "coverage": 0.3707865168539326,
+     "n_commits": 33,
+     "n_harmful": 6,
+     "n_bs": 27,
+     "chr": 0.18181818181818182,
+     "chr_cp95_upper": 0.32762675185040113
+    },
+    {
+     "tau": 0.03977997228503227,
+     "coverage": 0.38202247191011235,
+     "n_commits": 34,
+     "n_harmful": 6,
+     "n_bs": 28,
+     "chr": 0.17647058823529413,
+     "chr_cp95_upper": 0.31886933930632094
+    },
+    {
+     "tau": 0.04480154067277908,
+     "coverage": 0.39325842696629215,
+     "n_commits": 35,
+     "n_harmful": 6,
+     "n_bs": 29,
+     "chr": 0.17142857142857143,
+     "chr_cp95_upper": 0.3105641705036986
+    },
+    {
+     "tau": 0.05613021180033684,
+     "coverage": 0.4044943820224719,
+     "n_commits": 36,
+     "n_harmful": 6,
+     "n_bs": 30,
+     "chr": 0.16666666666666666,
+     "chr_cp95_upper": 0.30267742362657557
+    },
+    {
+     "tau": 0.062061090022325516,
+     "coverage": 0.4157303370786517,
+     "n_commits": 37,
+     "n_harmful": 6,
+     "n_bs": 31,
+     "chr": 0.16216216216216217,
+     "chr_cp95_upper": 0.2951785296973097
+    },
+    {
+     "tau": 0.06603913009166718,
+     "coverage": 0.42696629213483145,
+     "n_commits": 38,
+     "n_harmful": 6,
+     "n_bs": 32,
+     "chr": 0.15789473684210525,
+     "chr_cp95_upper": 0.28803979602672275
+    },
+    {
+     "tau": 0.07263343036174774,
+     "coverage": 0.43820224719101125,
+     "n_commits": 39,
+     "n_harmful": 6,
+     "n_bs": 33,
+     "chr": 0.15384615384615385,
+     "chr_cp95_upper": 0.28123607989900634
+    },
+    {
+     "tau": 0.07837976515293121,
+     "coverage": 0.449438202247191,
+     "n_commits": 40,
+     "n_harmful": 6,
+     "n_bs": 34,
+     "chr": 0.15,
+     "chr_cp95_upper": 0.27474450501397046
+    },
+    {
+     "tau": 0.10189320892095566,
+     "coverage": 0.4606741573033708,
+     "n_commits": 41,
+     "n_harmful": 6,
+     "n_bs": 35,
+     "chr": 0.14634146341463414,
+     "chr_cp95_upper": 0.2685442144173794
+    },
+    {
+     "tau": 0.10768052190542221,
+     "coverage": 0.47191011235955055,
+     "n_commits": 42,
+     "n_harmful": 6,
+     "n_bs": 36,
+     "chr": 0.14285714285714285,
+     "chr_cp95_upper": 0.2626161546521668
+    },
+    {
+     "tau": 0.1382954716682434,
+     "coverage": 0.48314606741573035,
+     "n_commits": 43,
+     "n_harmful": 6,
+     "n_bs": 37,
+     "chr": 0.13953488372093023,
+     "chr_cp95_upper": 0.25694288669509635
+    },
+    {
+     "tau": 0.14460384845733643,
+     "coverage": 0.4943820224719101,
+     "n_commits": 44,
+     "n_harmful": 6,
+     "n_bs": 38,
+     "chr": 0.13636363636363635,
+     "chr_cp95_upper": 0.2515084199348106
+    },
+    {
+     "tau": 0.21616527438163757,
+     "coverage": 0.5056179775280899,
+     "n_commits": 45,
+     "n_harmful": 6,
+     "n_bs": 39,
+     "chr": 0.13333333333333333,
+     "chr_cp95_upper": 0.2462980660228803
+    },
+    {
+     "tau": 0.22339127957820892,
+     "coverage": 0.5168539325842697,
+     "n_commits": 46,
+     "n_harmful": 6,
+     "n_bs": 40,
+     "chr": 0.13043478260869565,
+     "chr_cp95_upper": 0.2412983099097635
+    },
+    {
+     "tau": 0.22895847260951996,
+     "coverage": 0.5280898876404494,
+     "n_commits": 47,
+     "n_harmful": 6,
+     "n_bs": 41,
+     "chr": 0.1276595744680851,
+     "chr_cp95_upper": 0.23649669577918447
+    },
+    {
+     "tau": 0.24916979670524597,
+     "coverage": 0.5393258426966292,
+     "n_commits": 48,
+     "n_harmful": 6,
+     "n_bs": 42,
+     "chr": 0.125,
+     "chr_cp95_upper": 0.23188172593102926
+    },
+    {
+     "tau": 0.2531171143054962,
+     "coverage": 0.550561797752809,
+     "n_commits": 49,
+     "n_harmful": 6,
+     "n_bs": 43,
+     "chr": 0.12244897959183673,
+     "chr_cp95_upper": 0.22744277094562745
+    },
+    {
+     "tau": 0.26878413558006287,
+     "coverage": 0.5617977528089888,
+     "n_commits": 50,
+     "n_harmful": 6,
+     "n_bs": 44,
+     "chr": 0.12,
+     "chr_cp95_upper": 0.22316998970044383
+    },
+    {
+     "tau": 0.2827546298503876,
+     "coverage": 0.5730337078651685,
+     "n_commits": 51,
+     "n_harmful": 6,
+     "n_bs": 45,
+     "chr": 0.11764705882352941,
+     "chr_cp95_upper": 0.21905425801127204
+    },
+    {
+     "tau": 0.2847510576248169,
+     "coverage": 0.5842696629213483,
+     "n_commits": 52,
+     "n_harmful": 6,
+     "n_bs": 46,
+     "chr": 0.11538461538461539,
+     "chr_cp95_upper": 0.215087104840209
+    },
+    {
+     "tau": 0.2960197627544403,
+     "coverage": 0.5955056179775281,
+     "n_commits": 53,
+     "n_harmful": 6,
+     "n_bs": 47,
+     "chr": 0.11320754716981132,
+     "chr_cp95_upper": 0.21126065515709064
+    },
+    {
+     "tau": 0.3151256740093231,
+     "coverage": 0.6067415730337079,
+     "n_commits": 54,
+     "n_harmful": 6,
+     "n_bs": 48,
+     "chr": 0.1111111111111111,
+     "chr_cp95_upper": 0.20756757866389816
+    },
+    {
+     "tau": 0.33983367681503296,
+     "coverage": 0.6179775280898876,
+     "n_commits": 55,
+     "n_harmful": 6,
+     "n_bs": 49,
+     "chr": 0.10909090909090909,
+     "chr_cp95_upper": 0.20400104369637223
+    },
+    {
+     "tau": 0.3529869616031647,
+     "coverage": 0.6292134831460674,
+     "n_commits": 56,
+     "n_harmful": 6,
+     "n_bs": 50,
+     "chr": 0.10714285714285714,
+     "chr_cp95_upper": 0.2005546757065888
+    },
+    {
+     "tau": 0.37114909291267395,
+     "coverage": 0.6404494382022472,
+     "n_commits": 57,
+     "n_harmful": 7,
+     "n_bs": 50,
+     "chr": 0.12280701754385964,
+     "chr_cp95_upper": 0.21832469358086445
+    },
+    {
+     "tau": 0.3775838613510132,
+     "coverage": 0.651685393258427,
+     "n_commits": 58,
+     "n_harmful": 7,
+     "n_bs": 51,
+     "chr": 0.1206896551724138,
+     "chr_cp95_upper": 0.21476821433959437
+    },
+    {
+     "tau": 0.3794695734977722,
+     "coverage": 0.6629213483146067,
+     "n_commits": 59,
+     "n_harmful": 7,
+     "n_bs": 52,
+     "chr": 0.11864406779661017,
+     "chr_cp95_upper": 0.21132541122343432
+    },
+    {
+     "tau": 0.3846220374107361,
+     "coverage": 0.6741573033707865,
+     "n_commits": 60,
+     "n_harmful": 7,
+     "n_bs": 53,
+     "chr": 0.11666666666666667,
+     "chr_cp95_upper": 0.2079909371907976
+    },
+    {
+     "tau": 0.39491480588912964,
+     "coverage": 0.6853932584269663,
+     "n_commits": 61,
+     "n_harmful": 8,
+     "n_bs": 53,
+     "chr": 0.13114754098360656,
+     "chr_cp95_upper": 0.22421272857305313
+    },
+    {
+     "tau": 0.3970397412776947,
+     "coverage": 0.6966292134831461,
+     "n_commits": 62,
+     "n_harmful": 8,
+     "n_bs": 54,
+     "chr": 0.12903225806451613,
+     "chr_cp95_upper": 0.22079276463175415
+    },
+    {
+     "tau": 0.4153554439544678,
+     "coverage": 0.7078651685393258,
+     "n_commits": 63,
+     "n_harmful": 8,
+     "n_bs": 55,
+     "chr": 0.12698412698412698,
+     "chr_cp95_upper": 0.217475252037397
+    },
+    {
+     "tau": 0.4214102625846863,
+     "coverage": 0.7191011235955056,
+     "n_commits": 64,
+     "n_harmful": 8,
+     "n_bs": 56,
+     "chr": 0.125,
+     "chr_cp95_upper": 0.2142556703086208
+    },
+    {
+     "tau": 0.44487738609313965,
+     "coverage": 0.7303370786516854,
+     "n_commits": 65,
+     "n_harmful": 9,
+     "n_bs": 56,
+     "chr": 0.13846153846153847,
+     "chr_cp95_upper": 0.22918263826550034
+    },
+    {
+     "tau": 0.47526004910469055,
+     "coverage": 0.7415730337078652,
+     "n_commits": 66,
+     "n_harmful": 10,
+     "n_bs": 56,
+     "chr": 0.15151515151515152,
+     "chr_cp95_upper": 0.2434418358124833
+    },
+    {
+     "tau": 0.47536659240722656,
+     "coverage": 0.7528089887640449,
+     "n_commits": 67,
+     "n_harmful": 11,
+     "n_bs": 56,
+     "chr": 0.16417910447761194,
+     "chr_cp95_upper": 0.2570925984965865
+    },
+    {
+     "tau": 0.4819191098213196,
+     "coverage": 0.7640449438202247,
+     "n_commits": 68,
+     "n_harmful": 11,
+     "n_bs": 57,
+     "chr": 0.16176470588235295,
+     "chr_cp95_upper": 0.25352527199056424
+    },
+    {
+     "tau": 0.49165892601013184,
+     "coverage": 0.7752808988764045,
+     "n_commits": 69,
+     "n_harmful": 11,
+     "n_bs": 58,
+     "chr": 0.15942028985507245,
+     "chr_cp95_upper": 0.2500552090514733
+    },
+    {
+     "tau": 0.5227270722389221,
+     "coverage": 0.7865168539325843,
+     "n_commits": 70,
+     "n_harmful": 11,
+     "n_bs": 59,
+     "chr": 0.15714285714285714,
+     "chr_cp95_upper": 0.24667850269927627
+    },
+    {
+     "tau": 0.5321052074432373,
+     "coverage": 0.797752808988764,
+     "n_commits": 71,
+     "n_harmful": 11,
+     "n_bs": 60,
+     "chr": 0.15492957746478872,
+     "chr_cp95_upper": 0.24339145139114263
+    },
+    {
+     "tau": 0.5329104065895081,
+     "coverage": 0.8089887640449438,
+     "n_commits": 72,
+     "n_harmful": 11,
+     "n_bs": 61,
+     "chr": 0.1527777777777778,
+     "chr_cp95_upper": 0.24019054577246468
+    },
+    {
+     "tau": 0.5672280788421631,
+     "coverage": 0.8202247191011236,
+     "n_commits": 73,
+     "n_harmful": 12,
+     "n_bs": 61,
+     "chr": 0.1643835616438356,
+     "chr_cp95_upper": 0.2526901104635722
+    },
+    {
+     "tau": 0.5790814757347107,
+     "coverage": 0.8314606741573034,
+     "n_commits": 74,
+     "n_harmful": 13,
+     "n_bs": 61,
+     "chr": 0.17567567567567569,
+     "chr_cp95_upper": 0.26472359537883067
+    },
+    {
+     "tau": 0.5931229591369629,
+     "coverage": 0.8426966292134831,
+     "n_commits": 75,
+     "n_harmful": 13,
+     "n_bs": 62,
+     "chr": 0.17333333333333334,
+     "chr_cp95_upper": 0.2613876074647734
+    },
+    {
+     "tau": 0.5979072451591492,
+     "coverage": 0.8539325842696629,
+     "n_commits": 76,
+     "n_harmful": 13,
+     "n_bs": 63,
+     "chr": 0.17105263157894737,
+     "chr_cp95_upper": 0.2581343206647349
+    },
+    {
+     "tau": 0.6295400857925415,
+     "coverage": 0.8651685393258427,
+     "n_commits": 77,
+     "n_harmful": 13,
+     "n_bs": 64,
+     "chr": 0.16883116883116883,
+     "chr_cp95_upper": 0.2549607112456916
+    },
+    {
+     "tau": 0.6727563142776489,
+     "coverage": 0.8764044943820225,
+     "n_commits": 78,
+     "n_harmful": 13,
+     "n_bs": 65,
+     "chr": 0.16666666666666666,
+     "chr_cp95_upper": 0.25186390033069433
+    },
+    {
+     "tau": 0.6748970150947571,
+     "coverage": 0.8876404494382022,
+     "n_commits": 79,
+     "n_harmful": 13,
+     "n_bs": 66,
+     "chr": 0.16455696202531644,
+     "chr_cp95_upper": 0.24884114538060184
+    },
+    {
+     "tau": 0.829138994216919,
+     "coverage": 0.898876404494382,
+     "n_commits": 80,
+     "n_harmful": 13,
+     "n_bs": 67,
+     "chr": 0.1625,
+     "chr_cp95_upper": 0.24588983226552474
+    },
+    {
+     "tau": 0.8449277877807617,
+     "coverage": 0.9101123595505618,
+     "n_commits": 81,
+     "n_harmful": 13,
+     "n_bs": 68,
+     "chr": 0.16049382716049382,
+     "chr_cp95_upper": 0.24300746787931504
+    },
+    {
+     "tau": 0.8651790022850037,
+     "coverage": 0.9213483146067416,
+     "n_commits": 82,
+     "n_harmful": 13,
+     "n_bs": 69,
+     "chr": 0.15853658536585366,
+     "chr_cp95_upper": 0.24019167325456275
+    },
+    {
+     "tau": 0.8776923418045044,
+     "coverage": 0.9325842696629213,
+     "n_commits": 83,
+     "n_harmful": 13,
+     "n_bs": 70,
+     "chr": 0.1566265060240964,
+     "chr_cp95_upper": 0.23744017713928847
+    },
+    {
+     "tau": 0.8979478478431702,
+     "coverage": 0.9438202247191011,
+     "n_commits": 84,
+     "n_harmful": 13,
+     "n_bs": 71,
+     "chr": 0.15476190476190477,
+     "chr_cp95_upper": 0.23475080999988845
+    },
+    {
+     "tau": 0.9626705050468445,
+     "coverage": 0.9550561797752809,
+     "n_commits": 85,
+     "n_harmful": 13,
+     "n_bs": 72,
+     "chr": 0.15294117647058825,
+     "chr_cp95_upper": 0.2321214984179366
+    },
+    {
+     "tau": 0.9673755764961243,
+     "coverage": 0.9662921348314607,
+     "n_commits": 86,
+     "n_harmful": 13,
+     "n_bs": 73,
+     "chr": 0.1511627906976744,
+     "chr_cp95_upper": 0.22955025985120542
+    },
+    {
+     "tau": 0.969977617263794,
+     "coverage": 0.9775280898876404,
+     "n_commits": 87,
+     "n_harmful": 13,
+     "n_bs": 74,
+     "chr": 0.14942528735632185,
+     "chr_cp95_upper": 0.22703519773176828
+    },
+    {
+     "tau": 0.9967573285102844,
+     "coverage": 0.9887640449438202,
+     "n_commits": 88,
+     "n_harmful": 14,
+     "n_bs": 74,
+     "chr": 0.1590909090909091,
+     "chr_cp95_upper": 0.2374741796464156
+    },
+    {
+     "tau": 1.0,
+     "coverage": 1.0,
+     "n_commits": 89,
+     "n_harmful": 14,
+     "n_bs": 75,
+     "chr": 0.15730337078651685,
+     "chr_cp95_upper": 0.23493198308298377
+    }
+   ]
+  },
+  "full_without_GroupDRO": {
+   "n_commits": 7,
+   "n_bs_retained": 6,
+   "n_harmful": 1,
+   "n_abstained": 82,
+   "chr": 0.14285714285714285,
+   "chr_cp95_upper": 0.5207029735913071,
+   "bcov": 0.06741573033707865,
+   "harmful_blocked_of_14": 13,
+   "bs_lost_of_75": 69,
+   "harm_auroc": 0.4990476190476191,
+   "harm_auprc": 0.16602604964514608,
+   "gates": {
+    "g1_harm_auroc": {
+     "value": 0.4990476190476191,
+     "min": 0.75
+    },
+    "g2_auprc_lift": {
+     "value": 0.008722678858629235,
+     "auprc": 0.16602604964514608,
+     "prevalence": 0.15730337078651685,
+     "min": 0.1
+    },
+    "g3_bs_retained": {
+     "value": 6,
+     "min": 55
+    },
+    "g4_harmful": {
+     "value": 1,
+     "max": 3
+    },
+    "g5_chr_cp95_upper": {
+     "value": 0.5207029735913071,
+     "max": 0.15
+    },
+    "g6_frontier": {
+     "dominates_raw_tsicl": false,
+     "dominates_mirage": true,
+     "n_dominating_points_vs_raw": 0,
+     "n_dominating_points_vs_mirage": 43
+    },
+    "g7_sources_not_degraded": {
+     "value": 2,
+     "sources": [
+      "ETTh1",
+      "ETTh2"
+     ],
+     "min": 4,
+     "predicate": "chr <= raw TS-ICL chr on that source AND at least one B&S commit retained where one was available (declared at decision time; the 4/6 count itself is pre-registered)"
+    },
+    "g8_no_source_identity": {
+     "value": true,
+     "evidence": "source is not an input tensor anywhere in the model (see MODEL inputs and FORBIDDEN_INPUT_KEYS); every window is scored by the fold whose training pool excluded its source"
+    }
+   },
+   "gate_pass": {
+    "g1": false,
+    "g2": false,
+    "g3": false,
+    "g4": true,
+    "g5": false,
+    "g6": false,
+    "g7": false,
+    "g8": true
+   },
+   "all_gates_pass": false,
+   "per_source": {
+    "Crypto": {
+     "n_windows": 3,
+     "raw_tsicl_bs": 3,
+     "raw_tsicl_harmful": 0,
+     "raw_tsicl_chr": 0.0,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 0,
+     "bs_lost": 3
+    },
+    "ETTh1": {
+     "n_windows": 12,
+     "raw_tsicl_bs": 11,
+     "raw_tsicl_harmful": 1,
+     "raw_tsicl_chr": 0.08333333333333333,
+     "n_commits": 1,
+     "bs_retained": 1,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 1,
+     "bs_lost": 10
+    },
+    "ETTh2": {
+     "n_windows": 10,
+     "raw_tsicl_bs": 10,
+     "raw_tsicl_harmful": 0,
+     "raw_tsicl_chr": 0.0,
+     "n_commits": 5,
+     "bs_retained": 5,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 0,
+     "bs_lost": 5
+    },
+    "ETTm1": {
+     "n_windows": 16,
+     "raw_tsicl_bs": 13,
+     "raw_tsicl_harmful": 3,
+     "raw_tsicl_chr": 0.1875,
+     "n_commits": 1,
+     "bs_retained": 0,
+     "harmful": 1,
+     "chr": 1.0,
+     "harmful_blocked": 2,
+     "bs_lost": 13
+    },
+    "Oil Price": {
+     "n_windows": 7,
+     "raw_tsicl_bs": 6,
+     "raw_tsicl_harmful": 1,
+     "raw_tsicl_chr": 0.14285714285714285,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 1,
+     "bs_lost": 6
+    },
+    "US Term Structure": {
+     "n_windows": 41,
+     "raw_tsicl_bs": 32,
+     "raw_tsicl_harmful": 9,
+     "raw_tsicl_chr": 0.21951219512195122,
+     "n_commits": 0,
+     "bs_retained": 0,
+     "harmful": 0,
+     "chr": 0.0,
+     "harmful_blocked": 9,
+     "bs_lost": 32
+    }
+   },
+   "thresholds": {
+    "ETTh1": {
+     "tau_h": 0.38,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 518,
+      "n_committed": 232,
+      "n_harmful_commits": 19,
+      "n_bs_commits": 213,
+      "n_protected_edits": 0,
+      "chr": 0.08189655172413793,
+      "chr_cp95_upper": 0.11785428226550267,
+      "bcov": 0.4111969111969112,
+      "abstention_rate": 0.5521235521235521
+     },
+     "no_calibrated_point": false
+    },
+    "ETTh2": {
+     "tau_h": 0.32,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 526,
+      "n_committed": 226,
+      "n_harmful_commits": 17,
+      "n_bs_commits": 209,
+      "n_protected_edits": 0,
+      "chr": 0.0752212389380531,
+      "chr_cp95_upper": 0.11069591047330671,
+      "bcov": 0.3973384030418251,
+      "abstention_rate": 0.5703422053231939
+     },
+     "no_calibrated_point": false
+    },
+    "ETTm1": {
+     "tau_h": 0.06,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 552,
+      "n_committed": 170,
+      "n_harmful_commits": 9,
+      "n_bs_commits": 161,
+      "n_protected_edits": 0,
+      "chr": 0.052941176470588235,
+      "chr_cp95_upper": 0.09056366574337482,
+      "bcov": 0.2916666666666667,
+      "abstention_rate": 0.6920289855072463
+     },
+     "no_calibrated_point": false
+    },
+    "Crypto": {
+     "tau_h": 0.46,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 528,
+      "n_committed": 240,
+      "n_harmful_commits": 26,
+      "n_bs_commits": 214,
+      "n_protected_edits": 3,
+      "chr": 0.10833333333333334,
+      "chr_cp95_upper": 0.14712508511588812,
+      "bcov": 0.4053030303030303,
+      "abstention_rate": 0.5454545454545454
+     },
+     "no_calibrated_point": false
+    },
+    "US Term Structure": {
+     "tau_h": null,
+     "delta": null,
+     "tau_p": null,
+     "no_calibrated_point": true,
+     "reason": "no grid point reached CHR CP95 <= 0.15"
+    },
+    "Oil Price": {
+     "tau_h": 0.36,
+     "delta": 0.0,
+     "tau_p": 0.2,
+     "val_counts": {
+      "n_episodes": 506,
+      "n_committed": 216,
+      "n_harmful_commits": 20,
+      "n_bs_commits": 196,
+      "n_protected_edits": 0,
+      "chr": 0.09259259259259259,
+      "chr_cp95_upper": 0.13170127188994585,
+      "bcov": 0.38735177865612647,
+      "abstention_rate": 0.5731225296442688
+     },
+     "no_calibrated_point": false
+    }
+   },
+   "frontier": [
+    {
+     "tau": 4.459197953110561e-05,
+     "coverage": 0.011235955056179775,
+     "n_commits": 1,
+     "n_harmful": 0,
+     "n_bs": 1,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.95
+    },
+    {
+     "tau": 9.326778672402725e-05,
+     "coverage": 0.02247191011235955,
+     "n_commits": 2,
+     "n_harmful": 0,
+     "n_bs": 2,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.776393202250021
+    },
+    {
+     "tau": 9.381243580719456e-05,
+     "coverage": 0.033707865168539325,
+     "n_commits": 3,
+     "n_harmful": 0,
+     "n_bs": 3,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.6315968501359612
+    },
+    {
+     "tau": 9.661541116656736e-05,
+     "coverage": 0.0449438202247191,
+     "n_commits": 4,
+     "n_harmful": 0,
+     "n_bs": 4,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.527129195498412
+    },
+    {
+     "tau": 0.00019334862008690834,
+     "coverage": 0.056179775280898875,
+     "n_commits": 5,
+     "n_harmful": 0,
+     "n_bs": 5,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.450719728346941
+    },
+    {
+     "tau": 0.0003486245113890618,
+     "coverage": 0.06741573033707865,
+     "n_commits": 6,
+     "n_harmful": 0,
+     "n_bs": 6,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.39303776899708265
+    },
+    {
+     "tau": 0.0003867268387693912,
+     "coverage": 0.07865168539325842,
+     "n_commits": 7,
+     "n_harmful": 0,
+     "n_bs": 7,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.34816365513116077
+    },
+    {
+     "tau": 0.0004233910294715315,
+     "coverage": 0.0898876404494382,
+     "n_commits": 8,
+     "n_harmful": 0,
+     "n_bs": 8,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.3123439780663678
+    },
+    {
+     "tau": 0.0004258238768670708,
+     "coverage": 0.10112359550561797,
+     "n_commits": 9,
+     "n_harmful": 0,
+     "n_bs": 9,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.28312883556311347
+    },
+    {
+     "tau": 0.0005921758129261434,
+     "coverage": 0.11235955056179775,
+     "n_commits": 10,
+     "n_harmful": 0,
+     "n_bs": 10,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.2588655508930522
+    },
+    {
+     "tau": 0.0006860648863948882,
+     "coverage": 0.12359550561797752,
+     "n_commits": 11,
+     "n_harmful": 0,
+     "n_bs": 11,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.2384041903808526
+    },
+    {
+     "tau": 0.0008399939397349954,
+     "coverage": 0.1348314606741573,
+     "n_commits": 12,
+     "n_harmful": 0,
+     "n_bs": 12,
+     "chr": 0.0,
+     "chr_cp95_upper": 0.22092219194555585
+    },
+    {
+     "tau": 0.0009491470409557223,
+     "coverage": 0.14606741573033707,
+     "n_commits": 13,
+     "n_harmful": 1,
+     "n_bs": 12,
+     "chr": 0.07692307692307693,
+     "chr_cp95_upper": 0.31633976476272974
+    },
+    {
+     "tau": 0.0010555102489888668,
+     "coverage": 0.15730337078651685,
+     "n_commits": 14,
+     "n_harmful": 1,
+     "n_bs": 13,
+     "chr": 0.07142857142857142,
+     "chr_cp95_upper": 0.29673423894887463
+    },
+    {
+     "tau": 0.001124750473536551,
+     "coverage": 0.16853932584269662,
+     "n_commits": 15,
+     "n_harmful": 2,
+     "n_bs": 13,
+     "chr": 0.13333333333333333,
+     "chr_cp95_upper": 0.36344176554140206
+    },
+    {
+     "tau": 0.001314094290137291,
+     "coverage": 0.1797752808988764,
+     "n_commits": 16,
+     "n_harmful": 2,
+     "n_bs": 14,
+     "chr": 0.125,
+     "chr_cp95_upper": 0.34382519922958943
+    },
+    {
+     "tau": 0.0014018327929079533,
+     "coverage": 0.19101123595505617,
+     "n_commits": 17,
+     "n_harmful": 2,
+     "n_bs": 15,
+     "chr": 0.11764705882352941,
+     "chr_cp95_upper": 0.3261930630834782
+    },
+    {
+     "tau": 0.0016849226085469127,
+     "coverage": 0.20224719101123595,
+     "n_commits": 18,
+     "n_harmful": 2,
+     "n_bs": 16,
+     "chr": 0.1111111111111111,
+     "chr_cp95_upper": 0.31026273969821105
+    },
+    {
+     "tau": 0.0020391216967254877,
+     "coverage": 0.21348314606741572,
+     "n_commits": 19,
+     "n_harmful": 2,
+     "n_bs": 17,
+     "chr": 0.10526315789473684,
+     "chr_cp95_upper": 0.29580201397505035
+    },
+    {
+     "tau": 0.0021104137413203716,
+     "coverage": 0.2247191011235955,
+     "n_commits": 20,
+     "n_harmful": 2,
+     "n_bs": 18,
+     "chr": 0.1,
+     "chr_cp95_upper": 0.28261852488586087
+    },
+    {
+     "tau": 0.002197418361902237,
+     "coverage": 0.23595505617977527,
+     "n_commits": 21,
+     "n_harmful": 2,
+     "n_bs": 19,
+     "chr": 0.09523809523809523,
+     "chr_cp95_upper": 0.2705516993045313
+    },
+    {
+     "tau": 0.002210540696978569,
+     "coverage": 0.24719101123595505,
+     "n_commits": 22,
+     "n_harmful": 2,
+     "n_bs": 20,
+     "chr": 0.09090909090909091,
+     "chr_cp95_upper": 0.2594665322284372
+    },
+    {
+     "tau": 0.002748992759734392,
+     "coverage": 0.25842696629213485,
+     "n_commits": 23,
+     "n_harmful": 3,
+     "n_bs": 20,
+     "chr": 0.13043478260869565,
+     "chr_cp95_upper": 0.30363770155746167
+    },
+    {
+     "tau": 0.0028179888613522053,
+     "coverage": 0.2696629213483146,
+     "n_commits": 24,
+     "n_harmful": 3,
+     "n_bs": 21,
+     "chr": 0.125,
+     "chr_cp95_upper": 0.29227319650798933
+    },
+    {
+     "tau": 0.0038957868237048388,
+     "coverage": 0.2808988764044944,
+     "n_commits": 25,
+     "n_harmful": 3,
+     "n_bs": 22,
+     "chr": 0.12,
+     "chr_cp95_upper": 0.28172250797771403
+    },
+    {
+     "tau": 0.004012832883745432,
+     "coverage": 0.29213483146067415,
+     "n_commits": 26,
+     "n_harmful": 3,
+     "n_bs": 23,
+     "chr": 0.11538461538461539,
+     "chr_cp95_upper": 0.27190195515553406
+    },
+    {
+     "tau": 0.005082700867205858,
+     "coverage": 0.30337078651685395,
+     "n_commits": 27,
+     "n_harmful": 4,
+     "n_bs": 23,
+     "chr": 0.14814814814814814,
+     "chr_cp95_upper": 0.30762634422755497
+    },
+    {
+     "tau": 0.0052998908795416355,
+     "coverage": 0.3146067415730337,
+     "n_commits": 28,
+     "n_harmful": 5,
+     "n_bs": 23,
+     "chr": 0.17857142857142858,
+     "chr_cp95_upper": 0.33940197136159084
+    },
+    {
+     "tau": 0.007396468427032232,
+     "coverage": 0.3258426966292135,
+     "n_commits": 29,
+     "n_harmful": 5,
+     "n_bs": 24,
+     "chr": 0.1724137931034483,
+     "chr_cp95_upper": 0.32887269243481687
+    },
+    {
+     "tau": 0.008103872649371624,
+     "coverage": 0.33707865168539325,
+     "n_commits": 30,
+     "n_harmful": 6,
+     "n_bs": 24,
+     "chr": 0.2,
+     "chr_cp95_upper": 0.35700911456165313
+    },
+    {
+     "tau": 0.00835056509822607,
+     "coverage": 0.34831460674157305,
+     "n_commits": 31,
+     "n_harmful": 6,
+     "n_bs": 25,
+     "chr": 0.1935483870967742,
+     "chr_cp95_upper": 0.3466525437888071
+    },
+    {
+     "tau": 0.011670393869280815,
+     "coverage": 0.3595505617977528,
+     "n_commits": 32,
+     "n_harmful": 6,
+     "n_bs": 26,
+     "chr": 0.1875,
+     "chr_cp95_upper": 0.3368739185089907
+    },
+    {
+     "tau": 0.018791520968079567,
+     "coverage": 0.3707865168539326,
+     "n_commits": 33,
+     "n_harmful": 6,
+     "n_bs": 27,
+     "chr": 0.18181818181818182,
+     "chr_cp95_upper": 0.32762675185040113
+    },
+    {
+     "tau": 0.019463229924440384,
+     "coverage": 0.38202247191011235,
+     "n_commits": 34,
+     "n_harmful": 6,
+     "n_bs": 28,
+     "chr": 0.17647058823529413,
+     "chr_cp95_upper": 0.31886933930632094
+    },
+    {
+     "tau": 0.026408610865473747,
+     "coverage": 0.39325842696629215,
+     "n_commits": 35,
+     "n_harmful": 6,
+     "n_bs": 29,
+     "chr": 0.17142857142857143,
+     "chr_cp95_upper": 0.3105641705036986
+    },
+    {
+     "tau": 0.026895921677350998,
+     "coverage": 0.4044943820224719,
+     "n_commits": 36,
+     "n_harmful": 6,
+     "n_bs": 30,
+     "chr": 0.16666666666666666,
+     "chr_cp95_upper": 0.30267742362657557
+    },
+    {
+     "tau": 0.026917211711406708,
+     "coverage": 0.4157303370786517,
+     "n_commits": 37,
+     "n_harmful": 6,
+     "n_bs": 31,
+     "chr": 0.16216216216216217,
+     "chr_cp95_upper": 0.2951785296973097
+    },
+    {
+     "tau": 0.028415286913514137,
+     "coverage": 0.42696629213483145,
+     "n_commits": 38,
+     "n_harmful": 6,
+     "n_bs": 32,
+     "chr": 0.15789473684210525,
+     "chr_cp95_upper": 0.28803979602672275
+    },
+    {
+     "tau": 0.030168067663908005,
+     "coverage": 0.43820224719101125,
+     "n_commits": 39,
+     "n_harmful": 6,
+     "n_bs": 33,
+     "chr": 0.15384615384615385,
+     "chr_cp95_upper": 0.28123607989900634
+    },
+    {
+     "tau": 0.04471208527684212,
+     "coverage": 0.449438202247191,
+     "n_commits": 40,
+     "n_harmful": 6,
+     "n_bs": 34,
+     "chr": 0.15,
+     "chr_cp95_upper": 0.27474450501397046
+    },
+    {
+     "tau": 0.04538123309612274,
+     "coverage": 0.4606741573033708,
+     "n_commits": 41,
+     "n_harmful": 6,
+     "n_bs": 35,
+     "chr": 0.14634146341463414,
+     "chr_cp95_upper": 0.2685442144173794
+    },
+    {
+     "tau": 0.046190232038497925,
+     "coverage": 0.47191011235955055,
+     "n_commits": 42,
+     "n_harmful": 7,
+     "n_bs": 35,
+     "chr": 0.16666666666666666,
+     "chr_cp95_upper": 0.29036775211221694
+    },
+    {
+     "tau": 0.048488423228263855,
+     "coverage": 0.48314606741573035,
+     "n_commits": 43,
+     "n_harmful": 7,
+     "n_bs": 36,
+     "chr": 0.16279069767441862,
+     "chr_cp95_upper": 0.2841260059989797
+    },
+    {
+     "tau": 0.05754953995347023,
+     "coverage": 0.4943820224719101,
+     "n_commits": 44,
+     "n_harmful": 8,
+     "n_bs": 36,
+     "chr": 0.18181818181818182,
+     "chr_cp95_upper": 0.3042178811558839
+    },
+    {
+     "tau": 0.06211460381746292,
+     "coverage": 0.5056179775280899,
+     "n_commits": 45,
+     "n_harmful": 8,
+     "n_bs": 37,
+     "chr": 0.17777777777777778,
+     "chr_cp95_upper": 0.29797350520741195
+    },
+    {
+     "tau": 0.06687759608030319,
+     "coverage": 0.5168539325842697,
+     "n_commits": 46,
+     "n_harmful": 8,
+     "n_bs": 38,
+     "chr": 0.17391304347826086,
+     "chr_cp95_upper": 0.29197871258266084
+    },
+    {
+     "tau": 0.0673975944519043,
+     "coverage": 0.5280898876404494,
+     "n_commits": 47,
+     "n_harmful": 8,
+     "n_bs": 39,
+     "chr": 0.1702127659574468,
+     "chr_cp95_upper": 0.2862189422085896
+    },
+    {
+     "tau": 0.07152284681797028,
+     "coverage": 0.5393258426966292,
+     "n_commits": 48,
+     "n_harmful": 9,
+     "n_bs": 39,
+     "chr": 0.1875,
+     "chr_cp95_upper": 0.3043906578511362
+    },
+    {
+     "tau": 0.08368691056966782,
+     "coverage": 0.550561797752809,
+     "n_commits": 49,
+     "n_harmful": 9,
+     "n_bs": 40,
+     "chr": 0.1836734693877551,
+     "chr_cp95_upper": 0.2986344515301126
+    },
+    {
+     "tau": 0.09125752747058868,
+     "coverage": 0.5617977528089888,
+     "n_commits": 50,
+     "n_harmful": 9,
+     "n_bs": 41,
+     "chr": 0.18,
+     "chr_cp95_upper": 0.2930905806565784
+    },
+    {
+     "tau": 0.09328215569257736,
+     "coverage": 0.5730337078651685,
+     "n_commits": 51,
+     "n_harmful": 9,
+     "n_bs": 42,
+     "chr": 0.17647058823529413,
+     "chr_cp95_upper": 0.28774759308879855
+    },
+    {
+     "tau": 0.09881606698036194,
+     "coverage": 0.5842696629213483,
+     "n_commits": 52,
+     "n_harmful": 9,
+     "n_bs": 43,
+     "chr": 0.17307692307692307,
+     "chr_cp95_upper": 0.28259483869583507
+    },
+    {
+     "tau": 0.0994073823094368,
+     "coverage": 0.5955056179775281,
+     "n_commits": 53,
+     "n_harmful": 9,
+     "n_bs": 44,
+     "chr": 0.16981132075471697,
+     "chr_cp95_upper": 0.2776224010774938
+    },
+    {
+     "tau": 0.10900812596082687,
+     "coverage": 0.6067415730337079,
+     "n_commits": 54,
+     "n_harmful": 9,
+     "n_bs": 45,
+     "chr": 0.16666666666666666,
+     "chr_cp95_upper": 0.2728210360552462
+    },
+    {
+     "tau": 0.11487413942813873,
+     "coverage": 0.6179775280898876,
+     "n_commits": 55,
+     "n_harmful": 9,
+     "n_bs": 46,
+     "chr": 0.16363636363636364,
+     "chr_cp95_upper": 0.2681821161759588
+    },
+    {
+     "tau": 0.11909154057502747,
+     "coverage": 0.6292134831460674,
+     "n_commits": 56,
+     "n_harmful": 9,
+     "n_bs": 47,
+     "chr": 0.16071428571428573,
+     "chr_cp95_upper": 0.26369758056375725
+    },
+    {
+     "tau": 0.13066086173057556,
+     "coverage": 0.6404494382022472,
+     "n_commits": 57,
+     "n_harmful": 9,
+     "n_bs": 48,
+     "chr": 0.15789473684210525,
+     "chr_cp95_upper": 0.2593598895364318
+    },
+    {
+     "tau": 0.13234688341617584,
+     "coverage": 0.651685393258427,
+     "n_commits": 58,
+     "n_harmful": 9,
+     "n_bs": 49,
+     "chr": 0.15517241379310345,
+     "chr_cp95_upper": 0.2551619834731897
+    },
+    {
+     "tau": 0.15339043736457825,
+     "coverage": 0.6629213483146067,
+     "n_commits": 59,
+     "n_harmful": 9,
+     "n_bs": 50,
+     "chr": 0.15254237288135594,
+     "chr_cp95_upper": 0.2510972454817701
+    },
+    {
+     "tau": 0.1647753268480301,
+     "coverage": 0.6741573033707865,
+     "n_commits": 60,
+     "n_harmful": 9,
+     "n_bs": 51,
+     "chr": 0.15,
+     "chr_cp95_upper": 0.2471594674662178
+    },
+    {
+     "tau": 0.16823726892471313,
+     "coverage": 0.6853932584269663,
+     "n_commits": 61,
+     "n_harmful": 9,
+     "n_bs": 52,
+     "chr": 0.14754098360655737,
+     "chr_cp95_upper": 0.2433428192430699
+    },
+    {
+     "tau": 0.18161025643348694,
+     "coverage": 0.6966292134831461,
+     "n_commits": 62,
+     "n_harmful": 9,
+     "n_bs": 53,
+     "chr": 0.14516129032258066,
+     "chr_cp95_upper": 0.2396418203942678
+    },
+    {
+     "tau": 0.2369653582572937,
+     "coverage": 0.7078651685393258,
+     "n_commits": 63,
+     "n_harmful": 9,
+     "n_bs": 54,
+     "chr": 0.14285714285714285,
+     "chr_cp95_upper": 0.2360513145805704
+    },
+    {
+     "tau": 0.25141093134880066,
+     "coverage": 0.7191011235955056,
+     "n_commits": 64,
+     "n_harmful": 10,
+     "n_bs": 54,
+     "chr": 0.15625,
+     "chr_cp95_upper": 0.25061145507501076
+    },
+    {
+     "tau": 0.27490198612213135,
+     "coverage": 0.7303370786516854,
+     "n_commits": 65,
+     "n_harmful": 11,
+     "n_bs": 54,
+     "chr": 0.16923076923076924,
+     "chr_cp95_upper": 0.2645357846298366
+    },
+    {
+     "tau": 0.3255561888217926,
+     "coverage": 0.7415730337078652,
+     "n_commits": 66,
+     "n_harmful": 11,
+     "n_bs": 55,
+     "chr": 0.16666666666666666,
+     "chr_cp95_upper": 0.2607613153376402
+    },
+    {
+     "tau": 0.33505719900131226,
+     "coverage": 0.7528089887640449,
+     "n_commits": 67,
+     "n_harmful": 11,
+     "n_bs": 56,
+     "chr": 0.16417910447761194,
+     "chr_cp95_upper": 0.2570925984965865
+    },
+    {
+     "tau": 0.3758183419704437,
+     "coverage": 0.7640449438202247,
+     "n_commits": 68,
+     "n_harmful": 12,
+     "n_bs": 56,
+     "chr": 0.17647058823529413,
+     "chr_cp95_upper": 0.2701848284419145
+    },
+    {
+     "tau": 0.48342058062553406,
+     "coverage": 0.7752808988764045,
+     "n_commits": 69,
+     "n_harmful": 12,
+     "n_bs": 57,
+     "chr": 0.17391304347826086,
+     "chr_cp95_upper": 0.2664955719982254
+    },
+    {
+     "tau": 0.4897139370441437,
+     "coverage": 0.7865168539325843,
+     "n_commits": 70,
+     "n_harmful": 12,
+     "n_bs": 58,
+     "chr": 0.17142857142857143,
+     "chr_cp95_upper": 0.2629052823464073
+    },
+    {
+     "tau": 0.4964209198951721,
+     "coverage": 0.797752808988764,
+     "n_commits": 71,
+     "n_harmful": 12,
+     "n_bs": 59,
+     "chr": 0.16901408450704225,
+     "chr_cp95_upper": 0.25941004932933953
+    },
+    {
+     "tau": 0.5572587847709656,
+     "coverage": 0.8089887640449438,
+     "n_commits": 72,
+     "n_harmful": 12,
+     "n_bs": 60,
+     "chr": 0.16666666666666666,
+     "chr_cp95_upper": 0.2560061649301224
+    },
+    {
+     "tau": 0.5991533398628235,
+     "coverage": 0.8202247191011236,
+     "n_commits": 73,
+     "n_harmful": 12,
+     "n_bs": 61,
+     "chr": 0.1643835616438356,
+     "chr_cp95_upper": 0.2526901104635722
+    },
+    {
+     "tau": 0.6764716506004333,
+     "coverage": 0.8314606741573034,
+     "n_commits": 74,
+     "n_harmful": 12,
+     "n_bs": 62,
+     "chr": 0.16216216216216217,
+     "chr_cp95_upper": 0.24945854472170104
+    },
+    {
+     "tau": 0.7125638723373413,
+     "coverage": 0.8426966292134831,
+     "n_commits": 75,
+     "n_harmful": 12,
+     "n_bs": 63,
+     "chr": 0.16,
+     "chr_cp95_upper": 0.24630829299210152
+    },
+    {
+     "tau": 0.7138097882270813,
+     "coverage": 0.8539325842696629,
+     "n_commits": 76,
+     "n_harmful": 12,
+     "n_bs": 64,
+     "chr": 0.15789473684210525,
+     "chr_cp95_upper": 0.2432363368758445
+    },
+    {
+     "tau": 0.7542979717254639,
+     "coverage": 0.8651685393258427,
+     "n_commits": 77,
+     "n_harmful": 13,
+     "n_bs": 64,
+     "chr": 0.16883116883116883,
+     "chr_cp95_upper": 0.2549607112456916
+    },
+    {
+     "tau": 0.8328165411949158,
+     "coverage": 0.8764044943820225,
+     "n_commits": 78,
+     "n_harmful": 13,
+     "n_bs": 65,
+     "chr": 0.16666666666666666,
+     "chr_cp95_upper": 0.25186390033069433
+    },
+    {
+     "tau": 0.8656938672065735,
+     "coverage": 0.8876404494382022,
+     "n_commits": 79,
+     "n_harmful": 13,
+     "n_bs": 66,
+     "chr": 0.16455696202531644,
+     "chr_cp95_upper": 0.24884114538060184
+    },
+    {
+     "tau": 0.8879150152206421,
+     "coverage": 0.898876404494382,
+     "n_commits": 80,
+     "n_harmful": 13,
+     "n_bs": 67,
+     "chr": 0.1625,
+     "chr_cp95_upper": 0.24588983226552474
+    },
+    {
+     "tau": 0.9160423874855042,
+     "coverage": 0.9101123595505618,
+     "n_commits": 81,
+     "n_harmful": 13,
+     "n_bs": 68,
+     "chr": 0.16049382716049382,
+     "chr_cp95_upper": 0.24300746787931504
+    },
+    {
+     "tau": 0.927263617515564,
+     "coverage": 0.9213483146067416,
+     "n_commits": 82,
+     "n_harmful": 13,
+     "n_bs": 69,
+     "chr": 0.15853658536585366,
+     "chr_cp95_upper": 0.24019167325456275
+    },
+    {
+     "tau": 0.9443029165267944,
+     "coverage": 0.9325842696629213,
+     "n_commits": 83,
+     "n_harmful": 13,
+     "n_bs": 70,
+     "chr": 0.1566265060240964,
+     "chr_cp95_upper": 0.23744017713928847
+    },
+    {
+     "tau": 0.966265082359314,
+     "coverage": 0.9438202247191011,
+     "n_commits": 84,
+     "n_harmful": 13,
+     "n_bs": 71,
+     "chr": 0.15476190476190477,
+     "chr_cp95_upper": 0.23475080999988845
+    },
+    {
+     "tau": 0.9775211811065674,
+     "coverage": 0.9550561797752809,
+     "n_commits": 85,
+     "n_harmful": 14,
+     "n_bs": 71,
+     "chr": 0.16470588235294117,
+     "chr_cp95_upper": 0.24544080462355658
+    },
+    {
+     "tau": 0.9898427128791809,
+     "coverage": 0.9662921348314607,
+     "n_commits": 86,
+     "n_harmful": 14,
+     "n_bs": 72,
+     "chr": 0.16279069767441862,
+     "chr_cp95_upper": 0.24272672342021587
+    },
+    {
+     "tau": 0.9928582906723022,
+     "coverage": 0.9775280898876404,
+     "n_commits": 87,
+     "n_harmful": 14,
+     "n_bs": 73,
+     "chr": 0.16091954022988506,
+     "chr_cp95_upper": 0.2400718175531783
+    },
+    {
+     "tau": 0.9950065612792969,
+     "coverage": 0.9887640449438202,
+     "n_commits": 88,
+     "n_harmful": 14,
+     "n_bs": 74,
+     "chr": 0.1590909090909091,
+     "chr_cp95_upper": 0.2374741796464156
+    },
+    {
+     "tau": 1.0,
+     "coverage": 1.0,
+     "n_commits": 89,
+     "n_harmful": 14,
+     "n_bs": 75,
+     "chr": 0.15730337078651685,
+     "chr_cp95_upper": 0.23493198308298377
+    }
+   ]
+  }
+ },
+ "primary_arm": "full_COUNTERACT",
+ "primary_all_gates_pass": false,
+ "paired_bootstrap": {
+  "full_vs_stat_only": {
+   "mean_diff": 0.02247191011235955,
+   "ci95": [
+    -0.0898876404494382,
+    0.1348314606741573
+   ],
+   "p_gt_0": 0.6176,
+   "n_windows": 89
+  },
+  "full_vs_latent_only": {
+   "mean_diff": -0.033707865168539325,
+   "ci95": [
+    -0.1348314606741573,
+    0.07865168539325842
+   ],
+   "p_gt_0": 0.2366,
+   "n_windows": 89
+  },
+  "full_vs_delta_only": {
+   "mean_diff": 0.14606741573033707,
+   "ci95": [
+    0.06741573033707865,
+    0.23595505617977527
+   ],
+   "p_gt_0": 0.9996,
+   "n_windows": 89
+  },
+  "groupdro_vs_erm": {
+   "mean_diff": 0.12359550561797752,
+   "ci95": [
+    0.033707865168539325,
+    0.21348314606741572
+   ],
+   "p_gt_0": 0.9969,
+   "n_windows": 89
+  }
+ },
+ "checkpoint_freeze_verified": true,
+ "runtime_sec": 20.20562195777893
+}

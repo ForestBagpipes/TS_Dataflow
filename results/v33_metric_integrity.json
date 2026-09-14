@@ -1,0 +1,18 @@
+{
+ "n_old": 2414,
+ "n_new": 2414,
+ "n_shared": 2414,
+ "gates": {
+  "key_sets_equal": true,
+  "identity_hashes_match": true,
+  "non_impute_labels_bit_identical": true,
+  "observables_bit_identical_all_rows": true
+ },
+ "n_hash_mismatch": 0,
+ "n_non_impute_label_drift": 0,
+ "n_observable_drift": 0,
+ "label_drift_examples": [],
+ "observable_drift_examples": [],
+ "note": "v3.2 predates output_hash; operator-output identity is certified by bit-identical params plus bit-identical before/after NMSE on non-IMPUTE rows, both deterministic functions of the output. output_hash is recorded from the v3.3 table onward.",
+ "passes": true
+}

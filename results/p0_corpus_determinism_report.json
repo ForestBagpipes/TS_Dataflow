@@ -1,0 +1,15 @@
+{
+ "n_a": 1599,
+ "n_b": 1599,
+ "common": 1599,
+ "only_in_a": [],
+ "only_in_b": [],
+ "window_id_order_match": 1599,
+ "window_id_order_total": 1599,
+ "content_differ": [],
+ "deterministic": true,
+ "build_a_exit": 0,
+ "build_b_exit": 0,
+ "build_a_stdout_tail": "___P0_CORPUS_BUILD_DONE___ n=1599 unique_uids=1599\n  scales mutated: True\n  wrote results/p0_corpus_manifest_a.json",
+ "build_b_stdout_tail": "___P0_CORPUS_BUILD_DONE___ n=1599 unique_uids=1599\n  scales mutated: True\n  wrote results/p0_corpus_manifest_b.json"
+}

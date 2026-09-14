@@ -1,0 +1,92 @@
+{
+ "manifest": {
+  "path": "results/p0_corpus_manifest_a.json",
+  "n_windows": 1599,
+  "unique_uids": 1599
+ },
+ "audits": {
+  "family_scores.jsonl": {
+   "n": 1599,
+   "status_counts": {
+    "metadata_verifiable": 1599
+   },
+   "anomalies": []
+  },
+  "level_shift_probe.json": {
+   "n": 11193,
+   "status_counts": {
+    "metadata_verifiable": 11193
+   },
+   "anomalies": []
+  },
+  "route_conditioned_shift.json": {
+   "n": 4638,
+   "status_counts": {
+    "metadata_verifiable": 4638
+   },
+   "anomalies": []
+  },
+  "counterfactual_routing.json": {
+   "status": "aggregate_only",
+   "n_windows_result": 1599,
+   "n_windows_manifest": 1599,
+   "match": true,
+   "datasets": [
+    "Crypto",
+    "ETTh1",
+    "ETTh2",
+    "ETTm1",
+    "Oil Price",
+    "US Term Structure",
+    "ood:pulse_train",
+    "ood:random_walk",
+    "ood:sawtooth",
+    "ood:staircase"
+   ]
+  },
+  "misroute_evidence.json": {
+   "n": 316,
+   "status_counts": {
+    "metadata_verifiable": 316
+   },
+   "anomalies": []
+  },
+  "conformal_family.json": {
+   "status": "aggregate_only",
+   "n_windows_result": 1599,
+   "n_windows_manifest": 1599,
+   "match": true,
+   "families": [
+    "DENOISE",
+    "DESPIKE",
+    "IMPUTE",
+    "RESEGMENT"
+   ]
+  },
+  "resegment_noop.json": {
+   "status": "aggregate_only",
+   "n_windows_result": 350,
+   "n_windows_manifest": 1599,
+   "match": false,
+   "slice_seed": 202
+  }
+ },
+ "reconstruction_list": [
+  {
+   "file": "counterfactual_routing.json",
+   "status": "aggregate_only",
+   "note": "aggregate-only file, rebuild from manifest if used quantitatively"
+  },
+  {
+   "file": "conformal_family.json",
+   "status": "aggregate_only",
+   "note": "aggregate-only file, rebuild from manifest if used quantitatively"
+  },
+  {
+   "file": "resegment_noop.json",
+   "status": "aggregate_only",
+   "note": "aggregate-only file, rebuild from manifest if used quantitatively"
+  }
+ ],
+ "all_metadata_verifiable": true
+}

@@ -1,0 +1,324 @@
+{
+ "n_candidates": 2414,
+ "features": {
+  "confidence": {
+   "finite_rate": 1.0,
+   "n_distinct": 827,
+   "min": 0.32031339867367903,
+   "max": 0.8935304853582849,
+   "constant": false
+  },
+  "defect_strength": {
+   "finite_rate": 1.0,
+   "n_distinct": 524,
+   "min": 1.3020833333333333,
+   "max": 178.53219995150212,
+   "constant": false
+  },
+  "behav_risk": {
+   "finite_rate": 1.0,
+   "n_distinct": 827,
+   "min": -0.8073293414388028,
+   "max": 14.596858982296085,
+   "constant": false
+  },
+  "ood": {
+   "finite_rate": 1.0,
+   "n_distinct": 827,
+   "min": 6.665801730587617e-08,
+   "max": 0.32557229713388197,
+   "constant": false
+  },
+  "dominant_units": {
+   "finite_rate": 1.0,
+   "n_distinct": 524,
+   "min": 1.3020833333333333,
+   "max": 178.53219995150212,
+   "constant": false
+  },
+  "secondary_units": {
+   "finite_rate": 1.0,
+   "n_distinct": 685,
+   "min": 0.0,
+   "max": 17.578125,
+   "constant": false
+  },
+  "evidence_ratio": {
+   "finite_rate": 1.0,
+   "n_distinct": 817,
+   "min": 0.0,
+   "max": 1.0,
+   "constant": false
+  },
+  "cost": {
+   "finite_rate": 1.0,
+   "n_distinct": 176,
+   "min": 0.001953125,
+   "max": 0.712890625,
+   "constant": false
+  },
+  "touched_fraction": {
+   "finite_rate": 1.0,
+   "n_distinct": 103,
+   "min": 0.001953125,
+   "max": 1.0,
+   "constant": false
+  },
+  "output_length_ratio": {
+   "finite_rate": 1.0,
+   "n_distinct": 87,
+   "min": 0.400390625,
+   "max": 1.0,
+   "constant": false
+  },
+  "discard_share": {
+   "finite_rate": 1.0,
+   "n_distinct": 87,
+   "min": 0.0,
+   "max": 0.599609375,
+   "constant": false
+  },
+  "struct_distortion": {
+   "finite_rate": 1.0,
+   "n_distinct": 1594,
+   "min": 0.00075,
+   "max": 0.9997589374550676,
+   "constant": false
+  },
+  "struct_trend": {
+   "finite_rate": 1.0,
+   "n_distinct": 268,
+   "min": 0.0,
+   "max": 0.598000050721133,
+   "constant": false
+  },
+  "struct_period": {
+   "finite_rate": 1.0,
+   "n_distinct": 267,
+   "min": 0.0,
+   "max": 0.5341170760836729,
+   "constant": false
+  },
+  "struct_spectrum": {
+   "finite_rate": 1.0,
+   "n_distinct": 268,
+   "min": 0.0,
+   "max": 0.788629254301741,
+   "constant": false
+  },
+  "struct_acf": {
+   "finite_rate": 1.0,
+   "n_distinct": 268,
+   "min": 0.0,
+   "max": 0.24846995157239662,
+   "constant": false
+  },
+  "struct_changepoint": {
+   "finite_rate": 1.0,
+   "n_distinct": 53,
+   "min": 0.0,
+   "max": 1.0,
+   "constant": false
+  },
+  "struct_extremes": {
+   "finite_rate": 1.0,
+   "n_distinct": 268,
+   "min": 0.0,
+   "max": 0.8475495071821235,
+   "constant": false
+  },
+  "struct_shape": {
+   "finite_rate": 1.0,
+   "n_distinct": 6,
+   "min": 0.0,
+   "max": 0.07266904651229257,
+   "constant": false
+  },
+  "struct_patch": {
+   "finite_rate": 1.0,
+   "n_distinct": 644,
+   "min": 0.0,
+   "max": 0.6493087515096503,
+   "constant": false
+  },
+  "struct_footprint": {
+   "finite_rate": 1.0,
+   "n_distinct": 103,
+   "min": 0.0,
+   "max": 0.712890625,
+   "constant": false
+  },
+  "struct_spread": {
+   "finite_rate": 1.0,
+   "n_distinct": 379,
+   "min": 0.0,
+   "max": 0.9273278722918149,
+   "constant": false
+  },
+  "delta_utility": {
+   "finite_rate": 1.0,
+   "n_distinct": 1678,
+   "min": -30.89629380353608,
+   "max": 60.56189992041259,
+   "constant": false
+  },
+  "utility_before": {
+   "finite_rate": 1.0,
+   "n_distinct": 827,
+   "min": -67.28410618358741,
+   "max": -0.9110448689852298,
+   "constant": false
+  },
+  "utility_after": {
+   "finite_rate": 1.0,
+   "n_distinct": 1678,
+   "min": -66.84449743518547,
+   "max": -0.40988786818832995,
+   "constant": false
+  },
+  "improvement_consistency": {
+   "finite_rate": 1.0,
+   "n_distinct": 40,
+   "min": 0.0,
+   "max": 1.0,
+   "constant": false
+  },
+  "improvement_depth": {
+   "finite_rate": 1.0,
+   "n_distinct": 1476,
+   "min": 0.0,
+   "max": 1.0,
+   "constant": false
+  },
+  "action_risk": {
+   "finite_rate": 1.0,
+   "n_distinct": 1638,
+   "min": 0.05023716517857142,
+   "max": 0.7734375,
+   "constant": false
+  },
+  "probe_delta_mean": {
+   "finite_rate": 1.0,
+   "n_distinct": 1678,
+   "min": -6.834499556721143,
+   "max": 2.5283840818230963,
+   "constant": false
+  },
+  "probe_delta_std": {
+   "finite_rate": 1.0,
+   "n_distinct": 1678,
+   "min": 0.0,
+   "max": 11.80511408108566,
+   "constant": false
+  },
+  "probe_delta_max": {
+   "finite_rate": 1.0,
+   "n_distinct": 1678,
+   "min": 0.0,
+   "max": 42.946259608422515,
+   "constant": false
+  },
+  "forecast_nrmse_delta": {
+   "finite_rate": 1.0,
+   "n_distinct": 1674,
+   "min": -25.617651565877367,
+   "max": 25.053964916730795,
+   "constant": false
+  },
+  "recon_nrmse_med_delta": {
+   "finite_rate": 1.0,
+   "n_distinct": 1678,
+   "min": -20.844085762988954,
+   "max": 3.185156342618905,
+   "constant": false
+  },
+  "recon_nrmse_iqr_delta": {
+   "finite_rate": 1.0,
+   "n_distinct": 1678,
+   "min": -12.961410779107865,
+   "max": 5.7498647308078805,
+   "constant": false
+  },
+  "multiview_disagree_delta": {
+   "finite_rate": 1.0,
+   "n_distinct": 1661,
+   "min": -10.80925388208658,
+   "max": 4.889763691341886,
+   "constant": false
+  },
+  "perturb_output_sens_delta": {
+   "finite_rate": 1.0,
+   "n_distinct": 1656,
+   "min": -3.095556642594812,
+   "max": 6.0230091416471145,
+   "constant": false
+  },
+  "repr_jump_mean_delta": {
+   "finite_rate": 1.0,
+   "n_distinct": 1662,
+   "min": -0.29503707532118884,
+   "max": 0.4727309909668722,
+   "constant": false
+  },
+  "repr_norm_drift_delta": {
+   "finite_rate": 1.0,
+   "n_distinct": 1662,
+   "min": -0.4528155125368254,
+   "max": 0.2990620257435107,
+   "constant": false
+  },
+  "model_disagree_delta": {
+   "finite_rate": 1.0,
+   "n_distinct": 1662,
+   "min": -8.360671207854349,
+   "max": 11.799521771326942,
+   "constant": false
+  },
+  "seam_error": {
+   "finite_rate": 1.0,
+   "n_distinct": 834,
+   "min": 0.0,
+   "max": 49.271813314409165,
+   "constant": false
+  },
+  "outside_support_drift": {
+   "finite_rate": 1.0,
+   "n_distinct": 1,
+   "min": 0.0,
+   "max": 0.0,
+   "constant": true
+  },
+  "delta_utility_rel": {
+   "finite_rate": 1.0,
+   "n_distinct": 1678,
+   "min": -1.351199996188373,
+   "max": 0.9687468241417085,
+   "constant": false
+  },
+  "probe_delta_mean_rel": {
+   "finite_rate": 1.0,
+   "n_distinct": 1678,
+   "min": -0.8761385582426465,
+   "max": 1.6748361554937152,
+   "constant": false
+  },
+  "probe_delta_std_rel": {
+   "finite_rate": 1.0,
+   "n_distinct": 1678,
+   "min": 0.0,
+   "max": 4.304750297457752,
+   "constant": false
+  },
+  "probe_delta_max_rel": {
+   "finite_rate": 1.0,
+   "n_distinct": 1678,
+   "min": 0.0,
+   "max": 16.127357695896773,
+   "constant": false
+  }
+ },
+ "constant_features": [
+  "outside_support_drift"
+ ],
+ "all_features_finite": true
+}

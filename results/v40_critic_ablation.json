@@ -1,0 +1,101 @@
+{
+ "arms": {
+  "stat_only": {
+   "n_folds": 6,
+   "mean_test_harm_auroc": 0.8650226583673591,
+   "min_test_harm_auroc": 0.8531834662072834,
+   "mean_val_harm_auroc": 0.8704183381998211,
+   "mean_test_gain_spearman": 0.48330363220671996,
+   "mean_test_auprc_lift": 0.4327666158651571,
+   "folds_without_calibrated_point": 0,
+   "pooled_test_bcov": 0.2019047619047619,
+   "pooled_test_chr": 0.050533240741240625,
+   "n_params": 68389
+  },
+  "TSFM_latent_only": {
+   "n_folds": 6,
+   "mean_test_harm_auroc": 0.8744623987409598,
+   "min_test_harm_auroc": 0.8529370758562931,
+   "mean_val_harm_auroc": 0.9111160370790515,
+   "mean_test_gain_spearman": 0.4958268015066722,
+   "mean_test_auprc_lift": 0.43812990695452303,
+   "folds_without_calibrated_point": 0,
+   "pooled_test_bcov": 0.32952380952380955,
+   "pooled_test_chr": 0.12208724714169938,
+   "n_params": 416453
+  },
+  "delta_only": {
+   "n_folds": 6,
+   "mean_test_harm_auroc": 0.887369180542067,
+   "min_test_harm_auroc": 0.8604209722513024,
+   "mean_val_harm_auroc": 0.9061072542339242,
+   "mean_test_gain_spearman": 0.4937750998055565,
+   "mean_test_auprc_lift": 0.47136129834699286,
+   "folds_without_calibrated_point": 0,
+   "pooled_test_bcov": 0.2542857142857143,
+   "pooled_test_chr": 0.09752334976794126,
+   "n_params": 145909
+  },
+  "full_COUNTERACT": {
+   "n_folds": 6,
+   "mean_test_harm_auroc": 0.8992879097745959,
+   "min_test_harm_auroc": 0.8645900104162494,
+   "mean_val_harm_auroc": 0.9287374984813774,
+   "mean_test_gain_spearman": 0.5339801755837099,
+   "mean_test_auprc_lift": 0.4920642962990707,
+   "folds_without_calibrated_point": 0,
+   "pooled_test_bcov": 0.3533333333333333,
+   "pooled_test_chr": 0.12066033691975174,
+   "n_params": 954229
+  },
+  "full_without_GroupDRO": {
+   "n_folds": 6,
+   "mean_test_harm_auroc": 0.9020775410912423,
+   "min_test_harm_auroc": 0.8726713673330395,
+   "mean_val_harm_auroc": 0.9228727896935268,
+   "mean_test_gain_spearman": 0.5810248154388198,
+   "mean_test_auprc_lift": 0.49342329903160653,
+   "folds_without_calibrated_point": 1,
+   "pooled_test_bcov": 0.3557142857142857,
+   "pooled_test_chr": 0.12611213882953273,
+   "n_params": 954229
+  }
+ },
+ "arm_config": {
+  "stat_only": {
+   "use_seq": false,
+   "use_tsfm": false,
+   "use_delta": false,
+   "use_struct": true,
+   "use_dro": true
+  },
+  "TSFM_latent_only": {
+   "use_seq": false,
+   "use_tsfm": true,
+   "use_delta": false,
+   "use_struct": false,
+   "use_dro": true
+  },
+  "delta_only": {
+   "use_seq": false,
+   "use_tsfm": false,
+   "use_delta": true,
+   "use_struct": false,
+   "use_dro": true
+  },
+  "full_COUNTERACT": {
+   "use_seq": true,
+   "use_tsfm": true,
+   "use_delta": true,
+   "use_struct": true,
+   "use_dro": true
+  },
+  "full_without_GroupDRO": {
+   "use_seq": true,
+   "use_tsfm": true,
+   "use_delta": true,
+   "use_struct": true,
+   "use_dro": false
+  }
+ }
+}

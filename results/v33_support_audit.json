@@ -1,0 +1,113 @@
+{
+ "support_audit": {
+  "MAST_no_support": {
+   "support_q95": 0.00023025345846218258,
+   "K": 20,
+   "per_form": {
+    "ood:exchange": {
+     "mean_support_distance": 5.644632651923831e-05,
+     "frac_low_support_windows": 0.0,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.0
+    },
+    "ood:pulse_train": {
+     "mean_support_distance": 0.006139058176135976,
+     "frac_low_support_windows": 0.4444444444444444,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.6052631578947368
+    },
+    "ood:random_walk": {
+     "mean_support_distance": 1.1761912730511303e-05,
+     "frac_low_support_windows": 0.0,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.0
+    },
+    "ood:solar": {
+     "mean_support_distance": 2.626594047627625e-05,
+     "frac_low_support_windows": 0.03333333333333333,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.03333333333333333
+    },
+    "ood:staircase": {
+     "mean_support_distance": 4.8559586696438346e-05,
+     "frac_low_support_windows": 0.2,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.2222222222222222
+    }
+   }
+  },
+  "MAST_support_consequence": {
+   "support_q95": 0.00023025345846218258,
+   "K": 20,
+   "per_form": {
+    "ood:exchange": {
+     "mean_support_distance": 5.644632651923831e-05,
+     "frac_low_support_windows": 0.0,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.0
+    },
+    "ood:pulse_train": {
+     "mean_support_distance": 0.006139058176135976,
+     "frac_low_support_windows": 0.4444444444444444,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.6052631578947368
+    },
+    "ood:random_walk": {
+     "mean_support_distance": 1.1761912730511303e-05,
+     "frac_low_support_windows": 0.0,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.0
+    },
+    "ood:solar": {
+     "mean_support_distance": 2.626594047627625e-05,
+     "frac_low_support_windows": 0.03333333333333333,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.03333333333333333
+    },
+    "ood:staircase": {
+     "mean_support_distance": 4.8559586696438346e-05,
+     "frac_low_support_windows": 0.2,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.2222222222222222
+    }
+   }
+  },
+  "MAST_v2_hard_structure": {
+   "support_q95": 0.00023025345846218258,
+   "K": 20,
+   "per_form": {
+    "ood:exchange": {
+     "mean_support_distance": 5.644632651923831e-05,
+     "frac_low_support_windows": 0.0,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.0
+    },
+    "ood:pulse_train": {
+     "mean_support_distance": 0.006139058176135976,
+     "frac_low_support_windows": 0.4444444444444444,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.6052631578947368
+    },
+    "ood:random_walk": {
+     "mean_support_distance": 1.1761912730511303e-05,
+     "frac_low_support_windows": 0.0,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.0
+    },
+    "ood:solar": {
+     "mean_support_distance": 2.626594047627625e-05,
+     "frac_low_support_windows": 0.03333333333333333,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.03333333333333333
+    },
+    "ood:staircase": {
+     "mean_support_distance": 4.8559586696438346e-05,
+     "frac_low_support_windows": 0.2,
+     "frac_unstable_candidates": 1.0,
+     "frac_hazard_candidates": 0.2222222222222222
+    }
+   }
+  }
+ },
+ "definition": "cosine kNN K=20 on training-fold pre-action profiles; q95 from ID calibration; hazard = low_support AND unstable_action (frozen v2 family structural threshold)"
+}

@@ -1,0 +1,69 @@
+<h2>请选择两张图的整体版式方向</h2>
+<p class="subtitle">三组方案都使用中文、论文级扁平矢量风格；区别主要在阅读路径与图2的信息密度。点击卡片即可选择。</p>
+
+<div class="cards" style="grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:14px;background:#f8fafc">
+      <div style="font-size:12px;font-weight:700;margin-bottom:7px;color:#24364b">图1｜双案例对照</div>
+      <div style="display:grid;grid-template-columns:1fr 24px 1fr 24px 84px;gap:4px;align-items:center;font-size:8px">
+        <div style="border:1px solid #7ba8cf;border-radius:6px;padding:7px;background:#eaf4fb">伪影尖峰<br><span style="color:#2f7db7">╱╲│╲╱</span></div><div>→</div>
+        <div style="border:1px solid #e3a865;border-radius:6px;padding:7px;background:#fff1df">副本试修<br><span style="color:#d07b2d">╱╲╲╱</span></div><div>→</div>
+        <div style="border:1px solid #73aa78;border-radius:6px;padding:7px;background:#eaf6e9;color:#2f7140">效用↑＋结构稳<br><b>提交</b></div>
+        <div style="border:1px solid #7ba8cf;border-radius:6px;padding:7px;background:#eaf4fb">真实极值<br><span style="color:#2f7db7">╱╱▲╲╲</span></div><div>→</div>
+        <div style="border:1px solid #e3a865;border-radius:6px;padding:7px;background:#fff1df">副本削峰<br><span style="color:#d07b2d">╱──╲</span></div><div>→</div>
+        <div style="border:1px solid #c97a7a;border-radius:6px;padding:7px;background:#fdecec;color:#a33c3c">效用↑＋结构损<br><b>回滚</b></div>
+      </div>
+      <div style="height:12px"></div>
+      <div style="font-size:12px;font-weight:700;margin-bottom:7px;color:#24364b">图2｜四阶段紧凑学术版</div>
+      <div style="display:grid;grid-template-columns:50px repeat(4,1fr) 54px;gap:4px;align-items:stretch;font-size:7px;text-align:center">
+        <div style="padding:12px 3px;border-radius:5px;background:#eaf4fb;border:1px solid #79a9cf">原始语料</div>
+        <div style="padding:6px 3px;border-radius:5px;background:#e8f5f2;border-top:7px solid #3d948c">证据画像<br>统计＋行为</div>
+        <div style="padding:6px 3px;border-radius:5px;background:#fff1df;border-top:7px solid #e79a47">沙箱干预<br>副本试执行</div>
+        <div style="padding:6px 3px;border-radius:5px;background:#fdebea;border-top:7px solid #d96c63"><b>合取验收</b><br>效用＋结构＋风险</div>
+        <div style="padding:6px 3px;border-radius:5px;background:#f0ebf7;border-top:7px solid #8066aa">反馈与预算<br>提议更新</div>
+        <div style="padding:12px 3px;border-radius:5px;background:#eaf6e9;border:1px solid #73aa78">治理语料</div>
+      </div>
+      <div style="margin-top:7px;border-top:2px solid #7c8da0;text-align:center;font-size:7px;color:#5a6875">审计轨迹：状态｜动作｜证据｜判定｜原因</div>
+    </div>
+    <div class="card-body"><h3>A｜论文紧凑型（推荐）</h3><p>图1极简对照；图2模块清晰、验收层居中突出，最适合论文正文与黑白缩印。</p></div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:14px;background:#f8fafc">
+      <div style="font-size:12px;font-weight:700;margin-bottom:7px;color:#24364b">图1｜左因右果</div>
+      <div style="display:grid;grid-template-columns:1fr 20px 1fr;gap:5px;align-items:center;font-size:8px">
+        <div style="display:grid;gap:5px"><div style="padding:8px;border-radius:6px;background:#eaf4fb">孤立伪影 → 去尖峰</div><div style="padding:8px;border-radius:6px;background:#eaf4fb">真实极值 → 去尖峰</div></div><div>⇒</div>
+        <div style="display:grid;gap:5px"><div style="padding:8px;border-radius:6px;background:#eaf6e9;color:#2f7140">结构保留｜提交</div><div style="padding:8px;border-radius:6px;background:#fdecec;color:#a33c3c">结构破坏｜回滚</div></div>
+      </div>
+      <div style="height:12px"></div>
+      <div style="font-size:12px;font-weight:700;margin-bottom:7px;color:#24364b">图2｜阶段带＋纵向细节</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;font-size:7px;text-align:center">
+        <div><div style="background:#3d948c;color:white;padding:4px">阶段1</div><div style="height:76px;border:1px solid #8ebdb8;background:#edf8f6;padding:5px">统计证据<br>行为证据<br>同类校准<br>状态输出</div></div>
+        <div><div style="background:#e79a47;color:white;padding:4px">阶段2</div><div style="height:76px;border:1px solid #e7b27b;background:#fff5e8;padding:5px">七类动作<br>工作副本<br>沙箱副本<br>重新测量</div></div>
+        <div><div style="background:#d96c63;color:white;padding:4px">阶段3</div><div style="height:76px;border:1px solid #df9993;background:#fff0ef;padding:5px">有限样本校准<br>三条件 AND<br>提交／回滚</div></div>
+        <div><div style="background:#8066aa;color:white;padding:4px">阶段4</div><div style="height:76px;border:1px solid #aa98c6;background:#f5f1fa;padding:5px">奖励反馈<br>动作价值<br>预算分配<br>外环学习</div></div>
+      </div>
+    </div>
+    <div class="card-body"><h3>B｜参考图复刻型</h3><p>更接近用户给出的“顶部阶段标题＋竖向子模块”格式，信息丰富，但缩到论文单栏时较拥挤。</p></div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:14px;background:#f8fafc">
+      <div style="font-size:12px;font-weight:700;margin-bottom:7px;color:#24364b">图1｜中心矛盾</div>
+      <div style="position:relative;height:82px;font-size:8px">
+        <div style="position:absolute;left:0;top:9px;width:34%;padding:7px;border-radius:6px;background:#eaf4fb">两类相似峰值<br>同一去尖峰</div>
+        <div style="position:absolute;left:39%;top:0;width:24%;padding:14px 5px;border-radius:50%;background:#f7e3a8;text-align:center;font-weight:700">只看效用<br>无法区分</div>
+        <div style="position:absolute;right:0;top:0;width:30%;display:grid;gap:5px"><div style="padding:7px;background:#eaf6e9;border-radius:6px">提交</div><div style="padding:7px;background:#fdecec;border-radius:6px">回滚</div></div>
+      </div>
+      <div style="font-size:12px;font-weight:700;margin-bottom:7px;color:#24364b">图2｜盾牌中心辐射型</div>
+      <div style="position:relative;height:108px;font-size:7px;text-align:center">
+        <div style="position:absolute;left:37%;top:30px;width:26%;padding:16px 3px;background:#fdebea;clip-path:polygon(50% 0,100% 18%,88% 78%,50% 100%,12% 78%,0 18%);font-weight:700">执行时<br>验收盾</div>
+        <div style="position:absolute;left:0;top:0;width:26%;padding:8px;background:#e8f5f2;border-radius:6px">证据画像</div>
+        <div style="position:absolute;left:0;bottom:0;width:26%;padding:8px;background:#fff1df;border-radius:6px">沙箱试修</div>
+        <div style="position:absolute;right:0;top:0;width:26%;padding:8px;background:#eaf6e9;border-radius:6px">提交语料</div>
+        <div style="position:absolute;right:0;bottom:0;width:26%;padding:8px;background:#f0ebf7;border-radius:6px">反馈学习</div>
+      </div>
+    </div>
+    <div class="card-body"><h3>C｜视觉强调型</h3><p>盾牌概念最醒目，适合答辩展示；但数据流不如横向管线自然，图2细节展开受限。</p></div>
+  </div>
+</div>

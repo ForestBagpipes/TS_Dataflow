@@ -67,7 +67,7 @@ Five, and the two the budget mechanism needs.
 | downstream error | PatchTST and DLinear on the prepared corpus, **reported per stratum across the four layers** | was a corpus mean, which diluted differences that live in one layer |
 | repair accuracy | root mean square distance to the clean reference on the injected layer | was repair gain, a ratio; the repair family's home ground is a distance |
 | protected mis edit **rate** | edits in the protected layers divided by the protected layer total | was a count, which cannot be read across corpus sizes |
-| damage rate | definition 1, over committed edits | unchanged |
+| damage rate | harmful commits over committed edits, harm = `max(worse_binary, discard_share)` (counts discarded data) | changed 2026-08-30; old Definition 1 value is in `docs/version_ledger.md` as `v1-old (obsolete)` |
 | compute cost | seconds and accelerator occupancy to prepare the corpus | unchanged |
 | probes saved | probes avoided by skipping settled windows | reported only beside the next row |
 | missed windows | of those skipped, how many carried a defect | never omitted |

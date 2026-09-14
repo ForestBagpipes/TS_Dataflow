@@ -1,0 +1,507 @@
+{
+ "arms": {
+  "v2_frozen": {
+   "n_windows": 771,
+   "committed": 27,
+   "commit_rate": 0.03501945525291829,
+   "damage": 0.022586332684824902,
+   "cond_damage": 0.7407407407407407,
+   "beneficial_commits": 7,
+   "protected_mis_edit_rate": 0.027190332326283987,
+   "coverage": 0.04090909090909091,
+   "beneficial_coverage": 0.020454545454545454,
+   "mean_repair_gain_contaminated": -0.05326826591342934,
+   "max_dataset_bs_share": 0.42857142857142855
+  },
+  "oracle": {
+   "n_windows": 771,
+   "committed": 145,
+   "commit_rate": 0.1880674448767834,
+   "damage": 0.0,
+   "cond_damage": 0.0,
+   "beneficial_commits": 145,
+   "protected_mis_edit_rate": 0.0,
+   "coverage": 0.32954545454545453,
+   "beneficial_coverage": 0.32954545454545453,
+   "mean_repair_gain_contaminated": 0.18349903166060974,
+   "max_dataset_bs_share": 0.4068965517241379
+  },
+  "v3_2_bugfix_only": {
+   "n_windows": 771,
+   "committed": 119,
+   "commit_rate": 0.1543450064850843,
+   "damage": 0.03631647211413749,
+   "cond_damage": 0.23529411764705882,
+   "beneficial_commits": 91,
+   "protected_mis_edit_rate": 0.01812688821752266,
+   "coverage": 0.25681818181818183,
+   "beneficial_coverage": 0.20681818181818182,
+   "mean_repair_gain_contaminated": 0.1614363282812775,
+   "max_dataset_bs_share": 0.4175824175824176
+  },
+  "PICS_stat_only": {
+   "n_windows": 771,
+   "committed": 51,
+   "commit_rate": 0.06614785992217899,
+   "damage": 0.014267185473411154,
+   "cond_damage": 0.21568627450980393,
+   "beneficial_commits": 40,
+   "protected_mis_edit_rate": 0.01812688821752266,
+   "coverage": 0.10227272727272728,
+   "beneficial_coverage": 0.09090909090909091,
+   "mean_repair_gain_contaminated": 0.0769874530273551,
+   "max_dataset_bs_share": 0.325
+  },
+  "PICS_TSFM_only": {
+   "n_windows": 771,
+   "committed": 43,
+   "commit_rate": 0.055771725032425425,
+   "damage": 0.0038910505836575876,
+   "cond_damage": 0.06976744186046512,
+   "beneficial_commits": 40,
+   "protected_mis_edit_rate": 0.006042296072507553,
+   "coverage": 0.09318181818181819,
+   "beneficial_coverage": 0.09090909090909091,
+   "mean_repair_gain_contaminated": 0.08513922790718137,
+   "max_dataset_bs_share": 0.375
+  },
+  "PICS_joint": {
+   "n_windows": 771,
+   "committed": 71,
+   "commit_rate": 0.09208819714656291,
+   "damage": 0.02204928664072633,
+   "cond_damage": 0.23943661971830985,
+   "beneficial_commits": 54,
+   "protected_mis_edit_rate": 0.0030211480362537764,
+   "coverage": 0.1590909090909091,
+   "beneficial_coverage": 0.12272727272727273,
+   "mean_repair_gain_contaminated": 0.0863768162745897,
+   "max_dataset_bs_share": 0.5185185185185185
+  }
+ },
+ "folds": {
+  "v3_2_bugfix_only": {
+   "Crypto": {
+    "n_windows": 31,
+    "committed": 9,
+    "commit_rate": 0.2903225806451613,
+    "damage": 0.06451612903225806,
+    "cond_damage": 0.2222222222222222,
+    "beneficial_commits": 7,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.45,
+    "beneficial_coverage": 0.35,
+    "mean_repair_gain_contaminated": 0.23373466239175472,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh1": {
+    "n_windows": 167,
+    "committed": 11,
+    "commit_rate": 0.0658682634730539,
+    "damage": 0.005988023952095809,
+    "cond_damage": 0.09090909090909091,
+    "beneficial_commits": 10,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.1527777777777778,
+    "beneficial_coverage": 0.1388888888888889,
+    "mean_repair_gain_contaminated": 0.0699987596234902,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh2": {
+    "n_windows": 116,
+    "committed": 21,
+    "commit_rate": 0.1810344827586207,
+    "damage": 0.08620689655172414,
+    "cond_damage": 0.47619047619047616,
+    "beneficial_commits": 11,
+    "protected_mis_edit_rate": 0.11320754716981132,
+    "coverage": 0.23809523809523808,
+    "beneficial_coverage": 0.1746031746031746,
+    "mean_repair_gain_contaminated": 0.07609003569289408,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTm1": {
+    "n_windows": 106,
+    "committed": 15,
+    "commit_rate": 0.14150943396226415,
+    "damage": 0.0,
+    "cond_damage": 0.0,
+    "beneficial_commits": 15,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.20833333333333334,
+    "beneficial_coverage": 0.20833333333333334,
+    "mean_repair_gain_contaminated": 0.20229854595459293,
+    "max_dataset_bs_share": 1.0
+   },
+   "Oil Price": {
+    "n_windows": 86,
+    "committed": 10,
+    "commit_rate": 0.11627906976744186,
+    "damage": 0.0,
+    "cond_damage": 0.0,
+    "beneficial_commits": 10,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.3125,
+    "beneficial_coverage": 0.3125,
+    "mean_repair_gain_contaminated": 0.23565458050218935,
+    "max_dataset_bs_share": 1.0
+   },
+   "US Term Structure": {
+    "n_windows": 265,
+    "committed": 53,
+    "commit_rate": 0.2,
+    "damage": 0.05660377358490566,
+    "cond_damage": 0.2830188679245283,
+    "beneficial_commits": 38,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.292817679558011,
+    "beneficial_coverage": 0.20994475138121546,
+    "mean_repair_gain_contaminated": 0.19015064292587092,
+    "max_dataset_bs_share": 1.0
+   }
+  },
+  "PICS_stat_only": {
+   "Crypto": {
+    "n_windows": 31,
+    "committed": 4,
+    "commit_rate": 0.12903225806451613,
+    "damage": 0.0,
+    "cond_damage": 0.0,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.2,
+    "beneficial_coverage": 0.2,
+    "mean_repair_gain_contaminated": 0.14497716655854503,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh1": {
+    "n_windows": 167,
+    "committed": 5,
+    "commit_rate": 0.029940119760479042,
+    "damage": 0.005988023952095809,
+    "cond_damage": 0.2,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.010526315789473684,
+    "coverage": 0.05555555555555555,
+    "beneficial_coverage": 0.05555555555555555,
+    "mean_repair_gain_contaminated": 0.0432437302488493,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh2": {
+    "n_windows": 116,
+    "committed": 15,
+    "commit_rate": 0.12931034482758622,
+    "damage": 0.07758620689655173,
+    "cond_damage": 0.6,
+    "beneficial_commits": 6,
+    "protected_mis_edit_rate": 0.09433962264150944,
+    "coverage": 0.15873015873015872,
+    "beneficial_coverage": 0.09523809523809523,
+    "mean_repair_gain_contaminated": 0.037828084555729,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTm1": {
+    "n_windows": 106,
+    "committed": 10,
+    "commit_rate": 0.09433962264150944,
+    "damage": 0.009433962264150943,
+    "cond_damage": 0.1,
+    "beneficial_commits": 9,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.1388888888888889,
+    "beneficial_coverage": 0.125,
+    "mean_repair_gain_contaminated": 0.10794834652440263,
+    "max_dataset_bs_share": 1.0
+   },
+   "Oil Price": {
+    "n_windows": 86,
+    "committed": 4,
+    "commit_rate": 0.046511627906976744,
+    "damage": 0.0,
+    "cond_damage": 0.0,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.125,
+    "beneficial_coverage": 0.125,
+    "mean_repair_gain_contaminated": 0.1115285124159564,
+    "max_dataset_bs_share": 1.0
+   },
+   "US Term Structure": {
+    "n_windows": 265,
+    "committed": 13,
+    "commit_rate": 0.04905660377358491,
+    "damage": 0.0,
+    "cond_damage": 0.0,
+    "beneficial_commits": 13,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.0718232044198895,
+    "beneficial_coverage": 0.0718232044198895,
+    "mean_repair_gain_contaminated": 0.07810510910977717,
+    "max_dataset_bs_share": 1.0
+   }
+  },
+  "PICS_TSFM_only": {
+   "Crypto": {
+    "n_windows": 31,
+    "committed": 4,
+    "commit_rate": 0.12903225806451613,
+    "damage": 0.0,
+    "cond_damage": 0.0,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.2,
+    "beneficial_coverage": 0.2,
+    "mean_repair_gain_contaminated": 0.14497716655854503,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh1": {
+    "n_windows": 167,
+    "committed": 5,
+    "commit_rate": 0.029940119760479042,
+    "damage": 0.005988023952095809,
+    "cond_damage": 0.2,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.06944444444444445,
+    "beneficial_coverage": 0.05555555555555555,
+    "mean_repair_gain_contaminated": 0.04214756981455784,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh2": {
+    "n_windows": 116,
+    "committed": 6,
+    "commit_rate": 0.05172413793103448,
+    "damage": 0.017241379310344827,
+    "cond_damage": 0.3333333333333333,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.03773584905660377,
+    "coverage": 0.06349206349206349,
+    "beneficial_coverage": 0.06349206349206349,
+    "mean_repair_gain_contaminated": 0.03969709000728301,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTm1": {
+    "n_windows": 106,
+    "committed": 8,
+    "commit_rate": 0.07547169811320754,
+    "damage": 0.0,
+    "cond_damage": 0.0,
+    "beneficial_commits": 8,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.1111111111111111,
+    "beneficial_coverage": 0.1111111111111111,
+    "mean_repair_gain_contaminated": 0.11723550032330252,
+    "max_dataset_bs_share": 1.0
+   },
+   "Oil Price": {
+    "n_windows": 86,
+    "committed": 5,
+    "commit_rate": 0.05813953488372093,
+    "damage": 0.0,
+    "cond_damage": 0.0,
+    "beneficial_commits": 5,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.15625,
+    "beneficial_coverage": 0.15625,
+    "mean_repair_gain_contaminated": 0.1293604948189693,
+    "max_dataset_bs_share": 1.0
+   },
+   "US Term Structure": {
+    "n_windows": 265,
+    "committed": 15,
+    "commit_rate": 0.05660377358490566,
+    "damage": 0.0,
+    "cond_damage": 0.0,
+    "beneficial_commits": 15,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.08287292817679558,
+    "beneficial_coverage": 0.08287292817679558,
+    "mean_repair_gain_contaminated": 0.09086012924528787,
+    "max_dataset_bs_share": 1.0
+   }
+  },
+  "PICS_joint": {
+   "Crypto": {
+    "n_windows": 31,
+    "committed": 5,
+    "commit_rate": 0.16129032258064516,
+    "damage": 0.03225806451612903,
+    "cond_damage": 0.2,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.25,
+    "beneficial_coverage": 0.2,
+    "mean_repair_gain_contaminated": 0.14326945639649646,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh1": {
+    "n_windows": 167,
+    "committed": 5,
+    "commit_rate": 0.029940119760479042,
+    "damage": 0.005988023952095809,
+    "cond_damage": 0.2,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.06944444444444445,
+    "beneficial_coverage": 0.05555555555555555,
+    "mean_repair_gain_contaminated": 0.04214756981455784,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTh2": {
+    "n_windows": 116,
+    "committed": 7,
+    "commit_rate": 0.0603448275862069,
+    "damage": 0.02586206896551724,
+    "cond_damage": 0.42857142857142855,
+    "beneficial_commits": 4,
+    "protected_mis_edit_rate": 0.018867924528301886,
+    "coverage": 0.09523809523809523,
+    "beneficial_coverage": 0.06349206349206349,
+    "mean_repair_gain_contaminated": 0.03548147142001145,
+    "max_dataset_bs_share": 1.0
+   },
+   "ETTm1": {
+    "n_windows": 106,
+    "committed": 9,
+    "commit_rate": 0.08490566037735849,
+    "damage": 0.0,
+    "cond_damage": 0.0,
+    "beneficial_commits": 9,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.125,
+    "beneficial_coverage": 0.125,
+    "mean_repair_gain_contaminated": 0.12848404955385162,
+    "max_dataset_bs_share": 1.0
+   },
+   "Oil Price": {
+    "n_windows": 86,
+    "committed": 5,
+    "commit_rate": 0.05813953488372093,
+    "damage": 0.0,
+    "cond_damage": 0.0,
+    "beneficial_commits": 5,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.15625,
+    "beneficial_coverage": 0.15625,
+    "mean_repair_gain_contaminated": 0.1293604948189693,
+    "max_dataset_bs_share": 1.0
+   },
+   "US Term Structure": {
+    "n_windows": 265,
+    "committed": 40,
+    "commit_rate": 0.1509433962264151,
+    "damage": 0.045283018867924525,
+    "cond_damage": 0.3,
+    "beneficial_commits": 28,
+    "protected_mis_edit_rate": 0.0,
+    "coverage": 0.22099447513812154,
+    "beneficial_coverage": 0.15469613259668508,
+    "mean_repair_gain_contaminated": 0.09105008234638846,
+    "max_dataset_bs_share": 1.0
+   }
+  }
+ },
+ "ood_stress": {
+  "v3_2_bugfix_only": {
+   "n_windows": 56,
+   "edited": 41,
+   "edit_rate": 0.7321428571428571
+  },
+  "PICS_stat_only": {
+   "n_windows": 56,
+   "edited": 16,
+   "edit_rate": 0.2857142857142857
+  },
+  "PICS_TSFM_only": {
+   "n_windows": 56,
+   "edited": 18,
+   "edit_rate": 0.32142857142857145
+  },
+  "PICS_joint": {
+   "n_windows": 56,
+   "edited": 18,
+   "edit_rate": 0.32142857142857145
+  }
+ },
+ "paired_bootstrap": {
+  "coverage_pics_minus_bugfix": {
+   "diff": -0.04798962386511024,
+   "ci": [
+    -0.06614785992217899,
+    -0.029831387808041506
+   ]
+  },
+  "damage_pics_minus_bugfix": {
+   "diff": -0.014267185473411156,
+   "ci": [
+    -0.027237354085603113,
+    -0.0012970168612191958
+   ]
+  },
+  "pme_pics_minus_bugfix": {
+   "diff": -0.00648508430609598,
+   "ci": [
+    -0.01297016861219196,
+    -0.0012970168612191958
+   ]
+  },
+  "coverage_pics_minus_stat": {
+   "diff": 0.01815823605706874,
+   "ci": [
+    0.007782101167315175,
+    0.029831387808041506
+   ]
+  },
+  "coverage_pics_minus_tsfm": {
+   "diff": 0.01815823605706874,
+   "ci": [
+    0.009079118028534372,
+    0.028534370946822308
+   ]
+  },
+  "coverage_pics_minus_v2": {
+   "diff": 0.058365758754863814,
+   "ci": [
+    0.038910505836575876,
+    0.07911802853437094
+   ]
+  }
+ },
+ "cond_damage_ci": [
+  0.14545454545454545,
+  0.34615384615384615
+ ],
+ "gates": {
+  "protected_mis_edit<0.0181": true,
+  "damage<=0.0506": true,
+  "beneficial_coverage>=0.1455": false,
+  "cont_mean_gain>=0.083": true,
+  "ood_edit<=0.05": false,
+  "cond_damage_ci_upper<0.379": true,
+  "coverage>v2_frozen": true,
+  "beneficial_commits>=10": true,
+  "max_dataset_share<=0.60": true
+ },
+ "gates_pass": false,
+ "config": {
+  "alpha": 0.03,
+  "model": {
+   "max_depth": 3,
+   "max_iter": 100,
+   "learning_rate": 0.05,
+   "l2_regularization": 1.0,
+   "random_state": 20260901,
+   "alpha": 0.03,
+   "min_family_n": 30,
+   "global_fallback": true,
+   "keep_fallback": true
+  },
+  "split": "leave-one-dataset-out",
+  "split_seed": 20260901,
+  "eligible_families": [
+   "DENOISE",
+   "DESPIKE",
+   "IMPUTE"
+  ]
+ }
+}

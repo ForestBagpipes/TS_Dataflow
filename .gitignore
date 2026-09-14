@@ -47,3 +47,9 @@ logs/heartbeat.jsonl
 logs/manifest.jsonl
 logs/runs.jsonl
 logs/remote/
+
+# tooling caches / migration snapshots (not research content)
+.server-codex-setup/
+.tmp/
+node_modules/
+.codex-setup-known-hosts
