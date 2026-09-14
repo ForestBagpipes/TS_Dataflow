@@ -47,7 +47,7 @@ def readiness(config):
 
 def main():
     parser = argparse.ArgumentParser(description="v4.3 CPU contract and input preparation; no method promotion")
-    parser.add_argument("command", choices=("preflight", "inventory", "data", "pilot", "p2"))
+    parser.add_argument("command", choices=("preflight", "inventory", "data", "pilot", "p2", "agent-collect"))
     parser.add_argument("--config", required=True)
     parser.add_argument("--out", help="new run directory; existing directory is rejected")
     args = parser.parse_args()
@@ -70,7 +70,10 @@ def main():
     try:
         ready = readiness(config)
         atomic_json(out / "model_readiness.json", ready)
-        if args.command == "p2":
+        if args.command == "agent-collect":
+            from .agent_collect import run_collect
+            run_collect(config, out, code, status)
+        elif args.command == "p2":
             from .p2 import run_p2
             run_p2(config, out, code, atomic_json, status)
         elif args.command == "pilot":

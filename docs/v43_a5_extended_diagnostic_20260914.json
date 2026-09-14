@@ -1,0 +1,285 @@
+{
+  "status": {
+    "status": "completed",
+    "scope": "posthoc_rejected_eta_diagnostic",
+    "new_future_labels_read": 0,
+    "heldout_labels_read": 0,
+    "active_worker_pid": 77623,
+    "active_shard": "h192-rejected",
+    "supported_episodes": 50,
+    "additional_tsicl_calls": 0,
+    "additional_bolt_calls": 92,
+    "static_rejected_better_episodes": 26,
+    "static_rejected_better_parents": 14,
+    "promotion": false,
+    "runtime_seconds": 20.1647774799967
+  },
+  "oracle_scope_comparison": {
+    "by_source": {
+      "ETTm1": {
+        "fixed5": 0.9390858637116297,
+        "plus_static": 0.9390858637116297,
+        "plus_all_eta": 0.9386628925937496
+      },
+      "Solar": {
+        "fixed5": 1.3351650984718573,
+        "plus_static": 1.3351650984718573,
+        "plus_all_eta": 1.3346063088103017
+      },
+      "US_Term_Structure": {
+        "fixed5": 1.0079890458136356,
+        "plus_static": 1.0079890458136356,
+        "plus_all_eta": 1.0079890458136356
+      }
+    },
+    "source_macro": {
+      "fixed5": 1.0940800026657076,
+      "plus_static": 1.0940800026657076,
+      "plus_all_eta": 1.0937527490725623
+    },
+    "additional_oracle_winners": {
+      "ETTm1": 4,
+      "Solar": 5
+    },
+    "new_future_labels_read": 0,
+    "scope": "posthoc_all_eta_oracle_not_deployable"
+  },
+  "beneficial_static_rejected": [
+    {
+      "episode_uid": "5223352cffd1c6999e90c6b35d95f04caf416741459aede58452f09deb4d2d26",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:41808:42512",
+      "horizon": 96,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.008467351396878708
+    },
+    {
+      "episode_uid": "ffe31fc4de50828001d2677dc8b66c3efbbcf9afd6a2f6c34664b9c8696e3b82",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:42512:43216",
+      "horizon": 96,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.21767793595790863
+    },
+    {
+      "episode_uid": "1093aa4af168cc2583a3e1b5de6a65b4c58bc7163a484f1c239fe44c2b8e01b3",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:44624:45328",
+      "horizon": 96,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.30175402015447617
+    },
+    {
+      "episode_uid": "41a2882e710914fc1d835d86fbb66a571bc45a3e564d1a3aa41e6e28a11a1e21",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:45328:46032",
+      "horizon": 96,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.19230370968580246
+    },
+    {
+      "episode_uid": "f2ebd72d2a8aeab2b9ae2369630db2fdb3822117e52c49fee062debf5667e94b",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:46032:46736",
+      "horizon": 96,
+      "static_eta": 0.5,
+      "best_arm": "ETA_0",
+      "missed_task_gain": 0.02674550563097
+    },
+    {
+      "episode_uid": "ae9ebb5ba5b20538830c108cea73697681525351e9ddb47547662d6b97789211",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:46736:47440",
+      "horizon": 96,
+      "static_eta": 0.0,
+      "best_arm": "ETA_HALF",
+      "missed_task_gain": 0.44541533042987247
+    },
+    {
+      "episode_uid": "d313cb829f661b68b1b584ffac545068884d76bbb6971c00c27c393cbc1bde83",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:48144:48848",
+      "horizon": 96,
+      "static_eta": 0.5,
+      "best_arm": "ETA_0",
+      "missed_task_gain": 0.0485200360417366
+    },
+    {
+      "episode_uid": "420c472398dad4ff85ce1e3e2470b68354387efd4d4d029f73836fdce5a21ab9",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:48848:49552",
+      "horizon": 96,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.013071934382120731
+    },
+    {
+      "episode_uid": "78ebf764e5c6c58f261f2c79d3868263843f9c9aceaba45dc6e69d751ed824b6",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:49552:50256",
+      "horizon": 96,
+      "static_eta": 0.5,
+      "best_arm": "ETA_0",
+      "missed_task_gain": 0.11821262041727687
+    },
+    {
+      "episode_uid": "a15a0a1e0c8686749db65626e9336ca3a4cb37b83a425b53e0a33595b1f0a6f7",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:50960:51664",
+      "horizon": 96,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.05194988350073504
+    },
+    {
+      "episode_uid": "bf2a78d581979ed8bbde21bcfe4ae0278d623e1150f02f739a0d038c848fb39e",
+      "source": "Solar",
+      "parent_group": "Solar:32240:32944",
+      "horizon": 96,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.30659926136334814
+    },
+    {
+      "episode_uid": "665f52ac8073ac774a7e925cf5a8701b0dcbc958448c70f3b7a8e00a25f353ea",
+      "source": "Solar",
+      "parent_group": "Solar:35056:35760",
+      "horizon": 96,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.05301921367645335
+    },
+    {
+      "episode_uid": "cfdbaaab77b518e206926904a5fef53e47376965f785bd10a95a5ce97fa679c1",
+      "source": "Solar",
+      "parent_group": "Solar:35760:36464",
+      "horizon": 96,
+      "static_eta": 0.0,
+      "best_arm": "ETA_HALF",
+      "missed_task_gain": 0.031429345409075715
+    },
+    {
+      "episode_uid": "a3c52744e4dfbf7f353cf9a505b7bc27b716a5a405e6c7b9aed92f85fdfe152a",
+      "source": "Solar",
+      "parent_group": "Solar:36464:37168",
+      "horizon": 96,
+      "static_eta": 0.0,
+      "best_arm": "ETA_HALF",
+      "missed_task_gain": 0.010252962509790464
+    },
+    {
+      "episode_uid": "5eb22e0d252efc89adf4afdbbc26339b08902835ef7aeb8e96227496ac5fe916",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:42512:43216",
+      "horizon": 192,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.23325791085759784
+    },
+    {
+      "episode_uid": "6b46ad6990d80f623606bafb5cef6262b1a54d6cf595900ca9bb7401bbce1511",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:44624:45328",
+      "horizon": 192,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.5530570944150288
+    },
+    {
+      "episode_uid": "966dc9fb2415faebd61b4f3c793c3c517c58d5dff4e7a7424caf33fbd566b48a",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:45328:46032",
+      "horizon": 192,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.12144343927502632
+    },
+    {
+      "episode_uid": "9b64f06031d4dccee3b2d2ed953c1a6e358481952a5ec24a945ab5fd124e2ff2",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:46032:46736",
+      "horizon": 192,
+      "static_eta": 0.5,
+      "best_arm": "ETA_0",
+      "missed_task_gain": 0.0019486062228679657
+    },
+    {
+      "episode_uid": "268e6f468c1c9b343d9c045ac58ab0cd6fa8ca397b9501c89c839cf0dc698b68",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:46736:47440",
+      "horizon": 192,
+      "static_eta": 0.0,
+      "best_arm": "ETA_HALF",
+      "missed_task_gain": 0.3421604074537754
+    },
+    {
+      "episode_uid": "2351609bc38b2384f660f8944c962982b76948d1cd84bca61e73d14b5501bacc",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:48144:48848",
+      "horizon": 192,
+      "static_eta": 0.5,
+      "best_arm": "ETA_0",
+      "missed_task_gain": 0.08266822745402669
+    },
+    {
+      "episode_uid": "cfbddcc47b892253c429bbc0e92e946c0b20ba8b8fd13955afef45736e63ceb0",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:48848:49552",
+      "horizon": 192,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.020351406186819077
+    },
+    {
+      "episode_uid": "e2d876612bc32753de1f1393ab994affd99a844330a852e367e50c65a11ae191",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:49552:50256",
+      "horizon": 192,
+      "static_eta": 0.5,
+      "best_arm": "ETA_0",
+      "missed_task_gain": 0.08269946525494287
+    },
+    {
+      "episode_uid": "331fecf267ec10639b9a05822cefdb014cb0c29d723cd919d56f86798fcd271d",
+      "source": "ETTm1",
+      "parent_group": "ETTm1:50960:51664",
+      "horizon": 192,
+      "static_eta": 0.0,
+      "best_arm": "ETA_HALF",
+      "missed_task_gain": 0.020026937127113342
+    },
+    {
+      "episode_uid": "d893036775cf47776a95a5e5d25f003f82b3f9d2c358efa4cd7ecd8d0f3a78e1",
+      "source": "Solar",
+      "parent_group": "Solar:32240:32944",
+      "horizon": 192,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.432724735140801
+    },
+    {
+      "episode_uid": "07c65c7e5354fa8a9122ef396c50d3c58488fef1f00c0d23e1079974c14c08e1",
+      "source": "Solar",
+      "parent_group": "Solar:35056:35760",
+      "horizon": 192,
+      "static_eta": 0.0,
+      "best_arm": "ETA_HALF",
+      "missed_task_gain": 0.01670476396878584
+    },
+    {
+      "episode_uid": "3e1d35d1aab8342dd9273c0c545235da06f9fba179fff187a42c6a11868cd128",
+      "source": "Solar",
+      "parent_group": "Solar:35760:36464",
+      "horizon": 192,
+      "static_eta": 0.0,
+      "best_arm": "ETA_1",
+      "missed_task_gain": 0.03530650585889816
+    }
+  ],
+  "run": "/home/vipuser/work/work2/results/v43/20260914T135305.172771Z-a5-diagnostic",
+  "interpretation": "Static selected A5 and the pool of all eta strengths are different experiments; neither is deployed agent evidence."
+}
