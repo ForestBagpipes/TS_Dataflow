@@ -141,3 +141,8 @@ imbalanced to evaluate," not "TSFM signals do not work."
 
 
 2026-09-14 18:48 工程复核追加：修复残差PCA后附加缺失指示可能超过8维的问题，新增测试检查实际回归输入维度；最终CPU测试40项通过（0.96s），见 `logs/v43/contracts/20260914T104754.619288Z/`。旧39项日志保留；真实模型pilot仍待依赖，未产生方法晋升。
+
+
+### 2026-09-14 下载链路诊断（非方法版本）
+
+直连/代理/国内镜像只读实测已完成，详见 docs/download_routes_20260914.md。未重新安装或运行真实模型，不新增方法结果行；PICS_joint_relabel仍为incumbent，v4.3真实pilot待依赖与模型就绪。

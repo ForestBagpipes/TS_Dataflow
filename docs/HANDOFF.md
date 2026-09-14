@@ -639,3 +639,8 @@ tuned, the answer is a measurement limit, not a resource limit.
 ## 2026-09-14 原仓库同步
 
 原仓库 `https://github.com/ForestBagpipes/TS_Dataflow.git` 已设为origin，当前 `codex/introactts-v43-bootstrap` 已连接远端初始master历史，合并前后工作树完全相同。阶段commit/push规则已写入AGENTS.md。首次实际push因缺GitHub写入认证失败；待认证后补推HEAD，详情 `docs/git_sync.md`。这只阻断上传，不阻断本机安装/模型/pilot/监控。
+
+
+## 2026-09-14 下载链路实测
+
+同版8 MiB样本：NVIDIA官方cuDNN直连2.944 / 代理0.191 MiB/s，清华同包直连2.916 / 代理0.256 MiB/s，交大Torch直连0.733 / 代理0.326 MiB/s。新增只读探测脚本及后续下载进程专用的按域名直连配置；原安装仍用原线路，未重启或并发改写环境。完整限制、403探测失败与原始证据见 docs/download_routes_20260914.md。真实pilot仍未运行；本地提交待GitHub认证恢复后补推。

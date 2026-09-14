@@ -747,3 +747,8 @@ seed 方向一致。但这个差异不显著，三 seed 符号检验 p 0.250，�
 ## 2026-09-14 维护原Git仓库
 
 登记origin为ForestBagpipes/TS_Dataflow，保持当前快照内容接入远端master历史；新增每阶段推送及远端SHA核对规则。凭据/数据/权重文件检查未发现待上传项。首次push实际失败于HTTPS身份认证，记录在docs/git_sync.md；没有修改远端master或force push。
+
+
+## 2026-09-14 下载链路实测
+
+同版8 MiB样本：NVIDIA官方cuDNN直连2.944 / 代理0.191 MiB/s，清华同包直连2.916 / 代理0.256 MiB/s，交大Torch直连0.733 / 代理0.326 MiB/s。新增只读探测脚本及后续下载进程专用的按域名直连配置；原安装仍用原线路，未重启或并发改写环境。完整限制、403探测失败与原始证据见 docs/download_routes_20260914.md。真实pilot仍未运行；本地提交待GitHub认证恢复后补推。
