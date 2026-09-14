@@ -1,0 +1,9 @@
+{
+  "archive_sha256": "046cd6c80016e025097144d468898b3ca6e02a41d9d3967abf8aba4cabe8ac5d",
+  "verified_files": 1081,
+  "verified_source_bytes": 826134562,
+  "destination": "/home/vipuser/work/work2",
+  "source_git_commit": "23c131a06c664fafdbff1a3284c1470a831d529c",
+  "overwritten_files": 0,
+  "status": "completed"
+}

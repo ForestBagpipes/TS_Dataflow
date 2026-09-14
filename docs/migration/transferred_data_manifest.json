@@ -1,0 +1,60 @@
+{
+  "status": "existing assets transferred without transformation",
+  "files": [
+    {
+      "path": "data/ETT-small_ETTh1.csv",
+      "bytes": 2589657,
+      "sha256": "f18de3ad269cef59bb07b5438d79bb3042d3be49bdeecf01c1cd6d29695ee066"
+    },
+    {
+      "path": "data/ETT-small_ETTh2.csv",
+      "bytes": 2417960,
+      "sha256": "a3dc2c597b9218c7ce1cd55eb77b283fd459a1d09d753063f944967dd6b9218b"
+    },
+    {
+      "path": "data/ETT-small_ETTm1.csv",
+      "bytes": 10360719,
+      "sha256": "6ce1759b1a18e3328421d5d75fadcb316c449fcd7cec32820c8dafda71986c9e"
+    },
+    {
+      "path": "data/ETT-small_ETTm2.csv",
+      "bytes": 9677236,
+      "sha256": "db973ca252c6410a30d0469b13d696cf919648d0f3fd588c60f03fdbdbadd1fd"
+    },
+    {
+      "path": "data/exchange.txt.gz",
+      "bytes": 177142,
+      "sha256": "6a4fbb561dcdee43f071a83badbeec9223a335552278348656738b556f1c2e9d"
+    },
+    {
+      "path": "data/solar.txt.gz",
+      "bytes": 8748993,
+      "sha256": "1ae9329c3e1032acbb8dd080bfc397c44507006812a715d2788f172820489a1c"
+    },
+    {
+      "path": "data/time_Crypto.npz",
+      "bytes": 40814,
+      "sha256": "a905547fdfa832758539f3a14443d60b1c1cff9991f35ad964b7896dcf410375"
+    },
+    {
+      "path": "data/time_Oil_Price.npz",
+      "bytes": 160800,
+      "sha256": "da8ac6fc14a454071a6aadc210d8f8c1a86fe4266ea3611e56532bd31a118186"
+    },
+    {
+      "path": "data/time_US_Term_Structure.npz",
+      "bytes": 1376927,
+      "sha256": "7496e780f67da7da90073e0d7dcee5b445a4d54d9b568ef58f9938bbf6f76511"
+    },
+    {
+      "path": "data/time_export.json",
+      "bytes": 2669,
+      "sha256": "26a2ff3f1ba629179e2d38f7b991f3c333c3dce34670f679b68e8acc54dee356"
+    },
+    {
+      "path": "data/valuation_xl.npz",
+      "bytes": 3559346,
+      "sha256": "d904583b904333ce221776964405c701bb8cac7a3760d8788437d1a549684d83"
+    }
+  ]
+}
