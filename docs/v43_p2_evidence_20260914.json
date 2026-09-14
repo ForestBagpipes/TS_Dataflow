@@ -1,0 +1,349 @@
+{
+  "run": "/home/vipuser/work/work2/results/v43/20260914T131623.999847Z-p2",
+  "code_commit": "f5735aceaf54c002e92d119ad08b5ef68086ec69",
+  "code_hash": "8d8e7bbf2148c4f338ee280ba86d914617fc240e67013a33e8cd0833e7365985",
+  "status": {
+    "run_id": "20260914T131624.154880Z-p2",
+    "phase": "p2",
+    "status": "completed",
+    "pid": 75069,
+    "started_at": "2026-09-14T13:16:24.155239+00:00",
+    "label_access": "train_dev_only",
+    "n_episodes": 156,
+    "n_unique_parents": 26,
+    "future_labels_read": 156,
+    "heldout_labels_read": 0,
+    "active_worker_pid": 75477,
+    "active_shard": "h192-bolt",
+    "forecast_status": "completed",
+    "unique_forecasts": 580,
+    "scope": "P2_first_development_tranche",
+    "n_candidate_labels": 1092,
+    "promotion": false,
+    "incumbent": "PICS_joint_relabel",
+    "runtime_seconds": 251.38554544400176
+  },
+  "comparison": {
+    "scope": "P2_first_development_tranche",
+    "source_macro": {
+      "A0_NATIVE": {
+        "mae": 3.7999273258279778,
+        "mse": 74.81861438395191,
+        "mase": 1.2584538861659658,
+        "task_gain": 0.0,
+        "task_harm": 0.0
+      },
+      "A0_FFILL": {
+        "mae": 4.5771879667736535,
+        "mse": 96.64804153168633,
+        "mase": 1.43062948068829,
+        "task_gain": -0.7772606409456754,
+        "task_harm": 0.4098124098124098
+      },
+      "A2_SINGLE": {
+        "mae": 3.266175355750063,
+        "mse": 52.34410234719339,
+        "mase": 1.1570046259775237,
+        "task_gain": 0.5337519700779148,
+        "task_harm": 0.1810966810966811
+      },
+      "A3_COV": {
+        "mae": 4.050634815296773,
+        "mse": 76.60062999869643,
+        "mase": 1.3139825460644512,
+        "task_gain": -0.2507074894687962,
+        "task_harm": 0.4509379509379509
+      },
+      "A4_RIDGE_CONTEXT": {
+        "mae": 3.5381003839784126,
+        "mse": 65.50556553380007,
+        "mase": 1.2145383940222851,
+        "task_gain": 0.2618269418495648,
+        "task_harm": 0.1818181818181818
+      },
+      "A4_RIDGE_FULL": {
+        "mae": 3.5598768067196422,
+        "mse": 66.64930323427319,
+        "mase": 1.2188774942159377,
+        "task_gain": 0.24005051910833541,
+        "task_harm": 0.1818181818181818
+      },
+      "A5_STATIC": {
+        "mae": 3.2666335147856174,
+        "mse": 52.3507477129542,
+        "mase": 1.1571867198812082,
+        "task_gain": 0.5332938110423602,
+        "task_harm": 0.1810966810966811
+      },
+      "A9_ORACLE_AVAILABLE": {
+        "mae": 3.0497721113111385,
+        "mse": 47.387874376091276,
+        "mase": 1.0931965584678058,
+        "task_gain": 0.7501552145168392,
+        "task_harm": 0.0
+      }
+    },
+    "confidence_interval": null,
+    "promotion": false,
+    "nonoverlapping_base_parents_by_source": {
+      "ETTm1": 14,
+      "Solar": 11,
+      "US_Term_Structure": 1
+    },
+    "limitation": "3 fixed conditions, seed101, target0; A1 and native multivariate pending; source support unequal; full-history intervals overlap within dev and require larger dependence blocks for inference",
+    "information_tracks": {
+      "target_only": [
+        "A0_NATIVE",
+        "A0_FFILL",
+        "A2_SINGLE"
+      ],
+      "historical_siblings": [
+        "A3_COV",
+        "A4_RIDGE_CONTEXT",
+        "A5_STATIC"
+      ],
+      "extra_legal_history": [
+        "A4_RIDGE_FULL"
+      ]
+    }
+  },
+  "independent_verification": {
+    "status": "completed",
+    "started_at": 1789392037.4202049,
+    "new_future_labels_read": 0,
+    "heldout_labels_read": 0,
+    "verifier_sha256": "47fb79e43c2517a87f33acc7a95e973384c82e8be9939b91c060ccdcc5a51099",
+    "episodes": 156,
+    "verified_imputations": 512,
+    "verified_forecasts": 580,
+    "candidate_labels": 1092,
+    "observed_write_violations": 0,
+    "independent_macro": {
+      "A0_NATIVE": {
+        "mae": 3.7999273258279778,
+        "mse": 74.81861438395191,
+        "mase": 1.2584538861659658,
+        "task_gain": 0.0,
+        "task_harm": 0.0
+      },
+      "A0_FFILL": {
+        "mae": 4.5771879667736535,
+        "mse": 96.64804153168633,
+        "mase": 1.43062948068829,
+        "task_gain": -0.7772606409456754,
+        "task_harm": 0.4098124098124098
+      },
+      "A2_SINGLE": {
+        "mae": 3.266175355750063,
+        "mse": 52.34410234719339,
+        "mase": 1.1570046259775237,
+        "task_gain": 0.5337519700779148,
+        "task_harm": 0.1810966810966811
+      },
+      "A3_COV": {
+        "mae": 4.050634815296773,
+        "mse": 76.60062999869643,
+        "mase": 1.3139825460644512,
+        "task_gain": -0.2507074894687962,
+        "task_harm": 0.4509379509379509
+      },
+      "A4_RIDGE_CONTEXT": {
+        "mae": 3.5381003839784126,
+        "mse": 65.50556553380007,
+        "mase": 1.2145383940222851,
+        "task_gain": 0.2618269418495648,
+        "task_harm": 0.1818181818181818
+      },
+      "A4_RIDGE_FULL": {
+        "mae": 3.5598768067196422,
+        "mse": 66.64930323427319,
+        "mase": 1.2188774942159377,
+        "task_gain": 0.24005051910833541,
+        "task_harm": 0.1818181818181818
+      },
+      "A5_STATIC": {
+        "mae": 3.2666335147856174,
+        "mse": 52.3507477129542,
+        "mase": 1.1571867198812082,
+        "task_gain": 0.5332938110423602,
+        "task_harm": 0.1810966810966811
+      }
+    },
+    "task_harm_counts": {
+      "A0_NATIVE": 0,
+      "A0_FFILL": 68,
+      "A2_SINGLE": 31,
+      "A3_COV": 54,
+      "A4_RIDGE_CONTEXT": 19,
+      "A4_RIDGE_FULL": 19,
+      "A5_STATIC": 31
+    },
+    "peak_gpu_bytes": 1899153920,
+    "worker_inference_seconds": 41.26747229402099,
+    "promotion": false,
+    "confidence_interval": null,
+    "finished_at": 1789392043.2818263
+  },
+  "attribution": {
+    "scope": "posthoc_dev_only_not_method_selection",
+    "new_future_labels_read": 0,
+    "heldout_labels_read": 0,
+    "repair_scope": "synthetically_hidden_finite_target_positions_only_no_keep_repair_gain",
+    "script_sha256": "85efdd1270fb3f796120636ab3ab2733fafc63e14509277dce4190461525c281",
+    "source_macro_oracles": {
+      "target_only": 1.1139134898233498,
+      "plus_simple_cross_channel": 1.0940800026657076,
+      "plus_residual": 1.0940800026657076,
+      "plus_full_history": 1.093196558467806
+    },
+    "oracles_by_source": {
+      "ETTm1": {
+        "target_only": 0.9499593335806028,
+        "plus_simple_cross_channel": 0.9390858637116297,
+        "plus_residual": 0.9390858637116297,
+        "plus_full_history": 0.9389727672541328
+      },
+      "Solar": {
+        "target_only": 1.3824957596926808,
+        "plus_simple_cross_channel": 1.3351650984718573,
+        "plus_residual": 1.3351650984718573,
+        "plus_full_history": 1.3326278623356493
+      },
+      "US_Term_Structure": {
+        "target_only": 1.009285376196766,
+        "plus_simple_cross_channel": 1.0079890458136356,
+        "plus_residual": 1.0079890458136356,
+        "plus_full_history": 1.0079890458136356
+      }
+    },
+    "residual_changed_episodes": 8,
+    "residual_changed_parents": 4,
+    "changed_future_better": 2,
+    "changed_future_worse": 6,
+    "changed_gap_better": 6,
+    "changed_gap_worse": 2,
+    "promotion": false,
+    "confidence_interval": null
+  },
+  "costs": [
+    {
+      "shard": "h96-nested",
+      "model": "tsicl",
+      "task": "impute",
+      "n_requests": 203,
+      "load_seconds": 2.14049179200083,
+      "worker_wall_seconds": 10.985341494997556,
+      "inference_seconds": 3.9661986480205087,
+      "load_peak_gpu_bytes": 219461632,
+      "peak_gpu_bytes": 262648832
+    },
+    {
+      "shard": "h96-cov",
+      "model": "tsicl",
+      "task": "impute",
+      "n_requests": 53,
+      "load_seconds": 0.9567725909982983,
+      "worker_wall_seconds": 5.111459306001052,
+      "inference_seconds": 1.6008940470019297,
+      "load_peak_gpu_bytes": 219461632,
+      "peak_gpu_bytes": 1899153920
+    },
+    {
+      "shard": "h192-nested",
+      "model": "tsicl",
+      "task": "impute",
+      "n_requests": 203,
+      "load_seconds": 1.9523713759990642,
+      "worker_wall_seconds": 8.920870601999923,
+      "inference_seconds": 3.6431358449917752,
+      "load_peak_gpu_bytes": 219461632,
+      "peak_gpu_bytes": 262648832
+    },
+    {
+      "shard": "h192-cov",
+      "model": "tsicl",
+      "task": "impute",
+      "n_requests": 53,
+      "load_seconds": 0.9556839059987396,
+      "worker_wall_seconds": 5.107057351000549,
+      "inference_seconds": 1.603216405990679,
+      "load_peak_gpu_bytes": 219461632,
+      "peak_gpu_bytes": 1899153920
+    },
+    {
+      "shard": "h96-bolt",
+      "model": "bolt",
+      "task": "forecast",
+      "n_requests": 290,
+      "load_seconds": 0.48222365800029365,
+      "worker_wall_seconds": 19.98891878900031,
+      "inference_seconds": 12.480085403985868,
+      "load_peak_gpu_bytes": 411041792,
+      "peak_gpu_bytes": 434916864
+    },
+    {
+      "shard": "h192-bolt",
+      "model": "bolt",
+      "task": "forecast",
+      "n_requests": 290,
+      "load_seconds": 0.46056111300276825,
+      "worker_wall_seconds": 25.53567397599909,
+      "inference_seconds": 17.97394194403023,
+      "load_peak_gpu_bytes": 411041792,
+      "peak_gpu_bytes": 436470784
+    }
+  ],
+  "artifact_sha256": {
+    "status.json": "e70be62f1ca1ea9b07fa0a7d1803b9d2b48fa8e682e8ffd9dedc0df499806695",
+    "resolved_config.yaml": "8f95019c274f556e5c2981209ba7126032988680655ba9681e405d444b013fb5",
+    "code_manifest.json": "d1d15d5052a1e71765fe59ad4e38ab026ecaa98a26de711056accc49968d7218",
+    "semantic_gate.json": "6399d5a7d37a32a356519bc6d83271edb63e358c64d58f57aa04eead7d496a09",
+    "data_manifest.json": "f340b34be671ea764c17ad9ab1f1d6447d2e34d9777436d6132a73fbc742c0e6",
+    "model_manifest.json": "a5d3792466234b27583698da4e46e521040fe5e89a4e1261a74e72e633347e52",
+    "origin_manifest.json": "0a33c30a320cbf1f040b0024006b741e8a5d77db814790dff1546c3f5f8d3f7f",
+    "episode_manifest.json": "08a5b46adb90fc272398d76dacca8a0f219d231ba2c8715b988b4fcbb06c3158",
+    "arm_manifest.json": "ac89889803896cfce7d6171ee1edb9dab47712e9f3f65780737608b040b1acca",
+    "candidate_index.json": "92a2aa329719c913268919d9e3cb07f4e5e9b68fbbc022fd5396eb98b35fdac0",
+    "candidates.npz": "f6fd0e3c0ec8de693c0e59fdd6c6bf8be941eaefeac79301ca70c6e5fe426de0",
+    "forecasts.npz": "44421f38175197cc618c3f51316808fea66a0fa0cf139369d9c5dbc943850ed8",
+    "forecast_aliases.json": "c8def815ac12bf27c25638c1f398e5026135513dde06d50e029f9a1e1ac01c14",
+    "targets.npz": "bfbcda59bb5ec332f89a0238b87bcb5060b5d1b2899107c3bbc19f2b94498638",
+    "task_labels.json": "9d8034795aff1debcecdf7d885cf3386c22cc1c1a6bfa10950c683e34ec71112",
+    "oracle_labels.json": "782d0069aeadeddcfbc268ae462649d83872e7d5e24c0719114f1fa85e7ca711",
+    "comparison.json": "4da68ed8101133af2e0c4dce62a498d862b7eed92004b259aa41cff97493c9bd",
+    "candidate_evidence.json": "60e88a3ca0ac7728c40b98b4cac7f673faff28abf8b25d0ef17201bf53b98787",
+    "mask_plans.json": "69821d26892983058bc321d44d0d3727a670e400d8c5c5e3598c4194fb29e5af",
+    "metrics_by_source.json": "ed4870670008f1395b28a3e1ed9f0c3e78869747d48988386bb96932f75eebed",
+    "harmful_cases.json": "88fc05aae0321a693438a882d3b0e0b1917d1ef9f4b174fbf50459e853ec0329",
+    "cost_ledger.json": "1dddf45b74eeff410167d2dc3515572ff928faeae8f81ab9d83ccba2c8602dfb",
+    "cpu_cost_ledger.json": "e479ed6f608871bbcb8814e5c4c95a8fb55bc05ae120f1b5eb1f589f255b76ef",
+    "independent_verification.json": "29072a9eec2c71e68c4c6e20055ad73dd7680fd117c630d817341eca55995371",
+    "posthoc_attribution/summary.json": "882ca31ac7b4a556ca5c24215127f4ff2246b1f8c2e93851ccd5483f72acc551",
+    "posthoc_attribution/synthetic_repair.json": "3a4319445c986259c5f1c637d978cc4f1b2ca643349a2f8ee4b43c9e3e52666c",
+    "posthoc_attribution/residual_changed_cases.json": "3e062b258a147b28d92af4820c9ef431c364880d034b395a0c8358740749d88e",
+    "h96-bolt.request.json": "4b4b2434ea8d8fd7b216bb00bc030f8c5f8402c171e40d80cae80db469830319",
+    "h192-cov.request.json": "2916c91f5e091d136560c2603da023954ae81949d651232fc12c9ab037bb6883",
+    "h192-nested.request.json": "aa2044ce804e353e2b4a90c886a98b4f5ec33e7d26b4b926544b3f51d319b01d",
+    "h96-cov.request.json": "c0835d40e975007a3310570fe059743f1381df370ba5c868412c6382007a6f2c",
+    "h96-nested.request.json": "a2f51f296667aaa2a55be6930b7bdfc73200a5dd4971a121bb911d6caf731edd",
+    "h192-bolt.request.json": "f73382b6679471396d3ba21111338d65e56da27c6350cdd9e7d8ed4e9346bb01",
+    "h192-nested.response.json": "3765a4328abc50eb2dcc705cf6e9a83f64dc989fedf53e974d6083a67b1e9f9e",
+    "h96-cov.response.json": "ff4c2835c605a6c9ab0cfff7de762de1e5f35f54edb9c2264937a3937314c27a",
+    "h96-bolt.response.json": "55d17719e8726f70c5f27bf1a5abc42cbef3c85832a077f3a69dfdfe3f0fabad",
+    "h192-cov.response.json": "3d520392cfe3f860e034bc5ad0a1fd8db690e7ce576106ba4372abc74fda7dfb",
+    "h96-nested.response.json": "8f3f613b960ee0f747a06513f23856066167ee65a6b6cbd0fc7f2b4224d07256",
+    "h192-bolt.response.json": "58be48c404e0a2c4df2422394f86c40a1606ffcdf863d5b5d823cd90d309b809",
+    "h96-bolt.predictions.raw.npz": "9ad5af07b885552d4d14901c76778e3aca2c1cf2374d7c5de45ddb136c896cc2",
+    "h96-cov.predictions.npz": "72c368b47fd7aef5f930fac7a3d0ba7a12ba2f9f8f142673d1095d386ba2ef3b",
+    "h96-nested.predictions.raw.npz": "b6cbc7c2fb5d5acaea50ad1fea28992390b13243124b13a50ac9274f429e55af",
+    "h96-cov.predictions.raw.npz": "b5131dd9837e8278c8ca3bc999ebddb8daec1fe5a2f482671f84627e7800670f",
+    "h192-cov.predictions.npz": "72c368b47fd7aef5f930fac7a3d0ba7a12ba2f9f8f142673d1095d386ba2ef3b",
+    "h96-bolt.predictions.npz": "a9d812517e4a97ddb593c12245f4832c4e4f677347da08c340aeec7a84edcf0c",
+    "h192-cov.predictions.raw.npz": "b5131dd9837e8278c8ca3bc999ebddb8daec1fe5a2f482671f84627e7800670f",
+    "h96-nested.predictions.npz": "0af9388682b33d2886c4a9d58df6d04610c13c8dabe3cb160983356d7b79869e",
+    "h192-nested.predictions.npz": "0af9388682b33d2886c4a9d58df6d04610c13c8dabe3cb160983356d7b79869e",
+    "h192-nested.predictions.raw.npz": "b6cbc7c2fb5d5acaea50ad1fea28992390b13243124b13a50ac9274f429e55af",
+    "h192-bolt.predictions.raw.npz": "67020d88843e8b2f598e985ad907c762bec6e36f45d48bfd60b3018baf78a573",
+    "h192-bolt.predictions.npz": "79a488c3eb499e23d2115c0570bd7740e6765f2dcbfc8339b82d5f9f5dd663cb"
+  }
+}

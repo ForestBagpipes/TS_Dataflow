@@ -5,17 +5,17 @@
 | 阶段/臂 | 当前状态 | 证据/依赖 |
 |---|---|---|
 | 接管与旧入口审计 | completed（静态） | `v43_entrypoint_audit_20260914.md` |
-| CPU 数据/worker 语义 | completed（已列测试范围） | 43 passed；`results/v43/semantic_gate.json` 指向原日志 |
+| CPU 数据/worker 语义 | completed（已列测试范围） | P2为51 passed；`results/v43/p2_semantic_gate.json` 指向原日志 |
 | 32 origin 原始输入准备 | completed | 20 train/12 dev；future labels read=0 |
 | 真实 TS-ICL/Bolt worker | completed（已验接口范围） | 两必需模型 ready/passed，真实 pilot 通过 |
 | L512/H32 真实 pilot | completed（接口诊断） | 32 origins、64 插补、96 预测；独立复核通过 |
-| A0 native KEEP / legacy forward fill | not_run | pilot KEEP 不等于正式 A0 表 |
-| A1 PICS / v3.9 D | not_run | 保留历史参照；新协议适配待审计 |
-| A2 TS-ICL 单变量 | not_run | 等 pilot 通过再运行正式 H96/H192 |
-| A3 官方 covariates | not_run | 同信息强对照，不能当严格单变量 |
-| A4 direct ridge 与全历史强版本 | not_implemented / not_run | 真实模型 pilot 后推进 |
-| A5 nested OOF residual / static eta | CPU_impl_tested / not_run | 外层遮挡毒化通过，真实 proposer 尚未接入完整候选实验 |
-| A9 oracle | not_run | 全候选必须有完整真实任务标签，不填缺失 gain |
+| A0 native KEEP / legacy forward fill | first_dev_tranche_completed | H96/H192首批dev三条件已运行；完整污染矩阵待扩展 |
+| A1 PICS / v3.9 D | blocked_adapter | 旧771-parent重放依赖已审计，新区间可部署适配待完成 |
+| A2 TS-ICL 单变量 | first_dev_tranche_completed | 首批已运行；整体改善但ETTm1退步 |
+| A3 官方 covariates | first_dev_tranche_completed | 官方全部合法covariates已运行；首批整体差于native KEEP |
+| A4 direct ridge 与全历史强版本 | first_dev_tranche_completed | 同split全部合法历史和context两个版本已运行 |
+| A5 nested OOF residual / static eta | first_dev_tranche_completed_increment_not_established | 七类真实遮挡接线已运行；加入简单强候选集的oracle增量为0 |
+| A9 oracle | available_arms_dev_upper_bound_completed | 仅已执行臂的完整任务标签；不把缺失A1/其他模型当0 |
 | A6–A8 工具策略 | pending | 可见状态/选择接口通过测试，工具 ledger 与模型尚未训练 |
 | calibration / adaptation / confirm | pending | 读取权限仍关闭；适配仅 pair hash 接口已测试 |
 
@@ -40,3 +40,8 @@ Solar 复用本机文件，与论文作者仓库 Git blob 完全一致。只按�
 A1仍为blocked_adapter：`experiments/v39_phase0_replay.py:321` 强依赖771个冻结parents，`:450`按历史候选标签拟合LODO PICS并重放；源码存在不等于可对本次新时间区间部署。该参照待合法适配，不把旧分数贴到新UID，也不把缺失参照填0。原生多变量任务模型尚未运行。A9只对本轮完整已执行候选集生成开发上界，名称明确为A9_ORACLE_AVAILABLE，不冒充全候选上界。
 
 新增测试覆盖gzip越界标签不可解码、父区间共享、shared辅助遮挡、全历史不重读gap、A5不适用回A2、漏真实预测报错、ridge观测值不变及eta平局0。运行以新配置绑定的CPU gate为前提，结果产出前不作方法成功结论。PICS_joint_relabel不变，不将规划写入DOCX成果。
+
+
+## 2026-09-14 21:20 post-hoc：P2首批真实实验完成
+
+51项CPU测试通过，H96/H192、三个dev来源、26个基础parent/156变体，512次真实插补、580次去重预测、1092份任务标签全部完成，独立原始结果复核通过；耗时251.386秒，峰值GPU分配1.90GB。KEEP/A2/A5来源宏平均MASE为1.258454/1.157005/1.157187，无可靠确认性CI。A5仅4个ETTm1 parent产生8个修正变体，未来任务2好6坏；其真缺口重建6好2坏。加入A5后，相对已含简单跨通道强对照的oracle增量为0，不能晋升残差方法或进入更大A8训练。A1与原生多变量对照待适配，其他污染条件/来源尚未覆盖；calibration/test读取仍为0，PICS_joint_relabel不变。全部状态、误差分歧与成本见docs/v43_p2_report_20260914.md和docs/v43_p2_evidence_20260914.json。

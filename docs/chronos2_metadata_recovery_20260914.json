@@ -1,0 +1,56 @@
+{
+  "status": "completed",
+  "pid": 75675,
+  "route": "process_only_direct",
+  "action": "chronos2_metadata_only",
+  "started_at": "2026-09-14T13:20:06.202372+00:00",
+  "proxy_config_changed": false,
+  "revision": "29ec3766d36d6f73f0696f85560a422f50e8498c",
+  "finished_at": "2026-09-14T13:20:09.468437+00:00",
+  "manifest_status": "completed",
+  "chronos2_record": {
+    "repo_id": "amazon/chronos-2",
+    "revision": "29ec3766d36d6f73f0696f85560a422f50e8498c",
+    "revision_resolved_at": "2026-09-14T13:20:09.461711+00:00",
+    "metadata_checked_at": "2026-09-14T13:20:09.461730+00:00",
+    "endpoint": "https://huggingface.co",
+    "planned_dtype": "bfloat16",
+    "license": "apache-2.0",
+    "license_name": null,
+    "license_link": null,
+    "repository_files": {
+      ".gitattributes": {
+        "size": 1519,
+        "lfs_sha256": null,
+        "git_blob_id": "a6344aac8c09253b3b630fb776ae94478aa0275b"
+      },
+      "README.md": {
+        "size": 7773,
+        "lfs_sha256": null,
+        "git_blob_id": "f612bbc4b27e0a7bc8fca91d9ddfdc35aaf701bc"
+      },
+      "config.json": {
+        "size": 1067,
+        "lfs_sha256": null,
+        "git_blob_id": "f3207394965100a2aa18820b87da3d2bbad3b1f0"
+      },
+      "model.safetensors": {
+        "size": 477930472,
+        "lfs_sha256": "ddcda3c7508bf2528087723e98a20707cc04b7f370ae275a9fd88078ddba4f42",
+        "git_blob_id": "583070cca6b6f539b3d712c517ebbc0893cb754a"
+      }
+    },
+    "selected_files": [],
+    "downloaded": false,
+    "capabilities": [],
+    "status": "pending",
+    "pending_reason": "metadata_only_this_bootstrap",
+    "environment": "w2-chronos",
+    "environment_python": "/home/vipuser/work2-envs/w2-chronos/bin/python",
+    "environment_lock": "/home/vipuser/work/work2/requirements/bootstrap-20260914/w2-chronos.freeze.txt",
+    "environment_lock_sha256": "03857e0851a9946518bd58dfd188d156557bcef9a320cb7a293b93de96d44d0f",
+    "official_code_commit": "4dbf163c2734c089cdf7da2b86fde48862ff9c6f",
+    "official_code_path": "/home/vipuser/work/work2/third_party/chronos-forecasting"
+  },
+  "previous_manifest": "logs/v43/chronos2-metadata-direct-20260914/previous-manifest.json"
+}

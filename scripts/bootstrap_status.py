@@ -8,10 +8,12 @@ root = Path('/home/vipuser/work/work2')
 stage = Path('/home/vipuser/work2-staging/bootstrap-20260914')
 for label, path in (
     ('Environment installation', stage / 'status.json'),
-    ('Model preparation queue', stage / 'continuation-status.json'),
+    ('Original model preparation queue (historical exit retained)', stage / 'continuation-status.json'),
+    ('Optional metadata recovery', root / 'logs/v43/chronos2-metadata-direct-20260914/status.json'),
     ('Model manifest', root / 'configs/v43/model_manifest.bootstrap.json'),
     ('Bolt mirror transfer (not model readiness)', root / 'results/v43/bolt_mirror_status.json'),
     ('v43 pilot queue', root / 'results/v43/pilot_queue_status.json'),
+    ('v43 P2 experiment queue', root / 'results/v43/p2_queue_status.json'),
     ('v43 live monitor', root / 'results/v43/monitor_status.json'),
 ):
     print('\n' + label + ': ' + str(path), flush=True)
@@ -21,7 +23,7 @@ for label, path in (
     obj = json.loads(path.read_text())
     for key in ('status', 'phase', 'updated_at', 'at', 'pid', 'monitor_pid', 'environment_phase',
                 'pilot_status', 'pilot_directory', 'error', 'model_exit_code', 'alerts',
-                'downloaded_bytes', 'expected_bytes', 'route'):
+                'downloaded_bytes', 'expected_bytes', 'route', 'run', 'logs', 'finished_at'):
         if key in obj:
             print(f'  {key}: {obj[key]}')
     pid = obj.get('pid', obj.get('monitor_pid'))
