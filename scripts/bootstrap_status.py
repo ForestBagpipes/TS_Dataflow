@@ -34,5 +34,13 @@ for label, path in (
             print(f'  {key}: {info}')
 print('\nRecent installation log:', flush=True)
 path = stage / 'logs/bootstrap.log'
+transition_path = root / 'logs/v43/direct-switch-20260914/transition.json'
+if transition_path.exists() and (stage / 'status.json').exists():
+    transition = json.loads(transition_path.read_text())
+    environment = json.loads((stage / 'status.json').read_text())
+    if transition.get('resumed_pid') == environment.get('pid'):
+        path = stage / 'logs/bootstrap-direct-resume.log'
+        print('  task-scoped direct download; shared proxy unchanged', flush=True)
 if path.exists():
+    print('  ' + str(path), flush=True)
     subprocess.run(['tail', '-n', '8', str(path)], check=False)

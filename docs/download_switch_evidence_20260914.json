@@ -1,0 +1,77 @@
+{
+  "at": "2026-09-14T12:03:31.909843+00:00",
+  "transition": {
+    "status": "old_installer_stopped",
+    "at": "2026-09-14T11:58:25.900602+00:00",
+    "old_installers": [
+      {
+        "pid": 45580,
+        "create_time": 1789377897.93
+      },
+      {
+        "pid": 61386,
+        "create_time": 1789385264.55
+      }
+    ],
+    "observers": [
+      47722,
+      58448
+    ],
+    "preserved": [
+      {
+        "source": "/tmp/pip-unpack-_gqir3sy/nvidia_cuda_cupti_cu12-12.6.80-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+        "destination": "/home/vipuser/work/work2/.cache/bootstrap-direct-20260914/preserved/nvidia_cuda_cupti_cu12-12.6.80-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+        "bytes": 8917980,
+        "sha256": "6768bad6cab4f19e8292125e5f1ac8aa7d1718704012a0e3272a6f61c4bce132",
+        "complete_official_hash_verified": true
+      },
+      {
+        "source": "/tmp/pip-unpack-n6fdry5x/nvidia_cuda_runtime_cu12-12.6.77-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+        "destination": "/home/vipuser/work/work2/.cache/bootstrap-direct-20260914/preserved/nvidia_cuda_runtime_cu12-12.6.77-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+        "bytes": 897690,
+        "sha256": "ba3b56a4f896141e25e19ab287cd71e52a6a0f4b29d0d31609f60e3b4d5219b7",
+        "complete_official_hash_verified": true
+      },
+      {
+        "source": "/tmp/pip-unpack-i3hk3qkz/nvidia_cuda_nvrtc_cu12-12.6.77-py3-none-manylinux2014_x86_64.whl",
+        "destination": "/home/vipuser/work/work2/.cache/bootstrap-direct-20260914/preserved/nvidia_cuda_nvrtc_cu12-12.6.77-py3-none-manylinux2014_x86_64.whl",
+        "bytes": 23650380,
+        "sha256": "35b0cc6ee3a9636d5409133e79273ce1f3fd087abb0532d2d2e8fff1fe9efc53",
+        "complete_official_hash_verified": true
+      },
+      {
+        "source": "/tmp/pip-unpack-h_fw6cxv/nvidia_cublas_cu12-12.6.4.1-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+        "destination": "/home/vipuser/work/work2/.cache/bootstrap-direct-20260914/preserved/nvidia_cublas_cu12-12.6.4.1-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+        "bytes": 191889408,
+        "sha256": "ceb929fbe3b559a5744167a54e553c8fb5bf37c0212486461aef85241f44d10e",
+        "complete_official_hash_verified": false
+      },
+      {
+        "source": "/tmp/pip-unpack-8jx0zi_2/nvidia_cudnn_cu12-9.10.2.21-py3-none-manylinux_2_27_x86_64.whl",
+        "destination": "/home/vipuser/work/work2/.cache/bootstrap-direct-20260914/preserved/nvidia_cudnn_cu12-9.10.2.21-py3-none-manylinux_2_27_x86_64.whl",
+        "bytes": 706758467,
+        "sha256": "949452be657fa16687d0930933f032835951ef0892b37d2d53824d1a84dc97a8",
+        "complete_official_hash_verified": true
+      }
+    ],
+    "proxy_listener_before": true,
+    "proxy_service_modified": false,
+    "codex_configuration_modified": false,
+    "bandwidth_limit_mib_per_second": 8,
+    "error": "NoSuchProcess: process no longer exists (pid=45580)",
+    "recovery_at": "2026-09-14T11:59:11.772739+00:00",
+    "recovery_reason": "Parent exited automatically after child terminated; explicit parent termination found already exited. Downloads preserved.",
+    "resumed_pid": 66506,
+    "resumed_phase": "download-direct-wheels",
+    "switch_completed_at": "2026-09-14T11:59:42.927539+00:00",
+    "proxy_listener_after": true,
+    "observer_queues_relaunched": true
+  },
+  "manifest_path": "/home/vipuser/work/work2/logs/v43/direct-switch-20260914/wheel-manifest.json",
+  "manifest_sha256": "ec75fae3a5378a34a585df452d7de425c76def084bfc4b99d4aadf1ab36ced86",
+  "package_count": 25,
+  "total_wheel_bytes": 3532630185,
+  "preserved_bytes": 932113925,
+  "validation": "manifest official hashes and ranges checked; full model/environment validation pending",
+  "method_status": "not_run; historical incumbent unchanged"
+}
