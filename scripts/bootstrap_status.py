@@ -19,6 +19,8 @@ for label, path in (
     ('v431 sprint delivery', root / 'results/v431/20260914-sprint/sprint_status.json'),
     ('v431 TimesFM fixed candidates', root / 'results/v431/20260914-sprint/timesfm/status.json'),
     ('v431 TimesFM TATO', root / 'results/v431/20260914-sprint/timesfm_tato/status.json'),
+    ('v431 r2 delivery', root / 'results/v431-r2/delivery_status.json'),
+    ('v431 r3 queue', root / 'results/v431-r3/queue_status.json'),
     ('Historical pilot monitor (not current model status)', root / 'results/v43/monitor_status.json'),
 ):
     print('\n' + label + ': ' + str(path), flush=True)

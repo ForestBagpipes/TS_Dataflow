@@ -1,3 +1,11 @@
+## 2026-09-15 v4.3.1-r2 实际交付；r3接续开发
+
+r2保留旧STOP负结果并实现证据状态一致固定参照：Bolt 1.157005；TimesFM 1.069398，与固定mask CART相同，主动机制未成立。主表34行、26 DEV parent/156变体；train110 parent，75拟合/17检查/18获取，支持曲线18/37/75已完成。真实TimesFM补3504唯一预测，648同冻结终态价值标签、4992决策及费用独立复核通过。
+
+两家族真实在线结束：TimesFM自然7窗中6次mask，Bolt自然7窗全STOP，另有预算与失败受控分支。金融已核实Brent报价和Kim–Wright拟合远期利率，2 parent/12相关变体的18行附表已完成；完整观测40次输入/预测no-op一致。金融TimesFM 4.890237仍等固定取证，Bolt 3.069683未胜KEEP。附表按观测事件计H，与旧网格不可横比；自然缺口身份/严格PIT未解决，未来部分重叠旧DEV/pilot，非确认。
+
+报告：[r2报告](v431_r2_report.md)、[共同表](v431_r2_main_table.md)、[逐窗审计](v431_r2_stop_audit.md)、[独立复核](v431_r2_verification.md)、[金融身份](v431_r2_financial_audit.md)。incumbent不变，calibration/test封存；RED不写入DOCX已验证成果。新用户r3已授权长短上下文响应与任务收益映射，尚未产生r3成绩，见其预登记计划。
+
 > 2026-09-14 23:59 最终收口：共同表50个组合均已运行并独立复核；TimesFM固定五臂与TATO已完成，取代下文同步时的在途状态。全部三来源/26 dev parent/156变体，结果与费用以 [v431_sprint_report.md](v431_sprint_report.md) 为准。完整新agent未晋升，calibration/test封存。
 
 ## 2026-09-14 v4.3.1 当日并行冲刺：开发验证未晋升

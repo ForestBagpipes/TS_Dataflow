@@ -1,0 +1,84 @@
+{
+  "version": "v4.3.1-r2",
+  "created_at": "2026-09-14T16:32:53.574970+00:00",
+  "parent_commit": "6f0542b7bac096f1b236d313beb170c4e61a0c59",
+  "families": [
+    "bolt",
+    "timesfm"
+  ],
+  "sources": [
+    "ETTm1",
+    "Solar",
+    "US_Term_Structure"
+  ],
+  "extra_dev_sources_preregistered": [
+    "Oil_Price"
+  ],
+  "context": 512,
+  "horizons": [
+    96,
+    192
+  ],
+  "extra_history": 0,
+  "conditions": [
+    "raw",
+    "target_block_10",
+    "shared_block_10"
+  ],
+  "seed": 101,
+  "terminal": {
+    "type": "ordinary_CART_by_visible_state",
+    "max_depth": 3,
+    "min_samples_leaf": 96,
+    "min_parents": 16,
+    "states": [
+      "mask",
+      "history",
+      "both"
+    ],
+    "fit_roles": [
+      "T_fit",
+      "T_gate"
+    ],
+    "reference": "source_parent_weighted_best_fixed_fit_only",
+    "complete_target": "KEEP",
+    "no_evidence": "frozen_fixed_reference"
+  },
+  "learning_curve": {
+    "fractions": [
+      0.25,
+      0.5,
+      1.0
+    ],
+    "subset_rule": "source_stratified_nested_evenly_spaced_original_time",
+    "fit_roles": [
+      "T_fit",
+      "T_gate"
+    ],
+    "check_role": "T_check",
+    "selection": "always_full_support_no_check_selection"
+  },
+  "acquisition": {
+    "max_decisions": 1,
+    "tool_counts": {
+      "mask": 1,
+      "history": 1,
+      "both": 2
+    },
+    "max_depth": 2,
+    "min_parents": 16,
+    "role": "T_acq",
+    "lambda_rule": "0_or_0.1_train_median_abs_task_difference_div_positive_tool_cost_median;parent_LOPO",
+    "stop_rule": "predicted_net_value_must_be_positive",
+    "labels": "frozen_state_policy_actual_before_after_task_loss_minus_complete_branch_cost_delta"
+  },
+  "budgets": {
+    "low": 0.8140623268639832,
+    "high": 3.5
+  },
+  "cost_tolerance_mase": 0.0,
+  "history": "exclusive_r_512_minus_target_horizon",
+  "heldout_access": false,
+  "method_promotion": false,
+  "financial_scope": "identity_verified_processed_benchmark_snapshot; no_strict_PIT_claim_without_release_vintages"
+}

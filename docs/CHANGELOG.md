@@ -837,3 +837,12 @@ A5补全诊断证明100个非零eta候选均改变真实预测；相对静态有
 PICS_joint_relabel不变；TS-ICL约8.06%是基线收益，非agent。calibration/test读取0；无ICLR/SOTA/安全保证。下一步只在train内注册证据状态独立评分、H32→H96/H192收益排序迁移、无增益工具停止和真实成本预算诊断，先满足H2/H3再扩强baseline/第二TSFM/独立确认。RED不写入DOCX已验证成果。
 
 完整报告与代码证据：[v43_agent_report_20260914.md](v43_agent_report_20260914.md)，机器记录：[v43_agent_evidence_20260914.json](v43_agent_evidence_20260914.json)。原始run `results/v43/20260914T141030.324186Z-agent`；最新阶段状态 `results/v43/agent_stage_acceptance.json`。运行Git HEAD为c92eab5上的未提交工作区，先按内容hash冻结，随后9f5f49f保存了完全一致的代码；不以旧HEAD覆盖快照。
+
+
+## 2026-09-15 v4.3.1-r2 实际交付；r3接续开发
+
+r2保留旧STOP负结果并实现证据状态一致固定参照：Bolt 1.157005；TimesFM 1.069398，与固定mask CART相同，主动机制未成立。主表34行、26 DEV parent/156变体；train110 parent，75拟合/17检查/18获取，支持曲线18/37/75已完成。真实TimesFM补3504唯一预测，648同冻结终态价值标签、4992决策及费用独立复核通过。
+
+两家族真实在线结束：TimesFM自然7窗中6次mask，Bolt自然7窗全STOP，另有预算与失败受控分支。金融已核实Brent报价和Kim–Wright拟合远期利率，2 parent/12相关变体的18行附表已完成；完整观测40次输入/预测no-op一致。金融TimesFM 4.890237仍等固定取证，Bolt 3.069683未胜KEEP。附表按观测事件计H，与旧网格不可横比；自然缺口身份/严格PIT未解决，未来部分重叠旧DEV/pilot，非确认。
+
+报告：[r2报告](v431_r2_report.md)、[共同表](v431_r2_main_table.md)、[逐窗审计](v431_r2_stop_audit.md)、[独立复核](v431_r2_verification.md)、[金融身份](v431_r2_financial_audit.md)。incumbent不变，calibration/test封存；RED不写入DOCX已验证成果。新用户r3已授权长短上下文响应与任务收益映射，尚未产生r3成绩，见其预登记计划。
