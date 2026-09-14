@@ -1,0 +1,11 @@
+{
+  "api_url": "https://api.github.com/repos/laiguokun/multivariate-time-series-data/contents/solar-energy/solar_AL.txt.gz",
+  "github_blob_sha1": "08a1f235546b3708309ff4fb544a54bb82e4f5e7",
+  "local_blob_sha1": "08a1f235546b3708309ff4fb544a54bb82e4f5e7",
+  "match": true,
+  "local_sha256": "1ae9329c3e1032acbb8dd080bfc397c44507006812a715d2788f172820489a1c",
+  "local_bytes": 8748993,
+  "github_size": 8748993,
+  "local_path": "/home/vipuser/work/work2/data/solar.txt.gz",
+  "download_url": "https://raw.githubusercontent.com/laiguokun/multivariate-time-series-data/master/solar-energy/solar_AL.txt.gz"
+}

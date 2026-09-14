@@ -4,6 +4,7 @@ TIME uses the retained benchmark's common row index, not a claimed recovered
 exchange calendar. No object channel array or held-out value array is loaded.
 """
 import csv
+import gzip
 import hashlib
 import json
 from itertools import islice
@@ -109,7 +110,14 @@ def read_rows(record, start, stop, split):
     lo, hi = record["split_bounds"][split]
     require(lo <= start < stop <= hi, "data read crosses split")
     path = Path(record["path"])
-    if path.suffix == ".csv":
+    if path.suffix == ".gz":
+        # Benchmark rows have no embedded calendar. Decode only the allowed
+        # interval; skipped rows, including held-out measurements, stay text.
+        with gzip.open(path, "rt", newline="") as f:
+            rows = islice(csv.reader(f), start, stop)
+            values = np.asarray([[float(x) if x else np.nan for x in row] for row in rows], dtype=np.float64)
+        timestamps = np.arange(start, stop, dtype=np.int64)
+    elif path.suffix == ".csv":
         values, times = [], []
         with path.open(newline="") as f:
             reader = csv.reader(f)

@@ -25,3 +25,8 @@ git ls-remote origin refs/heads/codex/introactts-v43-bootstrap
 ## 2026-09-14 首次推送结果
 
 已配置origin并连接原master历史，当前codex分支保留全部服务器快照内容。对提交 `4764b57` 的实际推送退出码128：`fatal: could not read Username for https://github.com: terminal prompts disabled`。本机未配置Git凭据helper，未发现GH_TOKEN/GITHUB_TOKEN、SSH agent或标准SSH私钥，当前缺GitHub写入认证。未上传成功，不能把本地commit或remote设置标成远端同步。需要在服务器完成该仓库写入认证后正常补推当前HEAD；不要将令牌写入Git或文档。认证恢复前不依赖上传的研究与监控任务继续。
+
+
+## 2026-09-14 21:08 认证恢复并实际补推
+
+本阶段正常push已成功：远端从4e5c5bf推进至 `598d6106b74d196e20216a6391c555a3f8e3d0d1`。独立git ls-remote返回与本地SHA一致，此前积累的下载恢复、环境冻结、worker入口修复及真实pilot证据已上传当前codex分支。没有更新master或force push，也没有在项目中保存凭据。早先认证失败记录保留，不再作为当前阻塞。
