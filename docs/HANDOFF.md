@@ -1,3 +1,7 @@
+## 2026-09-14 21:00 post-hoc：真实 P1 pilot 完成
+
+32 origins（20 train / 12 dev）、L512/H32、64 次真实 TS-ICL 插补和 96 次 Bolt 预测全部完成；43 项 CPU gate 通过，独立原始结果重算通过，未读 calibration/test。运行 21.794 秒，最大 GPU 分配 710,672,896 字节。KEEP / SINGLE / COV 来源宏平均 MASE 为 1.322762 / 1.316489 / 1.228219；COV 宏平均 MAE 反而变差，两插补臂各 15/32 个 origin task harm，无 CI。仅为接口与开发诊断，正式 A0–A5/H96/H192 未运行，PICS_joint_relabel 不变。首轮导入失败和可选 Chronos-2 TLS 失败保留。证据与原始结果入口见 `docs/v43_pilot_report_20260914.md`、`docs/v43_pilot_evidence_20260914.json`；下一步补长来源、接正式强对照及 A5 静态规则。
+
 ### 2026-09-14 18:48 最终 CPU 复核
 
 最终测试增至 **40 passed in 0.96s**，日志 `logs/v43/contracts/20260914T104754.619288Z/`。修复残差回归在 PCA 后附加缺失指示导致最终维度可能超过8的问题；现将缺失指示纳入训练支持内的缩放/PCA，最终维度上限8。旧39项日志保留。先前等待队列会因代码hash改变正常阻塞退出，新队列与当前代码绑定；实时状态仍查 `results/v43/pilot_queue_status.json`。真实模型实验仍未运行。

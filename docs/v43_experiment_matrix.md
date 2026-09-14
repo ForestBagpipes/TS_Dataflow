@@ -5,10 +5,10 @@
 | 阶段/臂 | 当前状态 | 证据/依赖 |
 |---|---|---|
 | 接管与旧入口审计 | completed（静态） | `v43_entrypoint_audit_20260914.md` |
-| CPU 数据/worker 语义 | completed（已列测试范围） | 40 passed；`results/v43/semantic_gate.json` 指向原日志 |
+| CPU 数据/worker 语义 | completed（已列测试范围） | 43 passed；`results/v43/semantic_gate.json` 指向原日志 |
 | 32 origin 原始输入准备 | completed | 20 train/12 dev；future labels read=0 |
-| 真实 TS-ICL/Bolt worker | pending_validation | 源码接口已对接，模型验收 manifest 尚缺 |
-| L512/H32 真实 pilot | blocked_dependency / queued | 一次性队列只在依赖和 CPU gate 通过后执行 |
+| 真实 TS-ICL/Bolt worker | completed（已验接口范围） | 两必需模型 ready/passed，真实 pilot 通过 |
+| L512/H32 真实 pilot | completed（接口诊断） | 32 origins、64 插补、96 预测；独立复核通过 |
 | A0 native KEEP / legacy forward fill | not_run | pilot KEEP 不等于正式 A0 表 |
 | A1 PICS / v3.9 D | not_run | 保留历史参照；新协议适配待审计 |
 | A2 TS-ICL 单变量 | not_run | 等 pilot 通过再运行正式 H96/H192 |
@@ -20,3 +20,8 @@
 | calibration / adaptation / confirm | pending | 读取权限仍关闭；适配仅 pair hash 接口已测试 |
 
 首批队列预算为 TS-ICL 64 个插补请求 + Bolt 96 个预测请求，32 origins，3 个 worker 加载。内部调用次数、加载/推断耗时、峰值显存和每千 origin 成本待真实 pilot，当前不提供伪造时间或租费估计。正式实验矩阵预算在 pilot 后按相同协议实测外推，保留20%余量。
+
+
+## 2026-09-14 21:00 post-hoc：真实 P1 pilot 完成
+
+32 origins（20 train / 12 dev）、L512/H32、64 次真实 TS-ICL 插补和 96 次 Bolt 预测全部完成；43 项 CPU gate 通过，独立原始结果重算通过，未读 calibration/test。运行 21.794 秒，最大 GPU 分配 710,672,896 字节。KEEP / SINGLE / COV 来源宏平均 MASE 为 1.322762 / 1.316489 / 1.228219；COV 宏平均 MAE 反而变差，两插补臂各 15/32 个 origin task harm，无 CI。仅为接口与开发诊断，正式 A0–A5/H96/H192 未运行，PICS_joint_relabel 不变。首轮导入失败和可选 Chronos-2 TLS 失败保留。证据与原始结果入口见 `docs/v43_pilot_report_20260914.md`、`docs/v43_pilot_evidence_20260914.json`；下一步补长来源、接正式强对照及 A5 静态规则。

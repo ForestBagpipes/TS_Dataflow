@@ -167,3 +167,8 @@ imbalanced to evaluate," not "TSFM signals do not work."
 已将旧重依赖导出改为按需加载，保留原公共API，并将顶层__init__/types/verify三项必要入口依赖纳入worker代码hash。43项CPU测试通过（1.29秒），4项旧API判据回归通过，两个worker在各自冻结解释器的--help入口均通过。完整失败日志、测试和代码hash见 docs/worker_import_fix_20260914.json。新真实pilot仍须实际执行后验收，不把此修复记为方法成功。
 
 Bolt镜像于20:46:09整包官方SHA256通过，20:46:52在旧传输进程退出和HF文件锁保护下接入同一官方revision缓存；保存旧335,236,791字节未完成文件。原验收器确认Bolt GPU接口通过，TS-ICL也通过。可选Chronos-2元数据TLS失败及一次独立重试失败保留，不阻塞只要求TS-ICL/Bolt的pilot。权重完整镜像耗时与HF缓存命中耗时分别保存，不能混算。
+
+
+## 2026-09-14 21:00 post-hoc：真实 P1 pilot 完成
+
+32 origins（20 train / 12 dev）、L512/H32、64 次真实 TS-ICL 插补和 96 次 Bolt 预测全部完成；43 项 CPU gate 通过，独立原始结果重算通过，未读 calibration/test。运行 21.794 秒，最大 GPU 分配 710,672,896 字节。KEEP / SINGLE / COV 来源宏平均 MASE 为 1.322762 / 1.316489 / 1.228219；COV 宏平均 MAE 反而变差，两插补臂各 15/32 个 origin task harm，无 CI。仅为接口与开发诊断，正式 A0–A5/H96/H192 未运行，PICS_joint_relabel 不变。首轮导入失败和可选 Chronos-2 TLS 失败保留。证据与原始结果入口见 `docs/v43_pilot_report_20260914.md`、`docs/v43_pilot_evidence_20260914.json`；下一步补长来源、接正式强对照及 A5 静态规则。

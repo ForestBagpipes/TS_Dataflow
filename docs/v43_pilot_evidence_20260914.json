@@ -1,0 +1,330 @@
+{
+  "status.json": {
+    "run_id": "20260914T125503.110018Z-pilot",
+    "phase": "pilot",
+    "status": "completed",
+    "pid": 72598,
+    "started_at": "2026-09-14T12:55:03.110285+00:00",
+    "label_access": "train_dev_only",
+    "active_worker_pid": 72629,
+    "active_shard": "bolt",
+    "scope": "real_model_interface_pilot_only",
+    "n_origins": 32,
+    "future_labels_read": 32,
+    "forecast_status": "completed",
+    "incumbent": "PICS_joint_relabel",
+    "runtime_seconds": 21.79384452299928
+  },
+  "independent_verification.json": {
+    "status": "completed",
+    "started_at": 1789390811.055116,
+    "scope": "H32_interface_pilot_only",
+    "verifier_sha256": "8ec39645beaed4126c7b60011d41b54a98a976b1433c1836b50c435f6b9d7b26",
+    "heldout_labels_read": 0,
+    "new_future_labels_read": 0,
+    "origins": 32,
+    "split_counts": {
+      "train": 20,
+      "dev": 12
+    },
+    "verified_imputations": 64,
+    "verified_forecasts": 96,
+    "observed_write_violations": 0,
+    "independent_macro": {
+      "KEEP": {
+        "mae": 8.863374111722157,
+        "mase": 1.3227617236041875,
+        "task_gain": 0.0
+      },
+      "TSICL_SINGLE": {
+        "mae": 8.718426579631691,
+        "mase": 1.3164894899582746,
+        "task_gain": 0.14494753209046582
+      },
+      "TSICL_COV": {
+        "mae": 9.31780965425,
+        "mase": 1.228218711735492,
+        "task_gain": -0.4544355425278421
+      }
+    },
+    "task_harm_counts": {
+      "KEEP": 0,
+      "TSICL_SINGLE": 15,
+      "TSICL_COV": 15
+    },
+    "recomputed_costs": {
+      "tsicl_single": {
+        "n_requests": 32,
+        "inference_seconds": 1.0780117159883957,
+        "peak_gpu_bytes": 262173696
+      },
+      "tsicl_cov": {
+        "n_requests": 32,
+        "inference_seconds": 1.1426129750070686,
+        "peak_gpu_bytes": 710672896
+      },
+      "bolt": {
+        "n_requests": 96,
+        "inference_seconds": 2.5394450230014627,
+        "peak_gpu_bytes": 421627904
+      }
+    },
+    "promotion": false,
+    "confidence_interval": null,
+    "limitation": "train/dev mixed H32 diagnostic; full A0-A5 H96/H192 and source support pending",
+    "finished_at": 1789390811.5146577
+  },
+  "comparison.json": {
+    "scope": "H32_interface_pilot_only",
+    "arms": {
+      "KEEP": {
+        "n_origins": 32,
+        "n_sources": 6,
+        "source_macro_mae": 8.863374111722157,
+        "source_macro_mase": 1.3227617236041875,
+        "source_macro_task_gain": 0.0
+      },
+      "TSICL_SINGLE": {
+        "n_origins": 32,
+        "n_sources": 6,
+        "source_macro_mae": 8.718426579631691,
+        "source_macro_mase": 1.3164894899582746,
+        "source_macro_task_gain": 0.14494753209046582
+      },
+      "TSICL_COV": {
+        "n_origins": 32,
+        "n_sources": 6,
+        "source_macro_mae": 9.31780965425,
+        "source_macro_mase": 1.228218711735492,
+        "source_macro_task_gain": -0.4544355425278421
+      }
+    },
+    "confidence_interval": null,
+    "promotion": false,
+    "information_track": "governance_with_historical_siblings_into_univariate_Bolt",
+    "limitation": "Not a strict univariate method comparison; native multivariate target and A0-A5 pending"
+  },
+  "metrics_by_source.json": [
+    {
+      "arm": "KEEP",
+      "source": "ETTh1",
+      "n_origins": 6,
+      "n_scored": 6,
+      "mae": 2.1454148047293224,
+      "mase": 0.8579619775218351,
+      "task_gain": 0.0
+    },
+    {
+      "arm": "TSICL_SINGLE",
+      "source": "ETTh1",
+      "n_origins": 6,
+      "n_scored": 6,
+      "mae": 2.151915006649991,
+      "mase": 0.8605614403771553,
+      "task_gain": -0.006500201920668284
+    },
+    {
+      "arm": "TSICL_COV",
+      "source": "ETTh1",
+      "n_origins": 6,
+      "n_scored": 6,
+      "mae": 2.136608104221523,
+      "mase": 0.8544401344887494,
+      "task_gain": 0.008806700507799803
+    },
+    {
+      "arm": "KEEP",
+      "source": "ETTh2",
+      "n_origins": 6,
+      "n_scored": 6,
+      "mae": 3.6462503472963967,
+      "mase": 0.8543261334898808,
+      "task_gain": 0.0
+    },
+    {
+      "arm": "TSICL_SINGLE",
+      "source": "ETTh2",
+      "n_origins": 6,
+      "n_scored": 6,
+      "mae": 3.518304228782654,
+      "mase": 0.8243480183541682,
+      "task_gain": 0.12794611851374316
+    },
+    {
+      "arm": "TSICL_COV",
+      "source": "ETTh2",
+      "n_origins": 6,
+      "n_scored": 6,
+      "mae": 3.510437627633413,
+      "mase": 0.8225048528270064,
+      "task_gain": 0.13581271966298428
+    },
+    {
+      "arm": "KEEP",
+      "source": "ETTm1",
+      "n_origins": 6,
+      "n_scored": 6,
+      "mae": 1.225637125937889,
+      "mase": 0.48712571714849223,
+      "task_gain": 0.0
+    },
+    {
+      "arm": "TSICL_SINGLE",
+      "source": "ETTm1",
+      "n_origins": 6,
+      "n_scored": 6,
+      "mae": 1.2728219459143777,
+      "mase": 0.5058791791505354,
+      "task_gain": -0.04718481997648882
+    },
+    {
+      "arm": "TSICL_COV",
+      "source": "ETTm1",
+      "n_origins": 6,
+      "n_scored": 6,
+      "mae": 1.2310945607411365,
+      "mase": 0.489294757875199,
+      "task_gain": -0.0054574348032475255
+    },
+    {
+      "arm": "KEEP",
+      "source": "Crypto",
+      "n_origins": 3,
+      "n_scored": 3,
+      "mae": 38.93737681706747,
+      "mase": 0.62542411824175,
+      "task_gain": 0.0
+    },
+    {
+      "arm": "TSICL_SINGLE",
+      "source": "Crypto",
+      "n_origins": 3,
+      "n_scored": 3,
+      "mae": 38.182228565216064,
+      "mase": 0.6132946948403014,
+      "task_gain": 0.7551482518513998
+    },
+    {
+      "arm": "TSICL_COV",
+      "source": "Crypto",
+      "n_origins": 3,
+      "n_scored": 3,
+      "mae": 42.770290533701576,
+      "mase": 0.6869895568378045,
+      "task_gain": -3.8329137166341147
+    },
+    {
+      "arm": "KEEP",
+      "source": "US_Term_Structure",
+      "n_origins": 6,
+      "n_scored": 6,
+      "mae": 0.2541521017829297,
+      "mase": 2.4292710858484505,
+      "task_gain": 0.0
+    },
+    {
+      "arm": "TSICL_SINGLE",
+      "source": "US_Term_Structure",
+      "n_origins": 6,
+      "n_scored": 6,
+      "mae": 0.25400151195974463,
+      "mase": 2.4278316977783923,
+      "task_gain": 0.00015058982318506484
+    },
+    {
+      "arm": "TSICL_COV",
+      "source": "US_Term_Structure",
+      "n_origins": 6,
+      "n_scored": 6,
+      "mae": 0.22978709210127043,
+      "mase": 2.1963821460724353,
+      "task_gain": 0.024365009681659288
+    },
+    {
+      "arm": "KEEP",
+      "source": "Oil_Price",
+      "n_origins": 5,
+      "n_scored": 5,
+      "mae": 6.971413473518946,
+      "mase": 2.682461309374717,
+      "task_gain": 0.0
+    },
+    {
+      "arm": "TSICL_SINGLE",
+      "source": "Oil_Price",
+      "n_origins": 5,
+      "n_scored": 5,
+      "mae": 6.931288219267321,
+      "mase": 2.6670219092490957,
+      "task_gain": 0.04012525425162394
+    },
+    {
+      "arm": "TSICL_COV",
+      "source": "Oil_Price",
+      "n_origins": 5,
+      "n_scored": 5,
+      "mae": 6.02864000710108,
+      "mase": 2.3197008223117574,
+      "task_gain": 0.9427734664178662
+    }
+  ],
+  "cost_ledger.json": [
+    {
+      "shard": "tsicl_single",
+      "model": "tsicl",
+      "task": "impute",
+      "n_requests": 32,
+      "load_seconds": 2.070772029001091,
+      "worker_wall_seconds": 6.675384449001285,
+      "inference_seconds": 1.0780117159883957,
+      "load_peak_gpu_bytes": 219461632,
+      "peak_gpu_bytes": 262173696
+    },
+    {
+      "shard": "tsicl_cov",
+      "model": "tsicl",
+      "task": "impute",
+      "n_requests": 32,
+      "load_seconds": 1.1261044469974877,
+      "worker_wall_seconds": 4.885842201001651,
+      "inference_seconds": 1.1426129750070686,
+      "load_peak_gpu_bytes": 219461632,
+      "peak_gpu_bytes": 710672896
+    },
+    {
+      "shard": "bolt",
+      "model": "bolt",
+      "task": "forecast",
+      "n_requests": 96,
+      "load_seconds": 0.3862739189971762,
+      "worker_wall_seconds": 8.989161007000803,
+      "inference_seconds": 2.5394450230014627,
+      "load_peak_gpu_bytes": 411041792,
+      "peak_gpu_bytes": 421627904
+    }
+  ],
+  "cost_projection.json": {
+    "pilot_origins": 32,
+    "pilot_wall_seconds": 20.55038765700374,
+    "same_pilot_workload_seconds_per_1000_origins_with_20pct_margin": 770.6395371376402,
+    "limitation": "H32 fixed three arms only; excludes A5 nested residual and formal H96/H192; not rental quote"
+  },
+  "run": "/home/vipuser/work/work2/results/v43/20260914T125500.992800Z-pilot",
+  "artifact_sha256": {
+    "status.json": "f71218fb5b88fc04a399ea5d878278955debeff2b596078f182f6463dbff7459",
+    "independent_verification.json": "e4a81e8dd4179b6f5ba3a6e285f0471bfdad89fd624609eb329afc755251d54f",
+    "comparison.json": "02006192be921cc557d5111f0af6e5306d748680f2533c705b02fa397a0a94b4",
+    "metrics_by_source.json": "73e00def6b35c584bb4f09186041388321d423824e5631d1798e951c4ed48a24",
+    "cost_ledger.json": "d450b7436c1d678b55522472c03ff7a1846a408b3345c0088b398074c990d3d6",
+    "cost_projection.json": "4064f67f954e7fbcc0add9436bb653d0a9960f76d2c3d260838540f2028d251c",
+    "semantic_gate.json": "f4c4548af9837d04ebc895629f3c440404681f049c9f10f8649c442f011f548d",
+    "code_manifest.json": "a507a31e9dd53367ed538cff17ade2806da2837ac0a40efbad189cf80366e010",
+    "model_manifest.json": "a5d3792466234b27583698da4e46e521040fe5e89a4e1261a74e72e633347e52",
+    "origin_manifest.json": "0166e3bfdb69fed360027f5c3884430026729f1435531139de5e3881f8fbfb32",
+    "task_labels.json": "637a5f67c232dee9e8cb35e580cd505537d3de06fcde719cc005b32069a45c39",
+    "targets.npz": "fe34e8aa77ff7fc7b87c5cd06991a9e4dafb478b7f109977ffa08f8ff47bcdaa"
+  },
+  "failure_run": "results/v43/20260914T124856.762289Z-pilot",
+  "incumbent": "PICS_joint_relabel",
+  "promotion": false
+}

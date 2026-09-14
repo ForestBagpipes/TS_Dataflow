@@ -1,0 +1,320 @@
+{
+  "schema_version": 1,
+  "scope": "bootstrap_only",
+  "status": "failed",
+  "updated_at": "2026-09-14T12:47:36.232922+00:00",
+  "manifest_note": "Chronos-2 metadata only. Ready means tiny interface checks, not v43 worker or experiment validation.",
+  "script_sha256": "f212df9121dc0fe112e163ef748d745979005fa28f8d2aa2ad2815f7f1871fd6",
+  "models": {
+    "tsicl": {
+      "repo_id": "taharnbl/TS-ICL",
+      "revision": "19c94031439fb31f36ce395088ee50a6762d3774",
+      "revision_resolved_at": "2026-09-14T12:15:29.451266+00:00",
+      "metadata_checked_at": "2026-09-14T12:47:05.875657+00:00",
+      "endpoint": "https://huggingface.co",
+      "planned_dtype": "float32",
+      "license": "other",
+      "license_name": "tsicl-v1-license-v1.0",
+      "license_link": "LICENSE",
+      "repository_files": {
+        ".gitattributes": {
+          "size": 1519,
+          "lfs_sha256": null,
+          "git_blob_id": "a6344aac8c09253b3b630fb776ae94478aa0275b"
+        },
+        "LICENSE": {
+          "size": 14927,
+          "lfs_sha256": null,
+          "git_blob_id": "4b179b7bb58a1eaad7089070eb527b4f0d42cc46"
+        },
+        "README.md": {
+          "size": 1224,
+          "lfs_sha256": null,
+          "git_blob_id": "8a9218a9034ec91f4f29f8d6aadd28f90cb185dd"
+        },
+        "config.json": {
+          "size": 30,
+          "lfs_sha256": null,
+          "git_blob_id": "e3489967f6fbf60acea03c68c4f1159c40e1179e"
+        },
+        "tsicl-v1.ckpt": {
+          "size": 219150987,
+          "lfs_sha256": "a67ae9f694c2a83cfc8e7ec41745ff4f41a4a76ee2b17172ec3430d8d29da431",
+          "git_blob_id": "916d033bf562c976af39685ae7301208c7e4a991"
+        }
+      },
+      "selected_files": [
+        "LICENSE",
+        "README.md",
+        "config.json",
+        "tsicl-v1.ckpt"
+      ],
+      "downloaded": true,
+      "capabilities": [
+        "univariate_forecast_h32_with_nan",
+        "univariate_impute",
+        "covariate_impute"
+      ],
+      "status": "ready",
+      "pending_reason": null,
+      "environment": "w2-tsicl",
+      "environment_python": "/home/vipuser/work2-envs/w2-tsicl/bin/python",
+      "environment_lock": "/home/vipuser/work/work2/requirements/bootstrap-20260914/w2-tsicl.freeze.txt",
+      "environment_lock_sha256": "63bb5411bc29e64110415017c83f205f5961bee5dc9554bf7f902d553d0afa86",
+      "official_code_commit": "349f3eae4f01f78536b16a6ea53c0837760166ec",
+      "official_code_path": "/home/vipuser/work/work2/third_party/ts-icl",
+      "snapshot_path": "/home/vipuser/work2-cache/huggingface/hub/models--taharnbl--TS-ICL/snapshots/19c94031439fb31f36ce395088ee50a6762d3774",
+      "files": {
+        "LICENSE": {
+          "path": "/home/vipuser/work2-cache/huggingface/hub/models--taharnbl--TS-ICL/snapshots/19c94031439fb31f36ce395088ee50a6762d3774/LICENSE",
+          "size_bytes": 14927,
+          "sha256": "db328122693e6d772568211af13346840fa2a5e6ece21beffb1a166d6e3471e4"
+        },
+        "README.md": {
+          "path": "/home/vipuser/work2-cache/huggingface/hub/models--taharnbl--TS-ICL/snapshots/19c94031439fb31f36ce395088ee50a6762d3774/README.md",
+          "size_bytes": 1224,
+          "sha256": "6eb4ff6bf075483d04c4ff42f35e55edccb40a465f41521defdaead4e1414e85"
+        },
+        "config.json": {
+          "path": "/home/vipuser/work2-cache/huggingface/hub/models--taharnbl--TS-ICL/snapshots/19c94031439fb31f36ce395088ee50a6762d3774/config.json",
+          "size_bytes": 30,
+          "sha256": "b01242e143fe5ed9d1319af380e83c04db766d9db14ca6e0719714c0553e5cde"
+        },
+        "tsicl-v1.ckpt": {
+          "path": "/home/vipuser/work2-cache/huggingface/hub/models--taharnbl--TS-ICL/snapshots/19c94031439fb31f36ce395088ee50a6762d3774/tsicl-v1.ckpt",
+          "size_bytes": 219150987,
+          "sha256": "a67ae9f694c2a83cfc8e7ec41745ff4f41a4a76ee2b17172ec3430d8d29da431"
+        }
+      },
+      "download_wall_seconds": 0.2804539230019145,
+      "checkpoint_path": "/home/vipuser/work2-cache/huggingface/hub/models--taharnbl--TS-ICL/snapshots/19c94031439fb31f36ce395088ee50a6762d3774/tsicl-v1.ckpt",
+      "configuration": "embedded_in_checkpoint; extracted during model validation",
+      "license_artifacts": [
+        {
+          "source": "model_repository",
+          "filename": "LICENSE",
+          "path": "/home/vipuser/work2-cache/huggingface/hub/models--taharnbl--TS-ICL/snapshots/19c94031439fb31f36ce395088ee50a6762d3774/LICENSE",
+          "size_bytes": 14927,
+          "sha256": "db328122693e6d772568211af13346840fa2a5e6ece21beffb1a166d6e3471e4"
+        }
+      ],
+      "validation": {
+        "started_at": "2026-09-14T12:47:06.466657+00:00",
+        "status": "passed",
+        "scope": "synthetic_interface_smoke_only",
+        "installed_source": {
+          "path": "/home/vipuser/work2-envs/w2-tsicl/lib/python3.12/site-packages/tsicl/pipeline.py",
+          "sha256": "ae6494c95ebbe9c4b8352bfedbd86f428f483d4782e8ae60b55350465da8a8a1"
+        },
+        "checkpoint_config": {
+          "path": "/home/vipuser/work2-staging/bootstrap-20260914/logs/models/tsicl.checkpoint-config.json",
+          "sha256": "bb1f78df0a65bbc9b283a2a9cc6303bf2e6e6a762c19b558f1e14cd462a1e805"
+        },
+        "tests": [
+          {
+            "name": "impute_1d_nan",
+            "status": "passed",
+            "point_shape": [
+              1,
+              1,
+              256,
+              1
+            ],
+            "quantile_shape": [
+              1,
+              1,
+              256,
+              3
+            ]
+          },
+          {
+            "name": "forecast_1d_nan_h32",
+            "status": "passed",
+            "point_shape": [
+              1,
+              1,
+              32,
+              1
+            ],
+            "quantile_shape": [
+              1,
+              1,
+              32,
+              3
+            ]
+          },
+          {
+            "name": "impute_covariates_btc",
+            "status": "passed",
+            "point_shape": [
+              1,
+              1,
+              256,
+              1
+            ],
+            "quantile_shape": [
+              1,
+              1,
+              256,
+              3
+            ]
+          }
+        ],
+        "inference_wall_seconds": 1.1233499689988093,
+        "actual_parameter_dtypes": [
+          "torch.float32"
+        ],
+        "input_sha256": "642214bb208253d705ed32f6ab4e2d030b8d0ba0232850a90b66e9a58dcf74cb",
+        "covariate_shape": [
+          1,
+          256,
+          2
+        ],
+        "capabilities": [
+          "univariate_forecast_h32_with_nan",
+          "univariate_impute",
+          "covariate_impute"
+        ],
+        "observed_comparison_tolerance": {
+          "rtol": 1e-05,
+          "atol": 1e-05
+        },
+        "governance_note": "Official replace_by_gt is numerical preservation; production governance must only write raw NaN locations.",
+        "total_load_and_inference_seconds": 3.3935559749988897,
+        "gpu_name": "NVIDIA GeForce RTX 4090",
+        "peak_allocated_bytes": 249763840,
+        "peak_reserved_bytes": 281018368,
+        "torch_version": "2.9.1+cu126",
+        "cuda_runtime": "12.6",
+        "finished_at": "2026-09-14T12:47:11.822368+00:00"
+      }
+    },
+    "bolt": {
+      "repo_id": "amazon/chronos-bolt-base",
+      "revision": "5d9f166d69f47aef3401367a7b842e78fe97b121",
+      "revision_resolved_at": "2026-09-14T12:22:12.596524+00:00",
+      "metadata_checked_at": "2026-09-14T12:47:20.964236+00:00",
+      "endpoint": "https://huggingface.co",
+      "planned_dtype": "bfloat16",
+      "license": "apache-2.0",
+      "license_name": null,
+      "license_link": null,
+      "repository_files": {
+        ".gitattributes": {
+          "size": 1519,
+          "lfs_sha256": null,
+          "git_blob_id": "a6344aac8c09253b3b630fb776ae94478aa0275b"
+        },
+        "README.md": {
+          "size": 8659,
+          "lfs_sha256": null,
+          "git_blob_id": "c7908a2b74d0b637744f6d3afa12fcd6c769e393"
+        },
+        "config.json": {
+          "size": 1123,
+          "lfs_sha256": null,
+          "git_blob_id": "a408d6913e164963361eeacbe10f2e62d894a1d7"
+        },
+        "model.safetensors": {
+          "size": 821203576,
+          "lfs_sha256": "31f875483a3215bc6880a0837ea608a13ce55f88ad90538c3cdd0b29aeb60b36",
+          "git_blob_id": "24aeb3d657652a5cc8f545c78eb65bec9cc8df0c"
+        }
+      },
+      "selected_files": [
+        "README.md",
+        "config.json",
+        "model.safetensors"
+      ],
+      "downloaded": true,
+      "capabilities": [
+        "univariate_forecast_h32",
+        "ragged_batch",
+        "context_nan"
+      ],
+      "status": "ready",
+      "pending_reason": null,
+      "environment": "w2-chronos",
+      "environment_python": "/home/vipuser/work2-envs/w2-chronos/bin/python",
+      "environment_lock": "/home/vipuser/work/work2/requirements/bootstrap-20260914/w2-chronos.freeze.txt",
+      "environment_lock_sha256": "03857e0851a9946518bd58dfd188d156557bcef9a320cb7a293b93de96d44d0f",
+      "official_code_commit": "4dbf163c2734c089cdf7da2b86fde48862ff9c6f",
+      "official_code_path": "/home/vipuser/work/work2/third_party/chronos-forecasting",
+      "snapshot_path": "/home/vipuser/work2-cache/huggingface/hub/models--amazon--chronos-bolt-base/snapshots/5d9f166d69f47aef3401367a7b842e78fe97b121",
+      "files": {
+        "README.md": {
+          "path": "/home/vipuser/work2-cache/huggingface/hub/models--amazon--chronos-bolt-base/snapshots/5d9f166d69f47aef3401367a7b842e78fe97b121/README.md",
+          "size_bytes": 8659,
+          "sha256": "6b0a3a94a6eb64c6cb6ecef796d89591a0f099ede877717d7b0ce59f39e4ce59"
+        },
+        "config.json": {
+          "path": "/home/vipuser/work2-cache/huggingface/hub/models--amazon--chronos-bolt-base/snapshots/5d9f166d69f47aef3401367a7b842e78fe97b121/config.json",
+          "size_bytes": 1123,
+          "sha256": "46f7e7e695569f67b06178faa4f236c281392945aa2d1bdf844442e57155530b"
+        },
+        "model.safetensors": {
+          "path": "/home/vipuser/work2-cache/huggingface/hub/models--amazon--chronos-bolt-base/snapshots/5d9f166d69f47aef3401367a7b842e78fe97b121/model.safetensors",
+          "size_bytes": 821203576,
+          "sha256": "31f875483a3215bc6880a0837ea608a13ce55f88ad90538c3cdd0b29aeb60b36"
+        }
+      },
+      "download_wall_seconds": 1.0550697590006166,
+      "license_artifacts": [
+        {
+          "source": "official_code_repository",
+          "path": "/home/vipuser/work2-staging/bootstrap-20260914/logs/models/bolt.official-source.LICENSE",
+          "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b",
+          "code_commit": "4dbf163c2734c089cdf7da2b86fde48862ff9c6f"
+        }
+      ],
+      "model_license_evidence": "Model repository README metadata; source LICENSE stored separately.",
+      "validation": {
+        "started_at": "2026-09-14T12:47:22.420074+00:00",
+        "status": "passed",
+        "scope": "synthetic_interface_smoke_only",
+        "installed_source": {
+          "path": "/home/vipuser/work2-envs/w2-chronos/lib/python3.11/site-packages/chronos/base.py",
+          "sha256": "8938c48de071534c3fecd4e2762a5f99b86d592e8de26aeaa21ce81a08f99c31"
+        },
+        "tests": [
+          {
+            "name": "ragged_batch_256_192_and_nan_h32",
+            "status": "passed",
+            "shape": [
+              3,
+              9,
+              32
+            ]
+          }
+        ],
+        "inference_wall_seconds": 1.9289879309981188,
+        "actual_parameter_dtypes": [
+          "torch.bfloat16"
+        ],
+        "capabilities": [
+          "univariate_forecast_h32",
+          "ragged_batch",
+          "context_nan"
+        ],
+        "prediction_sha256": "eb99ce975ee9965c296fef92f9c07d272f5608e1e47e6aa35e4d1860e7e9aaec",
+        "total_load_and_inference_seconds": 5.606476241999189,
+        "gpu_name": "NVIDIA GeForce RTX 4090",
+        "peak_allocated_bytes": 422492672,
+        "peak_reserved_bytes": 438304768,
+        "torch_version": "2.9.1+cu126",
+        "cuda_runtime": "12.6",
+        "finished_at": "2026-09-14T12:47:30.007515+00:00"
+      }
+    },
+    "chronos2": {
+      "repo_id": "amazon/chronos-2",
+      "status": "failed",
+      "failed_action": "metadata",
+      "error": "SSLError: (MaxRetryError(\"HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /api/models/amazon/chronos-2/revision/main?blobs=True (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1016)')))\"), '(Request ID: bd030887-2fbf-4d8f-b101-fbf9ae3be083)')",
+      "failed_at": "2026-09-14T12:47:36.182891+00:00",
+      "failed_action_wall_seconds": 5.257875375998992,
+      "exit_code": 1,
+      "error_log": "/home/vipuser/work2-staging/bootstrap-20260914/logs/models/20260914T124652.378379Z.chronos2.metadata.log"
+    }
+  }
+}
