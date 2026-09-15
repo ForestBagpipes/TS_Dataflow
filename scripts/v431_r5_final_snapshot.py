@@ -43,6 +43,7 @@ def main():
                           train_parents=scene['train_parents'], dev_parents=scene['dev_parents'],
                           actual_trials=status.get('trials'), completed_trials=status.get('completed_trials'),
                           failed_trials=status.get('failed_trials'),
+                          partial_trials=scene.get('trial_status_counts', {}).get('partial') if scene.get('trial_status_counts') else None,
                           mase=scored.get('mase_full_denominator'),
                           search_seconds=cost.get('offline_search_seconds'),
                           cold_seconds=cost.get('cold_seconds'),
@@ -52,10 +53,10 @@ def main():
                           full_child_seconds=cost.get('complete_subprocess_wall_seconds'))
             compact.append(record)
             rows.append([record['scene'], f"{record['train_parents']}/{record['dev_parents']}",
-                         record['status'], f"{record['actual_trials']}/{record['completed_trials']}/{record['failed_trials']}",
+                         record['status'], f"{record['actual_trials']}/{record['completed_trials']}/{record['failed_trials']}/{record['partial_trials'] or 0}" if record['actual_trials'] is not None else '未终态',
                          number(record['mase']), number(record['search_seconds']), number(record['hot_seconds'])])
         sections += [f'\n## {title}\n\n', table(
-            ['场景', 'TRAIN/DEV parent', '审计状态', '试验/成功/失败', 'MASE', '搜索秒', '热部署秒/窗'], rows)]
+            ['场景', 'TRAIN/DEV parent', '审计状态', '试验/成功/失败/中断', 'MASE', '搜索秒', '热部署秒/窗'], rows)]
     sections += ['\n缩放单位为Bolt16/TimesFM32；官方单位为96。两者均为当前L512和有限TRAIN支持的适配，'
                  '不是官方L1440、500个训练实例、top16/Pareto/OT完整复现。500 trial不等于500个独立parent。'
                  '超时搜索可冻结已完成训练最优方案，但不能称完整500trial。原始失败保留。\n',
@@ -110,10 +111,41 @@ def main():
         [name, q['status'], q.get('deadline', '已完成')] for name, q in queues.items()]),
         '\n服务器预定关机2026-09-16 05:04:31 Asia/Shanghai；本程序不执行关机。'
         '新重任务截至04:45，随后保存提交与审阅包。重启后不得原样复用已过期deadline覆盖旧状态。\n']
+    smoke_path = ROOT / 'main-train-smoke/audit.json'
+    if smoke_path.exists():
+        smoke = read(smoke_path)
+        assert smoke['status'] == 'passed'
+        sections += ['\n## 八来源TRAIN原生接口实测\n\n每家族8个parent、32个请求；原完整/51点受控缺口、H96/H192。'
+                     '全部来自登记TRAIN输入，没有读取未来目标或计算MASE。不是r5治理成功或独立确认。\n',
+                     table(['家族', '请求', '完整进程秒', '加载秒', '请求均值/P95/最大秒', 'low/high超支'], [
+                         [family, v['requests'], number(v['full_subprocess_seconds']), number(v['cold_model_load_seconds']),
+                          '/'.join(number(v[k]) for k in ('hot_request_mean', 'hot_request_p95', 'hot_request_max')),
+                          f"{v['over_low']}/{v['over_high']}"] for family, v in smoke['families'].items()]),
+                     '\n原准备器曾多获取origin行CSV字符串但未数值解析、保存或用于特征/评分；'
+                     '执行前改为islice严格在origin前停止，32个冻结输入逐值相同，历史事实与旧配置保留。'
+                     'Electricity/Exchange/Traffic只验证行序接口，原始时钟缺失不宣称严格历史可用性。\n']
+    bank_path = ROOT / 'main-train-bank/audit.json'
+    if bank_path.exists():
+        bank = read(bank_path)
+        sections += ['\n## 合法TRAIN原生预测库\n\n审核状态：' + bank['status'] + '。'
+                     '登记230个合法TRAIN parent（232减两个Weather异常），每家族920个原生KEEP请求；'
+                     '不读取预测目标、不计算MASE、不拟合r5，不能把230写成r5实际拟合支持。\n']
+        bank_rows = []
+        for family, value in bank.get('families', {}).items():
+            if 'full_subprocess_seconds' not in value:
+                continue
+            bank_rows.append([family, value['requests'], number(value['full_subprocess_seconds']),
+                              number(value['cold_seconds']), number(value['hot_mean']),
+                              number(value['hot_max']), f"{value['over_low']}/{value['over_high']}"])
+        sections.append(table(['家族', '已核请求', '完整进程秒', '加载秒', '热请求均值秒', '最大秒', 'low/high超支'], bank_rows))
+        sections.append('\n只有表中已经完成审核的家族可称通过；未审核或截止未运行窗口不删除。'
+                        '原生预测库服务后续已登记基线准备，当前没有主矩阵方法成绩或独立确认结论。\n')
     Path('docs/v431_r5_final_snapshot.md').write_text(''.join(sections))
     (ROOT / 'final_snapshot.json').write_text(json.dumps(dict(
         generated_at=now, scenes=compact, common_table=combined, tato_costs=costs,
         chronos2=native, queue_status={k: v['status'] for k, v in queues.items()},
+        train_smoke_status=read(smoke_path)['status'] if smoke_path.exists() else 'not_run',
+        train_bank_status=read(bank_path)['status'] if bank_path.exists() else 'not_run',
         development_gate='failed', calibration_test='sealed'), ensure_ascii=False, indent=2) + '\n')
     print(json.dumps(dict(status='rendered', at=now, scenes=len(compact))))
 

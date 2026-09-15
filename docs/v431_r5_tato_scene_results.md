@@ -8,14 +8,14 @@
 |bolt-h96|audited_completed|500/500/500|14/14|14500|
 |timesfm-h192|audited_completed|500/500/500|14/14|14500|
 |timesfm-h96|audited_completed|500/500/500|14/14|14500|
-|solar-bolt-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
+|solar-bolt-h192|audited_partial|455/455/500|11/11|10010|
 |solar-bolt-h96|audited_completed|500/500/500|11/11|11000|
-|solar-timesfm-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
+|solar-timesfm-h192|audited_partial|32/33/500|11/11|709|
 |solar-timesfm-h96|audited_partial|247/247/500|11/11|5434|
-|us_term_structure-bolt-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
+|us_term_structure-bolt-h192|audited_partial|452/452/500|1/1|1356|
 |us_term_structure-bolt-h96|audited_completed|500/500/500|1/1|1500|
-|us_term_structure-timesfm-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
-|us_term_structure-timesfm-h96|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
+|us_term_structure-timesfm-h192|audited_partial|247/248/500|1/1|743|
+|us_term_structure-timesfm-h96|audited_completed|500/500/500|1/1|1500|
 
 ## 全部预登记来源共同子表
 
@@ -33,8 +33,8 @@
 |bolt|REFERENCE_FREE_low|52/26|52|1.131513|1.131513|
 |bolt|TATO_NATIVE_8_high|52/26|52|1.661713|1.661713|
 |bolt|TATO_NATIVE_8_low|52/26|52|1.661713|1.661713|
-|bolt|TATO_SCENE_high|52/26|40|缺项|1.325653|
-|bolt|TATO_SCENE_low|52/26|40|缺项|1.325653|
+|bolt|TATO_SCENE_high|52/26|52|1.416821|1.416821|
+|bolt|TATO_SCENE_low|52/26|52|1.416821|1.416821|
 |timesfm|FIXED_A0_NATIVE_high|52/26|52|1.198786|1.198786|
 |timesfm|FIXED_A0_NATIVE_low|52/26|52|1.198786|1.198786|
 |timesfm|FIXED_A2_SINGLE_high|52/26|52|1.133136|1.133136|
@@ -47,8 +47,8 @@
 |timesfm|REFERENCE_FREE_low|52/26|52|1.052925|1.052925|
 |timesfm|TATO_NATIVE_8_high|52/26|52|1.506187|1.506187|
 |timesfm|TATO_NATIVE_8_low|52/26|52|1.506187|1.506187|
-|timesfm|TATO_SCENE_high|52/26|39|缺项|1.291656|
-|timesfm|TATO_SCENE_low|52/26|39|缺项|1.291656|
+|timesfm|TATO_SCENE_high|52/26|52|1.221407|1.221407|
+|timesfm|TATO_SCENE_low|52/26|52|1.221407|1.221407|
 
 ## 首四ETTm1共同子表
 
@@ -163,6 +163,29 @@
 
 失败trial状态：{"completed": 500}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
 
+## solar-bolt-h192
+
+|方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
+|---|---:|---:|---:|---:|---:|
+|FIXED_A0_NATIVE_high|1.624087|1.624087|0.109451|0|0|
+|FIXED_A0_NATIVE_low|1.624087|1.624087|0.109451|0|0|
+|FIXED_A2_SINGLE_high|1.291039|1.291039|0.131706|0|0|
+|FIXED_A2_SINGLE_low|1.291039|1.291039|0.131706|0|0|
+|R2_EXISTING_CART_high|1.291039|1.291039|1.023464|0|0|
+|R2_EXISTING_CART_low|1.291039|1.291039|1.023464|0|11|
+|R5_high|1.345606|1.345606|0.128364|0|0|
+|R5_low|1.345606|1.345606|0.128263|0|0|
+|REFERENCE_FREE_high|1.345606|1.345606|0.128250|0|0|
+|REFERENCE_FREE_low|1.345606|1.345606|0.128250|0|0|
+|TATO_NATIVE_8_high|2.615655|2.615655|0.807834|0|0|
+|TATO_NATIVE_8_low|2.615655|2.615655|0.807834|0|3|
+|TATO_SCENE_high|2.563880|2.563880|0.060686|0|0|
+|TATO_SCENE_low|2.563880|2.563880|0.060686|0|0|
+
+模型冷启动 3.828 秒；离线搜索 484.657 秒；DEV部署热请求累计 0.668 秒；worker阶段 489.743 秒（不含此前imports/部分hash检查）。训练样本预测、失败trial与全部模型调用仍收费，不将离线搜索均摊后冒充部署费。
+
+失败trial状态：{"completed": 455}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
+
 ## solar-bolt-h96
 
 |方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
@@ -185,6 +208,29 @@
 模型冷启动 3.790 秒；离线搜索 357.513 秒；DEV部署热请求累计 0.456 秒；worker阶段 362.313 秒（不含此前imports/部分hash检查）。训练样本预测、失败trial与全部模型调用仍收费，不将离线搜索均摊后冒充部署费。
 
 失败trial状态：{"completed": 500}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
+
+## solar-timesfm-h192
+
+|方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
+|---|---:|---:|---:|---:|---:|
+|FIXED_A0_NATIVE_high|1.276459|1.276459|0.195105|0|0|
+|FIXED_A0_NATIVE_low|1.276459|1.276459|0.195105|0|0|
+|FIXED_A2_SINGLE_high|1.365243|1.365243|0.226679|0|0|
+|FIXED_A2_SINGLE_low|1.365243|1.365243|0.226679|0|0|
+|R2_EXISTING_CART_high|1.144236|1.144236|1.450481|0|0|
+|R2_EXISTING_CART_low|1.144236|1.144236|1.450481|0|11|
+|R5_high|1.111484|1.111484|0.404707|0|0|
+|R5_low|1.111484|1.111484|0.404697|0|0|
+|REFERENCE_FREE_high|1.144236|1.144236|0.221781|0|0|
+|REFERENCE_FREE_low|1.144236|1.144236|0.221782|0|0|
+|TATO_NATIVE_8_high|1.801689|1.801689|0.900882|0|0|
+|TATO_NATIVE_8_low|1.801689|1.801689|0.900882|0|11|
+|TATO_SCENE_high|1.322176|1.322176|0.116815|0|0|
+|TATO_SCENE_low|1.322176|1.322176|0.116815|0|0|
+
+模型冷启动 3.957 秒；离线搜索 81.961 秒；DEV部署热请求累计 1.285 秒；worker阶段 88.097 秒（不含此前imports/部分hash检查）。训练样本预测、失败trial与全部模型调用仍收费，不将离线搜索均摊后冒充部署费。
+
+失败trial状态：{"completed": 32, "partial": 1}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
 
 ## solar-timesfm-h96
 
@@ -209,6 +255,29 @@
 
 失败trial状态：{"completed": 247}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
 
+## us_term_structure-bolt-h192
+
+|方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
+|---|---:|---:|---:|---:|---:|
+|FIXED_A0_NATIVE_high|0.904596|0.904596|0.094804|0|0|
+|FIXED_A0_NATIVE_low|0.904596|0.904596|0.094804|0|0|
+|FIXED_A2_SINGLE_high|0.889001|0.889001|0.128872|0|0|
+|FIXED_A2_SINGLE_low|0.889001|0.889001|0.128872|0|0|
+|R2_EXISTING_CART_high|0.889001|0.889001|0.709582|0|0|
+|R2_EXISTING_CART_low|0.889001|0.889001|0.709582|0|0|
+|R5_high|0.889001|0.889001|0.130741|0|0|
+|R5_low|0.889001|0.889001|0.130636|0|0|
+|REFERENCE_FREE_high|0.889001|0.889001|0.130621|0|0|
+|REFERENCE_FREE_low|0.889001|0.889001|0.130622|0|0|
+|TATO_NATIVE_8_high|0.867272|0.867272|0.815280|0|0|
+|TATO_NATIVE_8_low|0.867272|0.867272|0.815280|0|1|
+|TATO_SCENE_high|0.819709|0.819709|0.057681|0|0|
+|TATO_SCENE_low|0.819709|0.819709|0.057681|0|0|
+
+模型冷启动 3.818 秒；离线搜索 81.952 秒；DEV部署热请求累计 0.058 秒；worker阶段 86.142 秒（不含此前imports/部分hash检查）。训练样本预测、失败trial与全部模型调用仍收费，不将离线搜索均摊后冒充部署费。
+
+失败trial状态：{"completed": 452}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
+
 ## us_term_structure-bolt-h96
 
 |方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
@@ -232,16 +301,130 @@
 
 失败trial状态：{"completed": 500}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
 
+## us_term_structure-timesfm-h192
+
+|方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
+|---|---:|---:|---:|---:|---:|
+|FIXED_A0_NATIVE_high|0.973870|0.973870|0.195724|0|0|
+|FIXED_A0_NATIVE_low|0.973870|0.973870|0.195724|0|0|
+|FIXED_A2_SINGLE_high|1.003261|1.003261|0.227269|0|0|
+|FIXED_A2_SINGLE_low|1.003261|1.003261|0.227269|0|0|
+|R2_EXISTING_CART_high|1.002407|1.002407|1.113451|0|0|
+|R2_EXISTING_CART_low|1.002407|1.002407|1.113451|0|1|
+|R5_high|1.002407|1.002407|0.623975|0|0|
+|R5_low|1.002407|1.002407|0.623913|0|0|
+|REFERENCE_FREE_high|1.003261|1.003261|0.228859|0|0|
+|REFERENCE_FREE_low|1.003261|1.003261|0.228860|0|0|
+|TATO_NATIVE_8_high|0.922200|0.922200|0.949440|0|0|
+|TATO_NATIVE_8_low|0.922200|0.922200|0.949440|0|1|
+|TATO_SCENE_high|0.930269|0.930269|0.103637|0|0|
+|TATO_SCENE_low|0.930269|0.930269|0.103637|0|0|
+
+模型冷启动 3.446 秒；离线搜索 83.006 秒；DEV部署热请求累计 0.104 秒；worker阶段 87.511 秒（不含此前imports/部分hash检查）。训练样本预测、失败trial与全部模型调用仍收费，不将离线搜索均摊后冒充部署费。
+
+失败trial状态：{"completed": 247, "partial": 1}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
+
+## us_term_structure-timesfm-h96
+
+|方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
+|---|---:|---:|---:|---:|---:|
+|FIXED_A0_NATIVE_high|1.136082|1.136082|0.194875|0|0|
+|FIXED_A0_NATIVE_low|1.136082|1.136082|0.194875|0|0|
+|FIXED_A2_SINGLE_high|1.166095|1.166095|0.242927|0|0|
+|FIXED_A2_SINGLE_low|1.166095|1.166095|0.242927|0|0|
+|R2_EXISTING_CART_high|1.162498|1.162498|1.138596|0|0|
+|R2_EXISTING_CART_low|1.162498|1.162498|1.138596|0|1|
+|R5_high|1.136082|1.136082|0.439550|0|0|
+|R5_low|1.136082|1.136082|0.439463|0|0|
+|REFERENCE_FREE_high|1.166095|1.166095|0.244440|0|0|
+|REFERENCE_FREE_low|1.166095|1.166095|0.244440|0|0|
+|TATO_NATIVE_8_high|1.111292|1.111292|1.112264|0|0|
+|TATO_NATIVE_8_low|1.111292|1.111292|1.112264|0|1|
+|TATO_SCENE_high|1.150837|1.150837|0.115517|0|0|
+|TATO_SCENE_low|1.150837|1.150837|0.115517|0|0|
+
+模型冷启动 5.299 秒；离线搜索 173.885 秒；DEV部署热请求累计 0.116 秒；worker阶段 180.184 秒（不含此前imports/部分hash检查）。训练样本预测、失败trial与全部模型调用仍收费，不将离线搜索均摊后冒充部署费。
+
+失败trial状态：{"completed": 500}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
+
 ## 官方96单位独立实验
 
 以下采用官方patch/data/model单位96，seq_l=5..15原样保留。L512下大部分长度不支持，失败原样记录。与scaled-unit场景实验分别报告，不把两种协议混称官方完整复现。
 
 |scene|状态|成功/实际/登记trial|新scene MASE（high）|完整子进程秒|
 |---|---|---|---:|---:|
-|bolt-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|未完成|
-|bolt-h96|pending_frozen_and_all_saved_deployment|未完成|未评分|未完成|
-|timesfm-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|未完成|
-|timesfm-h96|pending_frozen_and_all_saved_deployment|未完成|未评分|未完成|
+|bolt-h192|audited_completed|33/500/500|1.806359|75.201|
+
+|官方96同UID方法|MASE完整分母|部署费用秒/窗|超预算|
+|---|---:|---:|---:|
+|FIXED_A0_NATIVE_high|1.052150|0.097752|0|
+|FIXED_A0_NATIVE_low|1.052150|0.097752|0|
+|FIXED_A2_SINGLE_high|1.135679|0.128667|0|
+|FIXED_A2_SINGLE_low|1.135679|0.128667|0|
+|R2_EXISTING_CART_high|1.052150|0.852461|0|
+|R2_EXISTING_CART_low|1.052150|0.852461|14|
+|R5_high|1.050338|0.105036|0|
+|R5_low|1.050338|0.104935|0|
+|REFERENCE_FREE_high|1.050338|0.104921|0|
+|REFERENCE_FREE_low|1.050338|0.104920|0|
+|TATO_NATIVE_8_high|1.664499|0.802787|0|
+|TATO_NATIVE_8_low|1.664499|0.802787|0|
+|TATO_SCENE_high|1.806359|0.058575|0|
+|TATO_SCENE_low|1.806359|0.058575|0|
+|bolt-h96|audited_completed|33/500/500|1.254998|67.172|
+
+|官方96同UID方法|MASE完整分母|部署费用秒/窗|超预算|
+|---|---:|---:|---:|
+|FIXED_A0_NATIVE_high|0.947742|0.079006|0|
+|FIXED_A0_NATIVE_low|0.947742|0.079006|0|
+|FIXED_A2_SINGLE_high|1.046562|0.115779|0|
+|FIXED_A2_SINGLE_low|1.046562|0.115779|0|
+|R2_EXISTING_CART_high|0.947742|0.741099|0|
+|R2_EXISTING_CART_low|0.947742|0.741099|1|
+|R5_high|0.938258|0.082444|0|
+|R5_low|0.938258|0.082330|0|
+|REFERENCE_FREE_high|0.938258|0.082314|0|
+|REFERENCE_FREE_low|0.938258|0.082313|0|
+|TATO_NATIVE_8_high|1.506111|0.541453|0|
+|TATO_NATIVE_8_low|1.506111|0.541453|0|
+|TATO_SCENE_high|1.254998|0.039426|0|
+|TATO_SCENE_low|1.254998|0.039426|0|
+|timesfm-h192|audited_completed|33/500/500|1.497541|136.854|
+
+|官方96同UID方法|MASE完整分母|部署费用秒/窗|超预算|
+|---|---:|---:|---:|
+|FIXED_A0_NATIVE_high|1.322749|0.195152|0|
+|FIXED_A0_NATIVE_low|1.322749|0.195152|0|
+|FIXED_A2_SINGLE_high|1.146009|0.226689|0|
+|FIXED_A2_SINGLE_low|1.146009|0.226689|0|
+|R2_EXISTING_CART_high|1.053253|1.315703|0|
+|R2_EXISTING_CART_low|1.053253|1.315703|14|
+|R5_high|1.133115|0.457230|0|
+|R5_low|1.131973|0.452559|0|
+|REFERENCE_FREE_high|1.053253|0.199345|0|
+|REFERENCE_FREE_low|1.053253|0.199338|0|
+|TATO_NATIVE_8_high|1.693810|0.910790|0|
+|TATO_NATIVE_8_low|1.693810|0.910790|14|
+|TATO_SCENE_high|1.497541|0.112943|0|
+|TATO_SCENE_low|1.497541|0.112943|0|
+|timesfm-h96|audited_completed|33/500/500|1.408024|138.186|
+
+|官方96同UID方法|MASE完整分母|部署费用秒/窗|超预算|
+|---|---:|---:|---:|
+|FIXED_A0_NATIVE_high|1.225859|0.195358|0|
+|FIXED_A0_NATIVE_low|1.225859|0.195358|0|
+|FIXED_A2_SINGLE_high|1.010010|0.228842|0|
+|FIXED_A2_SINGLE_low|1.010010|0.228842|0|
+|R2_EXISTING_CART_high|0.933913|1.331571|0|
+|R2_EXISTING_CART_low|0.933913|1.331571|14|
+|R5_high|0.998537|0.427331|0|
+|R5_low|1.045354|0.382196|0|
+|REFERENCE_FREE_high|0.933913|0.200575|0|
+|REFERENCE_FREE_low|0.933913|0.200574|0|
+|TATO_NATIVE_8_high|1.815560|1.066238|0|
+|TATO_NATIVE_8_low|1.815560|1.066238|14|
+|TATO_SCENE_high|1.408024|0.105296|0|
+|TATO_SCENE_low|1.408024|0.105296|0|
 
 计时口径：首四scene的status.wall_seconds只涵盖worker阶段，前置import及部分hash检查未单独计时，不能称完整OS进程。extra v1队列wall_seconds从等mutex前开始，包含排队；v2由wall_scope明确标注锁后完整子进程时间，并单列queue_wait_seconds，按实际记录区分。official96的remaining_jobs job.seconds在锁后计时，才可作为完整子进程墙钟。未记录的开销保持未知，不补造0。
 

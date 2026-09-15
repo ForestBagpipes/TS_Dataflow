@@ -29,13 +29,14 @@ def main():
         files.add(Path(name))
     for folder in ['v43','v431','v431_r2','v431_r3','v431_r4']:
         files.update((Path('src/introact_ts')/folder).rglob('*.py'))
-    for pattern in ['delivery_summary.json','final_snapshot.json','actual_commands.json','strong_simple_freeze.json',
+    for pattern in ['delivery_summary.json','final_snapshot.json','docx_export_audit.json','actual_commands.json','strong_simple_freeze.json',
       'fit/manifest.json','fit/models_frozen.json','space/summary.json','data/*/support*.json','data/status.json',
       'statistics/*audit*.json','statistics/fixed_trace_changed_windows.json','evaluation/*/common*table.json',
       'evaluation/*/mechanism_table.json','evaluation/*/status.json','main-preparation/*.json',
       'online-*/status.json','online-*/visibility_barrier.json','online-*/process_accounting.json',
       'online-*/service/service_startup.json','evaluation/*/allfive-executed/table.json',
-      'statistics/cost_information.json','statistics/backbone_source_comparison.json','main-preparation/audit-v2/*.json',
+      'statistics/cost_information.json','statistics/backbone_source_comparison.json',
+      'statistics/projection_ranking_counterexample.json','main-preparation/audit-v2/*.json',
       'backbone-registry/registry.json','chronos2-native-check/*status.json',
       'chronos2-native-check/support-audit.json','chronos2-native-check/audit/*.json',
       '*queue-status.json','tato-scene/audit.json','tato-scene/*/request*.json',
@@ -48,7 +49,12 @@ def main():
       'tato-scene-extra-cached/*/run/status.json','tato-scene-extra-cached/*/run/frozen*.json',
       'chronos2-native-check/retry-map.json','chronos2-native-check/attempt1-record-failure/queue*.json',
       'chronos2-native-check/attempt1-record-failure/train/status.json',
-      'chronos2-queue-status.attempt1-failed.json']:
+      'chronos2-queue-status.attempt1-failed.json','main-train-smoke/*.json',
+      'main-train-smoke/*/status.json','main-train-smoke/*/model_identity.json',
+      'main-train-smoke/*/records.json','main-train-smoke/*/calls.json',
+      'main-train-bank/*.json','main-train-bank/*/status.json',
+      'main-train-bank/*/model_identity.json','main-train-bank/*/records.json',
+      'main-train-bank/*/calls.json']:
         files.update(R.glob(pattern))
     snapshots={}; originals={}
     for suite in ['dev','financial']:
@@ -67,7 +73,8 @@ def main():
         b=d['batch'];idx=[i for i,r in enumerate(b.roles) if r=='T_fit'][:2]
         snapshots[f'samples/{family}-train-current-predictions.json']=[dict(
           predictions=d['predictions'][i],metadata=d['cache_metadata'][i],
-          scope='TRAIN current-task native predictions; no original dataset or future values') for i in idx]
+          supervision_loss_mae_over_origin_scale=b.losses[i],origin_scale=b.rows[i]['origin_scale'],
+          scope='Previously used r5 TRAIN native forecasts and loss supervision; no original dataset or future target values') for i in idx]
     # Small raw forecast samples only; never include original inputs or future targets.
     for folder in ('tato-scene','tato-scene-extra-cached','tato-official96'):
         for prediction_file in sorted((R/folder).glob('*/run/predictions.npz')):

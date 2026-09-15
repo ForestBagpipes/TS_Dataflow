@@ -34,7 +34,7 @@ def main():
     cols=[('家族',lambda r:r['family']),('方法',lambda r:r['policy']),('MASE ↓',lambda r:f"{r['mase']:.6f}"),
       ('账本秒/窗',lambda r:f"{r['total_seconds']:.6f}"),('超预算',lambda r:r['budget_overruns'])]
     selected=['FIXED_A0_NATIVE_high','FIXED_A2_SINGLE_high','TRAIN_BEST_FIXED_FLOW_high','LEGACY_DIRECT_control_high',
-      'LEGACY_CART_H_high','R2_EXISTING_CART_high','R4_JOINT_high','R4_FREE_COVERAGE_high','R5_RAW_high','R5_SINGLE_high',
+      'LEGACY_CART_H_high','R2_EXISTING_CART_high','R4_JOINT_high','R4_FREE_COVERAGE_high','REFERENCE_FREE_high','R5_RAW_high','R5_SINGLE_high',
       'R5_high','FIXED_COUNT_2_high','FIXED_ORDER_3_high','TATO_NATIVE_8_high']
     t=table([r for r in dev if r['policy'] in selected],cols)
     ft=table([r for r in fin if r['policy'] in ['FIXED_A0_NATIVE_high','FIXED_A2_SINGLE_high','R4_FREE_COVERAGE_high','R5_high']],cols)
@@ -64,6 +64,8 @@ def main():
 ## 共同DEV主表
 
 同26parent/156相关变体，三个来源，旧DEV反复开发使用；3.5秒预算。组件账本保留原始计算费用并加本轮评分/求解，不能替代下文单请求墙钟。R2为不同信息完整方法，TATO为8trial短预算适配，非官方完整复现。两预算、固定五臂及全部方法详见共同主表。
+
+`REFERENCE_FREE`是r5自己的冻结免费参考直接提交，`R4_FREE_COVERAGE`是旧r4覆盖特征免费化的修复对照。两者高预算预测相同，但代码、费用及低预算准入行为不能混同。低预算r5为Bolt1.152415、TimesFM1.080221；对应r5免费参考为1.152415/1.069398，TimesFM仍退步。
 
 '''+t+'''
 ## 固定查询轨迹的机制表

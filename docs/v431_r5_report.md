@@ -21,6 +21,8 @@
 
 同26parent/156相关变体，三个来源，旧DEV反复开发使用；3.5秒预算。组件账本保留原始计算费用并加本轮评分/求解，不能替代下文单请求墙钟。R2为不同信息完整方法，TATO为8trial短预算适配，非官方完整复现。两预算、固定五臂及全部方法详见共同主表。
 
+`REFERENCE_FREE`是r5自己的冻结免费参考直接提交，`R4_FREE_COVERAGE`是旧r4覆盖特征免费化的修复对照。两者高预算预测相同，但代码、费用及低预算准入行为不能混同。低预算r5为Bolt1.152415、TimesFM1.080221；对应r5免费参考为1.152415/1.069398，TimesFM仍退步。
+
 | 家族 | 方法 | MASE ↓ | 账本秒/窗 | 超预算 |
 | --- | --- | --- | --- | --- |
 | bolt | FIXED_A0_NATIVE_high | 1.258454 | 0.089821 | 0 |
@@ -35,6 +37,7 @@
 | bolt | R5_RAW_high | 1.152415 | 0.114238 | 0 |
 | bolt | R5_SINGLE_high | 1.152415 | 0.114236 | 0 |
 | bolt | R5_high | 1.152415 | 0.114237 | 0 |
+| bolt | REFERENCE_FREE_high | 1.152415 | 0.114152 | 0 |
 | bolt | TATO_NATIVE_8_high | 1.685227 | 0.676848 | 0 |
 | bolt | TRAIN_BEST_FIXED_FLOW_high | 1.154554 | 0.198152 | 0 |
 | timesfm | FIXED_A0_NATIVE_high | 1.139837 | 0.196681 | 0 |
@@ -49,6 +52,7 @@
 | timesfm | R5_RAW_high | 1.072391 | 0.374219 | 0 |
 | timesfm | R5_SINGLE_high | 1.074180 | 0.386583 | 0 |
 | timesfm | R5_high | 1.074244 | 0.386979 | 0 |
+| timesfm | REFERENCE_FREE_high | 1.069398 | 0.220333 | 0 |
 | timesfm | TATO_NATIVE_8_high | 1.529002 | 0.999094 | 0 |
 | timesfm | TRAIN_BEST_FIXED_FLOW_high | 1.069398 | 0.580168 | 0 |
 

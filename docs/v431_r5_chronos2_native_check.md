@@ -1,3 +1,5 @@
+> 2026-09-16 04:23 执行状态更新：本页下文保留准备时的协议与预登记状态。实际执行已推进：四个ETTm1 TATO场景各500trial完成，追加来源部分搜索按截止保留partial；Chronos-2原生KEEP已完成旧DEV26parent/156变体，MASE0.957177。Weather文件、输入/mask及重叠审核已完成准备。最新完整状态以 [交付快照](v431_r5_final_snapshot.md)、[TATO实际结果](v431_r5_tato_scene_results.md)、[Chronos-2结果](v431_r5_chronos2_native_results.md) 和 [主矩阵准备](v431_r5_main_readiness.md) 为准。准备文中的“未运行”不覆盖后续真实记录；官方完整复现和r5主矩阵确认仍未完成。
+
 # Chronos-2 原生KEEP独立接口验收
 
 本页是r5候选冻结后的骨干接口/敏感性准备，不是第三个独立模型家族，不改变r5两家族主表，不将骨干自身差异归因于治理。当前GPU验收状态以 `results/v431-r5/chronos2-native-check/{train,dev}/status.json` 为准，本文不把下载和输入准备写成已通过模型实验。

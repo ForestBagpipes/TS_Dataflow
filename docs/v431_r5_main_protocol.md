@@ -1,3 +1,5 @@
+> 2026-09-16 04:23 执行状态更新：本页下文保留准备时的协议与预登记状态。实际执行已推进：四个ETTm1 TATO场景各500trial完成，追加来源部分搜索按截止保留partial；Chronos-2原生KEEP已完成旧DEV26parent/156变体，MASE0.957177。Weather文件、输入/mask及重叠审核已完成准备。最新完整状态以 [交付快照](v431_r5_final_snapshot.md)、[TATO实际结果](v431_r5_tato_scene_results.md)、[Chronos-2结果](v431_r5_chronos2_native_results.md) 和 [主矩阵准备](v431_r5_main_readiness.md) 为准。准备文中的“未运行”不覆盖后续真实记录；官方完整复现和r5主矩阵确认仍未完成。
+
 # r5 主实验准备与 TATO 职责审计
 
 2026-09-16。状态：已完成元数据清单、边界登记和场景搜索/部署 API；**主矩阵和官方完整 TATO 尚未运行**。本轮不启动 GPU，不读取已有 calibration/test 数值标签。主实验执行仍受 r5 开发准入与既有解封规则约束。

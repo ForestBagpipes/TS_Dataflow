@@ -12,6 +12,7 @@
 - [实际代码审计](docs/v431_r5_code_audit.md)、[预登记](docs/v431_r5_plan.md)、[完整本轮提示词](docs/v431_r5_prompt.md)
 - [论文草稿](docs/paper_v431_draft.md)、[创新归因](docs/novelty_matrix.md)、[金融费用审计](docs/v431_r4_financial_audit.md)
 - [TATO场景实际结果](docs/v431_r5_tato_scene_results.md)、[官方96单位边界](docs/v431_r5_tato_official96.md)、[主矩阵准备](docs/v431_r5_main_readiness.md)、[模型版本登记](docs/v431_r5_backbone_registry.md)
+- [截止前快照](docs/v431_r5_final_snapshot.md)、[冻结与费用一致性复核](docs/v431_r5_final_consistency.md)、[Chronos-2原生结果](docs/v431_r5_chronos2_native_results.md)
 - [交接](docs/HANDOFF.md)、[版本台账](docs/version_ledger.md)
 
 ## 运行与审计
