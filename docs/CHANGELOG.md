@@ -1,3 +1,13 @@
+## 2026-09-16 v4.3.1-r5：当前任务响应与联合收益投影（未晋升）
+
+真实冻结候选与两家族共同开发表、固定轨迹机制和88请求在线验收已完成。旧DEV26parent/156相关变体，高预算Bolt r5=免费覆盖修复1.152415；TimesFM r5 1.074244弱于免费/训练固定流程1.069398。固定同轨迹FULL−RAW为−0.001197/+0.000418，TimesFM退步；收益向量平方误差下降不足支持最终任务改善。严格参考OOF中35/54过去支持不足16，按登记回退，不夸大110登记TRAIN支持。研究准入失败，停止r5配置扩展，确认集封存。
+
+真实在线每家族44请求，其中38自然：Bolt0次继续，TimesFM22次；各1次低预算超支，TF一次预算耗尽后的solver timeout保留上次预测。高预算自然0超支。原始预测与已执行版本数值全部一致；TF原生live float64/缓存float32身份差异显式保留。完整输入KEEP、零预算及取证后故障受控分支费用不删。金融2parent/12变体，Bolt KEEP2.820959优于r5 3.042476；TF r5 4.890106与免费4.890237微差不支持泛化，自然缺口及严格PIT仍缺项。
+
+入口：[实际报告](v431_r5_report.md)、[完整共同表](v431_r5_main_table.md)、[机制表](v431_r5_mechanism_table.md)、[审计](v431_r5_verification.md)、[接续提示词](v431_r5_next_prompt.md)。模型hash `6bac8291c9c06eca4cb2c6f9a9b6fe49373d51815ff302421fc92b70c6d12792`。核心CLI为v431_r5_prepare/run/online/common/statistics/report；原预测缓存合法复用。r4覆盖统计从mask免费可算，修复对照独立保留，原r4负结果不改写。
+
+已运行近期baseline仅TATO两家族8trial适配；场景级500/500官方范围未运行。8来源主协议、数据/许可和独立区间准备继续，未满足开发门槛不启动确认。PICS_joint_relabel不变，不宣称主动/金融/SOTA优势。Git代码及审阅包发布SHA见v431_r5_delivery.md；发布远端不等于观察到Windows本机同步。
+
 > 2026-09-14 23:59 最终收口：共同表50个组合均已运行并独立复核；TimesFM固定五臂与TATO已完成，取代下文同步时的在途状态。全部三来源/26 dev parent/156变体，结果与费用以 [v431_sprint_report.md](v431_sprint_report.md) 为准。完整新agent未晋升，calibration/test封存。
 
 ## 2026-09-14 v4.3.1 当日并行冲刺：开发验证未晋升

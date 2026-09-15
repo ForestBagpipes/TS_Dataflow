@@ -1,3 +1,14 @@
+# r5最新差异与实际支持（2026-09-16）
+
+| 模块 | 已有先例与旧实现 | 本次差异 | 必要对照与真实结论 |
+|---|---|---|---|
+| 当前任务试运行 | TATO/TS-ICL任务治理，Forecast with Forecasts预测特征；r3/r4历史probe | 当前origin真实L512/H96,H192输入版本预测，七响应按合法originS | FREE/HISTORY/CURRENT：信息与费用分别列；当前响应不稳定优于历史/简单策略 |
+| 联合收益约束 | 绝对损失、凸包、欧氏投影和FW是经典方法 | 无未来mask用所有lead折点公共凸包，仅校正收益评分、不混预测 | 同查询RAW/单臂/成对/FULL；SSE下降，但TF最终MASE退步，独有预测增量未成立 |
+| 选择性执行 | DIME、TNDP、Loss-Conditioned State Execution等已有获取/决策/停止先例 | 预查询先验只读免费信息与已付费参考预测，最多3版本 | 共享复用的固定2/3/全部5对照；Bolt全STOP、TF自然22次但弱于免费参照，不能声称主动优势 |
+| 工程契约 | 缓存、回退、日志已有 | 候选物化后canonical去重，实际输出复用，未知证据typed状态 | 在线输入保护/身份/屏障与完整费用核验；不单独主张创新 |
+
+主来源链接和准确范围见[v431_r5_literature.md](v431_r5_literature.md)。Task-oriented Imputation、CSDI、ImputePilot、嵌套上下文等旧对应保留下文，不因r5负结果删除。
+
 # IntroAct-TS v4.3.1-r3 创新边界与验证矩阵
 
 核对日期：2026-09-15，Asia/Shanghai。执行要求见 [r3 prompt](v431_r3_prompt.md)，原始文献、日期和访问限制见 [相关工作核对](v431_r3_related_work.md)。本表是主张审计，不是方法晋升。r3 四套共同表和配对统计已完成，当前不支持有符号响应或主动获取的稳定增量；r2 的负结果保留。

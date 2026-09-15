@@ -1,8 +1,10 @@
 # IntroAct-TS
 
-面向冻结时间序列基础模型的任务感知数据治理智能体。
+最新交付 **v4.3.1-r5**：共同开发与真实在线已完成，联合约束及主动机制未通过准入，calibration/test封存。完整结果见[报告](docs/v431_r5_report.md)、[主表](docs/v431_r5_main_table.md)、[机制](docs/v431_r5_mechanism_table.md)、[继续执行提示词](docs/v431_r5_next_prompt.md)。
 
-最新候选为 **v4.3.1-r4-JOINT**。工程已实现并完成共同开发评估；尚未取得优于强简单对照和固定流程的证据，不宣称SOTA或金融有效性。响应和主动取证的旧负结果保留，calibration/test封存，PICS_joint_relabel为原协议历史incumbent。
+面向时间序列基础模型的任务一致数据治理智能体。
+
+历史候选为 **v4.3.1-r4-JOINT**。工程已实现并完成共同开发评估；尚未取得优于强简单对照和固定流程的证据，不宣称SOTA或金融有效性。响应和主动取证的旧负结果保留，calibration/test封存，PICS_joint_relabel为原协议历史incumbent。
 
 ## 阅读入口
 

@@ -1,0 +1,3175 @@
+{
+  "version": "v431-r5-main-preparation-v1",
+  "status": "prepared_not_executed",
+  "context": 512,
+  "horizons": [
+    96,
+    192
+  ],
+  "families": [
+    "chronos-bolt-base",
+    "timesfm-2.5-200m"
+  ],
+  "budgets_seconds": [
+    0.8140623268639832,
+    3.5
+  ],
+  "sources": [
+    {
+      "source": "ETTh1",
+      "path": "data/ETT-small_ETTh1.csv",
+      "frequency": "1h",
+      "provider": "https://github.com/zhouhaoyi/ETDataset",
+      "license": "CC BY-ND 4.0",
+      "target": "HUFL (channel 0; inherited v43)",
+      "file_sha256": "f18de3ad269cef59bb07b5438d79bb3042d3be49bdeecf01c1cd6d29695ee066",
+      "bytes": 2589657,
+      "rows": 17420,
+      "columns": 7,
+      "column_names": [
+        "HUFL",
+        "HULL",
+        "MUFL",
+        "MULL",
+        "LUFL",
+        "LULL",
+        "OT"
+      ],
+      "start": "2016-07-01 00:00:00",
+      "end": "2018-06-26 19:00:00",
+      "time_mode": "original_csv_timestamp_timezone_not_declared",
+      "status": "metadata_prepared_not_model_ready",
+      "split_bounds": {
+        "train": [
+          0,
+          10452
+        ],
+        "dev": [
+          10452,
+          13065
+        ],
+        "calibration": [
+          13065,
+          14807
+        ],
+        "test": [
+          14807,
+          17420
+        ]
+      },
+      "split_provenance": "r5_preregistered_60_15_10_15",
+      "prediction_labels_read": 0,
+      "timezone": "unknown",
+      "historical_vintage": "unknown",
+      "capacity": {
+        "train": 14,
+        "dev": 3,
+        "calibration": 2,
+        "test": 3
+      }
+    },
+    {
+      "source": "ETTh2",
+      "path": "data/ETT-small_ETTh2.csv",
+      "frequency": "1h",
+      "provider": "https://github.com/zhouhaoyi/ETDataset",
+      "license": "CC BY-ND 4.0",
+      "target": "HUFL (channel 0; inherited v43)",
+      "file_sha256": "a3dc2c597b9218c7ce1cd55eb77b283fd459a1d09d753063f944967dd6b9218b",
+      "bytes": 2417960,
+      "rows": 17420,
+      "columns": 7,
+      "column_names": [
+        "HUFL",
+        "HULL",
+        "MUFL",
+        "MULL",
+        "LUFL",
+        "LULL",
+        "OT"
+      ],
+      "start": "2016-07-01 00:00:00",
+      "end": "2018-06-26 19:00:00",
+      "time_mode": "original_csv_timestamp_timezone_not_declared",
+      "status": "metadata_prepared_not_model_ready",
+      "split_bounds": {
+        "train": [
+          0,
+          10452
+        ],
+        "dev": [
+          10452,
+          13065
+        ],
+        "calibration": [
+          13065,
+          14807
+        ],
+        "test": [
+          14807,
+          17420
+        ]
+      },
+      "split_provenance": "r5_preregistered_60_15_10_15",
+      "prediction_labels_read": 0,
+      "timezone": "unknown",
+      "historical_vintage": "unknown",
+      "capacity": {
+        "train": 14,
+        "dev": 3,
+        "calibration": 2,
+        "test": 3
+      }
+    },
+    {
+      "source": "ETTm1",
+      "path": "data/ETT-small_ETTm1.csv",
+      "frequency": "15min",
+      "provider": "https://github.com/zhouhaoyi/ETDataset",
+      "license": "CC BY-ND 4.0",
+      "target": "HUFL (channel 0; inherited v43)",
+      "file_sha256": "6ce1759b1a18e3328421d5d75fadcb316c449fcd7cec32820c8dafda71986c9e",
+      "bytes": 10360719,
+      "rows": 69680,
+      "columns": 7,
+      "column_names": [
+        "HUFL",
+        "HULL",
+        "MUFL",
+        "MULL",
+        "LUFL",
+        "LULL",
+        "OT"
+      ],
+      "start": "2016-07-01 00:00:00",
+      "end": "2018-06-26 19:45:00",
+      "time_mode": "original_csv_timestamp_timezone_not_declared",
+      "status": "metadata_prepared_not_model_ready",
+      "split_bounds": {
+        "train": [
+          0,
+          41808
+        ],
+        "dev": [
+          41808,
+          52260
+        ],
+        "calibration": [
+          52260,
+          59228
+        ],
+        "test": [
+          59228,
+          69680
+        ]
+      },
+      "split_provenance": "inherited_unchanged",
+      "prediction_labels_read": 0,
+      "timezone": "unknown",
+      "historical_vintage": "unknown",
+      "capacity": {
+        "train": 59,
+        "dev": 14,
+        "calibration": 9,
+        "test": 14
+      }
+    },
+    {
+      "source": "ETTm2",
+      "path": "data/ETT-small_ETTm2.csv",
+      "frequency": "15min",
+      "provider": "https://github.com/zhouhaoyi/ETDataset",
+      "license": "CC BY-ND 4.0",
+      "target": "HUFL (channel 0; inherited v43)",
+      "file_sha256": "db973ca252c6410a30d0469b13d696cf919648d0f3fd588c60f03fdbdbadd1fd",
+      "bytes": 9677236,
+      "rows": 69680,
+      "columns": 7,
+      "column_names": [
+        "HUFL",
+        "HULL",
+        "MUFL",
+        "MULL",
+        "LUFL",
+        "LULL",
+        "OT"
+      ],
+      "start": "2016-07-01 00:00:00",
+      "end": "2018-06-26 19:45:00",
+      "time_mode": "original_csv_timestamp_timezone_not_declared",
+      "status": "metadata_prepared_not_model_ready",
+      "split_bounds": {
+        "train": [
+          0,
+          41808
+        ],
+        "dev": [
+          41808,
+          52260
+        ],
+        "calibration": [
+          52260,
+          59228
+        ],
+        "test": [
+          59228,
+          69680
+        ]
+      },
+      "split_provenance": "r5_preregistered_60_15_10_15",
+      "prediction_labels_read": 0,
+      "timezone": "unknown",
+      "historical_vintage": "unknown",
+      "capacity": {
+        "train": 59,
+        "dev": 14,
+        "calibration": 9,
+        "test": 14
+      }
+    },
+    {
+      "source": "Electricity",
+      "path": "data/r5-public/electricity.txt.gz",
+      "frequency": "1h",
+      "target": "first channel (index 0; inherited v43 rule)",
+      "provider": "https://github.com/laiguokun/multivariate-time-series-data",
+      "license": "research availability stated; redistribution grant unresolved",
+      "file_sha256": "3c4c069588198c1fcc95cace7bb69c99922129edfd673b7286661dad20badefa",
+      "bytes": 17993794,
+      "columns": 321,
+      "rows": 26304,
+      "time_mode": "ordinal_only_no_fabricated_timestamp",
+      "start": null,
+      "end": null,
+      "status": "metadata_prepared_not_model_ready",
+      "split_bounds": {
+        "train": [
+          0,
+          15782
+        ],
+        "dev": [
+          15782,
+          19728
+        ],
+        "calibration": [
+          19728,
+          22358
+        ],
+        "test": [
+          22358,
+          26304
+        ]
+      },
+      "split_provenance": "r5_preregistered_60_15_10_15",
+      "prediction_labels_read": 0,
+      "timezone": "unknown",
+      "historical_vintage": "unknown",
+      "capacity": {
+        "train": 22,
+        "dev": 5,
+        "calibration": 3,
+        "test": 5
+      }
+    },
+    {
+      "source": "Exchange",
+      "path": "data/exchange.txt.gz",
+      "frequency": "daily observations; calendar unresolved",
+      "target": "first channel (index 0; inherited v43 rule)",
+      "provider": "https://github.com/laiguokun/multivariate-time-series-data",
+      "license": "research availability stated; redistribution grant unresolved",
+      "file_sha256": "6a4fbb561dcdee43f071a83badbeec9223a335552278348656738b556f1c2e9d",
+      "bytes": 177142,
+      "columns": 8,
+      "rows": 7588,
+      "time_mode": "ordinal_only_no_fabricated_timestamp",
+      "start": null,
+      "end": null,
+      "status": "metadata_prepared_not_model_ready",
+      "split_bounds": {
+        "train": [
+          0,
+          4552
+        ],
+        "dev": [
+          4552,
+          5691
+        ],
+        "calibration": [
+          5691,
+          6449
+        ],
+        "test": [
+          6449,
+          7588
+        ]
+      },
+      "split_provenance": "r5_preregistered_60_15_10_15",
+      "prediction_labels_read": 0,
+      "timezone": "unknown",
+      "historical_vintage": "unknown",
+      "capacity": {
+        "train": 6,
+        "dev": 1,
+        "calibration": 1,
+        "test": 1
+      }
+    },
+    {
+      "source": "Traffic",
+      "path": "data/r5-public/traffic.txt.gz",
+      "frequency": "1h; timestamp mapping unresolved",
+      "target": "first channel (index 0; inherited v43 rule)",
+      "provider": "https://github.com/laiguokun/multivariate-time-series-data",
+      "license": "research availability stated; redistribution grant unresolved",
+      "file_sha256": "c7be5a00519d344a5ec0eabdbfec5ea0c7dd1eed5f9b1a3843a93bb88086a56d",
+      "bytes": 29310512,
+      "columns": 862,
+      "rows": 17544,
+      "time_mode": "ordinal_only_no_fabricated_timestamp",
+      "start": null,
+      "end": null,
+      "status": "metadata_prepared_not_model_ready",
+      "split_bounds": {
+        "train": [
+          0,
+          10526
+        ],
+        "dev": [
+          10526,
+          13158
+        ],
+        "calibration": [
+          13158,
+          14912
+        ],
+        "test": [
+          14912,
+          17544
+        ]
+      },
+      "split_provenance": "r5_preregistered_60_15_10_15",
+      "prediction_labels_read": 0,
+      "timezone": "unknown",
+      "historical_vintage": "unknown",
+      "capacity": {
+        "train": 14,
+        "dev": 3,
+        "calibration": 2,
+        "test": 3
+      }
+    },
+    {
+      "source": "Weather",
+      "path": "data/r5-public/weather.csv",
+      "frequency": "10min",
+      "target": "first value channel (index 0; provider mapping pending)",
+      "provider": "https://github.com/thuml/Time-Series-Library",
+      "license": "benchmark archive/license mapping unresolved",
+      "status": "missing_file",
+      "split_bounds": null
+    }
+  ],
+  "windows_metadata": [
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:0:704",
+      "read_start": 0,
+      "origin": 512,
+      "max_target_end": 704,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:704:1408",
+      "read_start": 704,
+      "origin": 1216,
+      "max_target_end": 1408,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:1408:2112",
+      "read_start": 1408,
+      "origin": 1920,
+      "max_target_end": 2112,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:2112:2816",
+      "read_start": 2112,
+      "origin": 2624,
+      "max_target_end": 2816,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:2816:3520",
+      "read_start": 2816,
+      "origin": 3328,
+      "max_target_end": 3520,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:3520:4224",
+      "read_start": 3520,
+      "origin": 4032,
+      "max_target_end": 4224,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:4224:4928",
+      "read_start": 4224,
+      "origin": 4736,
+      "max_target_end": 4928,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:4928:5632",
+      "read_start": 4928,
+      "origin": 5440,
+      "max_target_end": 5632,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:5632:6336",
+      "read_start": 5632,
+      "origin": 6144,
+      "max_target_end": 6336,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:6336:7040",
+      "read_start": 6336,
+      "origin": 6848,
+      "max_target_end": 7040,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:7040:7744",
+      "read_start": 7040,
+      "origin": 7552,
+      "max_target_end": 7744,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:7744:8448",
+      "read_start": 7744,
+      "origin": 8256,
+      "max_target_end": 8448,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:8448:9152",
+      "read_start": 8448,
+      "origin": 8960,
+      "max_target_end": 9152,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "train",
+      "parent": "ETTh1:9152:9856",
+      "read_start": 9152,
+      "origin": 9664,
+      "max_target_end": 9856,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "dev",
+      "parent": "ETTh1:10452:11156",
+      "read_start": 10452,
+      "origin": 10964,
+      "max_target_end": 11156,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "dev",
+      "parent": "ETTh1:11156:11860",
+      "read_start": 11156,
+      "origin": 11668,
+      "max_target_end": 11860,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh1",
+      "role": "dev",
+      "parent": "ETTh1:11860:12564",
+      "read_start": 11860,
+      "origin": 12372,
+      "max_target_end": 12564,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:0:704",
+      "read_start": 0,
+      "origin": 512,
+      "max_target_end": 704,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:704:1408",
+      "read_start": 704,
+      "origin": 1216,
+      "max_target_end": 1408,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:1408:2112",
+      "read_start": 1408,
+      "origin": 1920,
+      "max_target_end": 2112,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:2112:2816",
+      "read_start": 2112,
+      "origin": 2624,
+      "max_target_end": 2816,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:2816:3520",
+      "read_start": 2816,
+      "origin": 3328,
+      "max_target_end": 3520,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:3520:4224",
+      "read_start": 3520,
+      "origin": 4032,
+      "max_target_end": 4224,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:4224:4928",
+      "read_start": 4224,
+      "origin": 4736,
+      "max_target_end": 4928,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:4928:5632",
+      "read_start": 4928,
+      "origin": 5440,
+      "max_target_end": 5632,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:5632:6336",
+      "read_start": 5632,
+      "origin": 6144,
+      "max_target_end": 6336,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:6336:7040",
+      "read_start": 6336,
+      "origin": 6848,
+      "max_target_end": 7040,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:7040:7744",
+      "read_start": 7040,
+      "origin": 7552,
+      "max_target_end": 7744,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:7744:8448",
+      "read_start": 7744,
+      "origin": 8256,
+      "max_target_end": 8448,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:8448:9152",
+      "read_start": 8448,
+      "origin": 8960,
+      "max_target_end": 9152,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "train",
+      "parent": "ETTh2:9152:9856",
+      "read_start": 9152,
+      "origin": 9664,
+      "max_target_end": 9856,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "dev",
+      "parent": "ETTh2:10452:11156",
+      "read_start": 10452,
+      "origin": 10964,
+      "max_target_end": 11156,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "dev",
+      "parent": "ETTh2:11156:11860",
+      "read_start": 11156,
+      "origin": 11668,
+      "max_target_end": 11860,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTh2",
+      "role": "dev",
+      "parent": "ETTh2:11860:12564",
+      "read_start": 11860,
+      "origin": 12372,
+      "max_target_end": 12564,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:0:704",
+      "read_start": 0,
+      "origin": 512,
+      "max_target_end": 704,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:704:1408",
+      "read_start": 704,
+      "origin": 1216,
+      "max_target_end": 1408,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:1408:2112",
+      "read_start": 1408,
+      "origin": 1920,
+      "max_target_end": 2112,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:2112:2816",
+      "read_start": 2112,
+      "origin": 2624,
+      "max_target_end": 2816,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:2816:3520",
+      "read_start": 2816,
+      "origin": 3328,
+      "max_target_end": 3520,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:3520:4224",
+      "read_start": 3520,
+      "origin": 4032,
+      "max_target_end": 4224,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:4224:4928",
+      "read_start": 4224,
+      "origin": 4736,
+      "max_target_end": 4928,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:4928:5632",
+      "read_start": 4928,
+      "origin": 5440,
+      "max_target_end": 5632,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:5632:6336",
+      "read_start": 5632,
+      "origin": 6144,
+      "max_target_end": 6336,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:6336:7040",
+      "read_start": 6336,
+      "origin": 6848,
+      "max_target_end": 7040,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:7040:7744",
+      "read_start": 7040,
+      "origin": 7552,
+      "max_target_end": 7744,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:7744:8448",
+      "read_start": 7744,
+      "origin": 8256,
+      "max_target_end": 8448,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:8448:9152",
+      "read_start": 8448,
+      "origin": 8960,
+      "max_target_end": 9152,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:9152:9856",
+      "read_start": 9152,
+      "origin": 9664,
+      "max_target_end": 9856,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:9856:10560",
+      "read_start": 9856,
+      "origin": 10368,
+      "max_target_end": 10560,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:10560:11264",
+      "read_start": 10560,
+      "origin": 11072,
+      "max_target_end": 11264,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:11264:11968",
+      "read_start": 11264,
+      "origin": 11776,
+      "max_target_end": 11968,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:11968:12672",
+      "read_start": 11968,
+      "origin": 12480,
+      "max_target_end": 12672,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:12672:13376",
+      "read_start": 12672,
+      "origin": 13184,
+      "max_target_end": 13376,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:13376:14080",
+      "read_start": 13376,
+      "origin": 13888,
+      "max_target_end": 14080,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:14080:14784",
+      "read_start": 14080,
+      "origin": 14592,
+      "max_target_end": 14784,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:14784:15488",
+      "read_start": 14784,
+      "origin": 15296,
+      "max_target_end": 15488,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:15488:16192",
+      "read_start": 15488,
+      "origin": 16000,
+      "max_target_end": 16192,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:16192:16896",
+      "read_start": 16192,
+      "origin": 16704,
+      "max_target_end": 16896,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:16896:17600",
+      "read_start": 16896,
+      "origin": 17408,
+      "max_target_end": 17600,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:17600:18304",
+      "read_start": 17600,
+      "origin": 18112,
+      "max_target_end": 18304,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:18304:19008",
+      "read_start": 18304,
+      "origin": 18816,
+      "max_target_end": 19008,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:19008:19712",
+      "read_start": 19008,
+      "origin": 19520,
+      "max_target_end": 19712,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:19712:20416",
+      "read_start": 19712,
+      "origin": 20224,
+      "max_target_end": 20416,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:20416:21120",
+      "read_start": 20416,
+      "origin": 20928,
+      "max_target_end": 21120,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:21120:21824",
+      "read_start": 21120,
+      "origin": 21632,
+      "max_target_end": 21824,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:21824:22528",
+      "read_start": 21824,
+      "origin": 22336,
+      "max_target_end": 22528,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:22528:23232",
+      "read_start": 22528,
+      "origin": 23040,
+      "max_target_end": 23232,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:23232:23936",
+      "read_start": 23232,
+      "origin": 23744,
+      "max_target_end": 23936,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:23936:24640",
+      "read_start": 23936,
+      "origin": 24448,
+      "max_target_end": 24640,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:24640:25344",
+      "read_start": 24640,
+      "origin": 25152,
+      "max_target_end": 25344,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:25344:26048",
+      "read_start": 25344,
+      "origin": 25856,
+      "max_target_end": 26048,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:26048:26752",
+      "read_start": 26048,
+      "origin": 26560,
+      "max_target_end": 26752,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:26752:27456",
+      "read_start": 26752,
+      "origin": 27264,
+      "max_target_end": 27456,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:27456:28160",
+      "read_start": 27456,
+      "origin": 27968,
+      "max_target_end": 28160,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:28160:28864",
+      "read_start": 28160,
+      "origin": 28672,
+      "max_target_end": 28864,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:28864:29568",
+      "read_start": 28864,
+      "origin": 29376,
+      "max_target_end": 29568,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:29568:30272",
+      "read_start": 29568,
+      "origin": 30080,
+      "max_target_end": 30272,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:30272:30976",
+      "read_start": 30272,
+      "origin": 30784,
+      "max_target_end": 30976,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:30976:31680",
+      "read_start": 30976,
+      "origin": 31488,
+      "max_target_end": 31680,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:31680:32384",
+      "read_start": 31680,
+      "origin": 32192,
+      "max_target_end": 32384,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:32384:33088",
+      "read_start": 32384,
+      "origin": 32896,
+      "max_target_end": 33088,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:33088:33792",
+      "read_start": 33088,
+      "origin": 33600,
+      "max_target_end": 33792,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:33792:34496",
+      "read_start": 33792,
+      "origin": 34304,
+      "max_target_end": 34496,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:34496:35200",
+      "read_start": 34496,
+      "origin": 35008,
+      "max_target_end": 35200,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:35200:35904",
+      "read_start": 35200,
+      "origin": 35712,
+      "max_target_end": 35904,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:35904:36608",
+      "read_start": 35904,
+      "origin": 36416,
+      "max_target_end": 36608,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:36608:37312",
+      "read_start": 36608,
+      "origin": 37120,
+      "max_target_end": 37312,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:37312:38016",
+      "read_start": 37312,
+      "origin": 37824,
+      "max_target_end": 38016,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:38016:38720",
+      "read_start": 38016,
+      "origin": 38528,
+      "max_target_end": 38720,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:38720:39424",
+      "read_start": 38720,
+      "origin": 39232,
+      "max_target_end": 39424,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:39424:40128",
+      "read_start": 39424,
+      "origin": 39936,
+      "max_target_end": 40128,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:40128:40832",
+      "read_start": 40128,
+      "origin": 40640,
+      "max_target_end": 40832,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "train",
+      "parent": "ETTm1:40832:41536",
+      "read_start": 40832,
+      "origin": 41344,
+      "max_target_end": 41536,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:41808:42512",
+      "read_start": 41808,
+      "origin": 42320,
+      "max_target_end": 42512,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:42512:43216",
+      "read_start": 42512,
+      "origin": 43024,
+      "max_target_end": 43216,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:43216:43920",
+      "read_start": 43216,
+      "origin": 43728,
+      "max_target_end": 43920,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:43920:44624",
+      "read_start": 43920,
+      "origin": 44432,
+      "max_target_end": 44624,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:44624:45328",
+      "read_start": 44624,
+      "origin": 45136,
+      "max_target_end": 45328,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:45328:46032",
+      "read_start": 45328,
+      "origin": 45840,
+      "max_target_end": 46032,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:46032:46736",
+      "read_start": 46032,
+      "origin": 46544,
+      "max_target_end": 46736,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:46736:47440",
+      "read_start": 46736,
+      "origin": 47248,
+      "max_target_end": 47440,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:47440:48144",
+      "read_start": 47440,
+      "origin": 47952,
+      "max_target_end": 48144,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:48144:48848",
+      "read_start": 48144,
+      "origin": 48656,
+      "max_target_end": 48848,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:48848:49552",
+      "read_start": 48848,
+      "origin": 49360,
+      "max_target_end": 49552,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:49552:50256",
+      "read_start": 49552,
+      "origin": 50064,
+      "max_target_end": 50256,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:50256:50960",
+      "read_start": 50256,
+      "origin": 50768,
+      "max_target_end": 50960,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm1",
+      "role": "dev",
+      "parent": "ETTm1:50960:51664",
+      "read_start": 50960,
+      "origin": 51472,
+      "max_target_end": 51664,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:0:704",
+      "read_start": 0,
+      "origin": 512,
+      "max_target_end": 704,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:704:1408",
+      "read_start": 704,
+      "origin": 1216,
+      "max_target_end": 1408,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:1408:2112",
+      "read_start": 1408,
+      "origin": 1920,
+      "max_target_end": 2112,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:2112:2816",
+      "read_start": 2112,
+      "origin": 2624,
+      "max_target_end": 2816,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:2816:3520",
+      "read_start": 2816,
+      "origin": 3328,
+      "max_target_end": 3520,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:3520:4224",
+      "read_start": 3520,
+      "origin": 4032,
+      "max_target_end": 4224,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:4224:4928",
+      "read_start": 4224,
+      "origin": 4736,
+      "max_target_end": 4928,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:4928:5632",
+      "read_start": 4928,
+      "origin": 5440,
+      "max_target_end": 5632,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:5632:6336",
+      "read_start": 5632,
+      "origin": 6144,
+      "max_target_end": 6336,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:6336:7040",
+      "read_start": 6336,
+      "origin": 6848,
+      "max_target_end": 7040,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:7040:7744",
+      "read_start": 7040,
+      "origin": 7552,
+      "max_target_end": 7744,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:7744:8448",
+      "read_start": 7744,
+      "origin": 8256,
+      "max_target_end": 8448,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:8448:9152",
+      "read_start": 8448,
+      "origin": 8960,
+      "max_target_end": 9152,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:9152:9856",
+      "read_start": 9152,
+      "origin": 9664,
+      "max_target_end": 9856,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:9856:10560",
+      "read_start": 9856,
+      "origin": 10368,
+      "max_target_end": 10560,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:10560:11264",
+      "read_start": 10560,
+      "origin": 11072,
+      "max_target_end": 11264,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:11264:11968",
+      "read_start": 11264,
+      "origin": 11776,
+      "max_target_end": 11968,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:11968:12672",
+      "read_start": 11968,
+      "origin": 12480,
+      "max_target_end": 12672,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:12672:13376",
+      "read_start": 12672,
+      "origin": 13184,
+      "max_target_end": 13376,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:13376:14080",
+      "read_start": 13376,
+      "origin": 13888,
+      "max_target_end": 14080,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:14080:14784",
+      "read_start": 14080,
+      "origin": 14592,
+      "max_target_end": 14784,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:14784:15488",
+      "read_start": 14784,
+      "origin": 15296,
+      "max_target_end": 15488,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:15488:16192",
+      "read_start": 15488,
+      "origin": 16000,
+      "max_target_end": 16192,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:16192:16896",
+      "read_start": 16192,
+      "origin": 16704,
+      "max_target_end": 16896,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:16896:17600",
+      "read_start": 16896,
+      "origin": 17408,
+      "max_target_end": 17600,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:17600:18304",
+      "read_start": 17600,
+      "origin": 18112,
+      "max_target_end": 18304,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:18304:19008",
+      "read_start": 18304,
+      "origin": 18816,
+      "max_target_end": 19008,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:19008:19712",
+      "read_start": 19008,
+      "origin": 19520,
+      "max_target_end": 19712,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:19712:20416",
+      "read_start": 19712,
+      "origin": 20224,
+      "max_target_end": 20416,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:20416:21120",
+      "read_start": 20416,
+      "origin": 20928,
+      "max_target_end": 21120,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:21120:21824",
+      "read_start": 21120,
+      "origin": 21632,
+      "max_target_end": 21824,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:21824:22528",
+      "read_start": 21824,
+      "origin": 22336,
+      "max_target_end": 22528,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:22528:23232",
+      "read_start": 22528,
+      "origin": 23040,
+      "max_target_end": 23232,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:23232:23936",
+      "read_start": 23232,
+      "origin": 23744,
+      "max_target_end": 23936,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:23936:24640",
+      "read_start": 23936,
+      "origin": 24448,
+      "max_target_end": 24640,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:24640:25344",
+      "read_start": 24640,
+      "origin": 25152,
+      "max_target_end": 25344,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:25344:26048",
+      "read_start": 25344,
+      "origin": 25856,
+      "max_target_end": 26048,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:26048:26752",
+      "read_start": 26048,
+      "origin": 26560,
+      "max_target_end": 26752,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:26752:27456",
+      "read_start": 26752,
+      "origin": 27264,
+      "max_target_end": 27456,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:27456:28160",
+      "read_start": 27456,
+      "origin": 27968,
+      "max_target_end": 28160,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:28160:28864",
+      "read_start": 28160,
+      "origin": 28672,
+      "max_target_end": 28864,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:28864:29568",
+      "read_start": 28864,
+      "origin": 29376,
+      "max_target_end": 29568,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:29568:30272",
+      "read_start": 29568,
+      "origin": 30080,
+      "max_target_end": 30272,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:30272:30976",
+      "read_start": 30272,
+      "origin": 30784,
+      "max_target_end": 30976,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:30976:31680",
+      "read_start": 30976,
+      "origin": 31488,
+      "max_target_end": 31680,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:31680:32384",
+      "read_start": 31680,
+      "origin": 32192,
+      "max_target_end": 32384,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:32384:33088",
+      "read_start": 32384,
+      "origin": 32896,
+      "max_target_end": 33088,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:33088:33792",
+      "read_start": 33088,
+      "origin": 33600,
+      "max_target_end": 33792,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:33792:34496",
+      "read_start": 33792,
+      "origin": 34304,
+      "max_target_end": 34496,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:34496:35200",
+      "read_start": 34496,
+      "origin": 35008,
+      "max_target_end": 35200,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:35200:35904",
+      "read_start": 35200,
+      "origin": 35712,
+      "max_target_end": 35904,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:35904:36608",
+      "read_start": 35904,
+      "origin": 36416,
+      "max_target_end": 36608,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:36608:37312",
+      "read_start": 36608,
+      "origin": 37120,
+      "max_target_end": 37312,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:37312:38016",
+      "read_start": 37312,
+      "origin": 37824,
+      "max_target_end": 38016,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:38016:38720",
+      "read_start": 38016,
+      "origin": 38528,
+      "max_target_end": 38720,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:38720:39424",
+      "read_start": 38720,
+      "origin": 39232,
+      "max_target_end": 39424,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:39424:40128",
+      "read_start": 39424,
+      "origin": 39936,
+      "max_target_end": 40128,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:40128:40832",
+      "read_start": 40128,
+      "origin": 40640,
+      "max_target_end": 40832,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "train",
+      "parent": "ETTm2:40832:41536",
+      "read_start": 40832,
+      "origin": 41344,
+      "max_target_end": 41536,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:41808:42512",
+      "read_start": 41808,
+      "origin": 42320,
+      "max_target_end": 42512,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:42512:43216",
+      "read_start": 42512,
+      "origin": 43024,
+      "max_target_end": 43216,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:43216:43920",
+      "read_start": 43216,
+      "origin": 43728,
+      "max_target_end": 43920,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:43920:44624",
+      "read_start": 43920,
+      "origin": 44432,
+      "max_target_end": 44624,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:44624:45328",
+      "read_start": 44624,
+      "origin": 45136,
+      "max_target_end": 45328,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:45328:46032",
+      "read_start": 45328,
+      "origin": 45840,
+      "max_target_end": 46032,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:46032:46736",
+      "read_start": 46032,
+      "origin": 46544,
+      "max_target_end": 46736,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:46736:47440",
+      "read_start": 46736,
+      "origin": 47248,
+      "max_target_end": 47440,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:47440:48144",
+      "read_start": 47440,
+      "origin": 47952,
+      "max_target_end": 48144,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:48144:48848",
+      "read_start": 48144,
+      "origin": 48656,
+      "max_target_end": 48848,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:48848:49552",
+      "read_start": 48848,
+      "origin": 49360,
+      "max_target_end": 49552,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:49552:50256",
+      "read_start": 49552,
+      "origin": 50064,
+      "max_target_end": 50256,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:50256:50960",
+      "read_start": 50256,
+      "origin": 50768,
+      "max_target_end": 50960,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "ETTm2",
+      "role": "dev",
+      "parent": "ETTm2:50960:51664",
+      "read_start": 50960,
+      "origin": 51472,
+      "max_target_end": 51664,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:0:704",
+      "read_start": 0,
+      "origin": 512,
+      "max_target_end": 704,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:704:1408",
+      "read_start": 704,
+      "origin": 1216,
+      "max_target_end": 1408,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:1408:2112",
+      "read_start": 1408,
+      "origin": 1920,
+      "max_target_end": 2112,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:2112:2816",
+      "read_start": 2112,
+      "origin": 2624,
+      "max_target_end": 2816,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:2816:3520",
+      "read_start": 2816,
+      "origin": 3328,
+      "max_target_end": 3520,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:3520:4224",
+      "read_start": 3520,
+      "origin": 4032,
+      "max_target_end": 4224,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:4224:4928",
+      "read_start": 4224,
+      "origin": 4736,
+      "max_target_end": 4928,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:4928:5632",
+      "read_start": 4928,
+      "origin": 5440,
+      "max_target_end": 5632,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:5632:6336",
+      "read_start": 5632,
+      "origin": 6144,
+      "max_target_end": 6336,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:6336:7040",
+      "read_start": 6336,
+      "origin": 6848,
+      "max_target_end": 7040,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:7040:7744",
+      "read_start": 7040,
+      "origin": 7552,
+      "max_target_end": 7744,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:7744:8448",
+      "read_start": 7744,
+      "origin": 8256,
+      "max_target_end": 8448,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:8448:9152",
+      "read_start": 8448,
+      "origin": 8960,
+      "max_target_end": 9152,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:9152:9856",
+      "read_start": 9152,
+      "origin": 9664,
+      "max_target_end": 9856,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:9856:10560",
+      "read_start": 9856,
+      "origin": 10368,
+      "max_target_end": 10560,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:10560:11264",
+      "read_start": 10560,
+      "origin": 11072,
+      "max_target_end": 11264,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:11264:11968",
+      "read_start": 11264,
+      "origin": 11776,
+      "max_target_end": 11968,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:11968:12672",
+      "read_start": 11968,
+      "origin": 12480,
+      "max_target_end": 12672,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:12672:13376",
+      "read_start": 12672,
+      "origin": 13184,
+      "max_target_end": 13376,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:13376:14080",
+      "read_start": 13376,
+      "origin": 13888,
+      "max_target_end": 14080,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:14080:14784",
+      "read_start": 14080,
+      "origin": 14592,
+      "max_target_end": 14784,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "train",
+      "parent": "Electricity:14784:15488",
+      "read_start": 14784,
+      "origin": 15296,
+      "max_target_end": 15488,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "dev",
+      "parent": "Electricity:15782:16486",
+      "read_start": 15782,
+      "origin": 16294,
+      "max_target_end": 16486,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "dev",
+      "parent": "Electricity:16486:17190",
+      "read_start": 16486,
+      "origin": 16998,
+      "max_target_end": 17190,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "dev",
+      "parent": "Electricity:17190:17894",
+      "read_start": 17190,
+      "origin": 17702,
+      "max_target_end": 17894,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "dev",
+      "parent": "Electricity:17894:18598",
+      "read_start": 17894,
+      "origin": 18406,
+      "max_target_end": 18598,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Electricity",
+      "role": "dev",
+      "parent": "Electricity:18598:19302",
+      "read_start": 18598,
+      "origin": 19110,
+      "max_target_end": 19302,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Exchange",
+      "role": "train",
+      "parent": "Exchange:0:704",
+      "read_start": 0,
+      "origin": 512,
+      "max_target_end": 704,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Exchange",
+      "role": "train",
+      "parent": "Exchange:704:1408",
+      "read_start": 704,
+      "origin": 1216,
+      "max_target_end": 1408,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Exchange",
+      "role": "train",
+      "parent": "Exchange:1408:2112",
+      "read_start": 1408,
+      "origin": 1920,
+      "max_target_end": 2112,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Exchange",
+      "role": "train",
+      "parent": "Exchange:2112:2816",
+      "read_start": 2112,
+      "origin": 2624,
+      "max_target_end": 2816,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Exchange",
+      "role": "train",
+      "parent": "Exchange:2816:3520",
+      "read_start": 2816,
+      "origin": 3328,
+      "max_target_end": 3520,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Exchange",
+      "role": "train",
+      "parent": "Exchange:3520:4224",
+      "read_start": 3520,
+      "origin": 4032,
+      "max_target_end": 4224,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Exchange",
+      "role": "dev",
+      "parent": "Exchange:4552:5256",
+      "read_start": 4552,
+      "origin": 5064,
+      "max_target_end": 5256,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:0:704",
+      "read_start": 0,
+      "origin": 512,
+      "max_target_end": 704,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:704:1408",
+      "read_start": 704,
+      "origin": 1216,
+      "max_target_end": 1408,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:1408:2112",
+      "read_start": 1408,
+      "origin": 1920,
+      "max_target_end": 2112,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:2112:2816",
+      "read_start": 2112,
+      "origin": 2624,
+      "max_target_end": 2816,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:2816:3520",
+      "read_start": 2816,
+      "origin": 3328,
+      "max_target_end": 3520,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:3520:4224",
+      "read_start": 3520,
+      "origin": 4032,
+      "max_target_end": 4224,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:4224:4928",
+      "read_start": 4224,
+      "origin": 4736,
+      "max_target_end": 4928,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:4928:5632",
+      "read_start": 4928,
+      "origin": 5440,
+      "max_target_end": 5632,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:5632:6336",
+      "read_start": 5632,
+      "origin": 6144,
+      "max_target_end": 6336,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:6336:7040",
+      "read_start": 6336,
+      "origin": 6848,
+      "max_target_end": 7040,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:7040:7744",
+      "read_start": 7040,
+      "origin": 7552,
+      "max_target_end": 7744,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:7744:8448",
+      "read_start": 7744,
+      "origin": 8256,
+      "max_target_end": 8448,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:8448:9152",
+      "read_start": 8448,
+      "origin": 8960,
+      "max_target_end": 9152,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "train",
+      "parent": "Traffic:9152:9856",
+      "read_start": 9152,
+      "origin": 9664,
+      "max_target_end": 9856,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "dev",
+      "parent": "Traffic:10526:11230",
+      "read_start": 10526,
+      "origin": 11038,
+      "max_target_end": 11230,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "dev",
+      "parent": "Traffic:11230:11934",
+      "read_start": 11230,
+      "origin": 11742,
+      "max_target_end": 11934,
+      "horizons": [
+        96,
+        192
+      ]
+    },
+    {
+      "source": "Traffic",
+      "role": "dev",
+      "parent": "Traffic:11934:12638",
+      "read_start": 11934,
+      "origin": 12446,
+      "max_target_end": 12638,
+      "horizons": [
+        96,
+        192
+      ]
+    }
+  ],
+  "heldout_labels_read": 0,
+  "metadata_bytes_hashed": true,
+  "parent_stride": 704,
+  "tracks": [
+    "complete_target_KEEP",
+    "controlled_missingness_existing_v43_recipe",
+    "verified_natural_gaps_if_available"
+  ],
+  "target_rule": "channel 0 inherited v43; ETT HUFL, independently confirm new provider field identity before model execution",
+  "mask_rule": "reuse frozen v43 observation-only masks; store concrete mask/input hashes before inference; never mask to improve candidate win rate",
+  "scoring": "same future positions; source/parent/variant macro MASE; origin learning scale separate",
+  "release_gate": "both families beat TRAIN-frozen simple controls; joint geometry same-information incremental on >=1 and non-worse other; online budget and all boundaries pass; otherwise keep sealed",
+  "official_TATO": {
+    "trials": 500,
+    "samples": 500,
+    "top_k": 16,
+    "context": 1440,
+    "status": "not_run_separate_protocol"
+  },
+  "scene_TATO": {
+    "trials": 500,
+    "max_distinct_train_samples": 500,
+    "context": 512,
+    "metric": "source/parent macro MSE",
+    "status": "API_prepared_not_run_not_full_official_reproduction"
+  },
+  "code_sha256": "961ba0db34cc5e192a5a2149cdc425b234fb5c1eab2a7395d4ba9e43e78a6cc5",
+  "old_manifest_sha256": "f340b34be671ea764c17ad9ab1f1d6447d2e34d9777436d6132a73fbc742c0e6"
+}

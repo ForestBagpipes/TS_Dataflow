@@ -1,0 +1,354 @@
+{
+  "status": "completed",
+  "source_sha256": {
+    "/home/vipuser/work/work2/scripts/v431_r5_run.py": "d4ca9d889f10d6d5ab32be254550b402b486f5f9e0fb8bd1047f11d35e31534b",
+    "src/introact_ts/v431_r5/geometry.py": "49e0175719d767239ef23f794765f3ba3e6eb3a3c0ca956bfdcbe429c257c391",
+    "src/introact_ts/v431_r5/dataset.py": "85621bf57e092176b5589a72917cec9d0bd6b9604155a7e36539f3b9f070bcc2",
+    "src/introact_ts/v431_r5/scoring.py": "25eff4f8234759999178cc7f182daba2e1547f7140d3da9f80597acb4145873e",
+    "src/introact_ts/v431_r5/controller.py": "f2e92eb2d894454154682362a298c79dd8ea2682e890b4e611d246683172261e"
+  },
+  "input_sha256": {
+    "bolt": "85dd732283caaf62aa0de1ad427f794fd3ad6a7511848c91e09ba03b531a1724",
+    "timesfm": "0687f9bd05acc3fe1cb620486f0c77b8a10ac57be7a38e50bb3d671ee64627d0"
+  },
+  "mask_protocol": "unknown future effective scoring mask; max-lead bound / common hull",
+  "budgets": {
+    "low": 0.8140623268639832,
+    "high": 3.5
+  },
+  "max_versions": 3,
+  "lambda_candidates": [
+    0.0,
+    0.01,
+    0.1
+  ],
+  "solver": {
+    "tolerance": 1e-08,
+    "max_iter": 2048,
+    "time_limit_seconds": 0.05
+  },
+  "branch_overhead_reservation": 0.051,
+  "output_reserve": 0.001,
+  "dev_consulted": false,
+  "elapsed_seconds": 3.7045314560000406,
+  "families": {
+    "bolt": {
+      "reference_tree": {
+        "feature": 3,
+        "threshold": 0.0,
+        "left": {
+          "arm": 4,
+          "parents": 51,
+          "fallback": false
+        },
+        "right": {
+          "arm": 2,
+          "parents": 54,
+          "fallback": false
+        }
+      },
+      "fit_parents": 54,
+      "gate_parents": 21,
+      "scorers": {
+        "current": {
+          "alpha": 10.0,
+          "hash": "dd79241ee187a448c7e6aeda17d03c2d1f8c134935591bc665ae96fcc16ad90e",
+          "rows": 1296,
+          "parents": 54,
+          "gate_mse": 0.9323197450071257,
+          "search": [
+            {
+              "alpha": 0.1,
+              "gate_mse": 1.8028089259296192,
+              "hash": "c647308c7b278d3af6228a12c06e875f04abfb5489d3a20f2cc0cfed865732f9"
+            },
+            {
+              "alpha": 1.0,
+              "gate_mse": 1.394659087073304,
+              "hash": "9f70363ec90565c21461f1b6804b804c21ace8c50f5f8f57d67d4494badbfba3"
+            },
+            {
+              "alpha": 10.0,
+              "gate_mse": 0.9323197450071257,
+              "hash": "dd79241ee187a448c7e6aeda17d03c2d1f8c134935591bc665ae96fcc16ad90e"
+            }
+          ]
+        },
+        "free": {
+          "alpha": 10.0,
+          "hash": "213f44c530e07778ea6cf7d03638ad4780c392cae57eb314b9814d64ffe6abc2",
+          "rows": 1296,
+          "parents": 54,
+          "gate_mse": 0.9094035520161807,
+          "search": [
+            {
+              "alpha": 0.1,
+              "gate_mse": 1.9663292836557478,
+              "hash": "1c7f1ed57c94595199dc8a81150aaee7f8d5b70cba8deee424ede6f5e996c807"
+            },
+            {
+              "alpha": 1.0,
+              "gate_mse": 1.1875858015445433,
+              "hash": "d0fcaca92afbca3b9598dd4b25b81c9f30a476abcf6c84869b848bef6d805d59"
+            },
+            {
+              "alpha": 10.0,
+              "gate_mse": 0.9094035520161807,
+              "hash": "213f44c530e07778ea6cf7d03638ad4780c392cae57eb314b9814d64ffe6abc2"
+            }
+          ]
+        },
+        "history": {
+          "alpha": 10.0,
+          "hash": "11a173a553c1c1ef77ed2e8baadd62be0d45e3a22c14f684a4e4b233f420dd94",
+          "rows": 1224,
+          "parents": 51,
+          "gate_mse": 0.8401291365050386,
+          "search": [
+            {
+              "alpha": 0.1,
+              "gate_mse": 1.0010046935348615,
+              "hash": "311c02243e80fcc1567d498931a9667117ce0213c05fceb6a26e6c7f89da68b6"
+            },
+            {
+              "alpha": 1.0,
+              "gate_mse": 0.8653799374318787,
+              "hash": "c15db36fcae361c0318df29484b5c77006ef634cb2c406660a4d0776950235ef"
+            },
+            {
+              "alpha": 10.0,
+              "gate_mse": 0.8401291365050386,
+              "hash": "11a173a553c1c1ef77ed2e8baadd62be0d45e3a22c14f684a4e4b233f420dd94"
+            }
+          ]
+        },
+        "prior": {
+          "alpha": 10.0,
+          "hash": "eadb18e85ac8cb0e4763ca1dc1184f69fd1976e09e1184b2baac6cbbb27d43a5",
+          "rows": 1296,
+          "parents": 54,
+          "gate_mse": 0.9947537578625999,
+          "search": [
+            {
+              "alpha": 0.1,
+              "gate_mse": 2.4335391333837637,
+              "hash": "161b4a44388335cf9002769375e91946654c692c3815765e7f8247ab35647b9f"
+            },
+            {
+              "alpha": 1.0,
+              "gate_mse": 1.468224626139137,
+              "hash": "50f4571685621fe2bb4b9b7fd27f9431aa82345cc601302038a84a45204d72e8"
+            },
+            {
+              "alpha": 10.0,
+              "gate_mse": 0.9947537578625999,
+              "hash": "eadb18e85ac8cb0e4763ca1dc1184f69fd1976e09e1184b2baac6cbbb27d43a5"
+            }
+          ]
+        }
+      },
+      "lambda_gate": {
+        "low": {
+          "selected": 0.01,
+          "choices": [
+            [
+              1.53760167889655,
+              0.11134615832870448,
+              0.0
+            ],
+            [
+              1.53760167889655,
+              0.11134451426144004,
+              0.01
+            ],
+            [
+              1.53760167889655,
+              0.11134495156017088,
+              0.1
+            ]
+          ]
+        },
+        "high": {
+          "selected": 0.1,
+          "choices": [
+            [
+              1.635768812811897,
+              0.18530331038382536,
+              0.0
+            ],
+            [
+              1.599489306677339,
+              0.1730223054040823,
+              0.01
+            ],
+            [
+              1.53760167889655,
+              0.11142376593285229,
+              0.1
+            ]
+          ]
+        }
+      },
+      "terminal_sha256": "65860f18412de061eaceb31f49174a8c77d471856311a0361ce883365f030c72"
+    },
+    "timesfm": {
+      "reference_tree": {
+        "feature": 3,
+        "threshold": 0.0,
+        "left": {
+          "arm": 4,
+          "parents": 51,
+          "fallback": false
+        },
+        "right": {
+          "arm": 2,
+          "parents": 54,
+          "fallback": false
+        }
+      },
+      "fit_parents": 54,
+      "gate_parents": 21,
+      "scorers": {
+        "current": {
+          "alpha": 1.0,
+          "hash": "3bf6c3a9fdf43c14eb6b5df70af061aba852e631d5791a3f95de1f11bda33eee",
+          "rows": 1296,
+          "parents": 54,
+          "gate_mse": 0.1543296983617415,
+          "search": [
+            {
+              "alpha": 0.1,
+              "gate_mse": 0.22369071648344174,
+              "hash": "b7a54f2d564015311fed89c43c05f7eb4d65e18f7e108dc42d4da4af0166872b"
+            },
+            {
+              "alpha": 1.0,
+              "gate_mse": 0.1543296983617415,
+              "hash": "3bf6c3a9fdf43c14eb6b5df70af061aba852e631d5791a3f95de1f11bda33eee"
+            },
+            {
+              "alpha": 10.0,
+              "gate_mse": 0.17550424332153164,
+              "hash": "36726d46050ca9e92ad35d50d2965056cbec1ad926c0959469bc1ee93ffb80c8"
+            }
+          ]
+        },
+        "free": {
+          "alpha": 0.1,
+          "hash": "bc6bfa341c590028e0514d0292977f63106e35ee8d149b1b15b06df46982dce3",
+          "rows": 1296,
+          "parents": 54,
+          "gate_mse": 0.22328894660429208,
+          "search": [
+            {
+              "alpha": 0.1,
+              "gate_mse": 0.22328894660429208,
+              "hash": "bc6bfa341c590028e0514d0292977f63106e35ee8d149b1b15b06df46982dce3"
+            },
+            {
+              "alpha": 1.0,
+              "gate_mse": 0.22364130919377953,
+              "hash": "cec9920000c4fee0d0dc50f65024b5185bbbcca7f24ef26229c66153178c8627"
+            },
+            {
+              "alpha": 10.0,
+              "gate_mse": 0.22980432320632363,
+              "hash": "21156ab46b2f3c111a3a2f3592944a8f513cc11aa09c4aca3d38c9f259916d67"
+            }
+          ]
+        },
+        "history": {
+          "alpha": 10.0,
+          "hash": "b92e6845600e7bbf759f7abc2b38e4886dd5f6ce9501b036d360e94b798f927b",
+          "rows": 1224,
+          "parents": 51,
+          "gate_mse": 0.25822634346523954,
+          "search": [
+            {
+              "alpha": 0.1,
+              "gate_mse": 0.5051106829031664,
+              "hash": "cba66394abeb5012a9ae76b9feb546edc54d983488f27d130d0fc8560a3e95cb"
+            },
+            {
+              "alpha": 1.0,
+              "gate_mse": 0.2702894046632605,
+              "hash": "557db2569fa366a613306f61a0ffc116471b704cef59498569242db52563fc1d"
+            },
+            {
+              "alpha": 10.0,
+              "gate_mse": 0.25822634346523954,
+              "hash": "b92e6845600e7bbf759f7abc2b38e4886dd5f6ce9501b036d360e94b798f927b"
+            }
+          ]
+        },
+        "prior": {
+          "alpha": 10.0,
+          "hash": "13c9f789c9fd5b42cc2e1cc40e56273ac25821fd0d17370505fde4e4c94ab9a7",
+          "rows": 1296,
+          "parents": 54,
+          "gate_mse": 0.24154298326372173,
+          "search": [
+            {
+              "alpha": 0.1,
+              "gate_mse": 0.33328365172404323,
+              "hash": "668d3e9130d632188138fce2e890eae4d211f3dd020f001fedc178c6b6661195"
+            },
+            {
+              "alpha": 1.0,
+              "gate_mse": 0.29463427735823666,
+              "hash": "0c32d83a0cb705568f8a58463f575eb3d726dfa6131deba46ebb1b3e01fd7dea"
+            },
+            {
+              "alpha": 10.0,
+              "gate_mse": 0.24154298326372173,
+              "hash": "13c9f789c9fd5b42cc2e1cc40e56273ac25821fd0d17370505fde4e4c94ab9a7"
+            }
+          ]
+        }
+      },
+      "lambda_gate": {
+        "low": {
+          "selected": 0.0,
+          "choices": [
+            [
+              1.4953609286509988,
+              0.29026446615228174,
+              0.0
+            ],
+            [
+              1.499991142645646,
+              0.2882988994498738,
+              0.01
+            ],
+            [
+              1.5000657210781636,
+              0.28458594145996235,
+              0.1
+            ]
+          ]
+        },
+        "high": {
+          "selected": 0.0,
+          "choices": [
+            [
+              1.4910991344764457,
+              0.30232208522450277,
+              0.0
+            ],
+            [
+              1.4957077179771188,
+              0.30015515609930865,
+              0.01
+            ],
+            [
+              1.500399511009757,
+              0.2903026187901388,
+              0.1
+            ]
+          ]
+        }
+      },
+      "terminal_sha256": "fae5a44fc003c7cd66d4fbf35c5b126152b5e399f5987bbde597c61ba5d2f3bd"
+    }
+  }
+}
