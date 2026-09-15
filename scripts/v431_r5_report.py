@@ -86,6 +86,8 @@ Bolt模型加载{accounting['bolt']['model_startup_seconds']:.6f}秒、完整进
 
 Bolt自然低预算金融一例1.346169秒超支；TimesFM自然低预算一例1.049711秒，剩余时间不足使求解超时，保留前一次合法动作。高预算自然请求无超支。两个零预算受控请求仍付出真实最终预测费用并标预算未满足；两个取证后故障受控请求保留前一版本和已发生费用。不是所有请求都满足预算。
 
+另外，TimesFM旧DEV离线高预算R5重放有1次solver time budget exhausted（uid c82550222faa9ce22b0f7f5322de427c12bd953d485265d4098c52bcc1a40ecf），回退与费用已经进入主表；它不是上述真实在线低预算超时。高预算自适应轨迹中至少三个数值不同预测的窗口仅Bolt0、TimesFM9，不能用固定查询集合的103/102窗覆盖冒充主动策略覆盖。
+
 固定轨迹完整FW分别14/15次达到迭代上限，最大gap分别0.002538/0.004460，作为带余项近似解保留。数据准备首次因NumPy整数JSON序列化失败，修复仅存储后重跑，失败目录保留。全部最终在线预测与对应已执行版本数值一致；dtype/hash差异单独核验，不能靠名称匹配。
 
 ## 金融条件
@@ -99,7 +101,7 @@ Bolt自然低预算金融一例1.346169秒超支；TimesFM自然低预算一例1
 
 8来源主矩阵已完成可用性准备，登记286parent（232train/54dev）；重叠与时间异常审核后104parent没有发现已用区间重叠和当前时间异常（84train/20dev），此处只说明已核对元数据，不是独立确认声明。全部286当前context无NaN，自然缺口轨道仍缺项，两个Weather异常TRAIN parent保持unsupported。详见v431_r5_main_readiness。
 
-TimesFM-3仅官方版本/许可元数据核验；Chronos-2原生验收进度与结果单列v431_r5_chronos2_native_results，不归入r5治理增益或新独立家族。主矩阵尚未开展候选确认实验，确认集封存。
+TimesFM-3仅官方版本/许可元数据核验。Chronos-2已完成原生KEEP检查：同旧DEV26parent/156变体MASE为0.957177，低于Bolt KEEP1.258454和TimesFM KEEP1.139837。这是骨干敏感性对照，没有运行Chronos-2治理策略，不归入r5治理增益或新独立家族。104次物理DEV调用和52次合法复用均核验；其0.017027秒/窗只计原生调用，不能与完整请求或组件发票直接比较。初次记录层失败及已发生费用另存。主矩阵尚未开展候选确认实验，确认集封存。
 
 当前支持：冻结TSFM治理的可执行、输入保护及费用审计；无需未来标签的联合收益可行域及近似投影误差关系；旧DEV上评分误差降低而动作选择可能恶化的经验负结果。不支持：联合约束预测优势、主动取证优势、金融泛化、独立确认、SOTA或录用保证。三角不等式、凸包、投影与FW为已有方法。
 
@@ -145,6 +147,9 @@ TATO、Task-oriented Time Series Imputation和TS-ICL已研究任务导向输入�
 本轮新测量/约束的可实现性已验证，独有预测增量待验证且当前DEV不支持。不能将工程正确性、oracle空间、自然调用或评分误差性质包装为SOTA。不宣称零样本跨家族迁移、金融point-in-time或TSFM适配训练收益。
 '''
     paper+='\n'+(D/'paper_v431_r5_method.md').read_text()+'\n'
+    if (D/'v431_r5_final_snapshot.md').exists():
+        paper+='\n## 关机前追加的基线与准备状态\n\n'
+        paper+=(D/'v431_r5_final_snapshot.md').read_text()+'\n'
     old.write_text(paper.rstrip()+"\n")
     print(json.dumps(dict(status='rendered',report=str(D/'v431_r5_report.md'),summary=str(R/'delivery_summary.json'))))
 if __name__=='__main__':main()

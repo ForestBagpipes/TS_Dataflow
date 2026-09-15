@@ -29,20 +29,26 @@ def main():
         files.add(Path(name))
     for folder in ['v43','v431','v431_r2','v431_r3','v431_r4']:
         files.update((Path('src/introact_ts')/folder).rglob('*.py'))
-    for pattern in ['delivery_summary.json','actual_commands.json','strong_simple_freeze.json',
+    for pattern in ['delivery_summary.json','final_snapshot.json','actual_commands.json','strong_simple_freeze.json',
       'fit/manifest.json','fit/models_frozen.json','space/summary.json','data/*/support*.json','data/status.json',
       'statistics/*audit*.json','statistics/fixed_trace_changed_windows.json','evaluation/*/common*table.json',
       'evaluation/*/mechanism_table.json','evaluation/*/status.json','main-preparation/*.json',
       'online-*/status.json','online-*/visibility_barrier.json','online-*/process_accounting.json',
       'online-*/service/service_startup.json','evaluation/*/allfive-executed/table.json',
-      'statistics/cost_information.json','main-preparation/audit-v2/*.json',
+      'statistics/cost_information.json','statistics/backbone_source_comparison.json','main-preparation/audit-v2/*.json',
       'backbone-registry/registry.json','chronos2-native-check/*status.json',
       'chronos2-native-check/support-audit.json','chronos2-native-check/audit/*.json',
       '*queue-status.json','tato-scene/audit.json','tato-scene/*/request*.json',
       'tato-scene/*/run/status.json','tato-scene/*/run/frozen*.json',
       'tato-scene-extra/queue*.json','tato-scene-extra/*/request*.json',
       'tato-scene-extra/*/run/status.json','tato-official96/*/request*.json',
-      'tato-official96/*/run/status.json']:
+      'tato-official96/*/run/status.json','tato-scene/train_cache_reuse_audit*.json',
+      'tato-scene-extra/cache_queue_handoff.json','tato-scene-extra/*amendment.json',
+      'tato-scene-extra-cached/queue*.json','tato-scene-extra-cached/*/request*.json',
+      'tato-scene-extra-cached/*/run/status.json','tato-scene-extra-cached/*/run/frozen*.json',
+      'chronos2-native-check/retry-map.json','chronos2-native-check/attempt1-record-failure/queue*.json',
+      'chronos2-native-check/attempt1-record-failure/train/status.json',
+      'chronos2-queue-status.attempt1-failed.json']:
         files.update(R.glob(pattern))
     snapshots={}; originals={}
     for suite in ['dev','financial']:
@@ -62,6 +68,16 @@ def main():
         snapshots[f'samples/{family}-train-current-predictions.json']=[dict(
           predictions=d['predictions'][i],metadata=d['cache_metadata'][i],
           scope='TRAIN current-task native predictions; no original dataset or future values') for i in idx]
+    # Small raw forecast samples only; never include original inputs or future targets.
+    for folder in ('tato-scene','tato-scene-extra-cached','tato-official96'):
+        for prediction_file in sorted((R/folder).glob('*/run/predictions.npz')):
+            originals[str(prediction_file)]=sha(prediction_file)
+            with np.load(prediction_file,allow_pickle=False) as values:
+                chosen=sorted(values.files)[:1]
+                snapshots[f'samples/{folder}-{prediction_file.parents[1].name}.json']=dict(
+                    scope='one saved deployment prediction; source labels/inputs excluded',
+                    prediction_file_sha256=sha(prediction_file),
+                    forecasts={k:values[k].tolist() for k in chosen})
     p=R/'statistics/report.json';originals[str(p)]=sha(p)
     def reduce(v):
         if isinstance(v,dict):return {k:reduce(x) for k,x in v.items()}

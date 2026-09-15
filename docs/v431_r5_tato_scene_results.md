@@ -6,14 +6,14 @@
 |---|---|---|---|---|
 |bolt-h192|audited_completed|500/500/500|14/14|14500|
 |bolt-h96|audited_completed|500/500/500|14/14|14500|
-|timesfm-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
+|timesfm-h192|audited_completed|500/500/500|14/14|14500|
 |timesfm-h96|audited_completed|500/500/500|14/14|14500|
 |solar-bolt-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
-|solar-bolt-h96|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
+|solar-bolt-h96|audited_completed|500/500/500|11/11|11000|
 |solar-timesfm-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
-|solar-timesfm-h96|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
+|solar-timesfm-h96|audited_partial|247/247/500|11/11|5434|
 |us_term_structure-bolt-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
-|us_term_structure-bolt-h96|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
+|us_term_structure-bolt-h96|audited_completed|500/500/500|1/1|1500|
 |us_term_structure-timesfm-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
 |us_term_structure-timesfm-h96|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
 
@@ -33,8 +33,8 @@
 |bolt|REFERENCE_FREE_low|52/26|52|1.131513|1.131513|
 |bolt|TATO_NATIVE_8_high|52/26|52|1.661713|1.661713|
 |bolt|TATO_NATIVE_8_low|52/26|52|1.661713|1.661713|
-|bolt|TATO_SCENE_high|52/26|28|缺项|1.140375|
-|bolt|TATO_SCENE_low|52/26|28|缺项|1.140375|
+|bolt|TATO_SCENE_high|52/26|40|缺项|1.325653|
+|bolt|TATO_SCENE_low|52/26|40|缺项|1.325653|
 |timesfm|FIXED_A0_NATIVE_high|52/26|52|1.198786|1.198786|
 |timesfm|FIXED_A0_NATIVE_low|52/26|52|1.198786|1.198786|
 |timesfm|FIXED_A2_SINGLE_high|52/26|52|1.133136|1.133136|
@@ -47,8 +47,29 @@
 |timesfm|REFERENCE_FREE_low|52/26|52|1.052925|1.052925|
 |timesfm|TATO_NATIVE_8_high|52/26|52|1.506187|1.506187|
 |timesfm|TATO_NATIVE_8_low|52/26|52|1.506187|1.506187|
-|timesfm|TATO_SCENE_high|52/26|14|缺项|1.337974|
-|timesfm|TATO_SCENE_low|52/26|14|缺项|1.337974|
+|timesfm|TATO_SCENE_high|52/26|39|缺项|1.291656|
+|timesfm|TATO_SCENE_low|52/26|39|缺项|1.291656|
+
+## 首四ETTm1共同子表
+
+每家族14 parent、28个target_block_10变体；仅ETTm1，不代替三来源52变体完整表。以下为high预算同UID比较，完整原生方法的信息与搜索协议不同。
+
+|家族|方法|MASE|完整窗/parent|费用秒/窗|超支|
+|---|---|---:|---|---:|---:|
+|bolt|FIXED_A0_NATIVE_high|0.999946|28/14|0.088379|0|
+|bolt|FIXED_A2_SINGLE_high|1.091120|28/14|0.122223|0|
+|bolt|R2_EXISTING_CART_high|0.999946|28/14|0.796780|0|
+|bolt|R5_high|0.994298|28/14|0.093740|0|
+|bolt|REFERENCE_FREE_high|0.994298|28/14|0.093617|0|
+|bolt|TATO_NATIVE_8_high|1.585305|28/14|0.672120|0|
+|bolt|TATO_SCENE_high|1.140375|28/14|0.048322|0|
+|timesfm|FIXED_A0_NATIVE_high|1.274304|28/14|0.195255|0|
+|timesfm|FIXED_A2_SINGLE_high|1.078010|28/14|0.227766|0|
+|timesfm|R2_EXISTING_CART_high|0.993583|28/14|1.323637|0|
+|timesfm|R5_high|1.065826|28/14|0.442281|0|
+|timesfm|REFERENCE_FREE_high|0.993583|28/14|0.199960|0|
+|timesfm|TATO_NATIVE_8_high|1.754685|28/14|0.988514|0|
+|timesfm|TATO_SCENE_high|1.341847|28/14|0.113364|0|
 
 ## bolt-h192
 
@@ -96,6 +117,29 @@
 
 失败trial状态：{"completed": 500}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
 
+## timesfm-h192
+
+|方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
+|---|---:|---:|---:|---:|---:|
+|FIXED_A0_NATIVE_high|1.322749|1.322749|0.195152|0|0|
+|FIXED_A0_NATIVE_low|1.322749|1.322749|0.195152|0|0|
+|FIXED_A2_SINGLE_high|1.146009|1.146009|0.226689|0|0|
+|FIXED_A2_SINGLE_low|1.146009|1.146009|0.226689|0|0|
+|R2_EXISTING_CART_high|1.053253|1.053253|1.315703|0|0|
+|R2_EXISTING_CART_low|1.053253|1.053253|1.315703|0|14|
+|R5_high|1.133115|1.133115|0.457230|0|0|
+|R5_low|1.131973|1.131973|0.452559|0|0|
+|REFERENCE_FREE_high|1.053253|1.053253|0.199345|0|0|
+|REFERENCE_FREE_low|1.053253|1.053253|0.199338|0|0|
+|TATO_NATIVE_8_high|1.693810|1.693810|0.910790|0|0|
+|TATO_NATIVE_8_low|1.693810|1.693810|0.910790|0|14|
+|TATO_SCENE_high|1.345721|1.345721|0.112477|0|0|
+|TATO_SCENE_low|1.345721|1.345721|0.112477|0|0|
+
+模型冷启动 4.044 秒；离线搜索 1695.897 秒；DEV部署热请求累计 1.575 秒；worker阶段 1702.426 秒（不含此前imports/部分hash检查）。训练样本预测、失败trial与全部模型调用仍收费，不将离线搜索均摊后冒充部署费。
+
+失败trial状态：{"completed": 500}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
+
 ## timesfm-h96
 
 |方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
@@ -116,6 +160,75 @@
 |TATO_SCENE_low|1.337974|1.337974|0.114251|0|0|
 
 模型冷启动 4.303 秒；离线搜索 1747.216 秒；DEV部署热请求累计 1.600 秒；worker阶段 1754.038 秒（不含此前imports/部分hash检查）。训练样本预测、失败trial与全部模型调用仍收费，不将离线搜索均摊后冒充部署费。
+
+失败trial状态：{"completed": 500}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
+
+## solar-bolt-h96
+
+|方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
+|---|---:|---:|---:|---:|---:|
+|FIXED_A0_NATIVE_high|2.123144|2.123144|0.078328|0|0|
+|FIXED_A0_NATIVE_low|2.123144|2.123144|0.078328|0|0|
+|FIXED_A2_SINGLE_high|1.407522|1.407522|0.111373|0|0|
+|FIXED_A2_SINGLE_low|1.407522|1.407522|0.111373|0|0|
+|R2_EXISTING_CART_high|1.407522|1.407522|0.889339|0|0|
+|R2_EXISTING_CART_low|1.407522|1.407522|0.889339|0|11|
+|R5_high|1.463979|1.463979|0.103254|0|0|
+|R5_low|1.463979|1.463979|0.103157|0|0|
+|REFERENCE_FREE_high|1.463979|1.463979|0.103142|0|0|
+|REFERENCE_FREE_low|1.463979|1.463979|0.103142|0|0|
+|TATO_NATIVE_8_high|2.310701|2.310701|0.543357|0|0|
+|TATO_NATIVE_8_low|2.310701|2.310701|0.543357|0|0|
+|TATO_SCENE_high|2.070091|2.070091|0.041433|0|0|
+|TATO_SCENE_low|2.070091|2.070091|0.041433|0|0|
+
+模型冷启动 3.790 秒；离线搜索 357.513 秒；DEV部署热请求累计 0.456 秒；worker阶段 362.313 秒（不含此前imports/部分hash检查）。训练样本预测、失败trial与全部模型调用仍收费，不将离线搜索均摊后冒充部署费。
+
+失败trial状态：{"completed": 500}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
+
+## solar-timesfm-h96
+
+|方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
+|---|---:|---:|---:|---:|---:|
+|FIXED_A0_NATIVE_high|1.257698|1.257698|0.197447|0|0|
+|FIXED_A0_NATIVE_low|1.257698|1.257698|0.197447|0|0|
+|FIXED_A2_SINGLE_high|1.108198|1.108198|0.228603|0|0|
+|FIXED_A2_SINGLE_low|1.108198|1.108198|0.228603|0|0|
+|R2_EXISTING_CART_high|1.016792|1.016792|1.479492|0|0|
+|R2_EXISTING_CART_low|1.016792|1.016792|1.479492|0|11|
+|R5_high|0.961153|0.961153|0.441902|0|0|
+|R5_low|1.023070|1.023070|0.364196|0|0|
+|REFERENCE_FREE_high|1.016792|1.016792|0.221788|0|0|
+|REFERENCE_FREE_low|1.016792|1.016792|0.221794|0|0|
+|TATO_NATIVE_8_high|1.692568|1.692568|1.058846|0|0|
+|TATO_NATIVE_8_low|1.692568|1.692568|1.058846|0|11|
+|TATO_SCENE_high|1.241464|1.241464|0.110404|0|0|
+|TATO_SCENE_low|1.241464|1.241464|0.110404|0|0|
+
+模型冷启动 4.011 秒；离线搜索 535.283 秒；DEV部署热请求累计 1.214 秒；worker阶段 541.491 秒（不含此前imports/部分hash检查）。训练样本预测、失败trial与全部模型调用仍收费，不将离线搜索均摊后冒充部署费。
+
+失败trial状态：{"completed": 247}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
+
+## us_term_structure-bolt-h96
+
+|方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
+|---|---:|---:|---:|---:|---:|
+|FIXED_A0_NATIVE_high|1.135344|1.135344|0.079400|0|0|
+|FIXED_A0_NATIVE_low|1.135344|1.135344|0.079400|0|0|
+|FIXED_A2_SINGLE_high|1.101897|1.101897|0.113028|0|0|
+|FIXED_A2_SINGLE_low|1.101897|1.101897|0.113028|0|0|
+|R2_EXISTING_CART_high|1.101897|1.101897|0.556205|0|0|
+|R2_EXISTING_CART_low|1.101897|1.101897|0.556205|0|0|
+|R5_high|1.101897|1.101897|0.114667|0|0|
+|R5_low|1.101897|1.101897|0.114579|0|0|
+|REFERENCE_FREE_high|1.101897|1.101897|0.114560|0|0|
+|REFERENCE_FREE_low|1.101897|1.101897|0.114560|0|0|
+|TATO_NATIVE_8_high|1.006039|1.006039|0.520719|0|0|
+|TATO_NATIVE_8_low|1.006039|1.006039|0.520719|0|0|
+|TATO_SCENE_high|0.766494|0.766494|0.042954|0|0|
+|TATO_SCENE_low|0.766494|0.766494|0.042954|0|0|
+
+模型冷启动 3.751 秒；离线搜索 69.853 秒；DEV部署热请求累计 0.043 秒；worker阶段 73.988 秒（不含此前imports/部分hash检查）。训练样本预测、失败trial与全部模型调用仍收费，不将离线搜索均摊后冒充部署费。
 
 失败trial状态：{"completed": 500}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
 
@@ -140,10 +253,4 @@
 
 实际 forecast(row, params) 只把该row的context、H、当前trial参数交给 execute_frozen_scene；预测完成后才取TRAIN目标计算MSE/MAE，并向Optuna反馈。不存在把早期TRAIN origin之后的值追加到模型输入或作为归一化数据的接口。TRAIN标签影响离线搜索参数是有监督拟合，不是无偏训练性能，也不能作为该早期origin部署时已有的证据。最终DEV部署只使用冻结参数与该DEV context，不把TRAIN/DEV目标传入预测函数。该结论基于具体输入键、调用链与保存的模型输入，不声称通用形式化信息流证明。
 
-额外resolved request仅允许登记运行时上限因剩余时间缩短；source、field、H、condition、UID、模型/代码hash、trial数与TRAIN监督角色必须与preregistered文件完全一致。USTS仅3个TRAIN parent和1个DEV parent，其支持局限必须保留。
-
-## 尚未执行extra的TRAIN缓存修订
-
-新增独立 `tato-scene-extra-cached` 请求与worker，不改正在执行或已完成的原worker。原extra请求保留并标为 `superseded_before_execution`；合表只计对应八个有效scene，不把原/新重复计作16个实验。每份缓存修订的原request/worker SHA、新worker/module SHA、TRAIN重复预测核验SHA以及输入、监督角色、500trial、600秒上限已通过独立映射校验。
-
-审计支持每次TRAIN cache hit追溯首次真实raw文件、point/hash、完整parent/model/native-config/dtype/input/H身份和首次费用；lookup+copy实际耗时单列，不能将首次计算抹除。部署每请求清缓存，不享受跨请求TRAIN复用。代码兼容的CPU合成验证覆盖Bolt/TimesFM原生point维度差、miss/hit/部署清空与错误parent拒绝；尚未执行的真实cached scene不因此标成通过或获得方法收益。
+额外resolved request仅允许登记运行时上限因剩余时间缩短；source、field、H、condition、UID、trial数与TRAIN监督角色必须与preregistered文件完全一致。缓存修订使用独立worker并绑定cache_amendment：原request/worker与新worker/module SHA分别保留，只替代尚未执行extra，不双计16个scene。原输入、参数、500trial与600秒上限保持不变。每次TRAIN缓存命中校验相同parent、checkpoint、native config、dtype、实际输入及H、首次raw文件/point/hash与首次真实费用；lookup+copy另收费，部署每请求清缓存。USTS仅3个TRAIN parent和1个DEV parent，其支持局限必须保留。

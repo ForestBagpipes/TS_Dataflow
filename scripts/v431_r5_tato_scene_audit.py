@@ -327,6 +327,17 @@ def report_markdown(report):
  for row in report['combined']['table']:
   val=lambda k:'缺项' if row[k] is None else f"{row[k]:.6f}"
   lines.append(f"|{row['family']}|{row['policy']}|{row['episodes']}/{row['parents']}|{row['successful_episodes']}|{val('mase_full_denominator')}|{val('mase_success_subset_only')}|")
+ primary_names={'bolt-h96','bolt-h192','timesfm-h96','timesfm-h192'}
+ primary_complete={s['scene'] for s in report['scenes'] if s['scene'] in primary_names and s['status'].startswith('audited_')}
+ if primary_complete==primary_names:
+  lines += ['', '## 首四ETTm1共同子表', '', '每家族14 parent、28个target_block_10变体；仅ETTm1，不代替三来源52变体完整表。以下为high预算同UID比较，完整原生方法的信息与搜索协议不同。', '', '|家族|方法|MASE|完整窗/parent|费用秒/窗|超支|', '|---|---|---:|---|---:|---:|']
+  primary_rows=[x for x in report['combined']['rows'] if x['scene'] in primary_names and x['policy'].endswith('_high')]
+  for family in ('bolt','timesfm'):
+   for policy in sorted({x['policy'] for x in primary_rows}):
+    t=summary([x for x in primary_rows if x['family']==family and x['policy']==policy])
+    val='缺项' if t['mase_full_denominator'] is None else f"{t['mase_full_denominator']:.6f}"
+    cost='未知' if t['seconds_macro_available_records'] is None else f"{t['seconds_macro_available_records']:.6f}"
+    lines.append(f"|{family}|{policy}|{val}|{t['episodes']}/{t['parents']}|{cost}|{t['budget_overruns']}|")
  for scene in report['scenes']:
   if not scene['status'].startswith('audited_'):continue
   lines += ['', '## '+scene['scene'],'', '|方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|', '|---|---:|---:|---:|---:|---:|']
