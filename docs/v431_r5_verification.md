@@ -96,3 +96,7 @@ Bolt 自然请求的最终动作与同 UID/预算离线决策全同。TimesFM �
 | TimesFM 受控删除8窗/2parent | 5.042518 | 5.042129 | 5.545777 | 5.042324 |
 
 本金融子集没有核实自然缺口请求，不能补写为已验证。完整输入全部 KEEP 且预测一致，仅说明 no-op 契约通过。Bolt 受控删除后的治理弱于 KEEP；TimesFM 相对免费参考差异极小且低/高预算方向不同，不支持主动机制或金融泛化。线上主DEV七窗按元数据预选，仅为真实执行验收，不是独立确认或总体开发表的替代。
+
+## 截止队列回归
+
+2026-09-16补充test_deadline_queue：模拟取得互斥时已过截止，确认不读取请求、不启动worker、不调用关机，原任务标not_run_deadline。只覆盖新改动的预算准入风险。命令：`source scripts/env_new_server.sh`后`"$W2_CORE_PY" -m unittest discover -s tests/v431_r5 -p test_deadline_queue.py -v`，实际通过。

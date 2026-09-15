@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Label-sealed real r5 trials; final output reuses an executed version.
 
-Parent owns the single GPU lock. --prepare-only never starts a model.
+Parent serializes with a separate queue mutex; services own gpu.lock.
+--prepare-only never starts a model.
 """
 import argparse
 import json

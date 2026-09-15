@@ -1,0 +1,25 @@
+{
+  "version": "chronos2-native-check-v1",
+  "model": "amazon/chronos-2",
+  "revision": "29ec3766d36d6f73f0696f85560a422f50e8498c",
+  "weight_sha256": "ddcda3c7508bf2528087723e98a20707cc04b7f370ae275a9fd88078ddba4f42",
+  "local_model_path": "/home/vipuser/work2-cache/chronos2-native-check/29ec3766d36d6f73f0696f85560a422f50e8498c",
+  "environment": "existing w2-chronos, no dependency changes",
+  "model_dtype": "float32",
+  "native_context": 512,
+  "horizons": [
+    96,
+    192
+  ],
+  "point_quantile": 0.5,
+  "cross_learning": false,
+  "batch_size": 1,
+  "purpose": "native KEEP interface and separate backbone sensitivity; not third independent family or r5 governance",
+  "inputs": {
+    "results/v431-r5/chronos2-native-check/train-inputs.npz": "b52a5e25d62760c6730d86e9fef3ae509d3a4b7f819d9f1ed0012289d918c810",
+    "results/v431-r5/chronos2-native-check/dev-inputs.npz": "2b1dfde4c762cdfc07e2b9d2dac5f6cb0f62981993eaefbf6676abc2c0c40769"
+  },
+  "metadata_only_selection": true,
+  "heldout_labels_read": false,
+  "source_sha256": "69bd14438ff24b6ebeac80252ab31a3b6b02af798591777619cf67df6efbc0f3"
+}

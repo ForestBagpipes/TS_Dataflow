@@ -2,7 +2,7 @@
 
 状态：两家族真实prepare-only已通过，GPU运行结果待填；不能把本页计划当作已执行。
 
-真实入口 `scripts/v431_r5_online.py --family bolt|timesfm --root results/v431-r5`。`--prepare-only`只加载冻结轻量模型、当前context与元数据，不启动GPU；常规模式由root唯一GPU队列持锁，子worker不再次持锁。
+真实入口 `scripts/v431_r5_online.py --family bolt|timesfm --root results/v431-r5`。`--prepare-only`只加载冻结轻量模型、当前context与元数据，不启动GPU；常规模式由root唯一队列使用独立mutex串行；模型服务每次调用自行持`gpu.lock`，父进程不得同时持同锁。此前外层同锁建议已纠正，真实运行使用不同队列锁。
 
 每家族提前选定44个case：3个合法TRAIN parent只测吞吐，旧7个DEV请求与12个金融请求各运行low/high预算，共38自然请求；另完整KEEP、零预算、真实候选执行后注入故障3个受控case。来源、H96和缺口条件按旧元数据选，不依据新损失选择。自然请求表示策略自然决策，不表示自然缺口。训练pilot及故障case采用固定查询次序，只作执行与吞吐检查，不能归入主动收益。
 

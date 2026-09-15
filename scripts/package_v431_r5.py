@@ -25,7 +25,7 @@ def main():
     for name in ['AGENTS.md','README.md','docs/HANDOFF.md','docs/version_ledger.md','docs/claims.md',
       'docs/novelty_matrix.md','docs/paper_v431_draft.md','docs/experiment-matrix.md','scripts/env_new_server.sh',
       'scripts/v431_r4_online.py','scripts/online_v43_agent.py','scripts/v431_r2_services.py',
-      'scripts/serve_v43_model.py','scripts/serve_v431_timesfm.py','scripts/v431_r3_statistics.py']:
+      'scripts/serve_v43_model.py','scripts/serve_v431_r2_timesfm.py','scripts/v431_r3_statistics.py']:
         files.add(Path(name))
     for folder in ['v43','v431','v431_r2','v431_r3','v431_r4']:
         files.update((Path('src/introact_ts')/folder).rglob('*.py'))
@@ -34,7 +34,15 @@ def main():
       'statistics/*audit*.json','statistics/fixed_trace_changed_windows.json','evaluation/*/common*table.json',
       'evaluation/*/mechanism_table.json','evaluation/*/status.json','main-preparation/*.json',
       'online-*/status.json','online-*/visibility_barrier.json','online-*/process_accounting.json',
-      'online-*/service/service_startup.json','allfive-executed/*/table.json']:
+      'online-*/service/service_startup.json','evaluation/*/allfive-executed/table.json',
+      'statistics/cost_information.json','main-preparation/audit-v2/*.json',
+      'backbone-registry/registry.json','chronos2-native-check/*status.json',
+      'chronos2-native-check/support-audit.json','chronos2-native-check/audit/*.json',
+      '*queue-status.json','tato-scene/audit.json','tato-scene/*/request*.json',
+      'tato-scene/*/run/status.json','tato-scene/*/run/frozen*.json',
+      'tato-scene-extra/queue*.json','tato-scene-extra/*/request*.json',
+      'tato-scene-extra/*/run/status.json','tato-official96/*/request*.json',
+      'tato-official96/*/run/status.json']:
         files.update(R.glob(pattern))
     snapshots={}; originals={}
     for suite in ['dev','financial']:

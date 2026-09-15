@@ -41,7 +41,7 @@ ETT目标保留旧v43的channel 0（HUFL），不是官方常见OT；新来源�
 | 入口/函数 | 职责 | 事实 |
 |---|---|---|
 | `scripts/v431_baselines/tato_adapter.py:adapt_window` | 每请求在512−H处切历史并进行8trial搜索 | 416/320输入，历史MAE，最后512当前预测；不是场景级离线训练 |
-| `timesfm_tato_worker.py:native_timesfm_pipeline` | 构造原生patch32管线 | trimmer保留5…15，未缩空间 |
+| `timesfm_tato_worker.py:native_timesfm_pipeline` | 构造长度单位32的适配管线 | trimmer枚举仍5…15，但长度单位由官方CLI默认96缩为32，实际长度空间改变 |
 | `third_party/TATO/transformation/library/trimmer.py:Transformation.pre_process` | 检查并裁输入 | `seq_l*32 > input_length` 先assert失败，未进入模型 |
 | `scripts/v431_baselines/worker.py:TimesFM.__init__` | 固定骨干配置 | `torch_compile=False`，ForecastConfig max_context512/max_horizon192；该上限不是546次失败原因 |
 | `worker.py:TimesFM.forecast` | 实际模型调用、原始输出与计时 | 变换成功后的shape与H记录，失败不填零 |
@@ -55,7 +55,7 @@ ETT目标保留旧v43的channel 0（HUFL），不是官方常见OT；新来源�
 `scripts/v431_r5_prepare_main.py` 提供：
 
 - `validate_train_samples`：拒绝非TRAIN、跨界、不匹配L/H和重复UID；已在服务器通过5个输入契约检查，未当作模型试验。
-- `scene_search(model, samples, output, family=..., trials=500)`：使用官方8类变换空间、真实冻结模型接口，最多500个不重复合法TRAIN样本，按source/parent宏平均MSE搜索；失败逐trial保留，全部失败报错。每个scene单H，模型由统一GPU队列常驻提供。
+- `scene_search(model, samples, output, family=..., trials=500)`：使用官方8类算子及已缩放长度单位的L512适配空间、真实冻结模型接口，最多500个不重复合法TRAIN样本，按source/parent宏平均MSE搜索；失败逐trial保留，全部失败报错。每个scene单H，模型由统一GPU队列常驻提供。
 - `execute_frozen_scene(model, context, horizon, params, family)`：线上只接当前dirty输入和冻结参数，无future或重新搜索接口，返回原网格预测、shape、hash和费用。
 
 这是**同骨干、同L的TRAIN场景适配API**，尚未运行500trial，也没有实现官方完整Pareto/top16验证过程，因此明确不能称官方完整复现。样本调用方须从已冻结TRAIN manifest读取器提供数组；当前验证器检查范围与角色，不是恶意调用方的认证边界。GPU负责人应将冻结manifest hash及训练样本来源纳入最终请求，不能只手填role冒充权限。
