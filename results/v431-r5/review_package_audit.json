@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "package_sha256": "1f4d1d2bcec2322fcf0348a5ac8a868373674b1ce351bc716da94f7ce35cd128",
+  "code_commit": "13d0f99a7698f003ec41eda5df1ad35a71c1459c",
+  "members": 337,
+  "hash_mismatches": [],
+  "credential_pattern_hits": [],
+  "forbidden_data_weight_files": [],
+  "source_tree_was_clean": true
+}

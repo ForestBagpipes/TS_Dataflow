@@ -13,3 +13,9 @@ r5共同开发、真实在线、TATO两套场景、Chronos-2原生敏感性、8�
 论文与进度文档已同步，新增docx/【work2】胡宏彬-进度文档-20260916-r5-final.docx。DOCX内部XML和原有ZIP成员保护检查通过，未做Office GUI渲染验收。配置、图表PDF/SVG和实际命令均保存。
 
 精简包的manifest.commit定义代码/结果版本，包索引results/v431-r5/review_package.json给出路径与SHA256。包发布提交可能晚于代码提交，两者分别记录；不将远端推送成功解释为已经观察到Windows同步。原05:04:31关机由外部安排，助手没有调用关机。
+
+## 最终代码与精简审阅包
+
+代码/结果提交：`13d0f99a7698f003ec41eda5df1ad35a71c1459c`。
+
+包：`results/v431-r5/review-13d0f99a7698.tar.gz`，1920550字节；SHA256 `1f4d1d2bcec2322fcf0348a5ac8a868373674b1ce351bc716da94f7ce35cd128`。包内manifest逐文件hash核验通过，未包含数据集、权重或凭据。包的发布提交晚于上述代码提交；最终发布SHA在Git分支与聊天交付中列出，避免自引用。

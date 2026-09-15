@@ -29,4 +29,4 @@ r5未达到开发准入，因此主实验候选确认没有启动。新增TATO T
 
 经过检查的阶段运行codex-save-local提交并推送当前codex分支。Windows登录后，F:\work\Time-research\work2按既有约定fast-forward同步。远端推送成功不等于已经观察到本机落盘；冲突或未提交修改不得用强推/reset绕过。
 
-精简审阅包与代码SHA见[交付记录](docs/v431_r5_delivery.md)，首个已上传[r5代码/结果包](results/v431-r5/review-81f9ccbc2f4e.tar.gz)。后续基线增量包以交付记录为准。真实在线结果见[在线审计](docs/v431_r5_online.md)，完整聊天报告不能被路径链接替代。
+精简审阅包与代码SHA见[交付记录](docs/v431_r5_delivery.md)，最终已上传[r5代码/结果包](results/v431-r5/review-13d0f99a7698.tar.gz)，代码提交`13d0f99a7698`；旧包保留。真实在线结果见[在线审计](docs/v431_r5_online.md)，完整聊天报告不能被路径链接替代。
