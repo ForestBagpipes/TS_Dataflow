@@ -247,3 +247,13 @@ r2保留旧STOP负结果并实现证据状态一致固定参照：Bolt 1.157005�
 冻结的source整TRAIN MASE常数用于r3证据归一化，包含早train origin之后和内部check/acq观测；不能称所有训练预处理严格逐origin隔离。DEV时该TRAIN均已过去，calibration/test未参与。保留既定共同分母与所有负结果；候选文件冻结供复核，不满足研究晋升/独立确认条件。PICS_joint_relabel仍为历史incumbent，不宣称SOTA，不把RED写成DOCX已验证成果。
 
 入口：[r3报告](v431_r3_report.md)、[共同主表](v431_r3_main_table.md)、[金融附表](v431_r3_financial_table.md)、[代码审计](v431_r3_code_audit.md)、[独立验证](v431_r3_verification.md)、[创新矩阵](novelty_matrix.md)、[论文](paper_v431_draft.md)。真实命令/配置/预测/支持/成本在results/v431-r3；最终提交和远端一致性见logs/v431-r3/git-sync.json，精简审阅包见results/v431-r3/review_package.json。同步失败不得标完成。
+
+
+## 2026-09-16 v4.3.1-r4：尺度修复与联合有限策略
+
+最新入口为[执行报告](v431_r4_report.md)、[共同表](v431_r4_main_table.md)、[冻结配置](../configs/v431-r4/resolved.json)。r4使用当前origin学习尺度，外层MASE不变；保留旧输入、原始预测、r3响应及主动负结果。主JOINT与通用cost-sensitive联合树合并为一方法，无原创名称拆分。两家族高预算均选固定H后coverage分支，Bolt1.154124弱于分阶段1.150787，TimesFM1.069398与免费策略同效而成本更高；区间跨零。当前不晋升，不打开确认集，不展开第五轮特征。金融仅2parent，BoltKEEP2.820959仍更强；自然缺口与严格PIT缺项。新原生基线只保留实际已执行TATO8trial，官方完整复现和独立评估协议仍待完成。
+
+CPU拟合与六套回归队列已完成，真实命令/PID/用时位于results/v431-r4/cpu_queue_status.json；在线真实分支和Git最终交付另见本轮报告，不以队列启动代替完成。
+
+
+r4实际在线：两家族各19自然+3受控完成；数值预测复核通过，TF非逐位相等。Bolt自然1/19超预算、TimesFM0/19，金融各0/12。完整墙钟、cold/hot与首次锁失败见v431_r4_online_verification.md和报告，不作为方法晋升。
