@@ -180,7 +180,7 @@ def render_docs():
       '- R5、R5_RAW、R5_SINGLE是自适应轨迹，不能将它们的差异全部归因于终态投影；固定轨迹归因另见机制表。',
       '- FIXED_ORDER_3与FIXED_COUNT_2仍受预算限制；ALL_FIVE同样受准入和失败停止限制，其名称不保证每窗实际执行5个版本。',
       '- ALL_FIVE_EXECUTED_UNCAPPED对每个不完整输入实际执行全部5臂后才终态投影，完整输入遵守KEEP。它不强制3.5秒上限，超支flag仅供比较，不算同预算方法。原bounded ALL_FIVE未覆盖。',
-      '- TATO_NATIVE_8为现有原生空间8-trial适配，非官方500-trial完整复现，长度失败与原费用范围保留。',
+      '- TATO_NATIVE_8为现有8类算子、缩放长度单位的8-trial适配，非官方500-trial完整复现，长度失败与原费用范围保留。',
       '- 金融Bolt KEEP 2.820959优于本轮候选；TimesFM金融微小点差仅2parent，不能声称自然缺口或金融泛化已成立。',
       '- 当前无可验证自然缺口新增实验；策略自然查询不是自然缺口验证。自然在线总请求墙钟、冷启动及超时见本轮最终报告。','',
       '生成：`scripts/v431_r5_common.py --docs`；原始来源为各suite的common_extended_table.json。所有原始共同表及历史负结果保留。']
@@ -188,7 +188,7 @@ def render_docs():
     stats=json.loads((ROOT/'statistics/report.json').read_text())
     text=['# v4.3.1-r5 同信息机制表','',
       '结论：固定查询轨迹下，FULL相对RAW在Bolt稍有改善，在TimesFM退步；收益向量平方误差改善不等价于排序或最终预测改善。联合约束的跨家族开发条件未满足。','',
-      'CURRENT四臂严格共用同一窗口查询动作与raw scorer；FREE/HISTORY沿相同当前查询集合，但其ridge分别拟合，只有架构、监督和alpha搜索预算一致，并非同一冻结系数。HISTORY额外取得并支付历史H证据，不能称同成本比较。当前完整L512任务响应与历史416/320输入任务分开。']
+      'CURRENT四臂严格共用同一窗口查询动作与raw scorer；FREE/HISTORY沿相同当前查询集合，但其ridge分别拟合，只有架构、监督和alpha搜索预算一致，并非同一冻结系数。HISTORY额外取得并支付历史H证据，不能称同成本比较。当前完整L512任务响应与历史416/320输入任务分开。 表中激活与排名改变比例按source→parent→variant宏平均，不等于简单窗数比例；平方误差为每窗收益向量坐标平方和再宏平均，未除以动作数。失败/unsupported不从主MASE分母删除，评分指标只在有效配对记录上计算。']
     for suite,label in [('dev','旧DEV'),('financial','金融附表')]:
         mechanism=stats['suites'][suite]['mechanism']
         text+=['',f'## {label}：固定轨迹，全部窗口','',

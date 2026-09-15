@@ -25,6 +25,14 @@ def write(p,x):
     q.write_text(json.dumps(x,indent=2,ensure_ascii=False)+'\n');q.replace(p)
 
 
+def request_record(manifest, **execution):
+    """Preserve input identity while replacing repeated execution bookkeeping."""
+    record=dict(manifest)
+    record.update(execution)
+    assert record['labels_read'] is False
+    return record
+
+
 def download():
     OUT.mkdir(parents=True,exist_ok=True);CACHE.mkdir(parents=True,exist_ok=True)
     weight=CACHE/'model.safetensors';begun=time.perf_counter()
@@ -128,7 +136,7 @@ def run(suite,deadline='2026-09-16T04:45:00+08:00'):
             input_preparation_sha256=config['source_sha256'],runtime_source_sha256=sha(__file__),
             checkpoint_revision=REVISION,input_manifest_sha256=sha(OUT/(suite+'-manifest.json')),
             r5_fit_manifest_sha256=sha('results/v431-r5/fit/manifest.json'),future_labels_read=False,
-            computation_deadline=deadline,pre_execution_revision_reason='deadline guard only; unchanged model/input/native settings'))
+            computation_deadline=deadline,pre_execution_revision_reason='deadline guard and record-key collision fix; unchanged model/input/native settings'))
         if suite=='dev':assert (OUT/'train/status.json').exists() and json.loads((OUT/'train/status.json').read_text())['status']=='completed'
         with Path('locks/gpu.lock').open('a') as lock:
             fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
@@ -172,7 +180,7 @@ def run(suite,deadline='2026-09-16T04:45:00+08:00'):
                     with temp.open('xb') as f:
                         np.savez(f,point=pred,quantiles=raw);f.flush();os.fsync(f.fileno())
                     temp.replace(rawpath)
-                    rec=dict(**r,prediction_hash=array_hash(pred),prediction_dtype=str(pred.dtype),shape=list(pred.shape),
+                    rec=request_record(r,prediction_hash=array_hash(pred),prediction_dtype=str(pred.dtype),shape=list(pred.shape),
                         charged_native_seconds=float(seconds),current_execution_seconds=time.perf_counter()-tick,cache_hit=cache_hit,
                         peak_gpu_bytes=int(torch.cuda.max_memory_allocated()),labels_read=False,
                         raw_file=str(rawpath),raw_file_sha256=sha(rawpath),raw_persistence_seconds=time.perf_counter()-persistence_started)

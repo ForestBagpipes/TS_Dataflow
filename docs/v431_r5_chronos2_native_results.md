@@ -2,7 +2,7 @@
 
 TRAIN/DEV原始预测尚未全部完成，后置评估未读未来标签。
 
-- train：not_started。
+- train：failed。
 - dev：not_started。
 
-不将下载、输入准备或部分接口运行当作r5在Chronos-2上有效；不将其称第三独立家族。
+也需等待外层队列完成并保存完整子进程计时。不将下载、输入准备或部分接口运行当作r5在Chronos-2上有效；不将其称第三独立家族。

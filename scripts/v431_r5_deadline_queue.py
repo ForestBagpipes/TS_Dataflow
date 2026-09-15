@@ -15,18 +15,20 @@ def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def main():
     p=argparse.ArgumentParser();p.add_argument('--deadline',default='2026-09-16T04:45:00+08:00')
     p.add_argument('--queue',default='results/v431-r5/tato-scene-extra/queue.preregistered.json')
+    p.add_argument('--worker',default='scripts/v431_r5_tato_scene.py')
+    p.add_argument('--status',default=None)
     a=p.parse_args();deadline=datetime.fromisoformat(a.deadline).timestamp();q=Path(a.queue)
-    status=q.with_name('queue.execution.json');jobs=read(q)['queue']
+    status=Path(a.status) if a.status else q.with_name('queue.execution.json');jobs=read(q)['queue']
     if status.exists():raise RuntimeError('Preserve queue execution; do not restart blindly')
     state=dict(status='waiting_for_primary_scenes',pid=os.getpid(),deadline=a.deadline,
-      preregister_sha256=sha(q),jobs=jobs,server_shutdown_invoked=False)
+      preregister_sha256=sha(q),jobs=jobs,server_shutdown_invoked=False,queue_code_sha256=sha(__file__),worker=str(Path(a.worker).resolve()))
     atom(status,state)
     primary=[Path('results/v431-r5/tato-scene')/name/'run/status.json' for name in
       ['bolt-h96','bolt-h192','timesfm-h96','timesfm-h192']]
     while time.time()<deadline:
         if all(x.exists() and read(x).get('status') in ('completed','partial','failed') for x in primary):break
         time.sleep(10)
-    worker=Path('scripts/v431_r5_tato_scene.py').resolve()
+    worker=Path(a.worker).resolve()
     interpreter=os.environ['W2_CHRONOS_PY']
     for j in jobs:
         # The queue wait is not a worker/request cost; re-evaluate after the lock.

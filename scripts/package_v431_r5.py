@@ -20,10 +20,10 @@ def main():
     commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
     files=set()
     for pattern in ['docs/v431_r5*.md','scripts/*v431_r5*.py','src/introact_ts/v431_r5/*.py',
-      'tests/v431_r5/*.py','configs/v431-r5/*.json']:
+      'tests/v431_r5/*.py','configs/v431-r5/*.json','docs/figures/v431-r5/*']:
         files.update(Path('.').glob(pattern))
     for name in ['AGENTS.md','README.md','docs/HANDOFF.md','docs/version_ledger.md','docs/claims.md',
-      'docs/novelty_matrix.md','docs/paper_v431_draft.md','docs/experiment-matrix.md','scripts/env_new_server.sh',
+      'docs/novelty_matrix.md','docs/paper_v431_draft.md','docs/paper_v431_r5_method.md','docs/experiment-matrix.md','scripts/env_new_server.sh',
       'scripts/v431_r4_online.py','scripts/online_v43_agent.py','scripts/v431_r2_services.py',
       'scripts/serve_v43_model.py','scripts/serve_v431_r2_timesfm.py','scripts/v431_r3_statistics.py']:
         files.add(Path(name))

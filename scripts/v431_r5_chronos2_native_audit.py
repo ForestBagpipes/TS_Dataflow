@@ -89,10 +89,16 @@ def main():
             compact=[dict(uid=r['episode_uid'],parent=r['parent_group'],source=r['source'],mase=r['mase'],mae=r['mae'],component_seconds=r['total_seconds']) for r in rr]
             table.append(dict(model=family,policy=policy,**aggregate(compact)))
     sources={s:aggregate([r for r in rows if r['source']==s]) for s in sorted({r['source'] for r in rows})}
+    failures=[]
+    for archived in sorted(OUT.glob('attempt*-*/queue-status.json')):
+        previous=json.loads(archived.read_text())
+        failures.append(dict(archive=str(archived.parent),queue=previous,
+            full_subprocess_seconds=sum(j.get('seconds',0) for j in previous.get('jobs',[])),
+            native_status=json.loads((archived.parent/'train/status.json').read_text())))
     download=json.loads((OUT/'download-status.json').read_text());write(target/'rows.json',rows);write(target/'table.json',table)
     write(target/'sources.json',sources);write(target/'prediction_checks.json',checked)
     write(target/'status.json',dict(status='completed',scope='old DEV backbone-only sensitivity, not r5 cross-backbone governance',
-        runs=runs,download_seconds=download.get('elapsed_seconds'),download_bytes=download.get('bytes'),
+        runs=runs,prior_failed_attempts=failures,download_seconds=download.get('elapsed_seconds'),download_bytes=download.get('bytes'),
         calibration_test_labels_read=False,old_dev_labels_read_only_after_predictions_verified=True,
         single_request_budget_scope='native model calls only; complete governance/controller request latency not benchmarked for Chronos-2',
         comparisons_cost_warning='Bolt/TimesFM baseline invoices include preparation; Chronos-2 native timing is separate and not claimed same whole-request budget',
@@ -103,6 +109,7 @@ def main():
     lines+=['','*Chronos-2列只计原生模型调用donor费用；Bolt/TimesFM列沿原完整组件invoice。口径不同，不能据此宣称完整请求同预算优势。','',
       '## 实际执行成本','',f"下载{download.get('bytes')}字节，耗时{download.get('elapsed_seconds',0):.3f}秒；未安装或升级环境。"]
     for suite,r in runs.items():lines.append(f"- {suite}：{r['parents']} parent/{r['variants']}变体；物理推断{r['physical_requests']}次、复用{r['reused_requests']}次。冷加载{r['cold_load_seconds']:.6f}秒，runner主体{r['runner_body_seconds']:.6f}秒（不含初始import），外层队列完整子进程{r['full_subprocess_seconds']:.6f}秒；物理native总{r['actual_physical_native_seconds']:.6f}秒；native均值/P95/最大{r['physical_native_mean']:.6f}/{r['physical_native_p95']:.6f}/{r['physical_native_max']:.6f}秒，峰值显存{r['peak_gpu_bytes']/2**30:.3f}GiB。")
+    for failed in failures:lines.append(f"- 保留失败尝试：{failed['native_status']['error']}；完整子进程{failed['full_subprocess_seconds']:.6f}秒，已尝试原生调用{failed['native_status']['attempted_physical_calls']}次。归档{failed['archive']}；记录层失败未用于评分，费用不归零。")
     lines+=['','## 验证与限制','','160个原始预测均核验输入身份、输出dtype/hash、逐请求原始quantiles和原生中位点完全一致；全部预测落盘并验证后才读取已使用DEV目标。封存集合未读。','',
       '完整/NaN以及H96/H192的TRAIN接口验收仅1个parent4案例，不是广泛训练支持。完整单请求处理/输出/策略预算未针对Chronos-2完整验收；DEV去重后的批处理进程平均不替代热请求延迟保证。','',
       '该结果仅是冻结新骨干的原生KEEP敏感性对照。没有Chronos-2治理候选共同表，也没有r5在该骨干上的收益主张。']

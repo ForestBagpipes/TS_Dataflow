@@ -1,0 +1,110 @@
+{
+  "statistics_sha256": "daee89ed6222ed80ece79bbf00bc2ac041864b230fcb83cc6de76f22faf5381f",
+  "records": [
+    {
+      "panel": "Complete method: r5 minus comparator",
+      "family": "bolt",
+      "left": "R5_high",
+      "right": "REFERENCE_FREE_high",
+      "mean": 0.0,
+      "ci90": [
+        0.0,
+        0.0
+      ],
+      "parents": 26,
+      "windows": 156
+    },
+    {
+      "panel": "Complete method: r5 minus comparator",
+      "family": "bolt",
+      "left": "R5_high",
+      "right": "TRAIN_BEST_FIXED_FLOW_high",
+      "mean": -0.002139288396532644,
+      "ci90": [
+        -0.024423872016256433,
+        0.021202848659682933
+      ],
+      "parents": 26,
+      "windows": 156
+    },
+    {
+      "panel": "Complete method: r5 minus comparator",
+      "family": "timesfm",
+      "left": "R5_high",
+      "right": "REFERENCE_FREE_high",
+      "mean": 0.004845395508748503,
+      "ci90": [
+        -0.00642000419949775,
+        0.018578199083331852
+      ],
+      "parents": 26,
+      "windows": 156
+    },
+    {
+      "panel": "Complete method: r5 minus comparator",
+      "family": "timesfm",
+      "left": "R5_high",
+      "right": "TRAIN_BEST_FIXED_FLOW_high",
+      "mean": 0.004845395508748503,
+      "ci90": [
+        -0.00642000419949775,
+        0.018578199083331852
+      ],
+      "parents": 26,
+      "windows": 156
+    },
+    {
+      "panel": "Same queries: FULL minus comparator",
+      "family": "bolt",
+      "left": "MECH_CURRENT_FULL",
+      "right": "MECH_CURRENT_RAW",
+      "mean": -0.0011966826177199797,
+      "ci90": [
+        -0.0035900478531599393,
+        0.0
+      ],
+      "parents": 26,
+      "windows": 156
+    },
+    {
+      "panel": "Same queries: FULL minus comparator",
+      "family": "bolt",
+      "left": "MECH_CURRENT_FULL",
+      "right": "MECH_CURRENT_SINGLE",
+      "mean": -0.0011966826177199797,
+      "ci90": [
+        -0.0035900478531599393,
+        0.0
+      ],
+      "parents": 26,
+      "windows": 156
+    },
+    {
+      "panel": "Same queries: FULL minus comparator",
+      "family": "timesfm",
+      "left": "MECH_CURRENT_FULL",
+      "right": "MECH_CURRENT_RAW",
+      "mean": 0.00041804719352815867,
+      "ci90": [
+        0.00012772606727535279,
+        0.0009261091644705689
+      ],
+      "parents": 26,
+      "windows": 156
+    },
+    {
+      "panel": "Same queries: FULL minus comparator",
+      "family": "timesfm",
+      "left": "MECH_CURRENT_FULL",
+      "right": "MECH_CURRENT_SINGLE",
+      "mean": -0.0044025844723393276,
+      "ci90": [
+        -0.0044025844723393276,
+        -0.0044025844723393276
+      ],
+      "parents": 26,
+      "windows": 156
+    }
+  ],
+  "scope": "Existing saved descriptive block statistics; no new training, targets, or inference"
+}

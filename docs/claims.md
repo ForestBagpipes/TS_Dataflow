@@ -6,7 +6,7 @@
 
 入口：[实际报告](v431_r5_report.md)、[完整共同表](v431_r5_main_table.md)、[机制表](v431_r5_mechanism_table.md)、[审计](v431_r5_verification.md)、[接续提示词](v431_r5_next_prompt.md)。模型hash `6bac8291c9c06eca4cb2c6f9a9b6fe49373d51815ff302421fc92b70c6d12792`。核心CLI为v431_r5_prepare/run/online/common/statistics/report；原预测缓存合法复用。r4覆盖统计从mask免费可算，修复对照独立保留，原r4负结果不改写。
 
-已运行近期baseline仅TATO两家族8trial适配；场景级500/500官方范围未运行。8来源主协议、数据/许可和独立区间准备继续，未满足开发门槛不启动确认。PICS_joint_relabel不变，不宣称主动/金融/SOTA优势。Git代码及审阅包发布SHA见v431_r5_delivery.md；发布远端不等于观察到Windows本机同步。
+原156变体共同表近期baseline为TATO两家族8trial适配。新增TRAIN场景搜索与官方96单位对照见v431_r5_tato_scene_results，按实际支持、长度单位和完成trial单列，均不能冒充官方完整协议。8来源输入/mask和历史暴露审计已准备，未满足开发门槛不启动确认。PICS_joint_relabel不变，不宣称主动/金融/SOTA优势。Git代码及审阅包发布SHA见v431_r5_delivery.md；发布远端不等于观察到Windows本机同步。
 
 ## 2026-09-15 v4.3.1-r2 实际交付；r3接续开发
 

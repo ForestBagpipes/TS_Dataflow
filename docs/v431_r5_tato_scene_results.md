@@ -7,7 +7,7 @@
 |bolt-h192|audited_completed|500/500/500|14/14|14500|
 |bolt-h96|audited_completed|500/500/500|14/14|14500|
 |timesfm-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
-|timesfm-h96|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
+|timesfm-h96|audited_completed|500/500/500|14/14|14500|
 |solar-bolt-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
 |solar-bolt-h96|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
 |solar-timesfm-h192|pending_frozen_and_all_saved_deployment|未完成|未评分|待验证|
@@ -47,8 +47,8 @@
 |timesfm|REFERENCE_FREE_low|52/26|52|1.052925|1.052925|
 |timesfm|TATO_NATIVE_8_high|52/26|52|1.506187|1.506187|
 |timesfm|TATO_NATIVE_8_low|52/26|52|1.506187|1.506187|
-|timesfm|TATO_SCENE_high|52/26|0|缺项|缺项|
-|timesfm|TATO_SCENE_low|52/26|0|缺项|缺项|
+|timesfm|TATO_SCENE_high|52/26|14|缺项|1.337974|
+|timesfm|TATO_SCENE_low|52/26|14|缺项|1.337974|
 
 ## bolt-h192
 
@@ -96,6 +96,29 @@
 
 失败trial状态：{"completed": 500}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
 
+## timesfm-h96
+
+|方法|完整分母MASE|成功窗MASE（仅诊断）|费用秒/窗|失败未跑|low/high预算实际超支|
+|---|---:|---:|---:|---:|---:|
+|FIXED_A0_NATIVE_high|1.225859|1.225859|0.195358|0|0|
+|FIXED_A0_NATIVE_low|1.225859|1.225859|0.195358|0|0|
+|FIXED_A2_SINGLE_high|1.010010|1.010010|0.228842|0|0|
+|FIXED_A2_SINGLE_low|1.010010|1.010010|0.228842|0|0|
+|R2_EXISTING_CART_high|0.933913|0.933913|1.331571|0|0|
+|R2_EXISTING_CART_low|0.933913|0.933913|1.331571|0|14|
+|R5_high|0.998537|0.998537|0.427331|0|0|
+|R5_low|1.045354|1.045354|0.382196|0|0|
+|REFERENCE_FREE_high|0.933913|0.933913|0.200575|0|0|
+|REFERENCE_FREE_low|0.933913|0.933913|0.200574|0|0|
+|TATO_NATIVE_8_high|1.815560|1.815560|1.066238|0|0|
+|TATO_NATIVE_8_low|1.815560|1.815560|1.066238|0|14|
+|TATO_SCENE_high|1.337974|1.337974|0.114251|0|0|
+|TATO_SCENE_low|1.337974|1.337974|0.114251|0|0|
+
+模型冷启动 4.303 秒；离线搜索 1747.216 秒；DEV部署热请求累计 1.600 秒；worker阶段 1754.038 秒（不含此前imports/部分hash检查）。训练样本预测、失败trial与全部模型调用仍收费，不将离线搜索均摊后冒充部署费。
+
+失败trial状态：{"completed": 500}。详细失败、逐窗输入/评分mask/revision、变换后形状与预测跨度见 audit JSON。
+
 ## 官方96单位独立实验
 
 以下采用官方patch/data/model单位96，seq_l=5..15原样保留。L512下大部分长度不支持，失败原样记录。与scaled-unit场景实验分别报告，不把两种协议混称官方完整复现。
@@ -118,3 +141,9 @@
 实际 forecast(row, params) 只把该row的context、H、当前trial参数交给 execute_frozen_scene；预测完成后才取TRAIN目标计算MSE/MAE，并向Optuna反馈。不存在把早期TRAIN origin之后的值追加到模型输入或作为归一化数据的接口。TRAIN标签影响离线搜索参数是有监督拟合，不是无偏训练性能，也不能作为该早期origin部署时已有的证据。最终DEV部署只使用冻结参数与该DEV context，不把TRAIN/DEV目标传入预测函数。该结论基于具体输入键、调用链与保存的模型输入，不声称通用形式化信息流证明。
 
 额外resolved request仅允许登记运行时上限因剩余时间缩短；source、field、H、condition、UID、模型/代码hash、trial数与TRAIN监督角色必须与preregistered文件完全一致。USTS仅3个TRAIN parent和1个DEV parent，其支持局限必须保留。
+
+## 尚未执行extra的TRAIN缓存修订
+
+新增独立 `tato-scene-extra-cached` 请求与worker，不改正在执行或已完成的原worker。原extra请求保留并标为 `superseded_before_execution`；合表只计对应八个有效scene，不把原/新重复计作16个实验。每份缓存修订的原request/worker SHA、新worker/module SHA、TRAIN重复预测核验SHA以及输入、监督角色、500trial、600秒上限已通过独立映射校验。
+
+审计支持每次TRAIN cache hit追溯首次真实raw文件、point/hash、完整parent/model/native-config/dtype/input/H身份和首次费用；lookup+copy实际耗时单列，不能将首次计算抹除。部署每请求清缓存，不享受跨请求TRAIN复用。代码兼容的CPU合成验证覆盖Bolt/TimesFM原生point维度差、miss/hit/部署清空与错误parent拒绝；尚未执行的真实cached scene不因此标成通过或获得方法收益。

@@ -144,6 +144,7 @@ TATO、Task-oriented Time Series Imputation和TS-ICL已研究任务导向输入�
 
 本轮新测量/约束的可实现性已验证，独有预测增量待验证且当前DEV不支持。不能将工程正确性、oracle空间、自然调用或评分误差性质包装为SOTA。不宣称零样本跨家族迁移、金融point-in-time或TSFM适配训练收益。
 '''
-    old.write_text(paper)
+    paper+='\n'+(D/'paper_v431_r5_method.md').read_text()+'\n'
+    old.write_text(paper.rstrip()+"\n")
     print(json.dumps(dict(status='rendered',report=str(D/'v431_r5_report.md'),summary=str(R/'delivery_summary.json'))))
 if __name__=='__main__':main()

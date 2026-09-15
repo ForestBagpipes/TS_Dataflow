@@ -8,22 +8,24 @@
 
 ## 阅读入口
 
-- [最新执行报告](docs/v431_r4_report.md)、[共同主表](docs/v431_r4_main_table.md)、[描述性统计](docs/v431_r4_statistics.md)
-- [实际代码映射](docs/v431_r4_code_map.md)、[预登记](docs/v431_r4_preregister.md)、[完整本轮提示词](docs/v431_r4_prompt.md)
+- [最新执行报告](docs/v431_r5_report.md)、[共同主表](docs/v431_r5_main_table.md)、[机制和统计](docs/v431_r5_mechanism_table.md)
+- [实际代码审计](docs/v431_r5_code_audit.md)、[预登记](docs/v431_r5_plan.md)、[完整本轮提示词](docs/v431_r5_prompt.md)
 - [论文草稿](docs/paper_v431_draft.md)、[创新归因](docs/novelty_matrix.md)、[金融费用审计](docs/v431_r4_financial_audit.md)
-- [强基线协议](docs/v431_r4_baseline_protocol.md)、[模型许可与适配登记](docs/v431_r4_model_registry.md)
+- [TATO场景实际结果](docs/v431_r5_tato_scene_results.md)、[官方96单位边界](docs/v431_r5_tato_official96.md)、[主矩阵准备](docs/v431_r5_main_readiness.md)、[模型版本登记](docs/v431_r5_backbone_registry.md)
 - [交接](docs/HANDOFF.md)、[版本台账](docs/version_ledger.md)
 
 ## 运行与审计
 
 所有训练、推断、测试和统计在当前服务器执行，先读取AGENTS.md并source scripts/env_new_server.sh。复用core、TS-ICL、Chronos隔离环境。单GPU任务由项目锁协调，不重装或修改全局环境。
 
-scripts/v431_r4_prepare.py构造合法尺度轨迹账本；scripts/v431_r4_run.py以--fit冻结有限策略，以--evaluate评估。冻结目录禁止覆盖，复现实验应使用独立输出路径。训练原始账本、模型、数据和大结果不入Git；configs/v431-r4/resolved.json保存实际冻结策略与身份。
+`scripts/v431_r5_prepare.py`逐项核验当前任务五臂预测与费用缓存，生成合法学习账本；`scripts/v431_r5_run.py --fit`训练冻结参考、评分和先验，`--evaluate --suite main --role dev`只运行已登记开发评估。既有冻结目录不得覆盖，不因缺模型文件而静默重训。配置、源码与策略身份见`configs/v431-r5/resolved.json`及结果manifest。完整数据和模型权重不入Git。
 
-scripts/v431_r4_statistics.py生成共同描述性统计，scripts/report_v431_r4.py由同一表更新报告与论文。成本保留冷/热归因及完整预测费用，缓存不构成免费证据。完整方法对照中信息不同的R2、旧r3和TATO不冒充同信息消融。
+`scripts/v431_r5_common.py`生成共同表，`scripts/v431_r5_statistics.py`及`v431_r5_online_audit.py`独立复核统计、预测与费用，`v431_r5_report.py`从账本生成报告和论文。`v431_r5_online.py --family bolt|timesfm`执行真实模型在线验收，仍须通过统一队列调度。R2/TATO的信息和动作空间差异单列，不冒充同信息消融。
+
+r5未达到开发准入，因此主实验候选确认没有启动。新增TATO TRAIN场景搜索、Chronos-2原生检查和公开数据准备属于基线/协议补齐，不能转写为r5方法晋升。旧r4入口和负结果继续保留。
 
 ## 本机同步
 
 经过检查的阶段运行codex-save-local提交并推送当前codex分支。Windows登录后，F:\work\Time-research\work2按既有约定fast-forward同步。远端推送成功不等于已经观察到本机落盘；冲突或未提交修改不得用强推/reset绕过。
 
-精简审阅包：[下载](artifacts/reviews/v431-r4-review.tar.gz)，[代码提交与SHA](artifacts/reviews/v431-r4-review.json)。自然在线结果与逐位/数值复核界限见[在线验收](docs/v431_r4_online_verification.md)。
+精简审阅包与代码SHA见[交付记录](docs/v431_r5_delivery.md)，首个已上传[r5代码/结果包](results/v431-r5/review-81f9ccbc2f4e.tar.gz)。后续基线增量包以交付记录为准。真实在线结果见[在线审计](docs/v431_r5_online.md)，完整聊天报告不能被路径链接替代。

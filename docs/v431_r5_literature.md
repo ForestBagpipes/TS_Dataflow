@@ -4,7 +4,7 @@
 
 | 工作与原始来源 | 已有先例 | r5应检验的边界 |
 |---|---|---|
-| [TATO官方代码](https://github.com/thulab/TATO)，ICLR2026页面本次遇browser verification | 冻结TSFM的输入变换与任务导向选择，原生空间离线搜索 | 五臂不覆盖有效观测是任务契约；必须胜完整原生方法公平适配后才谈强基线优势。两家族现仅8trial |
+| [TATO官方代码](https://github.com/thulab/TATO)，ICLR2026页面本次遇browser verification | 冻结TSFM的输入变换与任务导向选择，原生空间离线搜索 | 五臂不覆盖有效观测是任务契约；必须胜完整原生方法公平适配后才谈强基线优势。原156变体表仅8trial；追加TRAIN场景结果见独立基线报告，长度单位与官方不同 |
 | [Task-oriented Time Series Imputation Evaluation via Generalized Representers](https://arxiv.org/abs/2410.06652)，NeurIPS2024；[作者代码](https://github.com/hkuedl/Task-Oriented-Imputation) | 估计插补对下游任务的影响，并融合插补 | 任务收益监督本身不新；r5只在真实已执行版本中选一项，联合收益约束需单独消融 |
 | [TS-ICL](https://arxiv.org/abs/2606.05878)，2026预印本 | 时间坐标回归统一插补/预测与协变量；缺失上下文能力 | 使用其插补能力不是新插补器；原生TS-ICL与治理后固定TSFM区别清楚 |
 | [Forecast with Forecasts: Diversity Matters](https://arxiv.org/abs/2012.01643)，Kang等 | 从预测而非仅历史提取特征，利用预测多样性学习组合 | 当前预测差七特征不是首次使用预测作特征；最终不融合预测，但选择与组合差异不能替代实验证据 |

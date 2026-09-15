@@ -49,6 +49,81 @@ def scene_request_path(directory):
   if (directory/name).exists():return directory/name
  raise ValueError('No request found')
 
+def verify_cache_amendment(request):
+ amendment=request.get('cache_amendment')
+ if amendment is None:return None
+ original_path=Path(amendment['original_request']);assert sha(original_path)==amendment['original_request_sha256']
+ original=read(original_path)
+ fixed=('family','horizon','source','target_channel','target_field','condition','context','train_parents','dev_parents','rows','trials','inputs_sha256','seed','adapter_sha256','reference_frozen_sha256','supervision')
+ assert all(request[k]==original[k] for k in fixed),'Cache amendment changed method, supervision, or input identity'
+ assert 0<request['max_seconds']<=original['max_seconds']==600
+ assert request['trials']==original['trials']==500
+ assert amendment['original_worker_sha256']==original['worker_sha256']
+ assert amendment['new_worker_sha256']==request['worker_sha256']==sha(Path('scripts/v431_r5_tato_cached_scene.py'))
+ assert amendment['cache_module_sha256']==request['cache_module_sha256']==sha(Path('scripts/v431_r5_tato_parent_cache.py'))
+ proof_paths={'bolt_audit_sha256':SCENES/'train_cache_reuse_audit.json',
+              'timesfm_audit_sha256':SCENES/'timesfm_train_cache_reuse_audit.json'}
+ for key,path in proof_paths.items():assert amendment[key]==sha(path)
+ assert sha(request['inputs'])==original['inputs_sha256']
+ return dict(amendment,verified=True,original_status='superseded_before_execution',
+  scope='same TRAIN supervision/data/500 trials/600 second cap; only native prediction memoization changed')
+
+def canonical_digest(value):
+ return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+
+def audit_native_calls(calls,run,model,request,strict_raw):
+ """Verify first physical source and nonzero lookup accounting without GPU replay."""
+ request_rows={r['uid']:r for r in request['rows']};checked=0;maxgpu=0;hits=[];failures=[]
+ memo={};protocol=model.get('cache_numeric_protocol');base_identity={k:v for k,v in model.items() if k!='cache_numeric_protocol'}
+ for index,call in enumerate(calls):
+  is_parent_cache='cache_identity' in call
+  if is_parent_cache:
+   identity=call['cache_identity'];row=request_rows[call['episode_uid']]
+   assert identity['parent']==row['parent'] and identity['H']==call['horizon']
+   assert identity['model_identity_hash']==canonical_digest(base_identity)
+   assert identity['numeric_protocol_hash']==canonical_digest(protocol)
+   assert call['cache_key']==canonical_digest(identity)
+   assert np.isfinite(call['seconds']) and call['seconds']>=0
+   assert np.isfinite(call['lookup_seconds']) and call['lookup_seconds']>=0
+   assert call['seconds']+1e-12>=call['lookup_seconds']
+   expected_scope='train_cross_trial' if row['role']=='train' else 'deployment_request'
+   assert call['cache_scope']==expected_scope
+   if row['role']=='dev':assert not call['cache_hit'],'Cross-request deployment cache hit prohibited'
+   if call.get('status')=='failed':
+    assert not call['cache_hit'] and call['native_compute_seconds'] is None
+    failures.append({'index':index,'uid':call['episode_uid'],'seconds':call['seconds'],'reason':call.get('error')});continue
+   if call['cache_hit']:
+    first=int(call['first_call_index']);assert first<index and first in memo
+    prior=calls[first];assert not prior['cache_hit'] and prior['cache_scope']=='train_cross_trial'
+    assert prior['cache_identity']==identity
+    assert call['first_raw_file']==prior['raw_file'] and call['first_raw_sha256']==prior['raw_sha256']
+    assert call['point_hash']==memo[first]['point_hash']
+    assert call['first_charged_seconds']==prior['seconds']
+    assert call['native_compute_seconds']==0. and call['seconds']==call['lookup_seconds']
+    hits.append({'index':index,'first_index':first,'uid':call['episode_uid'],'seconds':call['seconds'],'first_charged_seconds':call['first_charged_seconds']});continue
+  elif call['cache_hit']:
+   continue
+  if not strict_raw:
+   if is_parent_cache:memo[index]={'point_hash':call['point_hash']}
+   continue
+  file=run/call['raw_file'];assert sha(file)==call['raw_sha256']
+  with np.load(file,allow_pickle=False) as raw:
+   x=raw['input'];point=raw['point'];assert np.isfinite(point).all() and np.isfinite(x).all()
+   if is_parent_cache:
+    assert identity['input_hash']==arrsha(x) and identity['dtype']==x.dtype.str and identity['shape']==list(x.shape)
+    native_point=point if point.ndim==3 else point[:,:,None]
+    assert call['point_hash']==arrsha(native_point)
+    assert call['first_raw_file']==call['raw_file'] and call['first_raw_sha256']==call['raw_sha256']
+    assert call['first_call_index']==index and call['first_charged_seconds']==call['seconds']
+    assert call['seconds']+1e-8>=call['native_compute_seconds']>=0
+    memo[index]={'point_hash':arrsha(native_point)}
+   else:assert call['cache_key']==arrsha(x)+':'+str(call['horizon'])
+  maxgpu=max(maxgpu,int(call.get('peak_gpu_bytes') or 0));checked+=1
+ return {'physical_raw_checked':checked,'peak_gpu_bytes':maxgpu,'parent_scoped_cache_hits':len(hits),
+   'lookup_seconds':sum(r['seconds'] for r in hits),'native_first_cost_not_erased':True,
+   'deployment_cross_request_hits':0,'failed_forecasts':failures,'hit_examples':hits[:10],
+   'scope':'TRAIN native outputs only; same parent/model/protocol/input/dtype/H; DEV request cache cleared'}
+
 def audit_scene(directory,strict_raw=True):
  request_path=scene_request_path(directory);request=read(request_path);run=directory/'run';train=[x for x in request['rows'] if x['role']=='train'];dev=[x for x in request['rows'] if x['role']=='dev']
  result={'scene':directory.name,'family':request['family'],'horizon':request['horizon'],
@@ -64,6 +139,7 @@ def audit_scene(directory,strict_raw=True):
    if unit_key in old:assert request[unit_key]==old[unit_key]
   assert 0<request['max_seconds']<=old['max_seconds']
   result['request_resolution']={'preregistered_sha256':sha(prereg),'resolved_sha256':sha(request_path),'maximum_seconds':request['max_seconds'],'preregistered_seconds':old['max_seconds']}
+ result['cache_amendment_audit']=verify_cache_amendment(request)
  # Check packed roles without opening any original DEV target.
  frozen_ref=read(ROOT/'fit/models_frozen.json');assert sha(ROOT/'fit/models.joblib')==frozen_ref['sha256']
  reference_parents=set(joblib.load(ROOT/'fit/models.joblib')['families'][request['family']]['reference'].training_parents)
@@ -118,15 +194,9 @@ def audit_scene(directory,strict_raw=True):
  meta=read(OLD/'episode_manifest.json');identity=read(run/'model_identity.json');model=identity['backbone'];expected=dataset['cache_metadata'][0][0]['model']
  assert model['repo_id']==expected['checkpoint'] and model['revision']==expected['revision']
  assert frozen['model_identity']==model
- calls=read(run/'calls.json');rawchecked=0;maxgpu=0
- if strict_raw:
-  for call in calls:
-   if call['cache_hit']:continue
-   file=run/call['raw_file'];assert sha(file)==call['raw_sha256']
-   with np.load(file,allow_pickle=False) as raw:
-    assert np.isfinite(raw['point']).all() and np.isfinite(raw['input']).all()
-    assert call['cache_key']==arrsha(raw['input'])+':'+str(call['horizon'])
-   maxgpu=max(maxgpu,int(call.get('peak_gpu_bytes',0)));rawchecked+=1
+ calls=read(run/'calls.json')
+ cache_audit=audit_native_calls(calls,run,model,request,strict_raw)
+ rawchecked=cache_audit['physical_raw_checked'];maxgpu=cache_audit['peak_gpu_bytes']
  common=read(ROOT/'evaluation/dev/common_decisions.json');baseline={(r['policy'],r['episode_uid']):r for r in common if r['family']==request['family']}
  devindex={r['uid']:r for r in dev};comparisons=[]
  tato8_path=Path('results/v431/20260914-sprint')/('tato' if request['family']=='bolt' else 'timesfm_tato')/'predictions.npz'
@@ -166,11 +236,13 @@ def audit_scene(directory,strict_raw=True):
                           'information':old.get('information'),'original_row_origin':old.get('origin')})
      if measured is not None:comparisons.append({**basic,'comparison':'TATO_SCENE_'+bn+' minus '+base+'_'+bn,'mase_difference':measured-old['mase']})
  result.update(status='audited_'+status['status'],worker_status=status,frozen=frozen,model_identity=identity,
-   train_prediction_scores_checked=trainchecks,raw_model_calls_checked=rawchecked,peak_gpu_bytes=maxgpu,
+   train_prediction_scores_checked=trainchecks,raw_model_calls_checked=rawchecked,peak_gpu_bytes=maxgpu,train_native_cache_audit=cache_audit,
    trial_status_counts=dict(Counter(t['status'] for t in trials)),failures=[{'trial':t['trial'],'status':t['status'],'error':t.get('error'),'completed_train_samples':len(t['samples']),'wall_seconds':t['wall_seconds']} for t in trials if t['status']!='completed'],
    cost={'cold_seconds':status['cold_seconds'],'offline_search_seconds':status['search_seconds'],'sum_trial_wall_seconds':sum(t['wall_seconds'] for t in trials),
          'deployment_hot_seconds':sum(r.get('hot_request_seconds',0) for r in deployment),'worker_wall_seconds':status['wall_seconds'],
-         'raw_model_seconds':sum(c.get('seconds',0) for c in calls),'actual_model_calls':sum(not c['cache_hit'] for c in calls),
+         'raw_model_seconds':sum(c.get('native_compute_seconds',c.get('seconds',0)) for c in calls if c.get('native_compute_seconds',c.get('seconds',0)) is not None),
+         'native_compute_unknown_failed_attempts':sum(c.get('status')=='failed' and c.get('native_compute_seconds') is None for c in calls),
+         'actual_model_calls':sum(not c['cache_hit'] and c.get('status')!='failed' for c in calls),
          'cache_hits':sum(c['cache_hit'] for c in calls),'maximum_actual_trial_shape':None,
          'call_count_scope':'successfully recorded native forecasts; failed branch elapsed remains included in trial/search wall'},
    pairwise_successful_uid_diagnostics={name:blocked_bootstrap([r for r in comparisons if r['comparison']==name],'mase_difference') for name in sorted({r['comparison'] for r in comparisons})},
@@ -183,8 +255,8 @@ def audit_scene(directory,strict_raw=True):
  result['cost']['worker_stage_wall_seconds']=result['cost'].pop('worker_wall_seconds')
  result['cost'].update(complete_subprocess_wall_seconds=None,pre_worker_import_seconds=None,
    timer_scope='worker-stage timer starts after imports and initial hash checks; not full OS process')
- if directory.parent.name=='tato-scene-extra':
-  q=directory.parent/'queue.execution.json'
+ if directory.parent.name in ('tato-scene-extra','tato-scene-extra-cached'):
+  q=ROOT/'tato-scene-extra/queue.execution.json'
   if q.exists():
    job=next((j for j in read(q).get('jobs',[]) if j.get('scene')==directory.name),None)
    if job and 'wall_seconds' in job:
@@ -278,12 +350,18 @@ def report_markdown(report):
  '## TRAIN角色与时间输入代码审核', '',
  '首批 prepare 和额外 prepare_extra 都先从已冻结免费参考的 training_parents 取T_fit父组，再按 source/H/target_block_10 选取独立parent。准备包只含全部请求的512点脏context，以及TRAIN请求的target/mask；DEV没有目标数组。独立审计检查包键集合严格相等，不允许额外标签或特征数组。各TRAIN请求完整context+H读取在原TRAIN边界内。', '',
  '实际 forecast(row, params) 只把该row的context、H、当前trial参数交给 execute_frozen_scene；预测完成后才取TRAIN目标计算MSE/MAE，并向Optuna反馈。不存在把早期TRAIN origin之后的值追加到模型输入或作为归一化数据的接口。TRAIN标签影响离线搜索参数是有监督拟合，不是无偏训练性能，也不能作为该早期origin部署时已有的证据。最终DEV部署只使用冻结参数与该DEV context，不把TRAIN/DEV目标传入预测函数。该结论基于具体输入键、调用链与保存的模型输入，不声称通用形式化信息流证明。', '',
- '额外resolved request仅允许登记运行时上限因剩余时间缩短；source、field、H、condition、UID、模型/代码hash、trial数与TRAIN监督角色必须与preregistered文件完全一致。USTS仅3个TRAIN parent和1个DEV parent，其支持局限必须保留。']
+ '额外resolved request仅允许登记运行时上限因剩余时间缩短；source、field、H、condition、UID、trial数与TRAIN监督角色必须与preregistered文件完全一致。缓存修订使用独立worker并绑定cache_amendment：原request/worker与新worker/module SHA分别保留，只替代尚未执行extra，不双计16个scene。原输入、参数、500trial与600秒上限保持不变。每次TRAIN缓存命中校验相同parent、checkpoint、native config、dtype、实际输入及H、首次raw文件/point/hash与首次真实费用；lookup+copy另收费，部署每请求清缓存。USTS仅3个TRAIN parent和1个DEV parent，其支持局限必须保留。']
  return '\n'.join(lines)+'\n'
 
 def main():
  p=argparse.ArgumentParser();p.add_argument('--scene');p.add_argument('--skip-raw',action='store_true');a=p.parse_args()
- directories=sorted(set(p.parent for root in (SCENES,ROOT/'tato-scene-extra') for p in root.glob('*/request*.json')))
+ primary=sorted(set(p.parent for p in SCENES.glob('*/request*.json')))
+ original_extra=sorted(set(p.parent for p in (ROOT/'tato-scene-extra').glob('*/request*.json')))
+ cached_extra=sorted(set(p.parent for p in (ROOT/'tato-scene-extra-cached').glob('*/request*.json')))
+ cached_names={p.name for p in cached_extra}
+ superseded=[dict(scene=p.name,path=str(p),status='superseded_before_execution') for p in original_extra if p.name in cached_names]
+ for old in superseded:assert not (Path(old['path'])/'run').exists(),'Cannot supersede an already executed extra scene'
+ directories=primary+[p for p in original_extra if p.name not in cached_names]+cached_extra
  official=sorted(set(p.parent for p in (ROOT/'tato-official96').glob('*/request*.json')))
  if a.scene:
   directories=[d for d in directories if d.name==a.scene];official=[d for d in official if d.name==a.scene]
@@ -293,7 +371,7 @@ def main():
   try:row=audit_scene(d,strict_raw=not a.skip_raw)
   except Exception as exc:row={'scene':d.name,'status':'audit_failed','error':repr(exc)}
   (official_results if d in official else results).append(row)
- report={'status':'independent_scene_audit','script_sha256':sha(__file__),'old_dev_only':True,'no_calibration_test_read':True,'scenes':results,'official96_scenes':official_results,'combined':combined_registered_matrix(directories,results)}
+ report={'status':'independent_scene_audit','script_sha256':sha(__file__),'old_dev_only':True,'no_calibration_test_read':True,'scenes':results,'superseded_requests':superseded,'official96_scenes':official_results,'combined':combined_registered_matrix(directories,results)}
  write(SCENES/'audit.json',report);Path('docs/v431_r5_tato_scene_results.md').write_text(report_markdown(report))
  print(json.dumps({'scaled':{r['scene']:r['status'] for r in results},'official96':{r['scene']:r['status'] for r in official_results}}))
  if any(r['status']=='audit_failed' for r in results+official_results):raise SystemExit(1)
