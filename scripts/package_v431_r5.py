@@ -47,6 +47,8 @@ def main():
       'tato-scene-extra/cache_queue_handoff.json','tato-scene-extra/*amendment.json',
       'tato-scene-extra-cached/queue*.json','tato-scene-extra-cached/*/request*.json',
       'tato-scene-extra-cached/*/run/status.json','tato-scene-extra-cached/*/run/frozen*.json',
+      'tato-scene-restart-*/queue*.json','tato-scene-restart-*/*/request*.json',
+      'tato-scene-restart-*/*/run/status.json','tato-scene-restart-*/*/run/frozen*.json',
       'chronos2-native-check/retry-map.json','chronos2-native-check/attempt1-record-failure/queue*.json',
       'chronos2-native-check/attempt1-record-failure/train/status.json',
       'chronos2-queue-status.attempt1-failed.json','main-train-smoke/*.json',
@@ -76,7 +78,9 @@ def main():
           supervision_loss_mae_over_origin_scale=b.losses[i],origin_scale=b.rows[i]['origin_scale'],
           scope='Previously used r5 TRAIN native forecasts and loss supervision; no original dataset or future target values') for i in idx]
     # Small raw forecast samples only; never include original inputs or future targets.
-    for folder in ('tato-scene','tato-scene-extra-cached','tato-official96'):
+    tato_folders=['tato-scene','tato-scene-extra-cached','tato-official96']
+    tato_folders += sorted(p.name for p in R.glob('tato-scene-restart-*') if p.is_dir())
+    for folder in tato_folders:
         for prediction_file in sorted((R/folder).glob('*/run/predictions.npz')):
             originals[str(prediction_file)]=sha(prediction_file)
             with np.load(prediction_file,allow_pickle=False) as values:

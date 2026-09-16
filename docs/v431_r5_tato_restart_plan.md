@@ -71,17 +71,17 @@ Expected: 全部 PASS。
 - Modify by report generator: `docs/v431_r5_tato_scene_results.md`
 - Modify by report generator: `docs/v431_r5_final_snapshot.md`
 
-- [ ] **Step 1: 准备新请求**
+- [x] **Step 1: 准备新请求**
 
 Run: `$W2_CORE_PY scripts/v431_r5_tato_restart_queue.py prepare --max-seconds 1200`
 
 Expected: 只登记 5 个旧 partial 场景，`heldout_labels_read=0`。
 
-- [ ] **Step 2: 在独立 tmux 启动单 GPU 串行队列**
+- [x] **Step 2: 在独立 tmux 启动单 GPU 串行队列**
 
 运行前再次检查 GPU、锁和其他进程；tmux 内显式 source `scripts/env_new_server.sh`，执行 queue 的 `run` 子命令。
 
-- [ ] **Step 3: 读取终态并独立审核**
+- [x] **Step 3: 读取终态并独立审核**
 
 Run: `$W2_CORE_PY scripts/v431_r5_tato_scene_audit.py`
 

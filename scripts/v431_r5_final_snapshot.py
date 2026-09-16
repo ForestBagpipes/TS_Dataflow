@@ -24,7 +24,7 @@ def table(headers, rows):
 def main():
     audit = read(ROOT / 'tato-scene/audit.json')
     now = datetime.now(ZoneInfo('Asia/Shanghai')).isoformat()
-    sections = [f'# r5 关机前交付快照\n\n生成时间：{now}。仅汇总已落盘并独立审核的记录，未完成项保留。\n',
+    sections = [f'# r5 最终交付快照\n\n生成时间：{now}。仅汇总已落盘并独立审核的记录，未完成项保留。\n',
                 'r5开发准入失败，模型与配置保持冻结，不增加搜索、不解封calibration/test。PICS_joint_relabel保留历史身份。\n']
     compact = []
     for key, title in [('scenes', 'TATO 缩放长度单位的场景适配'),
@@ -105,12 +105,15 @@ def main():
                  '未测外层时间记未知。extra/official队列另记锁后完整子进程墙钟。TRAIN缓存保存历史首次实际计算，'
                  'DEV请求缓存逐窗清空，未将离线预计算当免费在线信息。\n']
     queues = {}
-    for name in ['tato-scene-extra/queue.execution.json', 'official96-queue-status.json', 'chronos2-queue-status.json']:
+    for name in ['tato-scene-extra/queue.execution.json', 'official96-queue-status.json', 'chronos2-queue-status.json',
+                 'tato-scene-restart-20260916/queue.execution.json',
+                 'tato-scene-restart-20260916-r2/queue.execution.json']:
         queues[name] = read(ROOT / name)
     sections += ['\n## 队列与交接\n\n', table(['队列', '状态', '截止'], [
         [name, q['status'], q.get('deadline', '已完成')] for name, q in queues.items()]),
-        '\n服务器预定关机2026-09-16 05:04:31 Asia/Shanghai；本程序不执行关机。'
-        '新重任务截至04:45，随后保存提交与审阅包。重启后不得原样复用已过期deadline覆盖旧状态。\n']
+        '\n早期队列中的关机时间与deadline属于重启前历史记录，均未复用或覆盖。'
+        'restart首次启动因解释器依赖错误在模型加载前失败并保留；r2使用预登记解释器完成5个场景。'
+        '本程序不执行关机，也不把失败启动计作实验结果。\n']
     smoke_path = ROOT / 'main-train-smoke/audit.json'
     if smoke_path.exists():
         smoke = read(smoke_path)
