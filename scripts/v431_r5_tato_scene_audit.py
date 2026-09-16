@@ -9,6 +9,7 @@ import numpy as np
 import joblib
 from v431_r3_statistics import macro,blocked_bootstrap
 ROOT=Path('results/v431-r5');SCENES=ROOT/'tato-scene';OLD=Path('results/v43/20260914T141030.324186Z-agent')
+RESTART=ROOT/'tato-scene-restart-20260916'
 BASELINES=('FIXED_A0_NATIVE','FIXED_A2_SINGLE','REFERENCE_FREE','R5','R2_EXISTING_CART','TATO_NATIVE_8')
 POOL=('A0_NATIVE','A0_FFILL','A2_SINGLE','A3_COV','A4_RIDGE_CONTEXT')
 BUDGETS={'low':.8140623268639832,'high':3.5}
@@ -50,6 +51,10 @@ def scene_request_path(directory):
  raise ValueError('No request found')
 
 def verify_cache_amendment(request):
+ restart=request.get('restart_amendment')
+ if restart is not None:
+  source_path=Path(restart['source_request']);assert sha(source_path)==restart['source_request_sha256']
+  request=read(source_path)
  amendment=request.get('cache_amendment')
  if amendment is None:return None
  original_path=Path(amendment['original_request']);assert sha(original_path)==amendment['original_request_sha256']
@@ -67,6 +72,60 @@ def verify_cache_amendment(request):
  assert sha(request['inputs'])==original['inputs_sha256']
  return dict(amendment,verified=True,original_status='superseded_before_execution',
   scope='same TRAIN supervision/data/500 trials/600 second cap; only native prediction memoization changed')
+
+def verify_restart_amendment(request):
+ amendment=request.get('restart_amendment')
+ if amendment is None:return None
+ assert amendment['mode']=='fresh_deterministic_from_trial_zero'
+ source_scene=Path(amendment['source_scene']);source_request_path=Path(amendment['source_request'])
+ source_status_path=Path(amendment['source_status']);source_frozen_path=Path(amendment['source_frozen'])
+ assert source_request_path.parent==source_scene
+ assert source_status_path==source_scene/'run/status.json'
+ assert source_frozen_path==source_scene/'run/frozen_scene.json'
+ for path,key in ((source_request_path,'source_request_sha256'),(source_status_path,'source_status_sha256'),(source_frozen_path,'source_frozen_sha256')):
+  assert path.is_file() and sha(path)==amendment[key]
+ source=read(source_request_path);status=read(source_status_path);frozen=read(source_frozen_path)
+ fixed=('family','horizon','source','target_channel','target_field','condition','context','train_parents','dev_parents','rows','trials','inputs','inputs_sha256','seed','worker_sha256','cache_module_sha256','adapter_sha256','reference_frozen_sha256','supervision','heldout_labels_read')
+ assert all(request[k]==source[k] for k in fixed),'Restart changed method, data, supervision, or code identity'
+ assert status['status']=='partial','Restart source must be a terminal partial run'
+ assert frozen['request_sha256']==amendment['source_request_sha256']
+ assert not frozen['full_search_completed']
+ assert frozen['actual_trials']<frozen['requested_trials']==source['trials']==request['trials']==500
+ assert frozen['completed_trials']<=frozen['actual_trials']
+ assert request['heldout_labels_read']==source['heldout_labels_read']==0
+ assert Path(request['output']).resolve()!=source_scene.resolve()
+ assert amendment['old_partial_preserved'] is True
+ assert amendment['source_max_seconds']==source['max_seconds']
+ assert 0<request['max_seconds']==amendment['registered_max_seconds']<=1200.
+ assert request['max_seconds']>source['max_seconds']
+ return dict(amendment,verified=True,source_status='partial',source_actual_trials=frozen['actual_trials'],
+  source_completed_trials=frozen['completed_trials'],requested_trials=frozen['requested_trials'],
+  scope='fresh deterministic trial-zero rerun; only output path and registered wall-clock cap changed')
+
+def verify_restart_prefix(request,run):
+ amendment=request.get('restart_amendment');assert amendment is not None
+ source_run=Path(amendment['source_scene'])/'run'
+ old=read(source_run/'trials.json');new=read(Path(run)/'trials.json')
+ assert len(old)<=len(new),'Restart did not reproduce the entire source trial prefix'
+ completed=0;samples=0
+ for index,old_trial in enumerate(old):
+  new_trial=new[index]
+  assert old_trial['trial']==new_trial['trial']==index
+  assert old_trial['params']==new_trial['params'],'Restart sampler parameter prefix changed'
+  new_samples={sample['uid']:sample for sample in new_trial['samples']}
+  for old_sample in old_trial['samples']:
+   current=new_samples[old_sample['uid']]
+   assert current['prediction_hash']==old_sample['prediction_hash']
+   for key in ('train_mse','train_mae'):
+    assert abs(current[key]-old_sample[key])<=1e-12*max(1,abs(old_sample[key]))
+   samples+=1
+  if old_trial['status']=='completed':
+   assert new_trial['status']=='completed'
+   assert abs(new_trial['train_macro_mse']-old_trial['train_macro_mse'])<=1e-12*max(1,abs(old_trial['train_macro_mse']))
+   completed+=1
+ return {'verified':True,'source_trials_sha256':sha(source_run/'trials.json'),
+  'source_trials_checked':len(old),'completed_trials_reproduced':completed,
+  'sample_predictions_reproduced':samples,'scope':'params plus completed TRAIN scores and saved sample prediction hashes'}
 
 def canonical_digest(value):
  return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
@@ -140,6 +199,7 @@ def audit_scene(directory,strict_raw=True):
   assert 0<request['max_seconds']<=old['max_seconds']
   result['request_resolution']={'preregistered_sha256':sha(prereg),'resolved_sha256':sha(request_path),'maximum_seconds':request['max_seconds'],'preregistered_seconds':old['max_seconds']}
  result['cache_amendment_audit']=verify_cache_amendment(request)
+ result['restart_amendment_audit']=verify_restart_amendment(request)
  # Check packed roles without opening any original DEV target.
  frozen_ref=read(ROOT/'fit/models_frozen.json');assert sha(ROOT/'fit/models.joblib')==frozen_ref['sha256']
  reference_parents=set(joblib.load(ROOT/'fit/models.joblib')['families'][request['family']]['reference'].training_parents)
@@ -168,6 +228,7 @@ def audit_scene(directory,strict_raw=True):
  assert sha(request['inputs'])==request['inputs_sha256']
  assert not {r['parent'] for r in train}&{r['parent'] for r in dev}
  inputs=np.load(request['inputs'],allow_pickle=False);trials=read(run/'trials.json');complete=[]
+ if request.get('restart_amendment') is not None:result['restart_prefix_audit']=verify_restart_prefix(request,run)
  # Verify every saved TRAIN score independently, not just the chosen trial.
  train_index={r['uid']:r for r in train};trainchecks=0
  for trial in trials:
@@ -268,6 +329,13 @@ def audit_scene(directory,strict_raw=True):
      result['cost']['outer_job_wall_including_queue_seconds']=job['wall_seconds']
      result['cost']['outer_job_scope']='legacy v1 timer starts before mutex acquisition; includes waiting, not isolated child process'
   result['cost'].setdefault('outer_job_scope','not measured yet; resolve v1/v2 from recorded wall_scope')
+ if directory.parent.name=='tato-scene-restart-20260916':
+  q=RESTART/'queue.execution.json'
+  if q.exists():
+   job=next((j for j in read(q).get('jobs',[]) if j.get('scene')==directory.name),None)
+   if job and 'wall_seconds' in job:
+    result['cost']['complete_subprocess_wall_seconds']=job['wall_seconds']
+    result['cost']['outer_job_scope']=job['wall_scope']
  if directory.parent.name=='tato-official96':
   q=ROOT/'official96-queue-status.json'
   if q.exists():
@@ -323,6 +391,10 @@ def report_markdown(report):
   if st.startswith('audited_'):v=scene['worker_status'];counts=f"{v['completed_trials']}/{v['trials']}/{scene['requested_trials']}";dev=f"{v['deploy_completed']}/{scene['dev_parents']}";checked=str(scene['train_prediction_scores_checked'])
   else:counts='未完成';dev='未评分';checked='待验证'
   lines.append(f"|{scene['scene']}|{st}|{counts}|{dev}|{checked}|")
+ if report.get('restart_attempts'):
+  lines += ['', '## 尚未替代旧partial的restart尝试', '', '|场景|状态|说明|', '|---|---|---|']
+  for scene in report['restart_attempts']:
+   lines.append(f"|{scene['scene']}|{scene['status']}|未达到completed前，原partial仍用于共同子表|")
  lines += ['', '## 全部预登记来源共同子表', '', '|家族|方法|完整窗/parent|已预测窗|完整分母MASE|成功子集MASE（诊断）|', '|---|---|---|---|---:|---:|']
  for row in report['combined']['table']:
   val=lambda k:'缺项' if row[k] is None else f"{row[k]:.6f}"
@@ -361,7 +433,8 @@ def report_markdown(report):
  '## TRAIN角色与时间输入代码审核', '',
  '首批 prepare 和额外 prepare_extra 都先从已冻结免费参考的 training_parents 取T_fit父组，再按 source/H/target_block_10 选取独立parent。准备包只含全部请求的512点脏context，以及TRAIN请求的target/mask；DEV没有目标数组。独立审计检查包键集合严格相等，不允许额外标签或特征数组。各TRAIN请求完整context+H读取在原TRAIN边界内。', '',
  '实际 forecast(row, params) 只把该row的context、H、当前trial参数交给 execute_frozen_scene；预测完成后才取TRAIN目标计算MSE/MAE，并向Optuna反馈。不存在把早期TRAIN origin之后的值追加到模型输入或作为归一化数据的接口。TRAIN标签影响离线搜索参数是有监督拟合，不是无偏训练性能，也不能作为该早期origin部署时已有的证据。最终DEV部署只使用冻结参数与该DEV context，不把TRAIN/DEV目标传入预测函数。该结论基于具体输入键、调用链与保存的模型输入，不声称通用形式化信息流证明。', '',
- '额外resolved request仅允许登记运行时上限因剩余时间缩短；source、field、H、condition、UID、trial数与TRAIN监督角色必须与preregistered文件完全一致。缓存修订使用独立worker并绑定cache_amendment：原request/worker与新worker/module SHA分别保留，只替代尚未执行extra，不双计16个scene。原输入、参数、500trial与600秒上限保持不变。每次TRAIN缓存命中校验相同parent、checkpoint、native config、dtype、实际输入及H、首次raw文件/point/hash与首次真实费用；lookup+copy另收费，部署每请求清缓存。USTS仅3个TRAIN parent和1个DEV parent，其支持局限必须保留。']
+ '额外resolved request仅允许登记运行时上限因剩余时间缩短；source、field、H、condition、UID、trial数与TRAIN监督角色必须与preregistered文件完全一致。缓存修订使用独立worker并绑定cache_amendment：原request/worker与新worker/module SHA分别保留，只替代尚未执行extra，不双计16个scene。原输入、参数、500trial与600秒上限保持不变。每次TRAIN缓存命中校验相同parent、checkpoint、native config、dtype、实际输入及H、首次raw文件/point/hash与首次真实费用；lookup+copy另收费，部署每请求清缓存。USTS仅3个TRAIN parent和1个DEV parent，其支持局限必须保留。','',
+ '旧关机截止造成的partial场景可在独立restart目录从trial 0确定性重跑，唯一放宽项是预登记墙钟上限1200秒。审核绑定旧request/status/frozen哈希，并逐trial核对旧参数前缀、已完成TRAIN分数与已保存样本预测哈希；旧partial目录及其费用永久保留，不能覆盖或抵消。']
  return '\n'.join(lines)+'\n'
 
 def main():
@@ -372,19 +445,35 @@ def main():
  cached_names={p.name for p in cached_extra}
  superseded=[dict(scene=p.name,path=str(p),status='superseded_before_execution') for p in original_extra if p.name in cached_names]
  for old in superseded:assert not (Path(old['path'])/'run').exists(),'Cannot supersede an already executed extra scene'
- directories=primary+[p for p in original_extra if p.name not in cached_names]+cached_extra
+ restart_all=sorted(set(p.parent for p in RESTART.glob('*/request*.json')))
+ restart=[];restart_attempts=[]
+ for path in restart_all:
+  status_path=path/'run/status.json'
+  if status_path.exists() and read(status_path).get('status')=='completed':restart.append(path)
+  else:restart_attempts.append(path)
+ restart_names={p.name for p in restart}
+ for old in cached_extra:
+  if old.name not in restart_names:continue
+  status=read(old/'run/status.json');frozen=read(old/'run/frozen_scene.json')
+  assert status['status']=='partial' and not frozen['full_search_completed']
+  superseded.append(dict(scene=old.name,path=str(old),status='superseded_partial_by_fresh_deterministic_restart'))
+ directories=primary+[p for p in original_extra if p.name not in cached_names]+[p for p in cached_extra if p.name not in restart_names]+restart
  official=sorted(set(p.parent for p in (ROOT/'tato-official96').glob('*/request*.json')))
  if a.scene:
-  directories=[d for d in directories if d.name==a.scene];official=[d for d in official if d.name==a.scene]
- assert directories or official
- results=[];official_results=[]
+  directories=[d for d in directories if d.name==a.scene];official=[d for d in official if d.name==a.scene];restart_attempts=[d for d in restart_attempts if d.name==a.scene]
+ assert directories or official or restart_attempts
+ results=[];official_results=[];restart_attempt_results=[]
  for d in directories+official:
   try:row=audit_scene(d,strict_raw=not a.skip_raw)
   except Exception as exc:row={'scene':d.name,'status':'audit_failed','error':repr(exc)}
   (official_results if d in official else results).append(row)
- report={'status':'independent_scene_audit','script_sha256':sha(__file__),'old_dev_only':True,'no_calibration_test_read':True,'scenes':results,'superseded_requests':superseded,'official96_scenes':official_results,'combined':combined_registered_matrix(directories,results)}
+ for d in restart_attempts:
+  try:row=audit_scene(d,strict_raw=not a.skip_raw)
+  except Exception as exc:row={'scene':d.name,'status':'audit_failed','error':repr(exc)}
+  restart_attempt_results.append(row)
+ report={'status':'independent_scene_audit','script_sha256':sha(__file__),'old_dev_only':True,'no_calibration_test_read':True,'scenes':results,'superseded_requests':superseded,'restart_attempts':restart_attempt_results,'official96_scenes':official_results,'combined':combined_registered_matrix(directories,results)}
  write(SCENES/'audit.json',report);Path('docs/v431_r5_tato_scene_results.md').write_text(report_markdown(report))
  print(json.dumps({'scaled':{r['scene']:r['status'] for r in results},'official96':{r['scene']:r['status'] for r in official_results}}))
- if any(r['status']=='audit_failed' for r in results+official_results):raise SystemExit(1)
+ if any(r['status']=='audit_failed' for r in results+official_results+restart_attempt_results):raise SystemExit(1)
 
 if __name__=='__main__':main()
