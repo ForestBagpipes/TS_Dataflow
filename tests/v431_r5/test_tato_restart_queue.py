@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import sys
 
+import numpy as np
 import pytest
 
 
@@ -191,26 +192,41 @@ def test_restart_prefix_audit_checks_params_scores_and_prediction_hashes(tmp_pat
         },
     ]
     write_json(partial / "run/trials.json", old_trials)
+    np.savez(partial / "run/train_predictions_0000.npz", u1=np.array([1.0, 2.0]))
+    np.savez(partial / "run/train_predictions_0001.npz", u1=np.array([3.0, 4.0]))
     queue.prepare_restart_queue(source, tmp_path / "restart", 1200.0, worker, cache)
     request = json.loads((tmp_path / "restart/solar-timesfm-h96/request.preregistered.json").read_text())
     new_run = tmp_path / "restart/solar-timesfm-h96/run"
+    new_trials = json.loads(json.dumps(old_trials))
+    new_trials[0]["samples"][0]["prediction_hash"] = "p0-near-but-not-bitwise"
+    new_trials[1]["samples"][0]["prediction_hash"] = "p1-near-but-not-bitwise"
+    new_trials[1].update(status="completed", train_macro_mse=1.5)
+    new_trials.append(
+        {"trial": 2, "params": {"context_len": 384}, "status": "completed", "samples": []}
+    )
     write_json(
         new_run / "trials.json",
-        [
-            old_trials[0],
-            {**old_trials[1], "status": "completed", "train_macro_mse": 1.5},
-            {"trial": 2, "params": {"context_len": 384}, "status": "completed", "samples": []},
-        ],
+        new_trials,
     )
+    np.savez(new_run / "train_predictions_0000.npz", u1=np.array([1.0, 2.0 + 1e-13]))
+    np.savez(new_run / "train_predictions_0001.npz", u1=np.array([3.0 - 1e-13, 4.0]))
 
     result = audit.verify_restart_prefix(request, new_run)
     assert result["source_trials_checked"] == 2
     assert result["completed_trials_reproduced"] == 1
     assert result["sample_predictions_reproduced"] == 2
+    assert result["bitwise_prediction_hash_matches"] == 0
+    assert result["numerically_reproduced_hash_mismatches"] == 2
 
     new_trials = json.loads((new_run / "trials.json").read_text())
     new_trials[1]["params"]["context_len"] = 320
     write_json(new_run / "trials.json", new_trials)
+    with pytest.raises(AssertionError):
+        audit.verify_restart_prefix(request, new_run)
+
+    new_trials[1]["params"]["context_len"] = 448
+    write_json(new_run / "trials.json", new_trials)
+    np.savez(new_run / "train_predictions_0001.npz", u1=np.array([3.0, 4.1]))
     with pytest.raises(AssertionError):
         audit.verify_restart_prefix(request, new_run)
 

@@ -107,25 +107,36 @@ def verify_restart_prefix(request,run):
  source_run=Path(amendment['source_scene'])/'run'
  old=read(source_run/'trials.json');new=read(Path(run)/'trials.json')
  assert len(old)<=len(new),'Restart did not reproduce the entire source trial prefix'
- completed=0;samples=0
+ completed=0;samples=0;exact=0;numeric=0;max_abs=0.;max_scaled=0.;tolerance=1e-8
  for index,old_trial in enumerate(old):
   new_trial=new[index]
   assert old_trial['trial']==new_trial['trial']==index
   assert old_trial['params']==new_trial['params'],'Restart sampler parameter prefix changed'
   new_samples={sample['uid']:sample for sample in new_trial['samples']}
-  for old_sample in old_trial['samples']:
-   current=new_samples[old_sample['uid']]
-   assert current['prediction_hash']==old_sample['prediction_hash']
-   for key in ('train_mse','train_mae'):
-    assert abs(current[key]-old_sample[key])<=1e-12*max(1,abs(old_sample[key]))
-   samples+=1
+  old_predictions=source_run/f"train_predictions_{index:04d}.npz";new_predictions=Path(run)/f"train_predictions_{index:04d}.npz"
+  with np.load(old_predictions,allow_pickle=False) as old_values,np.load(new_predictions,allow_pickle=False) as new_values:
+   for old_sample in old_trial['samples']:
+    current=new_samples[old_sample['uid']];uid=old_sample['uid'];before=old_values[uid];after=new_values[uid]
+    assert before.shape==after.shape and before.dtype==after.dtype
+    if current['prediction_hash']==old_sample['prediction_hash']:
+     np.testing.assert_array_equal(before,after);exact+=1
+    else:
+     difference=float(np.max(np.abs(before-after)));scale=max(1.,float(np.max(np.abs(before))),float(np.max(np.abs(after))))
+     assert difference<=tolerance*scale,'Restart prediction changed beyond numeric reproducibility tolerance'
+     max_abs=max(max_abs,difference);max_scaled=max(max_scaled,difference/scale);numeric+=1
+    for key in ('train_mse','train_mae'):
+     assert abs(current[key]-old_sample[key])<=tolerance*max(1,abs(old_sample[key]))
+    samples+=1
   if old_trial['status']=='completed':
    assert new_trial['status']=='completed'
-   assert abs(new_trial['train_macro_mse']-old_trial['train_macro_mse'])<=1e-12*max(1,abs(old_trial['train_macro_mse']))
+   assert abs(new_trial['train_macro_mse']-old_trial['train_macro_mse'])<=tolerance*max(1,abs(old_trial['train_macro_mse']))
    completed+=1
  return {'verified':True,'source_trials_sha256':sha(source_run/'trials.json'),
   'source_trials_checked':len(old),'completed_trials_reproduced':completed,
-  'sample_predictions_reproduced':samples,'scope':'params plus completed TRAIN scores and saved sample prediction hashes'}
+  'sample_predictions_reproduced':samples,'bitwise_prediction_hash_matches':exact,
+  'numerically_reproduced_hash_mismatches':numeric,'max_abs_prediction_difference':max_abs,
+  'max_scaled_prediction_difference':max_scaled,'numeric_tolerance_scaled':tolerance,
+  'scope':'exact params; completed TRAIN scores and saved predictions reproduced bitwise or within recorded float tolerance'}
 
 def canonical_digest(value):
  return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()

@@ -56,7 +56,7 @@ Expected: FAIL，因为审核器尚无 `verify_restart_amendment`。
 
 - [x] **Step 3: 实现最小审核**
 
-验证固定身份字段、source 三个账本哈希、旧 partial 终态、墙钟上限和新输出隔离；主审核用 restart 目录替换同名 partial 目录。对真实 run 再核对旧参数前缀、completed TRAIN 分数与预测哈希。
+验证固定身份字段、source 三个账本哈希、旧 partial 终态、墙钟上限和新输出隔离；主审核用 restart 目录替换同名 partial 目录。对真实 run 再核对旧参数前缀、completed TRAIN 分数，并对预测记录字节一致或严格浮点数值复现。
 
 - [x] **Step 4: 运行针对性与 r5 全组测试**
 
