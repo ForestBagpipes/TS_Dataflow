@@ -1,6 +1,7 @@
 import importlib.util
 import json
 from pathlib import Path
+import sys
 
 import pytest
 
@@ -214,7 +215,7 @@ def test_restart_prefix_audit_checks_params_scores_and_prediction_hashes(tmp_pat
         audit.verify_restart_prefix(request, new_run)
 
 
-def test_run_queue_requires_completed_worker_terminal_and_is_one_shot(tmp_path):
+def test_run_queue_requires_completed_worker_terminal_and_is_one_shot(tmp_path, monkeypatch):
     queue_module = load_module(QUEUE_SCRIPT, "restart_queue_run")
     worker = tmp_path / "worker.py"
     cache = tmp_path / "cache.py"
@@ -228,7 +229,11 @@ def test_run_queue_requires_completed_worker_terminal_and_is_one_shot(tmp_path):
     source = tmp_path / "source"
     make_scene(source, "solar-timesfm-h96", "partial", 247, 247, worker, cache)
     output = tmp_path / "restart"
-    queue_module.prepare_restart_queue(source, output, 1200.0, worker, cache)
+    prepared = queue_module.prepare_restart_queue(
+        source, output, 1200.0, worker, cache, interpreter=Path(sys.executable)
+    )
+    assert prepared["interpreter"] == str(Path(sys.executable).absolute())
+    monkeypatch.setattr(queue_module.sys, "executable", str(tmp_path / "must-not-be-used"))
 
     result = queue_module.run_restart_queue(output / "queue.preregistered.json", tmp_path / "queue.lock")
     assert result["status"] == "completed"

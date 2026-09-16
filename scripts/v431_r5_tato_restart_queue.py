@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 import fcntl
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -20,7 +21,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE = ROOT / "results/v431-r5/tato-scene-extra-cached"
-DEFAULT_OUTPUT = ROOT / "results/v431-r5/tato-scene-restart-20260916"
+DEFAULT_OUTPUT = ROOT / "results/v431-r5/tato-scene-restart-20260916-r2"
 DEFAULT_WORKER = ROOT / "scripts/v431_r5_tato_cached_scene.py"
 DEFAULT_CACHE_MODULE = ROOT / "scripts/v431_r5_tato_parent_cache.py"
 MAX_REGISTERED_SECONDS = 1200.0
@@ -90,15 +91,19 @@ def prepare_restart_queue(
     max_seconds: float,
     worker: Path | str,
     cache_module: Path | str,
+    interpreter: Path | str | None = None,
 ):
     source_root = Path(source_root).resolve()
     output_root = Path(output_root).resolve()
     worker = Path(worker).resolve()
     cache_module = Path(cache_module).resolve()
+    interpreter = Path(
+        interpreter or os.environ.get("W2_CHRONOS_PY", sys.executable)
+    ).absolute()
     if output_root.exists():
         raise FileExistsError(f"Restart output already exists: {output_root}")
     assert source_root.is_dir(), source_root
-    assert worker.is_file() and cache_module.is_file()
+    assert worker.is_file() and cache_module.is_file() and interpreter.is_file()
     assert 0 < float(max_seconds) <= MAX_REGISTERED_SECONDS
 
     selected = []
@@ -179,6 +184,8 @@ def prepare_restart_queue(
         "worker_sha256": sha(worker),
         "cache_module": str(cache_module),
         "cache_module_sha256": sha(cache_module),
+        "interpreter": str(interpreter),
+        "interpreter_sha256": sha(interpreter),
         "max_seconds": float(max_seconds),
         "mode": "fresh_deterministic_from_trial_zero",
         "server_shutdown_invoked": False,
@@ -198,6 +205,8 @@ def run_restart_queue(queue_path: Path | str, queue_lock: Path | str):
     assert queue["server_shutdown_invoked"] is False
     worker = Path(queue["worker"])
     assert sha(worker) == queue["worker_sha256"]
+    interpreter = Path(queue["interpreter"])
+    assert interpreter.is_file() and sha(interpreter) == queue["interpreter_sha256"]
     queue_lock = Path(queue_lock)
     queue_lock.parent.mkdir(parents=True, exist_ok=True)
     with queue_lock.open("a") as lock_handle:
@@ -225,7 +234,8 @@ def run_restart_queue(queue_path: Path | str, queue_lock: Path | str):
             atomic_write(execution_path, execution)
             job_started = time.perf_counter()
             log_path = request_path.parent / "worker.stdout.log"
-            command = [sys.executable, str(worker), "--request", str(request_path)]
+            command = [str(interpreter), str(worker), "--request", str(request_path)]
+            job["command"] = command
             try:
                 assert sha(request_path) == registered["request_sha256"]
                 request = read(request_path)
@@ -286,6 +296,11 @@ def main() -> None:
     prepare_parser.add_argument("--max-seconds", type=float, default=MAX_REGISTERED_SECONDS)
     prepare_parser.add_argument("--worker", type=Path, default=DEFAULT_WORKER)
     prepare_parser.add_argument("--cache-module", type=Path, default=DEFAULT_CACHE_MODULE)
+    prepare_parser.add_argument(
+        "--interpreter",
+        type=Path,
+        default=Path(os.environ.get("W2_CHRONOS_PY", sys.executable)),
+    )
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument("--queue", type=Path, default=DEFAULT_OUTPUT / "queue.preregistered.json")
     run_parser.add_argument(
@@ -294,7 +309,12 @@ def main() -> None:
     args = parser.parse_args()
     if args.command == "prepare":
         result = prepare_restart_queue(
-            args.source_root, args.output_root, args.max_seconds, args.worker, args.cache_module
+            args.source_root,
+            args.output_root,
+            args.max_seconds,
+            args.worker,
+            args.cache_module,
+            args.interpreter,
         )
         print(json.dumps({"status": result["status"], "jobs": len(result["queue"])}))
     else:

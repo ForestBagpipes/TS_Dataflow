@@ -9,7 +9,7 @@ import numpy as np
 import joblib
 from v431_r3_statistics import macro,blocked_bootstrap
 ROOT=Path('results/v431-r5');SCENES=ROOT/'tato-scene';OLD=Path('results/v43/20260914T141030.324186Z-agent')
-RESTART=ROOT/'tato-scene-restart-20260916'
+RESTARTS=(ROOT/'tato-scene-restart-20260916',ROOT/'tato-scene-restart-20260916-r2')
 BASELINES=('FIXED_A0_NATIVE','FIXED_A2_SINGLE','REFERENCE_FREE','R5','R2_EXISTING_CART','TATO_NATIVE_8')
 POOL=('A0_NATIVE','A0_FFILL','A2_SINGLE','A3_COV','A4_RIDGE_CONTEXT')
 BUDGETS={'low':.8140623268639832,'high':3.5}
@@ -329,8 +329,8 @@ def audit_scene(directory,strict_raw=True):
      result['cost']['outer_job_wall_including_queue_seconds']=job['wall_seconds']
      result['cost']['outer_job_scope']='legacy v1 timer starts before mutex acquisition; includes waiting, not isolated child process'
   result['cost'].setdefault('outer_job_scope','not measured yet; resolve v1/v2 from recorded wall_scope')
- if directory.parent.name=='tato-scene-restart-20260916':
-  q=RESTART/'queue.execution.json'
+ if directory.parent.name.startswith('tato-scene-restart-20260916'):
+  q=directory.parent/'queue.execution.json'
   if q.exists():
    job=next((j for j in read(q).get('jobs',[]) if j.get('scene')==directory.name),None)
    if job and 'wall_seconds' in job:
@@ -445,7 +445,7 @@ def main():
  cached_names={p.name for p in cached_extra}
  superseded=[dict(scene=p.name,path=str(p),status='superseded_before_execution') for p in original_extra if p.name in cached_names]
  for old in superseded:assert not (Path(old['path'])/'run').exists(),'Cannot supersede an already executed extra scene'
- restart_all=sorted(set(p.parent for p in RESTART.glob('*/request*.json')))
+ restart_all=sorted(set(p.parent for root in RESTARTS for p in root.glob('*/request*.json')))
  restart=[];restart_attempts=[]
  for path in restart_all:
   status_path=path/'run/status.json'

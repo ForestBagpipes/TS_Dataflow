@@ -6,6 +6,8 @@
 
 **Architecture:** 新增一个只负责准备和串行调度的 restart queue；模型执行继续复用现有缓存 worker。独立审核器识别 restart 血缘、核对旧前缀，并在共同表中用新完整目录替换同名 partial 目录。
 
+**执行修订:** 首次正式启动目录因 core 解释器缺少 `tqdm` 在模型加载前失败并保留。r2 目录预登记并强制使用历史成功队列相同的 `W2_CHRONOS_PY`；这只修复运行环境，不更改方法或数据契约。
+
 **Tech Stack:** Python 3.11、pytest、Optuna、NumPy、现有 Bolt/TimesFM worker、JSON/NPZ 原子账本。
 
 ---
