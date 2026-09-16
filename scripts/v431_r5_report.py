@@ -150,7 +150,7 @@ TATO、Task-oriented Time Series Imputation和TS-ICL已研究任务导向输入�
 '''
     paper+='\n'+(D/'paper_v431_r5_method.md').read_text()+'\n'
     if (D/'v431_r5_final_snapshot.md').exists():
-        paper+='\n## 关机前追加的基线与准备状态\n\n'
+        paper+='\n## 最终补充的基线与准备状态\n\n'
         paper+=(D/'v431_r5_final_snapshot.md').read_text()+'\n'
     old.write_text(paper.rstrip()+"\n")
     print(json.dumps(dict(status='rendered',report=str(D/'v431_r5_report.md'),summary=str(R/'delivery_summary.json'))))
