@@ -91,6 +91,6 @@ Expected: 5 个 restart 场景均为 `audited_completed`，旧 partial 血缘和
 
 只登记实际完成范围，不改变 r5 负结果、开发门槛或封存状态。
 
-- [ ] **Step 5: 提交与同步**
+- [x] **Step 5: 提交与同步**
 
 检查凭据/数据/权重/大文件和 `git status`，运行 `codex-save-local "补齐TATO截止中断场景并保留确定性审计"`，核对本地与远端 SHA。
