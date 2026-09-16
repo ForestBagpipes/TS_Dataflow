@@ -403,7 +403,7 @@ def report_markdown(report):
   else:counts='未完成';dev='未评分';checked='待验证'
   lines.append(f"|{scene['scene']}|{st}|{counts}|{dev}|{checked}|")
  if report.get('restart_attempts'):
-  lines += ['', '## 尚未替代旧partial的restart尝试', '', '|场景|状态|说明|', '|---|---|---|']
+  lines += ['', '## 未被采纳的restart尝试', '', '下列尝试自身未达到completed，因此不进入共同子表；其后成功的独立r2目录已经按场景替代旧partial。', '', '|场景|状态|说明|', '|---|---|---|']
   for scene in report['restart_attempts']:
    lines.append(f"|{scene['scene']}|{scene['status']}|未达到completed前，原partial仍用于共同子表|")
  lines += ['', '## 全部预登记来源共同子表', '', '|家族|方法|完整窗/parent|已预测窗|完整分母MASE|成功子集MASE（诊断）|', '|---|---|---|---|---:|---:|']

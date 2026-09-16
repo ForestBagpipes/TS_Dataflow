@@ -87,7 +87,7 @@ Run: `$W2_CORE_PY scripts/v431_r5_tato_scene_audit.py`
 
 Expected: 5 个 restart 场景均为 `audited_completed`，旧 partial 血缘和新费用保留；若任一失败则保留真实失败，不改结果分母。
 
-- [ ] **Step 4: 更新交接、台账和快照**
+- [x] **Step 4: 更新交接、台账和快照**
 
 只登记实际完成范围，不改变 r5 负结果、开发门槛或封存状态。
 

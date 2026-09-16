@@ -160,11 +160,11 @@ TATO、Task-oriented Time Series Imputation和TS-ICL已研究任务导向输入�
 若真实目标为0.8，真实收益为`g=(0,0.6,-0.4)`。投影使整个向量平方误差从5.57降至3.77，但原始评分选择预测1（MAE0.2），投影后选择预测2（MAE1.2）。单臂截断在本例也产生相同变化。这个解析反例说明误差投影保证与动作排序保证不同，不是新增性能实验，也不证明高阶几何独有作用。数值核对保存在`statistics/projection_ranking_counterexample.json`。
 
 
-## 关机前追加的基线与准备状态
+## 最终补充的基线与准备状态
 
-# r5 关机前交付快照
+# r5 最终交付快照
 
-生成时间：2026-09-16T04:43:21.231857+08:00。仅汇总已落盘并独立审核的记录，未完成项保留。
+生成时间：2026-09-16T21:52:57.184125+08:00。仅汇总已落盘并独立审核的记录，未完成项保留。
 r5开发准入失败，模型与配置保持冻结，不增加搜索、不解封calibration/test。PICS_joint_relabel保留历史身份。
 
 ## TATO 缩放长度单位的场景适配
@@ -175,14 +175,14 @@ r5开发准入失败，模型与配置保持冻结，不增加搜索、不解封
 | bolt-h96 | 29/14 | audited_completed | 500/500/0/0 | 1.101865 | 527.935827 | 0.038954 |
 | timesfm-h192 | 29/14 | audited_completed | 500/500/0/0 | 1.345721 | 1695.896858 | 0.112477 |
 | timesfm-h96 | 29/14 | audited_completed | 500/500/0/0 | 1.337974 | 1747.215826 | 0.114251 |
-| solar-bolt-h192 | 22/11 | audited_partial | 455/455/0/0 | 2.563880 | 484.657089 | 0.060686 |
 | solar-bolt-h96 | 22/11 | audited_completed | 500/500/0/0 | 2.070091 | 357.512743 | 0.041433 |
-| solar-timesfm-h192 | 22/11 | audited_partial | 33/32/0/1 | 1.322176 | 81.960612 | 0.116815 |
-| solar-timesfm-h96 | 22/11 | audited_partial | 247/247/0/0 | 1.241464 | 535.282539 | 0.110404 |
-| us_term_structure-bolt-h192 | 3/1 | audited_partial | 452/452/0/0 | 0.819709 | 81.952219 | 0.057681 |
 | us_term_structure-bolt-h96 | 3/1 | audited_completed | 500/500/0/0 | 0.766494 | 69.852663 | 0.042954 |
-| us_term_structure-timesfm-h192 | 3/1 | audited_partial | 248/247/0/1 | 0.930269 | 83.005902 | 0.103637 |
 | us_term_structure-timesfm-h96 | 3/1 | audited_completed | 500/500/0/0 | 1.150837 | 173.885380 | 0.115517 |
+| solar-bolt-h192 | 22/11 | audited_completed | 500/500/0/0 | 2.563880 | 489.068933 | 0.054595 |
+| solar-timesfm-h192 | 22/11 | audited_completed | 500/500/0/0 | 1.322594 | 983.917747 | 0.105451 |
+| solar-timesfm-h96 | 22/11 | audited_completed | 500/500/0/0 | 1.246931 | 963.359102 | 0.102796 |
+| us_term_structure-bolt-h192 | 3/1 | audited_completed | 500/500/0/0 | 0.819709 | 85.364614 | 0.054673 |
+| us_term_structure-timesfm-h192 | 3/1 | audited_completed | 500/500/0/0 | 0.930269 | 161.948814 | 0.107002 |
 
 ## TATO 官方96单位、当前L512约束的场景适配
 
@@ -206,14 +206,14 @@ r5开发准入失败，模型与配置保持冻结，不增加搜索、不解封
 | bolt | R5_high | 52/52 | 1.131513 | 0.110751 | 0 |
 | bolt | REFERENCE_FREE_high | 52/52 | 1.131513 | 0.110635 | 0 |
 | bolt | TATO_NATIVE_8_high | 52/52 | 1.661713 | 0.671905 | 0 |
-| bolt | TATO_SCENE_high | 52/52 | 1.416821 | 0.049900 | 0 |
+| bolt | TATO_SCENE_high | 52/52 | 1.416821 | 0.048383 | 0 |
 | timesfm | FIXED_A0_NATIVE_high | 52/52 | 1.198786 | 0.195610 | 0 |
 | timesfm | FIXED_A2_SINGLE_high | 52/52 | 1.133136 | 0.230168 | 0 |
 | timesfm | R2_EXISTING_CART_high | 52/52 | 1.052183 | 1.304882 | 0 |
 | timesfm | R5_high | 52/52 | 1.057130 | 0.465782 | 0 |
 | timesfm | REFERENCE_FREE_high | 52/52 | 1.052925 | 0.219465 | 0 |
 | timesfm | TATO_NATIVE_8_high | 52/52 | 1.506187 | 0.999743 | 0 |
-| timesfm | TATO_SCENE_high | 52/52 | 1.221407 | 0.112183 | 0 |
+| timesfm | TATO_SCENE_high | 52/52 | 1.222388 | 0.109582 | 0 |
 
 缺少场景：无。
 
@@ -222,7 +222,7 @@ r5开发准入失败，模型与配置保持冻结，不增加搜索、不解封
 下表仅累计已独立审核场景；在途部分不写成零。搜索包含其中模型调用，不能再把原生模型时间重复加到搜索时间。完整子进程包含搜索、加载等阶段，不与阶段时间相加。
 | 协议 | 已审场景 | 搜索秒 | 冷加载秒 | 物理调用/命中 | 外层计时覆盖/秒 |
 | --- | --- | --- | --- | --- | --- |
-| scenes | 12 | 6660.497849 | 47.385597 | 83389/6967 | 8/1928.977860 |
+| scenes | 12 | 8077.298699 | 48.843767 | 96043/12061 | 8/3347.901091 |
 | official96_scenes | 4 | 385.483416 | 16.145947 | 3884/0 | 4/417.413003 |
 
 ## Chronos-2原生KEEP敏感性
@@ -255,8 +255,10 @@ TimesFM-3只核版本与许可，未下载运行。官方完整TATO、8来源r5�
 | tato-scene-extra/queue.execution.json | finished_with_explicit_missing_or_partial | 2026-09-16T04:25:00+08:00 |
 | official96-queue-status.json | finished | 2026-09-16T04:45:00+08:00 |
 | chronos2-queue-status.json | finished | 2026-09-16T04:45:00+08:00 |
+| tato-scene-restart-20260916/queue.execution.json | finished_with_failures | 已完成 |
+| tato-scene-restart-20260916-r2/queue.execution.json | completed | 已完成 |
 
-服务器预定关机2026-09-16 05:04:31 Asia/Shanghai；本程序不执行关机。新重任务截至04:45，随后保存提交与审阅包。重启后不得原样复用已过期deadline覆盖旧状态。
+早期队列中的关机时间与deadline属于重启前历史记录，均未复用或覆盖。restart首次启动因解释器依赖错误在模型加载前失败并保留；r2使用预登记解释器完成5个场景。本程序不执行关机，也不把失败启动计作实验结果。
 
 ## 八来源TRAIN原生接口实测
 

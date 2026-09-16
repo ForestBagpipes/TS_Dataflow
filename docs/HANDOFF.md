@@ -807,3 +807,14 @@ A1仍为blocked_adapter：`experiments/v39_phase0_replay.py:321` 强依赖771个
 复用全部已有TS-ICL遮挡输出，为未选择的eta强度补92次真实Bolt预测（20.16秒，未新增future读取），50个受支持episode中发现26个变体/14个parent有静态规则错过的更优任务强度。相对固定五臂强候选池，全部eta的开发oracle仅从MASE1.094080降至1.093753，增量约0.000327；新增胜出变体ETTm1有4个、Solar有5个。此前“加入A5的oracle增量为0”仅适用于静态选择后的候选，不适用于所有eta。保留两种口径和原始失败，不将新oracle作为部署成绩。证据见docs/v43_a5_extended_diagnostic_20260914.json。
 
 最小agent配置configs/v43/agent_minimal.yaml已冻结：110个train parent按时间拆75 scorer-fit / 35 acquisition-fit，dev维持26 parent。固定五臂初始池，strict_mask/history_probe两个验证工具，最多两轮；比较全体固定臂、train最佳固定、dirty简单选择、mask/history规则、全部证据、两种固定顺序及学习获取停止。同一浅层HGB模型族，source/uid/seed/真实缺陷类型/future不得进特征。费用计入基础候选、验证、选择、最终预测与分片加载/IPC，固定臂仅计实际所需候选；真实在线按需核验在离线评估后执行。尚未运行得出的agent结果均为pending，不作ICLR或晋升声明。
+
+
+## 2026-09-16 r5 TATO 截止中断场景补跑完成
+
+当前服务器项目根目录仍为 `/home/vipuser/work/work2`，分支为 `codex/introactts-v43-bootstrap`。补跑前代码基线为 `07532bc4789449150406ed38abbba4c544793bf8`；最终交付提交与精简包索引以 `docs/v431_r5_delivery.md` 的最新记录为准。
+
+原关机截止留下的 5 个 TATO 场景没有覆盖或伪装成完成。首个新队列 `tato-scene-restart-20260916` 因错误绑定 core 解释器，在加载模型前一致报缺少 `tqdm`，失败日志完整保留。新增失败测试后将队列解释器冻结为 Chronos 环境及其文件哈希，第二个不可复用目录 `tato-scene-restart-20260916-r2` 串行完成 5 个场景，每场均为 500/500 trials：Solar Bolt H192 503.702 秒、Solar TimesFM H192 991.696 秒、Solar TimesFM H96 970.053 秒、USTS Bolt H192 91.015 秒、USTS TimesFM H192 167.474 秒。
+
+独立审计确认 12 个缩放场景和 4 个官方 96 单位场景均为 `audited_completed`，共同表 52/52 变体无缺场景。重启前缀的参数逐项相同；GPU 数值复现按冻结的相对误差 `1e-8` 审核，最大预测绝对差 `2.9802322387695312e-08`，最大缩放差 `5.3477674568242645e-09`，没有将浮点 ULP 差异伪称逐位一致。最新场景 TATO MASE：Bolt `1.4168208282`、TimesFM `1.2223876203`；同窗 R2 CART 分别 `1.1148918025`、`1.0521830913`，r5 分别 `1.1315131388`、`1.0571296567`。TATO 仍明显更差，r5 准入失败与不晋升结论不变。
+
+`tests/v431_r5` 共 44 项通过；当前没有遗留 tmux/GPU worker，`gpu.lock` 已释放。calibration/test 标签继续封存。不能把环境迁移、解释器修复或基线补齐写成方法提升；下一项重 GPU 工作只能来自新的预登记独立问题或既有计划中尚未执行且条件满足的任务，不能为占满资源继续调 r5。
