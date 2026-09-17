@@ -369,3 +369,53 @@ do not describe it as one"；"must be rewritten rather than softened"……
 - 附录从"一段话占位"扩写成 16 节、27 张表的完整结构，填充工作量清晰可见。
 
 **建议：把这份评审的第 7 节（优先级清单）直接当作接下来的 TODO 列表。**
+
+---
+
+## 10. 修改记录：本评审 P0/P1/P2 的落实情况（2026-09-17 当天回填）
+
+在提交本评审后，立即按第 7 节的清单改了一轮文档。下面记录**已做**与**未做**，
+避免下次误以为已经全部处理。
+
+### 已处理
+
+| 编号 | 问题 | 处理方式 |
+|---|---|---|
+| W2 | "counterfactual" 用词争议 | 在 §3.2 开头新增 `Terminology` 段：明确是 offline-evaluation 语义、不主张因果识别、不引入 unconfoundedness 假设、$g_{i,a}$ 是实测而非潜在结果估计。**题目按 v4.4 规划固定，未改名。** |
+| W3 | 未与 bandit / OPE 切割 | 新增 §2.4 *Selective Decisions and Off-Policy Evaluation*，逐条说明三点差异（奖励来自冻结模型实测损失 / abstain 是一等动作且成本可测 / 无探索无策略参数），并与 learning-to-defer、selective prediction 划清边界 |
+| W4 | replay bank 分布偏移未讨论 | 新增附录 A.2 *Scope of Validity of the Replay Bank*（`app:scope`），正文 §3.2 留一句指针；明确写"§4.5 是 grid 内检查，不是 grid 外泛化" |
+| W11 | 参考文献偏少 | 从 35 条补到 **47 条**，新增 bandit / OPE / learning-to-defer / 缺失数据专著 / 数据清洗共 12 条 |
+| W12 | 附录缺导航 | 附录开头新增 *Appendix map*（`tab:app-map`，16 行），逐节说明"这一节回答什么问题" |
+| §5.1 | 否定句与 `deliberately` 过密 | `deliberately`/`deliberate` 由 8 处降到 **0**，每处换成具体理由；`really executed` 4 处全部改为 `actually executed` |
+| §5.2 | 模板化段落开头 | 删除两处 "All five published baselines enter."，改为承接 §4.2 的写法 |
+| §5.3 | §4.6 缺斜体问句 | 补 *"Which component carries the gain, and is local historical replay actually necessary?"* |
+| §5.4 | 摘要 `requires` 过强 | 改为 "can benefit from an explicit decision about when **not** to act"；补充 abstention 是有效结果；backbone 表述改为"两个开发骨干 + 一个方法设计外家族"；新增 intervention rate 占位符 |
+| §5.7 | 表题过长 | 压缩 Table 1 / 消融表表题 |
+| W7 | 多重比较 family 未定义 | **未处理**，见下 |
+
+### 未处理（需要数据或需要作者决策）
+
+| 编号 | 问题 | 为什么没做 |
+|---|---|---|
+| W1 | 没有结果 | 需要服务器跑出 `v44_*` 结果组，本轮不涉及实验 |
+| W5 | 目录过弱（应补"把 BRITS/CSDI/T1 也作为候选臂"的附录实验） | 需要新增实验，属服务器侧 |
+| W6 | $\tau$ 固定形式的理由 | 可以纯文字补，但想等主实验的 $\tau$ 实际取值出来再写，避免空谈 |
+| W7 | Holm 校正的 family 定义 | 需要作者确认统计口径（每表一个 family 还是每骨干一个），不宜代填 |
+| W9 | fig4/fig5 下沉导致 §4.4/§4.5 正文无图 | 已做取舍：正文保留同源表格。若要拉回图，必须先腾出等量空间，见 `latex/README.md` §4.5 |
+| W10 | §4.3 结论定位（与 TOI 的关系） | 已把措辞从"新发现"改为"narrow claim"，但更彻底的定位改写建议等结果出来再定 |
+
+### 页数副作用（重要）
+
+补完 §2.4 和 §3.2 两段后，正文溢出到第 10 页。为守住 9 页硬上限，做了如下腾挪：
+
+- **Table 效率** 移入附录 J（正文 §4.2 保留成本说明段并指向附录）；
+- **Table 重建-效用配对** 从正文删除（附录 E 已有完整版），正文只留 Figure 3；
+- `Scope of validity` 段落移入附录 A.2，正文留一句指针；
+- 三张正文图幅收窄到 fig1 0.80 / fig2 0.72 / fig3 0.60 `\textwidth`。
+
+结果：正文 **4 表 + 3 图**，全部落在第 3–9 页，结论在第 9 页，Overfull 为 0。
+完整取舍理由见 `latex/README.md` §4.5。
+
+> **给作者的提醒**：v4.4 规划写的是"正文 6 表 + 5 图"。在 9 页硬上限下，
+> 这个配额和新增的 §2.4 不可兼得。**上面这轮取舍是必要代价，不是疏漏**，
+> 但如果作者认为某张表必须回正文，就需要相应地删正文段落或再下沉别的表。
