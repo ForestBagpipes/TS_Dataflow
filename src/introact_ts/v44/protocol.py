@@ -75,6 +75,15 @@ TAU_EPSILON = 1e-12
 SPLIT_RATIOS = (0.60, 0.20, 0.20)
 SPLIT_NAMES = ("replay_fit", "gate", "train_eval")
 
+#: The block the replay bank is built from.  Every retrieval and every control
+#: fit is restricted to it (task book §10), so a request evaluated on the Gate
+#: or TRAIN-Eval block can never read a record from its own block.
+#:
+#: This names the block a *record* belongs to, never the block a request is
+#: evaluated on.  Passing an evaluation block as a retrieval guard filters the
+#: bank down to nothing and makes the selector abstain on every request.
+BANK_BLOCK = "replay_fit"
+
 #: Minimum purge between split blocks, in raw rows.
 PURGE = CONTEXT + max(HORIZONS)  # 704
 

@@ -21,7 +21,8 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
-from .protocol import ACTIONS, BETA_GRID, K_GRID, REFERENCE_ACTION, TAU_EPSILON
+from .protocol import (ACTIONS, BANK_BLOCK, BETA_GRID, K_GRID,
+                       REFERENCE_ACTION, TAU_EPSILON)
 from .replay import ReplayBank
 
 #: Slices of the concatenated state vector.
@@ -295,11 +296,16 @@ class ConservativeSelector:
 def select_action(query_vector: np.ndarray, bank: ReplayBank, *, k: int,
                   beta: float, legal: tuple[str, ...] = ACTIONS,
                   block_of: dict[str, str] | None = None,
-                  block: str | None = None,
+                  block: str = BANK_BLOCK,
                   exclude_parent: str | None = None,
                   **flags) -> Selection:
-    """Convenience entry point used by the gate sweep and the evaluation."""
+    """Convenience entry point used by the gate sweep and the evaluation.
+
+    ``block`` names the block the *bank* was built from (see
+    :data:`introact_ts.v44.protocol.BANK_BLOCK`), not the block the request
+    being scored belongs to.
+    """
     selector = ConservativeSelector(k=k, beta=beta, **flags)
-    selector.fit(bank, block_of=block_of, block="replay_fit")
+    selector.fit(bank, block_of=block_of, block=block)
     return selector.select(query_vector, bank, legal=legal, block_of=block_of,
                            block=block, exclude_parent=exclude_parent)

@@ -27,7 +27,7 @@ import numpy as np
 
 from .catalog import EpisodeCatalog
 from .matching import ConservativeSelector
-from .protocol import ACTIONS, BETA_GRID, K_GRID, REFERENCE_ACTION
+from .protocol import ACTIONS, BANK_BLOCK, BETA_GRID, K_GRID, REFERENCE_ACTION
 from .replay import ReplayBank
 
 #: The frozen R2 control estimator: the project's existing strong simple
@@ -52,16 +52,24 @@ def _query_states(catalog: EpisodeCatalog) -> dict[str, np.ndarray]:
             if entry.state_vector is not None}
 
 
-def full_selector(bank: ReplayBank, *, k: int, beta: float, **flags
-                  ) -> ConservativeSelector:
+def full_selector(bank: ReplayBank, *, k: int, beta: float,
+                  block_of: dict[str, str] | None = None,
+                  block: str = BANK_BLOCK, **flags) -> ConservativeSelector:
     selector = ConservativeSelector(k=k, beta=beta, **flags)
-    selector.fit(bank)
+    selector.fit(bank, block_of=block_of, block=block)
     return selector
 
 
 def select_with(selector: ConservativeSelector, bank: ReplayBank,
-                catalogs: list[EpisodeCatalog], *, block: str,
-                block_of: dict[str, str] | None) -> MethodRun:
+                catalogs: list[EpisodeCatalog], *,
+                block_of: dict[str, str] | None,
+                retrieval_block: str = BANK_BLOCK) -> MethodRun:
+    """Apply a fitted selector to a block of requests.
+
+    ``retrieval_block`` is the block the *bank* was built from, not the block
+    being evaluated -- see :data:`BANK_BLOCK`.  The evaluated block is carried by
+    ``catalogs``.
+    """
     selected: dict[str, str] = {}
     trace: dict[str, dict] = {}
     notes = {"abstained": 0, "unavailable": 0}
@@ -76,7 +84,7 @@ def select_with(selector: ConservativeSelector, bank: ReplayBank,
             selected[catalog.episode] = REFERENCE_ACTION
             continue
         decision = selector.select(states, bank, legal=legal, block_of=block_of,
-                                   block=block)
+                                   block=retrieval_block)
         selected[catalog.episode] = decision.action
         trace[catalog.episode] = decision.trace()
         if not decision.intervened:
@@ -160,7 +168,7 @@ def _episode_labels(bank: ReplayBank, *, block_of: dict[str, str],
 
 
 def r2_cart(bank: ReplayBank, catalogs: list[EpisodeCatalog], *,
-            block_of: dict[str, str], block: str) -> MethodRun:
+            block_of: dict[str, str], block: str = BANK_BLOCK) -> MethodRun:
     """The inherited strong simple control: a depth-3 CART over the same features.
 
     One classifier per action, each answering "is this action the best one for
@@ -168,6 +176,9 @@ def r2_cart(bank: ReplayBank, catalogs: list[EpisodeCatalog], *,
     existing R2 control; only the evidence base moves to the v4.4 task-state
     features, and the report says so rather than implying the old numbers carry
     over unchanged.
+
+    ``block`` is the block the evidence is *fitted* on -- the Replay-Fit bank --
+    not the block in ``catalogs``, which is what the control is applied to.
     """
     from sklearn.tree import DecisionTreeClassifier
 
@@ -210,13 +221,16 @@ def r2_cart(bank: ReplayBank, catalogs: list[EpisodeCatalog], *,
 
 
 def parametric(bank: ReplayBank, catalogs: list[EpisodeCatalog], *, k: int,
-               beta: float, block_of: dict[str, str], block: str,
-               kind: str = "ridge") -> MethodRun:
+               beta: float, block_of: dict[str, str],
+               block: str = BANK_BLOCK, kind: str = "ridge") -> MethodRun:
     """A5: replace replay retrieval with a lightweight parametric predictor.
 
     Same observable features, same conservative rule; only the way the local
     utility estimate is produced changes.  Depth-limited CART is available as
     the fixed secondary implementation; no deep network is used.
+
+    As in :func:`r2_cart`, ``block`` names the block the evidence comes from
+    (the Replay-Fit bank), not the block in ``catalogs``.
     """
     from sklearn.linear_model import Ridge
     from sklearn.tree import DecisionTreeRegressor
@@ -267,14 +281,13 @@ def parametric(bank: ReplayBank, catalogs: list[EpisodeCatalog], *, k: int,
 def gate_sweep(bank: ReplayBank, gate_catalogs: list[EpisodeCatalog], *,
                block_of: dict[str, str]) -> list[dict]:
     """The nine allowed ``K x beta`` configurations on TRAIN-Gate (§20)."""
-    from .metrics import hierarchical_aggregate
+    from .metrics import macro_headline
 
     results = []
     for k in K_GRID:
         for beta in BETA_GRID:
-            selector = full_selector(bank, k=k, beta=beta)
-            run = select_with(selector, bank, gate_catalogs, block="gate",
-                              block_of=block_of)
+            selector = full_selector(bank, k=k, beta=beta, block_of=block_of)
+            run = select_with(selector, bank, gate_catalogs, block_of=block_of)
             records = []
             for catalog in gate_catalogs:
                 entry = catalog.actions.get(run.selected[catalog.episode])
@@ -287,10 +300,9 @@ def gate_sweep(bank: ReplayBank, gate_catalogs: list[EpisodeCatalog], *,
                     "pattern": catalog.pattern, "severity": catalog.severity,
                     "mase": entry.mase,
                 })
-            macro = hierarchical_aggregate(records, "mase")["macro"]
             results.append({
                 "k": k, "beta": beta,
-                "source_macro_mase": macro[0]["mase"] if macro else None,
+                "source_macro_mase": macro_headline(records, "mase"),
                 "abstained": run.notes["abstained"],
                 "records": len(records),
             })

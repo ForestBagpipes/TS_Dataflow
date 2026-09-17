@@ -14,8 +14,10 @@ import numpy as np
 import pytest
 
 from introact_ts.v44 import actions as A
+from introact_ts.v44 import catalog as C
 from introact_ts.v44 import masking as M
 from introact_ts.v44 import matching as MT
+from introact_ts.v44 import methods as MX
 from introact_ts.v44 import metrics as ME
 from introact_ts.v44 import protocol as P
 from introact_ts.v44 import splits as S
@@ -95,6 +97,41 @@ def record(*, action: str, utility: float, parent: str = "p1",
     )
     payload.update(overrides)
     return ReplayRecord(**payload)
+
+
+def catalog(*, episode: str, parent: str, block: str,
+            source: str = "ETTh1") -> C.EpisodeCatalog:
+    """A minimal catalog with KEEP plus one usable alternative (FFILL).
+
+    Every action of the pool is present because ``legal()`` indexes all of
+    them; only KEEP and FFILL are applicable.
+    """
+    def entry(action: str, *, applicable: bool, mase: float | None,
+              utility: float | None) -> C.ActionEntry:
+        return C.ActionEntry(
+            action=action, applicable=applicable,
+            reason=None if applicable else "not applicable in this fixture",
+            alias_of=None, input_hash=f"{action}-in", prediction_hash=f"{action}-pr",
+            prediction=np.zeros(96) if applicable else None,
+            state_vector=np.zeros(22) if applicable else None,
+            mase=mase, mse=1.0 if mase is not None else None,
+            mae=1.0 if mase is not None else None,
+            rmsse=1.0 if mase is not None else None,
+            utility=utility, runtime=0.0)
+
+    actions = {
+        P.REFERENCE_ACTION: entry(P.REFERENCE_ACTION, applicable=True, mase=1.0,
+                                  utility=0.0),
+        "FFILL": entry("FFILL", applicable=True, mase=0.8, utility=0.2),
+    }
+    for action in P.ACTIONS:
+        actions.setdefault(action, entry(action, applicable=False, mase=None,
+                                         utility=None))
+    return C.EpisodeCatalog(
+        episode=episode, source=source, parent=parent, origin=512, horizon=96,
+        pattern="P2_target_block", severity=0.10, block=block, period=24,
+        mase_scale=1.0, rmsse_scale=1.0, mase_scale_id="scale-1",
+        future=np.zeros(96), reference_target=np.zeros(96), actions=actions)
 
 
 # -- 1. mask hash determinism ----------------------------------------------
@@ -322,6 +359,46 @@ def test_replay_lookup_never_crosses_blocks():
     assert {r.parent for r in left_out} == {"p2"}
 
 
+def test_retrieval_guard_names_the_bank_block_not_the_request_block():
+    """Regression: a request on Gate / TRAIN-Eval must still reach the bank.
+
+    The bank is only ever built from Replay-Fit, so guarding retrieval with the
+    *request's* block filters it down to nothing.  That made every one of the
+    nine ``K x beta`` configurations abstain on every request, which left the
+    gate with nothing to choose between and would have frozen an arbitrary
+    configuration.
+    """
+    bank = ReplayBank("bolt")
+    block_of = {"p1": "replay_fit", "p2": "replay_fit",
+                "p3": "gate", "p4": "train_eval"}
+    rng = np.random.default_rng(11)
+    for parent in ("p1", "p2"):
+        for i in range(12):
+            bank.add(record(action="FFILL", utility=0.3, parent=parent,
+                            state=rng.normal(size=22),
+                            input_hash=f"in-{parent}-{i}"))
+
+    # A request that lives in the Gate block is scored against Replay-Fit.
+    catalogs = [catalog(episode="e-gate", parent="p3", block="gate")]
+    selector = MX.full_selector(bank, k=8, beta=0.0, block_of=block_of)
+    run = MX.select_with(selector, bank, catalogs, block_of=block_of)
+    assert run.selected["e-gate"] == "FFILL"
+
+    # The same holds for a TRAIN-Eval request, and the evidence is the full
+    # Replay-Fit support rather than an empty bank.
+    selection = selector.select(np.zeros(22), bank, block_of=block_of,
+                                block=MX.BANK_BLOCK)
+    assert selection.scores["FFILL"].available
+    assert selection.scores["FFILL"].support == 24
+
+    # Passing the request's own block is exactly the bug: the bank empties and
+    # every action becomes unavailable.
+    emptied = selector.select(np.zeros(22), bank, block_of=block_of,
+                              block="gate")
+    assert not emptied.scores["FFILL"].available
+    assert emptied.action == P.REFERENCE_ACTION
+
+
 # -- 8./9./10. retrieval numerics ------------------------------------------
 
 
@@ -529,6 +606,34 @@ def test_aggregation_never_treats_variants_as_independent_samples():
     assert source_rows["ETTh1"] == pytest.approx(3.5)
     macro_rows = {r["method"]: r["mase"] for r in ladder["macro"]}
     assert macro_rows["m"] == pytest.approx(3.5)
+
+
+def test_macro_headline_averages_condition_cells_not_the_first_one():
+    """Regression: the headline is the mean over the condition cells.
+
+    ``hierarchical_aggregate`` returns one macro row per ``(horizon, pattern)``
+    cell and orders them by their condition keys.  Quoting ``macro[0]`` as the
+    table's headline therefore reported a single horizon/pattern combination --
+    here H192/P1_point -- as if it summarised both horizons and all four
+    patterns, which also made the K/beta gate optimise one arbitrary cell.
+    """
+    rows = []
+    for source in ("ETTh1", "ETTh2"):
+        for index, parent in enumerate(("a", "b")):
+            for horizon in (96, 192):
+                for pattern in ("P1_point", "P2_target_block"):
+                    rows.append({
+                        "method": "FULL", "backbone": "bolt", "horizon": horizon,
+                        "pattern": pattern, "severity": 0.1, "source": source,
+                        "parent": f"{source}-{parent}",
+                        "variant": f"{source}-{parent}-{horizon}-{pattern}",
+                        "mase": 1.0 + 0.1 * (horizon // 96) + 0.01 * len(pattern),
+                    })
+    cells = ME.macro_cells(rows, "mase")
+    assert len(cells) == 4
+    headline = ME.macro_headline(rows, "mase")
+    assert headline == pytest.approx(float(np.mean([c["mase"] for c in cells])))
+    assert headline != pytest.approx(cells[0]["mase"])
 
 
 def test_cache_identity_binds_every_required_field():

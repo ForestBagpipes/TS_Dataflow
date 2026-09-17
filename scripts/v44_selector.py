@@ -62,9 +62,15 @@ def load_bank(backbone: str, block: str = "replay_fit") -> ReplayBank:
 
 
 def run_methods(bank: ReplayBank, catalogs: list[EpisodeCatalog], *,
-                block: str, mapping: dict[str, str], k: int, beta: float,
+                mapping: dict[str, str], k: int, beta: float,
                 gate_catalogs: list[EpisodeCatalog] | None = None) -> dict[str, MT.MethodRun]:
-    """Every method of the ladder, all sharing one decision interface."""
+    """Every method of the ladder, all sharing one decision interface.
+
+    The bank is always the Replay-Fit bank, so every retrieval and every
+    control fit is guarded with ``MT.BANK_BLOCK``.  The block under evaluation
+    is whatever ``catalogs`` holds -- it is deliberately *not* passed to the
+    retrieval guard, which would empty the bank and make every method abstain.
+    """
     runs: dict[str, MT.MethodRun] = {}
     runs["NATIVE_KEEP"] = MT.native_keep(catalogs)
 
@@ -72,29 +78,30 @@ def run_methods(bank: ReplayBank, catalogs: list[EpisodeCatalog], *,
     fixed = MT.best_fixed(fixed_source)
     runs["BEST_FIXED"] = MT.apply_fixed(fixed, catalogs)
 
-    runs["R2_CART"] = MT.r2_cart(bank, catalogs, block_of=mapping, block=block)
+    runs["R2_CART"] = MT.r2_cart(bank, catalogs, block_of=mapping)
 
     runs["FULL_INTROACT"] = MT.select_with(
-        MT.full_selector(bank, k=k, beta=beta), bank, catalogs,
-        block=block, block_of=mapping)
+        MT.full_selector(bank, k=k, beta=beta, block_of=mapping), bank, catalogs,
+        block_of=mapping)
     runs["A1_GLOBAL_REPLAY"] = MT.select_with(
-        MT.full_selector(bank, k=k, beta=beta, local=False), bank, catalogs,
-        block=block, block_of=mapping)
+        MT.full_selector(bank, k=k, beta=beta, block_of=mapping, local=False),
+        bank, catalogs, block_of=mapping)
     runs["A2_WO_INTERVENTION"] = MT.select_with(
-        MT.full_selector(bank, k=k, beta=beta, use_intervention=False), bank,
-        catalogs, block=block, block_of=mapping)
+        MT.full_selector(bank, k=k, beta=beta, block_of=mapping,
+                         use_intervention=False),
+        bank, catalogs, block_of=mapping)
     runs["A3_WO_FORECAST"] = MT.select_with(
-        MT.full_selector(bank, k=k, beta=beta, use_forecast=False), bank,
-        catalogs, block=block, block_of=mapping)
+        MT.full_selector(bank, k=k, beta=beta, block_of=mapping,
+                         use_forecast=False),
+        bank, catalogs, block_of=mapping)
     runs["A4_WO_GATE"] = MT.select_with(
-        MT.full_selector(bank, k=k, beta=beta, conservative=False), bank,
-        catalogs, block=block, block_of=mapping)
+        MT.full_selector(bank, k=k, beta=beta, block_of=mapping,
+                         conservative=False),
+        bank, catalogs, block_of=mapping)
     runs["A5_PARAMETRIC_RIDGE"] = MT.parametric(
-        bank, catalogs, k=k, beta=beta, block_of=mapping, block=block,
-        kind="ridge")
+        bank, catalogs, k=k, beta=beta, block_of=mapping, kind="ridge")
     runs["A5_PARAMETRIC_CART"] = MT.parametric(
-        bank, catalogs, k=k, beta=beta, block_of=mapping, block=block,
-        kind="cart")
+        bank, catalogs, k=k, beta=beta, block_of=mapping, kind="cart")
     runs["CATALOG_ORACLE"] = MT.oracle_run(catalogs)
     return runs
 
@@ -178,9 +185,9 @@ def efficiency(records: list[dict]) -> dict:
 
 
 def macro_mase(records: list[dict], method: str, backbone: str) -> float | None:
+    """Headline source-macro MASE for one method, averaged over condition cells."""
     subset = [r for r in records if r["method"] == method and r["backbone"] == backbone]
-    macro = ME.hierarchical_aggregate(subset, "mase")["macro"]
-    return macro[0]["mase"] if macro else None
+    return ME.macro_headline(subset, "mase")
 
 
 def mode_gate(root: Path) -> None:
@@ -196,26 +203,34 @@ def mode_gate(root: Path) -> None:
         sweep = []
         for k in P.K_GRID:
             for beta in P.BETA_GRID:
-                selector = MT.full_selector(bank, k=k, beta=beta)
-                run = MT.select_with(selector, bank, catalogs, block="gate",
-                                     block_of=mapping)
+                selector = MT.full_selector(bank, k=k, beta=beta,
+                                            block_of=mapping)
+                run = MT.select_with(selector, bank, catalogs, block_of=mapping)
                 records = method_table({"FULL_INTROACT": run}, catalogs, backbone)
                 sweep.append({
                     "k": k, "beta": beta,
                     "source_macro_mase": macro_mase(records, "FULL_INTROACT", backbone),
+                    "source_macro_cells": {
+                        f"h{cell['horizon']}|{cell['pattern']}": cell["mase"]
+                        for cell in ME.macro_cells(records, "mase")},
                     "abstained": run.notes["abstained"],
                     "governance": governance(records).get("FULL_INTROACT", {}),
                 })
         results[backbone] = {"episodes": len(catalogs), "sweep": sweep}
 
     joint = []
-    for index, k in enumerate(P.K_GRID):
+    for k in P.K_GRID:
         for beta in P.BETA_GRID:
             values, harm, hir, calls = [], [], [], []
             for backbone in P.DEV_BACKBONES:
                 row = next(r for r in results[backbone]["sweep"]
                            if r["k"] == k and abs(r["beta"] - beta) < 1e-12)
-                values.append(row["source_macro_mase"])
+                value = row["source_macro_mase"]
+                if value is None:
+                    raise SystemExit(
+                        f"gate sweep produced no score for {backbone} at "
+                        f"K={k}, beta={beta}")
+                values.append(value)
                 gov = row["governance"]
                 harm.append(gov.get("harmful_loss", float("inf")))
                 hir.append(gov.get("hir", float("inf")))
@@ -265,14 +280,20 @@ def mode_eval(root: Path) -> None:
         bank = load_bank(backbone)
         gate_catalogs = load_catalog(root, "gate", backbone)
         catalogs = load_catalog(root, "train_eval", backbone)
-        runs = run_methods(bank, catalogs, block="train_eval", mapping=mapping,
-                           k=k, beta=beta, gate_catalogs=gate_catalogs)
+        runs = run_methods(bank, catalogs, mapping=mapping, k=k, beta=beta,
+                           gate_catalogs=gate_catalogs)
         records = method_table(runs, catalogs, backbone)
         all_records.extend(records)
         per_backbone[backbone] = {
             "episodes": len(catalogs),
             "macro_mase": {method: macro_mase(records, method, backbone)
                            for method in runs},
+            "macro_cells": {
+                method: {f"h{cell['horizon']}|{cell['pattern']}": cell["mase"]
+                         for cell in ME.macro_cells(
+                             [r for r in records if r["method"] == method],
+                             "mase")}
+                for method in runs},
             "governance": governance(records),
             "efficiency": efficiency(records),
             "notes": {method: run.notes for method, run in runs.items()},

@@ -184,3 +184,29 @@ def hierarchical_aggregate(records: list[dict], value_key: str, *,
 def macro_summary(records: list[dict], value_key: str) -> list[dict]:
     """Convenience wrapper: the ``macro`` level of the ladder, one row per cell."""
     return hierarchical_aggregate(records, value_key)["macro"]
+
+
+def macro_cells(records: list[dict], value_key: str) -> list[dict]:
+    """The source-macro value of every condition cell, kept separate.
+
+    ``hierarchical_aggregate`` deliberately returns one macro row per
+    ``(method, backbone, horizon, pattern, severity)`` cell, because a horizon
+    or a missingness pattern is a different condition and folding them together
+    silently would hide which condition a number came from.
+    """
+    return hierarchical_aggregate(records, value_key)["macro"]
+
+
+def macro_headline(records: list[dict], value_key: str) -> float | None:
+    """The headline macro value: equal-weight mean over the condition cells.
+
+    This is the number quoted as "source-macro MASE" in the tables and used as
+    the gate objective.  It is *not* ``macro_cells(...)[0][value_key]``: the
+    cells are ordered by their condition keys, so taking the first one reports
+    a single ``(horizon, pattern)`` cell as if it were the whole table.
+    """
+    values = [row[value_key] for row in macro_cells(records, value_key)
+              if row.get(value_key) is not None]
+    if not values:
+        return None
+    return float(np.mean(values))
