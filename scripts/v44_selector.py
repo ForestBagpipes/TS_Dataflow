@@ -142,21 +142,32 @@ def method_table(runs: dict[str, MT.MethodRun], catalogs: list[EpisodeCatalog],
 
 
 def governance(records: list[dict]) -> dict:
-    """HIR, Harmful Loss and Catalog Gap Closed, computed per method."""
+    """HIR, Harmful Loss and Catalog Gap Closed, computed per method.
+
+    A request only enters the diagnostics when its own loss, its reference loss
+    and its oracle loss are all present.  The three are structurally coupled --
+    the scoring mask and the MASE denominator are properties of the window, not
+    of the action -- so a disagreement would mean the catalog and the metrics
+    had drifted apart, and the count is reported rather than hidden.
+    """
     out: dict[str, dict] = {}
     grouped: dict[str, list[dict]] = defaultdict(list)
     for record in records:
         grouped[record["method"]].append(record)
     for method, items in sorted(grouped.items()):
-        loss = np.array([r["mase"] for r in items if r["mase"] is not None])
-        keep = np.array([r["keep_mase"] for r in items if r["mase"] is not None])
-        oracle = np.array([r["oracle_mase"] for r in items if r["mase"] is not None])
-        intervened = np.array([r["intervened"] for r in items if r["mase"] is not None])
-        if loss.size == 0:
+        usable = [r for r in items
+                  if r["mase"] is not None and r["keep_mase"] is not None
+                  and r["oracle_mase"] is not None]
+        if not usable:
             continue
+        loss = np.array([r["mase"] for r in usable], dtype=np.float64)
+        keep = np.array([r["keep_mase"] for r in usable], dtype=np.float64)
+        oracle = np.array([r["oracle_mase"] for r in usable], dtype=np.float64)
+        intervened = np.array([r["intervened"] for r in usable], dtype=bool)
         harmful = loss > keep
         out[method] = {
             "n": int(loss.size),
+            "excluded_missing_loss": int(len(items) - len(usable)),
             "intervention_rate": float(intervened.mean()),
             "hir": ME.harmful_intervention_rate(loss, keep),
             "conditional_hir": (float(harmful[intervened].mean())

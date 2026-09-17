@@ -131,38 +131,56 @@ def holm_adjust(p_values: dict[str, float]) -> dict[str, float]:
 
 
 def average_rank(records: list[dict], *, methods: list[str],
-                 value_key: str = "mase", backbone: str | None = None) -> dict[str, float]:
-    """Mean rank of each method over parents, averaged across parents.
+                 value_key: str = "mase", backbone: str | None = None,
+                 horizon: int | None = None, pattern: str | None = None,
+                 severity: float | None = None) -> dict[str, float]:
+    """Mean rank of each method, ranked inside every fully-specified cell.
 
-    Ranks are computed per parent so a source with many parents cannot dominate
-    by sheer count.
+    A "cell" is one ``(source, parent, horizon, pattern, severity)`` -- a single
+    comparison in which every method is scored on the same window.  Ranking
+    inside the cell and averaging the ranks per method is what stops a source
+    with many parents from dominating by sheer count, and what stops a record
+    from one condition silently overwriting a record from another.
     """
-    per_parent: dict[tuple[str, str], dict[str, float]] = defaultdict(dict)
+    per_cell: dict[tuple, dict[str, float]] = defaultdict(dict)
     for record in records:
         if backbone is not None and record.get("backbone") != backbone:
+            continue
+        if horizon is not None and record.get("horizon") != horizon:
+            continue
+        if pattern is not None and record.get("pattern") != pattern:
+            continue
+        if severity is not None and abs(float(record.get("severity", -1))
+                                        - float(severity)) > 1e-12:
             continue
         if record.get("method") not in methods:
             continue
         value = record.get(value_key)
         if value is None:
             continue
-        per_parent[(record["source"], record["parent"])][record["method"]] = float(value)
+        key = (record["source"], record["parent"], record["horizon"],
+               record["pattern"], float(record["severity"]))
+        per_cell[key][record["method"]] = float(value)
 
-    totals = {method: [] for method in methods}
-    for _, values in per_parent.items():
+    totals: dict[str, list[float]] = {method: [] for method in methods}
+    for values in per_cell.values():
         present = [m for m in methods if m in values]
         if len(present) < 2:
             continue
         ordered = sorted(present, key=lambda m: values[m])
         for position, method in enumerate(ordered, start=1):
-            totals[method].append(position)
+            totals[method].append(float(position))
     return {method: (float(np.mean(v)) if v else float("nan"))
             for method, v in totals.items()}
 
 
 def cell_win_counts(records: list[dict], *, method: str, baseline: str,
                     value_key: str = "mase") -> dict:
-    """Win/tie/loss counts over ``source x backbone x horizon x pattern`` cells."""
+    """Win/tie/loss counts over ``source x backbone x horizon x pattern x severity``.
+
+    The severity is part of the cell key so the 30% and 50% robustness
+    conditions can never be folded into -- or overwrite -- the 10% main one.
+    """
     cells: dict[tuple, dict[str, float]] = defaultdict(dict)
     for record in records:
         if record.get("method") not in (method, baseline):
@@ -171,7 +189,7 @@ def cell_win_counts(records: list[dict], *, method: str, baseline: str,
         if value is None:
             continue
         key = (record["source"], record["backbone"], record["horizon"],
-               record["pattern"])
+               record["pattern"], float(record["severity"]))
         cells[key][record["method"]] = float(value)
     wins = ties = losses = 0
     for values in cells.values():
