@@ -1,0 +1,5 @@
+stage,backbone,candidate_macro_mase,R1_beats_full,R2_reaches_best_selector,R2_margin,R3_not_worse_than_no_gate,R5_keep_rate,R5_non_degenerate,R6_boundary_ok
+stage1,bolt,1.1405766913890591,True,False,0.00044731218698190744,True,0.10869565217391304,True,True
+stage1,timesfm,1.085921400081268,True,False,0.004954087747391922,False,0.010869565217391304,True,True
+stage2,bolt,1.1357781878768018,True,True,-0.004351191325275394,True,0.11684782608695653,True,True
+stage2,timesfm,1.0860312961740752,True,False,0.005063983840199127,False,0.010869565217391304,True,True
