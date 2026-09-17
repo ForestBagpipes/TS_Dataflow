@@ -419,3 +419,130 @@ do not describe it as one"；"must be rewritten rather than softened"……
 > **给作者的提醒**：v4.4 规划写的是"正文 6 表 + 5 图"。在 9 页硬上限下，
 > 这个配额和新增的 §2.4 不可兼得。**上面这轮取舍是必要代价，不是疏漏**，
 > 但如果作者认为某张表必须回正文，就需要相应地删正文段落或再下沉别的表。
+
+---
+
+# 追加记录：v4.4-r2 改稿（2026-09-17 晚）
+
+> 本轮按任务书 §0–§41 重写"方法与实验定位"。仍在没有数字的骨架态，
+> 本节只列**结构与写作层**变化；结果侧留待 canonical CSV。
+
+## A. 方法定位
+
+| 维度 | v4.4（旧） | v4.4-r2（新） |
+|---|---|---|
+| 决策对象 | 是否修、怎么修（外加保守门控） | 选哪个合法干预（含 KEEP） |
+| 决策信号 | reconstruction gain vector | $L_{i,a}$，记为 $r_{i,a}=L_{i,a}-L_i^\*$ |
+| Stage 2 | Task-State Matching + Lower-Confidence Conservative Gate | Regret-Aware Intervention Scoring（pairwise 与 pairwise+expected-regret ensemble 两套，selector 冻结前写抽象） |
+| Stage 3 | 单调门控 (conservative) | Selective Decision（KEEP 是一等 action；abstain 是 outcome 不是 guard；若有 $\tau$ 写成 ambiguity handling） |
+| Replay bank 内容 | 与历史同分布的伪部署 | `B = {(z_i, a, L_{i,a})}`，**任务后果**，不是 reconstruction score |
+
+## B. 论文贡献（§5 任务书）
+
+1. **Selective data governance** — 把 incomplete-input handling 重新定义为
+   "per-episode decision over a fixed action catalog"。
+2. **Counterfactual replay** — 历史窗口上注入部署缺失机制，记录每个合法
+   动作的 task-level consequence，存入 `B`。
+3. **Regret-aware selective decision** — KEEP 是合法 action；selector 学习
+   pairwise + 期望 regret；abstention 是决策空间成员。
+
+不把 conservative calibration 写成核心贡献；如果最终不设阈值，则保留
+"abstain is a decision outcome"的叙述，不硬塞 gate。
+
+## C. 正文正式基线（§8 任务书）
+
+**固定为 5 个**：TOI（NeurIPS 2024）、TOI-VSF（TKDE 2025）、GIMCC（KDD 2025）、
+SRDI（WWW 2026）、ChannelTokenFormer（ICLR 2026）。正文 4 张主表 + Figure 1/2
++ Figure 3（已在骨架态下沉到 Appendix E.4）都必须出现这 5 个名字，且
+**不得根据结果删方法**。VIDA 留 Appendix E.5 扩展对比；TATO 留 Related Work
+与 Appendix 数据中心适应段。
+
+## D. Related Work（§11 任务书）
+
+收敛为三个 subsection：
+
+- 2.1 Reconstruction-Oriented Missing Data Modeling（极短，BRITS / CSDI / GAIN / SAITS
+  仅作背景，不再做核心对比对象）
+- 2.2 Task-Oriented Incomplete-Input Forecasting（TOI → TOI-VSF → GIMCC → VIDA → SRDI
+  形成时间线）
+- 2.3 Robust Forecasting with Missing and Asynchronous Inputs（ChannelTokenFormer + 定位段）
+
+OPE / contextual bandit 对比已移入 Appendix B.3，本节不再展开。
+
+## E. Method 结构（§12 任务书）
+
+```
+3.1 Problem Formulation
+3.2 Counterfactual Replay
+3.3 Regret-Aware Intervention Scoring
+3.4 Selective Decision
+3.5 Deployment and Complexity
+```
+
+Stage 2 公式保留两套：`eq:score-pair` 与 `eq:score-ensemble`，正文写抽象 + 
+`% FREEZE_AFTER_R2_SELECTOR` 注释，selector 冻结后由实验 Agent 填实。
+
+## F. 实验结构（§17 任务书）
+
+正文固定六节：4.1 Setup / 4.2 Main / 4.3 When Does Action Choice Matter? /
+4.4 Robustness / 4.5 Historical Support / 4.6 Ablation。**不再增加第四个正文机制实验**。
+
+## G. 主要表骨架（§19 / §22 / §24）
+
+- Table 1（Main）：5 baselines + Native KEEP + Best Fixed + R2-CART + Catalog Oracle + Ours，
+  含 Type 列，ChannelTokenFormer 行 `N/A*`。
+- Table 2（Opportunity）：5 baselines + Ours，按 $\Delta_i$ 三层。
+- Table 3（Robustness）：5 baselines + Ours，10/30/50% + Worst pattern + Avg. rank；
+  完整表下沉 Appendix F。
+- Table 4（Historical Support，**下沉 Appendix G**）：5 baselines + Ours × 25/50/100% + Offline cost。
+- Table 5（Ablation，**下沉 Appendix H**）：Full + A1 Gain Regression / A2 Unweighted / 
+  A3 w/o intervention state / A4 w/o context state / A5 Forced Intervention。
+
+## H. Figure 重写（§26–§28 任务书）
+
+- Figure 1：三 episode（A KEEP 最优 / B Single TS-ICL 最优 / C Multi TS-ICL 最优）+ 
+  counterfactual replay bank + argmax S[a] = KEEP ? 决策流。
+- Figure 2：**完全重写**为上下两条带（Offline vs Online），中间红字
+  "no future target crosses this line"。offline 带用绿色，online 带用蓝色。
+- Figure 3：**替换为** "Action choice matters where the opportunity exists"——
+  (a) 机会分层柱状图，(b) 各层相对 KEEP 的改善（fixed repair 灰虚线 vs IntroAct 蓝实线）。
+  旧版 `fig3_reconstruction_vs_utility` 已删除。
+- Figure 4 / Figure 5 保持原骨架，仅刷新 fig4 的 baseline 标签为 5 个正式基线。
+
+## I. 附录重排（§29 任务书）
+
+A Scope and Assumptions / B Full Method Details（含 OPE/bandit 对比段）/
+C Replay Construction / D Dataset and Missingness Protocol / E Full Main Results
+（含 Per-Source、Reconstruction-vs-Utility、Governance Diagnostics、Action-Opportunity Strata、
+Extended Comparison with VIDA）/ F Robustness Breakdown / G Historical Support Results /
+H Ablation Details / I Runtime and Failure Audit / J Development Negative Results /
+K Complete-Input Contract / L Financial Case Study / M Additional Seeds。
+
+附录新增 `app:train-eval`（J 节末尾），引用实验线 14 个真实数值，明确标注
+"不可与正文任何表比较"。
+
+## J. 页数收敛结果
+
+| 阶段 | 正文页数 | 总页数 | 备注 |
+|---|---|---|---|
+| 基线 HEAD（v4.4） | 10 | 22 | 已超 9 页上限 |
+| 我改动前（v4.4-r2 初稿） | 11 | 26 | 净增长 +1 |
+| **本次改动后（v4.4-r2）** | **9** | **26** | 5 项内容下沉附录，§4.1 收紧，Conclusion 收紧，Figure 2 收窄至 0.62 |
+
+编译：`pdflatex × 3 + bibtex + pdflatex × 2`，最终 0 error / 0 Overfull /
+0 undefined reference / 0 missing citation / 0 missing `app:` 标签。
+`\ph{KEY}` 含下划线由 `\detokenize` 处理。
+
+## K. 占位符 KEY 重命名（§36 任务书）
+
+正文里的 `\ph{}` KEY 全部统一到语义清晰的下划线分层命名：
+
+`MAIN_OVERALL_MASE`, `MAIN_GAIN_VS_BEST`, `MAIN_RANK`, `NOOP_HARM`,
+`HIGHOP_GAIN`, `ROBUST_50`, `SUPPORT_25`, `ABL_RANKING`, `ABL_KEEP`,
+`LATENCY`, `CALLS`。不再使用 `TEMP1/TEMP2` 等无意义 KEY。
+
+## L. 必须承认的 v4.4 负结果（§3 任务书）
+
+正文方法推导不假装上一轮成功；v4.4 的结果只作为 TRAIN-only development evidence，
+除非实验 Agent 允许否则不进 Main Results；旧结果以方法演化依据形式留附录 J
+"Development Negative Results"。

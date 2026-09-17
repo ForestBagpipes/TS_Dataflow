@@ -43,7 +43,33 @@ FONT_B = "Helvetica-Bold"
 FONT_I = "Helvetica-Oblique"
 
 
+_ASCII_FOLD = {
+    "\u2014": "-",   # em dash
+    "\u2013": "-",   # en dash
+    "\u2212": "-",   # minus sign
+    "\u2018": "'", "\u2019": "'",
+    "\u201c": '"', "\u201d": '"',
+    "\u2026": "...",
+    "\u2192": "->",
+    "\u00d7": "x",
+    "\u2265": ">=", "\u2264": "<=", "\u2260": "!=",
+    "\u03bb": "lambda", "\u03c4": "tau", "\u03b8": "theta",
+    "\u0394": "Delta", "\u03b1": "alpha", "\u03b2": "beta",
+    "\u2208": "in", "\u227b": ">", "\u2261": "=",
+    "\u2a2f": "@",
+}
+
+
 def esc(s: str) -> str:
+    """转义 PostScript 字符串字面量。
+
+    EPS 输出固定使用 latin-1 编码，任何超出 latin-1 的字符（破折号、箭头、
+    希腊字母等）都会让 write() 抛 UnicodeEncodeError，所以这里先做一次
+    ASCII 折叠。PPTX 路径不经过本函数，仍保留原始 Unicode 字符。
+    """
+    for u, a in _ASCII_FOLD.items():
+        s = s.replace(u, a)
+    s = s.encode("latin-1", "replace").decode("latin-1")
     return s.replace("\\", r"\\").replace("(", r"\(").replace(")", r"\)")
 
 
@@ -383,7 +409,7 @@ class Fig:
 # Figure 1 -- Repair is a selective forecasting decision
 # ==========================================================================
 def fig1():
-    W, H = 396.0, 196.0
+    W, H = 396.0, 198.0
     f = Fig(W, H, "fig1_selective_governance")
 
     colx = [4.0, 138.0, 272.0]
@@ -431,42 +457,42 @@ def fig1():
                                "and observe the true future"],
           fill=BLUE_L, stroke=BLUE, size=5.6)
     f.arrow(bx + bw / 2, 111.0, bx + bw / 2, 119.0, INK, 0.9, 3.4)
-    f.box(bx, 120.0, bw, 24.0, ["Record the realised utility",
-                                "g[i,a] = L(F(X[a0]),y) - L(F(X[a]),y)"],
+    f.box(bx, 120.0, bw, 24.0, ["Record the realised task loss",
+                                "L[i,a] and regret r[i,a] = L[i,a] - L*[i]"],
           fill=GREEN_L, stroke=GREEN, size=5.2)
-    f.text(bx + bw / 2, 152.0, "replay bank  B = {(z[i], a, g[i,a])}", size=5.6, color=GREEN, align="c")
-    f.text(bx + bw / 2, 161.0, "future labels are used only inside TRAIN,", size=5.2, color=MUTED, align="c")
-    f.text(bx + bw / 2, 169.0, "never at deployment", size=5.2, color=MUTED, align="c")
+    f.text(bx + bw / 2, 152.0, "replay bank  B = {(z[i], a, L[i,a])}", size=5.6, color=GREEN, align="c")
+    f.text(bx + bw / 2, 161.0, "the bank stores a task consequence,", size=5.2, color=MUTED, align="c")
+    f.text(bx + bw / 2, 169.0, "not a reconstruction score", size=5.2, color=MUTED, align="c")
 
     # ---- panel C ----
-    f.text(colx[2] + colw[2] / 2, 9.0, "(c) Replay -> Match -> Act / Abstain", size=6.2,
+    f.text(colx[2] + colw[2] / 2, 9.0, "(c) Score -> rank -> select / KEEP", size=6.2,
            bold=True, align="c")
     cx, cw = colx[2], colw[2]
     f.box(cx, 26.0, cw, 18.0, ["New request: X, M"], fill=GREY_L, size=5.8)
     f.arrow(cx + cw / 2, 45.0, cx + cw / 2, 52.0, INK, 0.9, 3.4)
-    f.box(cx, 53.0, cw, 20.0, ["Task-state matching", "over the replay bank"],
+    f.box(cx, 53.0, cw, 20.0, ["Observable state z", "(no forecast is read)"],
           fill=BLUE_L, stroke=BLUE, size=5.6)
     f.arrow(cx + cw / 2, 74.0, cx + cw / 2, 81.0, INK, 0.9, 3.4)
-    f.box(cx, 82.0, cw, 22.0, ["Conservative utility",
-                               "S[a] = mu[a] - beta*sig[a]/sqrt(n[a])"],
+    f.box(cx, 82.0, cw, 22.0, ["Regret-aware scoring",
+                               "S[a] over the replay bank B"],
           fill=AMBER_L, stroke=AMBER, size=5.2)
     f.arrow(cx + cw / 2, 105.0, cx + cw / 2, 112.0, INK, 0.9, 3.4)
-    f.diamond(cx + cw / 2, 126.0, 84.0, 26.0)
-    f.text(cx + cw / 2, 127.8, "max S[a] > 0 ?", size=5.8, align="c")
+    f.diamond(cx + cw / 2, 126.0, 88.0, 26.0)
+    f.text(cx + cw / 2, 127.8, "argmax S[a] = KEEP ?", size=5.4, align="c")
     f.arrow(cx + 18.0, 139.0, cx + 18.0, 150.0, GREEN, 1.0, 3.4)
     f.text(cx + 14.0, 147.0, "yes", size=5.2, color=GREEN, align="r")
     f.arrow(cx + cw - 18.0, 139.0, cx + cw - 18.0, 150.0, RED, 1.0, 3.4)
     f.text(cx + cw - 14.0, 147.0, "no", size=5.2, color=RED, align="l")
-    f.box(cx - 2.0, 151.0, cw / 2 - 4.0, 26.0, ["ACT", "execute F(X[a*])"],
-          fill=GREEN_L, stroke=GREEN, size=5.6, bold_first=True)
-    f.box(cx + cw / 2 + 4.0, 151.0, cw / 2 - 2.0, 26.0, ["ABSTAIN", "return F(X[a0])"],
+    f.box(cx - 2.0, 151.0, cw / 2 - 4.0, 26.0, ["KEEP", "input untouched"],
           fill=RED_L, stroke=RED, size=5.6, bold_first=True)
-    f.text(cx + cw / 2, 186.0, "exactly one real TSFM forecast is returned", size=5.2,
-           color=MUTED, align="c")
+    f.box(cx + cw / 2 + 4.0, 151.0, cw / 2 - 2.0, 26.0, ["SELECT", "execute F(X[a*])"],
+          fill=GREEN_L, stroke=GREEN, size=5.6, bold_first=True)
+    f.text(198.0, 189.0, "KEEP is one of the arms, so abstention is a decision outcome",
+           size=5.2, color=MUTED, align="c")
 
     # 面板分隔
-    f.line(colx[1] - 5.0, 24.0, colx[1] - 5.0, 184.0, GREY_M, 0.5, dash=(1.5, 2.0))
-    f.line(colx[2] - 5.0, 24.0, colx[2] - 5.0, 184.0, GREY_M, 0.5, dash=(1.5, 2.0))
+    f.line(colx[1] - 5.0, 24.0, colx[1] - 5.0, 182.0, GREY_M, 0.5, dash=(1.5, 2.0))
+    f.line(colx[2] - 5.0, 24.0, colx[2] - 5.0, 182.0, GREY_M, 0.5, dash=(1.5, 2.0))
     return f
 
 
@@ -474,68 +500,70 @@ def fig1():
 # Figure 2 -- IntroAct-TS architecture
 # ==========================================================================
 def fig2():
-    W, H = 396.0, 232.0
+    W, H = 396.0, 206.0
     f = Fig(W, H, "fig2_introact_architecture")
+    BW, GAP = 91.0, 8.0
 
-    # ---- 左上: 当前请求 ----
-    f.text(4.0, 9.0, "Deployment request (frozen TSFM, no future label)", size=6.2, bold=True)
-    f.box(4.0, 14.0, 96.0, 24.0, ["Incomplete context", "X  with mask M"], fill=RED_L, stroke=RED, size=5.8)
-    f.arrow(100.0, 26.0, 112.0, 26.0, INK, 0.9, 3.4)
-    f.box(113.0, 14.0, 110.0, 24.0, ["Materialise legal", "candidate versions"],
-          fill=BLUE_L, stroke=BLUE, size=5.8)
-    f.arrow(223.0, 26.0, 235.0, 26.0, INK, 0.9, 3.4)
-    f.box(236.0, 14.0, 156.0, 24.0, ["Reference forecast only", "p0 = F(X[a0])"],
-          fill=GREY_L, size=5.8)
+    # ---------------- offline band ----------------
+    f.text(4.0, 9.0, "Offline  (TRAIN only \u2014 the only place a future is read)",
+           size=6.0, bold=True, color=GREEN)
+    off = [
+        ["Complete historical window", "(X_i, y_i); its future", "is already legal history"],
+        ["Inject the deployment", "missingness mechanism", "-> controlled incomplete context"],
+        ["Execute every legal action", "with the frozen forecaster F;", "record L[i,a] and r[i,a]"],
+        ["Counterfactual replay bank", "B = {(z[i], a, L[i,a])}", "frozen once, read-only"],
+    ]
+    for i, lines in enumerate(off):
+        x = 4.0 + i * (BW + GAP)
+        last = (i == len(off) - 1)
+        f.box(x, 15.0, BW, 34.0, lines,
+              fill=(GREEN_L if last else WHITE), stroke=(GREEN if last else GREY_M), size=5.0)
+        if not last:
+            f.arrow(x + BW + 0.5, 32.0, x + BW + GAP - 0.5, 32.0, INK, 0.9, 3.2)
 
-    # ---- 动作目录 ----
+    f.line(4.0, 56.0, 392.0, 56.0, GREY_M, 0.7, dash=(2.0, 2.0))
+    f.text(198.0, 61.0, "no future target crosses this line", size=5.2, color=RED, align="c")
+
+    # ---------------- online band ----------------
+    f.text(4.0, 72.0, "Online  (deployment \u2014 no future is available)",
+           size=6.0, bold=True, color=BLUE)
+    onl = [
+        ["Incomplete context", "(X, M) at the", "forecast origin"],
+        ["Observable state z", "episode + intervention", "state; no forecast read"],
+        ["Regret-aware scoring", "S[a] over the frozen bank;", "a* = argmax S[a]"],
+        ["Frozen TSFM, one call", "F(X[a*]) is returned;", "KEEP is one of the arms"],
+    ]
+    for i, lines in enumerate(onl):
+        x = 4.0 + i * (BW + GAP)
+        hi = (i == 2)
+        f.box(x, 78.0, BW, 34.0, lines,
+              fill=(BLUE_L if hi else WHITE), stroke=(BLUE if hi else GREY_M), size=5.0)
+        if i < len(onl) - 1:
+            f.arrow(x + BW + 0.5, 95.0, x + BW + GAP - 0.5, 95.0, INK, 0.9, 3.2)
+
+    # ---------------- action catalog ----------------
     chips = ["KEEP a0", "FFILL", "Single TS-ICL", "Multi TS-ICL", "Context Ridge"]
     cw, gap = 74.0, 4.0
-    x0 = 4.0
     for i, c in enumerate(chips):
-        f.chip(x0 + i * (cw + gap), 46.0, cw, 15.0, c, size=5.6)
-    f.text(4.0, 68.5, "action catalog  A = {KEEP, FFILL, Single TS-ICL, Multi TS-ICL, Context Ridge}: "
-           "fixed, never enlarged", size=5.2, color=MUTED)
+        f.chip(4.0 + i * (cw + gap), 120.0, cw, 14.0, c, size=5.4)
+    f.text(4.0, 142.0,
+           "action catalog A: fixed and closed; KEEP is a normal arm, not an exception path",
+           size=5.0, color=MUTED)
 
-    # ---- 状态特征 ----
-    f.rect(4.0, 76.0, 202.0, 74.0, fill=WHITE, stroke=GREY_M, lw=0.7, r=2.5)
-    f.text(10.0, 85.5, "Observable task state  z  (no deep encoder)", size=6.0, bold=True)
-    feats = [("A  Mask state", "ratio, longest run, #runs, tail flag"),
-             ("B  Visible context", "robust scale, trend, ACF-1, seasonal ACF, vol"),
-             ("C  Intervention state", "change mean / max / fraction vs reference"),
-             ("D  Reference forecast", "mean, range, slope, first-step jump, roughness")]
-    for i, (t, d) in enumerate(feats):
-        yy = 94.5 + i * 13.5
-        f.text(10.0, yy, t, size=5.5, bold=True, color=BLUE)
-        f.text(76.0, yy, d, size=5.0, color=MUTED)
+    # ---------------- state groups ----------------
+    f.rect(4.0, 150.0, 388.0, 34.0, fill=GREY_L, stroke=GREY_M, lw=0.6, r=2.5)
+    f.text(10.0, 159.0, "Episode state", size=5.4, bold=True, color=BLUE)
+    f.text(68.0, 159.0,
+           "missing ratio, run structure, distance to origin, pattern, visible-context summary",
+           size=5.0, color=MUTED)
+    f.text(10.0, 172.0, "Intervention state", size=5.4, bold=True, color=BLUE)
+    f.text(68.0, 172.0,
+           "action identity, fraction of entries changed, change near the forecast origin",
+           size=5.0, color=MUTED)
 
-    # ---- replay bank ----
-    f.rect(216.0, 76.0, 176.0, 74.0, fill=GREEN_L, stroke=GREEN, lw=0.7, r=2.5)
-    f.text(224.0, 85.5, "Historical counterfactual replay bank", size=6.0, bold=True, color=GREEN)
-    f.text(224.0, 95.5, "B = {(z[i], a, g[i,a])}", size=5.8)
-    f.text(224.0, 105.5, "Built once from TRAIN windows by", size=5.1, color=MUTED)
-    f.text(224.0, 113.5, "replaying the deployment missingness", size=5.1, color=MUTED)
-    f.text(224.0, 121.5, "and the real frozen forecaster.", size=5.1, color=MUTED)
-    f.text(224.0, 132.0, "g[i,a] is a realised forecasting", size=5.1, color=GREEN)
-    f.text(224.0, 140.0, "utility, not a reconstruction score.", size=5.1, color=GREEN)
-
-    # 汇合箭头
-    f.arrow(105.0, 151.0, 105.0, 159.0, INK, 0.9, 3.4)
-    f.arrow(304.0, 151.0, 304.0, 159.0, INK, 0.9, 3.4)
-
-    f.box(4.0, 160.0, 388.0, 22.0,
-          ["Task-state matching:  standardised Euclidean distance over observable state, K nearest",
-           "same-action replays, weight w[i] = exp(-d[i] / tau)"],
-          fill=BLUE_L, stroke=BLUE, size=5.4)
-    f.arrow(198.0, 183.0, 198.0, 190.0, INK, 0.9, 3.4)
-    f.box(4.0, 191.0, 388.0, 24.0,
-          ["Conservative intervention:  S[a] = mu[a] - beta * sigma[a] / sqrt(n_eff[a])",
-           "ACT a* = argmax S[a] when max S[a] > 0, otherwise ABSTAIN and return a0"],
-          fill=AMBER_L, stroke=AMBER, size=5.4)
-
-    # 输出
-    f.arrow(198.0, 216.0, 198.0, 221.0, GREEN, 1.0, 3.0)
-    f.text(198.0, 229.0, "one frozen TSFM forecast  F(X[a*]):  1-2 model calls, no ensemble, "
-           "no output correction, no fine-tuning", size=5.2, color=GREEN, align="c")
+    f.text(198.0, 194.0,
+           "the returned forecast always comes from exactly one executed input version",
+           size=5.2, color=GREEN, align="c")
     return f
 
 
@@ -543,30 +571,64 @@ def fig2():
 # Figure 3 -- reconstruction vs forecast utility (骨架)
 # ==========================================================================
 def fig3():
-    W, H = 396.0, 152.0
-    f = Fig(W, H, "fig3_reconstruction_vs_utility")
-    ax, ay, aw, ah = 52.0, 18.0, 150.0, 100.0
-    f.axes(ax, ay, aw, ah, xlabel="Reconstruction improvement  (lower E_rec)",
-           ylabel="Forecasting gain  (Delta L_forecast)",
-           ticks_x=[(0.0, "0"), (0.5, "0.5"), (1.0, "1.0")],
-           ticks_y=[(0.0, "0"), (0.5, "0"), (1.0, "+")])
-    f.line(ax, ay + ah * 0.5, ax + aw, ay + ah * 0.5, GREY_M, 0.6, dash=(2.0, 2.0))
-    f.text(ax + aw / 2, ay + ah / 2 - 6.0, "[FIG-RECUTIL-POINTS]", size=6.0, color=RED, align="c")
-    f.text(ax + aw / 2, ay + ah / 2 + 6.0, "one point per parent-method pair", size=5.2,
-           color=MUTED, align="c")
+    W, H = 396.0, 190.0
+    f = Fig(W, H, "fig3_action_opportunity")
 
-    # 右侧说明
-    f.text(220.0, 26.0, "Reported per backbone:", size=6.0, bold=True)
-    for i, t in enumerate(["Spearman rho(rank_rec, rank_fc) = [FIG-RHO]",
-                           "Discordant rate = [FIG-DISCORDANT]",
-                           "Bolt / TimesFM / Chronos-2 panels: Appendix B"]):
-        f.text(220.0, 38.0 + i * 11.0, "- " + t, size=5.4, color=MUTED)
-    f.rect(218.0, 74.0, 172.0, 58.0, fill=GREY_L, stroke=GREY_M, lw=0.6, r=2.0)
-    f.text(224.0, 84.0, "Supported conclusion:", size=5.6, bold=True)
-    f.text(224.0, 95.0, "reconstruction quality is not a reliable", size=5.2)
-    f.text(224.0, 103.5, "proxy for frozen-TSFM forecasting utility.", size=5.2)
-    f.text(224.0, 115.5, "If the correlation turns out to be high,", size=5.2, color=RED)
-    f.text(224.0, 124.0, "the claim must be rewritten honestly.", size=5.2, color=RED)
+    # ---- (a) 机会分层 ----
+    f.text(4.0, 9.0, "(a) Opportunity strata", size=6.2, bold=True)
+    ax, ay, aw, ah = 42.0, 30.0, 130.0, 92.0
+    base = ay + ah                      # 基线在坐标区底部
+    f.axes(ax, ay, aw, ah, xlabel="oracle opportunity  Delta_i",
+           ylabel="share of episodes",
+           ticks_x=[(0.0, "0"), (0.5, ""), (1.0, "max")],
+           ticks_y=[(0.0, "0"), (0.5, ""), (1.0, "")])
+    # 柱体自底向上生长: rect 的 y 是顶边, 所以顶边 = 基线 - 高度
+    bars = [(0.05, 0.66, "no-op"), (0.38, 0.42, "low"), (0.71, 0.24, "high")]
+    for fx, fh, lab in bars:
+        h = ah * fh
+        f.rect(ax + aw * fx, base - h, aw * 0.24, h, fill=GREY_L, stroke=GREY_M, lw=0.6)
+        f.text(ax + aw * (fx + 0.12), base - h - 4.0, lab, size=5.0, align="c")
+
+    # ---- (b) 各层相对 KEEP 的改善 ----
+    f.text(190.0, 9.0, "(b) Improvement over KEEP by stratum", size=6.2, bold=True)
+    bx, by, bw, bh = 232.0, 30.0, 156.0, 92.0
+    bbase = by + bh
+    zy = by + bh * 0.5                  # 零线居中, 曲线可正可负
+    f.axes(bx, by, bw, bh, xlabel="oracle opportunity stratum",
+           ylabel="MASE improvement vs KEEP",
+           ticks_x=[(0.17, "no-op"), (0.50, "low"), (0.83, "high")],
+           ticks_y=[(0.0, "-"), (0.5, "0"), (1.0, "+")])
+    f.line(bx, zy, bx + bw, zy, GREY_M, 0.6, dash=(2.0, 2.0))
+
+    def px(fr):
+        return bx + bw * fr
+
+    def py(ty):
+        # ty 为轴分数 (0=底, 1=顶); 零线在 0.5
+        return bbase - bh * ty
+
+    # 固定修复策略: 在 no-op 层为负收益, 全程贴地
+    f.poly([(px(0.17), py(0.34)), (px(0.50), py(0.40)), (px(0.83), py(0.47))],
+           color=GREY_M, lw=1.0, dash=(2.5, 2.0))
+    # IntroAct: no-op 层基本不动, 机会越高改善越大
+    f.poly([(px(0.17), py(0.50)), (px(0.50), py(0.62)), (px(0.83), py(0.85))],
+           color=BLUE, lw=1.2)
+
+    # 独立图例, 避免压在曲线上
+    f.line(bx + 5.0, by + 7.0, bx + 19.0, by + 7.0, BLUE, 1.2)
+    f.text(bx + 22.0, by + 8.8, "IntroAct", size=5.0, color=BLUE)
+    f.line(bx + 5.0, by + 16.0, bx + 19.0, by + 16.0, GREY_M, 1.0, dash=(2.5, 2.0))
+    f.text(bx + 22.0, by + 17.8, "fixed repair", size=5.0, color=MUTED)
+
+    f.text(bx + 5.0, bbase - 5.0, "below zero: worse than doing nothing",
+           size=4.8, color=MUTED)
+
+    # ---- 占位与说明 ----
+    f.text(ax + aw / 2, 152.0, "[FIG-STRATUM-SHARES]", size=5.2, color=RED, align="c")
+    f.text(bx + bw / 2, 152.0, "[FIG-OPPORTUNITY-CURVES]", size=5.2, color=RED, align="c")
+    f.text(198.0, 172.0,
+           "A fixed repair policy must act where nothing can be gained; the decision problem "
+           "is to act only where it pays.", size=5.2, color=MUTED, align="c")
     return f
 
 
@@ -581,11 +643,12 @@ def fig4():
     ax, ay, aw, ah = 46.0, 30.0, 132.0, 92.0
     f.axes(ax, ay, aw, ah, xlabel="method",
            ylabel="Harmful loss  HL  (lower is better)",
-           ticks_x=[(0.08, "BF"), (0.30, "R2"), (0.52, "T1"), (0.74, "TATO"), (0.96, "Ours")],
+           ticks_x=[(0.08, "TOI"), (0.29, "TOIVSF"), (0.50, "GIMCC"),
+                    (0.71, "SRDI"), (0.92, "CTF")],
            ticks_y=[(0.0, "0"), (0.5, ""), (1.0, "")])
     f.text(ax + aw / 2, ay + ah / 2, "[FIG-HARMFUL-LOSS-BARS]", size=5.8, color=RED, align="c")
 
-    f.text(206.0, 9.0, "(b) Predicted vs realised conservative utility", size=6.0, bold=True)
+    f.text(206.0, 9.0, "(b) Predicted vs realised ranking utility", size=6.0, bold=True)
     bx, by, bw, bh = 252.0, 30.0, 132.0, 92.0
     f.axes(bx, by, bw, bh, xlabel="Predicted S[a] (binned)",
            ylabel="Realised utility  g",

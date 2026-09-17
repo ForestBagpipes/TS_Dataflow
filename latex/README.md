@@ -14,7 +14,7 @@ latex/
 ├── iclr2027_conference.bst         # 官方 bibstyle，禁止修改
 ├── fancyhdr.sty  natbib.sty  math_commands.tex   # 官方附带文件，禁止修改
 ├── references.bib                  # 唯一 bib 文件，只增量追加
-├── introact_ts_iclr27_v44.tex      # 当前版本正文（v4.4）
+├── introact_ts_iclr27_v44.tex      # 当前版本正文（v4.4-r2）
 └── figure/
     ├── build_figures.py            # 单一几何定义，同时产出 .eps 与 .pptx
     ├── build_pdf.sh                # .eps -> .pdf（ghostscript）
@@ -23,7 +23,7 @@ latex/
     ├── gsfonts/Fontmap             # Helvetica -> URW Nimbus 映射
     ├── fig1_selective_governance.{eps,pptx,pdf}
     ├── fig2_introact_architecture.{eps,pptx,pdf}
-    ├── fig3_reconstruction_vs_utility.{eps,pptx,pdf}
+    ├── fig3_action_opportunity.{eps,pptx,pdf}
     ├── fig4_governance_diagnostics.{eps,pptx,pdf}
     └── fig5_robustness_missingness.{eps,pptx,pdf}
 ```
@@ -66,26 +66,34 @@ pdflatex -interaction=nonstopmode introact_ts_iclr27_v44.tex
 
 渲染形式：`\ph{KEY}` → 灰色等宽 `[KEY]`。填充时只替换 `KEY`，不要动 `\ph`。
 
-### 命名规则
+### 命名规则（v4.4-r2 收窄后）
 
-```
-<域>-<对象>-<条件>-<指标>
-```
+§36 任务书统一过的语义清晰的占位符 KEY，**填充时只替换 KEY，不要新增未列出的 KEY**：
 
-| 域前缀 | 含义 | 例子 |
+| KEY | 含义 | 所属段 |
 |---|---|---|
-| （无） | Bolt 骨干 | `\ph{ETTH1-96-MASE}` |
-| `TF-` | TimesFM 骨干 | `\ph{TF-ETTH1-96-MASE}` |
-| `CH2-` | Chronos-2 骨干 | `\ph{CH2-ETTH1-96-MASE}` |
-| `SEV10/30/50-` | 缺失严重度表 | `\ph{SEV30-BRITS-MASE}` |
-| `P1..P4-` | 四种缺失模式 | `\ph{P3-OURS}` |
-| `PR-` | 模式平均排名 | `\ph{PR-OURS}` |
-| `K8-B0` 等 | $K\times\beta$ 网格 | `\ph{K16-B1}` |
-| `RS25/50/100-` | replay bank 规模 | `\ph{RS50-HIR}` |
-| `SEED1..10-` | 十个 mask 种子 | `\ph{SEED7-DELTA}` |
-| `CALLS-` | 调用与失败计数 | `\ph{CALLS-FAIL-N}` |
-| `FIN-` | 金融案例 | `\ph{FIN-P1-DEL-QLIKE}` |
-| `APP-` | 附录结构性占位 | `\ph{APP-SEVERITY-NOTE}` |
+| `MAIN_OVERALL_MASE` | source-macro MASE 主表主指标 | Abstract / Main |
+| `MAIN_GAIN_VS_BEST` | 相对最强已部署基线的差距 | Abstract |
+| `MAIN_RANK` | 平均排名 | Main |
+| `MAIN_INTERVENTION_RATE` | 介入率 | Abstract / Main |
+| `NOOP_HARM` | no-op 层的 harmful loss | Abstract / §4.3 |
+| `HIGHOP_GAIN` | high-opportunity 层 MASE | Abstract / §4.3 |
+| `ROBUST_50` | 50% 缺失下的 MASE | §4.4 |
+| `SUPPORT_25` | 25% replay 支持下的 MASE | §4.5 |
+| `ABL_RANKING` | A1 (gain regression) 与 Full 的差 | §4.6 |
+| `ABL_KEEP` | A5 (forced intervention) 与 Full 的差 | §4.6 |
+| `LATENCY` | 请求延迟 | §4.2 / App. I |
+| `CALLS` | 每请求模型调用数 | §4.2 / App. I |
+
+正文里其它未列出的数字一律写成 `\<SCOPE>_<METHOD>_<METRIC>` 或
+`\<METHOD>_<SEVERITY/PATTERN>_<METRIC>`。示例：
+
+- `\ph{TOI_10}` = TOI 在 10% 缺失下的 MASE
+- `\ph{CH2-OURS-RMSE}` = Chronos-2 上我们的 RMSE
+- `\ph{OPPSENS_HALF_LOW}` = 机会分层敏感度（×0.5 边界，low 层 MASE）
+
+`\ph` 的实现是 `\textsf{[\detokenize{#1}]}`，KEY 含下划线会被
+`\detokenize` 转成普通字符，不会触发 math 下标错误。
 
 表格里的其他约定：
 
@@ -160,27 +168,31 @@ bash preview.sh        # 生成 _preview_*.png 人工核对
 
 ## 4.5 当前正文浮动体配额（9 页硬约束下的取舍）
 
-正文 9 页是硬上限，而 v4.4 规划要求 6 表 + 5 图。实际收敛结果为
-**正文 4 表 + 3 图**，其余下沉附录。这不是随意删减，每一条都有理由：
+正文 9 页是硬上限，v4.4-r2 规划要求 6 表 + 5 图。实际收敛结果为
+**正文 2 表 + 3 图**，其余下沉附录。这不是随意删减，每一条都有理由：
 
 | 浮动体 | 位置 | 理由 |
 |---|---|---|
-| Figure 1 概念图 | 正文 p3 | 规划明确要求 |
-| Figure 2 架构图 | 正文 p4 | 规划明确要求 |
-| Table 1 主结果 | 正文 p7 | 规划要求，核心表 |
-| Figure 3 重建 vs 效用 | 正文 p8 | §4.3 的结论靠它承载 |
-| Table 2 治理诊断 | 正文 p9 | 论文独有贡献（HIR / HL / CGC） |
-| Table 3 鲁棒性 | 正文 p9 | Experiment 4，规划要求留在正文 |
-| Table 4 消融 | 正文 p9 | 规划要求，固定 6 行 |
-| Table 效率 | → 附录 J | 规划只要求"并入 4.2 末尾"；正文保留一段成本说明并指向附录 |
-| Table 重建-效用配对 | → 附录 E | 附录已有完整版，正文留 Figure 3 即可，避免重复 |
-| Figure 4 治理诊断 | → 附录 F | 与 Table 2 同源，正文留表 |
-| Figure 5 鲁棒性曲线 | → 附录 G | 与 Table 3 同源，正文留表 |
+| Figure 1 概念图 | 正文 p3 | §26 规划明确要求（三 episode + 决策流） |
+| Figure 2 架构图 | 正文 p4 | §27 规划明确要求（offline/online 分隔线） |
+| Figure 3 机会分层与改善 | 正文（→ Appendix E.4） | §28 优先给 §4.3；正文中以 prose 引导并指向 Appendix E.4 |
+| Table 1 主结果 | 正文 p8 | §17 规划要求，核心表，含 Type 列 |
+| Table 2 When Does Action Choice Matter? | 正文 p9 | §21 规划要求，按 $\Delta_i$ 分层 |
+| Table 3 鲁棒性 | 正文 p9 | §22 规划要求，10/30/50% × worst pattern × avg rank |
+| Table 4 历史支持效率 | → Appendix G | §23 规划要求作 Extra Experiment 3；表格下沉，§4.5 留 prose + 占位符 |
+| Table 5 消融 | → Appendix H | §24 规划要求六行；表格下沉，§4.6 留 prose + 占位符 |
+| Figure 4 治理诊断 | → Appendix F | 与 Table 2 同源，附录留图 |
+| Figure 5 鲁棒性曲线 | → Appendix G | 与 Table 3 同源，附录留图 |
+
+**v4.4-r2 正文基线固定为 5 个**：TOI（NeurIPS 2024）、TOI-VSF（TKDE 2025）、
+GIMCC（KDD 2025）、SRDI（WWW 2026）、ChannelTokenFormer（ICLR 2026）。
+VIDA（KDD 2025）只作 Appendix E.5 扩展对比，**不得静默替换任一正式 baseline**。
+TATO 不再作为正文基线，仅留 Related Work + Appendix C 数据中心适应段。
 
 **如果后续必须把某张图/表拉回正文**，就得从别处腾出等量空间。
 可用的手段只有三个（按代价从小到大）：
 1. 删正文里与附录重复的说明性段落；
-2. 收图幅（改 `width=` 系数，当前 fig1 0.80 / fig2 0.72 / fig3 0.60）；
+2. 收图幅（当前 fig1 0.80 / fig2 0.62 / fig3 已下沉）；
 3. 把某张正文表再下沉到附录。
 
 注意 `\resizebox{\textwidth}{!}` 的表格改字号**不会**改变高度，见 §3。
@@ -208,7 +220,7 @@ bash preview.sh        # 生成 _preview_*.png 人工核对
   safe、robust、generalizes 之类断言。
 - 效率（时延、调用数）只能单独成表/成段，**不得**折进任何精度分数。
 - Catalog Oracle 只作诊断上界，**不得**进入平均排名，**不得**写进 claim。
-- 正文只保留 Experiment 1–4 + Ablation（4.1–4.6 六节），其余全部进附录。
+- 正文只保留 4.1 Setup / 4.2 Main / 4.3 Opportunity / 4.4 Robustness / 4.5 Historical Support / 4.6 Ablation 六节，每节的表格或图见 §4.5；其余全部进附录。
 - 结果与失败一律保留，包括负结果；不得删掉不合意的配置。
 - 正文提到的每个数字都必须能追溯到 `v44_*` 结果组中的一条记录，
   不允许手工转录。

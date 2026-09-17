@@ -35,8 +35,10 @@
 \definecolor{phgray}{gray}{0.45}
 \definecolor{bestgray}{gray}{0.94}
 
-% 未运行结果的占位符。填充时只替换 KEY，不要改 \ph 本身。
-\newcommand{\ph}[1]{\textcolor{phgray}{\textsf{[#1]}}}
+% 未运行结果的占位符。KEY 一律用下划线分层命名（如 MAIN_OVERALL_MASE），
+% 下划线是数学下标字符，因此必须 \detokenize 成普通字符后才能进 \textsf。
+% 填充时只替换 KEY，不要改 \ph 本身。
+\newcommand{\ph}[1]{\textcolor{phgray}{\textsf{[\detokenize{#1}]}}}
 % 表格中强调：第一名加粗，第二名下划线，Oracle 用斜体灰字。
 \newcommand{\best}[1]{\textbf{#1}}
 \newcommand{\second}[1]{\underline{#1}}
@@ -76,123 +78,124 @@ in Time-Series Foundation Models}
 \maketitle
 
 \begin{abstract}
-Time-series foundation models provide strong zero-shot forecasting capabilities, yet
-their deployment often encounters incomplete contexts caused by missing, delayed, or
-asynchronously available observations. Existing imputation methods primarily optimize
-reconstruction, while recent task-oriented and data-centric approaches show that data
-processing should instead account for downstream forecasting utility. We argue that a
-further decision is necessary: a feasible intervention should not always be executed,
-because the same repair can improve one forecasting episode while harming another. We
-formulate incomplete-input handling for frozen \tsfm{}s as \emph{selective data
-governance} and introduce \introact{}. \introact{} replays historical
-pseudo-deployments to record the forecasting utility of legal interventions, retrieves
-locally matched intervention outcomes for a new request, and applies an intervention
-only when its conservative estimated utility is positive. \introact{} modifies neither
-the foundation-model parameters nor its forecast outputs, and can abstain when
-historical evidence is insufficient; abstention returns the untouched reference forecast
-and is treated as a valid outcome rather than a failure. Across \ph{N-DATASETS} datasets,
-four missingness patterns, and two forecasting horizons, using two frozen \tsfm{}
-backbones for development and a third family held out from method design,
-\introact{} achieves \ph{RESULT-MAIN} while reducing harmful interventions by
-\ph{RESULT-HARMFUL} relative to \ph{STRONG-BASELINE}, at an intervention rate of
-\ph{RESULT-INTERVENTION-RATE}. These results suggest that incomplete-input handling can
-benefit from an explicit decision about when \emph{not} to act, rather than treating
-repair as a mandatory preprocessing step.
+Time-series foundation models are increasingly deployed without task-specific parameter
+updates, yet their forecasting contexts may contain missing variables, delayed observations,
+or test-time missing blocks. Existing incomplete-input forecasting methods largely focus on
+reconstructing unavailable information or on training architectures that remain robust to
+missingness. We study a complementary question for frozen forecasters: given several legal
+ways of handling an incomplete context, which intervention should be applied to the current
+forecasting episode, if any? We introduce \introact{}, a selective data-governance framework
+that replays historical pseudo-deployments to obtain the realised forecasting consequences of
+candidate interventions, and derives its decision rule from evidence aligned with intervention
+ranking rather than with reconstruction fidelity. \textsc{Keep} is treated as a first-class
+action, so the method leaves an input unchanged whenever the available evidence does not
+support a switch. \introact{} never fine-tunes the frozen backbone, never ensembles forecast
+outputs, and returns a forecast produced from exactly one executed input version. Across
+\ph{N_DATASETS} datasets, four missingness patterns, and two forecasting horizons, with two
+frozen backbones used for development and a third family held out from method design,
+\introact{} reaches \ph{MAIN_OVERALL_MASE} source-macro MASE against \ph{STRONG_BASELINE} at an
+intervention rate of \ph{MAIN_INTERVENTION_RATE}, while the harmful-intervention diagnostics in
+\S\ref{sec:exp-opportunity} remain \ph{NOOP_HARM}. These results suggest that incomplete-input
+handling is better posed as a per-episode decision about when \emph{not} to act than as a
+mandatory preprocessing step. \ph{ABSTRACT_CLOSING}.
 \end{abstract}
 
 % ===========================================================================
 \section{Introduction}
 \label{sec:intro}
 
-Time-series foundation models (\tsfm{}s) have changed the economics of forecasting:
-models such as Chronos~\citep{ansari2024chronos}, Chronos-Bolt~\citep{chronosbolt2025},
-TimesFM~\citep{das2024timesfm}, Moirai~\citep{woo2024moirai}, and
-Chronos-2~\citep{chronos2_2025} now produce competitive zero-shot forecasts without
-task-specific training. In real deployments, however, the context handed to such a
-model is frequently incomplete. A sensor drops out for a stretch of time; a reporting
-channel delivers a variable several steps late; variables are sampled asynchronously
-and a few are not yet available at the forecast origin; only part of a data acquisition
-batch has arrived. The resulting input is not \emph{wrong} --- it is \emph{partial}. A real
-observation that has already arrived and is valid must not be overwritten, and an
-incomplete context is a structural property of acquisition rather than a defect to be
-scrubbed away.
+Time-series foundation models (\tsfm{}s) now produce competitive zero-shot forecasts without
+task-specific training~\citep{ansari2024chronos,chronosbolt2025,das2024timesfm,woo2024moirai,
+chronos2_2025}, which makes them attractive as fixed components of deployed forecasting
+systems. In deployment, however, the context handed to such a model is frequently incomplete.
+A sensor drops out for a stretch of time; a reporting channel delivers a variable several
+steps late; variables are sampled asynchronously and a few have not arrived at the forecast
+origin; only part of an acquisition batch is available. The resulting input is not
+\emph{wrong} --- it is \emph{partial}. An observation that has already arrived and is valid
+must not be overwritten, and an incomplete context is a structural property of acquisition
+rather than a defect to be scrubbed away.
 
 The classical response to incompleteness is imputation. Reconstruction-oriented methods
-recover missing entries as accurately as possible: BRITS~\citep{cao2018brits} uses
-bidirectional recurrent dynamics, CSDI~\citep{tashiro2021csdi} models the conditional
-distribution of missing values with a score-based diffusion process, and the recent
-T1~\citep{park2026t1} improves multivariate reconstruction under diverse and heavy
-missingness through selective cross-variable information transfer. This line answers a
-well-posed question --- \emph{how can we reconstruct missing observations?} --- but it
-optimizes a proxy. High reconstruction accuracy is measured against the true missing
-values, whereas what a deployed forecaster is ultimately scored on is the accuracy of
-its forecast.
-
-A second line of work has already recognized this gap. Task-oriented imputation
+recover missing entries as accurately as possible --- BRITS~\citep{cao2018brits} through
+bidirectional recurrent dynamics, CSDI~\citep{tashiro2021csdi} through conditional
+score-based diffusion, and generative or self-attention variants in the same
+spirit~\citep{yoon2018gain,du2023saits} --- and are scored on reconstruction error. A more
+recent line argues that this objective is a proxy. Task-oriented imputation
 evaluation~\citep{wang2024taskoriented} estimates how much a given imputation strategy
-improves a downstream task and shows that different strategies carry very different task
-value, so the field has moved from reconstruction quality toward task utility. We take the
-next step: even when a task-oriented estimate says that a repair is useful on average, a
-deployed system still has to decide \emph{whether to execute that repair for this
-particular forecasting episode}. Averages over a corpus do not license an action on a
-single window.
+improves a downstream task and shows that strategy rankings under reconstruction and under
+task utility can disagree. TOI-VSF~\citep{hao2025toivsf} makes the point concrete for
+\emph{variable subset forecasting} (VSF), where whole variables are absent at inference
+time, by training the imputation module to support the forecasting objective directly rather
+than to recover the missing series precisely. The question this line answers is
+\emph{how should incomplete variables or observations be reconstructed or modelled so that
+forecasting remains accurate}.
 
-Third, adapting the data rather than the model is no longer a novel framing on its own.
-TATO~\citep{qiu2026tato} searches a transformation pipeline that adapts heterogeneous
-domains to a frozen \tsfm{} without touching its parameters, establishing
-\emph{data-to-model} adaptation as a working paradigm. What TATO produces, however, is a
-domain- or scenario-level transformation. Our setting is strictly finer-grained:
-\emph{instance-level} selective intervention under incomplete inputs, where the correct
-decision may differ between two windows of the same dataset and the same backbone.
+That question has since been pursued directly, and the resulting methods are progressively
+more task- and deployment-aware. GIMCC~\citep{hao2025gimcc} couples generative imputation
+with multi-level causal consistency so that filled-in variables preserve the causal structure
+the forecaster relies on; SRDI~\citep{xu2026srdi} targets the distribution shift induced by
+variable absence and imputes diffusively in a shift-resilient space;
+ChannelTokenFormer~\citep{jang2026channeltokenformer} instead redesigns the forecasting
+architecture so that channel dependency, sampling asynchrony, and test-time missing blocks
+are addressed jointly rather than in isolation. Against generic imputation, these methods are
+already aimed at incomplete-input forecasting, so \emph{task-oriented handling of missing
+data} is no longer a contribution by itself. VIDA~\citep{liang2025vida} is a closely related
+VSF framework that reframes the problem as cross-domain knowledge transfer; we discuss it
+alongside the other extended comparisons in Appendix~\ref{app:extended}.
 
-Three observations motivate the design. \textbf{(i)}~Reconstruction improvement and
-forecasting utility are not equivalent: an intervention that reduces reconstruction error
-can still degrade the frozen forecaster's output. \textbf{(ii)}~The best intervention
-varies across episodes and backbones. \textbf{(iii)}~A wrong intervention can be worse than
-leaving the input unchanged, so unconditional ``repair'' is not merely suboptimal but
-actively harmful on a non-trivial fraction of requests. Together these turn incomplete-input
-handling into a decision problem rather than a preprocessing problem.
+We study a question this line leaves open. The methods above answer how incomplete
+observations should be reconstructed or modelled, they are evaluated by a score aggregated
+over a corpus, and what they return is a single repaired or robustly modelled series. A
+deployed system must instead decide, for \emph{this} episode, whether to intervene at all
+and, if so, which of several legal ways of handling the incomplete input to use. Three
+properties make that decision non-trivial. \textbf{(i)}~\emph{Intervention utility is
+heterogeneous}: the same repair lowers forecasting loss on one episode and raises it on
+another, so a strategy-level average does not license an action on a single window.
+\textbf{(ii)}~\emph{No single global repair policy suffices}, because the identity of the
+best action varies with the episode, the dataset, and the frozen backbone.
+\textbf{(iii)}~\emph{A wrong intervention can be worse than doing nothing}, so unconditional
+repair is not merely suboptimal but actively harmful on a non-trivial fraction of requests.
+Reconstruction-oriented objectives and task-wide adaptation both optimise an aggregate, and
+neither resolves per-episode action selection.
 
-We therefore propose \introact{}, built from three components.
-\emph{Counterfactual Replay} reconstructs pseudo-deployments from historical windows
-whose futures are already legal history: it injects the deployment missingness
-mechanism, actually executes every legal governance action with the frozen forecaster,
-and records the realised forecasting utility of each action. \emph{Task-State Matching}
-retrieves, for a new request, the historical replays whose observable task state and
-intervention state are most similar, using a lightweight feature set and no learned
-metric. \emph{Conservative Intervention} converts the retrieved utilities into a
-mean-minus-uncertainty score and executes an action only when that score is positive,
-otherwise returning the untouched reference forecast. \introact{} never fine-tunes the
-backbone, never ensembles forecast outputs, and never corrects the forecaster's
-predictions; the returned forecast always comes from exactly one actually executed input
-version.
+We therefore formalise incomplete-input handling for frozen \tsfm{}s as \emph{selective data
+governance} and propose \introact{}, organised as three stages. \emph{Counterfactual Replay}
+builds pseudo-deployments from historical windows whose futures are already legal history: it
+injects the deployment missingness mechanism, actually executes every legal action with the
+frozen forecaster, and records the realised forecasting loss of each action.
+\emph{Regret-Aware Intervention Scoring} turns those records into evidence aligned with the
+discrete decision we have to make, rather than into a point-wise regression of every action's
+gain. \emph{Selective Intervention} treats \textsc{Keep} as an ordinary action, so abstention
+is a member of the decision space rather than a separate safety layer. The returned forecast
+always comes from exactly one actually executed input version; the backbone is never
+fine-tuned, never ensembled, and never corrected.
 
 \paragraph{Contributions.}
-\textbf{(1)~Selective governance as a problem.} We formalise incomplete-input handling for
-frozen \tsfm{}s as a per-episode decision between intervening and abstaining, and show that
-a feasible repair is not always a beneficial one (\S\ref{sec:exp-recutility},
-\S\ref{sec:exp-governance}). \textbf{(2)~Counterfactual replay.} We build a replay bank
-from TRAIN windows by re-enacting the deployment missingness mechanism and executing the
-legal action catalog with the real frozen forecaster, so that supervision is a realised
-forecasting utility rather than a reconstruction score (\S\ref{sec:method-replay},
-\S\ref{sec:exp-main}). \textbf{(3)~Conservative intervention.} We derive an act/abstain
-rule from a mean-minus-uncertainty score over locally matched historical replays, and
-evaluate its effect on harmful interventions, robustness to missingness severity, and
-deployment cost (\S\ref{sec:method-gate}, \S\ref{sec:exp-governance},
+\textbf{(1)~Selective data governance.} We formalise incomplete-input handling for frozen
+\tsfm{}s as a per-episode decision between executing one legal intervention and leaving the
+input unchanged, and show that a feasible intervention is not always a beneficial one
+(\S\ref{sec:exp-opportunity}). \textbf{(2)~Counterfactual replay.} We build a replay bank from
+TRAIN windows by re-enacting the deployment missingness mechanism and executing the legal
+action catalog with the real frozen forecaster, so that the stored supervision is a realised
+task consequence rather than a reconstruction score (\S\ref{sec:method-replay},
+\S\ref{sec:exp-main}). \textbf{(3)~Regret-aware selective decision.} We derive the decision
+from historical action regret and pairwise preference instead of from a point-wise gain
+regression, which lets \textsc{Keep} compete on equal terms and makes abstention a natural
+outcome rather than an imposed guard (\S\ref{sec:method-scoring}, \S\ref{sec:method-decision},
 \S\ref{sec:exp-robust}).
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.80\textwidth]{figure/fig1_selective_governance.pdf}
-  \caption{Repair is treated as a selective forecasting decision rather than a mandatory
-  preprocessing operation. \textbf{(a)}~Three episodes share the same incomplete-context
-  problem but have different best actions, so the utility of a repair is episode
-  dependent. \textbf{(b)}~Historical TRAIN windows are replayed as pseudo-deployments:
-  the deployment missingness mechanism is injected and every legal action is actually
-  executed with the frozen forecaster, yielding the realised utility $g_{i,a}$.
-  \textbf{(c)}~A new request is matched against the replay bank, and an action is taken
-  only if its conservative utility is positive; otherwise the system abstains and returns
-  the reference forecast.}
+  \caption{Intervention utility is episode dependent. \textbf{(a)}~Three incomplete-context
+  episodes with the same missingness mechanism and the same frozen forecaster, but different
+  best actions: on episode A the reference input is already best, on B a different legal
+  action wins, and on C yet another one does. \textbf{(b)}~Historical TRAIN windows are
+  replayed as pseudo-deployments: the deployment missingness mechanism is injected, every
+  legal action is actually executed with the frozen forecaster, and the realised action losses
+  are recorded. \textbf{(c)}~A new request is scored against that replay evidence, and the
+  system either executes the best-ranked legal action or returns the untouched reference
+  forecast.}
   \label{fig:concept}
 \end{figure}
 
@@ -200,65 +203,61 @@ deployment cost (\S\ref{sec:method-gate}, \S\ref{sec:exp-governance},
 \section{Related Work}
 \label{sec:related}
 
-\subsection{Time-Series Imputation}
-Reconstruction-oriented imputation is a mature line. BRITS~\citep{cao2018brits}
-performs bidirectional recurrent imputation and was an early demonstration that temporal
-consistency improves reconstruction. CSDI~\citep{tashiro2021csdi} replaces the
-deterministic mapping with a conditional score-based diffusion model, producing
-probabilistic imputations, and generative or self-attention variants such as
-GAIN~\citep{yoon2018gain} and SAITS~\citep{du2023saits} explore related alternatives.
-Most recently, T1~\citep{park2026t1} targets diverse missing patterns and heavy missing
-ratios by binding CNN channels to attention heads, so that cross-variable information
-transfer can be selectively suppressed when a channel's temporal evidence is corrupted.
-All of these methods are evaluated primarily on reconstruction error. We use BRITS, CSDI,
-and T1 as published baselines and, in \S\ref{sec:exp-recutility}, measure directly whether
-their reconstruction advantage translates into forecasting utility for a frozen \tsfm{}.
+\subsection{Reconstruction-Oriented Missing Data Modeling}
+Imputation is a mature line. BRITS~\citep{cao2018brits} performs bidirectional recurrent
+imputation and was an early demonstration that temporal consistency improves recovery;
+CSDI~\citep{tashiro2021csdi} replaces the deterministic mapping with a conditional
+score-based diffusion model; and GAIN~\citep{yoon2018gain} and SAITS~\citep{du2023saits}
+explore adversarial and self-attention variants of the same objective. All of these methods
+are scored on reconstruction error against the artificially hidden values. We keep this line
+as background only: our object of study is not a better reconstruction model, and no number
+in this paper rewards reconstruction quality for its own sake.
 
-\subsection{Task-Oriented Imputation}
-Task-oriented imputation evaluation~\citep{wang2024taskoriented} reframes the objective:
-rather than asking how well missing values are recovered, it estimates how much a given
-imputation strategy helps a downstream task, and reports that strategy rankings under
-reconstruction and under task utility can disagree. This is the closest prior work to our
-motivation. Our problem differs in kind rather than in degree: task-oriented evaluation
-still produces a \emph{strategy-level} score and a fused imputation, whereas we ask
-whether a specific legal action should be executed for a specific episode, and we
-explicitly allow the answer to be ``no action''. We also restrict the final forecast to
-one actually executed input version, so no output fusion or post-hoc correction can
-contribute to the reported numbers.
+\subsection{Task-Oriented Incomplete-Input Forecasting}
+\label{sec:related-taskoriented}
+A second line moves the objective from recovery to downstream utility, and its methods have
+become progressively closer to our setting. Task-oriented imputation
+evaluation~\citep{wang2024taskoriented} estimates how much a given imputation strategy
+improves a downstream task without retraining the task model, and reports that strategy
+rankings under reconstruction and under task utility can disagree. TOI-VSF~\citep{hao2025toivsf}
+carries this into \emph{variable subset forecasting}, where entire variables are absent at
+inference: it pairs a forecasting-model-agnostic self-supervised imputation module with joint
+imputation-and-forecasting learning, on the argument that precise recovery is not the
+objective. GIMCC~\citep{hao2025gimcc} adds multi-level causal consistency between the
+generated values and the forecasting target, so that imputation preserves the structure the
+forecaster depends on. VIDA~\citep{liang2025vida} reframes VSF as cross-domain knowledge
+transfer and adapts representations from the complete-variable domain.
+SRDI~\citep{xu2026srdi} addresses the distribution shift that variable absence itself induces,
+imputing diffusively in a shift-resilient space. The trajectory is therefore: task-oriented
+evaluation, then variable-subset forecasting, then task-driven reconstruction, then
+shift-aware VSF.
 
-\subsection{Data-Centric Adaptation of Time-Series Foundation Models}
-TATO~\citep{qiu2026tato} searches over transformation pipelines so that heterogeneous
-domains can be served by a single frozen \tsfm{}, selecting pipelines by historical task
-performance. This established data-to-model adaptation as an effective paradigm, so
-``adapting the data instead of the model'' is no longer a contribution by itself.
-In-context adaptation~\citep{tsicl2026} provides a related route in which the context
-itself carries the task specification. Relative to both, our object of study is the
-\emph{decision} layer: given a catalog of already-available legal interventions, which
-one, if any, should be applied to \emph{this} incomplete context. Work on sequential
-evidence acquisition and decision value~\citep{he2024dime,kang2020forecastwithforecasts}
-formalises when information is worth its cost; our selection rule stays a
-simple conservative heuristic rather than claiming an information-theoretic optimum, and
-report its full cost accounting in \S\ref{sec:exp-efficiency}.
+What this line still produces is a \emph{strategy-level} decision and a single repaired or
+robustly modelled series. Our question is finer-grained: given several legal ways of handling
+the current incomplete input, should the system intervene at all, and which intervention
+serves \emph{this} frozen forecaster on \emph{this} episode. We also constrain the returned
+forecast to come from one actually executed input version, so no output fusion or post-hoc
+correction can contribute to a reported number.
 
-\subsection{Selective Decisions and Off-Policy Evaluation}
-\label{sec:related-ope}
-Our decision layer is formally close to conservative policy selection in contextual
-bandits~\citep{abbasiyadkori2011improved,lattimore2020bandit} and to off-policy
-evaluation~\citep{strehl2010learning,dudik2011doubly,swaminathan2015counterfactual,
-jiang2016doubly,thomas2016data}, but three differences matter here. First, an arm's value
-is not a designed reward but the realised loss of a frozen, non-differentiable forecaster,
-so there is no reward model to fit and no simulator to query: the only legal supervision is
-a replayed historical window, tied to the exact model revision that produced it. Second,
-abstention is a first-class action with a known-safe outcome, so a wrong decision is
-asymmetric and directly measurable --- which is why we report harmful intervention rate and
-harmful loss rather than regret alone. Third, we explore nothing and fit no policy
-parameters; the selector is a fixed local-average rule over retrieved replays, which keeps
-it auditable but also caps its ceiling. Selective prediction and learning to
-defer~\citep{chow1970optimum,vovk2005algorithmic,geifman2017selective,madras2018predict,
-mozannar2020consistent} are the closest relatives, but they decide whether to
-\emph{predict} or hand the case to a human or a second model; we decide whether to
-\emph{modify the input} of one fixed predictor, and our abstention returns that
-predictor's own reference forecast.
+\subsection{Robust Forecasting with Missing and Asynchronous Inputs}
+\label{sec:related-robust}
+A third line changes the forecasting model rather than the data.
+ChannelTokenFormer~\citep{jang2026channeltokenformer} is a Transformer framework designed so
+that inter-channel dependency, channel-wise asynchronous sampling, and test-time missing
+blocks are handled jointly instead of in isolation, and it is evaluated on both public
+benchmarks and a private industrial dataset. Methods in this family are complete forecasting
+architectures: they are trained for the task and their parameters are part of the contribution.
+
+\introact{} differs from all three lines on a single axis. It does not propose a new
+forecasting backbone, does not require training or modifying the frozen \tsfm{}, and does not
+output a fused or corrected series. It instead operates inside a fixed catalog of legal
+interventions and makes an \emph{episode-level selection} among them, with the untouched
+input available as one of the choices. Because an arm's value here is the realised loss of a
+frozen, non-differentiable forecaster, the decision layer also differs from conservative
+policy selection in contextual bandits and from off-policy evaluation: there is no designed
+reward, no simulator, and no policy parameters to fit. We develop that contrast in
+Appendix~\ref{app:ope-positioning} and keep it out of the main text because the selector we
+report is not a policy-learning method.
 
 % ===========================================================================
 \section{Problem Formulation and Method}
@@ -266,13 +265,16 @@ predictor's own reference forecast.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.72\textwidth]{figure/fig2_introact_architecture.pdf}
-  \caption{Architecture of \introact{}. A deployment request produces a reference
-  forecast and a set of materialised legal input versions. In parallel, a counterfactual
-  replay bank is built once from TRAIN windows. The observable task state of the request
-  is matched against the bank, each candidate action receives a conservative utility
-  score, and exactly one action is executed --- or the system abstains. The returned
-  forecast always comes from a single actually executed input version.}
+  \includegraphics[width=0.62\textwidth]{figure/fig2_introact_architecture.pdf}
+  \caption{Architecture of \introact{}. \textbf{Offline (top)}: complete historical TRAIN
+  windows are turned into controlled incomplete contexts by injecting the deployment
+  missingness mechanism; every legal intervention is executed with the frozen forecaster and
+  the realised action losses populate a counterfactual replay bank. The offline path is the
+  only place where a future is read. \textbf{Online (bottom)}: a deployment request exposes an
+  incomplete context only, from which an observable state is computed; that state is scored
+  against the frozen bank, and one legal action --- possibly \textsc{Keep} --- is executed with
+  the same frozen forecaster. Neither a future target nor a non-selected candidate's forecast
+  is ever accessed online.}
   \label{fig:arch}
 \end{figure}
 
@@ -282,14 +284,13 @@ Let $X \in \mathbb{R}^{C \times L}$ be the multivariate context available at the
 origin, with observation mask $M \in \{0,1\}^{C \times L}$, and let
 $Y \in \mathbb{R}^{C \times H}$ be the future target, which is \emph{never} available to
 the decision procedure. Let $F$ be a frozen time-series foundation model with fixed
-parameters; $F$ maps a complete-enough input to a forecast
-$p = F(X) \in \mathbb{R}^{C \times H}$. Let
+parameters, mapping an input to a forecast $p = F(X)$. Let
 $\calA = \{a_0, a_1, \dots, a_K\}$ be a fixed catalog of legal governance actions, where
-each $a$ materialises a legal input version $X^{a}$ from $(X, M)$, and $a_0$ is the
-\emph{reference} action (the untouched input, i.e.\ KEEP). Let $\loss(p, Y)$ be a
+each $a$ materialises a legal input version $X^{a}$ from $(X, M)$ and $a_0$ is the
+\emph{reference} action (the untouched input, i.e.\ \textsc{Keep}). Let $\loss$ be a
 forecasting loss. The task is to choose
 \begin{equation}
-  a^\star(X, M) \;\in\; \calA \cup \{\textsc{Abstain}\},
+  a^\star(X, M) \;\in\; \calA,
   \qquad
   a^\star \text{ must not depend on } Y ,
   \label{eq:objective}
@@ -301,140 +302,160 @@ harmful interventions.
 Three structural constraints distinguish this from ordinary imputation. First, \emph{no
 valid observation may be overwritten}: every $X^{a}$ differs from $X^{a_0}$ only at
 positions where $M = 0$. Second, \emph{the future is unavailable}: no candidate forecast
-may be inspected before an action is chosen, and features may not be computed from
-forecasts of non-selected candidates. Third, \emph{abstention is legal}: leaving the
-input untouched is a valid outcome, and the system is not required to act.
+may be inspected before an action is chosen. Third, \emph{the untouched input is a
+candidate like any other}: \textsc{Keep} belongs to $\calA$ and the decision rule of
+\S\ref{sec:method-decision} can select it, so leaving the input unchanged is an outcome of
+the same ranking rather than an exception path bolted onto it.
 
 \subsection{Counterfactual Replay}
 \label{sec:method-replay}
 \paragraph{Terminology.}
 We use \emph{counterfactual} in the offline-evaluation sense, not the causal-identification
-sense: $g_{i,a}$ is the outcome of an action the deployed system did \emph{not} take,
-recovered by replaying a historical window rather than by modelling it. No unconfoundedness
-assumption is invoked, because both $F(X_i^{a_0})$ and $F(X_i^{a})$ are evaluated on the
-same fully observed window, so $g_{i,a}$ is a realised measurement rather than an estimate
-of a latent potential outcome.
+sense: for $a \neq a_0$, $L_{i,a}$ is the outcome of an action the deployed system did
+\emph{not} take, recovered by replaying a historical window rather than by modelling it. No
+unconfoundedness assumption is invoked, because both $F(X_i^{a_0})$ and $F(X_i^{a})$ are
+evaluated on the same fully observed historical window, so every recorded loss is a
+realised measurement rather than an estimate of a latent potential outcome.
 
-The central difficulty is that the quantity we care about,
-$g_a = \loss(F(X^{a_0}), Y) - \loss(F(X^{a}), Y)$, depends on $Y$ and therefore cannot be
-observed at deployment. Our remedy is to obtain it from the past. For a historical
-window whose forecast target is already part of the legally visible history, the same
-quantity is computable: the window is fully observed, its future is known, and it can
-therefore be replayed as a \emph{pseudo-deployment}.
-
-Concretely, for a historical window $i$ we take its complete context $X_i$ and its
-already-realised future $y_i$, inject the \emph{same} missingness mechanism that
-deployment uses (the mechanism is fixed before any method is run, see
-\S\ref{sec:exp-setup}), obtaining an incomplete input $(X_i, M_i)$, and then actually
-execute every action $a \in \calA$ with the frozen forecaster $F$:
+The central difficulty is that the quantity we care about depends on $Y$ and therefore
+cannot be observed at deployment. Our remedy is to obtain it from the past. For a
+historical window whose forecast target is already part of the legally visible history, the
+same quantity is computable: the window is fully observed, its future is known, and it can
+therefore be replayed as a \emph{pseudo-deployment}. Concretely, for a historical window $i$
+we take its complete context $X_i$ and its already-realised future $y_i$, inject the
+\emph{same} missingness mechanism that deployment uses (fixed before any method is run, see
+\S\ref{sec:exp-setup}) to obtain $(X_i, M_i)$, and then actually execute every action
+$a \in \calA$ with the frozen forecaster. The realised task loss of action $a$ on window $i$,
+and the best achievable loss on that window, are
 \begin{equation}
-  g_{i,a} \;=\; \loss\!\left(F(X_i^{a_0}),\, y_i\right) \;-\; \loss\!\left(F(X_i^{a}),\, y_i\right) .
-  \label{eq:replay-gain}
+  L_{i,a} \;=\; \loss\!\left(F(T_a(X_i, M_i)),\, y_i\right),
+  \qquad
+  L_i^{\star} \;=\; \min_{b \in \calA} L_{i,b} ,
+  \label{eq:loss}
 \end{equation}
-Each executed pseudo-deployment contributes a triple
+so that the \emph{action regret} of $a$ on window $i$ is
 \begin{equation}
-  \calB \;=\; \bigl\{\, (z_i,\, a,\, g_{i,a}) \,\bigr\},
+  r_{i,a} \;=\; L_{i,a} - L_i^{\star} \;\ge\; 0 .
+  \label{eq:regret}
+\end{equation}
+Each executed pseudo-deployment contributes a record
+\begin{equation}
+  \calB \;=\; \bigl\{\, (z_i,\, a,\, L_{i,a}) \,\bigr\},
   \label{eq:replay-bank}
 \end{equation}
-where $z_i$ is the \emph{observable} task state of the pseudo-deployment (\S\ref{sec:method-state}).
-The resulting bank is a record of what actually happened when each legal intervention was
-applied to a real historical window under the deployment missingness mechanism. It is not
-a model of the data, and $g_{i,a}$ is not a reconstruction score: it is the realised
-change in forecasting loss.
+where $z_i$ is the \emph{observable} state of the pseudo-deployment
+(\S\ref{sec:method-scoring}). We also retain the relative utility
+$g_{i,a} = L_{i,a_0} - L_{i,a}$, which reads naturally when a quantity is compared against
+\textsc{Keep}, but the decision evidence is expressed through $L_{i,a}$ and $r_{i,a}$,
+because those are the quantities the final decision is actually about.
 
+The bank records what really happened when each legal intervention was applied to a real
+historical window under the deployment missingness mechanism. It is not a model of the data,
+and $L_{i,a}$ is not a reconstruction score: it is the realised change in forecasting loss.
 Because $y_i$ belongs to TRAIN history, no test-time label is ever consulted. The bank is
 built once, offline, and is then frozen; deployment reads it but never writes to it.
-Figure~\ref{fig:concept}(b) summarises this construction. The bank is a discrete grid
-rather than a model of missingness; the resulting scope of validity is discussed in
+Figure~\ref{fig:concept}(b) summarises this construction. The bank is a discrete grid rather
+than a model of missingness, and the resulting scope of validity is discussed in
 Appendix~\ref{app:scope}.
 
-\subsection{Task-State Matching}
-\label{sec:method-state}
-A request is answered by retrieving historical replays that resemble it, so the state
-representation has to describe both \emph{how incomplete} the request is and \emph{what
-the candidate intervention would change}. The state uses no learned encoder, only
-four groups of lightweight, directly computable features:
+\subsection{Regret-Aware Intervention Scoring}
+\label{sec:method-scoring}
+The decision we have to make is discrete, so what should be optimised is not the accuracy
+with which a vector of action gains is regressed, but the ordering of actions on which the
+decision depends. The two objectives are not the same: a scorer can improve its point-wise
+gain error while leaving the argmax unchanged, or change the argmax while its average error
+worsens. We therefore formulate scoring directly over action comparisons.
 
+The state $z$ used by the scorer describes the \emph{request} and the \emph{candidate
+interventions}, never the forecaster's response to a non-selected candidate, and it is kept
+deliberately small:
 \begin{itemize}\itemsep1pt
-  \item \textbf{A --- Mask state}: overall missing ratio, longest missing run, number of
-  missing runs, distance from the nearest missing position to the forecast origin, a
-  target-only/shared indicator, and a tail-missing indicator.
-  \item \textbf{B --- Visible-context state}, computed only from values that are actually
-  visible: robust scale, linear trend, lag-1 autocorrelation, seasonal autocorrelation,
-  recent level shift, and recent volatility.
-  \item \textbf{C --- Intervention state}: for each candidate version $X^{a}$ relative to
-  the reference $X^{a_0}$, the mean absolute change, maximum absolute change, fraction of
-  changed positions, change trend, and the change within the last-observed region. These
-  describe the difference between two \emph{inputs}, never a difference between forecasts.
-  \item \textbf{D --- Reference-forecast state}: obtained from the single legal reference
-  forecast $p_0 = F(X^{a_0})$ only --- its mean, range, slope, first-step jump from the
-  last visible observation, and roughness.
+  \item \textbf{Episode state}: missing ratio, missing-run structure, the distance from the
+  nearest missing position to the forecast origin, the pattern indicator, and summary
+  statistics of the visible context.
+  \item \textbf{Intervention state}: for each candidate version $X^{a}$ relative to the
+  reference $X^{a_0}$, the action identity, the fraction of changed positions, and how much
+  of the change falls near the forecast origin. These describe a difference between two
+  \emph{inputs}, never a difference between forecasts.
 \end{itemize}
+The complete feature list, the normalisation statistics, and the exact learner are given in
+Appendix~\ref{app:features}. Nothing in $z$ is computed from the future, and no
+non-selected candidate's forecast is executed to build it.
 
-Group~D deserves emphasis. We execute only the reference forecast before deciding; we do
-not run the non-selected candidates' forecasts to build features. This keeps the state
-observable under the deployment contract of \S\ref{sec:method-problem} and keeps the
-number of frozen-model calls at the level reported in \S\ref{sec:exp-efficiency}. All
-continuous features are standardised using statistics fitted on the replay-fit portion of
-TRAIN only; similarity is standardised Euclidean distance, with no learned metric.
-Retrieval is performed \emph{per action}, so for action $a$ the neighbourhood $\calN_a$
-contains only historical replays of the same action, and
+Given $\calB$, the scorer produces a value $S_a(z)$ for every legal action and the deployed
+decision is
 \begin{equation}
-  w_i \;=\; \exp\!\left(-\,d_i / \tau\right), \qquad
-  \tau \;=\; \operatorname{median}_{i \in \calN_a} d_i + \epsilon .
-  \label{eq:weights}
+  a^{\star} \;=\; \arg\max_{a \in \calA} S_a(z) .
+  \label{eq:score}
 \end{equation}
-The bandwidth $\tau$ is not tuned: it is set from the query's own neighbourhood, so that
-the only searched hyperparameter is $K \in \{8, 16, 32\}$.
+We consider two instantiations of $S_a$, both aligned with the ordering rather than with
+point-wise gain error, and we freeze exactly one of them on the TRAIN gate before any main
+experiment is run. In the \emph{pairwise} instantiation each replay record contributes
+weighted preferences
+\begin{equation}
+  y_{i,a,b} \;=\; \mathbf{1}[L_{i,a} < L_{i,b}],
+  \qquad
+  \omega_{i,a,b} \;=\; |L_{i,a} - L_{i,b}| ,
+  \label{eq:pairwise}
+\end{equation}
+a comparison model $q_\theta(a \succ b \mid z_i)$ is fitted to them, and the action score
+aggregates the fitted comparisons,
+\begin{equation}
+  S_a^{\mathrm{pair}}(z) \;=\; \sum_{b \neq a} q_\theta(a \succ b \mid z) .
+  \label{eq:score-pair}
+\end{equation}
+In the \emph{ensemble} instantiation the pairwise score is combined with expected-regret
+estimates from two lightweight regressors,
+\begin{equation}
+  S_a(z) \;=\; \lambda_p S_a^{\mathrm{pair}}(z) \;-\; \lambda_r \hat r_a^{\mathrm{ridge}}(z)
+  \;-\; \lambda_t \hat r_a^{\mathrm{tree}}(z) .
+  \label{eq:score-ensemble}
+\end{equation}
+Both instantiations use the same replay bank, the same state $z$, and the same decision rule
+\eqref{eq:score}; they differ only in how $\calB$ is converted into a ranking. Which one is
+used, together with its fitted hyperparameters and the measured ordering agreement, is
+reported in \S\ref{sec:exp-main} and \S\ref{sec:exp-ablation}.
+% FREEZE_AFTER_R2_SELECTOR: 实验 Agent 冻结最终 selector 后，删除未采用的那一支（或降级为
+% 消融项），并把采用支写实：$q_\theta$ 的模型族与容量、$\lambda_p,\lambda_r,\lambda_t$、
+% 正则与早停口径、以及 $\tau$ 的选取位置。在此之前不得把任一支写成"我们的方法就是"。
 
-\subsection{Conservative Intervention}
-\label{sec:method-gate}
-For a new request and candidate action $a$, the matched replays give a local estimate of
-the utility of $a$,
+\subsection{Selective Decision}
+\label{sec:method-decision}
+\textsc{Keep} is the reference action $a_0$ and competes in \eqref{eq:score} on the same
+footing as every other legal action. Abstention is therefore not a separate guard bolted onto
+a repair module: it is the outcome of the ranking whenever the untouched input is the
+highest-scoring option. This distinction matters for what the method may claim. A
+formulation that first selects a candidate and then applies a conservative threshold does
+lower the harmful-intervention rate, but it does so by suppressing actions whose expected
+regret is genuinely negative as well as actions whose evidence is merely thin; we document
+that trade-off, measured in the preceding development cycle, in
+Appendix~\ref{app:development}. The formulation used here instead lets the ranking decide, so
+a wrongly suppressed intervention and a wrongly executed one are the same kind of error.
+
+If the frozen scorer exposes a calibrated comparison against \textsc{Keep}, we add a
+lightweight ambiguity check and fall back to the reference action,
 \begin{equation}
-  \hat\mu_a \;=\; \frac{\sum_{i \in \calN_a} w_i\, g_{i,a}}{\sum_{i \in \calN_a} w_i},
-  \qquad
-  \hat\sigma_a^2 \;=\; \frac{\sum_{i \in \calN_a} w_i\,(g_{i,a} - \hat\mu_a)^2}{\sum_{i \in \calN_a} w_i},
-  \qquad
-  n_{\mathrm{eff},a} \;=\; \frac{\bigl(\sum_i w_i\bigr)^2}{\sum_i w_i^2} .
-  \label{eq:local-mean}
+  P(a^{\star} \succ a_0 \mid z) < \tau \;\Rightarrow\; a^{\star} = a_0 ,
+  \label{eq:abstain}
 \end{equation}
-A positive mean alone is not a sufficient reason to act: local historical evidence can be
-thin or contradictory, and acting on a noisy positive estimate is exactly how a repair
-becomes harmful. We therefore score each action by a lower-confidence quantity
-\begin{equation}
-  S_a \;=\; \hat\mu_a \;-\; \beta\,\frac{\hat\sigma_a}{\sqrt{n_{\mathrm{eff},a}}},
-  \label{eq:conservative-score}
-\end{equation}
-and take
-\begin{equation}
-  a^\star \;=\;
-  \begin{cases}
-    \arg\max_{a \in \calA} S_a, & \max_{a \in \calA} S_a > 0,\\[2pt]
-    a_0 \ (\textsc{Abstain}),   & \text{otherwise}.
-  \end{cases}
-  \label{eq:act-abstain}
-\end{equation}
-The reference action $a_0$ is always legal, so abstention never fails: when the evidence
-is insufficient or points to harm, the system returns the untouched input. The
-conservatism level $\beta \in \{0, 1, 1.64\}$ and the neighbourhood size $K$ are the only
-tuned quantities; both are selected on a held-out TRAIN gate (\S\ref{sec:exp-setup}) and
-then frozen. $S_a$ is a heuristic score, not a calibrated lower bound on $g_a$; we report
-its sign agreement with realised utility in \S\ref{sec:exp-governance} and do not claim
-coverage guarantees.
+with $\tau$ selected on the TRAIN gate together with the other hyperparameters.
+\eqref{eq:abstain} is ambiguity handling, not a guarantee: we do not claim coverage,
+calibration, or any lower bound on the realised utility of a selected action, and every
+decision-quality number we report is measured rather than bounded.
 
 \subsection{Deployment and Complexity}
 \label{sec:method-deploy}
-A request is served in six steps: read the visible context and mask; execute the reference
-action to obtain $p_0$; materialise the legal candidates; extract $z$; query the frozen bank
-and compute $S_a$ for every candidate; then abstain if $\max_a S_a \le 0$, otherwise
-execute $a^\star$ and return $F(X^{a^\star})$. The backbone is called once for the
-reference and once for the selected action, so a request costs one or two \tsfm{} forecasts
-(\S\ref{sec:exp-efficiency}). There is no ensemble, no output correction, no residual
-model, and no parameter update. Cost accounting is kept explicit: candidate
-materialisation, imputer runtime, both \tsfm{} calls, selector overhead, and total request
-wall-clock are recorded separately, and no component is booked as free because a cached
-artefact happened to exist.
+A request is served in five steps: read the visible context and mask; compute the observable
+state $z$; materialise the legal candidate inputs; score every candidate against the frozen
+bank; execute $a^{\star}$ with the frozen forecaster and return the resulting forecast. When
+$a^{\star} = a_0$ the input is untouched and the returned forecast is the reference one.
+Under the frozen state definition above the scorer reads no forecast: $z$ is computed from
+the input and the mask alone, so the frozen forecaster is executed once per request, for the
+action the ranking selects (Appendix~\ref{app:calls}). There is no ensemble, no output
+correction, no residual model, and no parameter update. Cost accounting is kept explicit and
+separated: candidate materialisation, frozen-model calls, selector overhead, and total
+request wall-clock are recorded individually, and no component is booked as free because a
+cached artefact happened to exist.
 
 % ===========================================================================
 \section{Experiments}
@@ -443,7 +464,7 @@ artefact happened to exist.
 \subsection{Experimental Setup}
 \label{sec:exp-setup}
 \paragraph{Datasets and backbones.}
-The main matrix uses \ph{N-DATASETS} public forecasting sources: ETTh1, ETTh2, ETTm1,
+The main matrix uses \ph{N_DATASETS} public forecasting sources: ETTh1, ETTh2, ETTm1,
 ETTm2, Electricity~\citep{uci_electricity}, Exchange~\citep{lai2018lstnet},
 Traffic~\citep{pems}, and Weather~\citep{wu2021autoformer}. Three frozen \tsfm{} families
 are used: Chronos-Bolt~\citep{chronosbolt2025} (\emph{Bolt}),
@@ -457,275 +478,243 @@ only in Appendix~\ref{app:horizons}.
 \paragraph{Governance actions.}
 The catalog is fixed at five legal actions,
 $\calA = \{\textsc{Keep},\ \textsc{Ffill},\ \textsc{Single TS-ICL},\ \textsc{Multi TS-ICL},\ \textsc{Context Ridge}\}$,
-with \textsc{Keep} as the reference $a_0$. The catalog stays at five arms because the
-contribution under test is the selection rule, not imputer architecture; a wider catalog
-would confound the two. A complete and
-valid input is always mapped to \textsc{Keep}; unsupported, aliased, and failed actions
-are recorded rather than silently dropped.
+with \textsc{Keep} as the reference $a_0$. A complete and valid input is always mapped to
+\textsc{Keep}; unsupported, aliased, and failed actions are recorded rather than silently
+dropped.
 
 \paragraph{Missingness protocol.}
 Four deterministic patterns are frozen before any method runs: \textbf{P1 point missing};
-\textbf{P2 target block} (a contiguous block missing on the target variable);
-\textbf{P3 shared block} (several visible variables missing over the same interval); and
-\textbf{P4 tail missing} (a block adjacent to the forecast origin, modelling observations
-that have not arrived). Every mask is derived by a deterministic hash of
-\texttt{source + parent + origin + horizon + pattern + protocol\_seed} and is never moved
-after forecasts are seen. The main experiment uses $10\%$ severity, matching the scale of
-the preceding controlled-deletion work; \S\ref{sec:exp-robust} adds $30\%$ and $50\%$.
+\textbf{P2 target block}; \textbf{P3 shared block}; and \textbf{P4 tail missing}. Every mask
+is derived by a deterministic hash of \texttt{source + parent + origin + horizon + pattern
++ protocol\_seed} and is never moved after forecasts are seen. The main experiment uses
+$10\%$ severity; \S\ref{sec:exp-robust} adds $30\%$ and $50\%$.
 
 \paragraph{Splits.}
 Only legal TRAIN parents are used. Within TRAIN, parents are sorted by source and time and
-divided into \emph{replay-fit} ($\sim$60\%, used to build the replay bank, train
-baselines, and fit feature normalisation), \emph{gate} ($\sim$20\%, used to select $K$,
-$\beta$, and any legal baseline hyperparameter), and \emph{TRAIN-eval} ($\sim$20\%, the
-final internal acceptance check before freezing). Purging is enforced at $L + H$ and no
-parent's masks, patterns, or horizons cross a split boundary. TRAIN-eval targets may be
-used for evaluation but not to refit the selector. Replay pseudo-deployment severities are
-drawn from the same three levels by deterministic hash, so the method is a single
-configuration that is not retuned per severity.
+divided into \emph{replay-fit} ($\sim$60\%, to build the replay bank and fit feature
+scaling), \emph{gate} ($\sim$20\%, to select the selector hyperparameters and any legal
+baseline hyperparameter), and \emph{TRAIN-eval} ($\sim$20\%, the final internal acceptance
+check). Purging is enforced at $L + H$ and no parent's masks, patterns, or horizons cross a
+split boundary. Replay pseudo-deployment severities are drawn from the same three levels by
+deterministic hash, so the method is a single configuration that is not retuned per severity.
+\S\ref{sec:exp-support} reuses this split rule while restricting how much of replay-fit is
+available.
 
 \paragraph{Baselines and controls.}
 Five published baselines are fixed in advance and never swapped after results are seen:
-BRITS~\citep{cao2018brits}, CSDI~\citep{tashiro2021csdi}, TOI/generalized
-representers~\citep{wang2024taskoriented}, T1~\citep{park2026t1}, and
-TATO~\citep{qiu2026tato}. All five appear in every main-text experiment. Alongside them we
-report three controls that are not claimed as published baselines: \textsc{Native Keep}
-(no governance), \textsc{Best Fixed} (one action chosen on TRAIN and applied to every
-request, testing whether instance-level selection is necessary at all), and
-\textbf{R2-CART}, the strongest simple selector inherited from the preceding development
-cycle, which \introact{} must beat if a more elaborate procedure is to be justified.
-Finally, a \emph{Catalog Oracle} chooses the best of the five legal actions using the
-future target; it is a diagnostic upper reference only, never deployable, never part of
-any average rank, and rendered in grey italics. Trainable imputers (BRITS, CSDI, T1) are
-trained on TRAIN only with a TRAIN mixture over the same three severities. Because our
-$L = 512$ task differs from the TATO paper's setting, we report TATO explicitly as
-\emph{under our $L{=}512$ protocol} and never as a full replication.
+TOI~\citep{wang2024taskoriented}, TOI-VSF~\citep{hao2025toivsf},
+GIMCC~\citep{hao2025gimcc}, SRDI~\citep{xu2026srdi}, and
+ChannelTokenFormer~\citep{jang2026channeltokenformer}. All five appear in every
+non-ablation experiment in the main text. The four data-side methods receive a per-backbone
+column; ChannelTokenFormer is a complete forecasting architecture trained for the task rather
+than a data-side adapter, so its row in Table~\ref{tab:main} has no per-frozen-backbone
+column and no number is fabricated for the missing cells. VIDA~\citep{liang2025vida} is held
+back from the core set and reported as an extended comparison in
+Appendix~\ref{app:extended}. Three controls accompany the five: \textsc{Native Keep},
+\textsc{Best Fixed}, and \textbf{R2-CART}; a \emph{Catalog Oracle} using the future target is
+reported in grey italics as a diagnostic upper reference and is excluded from all ranks.
+Trainable baselines are fitted on TRAIN only.
 
 \paragraph{Metrics, aggregation, and statistics.}
-The primary metric is MASE~\citep{hyndman2006mase}, averaged source-macro: first over
-parents, then over sources, with the eight sources equally weighted. Secondary metrics are
-MSE, MAE, and RMSSE. MAPE is not a headline metric because it is unstable near zero, CRPS
-is not used because not every backbone or baseline exposes comparable probabilistic
-forecasts, and QLIKE is deferred to the finance case study (Appendix~\ref{app:finance}).
-Efficiency is reported separately and never folded into an accuracy score. The primary
-statistical unit is the parent: we use paired cluster bootstrap with \ph{N-BOOTSTRAP}
-resamples over parent blocks for 95\% confidence intervals on source-macro MASE
-differences against each baseline, with Holm correction~\citep{holm1979simple} across
-baselines, and additionally report average rank and the number of won cells over
-source $\times$ backbone $\times$ horizon $\times$ pattern. Mask variants of the same
-parent are never treated as independent samples.
+Four forecasting metrics are reported throughout: MASE~\citep{hyndman2006mase} as the primary
+metric, plus MAE, RMSE, and MSE. MASE is averaged source-macro: first over parents, then over
+sources, with the eight sources equally weighted. MAPE, CRPS, and QLIKE are not headline
+metrics (MAPE is unstable near zero, CRPS is not exposed by every backbone or baseline, and
+QLIKE is deferred to Appendix~\ref{app:finance}). Efficiency is reported separately and
+never folded into an accuracy score. The primary statistical unit is the parent: paired
+cluster bootstrap with \ph{N_BOOTSTRAP} resamples over parent blocks gives 95\% confidence
+intervals on source-macro MASE differences against each baseline, with Holm
+correction~\citep{holm1979simple} across baselines, and additionally we report average rank
+and the number of won cells over source $\times$ backbone $\times$ horizon $\times$ pattern.
+Mask variants of the same parent are never treated as independent samples.
 
 \subsection{Main Results}
 \label{sec:exp-main}
-\emph{Does \introact{} improve incomplete-input forecasting across datasets and frozen
-\tsfm{} backbones compared with recent task-oriented, imputation, and TSFM-adaptation
-methods?}
+\emph{Can \introact{} improve forecasting under incomplete inputs across datasets and frozen
+\tsfm{} backbones, compared with published methods designed for task-oriented or
+incomplete-input forecasting?}
 
-Table~\ref{tab:main} reports the main comparison under the 10\% severity condition, with
-all eight sources, three backbones, two horizons, and four patterns. \ph{MAIN-READING}.
-\ph{MAIN-BACKBONE-CONSISTENCY}. \ph{MAIN-T1TATO}. \ph{MAIN-R2CART}. \ph{MAIN-RANK}.
-Per-dataset MAE and RMSSE tables are deferred to Appendix~\ref{app:datasets}.
+Table~\ref{tab:main} reports the main comparison at $10\%$ severity, over all eight sources,
+three backbones, two horizons, and four patterns. \ph{MAIN_READING}.
+\ph{MAIN_BACKBONE_CONSISTENCY}. \ph{MAIN_BASELINE_SPREAD}. \ph{MAIN_R2CART}. \ph{MAIN_RANK}.
+\ph{MAIN_SELECTOR_CHOICE}. Per-source MAE and RMSE tables are deferred to
+Appendix~\ref{app:datasets}. Deployment cost is reported separately in
+Appendix~\ref{app:calls} and is never folded into an accuracy score: offline fitting is a
+one-off cost, online cost covers candidate construction, frozen-model calls, and end-to-end
+request latency, cached historical artefacts are not booked as zero, and cold start is
+reported separately from hot latency.
 
 \begin{table}[t]
-  \caption{Main results at 10\% missingness; MASE is source-macro averaged and lower is
-  better. \best{Bold} is the best deployable method, \second{underline} the second best.
-  The oracle row uses future targets for diagnosis only, is not deployable, and is excluded
-  from ranks and from all claims.}
+  \caption{Main results at $10\%$ missingness. MASE is source-macro averaged and lower is
+  better everywhere. The \emph{Type} column separates data-side methods, which can be
+  composed with a frozen backbone, from ChannelTokenFormer, which is a complete forecasting
+  architecture trained for the task: it has no per-frozen-backbone column, and its row is
+  reported on the task-level comparison only, with no number fabricated for the missing
+  cells. \best{Bold} is the best deployable method, \second{underline} the second best. The
+  oracle row uses future targets for diagnosis only, is not deployable, and is excluded from
+  ranks and from all claims.}
   \label{tab:main}
   \centering
   \small
-  \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{lcccccc}
+  \setlength{\tabcolsep}{3.5pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{llccccccc}
     \toprule
-    Method & Bolt MASE $\downarrow$ & TimesFM MASE $\downarrow$ & Chronos-2 MASE $\downarrow$
-           & Overall MASE $\downarrow$ & MSE $\downarrow$ & Avg.\ Rank $\downarrow$ \\
+    Method & Type & Bolt MASE $\downarrow$ & TimesFM MASE $\downarrow$
+           & Chronos-2 MASE $\downarrow$ & Overall MASE $\downarrow$
+           & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    Native KEEP      & \ph{KEEP-BOLT}  & \ph{KEEP-TF}  & \ph{KEEP-CH2}  & \ph{KEEP-OVR}  & \ph{KEEP-MSE}  & \ph{KEEP-RANK} \\
-    Best Fixed       & \ph{BF-BOLT}    & \ph{BF-TF}    & \ph{BF-CH2}    & \ph{BF-OVR}    & \ph{BF-MSE}    & \ph{BF-RANK} \\
-    R2-CART          & \ph{R2-BOLT}    & \ph{R2-TF}    & \ph{R2-CH2}    & \ph{R2-OVR}    & \ph{R2-MSE}    & \ph{R2-RANK} \\
-    BRITS            & \ph{BRITS-BOLT} & \ph{BRITS-TF} & \ph{BRITS-CH2} & \ph{BRITS-OVR} & \ph{BRITS-MSE} & \ph{BRITS-RANK} \\
-    CSDI             & \ph{CSDI-BOLT}  & \ph{CSDI-TF}  & \ph{CSDI-CH2}  & \ph{CSDI-OVR}  & \ph{CSDI-MSE}  & \ph{CSDI-RANK} \\
-    TOI              & \ph{TOI-BOLT}   & \ph{TOI-TF}   & \ph{TOI-CH2}   & \ph{TOI-OVR}   & \ph{TOI-MSE}   & \ph{TOI-RANK} \\
-    T1               & \ph{T1-BOLT}    & \ph{T1-TF}    & \ph{T1-CH2}    & \ph{T1-OVR}    & \ph{T1-MSE}    & \ph{T1-RANK} \\
-    TATO             & \ph{TATO-BOLT}  & \ph{TATO-TF}  & \ph{TATO-CH2}  & \ph{TATO-OVR}  & \ph{TATO-MSE}  & \ph{TATO-RANK} \\
+    Native KEEP        & Frozen TSFM            & \ph{KEEP_BOLT}   & \ph{KEEP_TF}   & \ph{KEEP_CH2}   & \ph{KEEP_OVR}   & \ph{KEEP_MAE}   & \ph{KEEP_RMSE}   & \ph{KEEP_RANK} \\
+    Best Fixed         & Frozen TSFM            & \ph{BF_BOLT}     & \ph{BF_TF}     & \ph{BF_CH2}     & \ph{BF_OVR}     & \ph{BF_MAE}     & \ph{BF_RMSE}     & \ph{BF_RANK} \\
+    R2-CART            & Selector               & \ph{R2_BOLT}     & \ph{R2_TF}     & \ph{R2_CH2}     & \ph{R2_OVR}     & \ph{R2_MAE}     & \ph{R2_RMSE}     & \ph{R2_RANK} \\
+    TOI                & Task-oriented          & \ph{TOI_BOLT}    & \ph{TOI_TF}    & \ph{TOI_CH2}    & \ph{TOI_OVR}    & \ph{TOI_MAE}    & \ph{TOI_RMSE}    & \ph{TOI_RANK} \\
+    TOI-VSF            & VSF                    & \ph{TOIVSF_BOLT} & \ph{TOIVSF_TF} & \ph{TOIVSF_CH2} & \ph{TOIVSF_OVR} & \ph{TOIVSF_MAE} & \ph{TOIVSF_RMSE} & \ph{TOIVSF_RANK} \\
+    GIMCC              & VSF                    & \ph{GIMCC_BOLT}  & \ph{GIMCC_TF}  & \ph{GIMCC_CH2}  & \ph{GIMCC_OVR}  & \ph{GIMCC_MAE}  & \ph{GIMCC_RMSE}  & \ph{GIMCC_RANK} \\
+    SRDI               & VSF                    & \ph{SRDI_BOLT}   & \ph{SRDI_TF}   & \ph{SRDI_CH2}   & \ph{SRDI_OVR}   & \ph{SRDI_MAE}   & \ph{SRDI_RMSE}   & \ph{SRDI_RANK} \\
+    ChannelTokenFormer & Forecast model         & N/A\textsuperscript{*} & N/A\textsuperscript{*} & N/A\textsuperscript{*} & \ph{CTF_OVR} & \ph{CTF_MAE} & \ph{CTF_RMSE} & \ph{CTF_RANK} \\
     \midrule
-    \rowcolor{bestgray}\introact{}      & \ph{OURS-BOLT}  & \ph{OURS-TF}  & \ph{OURS-CH2}  & \ph{OURS-OVR}  & \ph{OURS-MSE}  & \ph{OURS-RANK} \\
+    \rowcolor{bestgray}\introact{} & Frozen TSFM governance & \ph{OURS_BOLT} & \ph{OURS_TF} & \ph{OURS_CH2} & \ph{OURS_OVR} & \ph{OURS_MAE} & \ph{OURS_RMSE} & \ph{OURS_RANK} \\
     \midrule
-    Catalog Oracle   & \oracle{\ph{ORACLE-BOLT}} & \oracle{\ph{ORACLE-TF}}
-      & \oracle{\ph{ORACLE-CH2}} & \oracle{\ph{ORACLE-OVR}} & \oracle{\ph{ORACLE-MSE}} & \oracle{--} \\
+    Catalog Oracle     & Diagnostic             & \oracle{\ph{ORACLE_BOLT}} & \oracle{\ph{ORACLE_TF}} & \oracle{\ph{ORACLE_CH2}} & \oracle{\ph{ORACLE_OVR}} & \oracle{\ph{ORACLE_MAE}} & \oracle{\ph{ORACLE_RMSE}} & \oracle{--} \\
     \bottomrule
   \end{tabular}}
+  \vspace{-2pt}
+  {\footnotesize\textsuperscript{*}Not applicable: ChannelTokenFormer is a trained forecasting
+  architecture rather than a data-side adapter over a frozen backbone.}
 \end{table}
 
-\subsubsection{Efficiency and Deployment Cost}
-\label{sec:exp-efficiency}
-Cost is reported separately in Appendix~\ref{app:calls} and is never folded into an
-accuracy score. Offline training/search is the one-off cost of fitting trainable imputers
-or running a transformation search; online cost covers candidate construction, frozen-model
-calls, and end-to-end request latency. Cached historical artefacts are not booked as zero,
-and batch-averaged latency is not presented as a per-request guarantee; cold start is
-reported separately from hot latency.
+\subsection{When Does Action Choice Matter?}
+\label{sec:exp-opportunity}
+\emph{Does a single fixed repair policy suffice, or does the useful action depend on the
+episode?}
 
-\subsection{Reconstruction Is Not Forecast Utility}
-\label{sec:exp-recutility}
-\emph{Does better reconstruction imply better forecasting for a frozen \tsfm{}?}
-
-This experiment reuses the predictions produced by the main experiment; no protocol is
-changed. Because the artificially hidden positions are known, the reconstruction error
-$E^{\mathrm{rec}}$ is computable, and the forecasting effect is
-$\Delta L^{\mathrm{forecast}} = L_{\textsc{Keep}} - L_{\text{method}}$. All five published
-baselines enter. Figure~\ref{fig:recutil} plots reconstruction improvement against
-forecasting improvement, one point per parent--method pair, with identical axis
-definitions across backbones; the paired numbers and the discordant rate are in
-Table~\ref{tab:app-recutils} (Appendix~\ref{app:recutils}).
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.60\textwidth]{figure/fig3_reconstruction_vs_utility.pdf}
-  \caption{Reconstruction improvement against forecasting improvement, one point per
-  parent--method pair, identical axes for every backbone. The panel is a placeholder until
-  the main experiment produces the underlying CSV.}
-  \label{fig:recutil}
-\end{figure}
-
-The claim this experiment supports is narrow: \emph{reconstruction quality is not a
-reliable proxy for frozen-\tsfm{} forecasting utility}. If the measured correlation
-turns out to be high, this conclusion must be rewritten rather than softened.
-
-\subsection{When Should We Intervene?}
-\label{sec:exp-governance}
-\emph{Can historical counterfactual utility support instance-level intervention
-decisions, and does abstention reduce harmful governance?}
-
-The same five published baselines enter as in \S\ref{sec:exp-main}. We report four governance diagnostics: the
-\emph{intervention rate} (fraction of requests whose input was actually changed); the
-\emph{harmful intervention rate}
-$\mathrm{HIR} = |\{i : L_{m,i} > L_{\textsc{Keep},i}\}| / N$, reported both
-unconditionally and conditional on an intervention; the
-\emph{harmful loss}
-$\mathrm{HL} = \frac{1}{N}\sum_i \max(0, L_{m,i} - L_{\textsc{Keep},i})$; and the
-\emph{catalog gap closed}
+This experiment tests the premise of selective governance on the evaluation episodes. For
+each parent we define the oracle opportunity of the episode,
 \begin{equation}
-  \mathrm{CGC} \;=\; \frac{L_{\textsc{Keep}} - L_m}{L_{\textsc{Keep}} - L_{\mathrm{oracle}}},
+  \Delta_i \;=\; L_{\textsc{Keep},i} - L_i^{\star},
   \qquad
-  L_{\mathrm{oracle}} = \min_{a \in \calA} L_a ,
-  \label{eq:cgc}
+  L_i^{\star} = \min_{a \in \calA} L_{i,a},
+  \label{eq:opportunity}
 \end{equation}
-computed only on improvable windows where the oracle strictly beats \textsc{Keep}. The name
-reflects that the baselines can produce inputs outside the five-arm catalog; it is not a
-universal oracle gap. Figure~\ref{fig:governance} in Appendix~\ref{app:governance-fig}
-shows the per-method harmful loss and the realised utility against the binned score.
+which is how much the best legal action could have improved on the untouched input. Because
+$\Delta_i$ uses the future target, it is a diagnostic, not a deployable feature: the
+\emph{strata} are defined by thresholds fitted on TRAIN only and then applied unchanged to
+the evaluation episodes, giving \emph{no-op} (the reference input is already best, up to a
+tolerance fixed on TRAIN), \emph{low opportunity}, and \emph{high opportunity}. No evaluation
+episode is used to choose the thresholds.
+
+All five published baselines enter, and Table~\ref{tab:opportunity} reports MASE within each
+stratum under the identical partition. The table answers two questions at once: does
+\introact{} avoid governance where nothing can be gained, and does it exploit action
+heterogeneity where it exists? A method that is better only in the high-opportunity stratum
+while degrading the no-op stratum has not solved the selection problem this paper poses.
+\ph{OPPORTUNITY_READING}. \ph{OPPORTUNITY_NOOP}. \ph{OPPORTUNITY_HIGH}. The distribution of
+$\Delta_i$ and the sensitivity of the stratum boundaries are reported in
+Appendix~\ref{app:opportunity}.
 
 \begin{table}[t]
-  \caption{Selective governance diagnostics. HIR and harmful loss measure harm relative
-  to \textsc{Native Keep}; catalog gap closed measures the share of the achievable five-arm
-  improvement that was captured.}
-  \label{tab:governance}
+  \caption{When does action choice matter? Episodes are partitioned into no-op,
+  low-opportunity, and high-opportunity strata by TRAIN-only thresholds on the oracle
+  opportunity $\Delta_i$ of \eqref{eq:opportunity}; MASE is source-macro averaged within each
+  stratum and lower is better. The identical partition is applied to every method.}
+  \label{tab:opportunity}
   \centering
   \small
   \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
+  \begin{tabular}{lcccc}
     \toprule
-    Method & MASE $\downarrow$ & Intervention Rate & HIR $\downarrow$ & Harmful Loss $\downarrow$ & Catalog Gap Closed $\uparrow$ \\
+    Method & No-op MASE $\downarrow$ & Low opportunity $\downarrow$ & High opportunity $\downarrow$ & Overall $\downarrow$ \\
     \midrule
-    Best Fixed       & \ph{BF-MASE}    & \ph{BF-IR}    & \ph{BF-HIR}    & \ph{BF-HL}    & \ph{BF-CGC} \\
-    R2-CART          & \ph{R2-MASE}    & \ph{R2-IR}    & \ph{R2-HIR}    & \ph{R2-HL}    & \ph{R2-CGC} \\
-    BRITS            & \ph{BRITS-MASE} & \ph{BRITS-IR} & \ph{BRITS-HIR} & \ph{BRITS-HL} & \ph{BRITS-CGC} \\
-    CSDI             & \ph{CSDI-MASE}  & \ph{CSDI-IR}  & \ph{CSDI-HIR}  & \ph{CSDI-HL}  & \ph{CSDI-CGC} \\
-    TOI              & \ph{TOI-MASE}   & \ph{TOI-IR}   & \ph{TOI-HIR}   & \ph{TOI-HL}   & \ph{TOI-CGC} \\
-    T1               & \ph{T1-MASE}    & \ph{T1-IR}    & \ph{T1-HIR}    & \ph{T1-HL}    & \ph{T1-CGC} \\
-    TATO             & \ph{TATO-MASE}  & \ph{TATO-IR}  & \ph{TATO-HIR}  & \ph{TATO-HL}  & \ph{TATO-CGC} \\
+    TOI                & \ph{NOOP_TOI}    & \ph{LOWOP_TOI}    & \ph{HIGHOP_TOI}    & \ph{OVR_TOI} \\
+    TOI-VSF            & \ph{NOOP_TOIVSF} & \ph{LOWOP_TOIVSF} & \ph{HIGHOP_TOIVSF} & \ph{OVR_TOIVSF} \\
+    GIMCC              & \ph{NOOP_GIMCC}  & \ph{LOWOP_GIMCC}  & \ph{HIGHOP_GIMCC}  & \ph{OVR_GIMCC} \\
+    SRDI               & \ph{NOOP_SRDI}   & \ph{LOWOP_SRDI}   & \ph{HIGHOP_SRDI}   & \ph{OVR_SRDI} \\
+    ChannelTokenFormer & \ph{NOOP_CTF}    & \ph{LOWOP_CTF}    & \ph{HIGHOP_CTF}    & \ph{OVR_CTF} \\
     \midrule
-    \rowcolor{bestgray}\introact{}      & \ph{OURS-MASE}  & \ph{OURS-IR}  & \ph{OURS-HIR}  & \ph{OURS-HL}  & \ph{OURS-CGC} \\
+    \rowcolor{bestgray}\introact{} & \ph{NOOP_OURS} & \ph{LOWOP_OURS} & \ph{HIGHOP_OURS} & \ph{OVR_OURS} \\
     \bottomrule
-  \end{tabular}}
+  \end{tabular}
 \end{table}
+
+Figure~\ref{fig:opportunity} in Appendix~\ref{app:opportunity} visualises the stratum shares
+together with the per-stratum improvement over \textsc{Keep}; the panel is a placeholder until
+the main experiment produces the underlying CSV.
 
 \subsection{Robustness to Missingness}
 \label{sec:exp-robust}
 \emph{Does the same frozen governance policy remain useful as missingness becomes more
 severe and structurally different?}
 
-The same five published baselines enter, with no method retuned between severities.
-Severities are $10\%$, $30\%$ and $50\%$, crossed with
-the four patterns and the three backbones. No method is retuned: \introact{} reuses the
-$K$ and $\beta$ frozen after the TRAIN gate, and the baselines reuse the models and rules
-fixed on TRAIN. Complete numbers are in Appendix~\ref{app:severity}, and
-Figure~\ref{fig:robust} in Appendix~\ref{app:robust-fig} shows the severity trend.
+The same five published baselines enter, and no method is retuned between severities.
+Severities are $10\%$, $30\%$ and $50\%$, crossed with the four patterns and the three
+backbones, with the selector configuration carried over unchanged from the TRAIN gate.
+Table~\ref{tab:robust} reports the severity trend, the worst pattern cell, and the average
+rank; the complete pattern $\times$ severity breakdown is in
+Appendix~\ref{app:robustness}, and Figure~\ref{fig:robust} in
+Appendix~\ref{app:robust-fig} shows the trend. \ph{ROBUST_READING}. \ph{ROBUST_50}.
+\ph{ROBUST_WORST_PATTERN}.
 
 \begin{table}[t]
-  \caption{Robustness to missingness severity. The worst-case column is the largest
-  degradation relative to \textsc{Native Keep} over all severity, pattern, and backbone
-  cells; a negative entry means a method can be worse than doing nothing.}
+  \caption{Robustness to missingness severity, with no method retuned between levels. The
+  worst-pattern column is the largest degradation relative to \textsc{Native Keep} over all
+  pattern and backbone cells at that severity; a negative entry means a method can be worse
+  than doing nothing. Average rank is over method $\times$ severity $\times$ pattern $\times$
+  backbone cells.}
   \label{tab:robust}
   \centering
   \small
-  \begin{tabular}{lcccc}
+  \setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccc}
     \toprule
-    Method & 10\% MASE $\downarrow$ & 30\% MASE $\downarrow$ & 50\% MASE $\downarrow$ & Worst-case $\Delta$ vs KEEP $\uparrow$ \\
+    Method & 10\% MASE $\downarrow$ & 30\% MASE $\downarrow$ & 50\% MASE $\downarrow$ & Worst pattern $\downarrow$ & Avg.\ rank $\downarrow$ \\
     \midrule
-    BRITS       & \ph{BRITS-10} & \ph{BRITS-30} & \ph{BRITS-50} & \ph{BRITS-WORST} \\
-    CSDI        & \ph{CSDI-10}  & \ph{CSDI-30}  & \ph{CSDI-50}  & \ph{CSDI-WORST} \\
-    TOI         & \ph{TOI-10}   & \ph{TOI-30}   & \ph{TOI-50}   & \ph{TOI-WORST} \\
-    T1          & \ph{T1-10}    & \ph{T1-30}    & \ph{T1-50}    & \ph{T1-WORST} \\
-    TATO        & \ph{TATO-10}  & \ph{TATO-30}  & \ph{TATO-50}  & \ph{TATO-WORST} \\
+    TOI                & \ph{TOI_10}    & \ph{TOI_30}    & \ph{TOI_50}    & \ph{TOI_WORST}    & \ph{TOI_ARANK} \\
+    TOI-VSF            & \ph{TOIVSF_10} & \ph{TOIVSF_30} & \ph{TOIVSF_50} & \ph{TOIVSF_WORST} & \ph{TOIVSF_ARANK} \\
+    GIMCC              & \ph{GIMCC_10}  & \ph{GIMCC_30}  & \ph{GIMCC_50}  & \ph{GIMCC_WORST}  & \ph{GIMCC_ARANK} \\
+    SRDI               & \ph{SRDI_10}   & \ph{SRDI_30}   & \ph{SRDI_50}   & \ph{SRDI_WORST}   & \ph{SRDI_ARANK} \\
+    ChannelTokenFormer & \ph{CTF_10}    & \ph{CTF_30}    & \ph{CTF_50}    & \ph{CTF_WORST}    & \ph{CTF_ARANK} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{OURS-10}  & \ph{OURS-30}  & \ph{OURS-50}  & \ph{OURS-WORST} \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-\subsection{Ablation Study}
-\label{sec:exp-ablation}
-\emph{Which component carries the gain, and is local historical replay actually
-necessary?}
-
-The ablation uses the unified main protocol and is fixed at six rows. A1 replaces
-per-action local matching with a global replay pool; A2 drops the intervention-state
-features; A3 drops the reference-forecast state; A4 drops the conservative gate, so the
-method always acts on the highest estimated mean; A5 replaces historical replay with a
-parametric gain predictor (lightweight ridge or CART, no larger network) over the
-\emph{identical} observable features, isolating local historical replay against a global
-gain regression.
-
-\begin{table}[t]
-  \caption{Ablation on the main protocol; $\checkmark$ marks a present component. Calls is
-  the mean number of frozen-model forecasts per request.}
-  \label{tab:ablation}
-  \centering
-  \small
-  \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{lcccccccc}
-    \toprule
-    & \multicolumn{5}{c}{Components} & \multicolumn{3}{c}{Outcome} \\
-    \cmidrule(lr){2-6}\cmidrule(lr){7-9}
-    Variant & Replay & Local match & Interv.\ state & Forecast state & Cons.\ gate
-            & MASE $\downarrow$ & HIR $\downarrow$ & Calls $\downarrow$ \\
-    \midrule
-    Full \introact{}            & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & \ph{FULL-MASE} & \ph{FULL-HIR} & \ph{FULL-CALLS} \\
-    A1 Global Replay            & $\checkmark$ &              & $\checkmark$ & $\checkmark$ & $\checkmark$ & \ph{A1-MASE}   & \ph{A1-HIR}   & \ph{A1-CALLS} \\
-    A2 w/o Intervention State   & $\checkmark$ & $\checkmark$ &              & $\checkmark$ & $\checkmark$ & \ph{A2-MASE}   & \ph{A2-HIR}   & \ph{A2-CALLS} \\
-    A3 w/o Forecast State       & $\checkmark$ & $\checkmark$ & $\checkmark$ &              & $\checkmark$ & \ph{A3-MASE}   & \ph{A3-HIR}   & \ph{A3-CALLS} \\
-    A4 w/o Conservative Gate    & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ &              & \ph{A4-MASE}   & \ph{A4-HIR}   & \ph{A4-CALLS} \\
-    A5 Parametric Gain Predictor&              & ---          & $\checkmark$ & $\checkmark$ & $\checkmark$ & \ph{A5-MASE}   & \ph{A5-HIR}   & \ph{A5-CALLS} \\
+    \rowcolor{bestgray}\introact{} & \ph{OURS_10} & \ph{OURS_30} & \ph{OURS_50} & \ph{OURS_WORST} & \ph{OURS_ARANK} \\
     \bottomrule
   \end{tabular}}
 \end{table}
 
-\ph{ABLATION-READING}.
+\subsection{Historical Support Efficiency}
+\label{sec:exp-support}
+\emph{Does counterfactual replay provide an effective way to exploit limited historical
+supervision for incomplete-input decision making?}
+
+Replay supervision is a bounded resource: it is limited by how many historical windows are
+legally available, not by compute. This experiment restricts the historical support that every
+method may use to $25\%$, $50\%$, and $100\%$ of the replay-fit portion of TRAIN under the
+identical split rule of \S\ref{sec:exp-setup}, and re-fits each method from scratch at each
+level. All five published baselines enter. The compact reading statement is below and the
+full source-macro table with the offline-cost column is deferred to
+Appendix~\ref{app:support}: \ph{SUPPORT_READING}. \ph{SUPPORT_25}, \ph{SUPPORT_50},
+\ph{SUPPORT_100}, \ph{SUPPORT_OFFLINE_COST}.
+
+\subsection{Ablation Study}
+\label{sec:exp-ablation}
+\emph{Which component carries the gain, and does regret-aware ranking actually matter?}
+
+The ablation is fixed at six rows and reuses the unified main protocol: A1 replaces
+regret-aware ranking with direct gain regression; A2 drops the pairwise weights
+$\omega_{i,a,b}$ of \eqref{eq:pairwise}; A3 drops the intervention state, A4 drops the
+episode context; A5 removes \textsc{Keep} from the decision space so the system must
+intervene on every request. The full six-row table is deferred to
+Appendix~\ref{app:ablation-details}; the headline reading is \ph{ABLATION_READING}.
 
 % ===========================================================================
 \section{Conclusion}
 \label{sec:conclusion}
 We formulated incomplete-input handling for frozen time-series foundation models as
-selective data governance: the question is not how accurately an incomplete context can be
-repaired, but whether a particular repair is useful for the frozen forecaster on the
-current episode. \introact{} answers this by replaying historical pseudo-deployments to
-record what each legal intervention actually did to forecasting utility, matching a new
-request against those replays in an observable task state, and acting only when the
-matched evidence supports a positive conservative utility. The method leaves the backbone
-untouched, returns a forecast from exactly one actually executed input version, and can
-abstain. \ph{CONCLUSION-CLOSING}.
+selective data governance. It is an \emph{intervention decision problem}, where a feasible
+repair is not automatically beneficial and the untouched input is a legitimate answer;
+historical replay provides \emph{task-level supervision}, since the realised consequence of an
+intervention is measured rather than modelled; and \emph{decision-aligned selection}
+determines when to intervene without modifying the frozen backbone, returning a forecast from
+exactly one executed input version. \ph{CONCLUSION_CLOSING}.
+
+\subsubsection*{AI use statement}
 
 \subsubsection*{AI use statement}
 In this work, we used generative AI tools for drafting and editing prose, for
@@ -765,13 +754,21 @@ avoided: raw predictions are retained. Details are in Appendix~\ref{app:reprodet
 % ===========================================================================
 % 附录（由正文下沉 + 完整化）。所有未运行数字一律 \ph{KEY}，禁止编造。
 % ===========================================================================
+
+
+
 \appendix
+
 \newpage
+
+
 
 \section*{Appendix map}
 \label{app:map}
 Table~\ref{tab:app-map} lists what each appendix section contains, so that a reader looking
-for a specific piece of evidence does not have to scan the whole appendix.
+for a specific piece of evidence does not have to scan the whole appendix. Sections~A--D fix
+the protocol and the method details, E--I report the evidence behind the main-text tables,
+J records what was tried and rejected, and K--M cover the boundary regimes.
 
 \begin{table}[h]
   \caption{Appendix map. Sections are lettered in order of appearance; this table is
@@ -784,91 +781,54 @@ for a specific piece of evidence does not have to scan the whole appendix.
     \toprule
     Section & Contents & Question it answers \\
     \midrule
-    A. Protocol details   & splits and purging, action catalog, observable features, missingness patterns, replay-bank scope & what exactly was fixed before the experiment ran? \\
-    B. Full per-source results & every source, backbone, horizon and metric at $10\%$ severity & does the aggregate hold source by source? \\
-    C. Full severity tables & $10/30/50\%$ for every method and metric & does the frozen policy degrade slower than the baselines? \\
-    D. Per-pattern results & P1--P4 reported separately & which missingness structure drives the result? \\
-    E. Reconstruction vs.\ utility & full paired table and discordant rate & is reconstruction a usable proxy? \\
-    F. Governance diagnostics & harmful loss and score-sign agreement & does abstention remove harm? \\
-    G. Robustness figure & severity trend per backbone & how does the trend look, not just the endpoints? \\
-    H. Replay size & $25/50/100\%$ of the bank & how much history does the method need? \\
-    I. $K$ and $\beta$ sensitivity & the full $3\times3$ gate grid & is the frozen choice robust or arbitrary? \\
-    J. Call accounting & latency, call counts, failures, timeouts & what does a request actually cost? \\
-    K. Preceding-cycle negative result & the failed projection attempt & what was tried and rejected, and why? \\
-    L. Complete-input contract & required behaviour by input regime & what happens when nothing is missing? \\
-    M. Finance case study & two finance parents, QLIKE & what happens outside the benchmark sources? \\
-    N. Ten mask seeds & mask-realisation stability & is the conclusion an artefact of one mask? \\
-    O. Additional horizons & horizons outside $\{96,192\}$ & does the conclusion extend further out? \\
-    P. Reproducibility details & record schema and result groups & can every number be traced to an artefact? \\
+    A. Scope and assumptions & replay-bank scope, closed catalog, determinism & what is out of scope, and which claims are therefore not made? \\
+    B. Full method details & action catalog, observable state, relation to OPE and selective prediction & what exactly is the method, and how is it positioned? \\
+    C. Replay construction & splits and purging, bank construction, bank size & how was the replay bank built, and how much of it is needed? \\
+    D. Dataset and missingness protocol & the four frozen patterns and the mask derivation rule & what missingness is being simulated, and how is it made deterministic? \\
+    E. Full main results & per-source tables, reconstruction-vs-utility, governance diagnostics, opportunity strata, extended comparison & does the aggregate hold source by source and stratum by stratum? \\
+    F. Robustness breakdown & $10/30/50\%$ tables, per-pattern results, severity trend & does the frozen policy degrade slower than the baselines? \\
+    G. Historical support results & every method re-fitted at $25/50/100\%$ support & how much history does each method need? \\
+    H. Ablation details & full outcome vector and ordering stability & which component carries the gain? \\
+    I. Runtime and failure audit & latency, call counts, failures, timeouts, cold start & what does a request actually cost? \\
+    J. Development negative results & local gain averaging with lower-confidence gating, gain regression, the sealed v4.4 TRAIN-eval batch & what was tried and rejected, and why? \\
+    K. Complete-input contract & required behaviour by input regime & what happens when nothing is missing? \\
+    L. Financial case study & finance parents, QLIKE & what happens outside the benchmark sources? \\
+    M. Additional seeds and sensitivity & mask-seed stability, extra horizons, record schema & is the conclusion an artefact of one mask, or of the chosen horizons? \\
     \bottomrule
   \end{tabular}}
 \end{table}
 
 
-\section{Protocol Details}
-\label{app:protocol}
-This appendix records the fixed protocol that the main experiment consumes. Nothing here
-is a result; it is the contract that the result tables are read against.
-
-\subsection{Splits, Purging, and Replay-Bank Construction}
-\label{app:splits}
-Sources are split at the parent level only. Within each source the registered legal TRAIN
-parents are sorted by origin time and partitioned into \emph{replay-fit}, \emph{gate}, and
-\emph{TRAIN-eval} at approximately $60/20/20$. The replay bank is built exclusively from
-replay-fit parents; $K$, $\beta$, and any legal baseline hyperparameter are selected on the
-gate split; TRAIN-eval is the final internal acceptance check before the configuration is
-frozen. Purging is enforced at $L + H$, so no parent's context window overlaps a later
-split's target window. Table~\ref{tab:app-splits} records the realised sizes.
-
-\begin{table}[h]
-  \caption{Realised TRAIN-only split sizes and parent capacities. Counts are of legal
-  parents, not of correlated mask variants; a parent with several patterns or severities
-  still contributes one unit to every statistic in the paper.}
-  \label{tab:app-splits}
-  \centering
-  \small
-  \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
-    \toprule
-    Split & Parents & Origins & Sources covered & Used for \\
-    \midrule
-    Replay-fit   & \ph{FIT-PARENTS}   & \ph{FIT-ORIGINS}   & \ph{FIT-SOURCES}   & replay bank, baseline training, feature normalisation \\
-    Gate         & \ph{GATE-PARENTS}  & \ph{GATE-ORIGINS}  & \ph{GATE-SOURCES}  & $K$, $\beta$, baseline hyperparameters \\
-    TRAIN-eval   & \ph{EVAL-PARENTS}  & \ph{EVAL-ORIGINS}  & \ph{EVAL-SOURCES}  & frozen-configuration acceptance check \\
-    \midrule
-    Total legal TRAIN & \ph{TRAIN-PARENTS} & \ph{TRAIN-ORIGINS} & \ph{N-DATASETS} & --- \\
-    \bottomrule
-  \end{tabular}}
-\end{table}
-
-The replay bank is constructed as follows. For every replay-fit parent we take the
-historical window $(X_i, y_i)$ whose future is already legal history, inject the deployment
-missingness mechanism to obtain the incomplete version $X_i^{a_0}$, materialise each legal
-action $a \in \calA$ into $X_i^{a}$, actually execute the frozen forecaster on each
-materialised version, and store the realised gain
-\begin{equation}
-  g_{i,a} \;=\; \loss\big(F(X_i^{a_0}),\, y_i\big) - \loss\big(F(X_i^{a}),\, y_i\big),
-  \label{eq:app-gain}
-\end{equation}
-so that $g_{i,a} > 0$ means the action helped and $g_{i,a} < 0$ means it hurt. The bank is
-$\calB = \{(z_i, a, g_{i,a})\}$, where $z_i$ is the observable task state defined in
-Appendix~\ref{app:features}. Pseudo-deployment severities are drawn from
-$\{10\%, 30\%, 50\%\}$ by deterministic hash of the same key that defines the mask, so the
-bank covers the severity range without the method being retuned per severity. Because the
-bank is built once from TRAIN and never rebuilt at deployment time, the offline cost is
-paid once; Appendix~\ref{app:calls} separates it from the per-request online cost.
-
-\subsection{Scope of Validity of the Replay Bank}
+\section{Scope and Assumptions}
 \label{app:scope}
+This section states what the replay bank is, what it is not, and which claims the paper
+therefore does and does not make.
 
 The bank is a discrete grid (four patterns $\times$ three severities $\times$ registered
 sources), not a continuous model of missingness. If a request falls outside that grid --- a
 different missingness mechanism, a different missing-rate regime, or an unrepresented source
-family --- the matcher still returns nearest neighbours, but the retrieved $g_{i,a}$ need
-not transfer, and the conservative gate is the only protection against that mismatch. We
-therefore read \S\ref{sec:exp-robust} as a within-grid check, not as out-of-grid
-generalisation, and the finance case study (Appendix~\ref{app:finance}) is the only contact
-with a non-synthetic gap in this paper.
+family --- the scorer still returns a ranking, but the retrieved historical losses need not
+transfer. We therefore read \S\ref{sec:exp-robust} as a within-grid check rather than as
+out-of-grid generalisation, and the finance case study (Appendix~\ref{app:finance}) is the
+only contact with a non-synthetic gap in this paper.
+
+Three further assumptions are worth stating explicitly. First, the action catalog is closed and
+given: we do not search for new interventions, and a wider catalog would change every number
+in this paper without changing the decision problem. Second, the deployment missingness
+mechanism is assumed to be the one that the replay injects; a request produced by a different
+mechanism is handled by the same scorer but is outside the scope of the reported results.
+Third, the frozen forecaster is assumed deterministic and revision-pinned: every replay record
+is tied to the exact model revision that produced it, and a model update invalidates the bank
+rather than silently degrading it.
+
+
+\section{Full Method Details}
+\label{app:method-details}
+This section expands \S\ref{sec:method}: the closed action catalog, the observable state used
+by the scorer, and the relation of the decision layer to off-policy evaluation and selective
+prediction. The learner that turns replay records into a ranking is frozen on the TRAIN gate
+and reported in \S\ref{sec:exp-main}; its implementation is not restated here because it is
+selected by the protocol rather than fixed by the paper's formulation.
 
 \subsection{Governance Action Catalog}
 \label{app:catalog}
@@ -901,17 +861,17 @@ A complete and valid input is always mapped to \textsc{Keep} and the reference f
 returned unchanged. Unsupported, aliased, and failed actions are recorded with an explicit
 status; they are never silently dropped and never counted as successes.
 
-\subsection{Observable Task-State Features}
+\subsection{Observable State Features}
 \label{app:features}
-The task state $z_i$ is lightweight and fully observable at request time. It
-contains no future target information and no quantity computed from the frozen model's
-output on any candidate version other than the reference forecast. Table~\ref{tab:app-features}
-lists the four groups.
+The state $z_i$ is lightweight and fully observable at request time. It contains no future
+target information and, under the frozen state definition of \S\ref{sec:method-scoring}, no
+quantity computed from the frozen model's output at all: scoring happens before any forecast
+is produced. Table~\ref{tab:app-features} lists the two groups.
 
 \begin{table}[h]
-  \caption{The four observable task-state feature groups. Every feature is computable from
-  the request alone; none requires the future target. Group~D is the only group that
-  touches the frozen model, and it uses the reference forecast only.}
+  \caption{The two observable state groups. Every feature is computable from the request
+  alone; none requires the future target, and none requires a forecast. Group~I is evaluated
+  once per candidate action; group~E is evaluated once per request.}
   \label{tab:app-features}
   \centering
   \small
@@ -920,20 +880,129 @@ lists the four groups.
     \toprule
     Group & Features & Dim. \\
     \midrule
-    A Mask state        & mask rate, number of missing runs, longest run length, run-position moments, distance of the missing block to the origin & \ph{DIM-A} \\
-    B Visible context   & level, local trend, seasonality strength, volatility, autocorrelation summary of the visible entries & \ph{DIM-B} \\
-    C Intervention state& action identity, deviation of the materialised values from the visible context, number of entries changed & \ph{DIM-C} \\
-    D Reference forecast state & summary statistics of the reference forecast and a scale proxy relative to the visible context & \ph{DIM-D} \\
+    E Episode state      & missing ratio, number of missing runs, longest run length, distance of the missing block to the origin, pattern indicator, and summary statistics of the visible context (level, local trend, seasonality strength, volatility) & \ph{DIM_E} \\
+    I Intervention state & action identity, fraction of entries changed relative to the reference input, and the share of the change that falls near the forecast origin & \ph{DIM_I} \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-Features are standardised using statistics fitted on replay-fit parents only. Distances are
-plain standardised Euclidean distances; no learned metric and no deep encoder is used, so
-the matching step has no training cost and cannot leak supervision from outside the bank.
-The per-action neighbourhood size $K \in \{8, 16, 32\}$ and the conservativeness level
-$\beta \in \{0, 1, 1.64\}$ are selected on the gate split; the temperature is fixed at
-$\tau = \mathrm{median}(d_i) + \varepsilon$ and is never searched.
+Features are standardised using statistics fitted on replay-fit parents only. The normalisation
+is part of the frozen configuration and is not refitted on the gate or the evaluation splits.
+The exact learner that maps $z$ to a ranking, together with its regularisation and early
+stopping, is frozen on the gate split and reported in \S\ref{sec:exp-main}; it is not restated
+here because it is selected by the protocol rather than fixed by the paper's formulation.
+
+
+\subsection{Relation to Off-Policy Evaluation and Selective Prediction}
+\label{app:ope-positioning}
+Our decision layer is formally close to conservative policy selection in contextual
+bandits~\citep{abbasiyadkori2011improved,lattimore2020bandit} and to off-policy
+evaluation~\citep{strehl2010learning,dudik2011doubly,swaminathan2015counterfactual,
+jiang2016doubly,thomas2016data}, but three differences matter here. First, an arm's value is
+not a designed reward but the realised loss of a frozen, non-differentiable forecaster, so
+there is no reward model to fit and no simulator to query: the only legal supervision is a
+replayed historical window, tied to the exact model revision that produced it. Second, the
+untouched input is one of the arms rather than a fallback, so a wrong decision is asymmetric
+and directly measurable, which is why we report harmful loss and action-opportunity strata
+rather than regret alone. Third, the exploration budget is zero: no action is ever executed at
+deployment in order to learn, so the bank is a fixed historical artefact and the method has no
+online update.
+
+Selective prediction and learning to defer~\citep{chow1970optimum,vovk2005algorithmic,
+geifman2017selective,madras2018predict,mozannar2020consistent} are the closest relatives, but
+they decide whether to \emph{predict} or to hand the case to a human or a second model. We
+decide whether to \emph{modify the input} of one fixed predictor, and our abstention returns
+that predictor's own reference forecast. Work on sequential evidence acquisition and decision
+value~\citep{he2024dime,kang2020forecastwithforecasts} formalises when information is worth
+its cost; we make no information-theoretic optimality claim and report the full cost
+accounting separately (Appendix~\ref{app:calls}).
+
+\section{Replay Construction}
+\label{app:replay}
+This section records how the replay bank is built and how much of it is needed. Nothing here
+is a result; it is the construction that the result tables are read against.
+
+\subsection{Splits, Purging, and Replay-Bank Construction}
+\label{app:splits}
+Sources are split at the parent level only. Within each source the registered legal TRAIN
+parents are sorted by origin time and partitioned into \emph{replay-fit}, \emph{gate}, and
+\emph{TRAIN-eval} at approximately $60/20/20$. The replay bank is built exclusively from
+replay-fit parents; the selector hyperparameters and any legal baseline hyperparameter are selected on the
+gate split; TRAIN-eval is the final internal acceptance check before the configuration is
+frozen. Purging is enforced at $L + H$, so no parent's context window overlaps a later
+split's target window. Table~\ref{tab:app-splits} records the realised sizes.
+
+\begin{table}[h]
+  \caption{Realised TRAIN-only split sizes and parent capacities. Counts are of legal
+  parents, not of correlated mask variants; a parent with several patterns or severities
+  still contributes one unit to every statistic in the paper.}
+  \label{tab:app-splits}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
+    \toprule
+    Split & Parents & Origins & Sources covered & Used for \\
+    \midrule
+    Replay-fit   & \ph{FIT_PARENTS}   & \ph{FIT_ORIGINS}   & \ph{FIT_SOURCES}   & replay bank, baseline training, feature normalisation \\
+    Gate         & \ph{GATE_PARENTS}  & \ph{GATE_ORIGINS}  & \ph{GATE_SOURCES}  & selector and baseline hyperparameters \\
+    TRAIN-eval   & \ph{EVAL_PARENTS}  & \ph{EVAL_ORIGINS}  & \ph{EVAL_SOURCES}  & frozen-configuration acceptance check \\
+    \midrule
+    Total legal TRAIN & \ph{TRAIN_PARENTS} & \ph{TRAIN_ORIGINS} & \ph{N_DATASETS} & --- \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+The replay bank is constructed as follows. For every replay-fit parent we take the
+historical window $(X_i, y_i)$ whose future is already legal history, inject the deployment
+missingness mechanism to obtain the incomplete version $X_i^{a_0}$, materialise each legal
+action $a \in \calA$ into $X_i^{a}$, actually execute the frozen forecaster on each
+materialised version, and store the realised gain
+\begin{equation}
+  g_{i,a} \;=\; \loss\big(F(X_i^{a_0}),\, y_i\big) - \loss\big(F(X_i^{a}),\, y_i\big),
+  \label{eq:app-gain}
+\end{equation}
+so that $g_{i,a} > 0$ means the action helped and $g_{i,a} < 0$ means it hurt. The bank is
+$\calB = \{(z_i, a, g_{i,a})\}$, where $z_i$ is the observable task state defined in
+Appendix~\ref{app:features}. Pseudo-deployment severities are drawn from
+$\{10\%, 30\%, 50\%\}$ by deterministic hash of the same key that defines the mask, so the
+bank covers the severity range without the method being retuned per severity. Because the
+bank is built once from TRAIN and never rebuilt at deployment time, the offline cost is
+paid once; Appendix~\ref{app:calls} separates it from the per-request online cost.
+
+\subsection{Replay Bank Size}
+\label{app:replaysize}
+The replay bank is subsampled to $25\%$, $50\%$, and $100\%$ of its replay-fit support to
+measure how much the method depends on the amount of historical evidence. This analysis is
+not part of the main text and was not used to select any hyperparameter; the frozen
+configuration is the one trained on the full bank. If performance at $25\%$ matches
+performance at $100\%$, the honest reading is that the bank is already saturated at this
+scale, not that the method is data-efficient in general.
+
+\begin{table}[h]
+  \caption{Replay-bank size ablation. The bank is subsampled by replay-fit parent, keeping
+  every action and severity per retained parent, so the subsample changes the amount of
+  history rather than its composition.}
+  \label{tab:app-replaysize}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lccccc}
+    \toprule
+    Bank fraction & MASE $\downarrow$ & Intervention Rate & HIR $\downarrow$ & Harmful Loss $\downarrow$ & Calls $\downarrow$ \\
+    \midrule
+    $25\%$  & \ph{RS25_MASE}  & \ph{RS25_IR}  & \ph{RS25_HIR}  & \ph{RS25_HL}  & \ph{RS25_CALLS} \\
+    $50\%$  & \ph{RS50_MASE}  & \ph{RS50_IR}  & \ph{RS50_HIR}  & \ph{RS50_HL}  & \ph{RS50_CALLS} \\
+    $100\%$ & \ph{RS100_MASE} & \ph{RS100_IR} & \ph{RS100_HIR} & \ph{RS100_HL} & \ph{RS100_CALLS} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Dataset and Missingness Protocol}
+\label{app:data-protocol}
+The missingness mechanism is frozen before any method is run, and every mask is derived
+deterministically from a key that identifies the parent and the pattern. This section fixes
+the four patterns and the derivation rule.
 
 \subsection{Missingness Patterns}
 \label{app:patterns}
@@ -962,7 +1031,13 @@ after forecasts are seen.
   \end{tabular}
 \end{table}
 
-\section{Full Per-Source Results}
+\section{Full Main Results}
+\label{app:main-full}
+This section expands \S\ref{sec:exp-main} and \S\ref{sec:exp-opportunity}: per-source tables,
+the paired reconstruction-versus-utility table, the governance diagnostics figure, the
+opportunity strata, and the extended comparison.
+
+\subsection{Per-Source Results}
 \label{app:datasets}
 Tables~\ref{tab:app-src-bolt}--\ref{tab:app-src-ch2} give the complete per-source results at
 $10\%$ severity for the three frozen backbones, all four metrics and both main horizons.
@@ -977,34 +1052,34 @@ transcribed by hand, so the appendix and the main table cannot disagree.
   \setlength{\tabcolsep}{4pt}
 \resizebox{\textwidth}{!}{\begin{tabular}{llcccc}
     \toprule
-    Source & $H$ & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSSE $\downarrow$ \\
+    Source & $H$ & MASE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & MSE $\downarrow$ \\
     \midrule
-    ETTh1 & 96 & \ph{ETTH1-96-MASE} & \ph{ETTH1-96-MSE} & \ph{ETTH1-96-MAE} & \ph{ETTH1-96-RMSSE} \\
-     & 192 & \ph{ETTH1-192-MASE} & \ph{ETTH1-192-MSE} & \ph{ETTH1-192-MAE} & \ph{ETTH1-192-RMSSE} \\
+    ETTh1 & 96 & \ph{ETTH1-96-MASE} & \ph{ETTH1-96-MSE} & \ph{ETTH1-96-MAE} & \ph{ETTH1-96-RMSE} \\
+     & 192 & \ph{ETTH1-192-MASE} & \ph{ETTH1-192-MSE} & \ph{ETTH1-192-MAE} & \ph{ETTH1-192-RMSE} \\
     \midrule
-    ETTh2 & 96 & \ph{ETTH2-96-MASE} & \ph{ETTH2-96-MSE} & \ph{ETTH2-96-MAE} & \ph{ETTH2-96-RMSSE} \\
-     & 192 & \ph{ETTH2-192-MASE} & \ph{ETTH2-192-MSE} & \ph{ETTH2-192-MAE} & \ph{ETTH2-192-RMSSE} \\
+    ETTh2 & 96 & \ph{ETTH2-96-MASE} & \ph{ETTH2-96-MSE} & \ph{ETTH2-96-MAE} & \ph{ETTH2-96-RMSE} \\
+     & 192 & \ph{ETTH2-192-MASE} & \ph{ETTH2-192-MSE} & \ph{ETTH2-192-MAE} & \ph{ETTH2-192-RMSE} \\
     \midrule
-    ETTm1 & 96 & \ph{ETTM1-96-MASE} & \ph{ETTM1-96-MSE} & \ph{ETTM1-96-MAE} & \ph{ETTM1-96-RMSSE} \\
-     & 192 & \ph{ETTM1-192-MASE} & \ph{ETTM1-192-MSE} & \ph{ETTM1-192-MAE} & \ph{ETTM1-192-RMSSE} \\
+    ETTm1 & 96 & \ph{ETTM1-96-MASE} & \ph{ETTM1-96-MSE} & \ph{ETTM1-96-MAE} & \ph{ETTM1-96-RMSE} \\
+     & 192 & \ph{ETTM1-192-MASE} & \ph{ETTM1-192-MSE} & \ph{ETTM1-192-MAE} & \ph{ETTM1-192-RMSE} \\
     \midrule
-    ETTm2 & 96 & \ph{ETTM2-96-MASE} & \ph{ETTM2-96-MSE} & \ph{ETTM2-96-MAE} & \ph{ETTM2-96-RMSSE} \\
-     & 192 & \ph{ETTM2-192-MASE} & \ph{ETTM2-192-MSE} & \ph{ETTM2-192-MAE} & \ph{ETTM2-192-RMSSE} \\
+    ETTm2 & 96 & \ph{ETTM2-96-MASE} & \ph{ETTM2-96-MSE} & \ph{ETTM2-96-MAE} & \ph{ETTM2-96-RMSE} \\
+     & 192 & \ph{ETTM2-192-MASE} & \ph{ETTM2-192-MSE} & \ph{ETTM2-192-MAE} & \ph{ETTM2-192-RMSE} \\
     \midrule
-    Electricity & 96 & \ph{ELEC-96-MASE} & \ph{ELEC-96-MSE} & \ph{ELEC-96-MAE} & \ph{ELEC-96-RMSSE} \\
-     & 192 & \ph{ELEC-192-MASE} & \ph{ELEC-192-MSE} & \ph{ELEC-192-MAE} & \ph{ELEC-192-RMSSE} \\
+    Electricity & 96 & \ph{ELEC-96-MASE} & \ph{ELEC-96-MSE} & \ph{ELEC-96-MAE} & \ph{ELEC-96-RMSE} \\
+     & 192 & \ph{ELEC-192-MASE} & \ph{ELEC-192-MSE} & \ph{ELEC-192-MAE} & \ph{ELEC-192-RMSE} \\
     \midrule
-    Exchange & 96 & \ph{EXCH-96-MASE} & \ph{EXCH-96-MSE} & \ph{EXCH-96-MAE} & \ph{EXCH-96-RMSSE} \\
-     & 192 & \ph{EXCH-192-MASE} & \ph{EXCH-192-MSE} & \ph{EXCH-192-MAE} & \ph{EXCH-192-RMSSE} \\
+    Exchange & 96 & \ph{EXCH-96-MASE} & \ph{EXCH-96-MSE} & \ph{EXCH-96-MAE} & \ph{EXCH-96-RMSE} \\
+     & 192 & \ph{EXCH-192-MASE} & \ph{EXCH-192-MSE} & \ph{EXCH-192-MAE} & \ph{EXCH-192-RMSE} \\
     \midrule
-    Traffic & 96 & \ph{TRAF-96-MASE} & \ph{TRAF-96-MSE} & \ph{TRAF-96-MAE} & \ph{TRAF-96-RMSSE} \\
-     & 192 & \ph{TRAF-192-MASE} & \ph{TRAF-192-MSE} & \ph{TRAF-192-MAE} & \ph{TRAF-192-RMSSE} \\
+    Traffic & 96 & \ph{TRAF-96-MASE} & \ph{TRAF-96-MSE} & \ph{TRAF-96-MAE} & \ph{TRAF-96-RMSE} \\
+     & 192 & \ph{TRAF-192-MASE} & \ph{TRAF-192-MSE} & \ph{TRAF-192-MAE} & \ph{TRAF-192-RMSE} \\
     \midrule
-    Weather & 96 & \ph{WTHR-96-MASE} & \ph{WTHR-96-MSE} & \ph{WTHR-96-MAE} & \ph{WTHR-96-RMSSE} \\
-     & 192 & \ph{WTHR-192-MASE} & \ph{WTHR-192-MSE} & \ph{WTHR-192-MAE} & \ph{WTHR-192-RMSSE} \\
+    Weather & 96 & \ph{WTHR-96-MASE} & \ph{WTHR-96-MSE} & \ph{WTHR-96-MAE} & \ph{WTHR-96-RMSE} \\
+     & 192 & \ph{WTHR-192-MASE} & \ph{WTHR-192-MSE} & \ph{WTHR-192-MAE} & \ph{WTHR-192-RMSE} \\
     \midrule
-    \rowcolor{bestgray}Source-macro & 96  & \ph{BOLT-96-MASE} & \ph{BOLT-96-MSE} & \ph{BOLT-96-MAE} & \ph{BOLT-96-RMSSE} \\
-    \rowcolor{bestgray}Source-macro & 192 & \ph{BOLT-192-MASE} & \ph{BOLT-192-MSE} & \ph{BOLT-192-MAE} & \ph{BOLT-192-RMSSE} \\
+    \rowcolor{bestgray}Source-macro & 96  & \ph{BOLT-96-MASE} & \ph{BOLT-96-MSE} & \ph{BOLT-96-MAE} & \ph{BOLT-96-RMSE} \\
+    \rowcolor{bestgray}Source-macro & 192 & \ph{BOLT-192-MASE} & \ph{BOLT-192-MSE} & \ph{BOLT-192-MAE} & \ph{BOLT-192-RMSE} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1019,34 +1094,34 @@ The Bolt backbone is the reference for the main table, so its per-source rows ar
   \setlength{\tabcolsep}{4pt}
 \resizebox{\textwidth}{!}{\begin{tabular}{llcccc}
     \toprule
-    Source & $H$ & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSSE $\downarrow$ \\
+    Source & $H$ & MASE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & MSE $\downarrow$ \\
     \midrule
-    ETTh1 & 96 & \ph{TF-ETTH1-96-MASE} & \ph{TF-ETTH1-96-MSE} & \ph{TF-ETTH1-96-MAE} & \ph{TF-ETTH1-96-RMSSE} \\
-     & 192 & \ph{TF-ETTH1-192-MASE} & \ph{TF-ETTH1-192-MSE} & \ph{TF-ETTH1-192-MAE} & \ph{TF-ETTH1-192-RMSSE} \\
+    ETTh1 & 96 & \ph{TF-ETTH1-96-MASE} & \ph{TF-ETTH1-96-MSE} & \ph{TF-ETTH1-96-MAE} & \ph{TF-ETTH1-96-RMSE} \\
+     & 192 & \ph{TF-ETTH1-192-MASE} & \ph{TF-ETTH1-192-MSE} & \ph{TF-ETTH1-192-MAE} & \ph{TF-ETTH1-192-RMSE} \\
     \midrule
-    ETTh2 & 96 & \ph{TF-ETTH2-96-MASE} & \ph{TF-ETTH2-96-MSE} & \ph{TF-ETTH2-96-MAE} & \ph{TF-ETTH2-96-RMSSE} \\
-     & 192 & \ph{TF-ETTH2-192-MASE} & \ph{TF-ETTH2-192-MSE} & \ph{TF-ETTH2-192-MAE} & \ph{TF-ETTH2-192-RMSSE} \\
+    ETTh2 & 96 & \ph{TF-ETTH2-96-MASE} & \ph{TF-ETTH2-96-MSE} & \ph{TF-ETTH2-96-MAE} & \ph{TF-ETTH2-96-RMSE} \\
+     & 192 & \ph{TF-ETTH2-192-MASE} & \ph{TF-ETTH2-192-MSE} & \ph{TF-ETTH2-192-MAE} & \ph{TF-ETTH2-192-RMSE} \\
     \midrule
-    ETTm1 & 96 & \ph{TF-ETTM1-96-MASE} & \ph{TF-ETTM1-96-MSE} & \ph{TF-ETTM1-96-MAE} & \ph{TF-ETTM1-96-RMSSE} \\
-     & 192 & \ph{TF-ETTM1-192-MASE} & \ph{TF-ETTM1-192-MSE} & \ph{TF-ETTM1-192-MAE} & \ph{TF-ETTM1-192-RMSSE} \\
+    ETTm1 & 96 & \ph{TF-ETTM1-96-MASE} & \ph{TF-ETTM1-96-MSE} & \ph{TF-ETTM1-96-MAE} & \ph{TF-ETTM1-96-RMSE} \\
+     & 192 & \ph{TF-ETTM1-192-MASE} & \ph{TF-ETTM1-192-MSE} & \ph{TF-ETTM1-192-MAE} & \ph{TF-ETTM1-192-RMSE} \\
     \midrule
-    ETTm2 & 96 & \ph{TF-ETTM2-96-MASE} & \ph{TF-ETTM2-96-MSE} & \ph{TF-ETTM2-96-MAE} & \ph{TF-ETTM2-96-RMSSE} \\
-     & 192 & \ph{TF-ETTM2-192-MASE} & \ph{TF-ETTM2-192-MSE} & \ph{TF-ETTM2-192-MAE} & \ph{TF-ETTM2-192-RMSSE} \\
+    ETTm2 & 96 & \ph{TF-ETTM2-96-MASE} & \ph{TF-ETTM2-96-MSE} & \ph{TF-ETTM2-96-MAE} & \ph{TF-ETTM2-96-RMSE} \\
+     & 192 & \ph{TF-ETTM2-192-MASE} & \ph{TF-ETTM2-192-MSE} & \ph{TF-ETTM2-192-MAE} & \ph{TF-ETTM2-192-RMSE} \\
     \midrule
-    Electricity & 96 & \ph{TF-ELEC-96-MASE} & \ph{TF-ELEC-96-MSE} & \ph{TF-ELEC-96-MAE} & \ph{TF-ELEC-96-RMSSE} \\
-     & 192 & \ph{TF-ELEC-192-MASE} & \ph{TF-ELEC-192-MSE} & \ph{TF-ELEC-192-MAE} & \ph{TF-ELEC-192-RMSSE} \\
+    Electricity & 96 & \ph{TF-ELEC-96-MASE} & \ph{TF-ELEC-96-MSE} & \ph{TF-ELEC-96-MAE} & \ph{TF-ELEC-96-RMSE} \\
+     & 192 & \ph{TF-ELEC-192-MASE} & \ph{TF-ELEC-192-MSE} & \ph{TF-ELEC-192-MAE} & \ph{TF-ELEC-192-RMSE} \\
     \midrule
-    Exchange & 96 & \ph{TF-EXCH-96-MASE} & \ph{TF-EXCH-96-MSE} & \ph{TF-EXCH-96-MAE} & \ph{TF-EXCH-96-RMSSE} \\
-     & 192 & \ph{TF-EXCH-192-MASE} & \ph{TF-EXCH-192-MSE} & \ph{TF-EXCH-192-MAE} & \ph{TF-EXCH-192-RMSSE} \\
+    Exchange & 96 & \ph{TF-EXCH-96-MASE} & \ph{TF-EXCH-96-MSE} & \ph{TF-EXCH-96-MAE} & \ph{TF-EXCH-96-RMSE} \\
+     & 192 & \ph{TF-EXCH-192-MASE} & \ph{TF-EXCH-192-MSE} & \ph{TF-EXCH-192-MAE} & \ph{TF-EXCH-192-RMSE} \\
     \midrule
-    Traffic & 96 & \ph{TF-TRAF-96-MASE} & \ph{TF-TRAF-96-MSE} & \ph{TF-TRAF-96-MAE} & \ph{TF-TRAF-96-RMSSE} \\
-     & 192 & \ph{TF-TRAF-192-MASE} & \ph{TF-TRAF-192-MSE} & \ph{TF-TRAF-192-MAE} & \ph{TF-TRAF-192-RMSSE} \\
+    Traffic & 96 & \ph{TF-TRAF-96-MASE} & \ph{TF-TRAF-96-MSE} & \ph{TF-TRAF-96-MAE} & \ph{TF-TRAF-96-RMSE} \\
+     & 192 & \ph{TF-TRAF-192-MASE} & \ph{TF-TRAF-192-MSE} & \ph{TF-TRAF-192-MAE} & \ph{TF-TRAF-192-RMSE} \\
     \midrule
-    Weather & 96 & \ph{TF-WTHR-96-MASE} & \ph{TF-WTHR-96-MSE} & \ph{TF-WTHR-96-MAE} & \ph{TF-WTHR-96-RMSSE} \\
-     & 192 & \ph{TF-WTHR-192-MASE} & \ph{TF-WTHR-192-MSE} & \ph{TF-WTHR-192-MAE} & \ph{TF-WTHR-192-RMSSE} \\
+    Weather & 96 & \ph{TF-WTHR-96-MASE} & \ph{TF-WTHR-96-MSE} & \ph{TF-WTHR-96-MAE} & \ph{TF-WTHR-96-RMSE} \\
+     & 192 & \ph{TF-WTHR-192-MASE} & \ph{TF-WTHR-192-MSE} & \ph{TF-WTHR-192-MAE} & \ph{TF-WTHR-192-RMSE} \\
     \midrule
-    \rowcolor{bestgray}Source-macro & 96  & \ph{TF-96-MASE} & \ph{TF-96-MSE} & \ph{TF-96-MAE} & \ph{TF-96-RMSSE} \\
-    \rowcolor{bestgray}Source-macro & 192 & \ph{TF-192-MASE} & \ph{TF-192-MSE} & \ph{TF-192-MAE} & \ph{TF-192-RMSSE} \\
+    \rowcolor{bestgray}Source-macro & 96  & \ph{TF-96-MASE} & \ph{TF-96-MSE} & \ph{TF-96-MAE} & \ph{TF-96-RMSE} \\
+    \rowcolor{bestgray}Source-macro & 192 & \ph{TF-192-MASE} & \ph{TF-192-MSE} & \ph{TF-192-MAE} & \ph{TF-192-RMSE} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1061,41 +1136,187 @@ TimesFM is used for method development alongside Bolt, so a per-source view here
   \setlength{\tabcolsep}{4pt}
 \resizebox{\textwidth}{!}{\begin{tabular}{llcccc}
     \toprule
-    Source & $H$ & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSSE $\downarrow$ \\
+    Source & $H$ & MASE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & MSE $\downarrow$ \\
     \midrule
-    ETTh1 & 96 & \ph{CH2-ETTH1-96-MASE} & \ph{CH2-ETTH1-96-MSE} & \ph{CH2-ETTH1-96-MAE} & \ph{CH2-ETTH1-96-RMSSE} \\
-     & 192 & \ph{CH2-ETTH1-192-MASE} & \ph{CH2-ETTH1-192-MSE} & \ph{CH2-ETTH1-192-MAE} & \ph{CH2-ETTH1-192-RMSSE} \\
+    ETTh1 & 96 & \ph{CH2-ETTH1-96-MASE} & \ph{CH2-ETTH1-96-MSE} & \ph{CH2-ETTH1-96-MAE} & \ph{CH2-ETTH1-96-RMSE} \\
+     & 192 & \ph{CH2-ETTH1-192-MASE} & \ph{CH2-ETTH1-192-MSE} & \ph{CH2-ETTH1-192-MAE} & \ph{CH2-ETTH1-192-RMSE} \\
     \midrule
-    ETTh2 & 96 & \ph{CH2-ETTH2-96-MASE} & \ph{CH2-ETTH2-96-MSE} & \ph{CH2-ETTH2-96-MAE} & \ph{CH2-ETTH2-96-RMSSE} \\
-     & 192 & \ph{CH2-ETTH2-192-MASE} & \ph{CH2-ETTH2-192-MSE} & \ph{CH2-ETTH2-192-MAE} & \ph{CH2-ETTH2-192-RMSSE} \\
+    ETTh2 & 96 & \ph{CH2-ETTH2-96-MASE} & \ph{CH2-ETTH2-96-MSE} & \ph{CH2-ETTH2-96-MAE} & \ph{CH2-ETTH2-96-RMSE} \\
+     & 192 & \ph{CH2-ETTH2-192-MASE} & \ph{CH2-ETTH2-192-MSE} & \ph{CH2-ETTH2-192-MAE} & \ph{CH2-ETTH2-192-RMSE} \\
     \midrule
-    ETTm1 & 96 & \ph{CH2-ETTM1-96-MASE} & \ph{CH2-ETTM1-96-MSE} & \ph{CH2-ETTM1-96-MAE} & \ph{CH2-ETTM1-96-RMSSE} \\
-     & 192 & \ph{CH2-ETTM1-192-MASE} & \ph{CH2-ETTM1-192-MSE} & \ph{CH2-ETTM1-192-MAE} & \ph{CH2-ETTM1-192-RMSSE} \\
+    ETTm1 & 96 & \ph{CH2-ETTM1-96-MASE} & \ph{CH2-ETTM1-96-MSE} & \ph{CH2-ETTM1-96-MAE} & \ph{CH2-ETTM1-96-RMSE} \\
+     & 192 & \ph{CH2-ETTM1-192-MASE} & \ph{CH2-ETTM1-192-MSE} & \ph{CH2-ETTM1-192-MAE} & \ph{CH2-ETTM1-192-RMSE} \\
     \midrule
-    ETTm2 & 96 & \ph{CH2-ETTM2-96-MASE} & \ph{CH2-ETTM2-96-MSE} & \ph{CH2-ETTM2-96-MAE} & \ph{CH2-ETTM2-96-RMSSE} \\
-     & 192 & \ph{CH2-ETTM2-192-MASE} & \ph{CH2-ETTM2-192-MSE} & \ph{CH2-ETTM2-192-MAE} & \ph{CH2-ETTM2-192-RMSSE} \\
+    ETTm2 & 96 & \ph{CH2-ETTM2-96-MASE} & \ph{CH2-ETTM2-96-MSE} & \ph{CH2-ETTM2-96-MAE} & \ph{CH2-ETTM2-96-RMSE} \\
+     & 192 & \ph{CH2-ETTM2-192-MASE} & \ph{CH2-ETTM2-192-MSE} & \ph{CH2-ETTM2-192-MAE} & \ph{CH2-ETTM2-192-RMSE} \\
     \midrule
-    Electricity & 96 & \ph{CH2-ELEC-96-MASE} & \ph{CH2-ELEC-96-MSE} & \ph{CH2-ELEC-96-MAE} & \ph{CH2-ELEC-96-RMSSE} \\
-     & 192 & \ph{CH2-ELEC-192-MASE} & \ph{CH2-ELEC-192-MSE} & \ph{CH2-ELEC-192-MAE} & \ph{CH2-ELEC-192-RMSSE} \\
+    Electricity & 96 & \ph{CH2-ELEC-96-MASE} & \ph{CH2-ELEC-96-MSE} & \ph{CH2-ELEC-96-MAE} & \ph{CH2-ELEC-96-RMSE} \\
+     & 192 & \ph{CH2-ELEC-192-MASE} & \ph{CH2-ELEC-192-MSE} & \ph{CH2-ELEC-192-MAE} & \ph{CH2-ELEC-192-RMSE} \\
     \midrule
-    Exchange & 96 & \ph{CH2-EXCH-96-MASE} & \ph{CH2-EXCH-96-MSE} & \ph{CH2-EXCH-96-MAE} & \ph{CH2-EXCH-96-RMSSE} \\
-     & 192 & \ph{CH2-EXCH-192-MASE} & \ph{CH2-EXCH-192-MSE} & \ph{CH2-EXCH-192-MAE} & \ph{CH2-EXCH-192-RMSSE} \\
+    Exchange & 96 & \ph{CH2-EXCH-96-MASE} & \ph{CH2-EXCH-96-MSE} & \ph{CH2-EXCH-96-MAE} & \ph{CH2-EXCH-96-RMSE} \\
+     & 192 & \ph{CH2-EXCH-192-MASE} & \ph{CH2-EXCH-192-MSE} & \ph{CH2-EXCH-192-MAE} & \ph{CH2-EXCH-192-RMSE} \\
     \midrule
-    Traffic & 96 & \ph{CH2-TRAF-96-MASE} & \ph{CH2-TRAF-96-MSE} & \ph{CH2-TRAF-96-MAE} & \ph{CH2-TRAF-96-RMSSE} \\
-     & 192 & \ph{CH2-TRAF-192-MASE} & \ph{CH2-TRAF-192-MSE} & \ph{CH2-TRAF-192-MAE} & \ph{CH2-TRAF-192-RMSSE} \\
+    Traffic & 96 & \ph{CH2-TRAF-96-MASE} & \ph{CH2-TRAF-96-MSE} & \ph{CH2-TRAF-96-MAE} & \ph{CH2-TRAF-96-RMSE} \\
+     & 192 & \ph{CH2-TRAF-192-MASE} & \ph{CH2-TRAF-192-MSE} & \ph{CH2-TRAF-192-MAE} & \ph{CH2-TRAF-192-RMSE} \\
     \midrule
-    Weather & 96 & \ph{CH2-WTHR-96-MASE} & \ph{CH2-WTHR-96-MSE} & \ph{CH2-WTHR-96-MAE} & \ph{CH2-WTHR-96-RMSSE} \\
-     & 192 & \ph{CH2-WTHR-192-MASE} & \ph{CH2-WTHR-192-MSE} & \ph{CH2-WTHR-192-MAE} & \ph{CH2-WTHR-192-RMSSE} \\
+    Weather & 96 & \ph{CH2-WTHR-96-MASE} & \ph{CH2-WTHR-96-MSE} & \ph{CH2-WTHR-96-MAE} & \ph{CH2-WTHR-96-RMSE} \\
+     & 192 & \ph{CH2-WTHR-192-MASE} & \ph{CH2-WTHR-192-MSE} & \ph{CH2-WTHR-192-MAE} & \ph{CH2-WTHR-192-RMSE} \\
     \midrule
-    \rowcolor{bestgray}Source-macro & 96  & \ph{CH2-96-MASE} & \ph{CH2-96-MSE} & \ph{CH2-96-MAE} & \ph{CH2-96-RMSSE} \\
-    \rowcolor{bestgray}Source-macro & 192 & \ph{CH2-192-MASE} & \ph{CH2-192-MSE} & \ph{CH2-192-MAE} & \ph{CH2-192-RMSSE} \\
+    \rowcolor{bestgray}Source-macro & 96  & \ph{CH2-96-MASE} & \ph{CH2-96-MSE} & \ph{CH2-96-MAE} & \ph{CH2-96-RMSE} \\
+    \rowcolor{bestgray}Source-macro & 192 & \ph{CH2-192-MASE} & \ph{CH2-192-MSE} & \ph{CH2-192-MAE} & \ph{CH2-192-RMSE} \\
     \bottomrule
   \end{tabular}}
 \end{table}
 
 Chronos-2 never participates in method design or hyperparameter selection; it is included to test whether the frozen configuration transfers to a family it was not developed on.
 
-\section{Full Missing-Severity Tables}
+\subsection{Reconstruction versus Forecasting Utility}
+\label{app:recutils}
+Table~\ref{tab:app-recutils} gives the per-method reconstruction and forecasting numbers
+behind the summary in \S\ref{sec:exp-opportunity}. Reconstruction error uses the artificially
+hidden positions, which are known because the mask is synthetic; forecast gain is measured
+against \textsc{Native Keep} on the same backbone. The discordant rate is the fraction of
+method pairs whose reconstruction and forecasting rankings disagree.
+
+\begin{table}[h]
+  \caption{Full paired reconstruction-versus-utility table. The Spearman $\rho$ row compares
+  the reconstruction ranking with the forecasting ranking within each backbone; a $\rho$
+  close to zero means the two rankings carry different information.}
+  \label{tab:app-recutils}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
+    \toprule
+    Method & Rec.\ MSE $\downarrow$ & Rec.\ MAE $\downarrow$ & Forecast MASE $\downarrow$
+           & Forecast Gain $\uparrow$ & Discordant Rate $\downarrow$ \\
+    \midrule
+    TOI                & \ph{REC_TOI_MSE}    & \ph{REC_TOI_MAE}    & \ph{REC_TOI_MASE}    & \ph{REC_TOI_GAIN}    & \multirow{6}{*}{\ph{DISCORDANT_RATE}} \\
+    TOI-VSF            & \ph{REC_TOIVSF_MSE} & \ph{REC_TOIVSF_MAE} & \ph{REC_TOIVSF_MASE} & \ph{REC_TOIVSF_GAIN} & \\
+    GIMCC              & \ph{REC_GIMCC_MSE}  & \ph{REC_GIMCC_MAE}  & \ph{REC_GIMCC_MASE}  & \ph{REC_GIMCC_GAIN}  & \\
+    SRDI               & \ph{REC_SRDI_MSE}   & \ph{REC_SRDI_MAE}   & \ph{REC_SRDI_MASE}   & \ph{REC_SRDI_GAIN}   & \\
+    ChannelTokenFormer & \ph{REC_CTF_MSE}    & \ph{REC_CTF_MAE}    & \ph{REC_CTF_MASE}    & \ph{REC_CTF_GAIN}    & \\
+    \rowcolor{bestgray}\introact{} & \ph{REC_OURS_MSE} & \ph{REC_OURS_MAE} & \ph{REC_OURS_MASE} & \ph{REC_OURS_GAIN} & \\
+    \midrule
+    \multicolumn{6}{l}{\footnotesize Spearman $\rho$ between reconstruction rank and
+    forecasting rank: Bolt \ph{RHO_BOLT}, TimesFM \ph{RHO_TF}, Chronos-2 \ph{RHO_CH2}} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\subsection{Governance Diagnostics}
+\label{app:governance-fig}
+Figure~\ref{fig:governance} visualises the diagnostics tabulated in
+Table~\ref{tab:opportunity}. Panel~(b) is a sign-agreement check rather than a calibration
+curve: the ranking score is used only to order actions, and we do not claim that its magnitude
+is a calibrated probability.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.84\textwidth]{figure/fig4_governance_diagnostics.pdf}
+  \caption{\textbf{(a)}~Harmful loss by method. \textbf{(b)}~Realised utility against the
+  binned ranking score with 95\% intervals. Panel~(b) is a sign agreement check, not a
+  calibration claim.}
+  \label{fig:governance}
+\end{figure}
+
+
+\subsection{Action-Opportunity Strata}
+\label{app:opportunity}
+The strata used in \S\ref{sec:exp-opportunity} are defined by thresholds on the oracle
+opportunity $\Delta_i = L_{\textsc{Keep},i} - L_i^{\star}$ of \eqref{eq:opportunity}. The
+thresholds are fitted on the gate split only and then applied unchanged to the evaluation
+episodes, so no evaluation episode participates in choosing them. Table~\ref{tab:app-opp-sizes}
+records the realised stratum sizes and the opportunity distribution, and
+Table~\ref{tab:app-opp-sens} repeats the stratum-level MASE under alternative boundaries, so
+that a reader can see how much of the effect depends on where the boundary was drawn.
+
+\begin{table}[h]
+  \caption{Action-opportunity strata on the evaluation episodes. Boundaries are the TRAIN-gate
+  thresholds, applied unchanged. Counts are of legal parents, not of mask variants.}
+  \label{tab:app-opp-sizes}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
+    \toprule
+    Stratum & Parents & Share of episodes & Median $\Delta_i$ & 90th pct.\ $\Delta_i$ \\
+    \midrule
+    No-op             & \ph{STRATUM_NOOP_N}  & \ph{STRATUM_NOOP_SHARE}  & \ph{STRATUM_NOOP_MED}  & \ph{STRATUM_NOOP_P90} \\
+    Low opportunity   & \ph{STRATUM_LOW_N}   & \ph{STRATUM_LOW_SHARE}   & \ph{STRATUM_LOW_MED}   & \ph{STRATUM_LOW_P90} \\
+    High opportunity  & \ph{STRATUM_HIGH_N}  & \ph{STRATUM_HIGH_SHARE}  & \ph{STRATUM_HIGH_MED}  & \ph{STRATUM_HIGH_P90} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Stratum-boundary sensitivity. The no-op tolerance and the low/high boundary are
+  shifted by the indicated factor of the TRAIN-gate threshold; every other setting is
+  unchanged. MASE is source-macro averaged within the resulting strata.}
+  \label{tab:app-opp-sens}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
+    \toprule
+    Boundary factor & No-op MASE $\downarrow$ & Low MASE $\downarrow$ & High MASE $\downarrow$ & Overall MASE $\downarrow$ \\
+    \midrule
+    $\times 0.5$ & \ph{OPPSENS_HALF_NOOP}  & \ph{OPPSENS_HALF_LOW}  & \ph{OPPSENS_HALF_HIGH}  & \ph{OPPSENS_HALF_OVR} \\
+    $\times 1.0$ & \ph{OPPSENS_ONE_NOOP}   & \ph{OPPSENS_ONE_LOW}   & \ph{OPPSENS_ONE_HIGH}   & \ph{OPPSENS_ONE_OVR} \\
+    $\times 2.0$ & \ph{OPPSENS_TWO_NOOP}   & \ph{OPPSENS_TWO_LOW}   & \ph{OPPSENS_TWO_HIGH}   & \ph{OPPSENS_TWO_OVR} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.62\textwidth]{figure/fig3_action_opportunity.pdf}
+  \caption{Action choice matters where the opportunity exists. The horizontal axis is the
+  oracle opportunity $\Delta_i$ of an episode, binned from TRAIN-only thresholds; the
+  vertical axis is the improvement of a method over \textsc{Keep}. The no-op stratum is where
+  an intervention can only lose, and the high-opportunity stratum is where selection has
+  something to gain. The panel is a placeholder until the main experiment produces the
+  underlying CSV.}
+  \label{fig:opportunity}
+\end{figure}
+
+\subsection{Extended Comparison}
+\label{app:extended}
+VIDA~\citep{liang2025vida} is a closely related variable-subset-forecasting framework that
+reframes the problem as cross-domain knowledge transfer. It is not part of the five core
+baselines: the core set is fixed at five published methods before any result is seen, and
+VIDA's adaptation procedure targets a training regime that differs from our frozen-backbone
+contract. We therefore report it as an extended comparison rather than substituting it for a
+core baseline. Table~\ref{tab:app-vida} gives the comparison on the main protocol.
+
+If a core baseline turns out not to admit a legal adaptation to our protocol, we report that
+to the reader instead of replacing it silently, and any change to the core set is an explicit
+protocol revision rather than an editorial one.
+
+\begin{table}[h]
+  \caption{Extended comparison on the main protocol ($10\%$ severity, source-macro MASE,
+  lower is better). VIDA is reported for completeness and is excluded from the core average
+  ranks of Table~\ref{tab:main}.}
+  \label{tab:app-vida}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lccccc}
+    \toprule
+    Method & Bolt $\downarrow$ & TimesFM $\downarrow$ & Chronos-2 $\downarrow$ & Overall $\downarrow$ & Rank $\downarrow$ \\
+    \midrule
+    VIDA           & \ph{VIDA_BOLT} & \ph{VIDA_TF} & \ph{VIDA_CH2} & \ph{VIDA_OVR} & \ph{VIDA_RANK} \\
+    \introact{}    & \ph{OURS_BOLT} & \ph{OURS_TF} & \ph{OURS_CH2} & \ph{OURS_OVR} & \ph{OURS_RANK} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Robustness Breakdown}
+\label{app:robustness}
+This section expands \S\ref{sec:exp-robust}: the complete severity tables, the per-pattern
+results, and the severity trend.
+
+\subsection{Severity Tables}
 \label{app:severity}
 Tables~\ref{tab:app-sev10}--\ref{tab:app-sev50} give the complete severity sweep. No method
 is retuned between severities: \introact{} reuses the $K$ and $\beta$ frozen after the
@@ -1112,20 +1333,20 @@ policy degrades faster or slower than the baselines, not to select a new configu
   \setlength{\tabcolsep}{4pt}
 \resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
     \toprule
-    Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSSE $\downarrow$ & Rank $\downarrow$ \\
+    Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & \ph{SEV10-KEEP-MASE} & \ph{SEV10-KEEP-MSE} & \ph{SEV10-KEEP-MAE} & \ph{SEV10-KEEP-RMSSE} & \ph{SEV10-KEEP-RANK} \\
-    \textsc{Best Fixed}  & \ph{SEV10-BF-MASE}   & \ph{SEV10-BF-MSE}   & \ph{SEV10-BF-MAE}   & \ph{SEV10-BF-RMSSE}   & \ph{SEV10-BF-RANK} \\
-    R2-CART              & \ph{SEV10-R2-MASE}   & \ph{SEV10-R2-MSE}   & \ph{SEV10-R2-MAE}   & \ph{SEV10-R2-RMSSE}   & \ph{SEV10-R2-RANK} \\
-    BRITS                & \ph{SEV10-BRITS-MASE}& \ph{SEV10-BRITS-MSE}& \ph{SEV10-BRITS-MAE}& \ph{SEV10-BRITS-RMSSE}& \ph{SEV10-BRITS-RANK} \\
-    CSDI                 & \ph{SEV10-CSDI-MASE} & \ph{SEV10-CSDI-MSE} & \ph{SEV10-CSDI-MAE} & \ph{SEV10-CSDI-RMSSE} & \ph{SEV10-CSDI-RANK} \\
-    TOI                  & \ph{SEV10-TOI-MASE}  & \ph{SEV10-TOI-MSE}  & \ph{SEV10-TOI-MAE}  & \ph{SEV10-TOI-RMSSE}  & \ph{SEV10-TOI-RANK} \\
-    T1                   & \ph{SEV10-T1-MASE}   & \ph{SEV10-T1-MSE}   & \ph{SEV10-T1-MAE}   & \ph{SEV10-T1-RMSSE}   & \ph{SEV10-T1-RANK} \\
-    TATO                 & \ph{SEV10-TATO-MASE} & \ph{SEV10-TATO-MSE} & \ph{SEV10-TATO-MAE} & \ph{SEV10-TATO-RMSSE} & \ph{SEV10-TATO-RANK} \\
+    \textsc{Native Keep} & \ph{SEV10-KEEP-MASE} & \ph{SEV10-KEEP-MSE} & \ph{SEV10-KEEP-MAE} & \ph{SEV10-KEEP-RMSE} & \ph{SEV10-KEEP-RANK} \\
+    \textsc{Best Fixed}  & \ph{SEV10-BF-MASE}   & \ph{SEV10-BF-MSE}   & \ph{SEV10-BF-MAE}   & \ph{SEV10-BF-RMSE}   & \ph{SEV10-BF-RANK} \\
+    R2-CART              & \ph{SEV10-R2-MASE}   & \ph{SEV10-R2-MSE}   & \ph{SEV10-R2-MAE}   & \ph{SEV10-R2-RMSE}   & \ph{SEV10-R2-RANK} \\
+    TOI                   & \ph{SEV10_TOI_MASE}& \ph{SEV10_TOI_MSE}& \ph{SEV10_TOI_MAE}& \ph{SEV10_TOI_RMSE}& \ph{SEV10_TOI_RANK} \\
+    TOI-VSF               & \ph{SEV10_TOIVSF_MASE} & \ph{SEV10_TOIVSF_MSE} & \ph{SEV10_TOIVSF_MAE} & \ph{SEV10_TOIVSF_RMSE} & \ph{SEV10_TOIVSF_RANK} \\
+    GIMCC                 & \ph{SEV10_GIMCC_MASE}  & \ph{SEV10_GIMCC_MSE}  & \ph{SEV10_GIMCC_MAE}  & \ph{SEV10_GIMCC_RMSE}  & \ph{SEV10_GIMCC_RANK} \\
+    SRDI                  & \ph{SEV10_SRDI_MASE}   & \ph{SEV10_SRDI_MSE}   & \ph{SEV10_SRDI_MAE}   & \ph{SEV10_SRDI_RMSE}   & \ph{SEV10_SRDI_RANK} \\
+    ChannelTokenFormer    & \ph{SEV10_CTF_MASE} & \ph{SEV10_CTF_MSE} & \ph{SEV10_CTF_MAE} & \ph{SEV10_CTF_RMSE} & \ph{SEV10_CTF_RANK} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SEV10-OURS-MASE} & \ph{SEV10-OURS-MSE} & \ph{SEV10-OURS-MAE} & \ph{SEV10-OURS-RMSSE} & \ph{SEV10-OURS-RANK} \\
+    \rowcolor{bestgray}\introact{} & \ph{SEV10-OURS-MASE} & \ph{SEV10-OURS-MSE} & \ph{SEV10-OURS-MAE} & \ph{SEV10-OURS-RMSE} & \ph{SEV10-OURS-RANK} \\
     \midrule
-    \oracle{Catalog Oracle (diagnostic)} & \oracle{\ph{SEV10-ORACLE-MASE}} & \oracle{\ph{SEV10-ORACLE-MSE}} & \oracle{\ph{SEV10-ORACLE-MAE}} & \oracle{\ph{SEV10-ORACLE-RMSSE}} & \oracle{---} \\
+    \oracle{Catalog Oracle (diagnostic)} & \oracle{\ph{SEV10-ORACLE-MASE}} & \oracle{\ph{SEV10-ORACLE-MSE}} & \oracle{\ph{SEV10-ORACLE-MAE}} & \oracle{\ph{SEV10-ORACLE-RMSE}} & \oracle{---} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1139,18 +1360,18 @@ policy degrades faster or slower than the baselines, not to select a new configu
   \setlength{\tabcolsep}{4pt}
 \resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
     \toprule
-    Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSSE $\downarrow$ & Rank $\downarrow$ \\
+    Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & \ph{SEV30-KEEP-MASE} & \ph{SEV30-KEEP-MSE} & \ph{SEV30-KEEP-MAE} & \ph{SEV30-KEEP-RMSSE} & \ph{SEV30-KEEP-RANK} \\
-    \textsc{Best Fixed}  & \ph{SEV30-BF-MASE}   & \ph{SEV30-BF-MSE}   & \ph{SEV30-BF-MAE}   & \ph{SEV30-BF-RMSSE}   & \ph{SEV30-BF-RANK} \\
-    R2-CART              & \ph{SEV30-R2-MASE}   & \ph{SEV30-R2-MSE}   & \ph{SEV30-R2-MAE}   & \ph{SEV30-R2-RMSSE}   & \ph{SEV30-R2-RANK} \\
-    BRITS                & \ph{SEV30-BRITS-MASE}& \ph{SEV30-BRITS-MSE}& \ph{SEV30-BRITS-MAE}& \ph{SEV30-BRITS-RMSSE}& \ph{SEV30-BRITS-RANK} \\
-    CSDI                 & \ph{SEV30-CSDI-MASE} & \ph{SEV30-CSDI-MSE} & \ph{SEV30-CSDI-MAE} & \ph{SEV30-CSDI-RMSSE} & \ph{SEV30-CSDI-RANK} \\
-    TOI                  & \ph{SEV30-TOI-MASE}  & \ph{SEV30-TOI-MSE}  & \ph{SEV30-TOI-MAE}  & \ph{SEV30-TOI-RMSSE}  & \ph{SEV30-TOI-RANK} \\
-    T1                   & \ph{SEV30-T1-MASE}   & \ph{SEV30-T1-MSE}   & \ph{SEV30-T1-MAE}   & \ph{SEV30-T1-RMSSE}   & \ph{SEV30-T1-RANK} \\
-    TATO                 & \ph{SEV30-TATO-MASE} & \ph{SEV30-TATO-MSE} & \ph{SEV30-TATO-MAE} & \ph{SEV30-TATO-RMSSE} & \ph{SEV30-TATO-RANK} \\
+    \textsc{Native Keep} & \ph{SEV30-KEEP-MASE} & \ph{SEV30-KEEP-MSE} & \ph{SEV30-KEEP-MAE} & \ph{SEV30-KEEP-RMSE} & \ph{SEV30-KEEP-RANK} \\
+    \textsc{Best Fixed}  & \ph{SEV30-BF-MASE}   & \ph{SEV30-BF-MSE}   & \ph{SEV30-BF-MAE}   & \ph{SEV30-BF-RMSE}   & \ph{SEV30-BF-RANK} \\
+    R2-CART              & \ph{SEV30-R2-MASE}   & \ph{SEV30-R2-MSE}   & \ph{SEV30-R2-MAE}   & \ph{SEV30-R2-RMSE}   & \ph{SEV30-R2-RANK} \\
+    TOI                   & \ph{SEV30_TOI_MASE}& \ph{SEV30_TOI_MSE}& \ph{SEV30_TOI_MAE}& \ph{SEV30_TOI_RMSE}& \ph{SEV30_TOI_RANK} \\
+    TOI-VSF               & \ph{SEV30_TOIVSF_MASE} & \ph{SEV30_TOIVSF_MSE} & \ph{SEV30_TOIVSF_MAE} & \ph{SEV30_TOIVSF_RMSE} & \ph{SEV30_TOIVSF_RANK} \\
+    GIMCC                 & \ph{SEV30_GIMCC_MASE}  & \ph{SEV30_GIMCC_MSE}  & \ph{SEV30_GIMCC_MAE}  & \ph{SEV30_GIMCC_RMSE}  & \ph{SEV30_GIMCC_RANK} \\
+    SRDI                  & \ph{SEV30_SRDI_MASE}   & \ph{SEV30_SRDI_MSE}   & \ph{SEV30_SRDI_MAE}   & \ph{SEV30_SRDI_RMSE}   & \ph{SEV30_SRDI_RANK} \\
+    ChannelTokenFormer    & \ph{SEV30_CTF_MASE} & \ph{SEV30_CTF_MSE} & \ph{SEV30_CTF_MAE} & \ph{SEV30_CTF_RMSE} & \ph{SEV30_CTF_RANK} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SEV30-OURS-MASE} & \ph{SEV30-OURS-MSE} & \ph{SEV30-OURS-MAE} & \ph{SEV30-OURS-RMSSE} & \ph{SEV30-OURS-RANK} \\
+    \rowcolor{bestgray}\introact{} & \ph{SEV30-OURS-MASE} & \ph{SEV30-OURS-MSE} & \ph{SEV30-OURS-MAE} & \ph{SEV30-OURS-RMSE} & \ph{SEV30-OURS-RANK} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1164,23 +1385,23 @@ policy degrades faster or slower than the baselines, not to select a new configu
   \setlength{\tabcolsep}{4pt}
 \resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
     \toprule
-    Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSSE $\downarrow$ & Rank $\downarrow$ \\
+    Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & \ph{SEV50-KEEP-MASE} & \ph{SEV50-KEEP-MSE} & \ph{SEV50-KEEP-MAE} & \ph{SEV50-KEEP-RMSSE} & \ph{SEV50-KEEP-RANK} \\
-    \textsc{Best Fixed}  & \ph{SEV50-BF-MASE}   & \ph{SEV50-BF-MSE}   & \ph{SEV50-BF-MAE}   & \ph{SEV50-BF-RMSSE}   & \ph{SEV50-BF-RANK} \\
-    R2-CART              & \ph{SEV50-R2-MASE}   & \ph{SEV50-R2-MSE}   & \ph{SEV50-R2-MAE}   & \ph{SEV50-R2-RMSSE}   & \ph{SEV50-R2-RANK} \\
-    BRITS                & \ph{SEV50-BRITS-MASE}& \ph{SEV50-BRITS-MSE}& \ph{SEV50-BRITS-MAE}& \ph{SEV50-BRITS-RMSSE}& \ph{SEV50-BRITS-RANK} \\
-    CSDI                 & \ph{SEV50-CSDI-MASE} & \ph{SEV50-CSDI-MSE} & \ph{SEV50-CSDI-MAE} & \ph{SEV50-CSDI-RMSSE} & \ph{SEV50-CSDI-RANK} \\
-    TOI                  & \ph{SEV50-TOI-MASE}  & \ph{SEV50-TOI-MSE}  & \ph{SEV50-TOI-MAE}  & \ph{SEV50-TOI-RMSSE}  & \ph{SEV50-TOI-RANK} \\
-    T1                   & \ph{SEV50-T1-MASE}   & \ph{SEV50-T1-MSE}   & \ph{SEV50-T1-MAE}   & \ph{SEV50-T1-RMSSE}   & \ph{SEV50-T1-RANK} \\
-    TATO                 & \ph{SEV50-TATO-MASE} & \ph{SEV50-TATO-MSE} & \ph{SEV50-TATO-MAE} & \ph{SEV50-TATO-RMSSE} & \ph{SEV50-TATO-RANK} \\
+    \textsc{Native Keep} & \ph{SEV50-KEEP-MASE} & \ph{SEV50-KEEP-MSE} & \ph{SEV50-KEEP-MAE} & \ph{SEV50-KEEP-RMSE} & \ph{SEV50-KEEP-RANK} \\
+    \textsc{Best Fixed}  & \ph{SEV50-BF-MASE}   & \ph{SEV50-BF-MSE}   & \ph{SEV50-BF-MAE}   & \ph{SEV50-BF-RMSE}   & \ph{SEV50-BF-RANK} \\
+    R2-CART              & \ph{SEV50-R2-MASE}   & \ph{SEV50-R2-MSE}   & \ph{SEV50-R2-MAE}   & \ph{SEV50-R2-RMSE}   & \ph{SEV50-R2-RANK} \\
+    TOI                   & \ph{SEV50_TOI_MASE}& \ph{SEV50_TOI_MSE}& \ph{SEV50_TOI_MAE}& \ph{SEV50_TOI_RMSE}& \ph{SEV50_TOI_RANK} \\
+    TOI-VSF               & \ph{SEV50_TOIVSF_MASE} & \ph{SEV50_TOIVSF_MSE} & \ph{SEV50_TOIVSF_MAE} & \ph{SEV50_TOIVSF_RMSE} & \ph{SEV50_TOIVSF_RANK} \\
+    GIMCC                 & \ph{SEV50_GIMCC_MASE}  & \ph{SEV50_GIMCC_MSE}  & \ph{SEV50_GIMCC_MAE}  & \ph{SEV50_GIMCC_RMSE}  & \ph{SEV50_GIMCC_RANK} \\
+    SRDI                  & \ph{SEV50_SRDI_MASE}   & \ph{SEV50_SRDI_MSE}   & \ph{SEV50_SRDI_MAE}   & \ph{SEV50_SRDI_RMSE}   & \ph{SEV50_SRDI_RANK} \\
+    ChannelTokenFormer    & \ph{SEV50_CTF_MASE} & \ph{SEV50_CTF_MSE} & \ph{SEV50_CTF_MAE} & \ph{SEV50_CTF_RMSE} & \ph{SEV50_CTF_RANK} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SEV50-OURS-MASE} & \ph{SEV50-OURS-MSE} & \ph{SEV50-OURS-MAE} & \ph{SEV50-OURS-RMSSE} & \ph{SEV50-OURS-RANK} \\
+    \rowcolor{bestgray}\introact{} & \ph{SEV50-OURS-MASE} & \ph{SEV50-OURS-MSE} & \ph{SEV50-OURS-MAE} & \ph{SEV50-OURS-RMSE} & \ph{SEV50-OURS-RANK} \\
     \bottomrule
   \end{tabular}}
 \end{table}
 
-\section{Per-Pattern Results}
+\subsection{Per-Pattern Results}
 \label{app:pattern}
 Table~\ref{tab:app-pattern-res} separates the four patterns. Point missing is expected to
 be the easiest regime and tail missing the hardest, because the missing block is adjacent
@@ -1199,71 +1420,21 @@ main table.
     \toprule
     Method & P1 Point & P2 Target Block & P3 Shared Block & P4 Tail & Avg.\ Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & \ph{P1-KEEP} & \ph{P2-KEEP} & \ph{P3-KEEP} & \ph{P4-KEEP} & \ph{PR-KEEP} \\
-    \textsc{Best Fixed}  & \ph{P1-BF}   & \ph{P2-BF}   & \ph{P3-BF}   & \ph{P4-BF}   & \ph{PR-BF} \\
-    R2-CART              & \ph{P1-R2}   & \ph{P2-R2}   & \ph{P3-R2}   & \ph{P4-R2}   & \ph{PR-R2} \\
-    BRITS                & \ph{P1-BRITS}& \ph{P2-BRITS}& \ph{P3-BRITS}& \ph{P4-BRITS}& \ph{PR-BRITS} \\
-    CSDI                 & \ph{P1-CSDI} & \ph{P2-CSDI} & \ph{P3-CSDI} & \ph{P4-CSDI} & \ph{PR-CSDI} \\
-    TOI                  & \ph{P1-TOI}  & \ph{P2-TOI}  & \ph{P3-TOI}  & \ph{P4-TOI}  & \ph{PR-TOI} \\
-    T1                   & \ph{P1-T1}   & \ph{P2-T1}   & \ph{P3-T1}   & \ph{P4-T1}   & \ph{PR-T1} \\
-    TATO                 & \ph{P1-TATO} & \ph{P2-TATO} & \ph{P3-TATO} & \ph{P4-TATO} & \ph{PR-TATO} \\
+    \textsc{Native Keep} & \ph{P1_KEEP} & \ph{P2_KEEP} & \ph{P3_KEEP} & \ph{P4_KEEP} & \ph{PR_KEEP} \\
+    \textsc{Best Fixed}  & \ph{P1_BF}   & \ph{P2_BF}   & \ph{P3_BF}   & \ph{P4_BF}   & \ph{PR_BF} \\
+    R2-CART              & \ph{P1_R2}   & \ph{P2_R2}   & \ph{P3_R2}   & \ph{P4_R2}   & \ph{PR_R2} \\
+    TOI                   & \ph{P1_TOI}& \ph{P2_TOI}& \ph{P3_TOI}& \ph{P4_TOI}& \ph{PR_TOI} \\
+    TOI-VSF               & \ph{P1_TOIVSF} & \ph{P2_TOIVSF} & \ph{P3_TOIVSF} & \ph{P4_TOIVSF} & \ph{PR_TOIVSF} \\
+    GIMCC                 & \ph{P1_GIMCC}  & \ph{P2_GIMCC}  & \ph{P3_GIMCC}  & \ph{P4_GIMCC}  & \ph{PR_GIMCC} \\
+    SRDI                  & \ph{P1_SRDI}   & \ph{P2_SRDI}   & \ph{P3_SRDI}   & \ph{P4_SRDI}   & \ph{PR_SRDI} \\
+    ChannelTokenFormer    & \ph{P1_CTF} & \ph{P2_CTF} & \ph{P3_CTF} & \ph{P4_CTF} & \ph{PR_CTF} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{P1-OURS} & \ph{P2-OURS} & \ph{P3-OURS} & \ph{P4-OURS} & \ph{PR-OURS} \\
+    \rowcolor{bestgray}\introact{} & \ph{P1_OURS} & \ph{P2_OURS} & \ph{P3_OURS} & \ph{P4_OURS} & \ph{PR_OURS} \\
     \bottomrule
   \end{tabular}}
 \end{table}
 
-\section{Reconstruction versus Utility: Full Paired Table}
-\label{app:recutils}
-Table~\ref{tab:app-recutils} gives the per-method reconstruction and forecasting numbers
-behind the summary in \S\ref{sec:exp-recutility}. Reconstruction error uses the artificially
-hidden positions, which are known because the mask is synthetic; forecast gain is measured
-against \textsc{Native Keep} on the same backbone. The discordant rate is the fraction of
-method pairs whose reconstruction and forecasting rankings disagree.
-
-\begin{table}[h]
-  \caption{Full paired reconstruction-versus-utility table. The Spearman $\rho$ row compares
-  the reconstruction ranking with the forecasting ranking within each backbone; a $\rho$
-  close to zero means the two rankings carry different information.}
-  \label{tab:app-recutils}
-  \centering
-  \small
-  \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
-    \toprule
-    Method & Rec.\ MSE $\downarrow$ & Rec.\ MAE $\downarrow$ & Forecast MASE $\downarrow$
-           & Forecast Gain $\uparrow$ & Discordant Rate $\downarrow$ \\
-    \midrule
-    BRITS       & \ph{BRITS-MSE}  & \ph{BRITS-MAE}  & \ph{BRITS-MASE}  & \ph{BRITS-GAIN}  & \multirow{6}{*}{\ph{DISCORDANT}} \\
-    CSDI        & \ph{CSDI-MSE}   & \ph{CSDI-MAE}   & \ph{CSDI-MASE}   & \ph{CSDI-GAIN}   & \\
-    TOI         & \ph{TOI-MSE}    & \ph{TOI-MAE}    & \ph{TOI-MASE}    & \ph{TOI-GAIN}    & \\
-    T1          & \ph{T1-MSE}     & \ph{T1-MAE}     & \ph{T1-MASE}     & \ph{T1-GAIN}     & \\
-    TATO        & \ph{TATO-MSE}   & \ph{TATO-MAE}   & \ph{TATO-MASE}   & \ph{TATO-GAIN}   & \\
-    \rowcolor{bestgray}\introact{} & \ph{OURS-MSE}   & \ph{OURS-MAE}   & \ph{OURS-MASE}   & \ph{OURS-GAIN}   & \\
-    \midrule
-    \multicolumn{6}{l}{\footnotesize Spearman $\rho$ between reconstruction rank and
-    forecasting rank: Bolt \ph{RHO-BOLT}, TimesFM \ph{RHO-TF}, Chronos-2 \ph{RHO-CH2}} \\
-    \bottomrule
-  \end{tabular}}
-\end{table}
-
-\section{Governance Diagnostics Figure}
-\label{app:governance-fig}
-Figure~\ref{fig:governance} visualises the diagnostics tabulated in
-Table~\ref{tab:governance}. Panel~(b) is a sign-agreement check rather than a calibration
-curve: the conservative score is used only to order actions and
-to trigger abstention, and we do not claim that its magnitude is a calibrated probability.
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.84\textwidth]{figure/fig4_governance_diagnostics.pdf}
-  \caption{\textbf{(a)}~Harmful loss by method. \textbf{(b)}~Realised utility against the
-  binned conservative score with 95\% intervals. Panel~(b) is a sign agreement check, not a
-  calibration claim.}
-  \label{fig:governance}
-\end{figure}
-
-\section{Robustness Figure}
+\subsection{Robustness Trend Figure}
 \label{app:robust-fig}
 Figure~\ref{fig:robust} shows the severity trend summarised by Table~\ref{tab:robust}. Each
 panel is a different frozen backbone; the axes are identical across panels so that the
@@ -1278,64 +1449,173 @@ panels can be compared directly.
   \label{fig:robust}
 \end{figure}
 
-\section{Replay Size}
-\label{app:replaysize}
-The replay bank is subsampled to $25\%$, $50\%$, and $100\%$ of its replay-fit support to
-measure how much the method depends on the amount of historical evidence. This analysis is
-not part of the main text and was not used to select any hyperparameter; the frozen
-configuration is the one trained on the full bank. If performance at $25\%$ matches
-performance at $100\%$, the honest reading is that the bank is already saturated at this
-scale, not that the method is data-efficient in general.
+
+\section{Historical Support Results}
+\label{app:support}
+\label{app:support-details}
+This section supports \S\ref{sec:exp-support}. Every method is re-fitted from scratch under
+$25\%$, $50\%$, and $100\%$ of the replay-fit portion of TRAIN, using the identical split rule
+and purge of Appendix~\ref{app:splits}. Table~\ref{tab:support} collects the compact reading
+statement and Table~\ref{tab:app-support-full} reports all four metrics at each support level.
+Table~\ref{tab:app-support-cost} separates the one-off offline fitting cost from the
+per-request online cost at each level.
+
+The bank-size check in Appendix~\ref{app:replaysize} is the corresponding internal ablation: it
+subsamples the replay bank while holding the baseline training set fixed, whereas this section
+restricts the available history for every method at the same time. The two are not
+interchangeable, and a disagreement between them is informative rather than contradictory.
 
 \begin{table}[h]
-  \caption{Replay-bank size ablation. The bank is subsampled by replay-fit parent, keeping
-  every action and severity per retained parent, so the subsample changes the amount of
-  history rather than its composition.}
-  \label{tab:app-replaysize}
+  \caption{Historical support efficiency. Every method is re-fitted under the same
+  restriction on how much of replay-fit is available; MASE is source-macro averaged and lower
+  is better. Offline cost is the one-off fitting cost of the method and is reported separately
+  from the online cost of a request.}
+  \label{tab:support}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
+    \toprule
+    Method & 25\% support $\downarrow$ & 50\% support $\downarrow$ & 100\% support $\downarrow$ & Offline cost $\downarrow$ \\
+    \midrule
+    TOI                & \ph{SUPPORT25_TOI}    & \ph{SUPPORT50_TOI}    & \ph{SUPPORT100_TOI}    & \ph{OFFLINE_TOI} \\
+    TOI-VSF            & \ph{SUPPORT25_TOIVSF} & \ph{SUPPORT50_TOIVSF} & \ph{SUPPORT100_TOIVSF} & \ph{OFFLINE_TOIVSF} \\
+    GIMCC              & \ph{SUPPORT25_GIMCC}  & \ph{SUPPORT50_GIMCC}  & \ph{SUPPORT100_GIMCC}  & \ph{OFFLINE_GIMCC} \\
+    SRDI               & \ph{SUPPORT25_SRDI}   & \ph{SUPPORT50_SRDI}   & \ph{SUPPORT100_SRDI}   & \ph{OFFLINE_SRDI} \\
+    ChannelTokenFormer & \ph{SUPPORT25_CTF}    & \ph{SUPPORT50_CTF}    & \ph{SUPPORT100_CTF}    & \ph{OFFLINE_CTF} \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & \ph{SUPPORT25_OURS} & \ph{SUPPORT50_OURS} & \ph{SUPPORT100_OURS} & \ph{OFFLINE_OURS} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Historical support efficiency, all four metrics, source-macro averaged. Every
+  method is re-fitted under the same restriction. Lower is better in every metric column.}
+  \label{tab:app-support-full}
   \centering
   \small
   \setlength{\tabcolsep}{4pt}
-  \begin{tabular}{lccccc}
+\resizebox{\textwidth}{!}{\begin{tabular}{llcccc}
     \toprule
-    Bank fraction & MASE $\downarrow$ & Intervention Rate & HIR $\downarrow$ & Harmful Loss $\downarrow$ & Calls $\downarrow$ \\
+    Method & Support & MASE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & MSE $\downarrow$ \\
     \midrule
-    $25\%$  & \ph{RS25-MASE}  & \ph{RS25-IR}  & \ph{RS25-HIR}  & \ph{RS25-HL}  & \ph{RS25-CALLS} \\
-    $50\%$  & \ph{RS50-MASE}  & \ph{RS50-IR}  & \ph{RS50-HIR}  & \ph{RS50-HL}  & \ph{RS50-CALLS} \\
-    $100\%$ & \ph{RS100-MASE} & \ph{RS100-IR} & \ph{RS100-HIR} & \ph{RS100-HL} & \ph{RS100-CALLS} \\
+    TOI                & 25\% / 50\% / 100\% & \ph{TOI_S25_MASE} & \ph{TOI_S25_MAE} & \ph{TOI_S25_RMSE} & \ph{TOI_S25_MSE} \\
+    TOI-VSF            & 25\% / 50\% / 100\% & \ph{TOIVSF_S25_MASE} & \ph{TOIVSF_S25_MAE} & \ph{TOIVSF_S25_RMSE} & \ph{TOIVSF_S25_MSE} \\
+    GIMCC              & 25\% / 50\% / 100\% & \ph{GIMCC_S25_MASE} & \ph{GIMCC_S25_MAE} & \ph{GIMCC_S25_RMSE} & \ph{GIMCC_S25_MSE} \\
+    SRDI               & 25\% / 50\% / 100\% & \ph{SRDI_S25_MASE} & \ph{SRDI_S25_MAE} & \ph{SRDI_S25_RMSE} & \ph{SRDI_S25_MSE} \\
+    ChannelTokenFormer & 25\% / 50\% / 100\% & \ph{CTF_S25_MASE} & \ph{CTF_S25_MAE} & \ph{CTF_S25_RMSE} & \ph{CTF_S25_MSE} \\
+    \introact{}        & 25\% / 50\% / 100\% & \ph{OURS_S25_MASE} & \ph{OURS_S25_MAE} & \ph{OURS_S25_RMSE} & \ph{OURS_S25_MSE} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Offline and online cost by support level. Offline cost is the one-off fitting cost;
+  online cost is per request and excludes cold start. The two are never summed into a single
+  number, because they are paid on different schedules.}
+  \label{tab:app-support-cost}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccc}
+    \toprule
+    Method & Offline 25\% & Offline 50\% & Offline 100\% & Online 25\% & Online 50\% & Online 100\% \\
+    \midrule
+    TOI                & \ph{TOI_OFF25} & \ph{TOI_OFF50} & \ph{TOI_OFF100} & \ph{TOI_ON25} & \ph{TOI_ON50} & \ph{TOI_ON100} \\
+    TOI-VSF            & \ph{TOIVSF_OFF25} & \ph{TOIVSF_OFF50} & \ph{TOIVSF_OFF100} & \ph{TOIVSF_ON25} & \ph{TOIVSF_ON50} & \ph{TOIVSF_ON100} \\
+    GIMCC              & \ph{GIMCC_OFF25} & \ph{GIMCC_OFF50} & \ph{GIMCC_OFF100} & \ph{GIMCC_ON25} & \ph{GIMCC_ON50} & \ph{GIMCC_ON100} \\
+    SRDI               & \ph{SRDI_OFF25} & \ph{SRDI_OFF50} & \ph{SRDI_OFF100} & \ph{SRDI_ON25} & \ph{SRDI_ON50} & \ph{SRDI_ON100} \\
+    ChannelTokenFormer & \ph{CTF_OFF25} & \ph{CTF_OFF50} & \ph{CTF_OFF100} & \ph{CTF_ON25} & \ph{CTF_ON50} & \ph{CTF_ON100} \\
+    \introact{}        & \ph{OURS_OFF25} & \ph{OURS_OFF50} & \ph{OURS_OFF100} & \ph{OURS_ON25} & \ph{OURS_ON50} & \ph{OURS_ON100} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+
+\section{Ablation Details}
+\label{app:ablation-details}
+This section supports \S\ref{sec:exp-ablation}. Table~\ref{tab:ablation} reports the six
+variants on the unified main protocol; Table~\ref{tab:app-ablation-full} reports the full
+outcome vector; and Table~\ref{tab:app-ablation-stab} repeats the ablation under a different
+deterministic ordering of the replay records, so that a reader can see whether a variant's
+position is an artefact of the order in which records were consumed. The variant definitions
+follow \S\ref{sec:exp-ablation} exactly.
+
+\begin{table}[h]
+  \caption{Ablation on the main protocol; $\checkmark$ marks a present component and
+  ``partial'' a state group reduced to a subset. \emph{Replay sup.} is historical replay
+  supervision, \emph{Regret rank} the regret-aware ranking objective, \emph{Pair w.} the
+  pairwise comparison weights, \emph{Ep./Int.\ state} the two state groups, and
+  \emph{Keep sel.} the availability of \textsc{Keep} in the decision space. Harmful loss is
+  measured relative to \textsc{Native Keep}.}
+  \label{tab:ablation}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccccccc}
+    \toprule
+    & \multicolumn{5}{c}{Components} & \multicolumn{5}{c}{Outcome} \\
+    \cmidrule(lr){2-6}\cmidrule(lr){7-11}
+    Variant & Replay sup. & Regret rank & Pair w. & Ep./Int.\ state & Keep sel.
+            & MASE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Harmful loss $\downarrow$ & Rank $\downarrow$ \\
+    \midrule
+    Full \introact{}          & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & \ph{FULL_MASE} & \ph{FULL_MAE} & \ph{FULL_RMSE} & \ph{FULL_HL} & \ph{FULL_RANK} \\
+    A1 Gain regression        & $\checkmark$ &              & ---          & $\checkmark$ & $\checkmark$ & \ph{A1_MASE}   & \ph{A1_MAE}   & \ph{A1_RMSE}   & \ph{A1_HL}   & \ph{A1_RANK} \\
+    A2 Unweighted ranking     & $\checkmark$ & $\checkmark$ &              & $\checkmark$ & $\checkmark$ & \ph{A2_MASE}   & \ph{A2_MAE}   & \ph{A2_RMSE}   & \ph{A2_HL}   & \ph{A2_RANK} \\
+    A3 w/o intervention state & $\checkmark$ & $\checkmark$ & $\checkmark$ & partial      & $\checkmark$ & \ph{A3_MASE}   & \ph{A3_MAE}   & \ph{A3_RMSE}   & \ph{A3_HL}   & \ph{A3_RANK} \\
+    A4 w/o context state      & $\checkmark$ & $\checkmark$ & $\checkmark$ & partial      & $\checkmark$ & \ph{A4_MASE}   & \ph{A4_MAE}   & \ph{A4_RMSE}   & \ph{A4_HL}   & \ph{A4_RANK} \\
+    A5 Forced intervention    & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ &              & \ph{A5_MASE}   & \ph{A5_MAE}   & \ph{A5_RMSE}   & \ph{A5_HL}   & \ph{A5_RANK} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Ablation, full outcome vector. Harmful loss is measured relative to
+  \textsc{Native Keep} and is reported both unconditionally and conditional on an intervention
+  having been executed. Calls is the mean number of frozen-model forecasts per request.}
+  \label{tab:app-ablation-full}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccccccc}
+    \toprule
+    Variant & MASE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & MSE $\downarrow$ & Harmful loss $\downarrow$ & Conditional HIR $\downarrow$ & Calls $\downarrow$ \\
+    \midrule
+    Full \introact{}          & \ph{AF_FULL_MASE} & \ph{AF_FULL_MAE} & \ph{AF_FULL_RMSE} & \ph{AF_FULL_MSE} & \ph{AF_FULL_HL} & \ph{AF_FULL_CHIR} & \ph{AF_FULL_CALLS} \\
+    A1 Gain regression        & \ph{AF_A1_MASE}   & \ph{AF_A1_MAE}   & \ph{AF_A1_RMSE}   & \ph{AF_A1_MSE}   & \ph{AF_A1_HL}   & \ph{AF_A1_CHIR}   & \ph{AF_A1_CALLS} \\
+    A2 Unweighted ranking     & \ph{AF_A2_MASE}   & \ph{AF_A2_MAE}   & \ph{AF_A2_RMSE}   & \ph{AF_A2_MSE}   & \ph{AF_A2_HL}   & \ph{AF_A2_CHIR}   & \ph{AF_A2_CALLS} \\
+    A3 w/o intervention state & \ph{AF_A3_MASE}   & \ph{AF_A3_MAE}   & \ph{AF_A3_RMSE}   & \ph{AF_A3_MSE}   & \ph{AF_A3_HL}   & \ph{AF_A3_CHIR}   & \ph{AF_A3_CALLS} \\
+    A4 w/o context state      & \ph{AF_A4_MASE}   & \ph{AF_A4_MAE}   & \ph{AF_A4_RMSE}   & \ph{AF_A4_MSE}   & \ph{AF_A4_HL}   & \ph{AF_A4_CHIR}   & \ph{AF_A4_CALLS} \\
+    A5 Forced intervention    & \ph{AF_A5_MASE}   & \ph{AF_A5_MAE}   & \ph{AF_A5_RMSE}   & \ph{AF_A5_MSE}   & \ph{AF_A5_HL}   & \ph{AF_A5_CHIR}   & \ph{AF_A5_CALLS} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Ordering stability of the ablation. The whole ablation is repeated after a
+  deterministic reshuffle of the replay records; the column reports the Spearman correlation
+  between the two rankings of the six variants, per backbone. A high value means the variant
+  ordering is not an artefact of record order.}
+  \label{tab:app-ablation-stab}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lcc}
+    \toprule
+    Backbone & Spearman $\rho$ between orderings $\uparrow$ & Rank of Full variant \\
+    \midrule
+    Bolt      & \ph{ABL_STAB_BOLT} & \ph{ABL_RANKFULL_BOLT} \\
+    TimesFM   & \ph{ABL_STAB_TF}   & \ph{ABL_RANKFULL_TF} \\
+    Chronos-2 & \ph{ABL_STAB_CH2}  & \ph{ABL_RANKFULL_CH2} \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\section{$K$ and $\beta$ Sensitivity}
-\label{app:ksens}
-Table~\ref{tab:app-ksens} reports the full $3 \times 3$ grid over the neighbourhood size
-$K \in \{8, 16, 32\}$ and the conservativeness level $\beta \in \{0, 1, 1.64\}$. The grid is
-evaluated on the gate split only; the cell carried into the frozen configuration is marked.
-The temperature is not part of the grid: it is fixed at
-$\tau = \mathrm{median}(d_i) + \varepsilon$ precisely so that this search stays two-dimensional.
-
-\begin{table}[h]
-  \caption{$K$ and $\beta$ sensitivity on the gate split. Each cell reports MASE and the
-  harmful intervention rate. The selected cell is marked with a dagger.}
-  \label{tab:app-ksens}
-  \centering
-  \small
-  \setlength{\tabcolsep}{4pt}
-  \begin{tabular}{lccc}
-    \toprule
-    & $\beta = 0$ & $\beta = 1$ & $\beta = 1.64$ \\
-    \midrule
-    $K = 8$  & \ph{K8-B0}  & \ph{K8-B1}  & \ph{K8-B164} \\
-    $K = 16$ & \ph{K16-B0} & \ph{K16-B1} & \ph{K16-B164} \\
-    $K = 32$ & \ph{K32-B0} & \ph{K32-B1} & \ph{K32-B164} \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-\section{Frozen-Model Call Accounting}
+\section{Runtime and Failure Audit}
 \label{app:calls}
 Table~\ref{tab:app-efficiency} gives the full cost breakdown behind the summary in
-\S\ref{sec:exp-efficiency}.
+\S\ref{sec:exp-main}.
 
 \begin{table}[t]
   \caption{Deployment cost for all methods, offline and online kept separate. Latency percentiles are
@@ -1349,12 +1629,12 @@ Table~\ref{tab:app-efficiency} gives the full cost breakdown behind the summary 
     \toprule
     Method & Offline train/search & Candidate constr. & TSFM calls/req.\ & Mean lat.\ $\downarrow$ & P95 $\downarrow$ & Max $\downarrow$ \\
     \midrule
-    BRITS       & \ph{BRITS-OFF} & \ph{BRITS-CAND} & \ph{BRITS-CALLS} & \ph{BRITS-MEAN} & \ph{BRITS-P95} & \ph{BRITS-MAX} \\
-    CSDI        & \ph{CSDI-OFF}  & \ph{CSDI-CAND}  & \ph{CSDI-CALLS}  & \ph{CSDI-MEAN}  & \ph{CSDI-P95}  & \ph{CSDI-MAX} \\
-    TOI         & \ph{TOI-OFF}   & \ph{TOI-CAND}   & \ph{TOI-CALLS}   & \ph{TOI-MEAN}   & \ph{TOI-P95}   & \ph{TOI-MAX} \\
-    T1          & \ph{T1-OFF}    & \ph{T1-CAND}    & \ph{T1-CALLS}    & \ph{T1-MEAN}    & \ph{T1-P95}    & \ph{T1-MAX} \\
-    TATO        & \ph{TATO-OFF}  & \ph{TATO-CAND}  & \ph{TATO-CALLS}  & \ph{TATO-MEAN}  & \ph{TATO-P95}  & \ph{TATO-MAX} \\
-    \rowcolor{bestgray}\introact{} & \ph{OURS-OFF}  & \ph{OURS-CAND}  & \ph{OURS-CALLS}  & \ph{OURS-MEAN}  & \ph{OURS-P95}  & \ph{OURS-MAX} \\
+    TOI                & \ph{TOI_OFF}    & \ph{TOI_CAND}    & \ph{TOI_CALLS}    & \ph{TOI_MEAN}    & \ph{TOI_P95}    & \ph{TOI_MAX} \\
+    TOI-VSF            & \ph{TOIVSF_OFF} & \ph{TOIVSF_CAND} & \ph{TOIVSF_CALLS} & \ph{TOIVSF_MEAN} & \ph{TOIVSF_P95} & \ph{TOIVSF_MAX} \\
+    GIMCC              & \ph{GIMCC_OFF}  & \ph{GIMCC_CAND}  & \ph{GIMCC_CALLS}  & \ph{GIMCC_MEAN}  & \ph{GIMCC_P95}  & \ph{GIMCC_MAX} \\
+    SRDI               & \ph{SRDI_OFF}   & \ph{SRDI_CAND}   & \ph{SRDI_CALLS}   & \ph{SRDI_MEAN}   & \ph{SRDI_P95}   & \ph{SRDI_MAX} \\
+    ChannelTokenFormer & \ph{CTF_OFF}    & \ph{CTF_CAND}    & \ph{CTF_CALLS}    & \ph{CTF_MEAN}    & \ph{CTF_P95}    & \ph{CTF_MAX} \\
+    \rowcolor{bestgray}\introact{} & \ph{OURS_OFF} & \ph{OURS_CAND} & \ph{OURS_CALLS} & \ph{OURS_MEAN} & \ph{OURS_P95} & \ph{OURS_MAX} \\
     \midrule
     \multicolumn{7}{l}{\footnotesize Cold start: \ph{COLDSTART} \quad
     Failure/timeout share: \ph{FAILRATE}} \\
@@ -1365,14 +1645,18 @@ Table~\ref{tab:app-efficiency} gives the full cost breakdown behind the summary 
 
 Table~\ref{tab:app-calls} separates offline from online cost and separates successes from
 failures. Failures and timeouts are never counted as successes and are never dropped from
-the denominator; a request that fails to produce a forecast is reported as a failure, not
-as a zero-cost success. The reference forecast always costs one call, and an executed
-intervention costs a second one, so the call count is at most two per request.
+the denominator; a request that fails to produce a forecast is reported as a failure, not as
+a zero-cost success. Under the frozen state definition of \S\ref{sec:method-scoring} the
+scorer reads no forecast, so a request costs exactly one frozen-model call: the call is made
+for the action the ranking selects, and when that action is \textsc{Keep} the same call
+produces the returned reference forecast. Candidate materialisation and scoring are
+forecast-free and are booked separately.
 
 \begin{table}[h]
   \caption{Frozen-model call accounting. Latency is reported per request and excludes cold
-  start, which is reported on its own line; the offline replay-bank build is amortised and
-  reported separately.}
+  start, which is reported on its own line; the offline replay-bank build and the one-off
+  selector fit are amortised and reported separately. Candidate materialisation and scoring
+  are forecast-free, so they do not appear in the call column.}
   \label{tab:app-calls}
   \centering
   \small
@@ -1381,18 +1665,28 @@ intervention costs a second one, so the call count is at most two per request.
     \toprule
     Outcome & Requests & Share & Frozen-model calls per request \\
     \midrule
-    Abstained (reference forecast only) & \ph{CALLS-ABSTAIN-N} & \ph{CALLS-ABSTAIN-SHARE} & 1 \\
-    Intervened (reference + one action) & \ph{CALLS-ACT-N}     & \ph{CALLS-ACT-SHARE}     & 2 \\
-    Failed before any forecast          & \ph{CALLS-FAIL-N}    & \ph{CALLS-FAIL-SHARE}    & \ph{CALLS-FAIL-COST} \\
-    Timed out after the reference       & \ph{CALLS-TIMEOUT-N} & \ph{CALLS-TIMEOUT-SHARE} & \ph{CALLS-TIMEOUT-COST} \\
+    \textsc{Keep} selected (input untouched)   & \ph{CALLS_KEEP_N}    & \ph{CALLS_KEEP_SHARE}    & 1 \\
+    Intervention selected (input changed)      & \ph{CALLS_ACT_N}     & \ph{CALLS_ACT_SHARE}     & 1 \\
+    Failed before any forecast                 & \ph{CALLS_FAIL_N}    & \ph{CALLS_FAIL_SHARE}    & \ph{CALLS_FAIL_COST} \\
+    Timed out after the forecast               & \ph{CALLS_TIMEOUT_N} & \ph{CALLS_TIMEOUT_SHARE} & \ph{CALLS_TIMEOUT_COST} \\
     \midrule
-    Offline replay-bank build (amortised) & --- & --- & \ph{CALLS-OFFLINE} \\
-    Cold start (first request of a process) & \ph{CALLS-COLD-N} & --- & \ph{CALLS-COLD-LATENCY} \\
+    Offline replay-bank build (amortised)      & --- & --- & \ph{CALLS_OFFLINE} \\
+    Offline selector fit (amortised)           & --- & --- & \ph{CALLS_SELECTOR} \\
+    Cold start (first request of a process)    & \ph{CALLS_COLD_N} & --- & \ph{CALLS_COLD_LATENCY} \\
     \bottomrule
   \end{tabular}}
 \end{table}
 
-\section{Negative Result from the Preceding Development Cycle}
+
+\section{Development Negative Results}
+\label{app:development}
+This section records what was tried in the development of this line of work and rejected, and
+why. It exists because the final formulation is easier to read against the alternatives it
+replaced, and because omitting it would misrepresent how the method was reached. Nothing in
+this section is an independent confirmation of any method, and no number here is comparable
+with any table in the main text.
+
+\subsection{Local Gain Averaging with Lower-Confidence Gating}
 \label{app:r5}
 An earlier configuration in this line of work attempted to improve intervention ranking by
 projecting estimated gain vectors onto a convex feasible set, under a Frank--Wolfe
@@ -1406,7 +1700,7 @@ and does not imply a better MASE.
 In that cycle the projection did reduce the squared error of the estimated gain vector
 while failing to improve, and in one backbone degrading, the final forecasting metric.
 Those measurements are recorded here because they motivate the design decision in
-\S\ref{sec:method-gate}: continuous score calibration is insufficient for discrete
+\S\ref{sec:method-scoring}: continuous score calibration is insufficient for discrete
 intervention selection, which is why \introact{} scores actions with an explicitly
 conservative mean-minus-uncertainty quantity and abstains rather than refining a score.
 The recorded measurements belong to the preceding protocol (a small development split of
@@ -1441,10 +1735,97 @@ simple selector available at the time (\textbf{R2-CART} in the present terminolo
 competitive with, and on one backbone better than, the more elaborate candidate; that is
 why R2-CART is carried forward as a mandatory control in every main-text table. Second,
 reducing estimation error on a continuous score was not sufficient to improve discrete
-selection; that is why the conservative gate in \S\ref{sec:method-gate} is evaluated
+selection; that is why the lower-confidence gate in \S\ref{sec:method-scoring} is evaluated
 directly on harmful intervention rate and harmful loss, not only on MASE.
 
-\section{Complete Input Contract}
+\subsection{Sensitivity of the Development-Cycle Hyperparameters}
+\label{app:ksens}
+The rejected formulation of Appendix~\ref{app:development} had exactly two tuned quantities:
+a neighbourhood size $K \in \{8, 16, 32\}$ and a conservativeness level
+$\beta \in \{0, 1, 1.64\}$. Table~\ref{tab:app-ksens} reports the full $3 \times 3$ grid on the
+gate split, so that a reader can see how the rejected configuration was chosen and how flat
+the surface was. The grid is retained as development evidence; it does not describe the frozen
+configuration of this paper, whose hyperparameters are frozen on the same gate split and
+reported in \S\ref{sec:exp-main}.
+
+\begin{table}[h]
+  \caption{Sensitivity of the rejected development-cycle configuration on the gate split.
+  Each cell reports MASE and the harmful intervention rate. The cell that was carried into
+  that cycle's configuration is marked with a dagger. These cells belong to the rejected
+  formulation and are \emph{not} comparable with any table in the main text.}
+  \label{tab:app-ksens}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lccc}
+    \toprule
+    & $\beta = 0$ & $\beta = 1$ & $\beta = 1.64$ \\
+    \midrule
+    $K = 8$  & \ph{K8_B0}  & \ph{K8_B1}  & \ph{K8_B164} \\
+    $K = 16$ & \ph{K16_B0} & \ph{K16_B1} & \ph{K16_B164} \\
+    $K = 32$ & \ph{K32_B0} & \ph{K32_B1} & \ph{K32_B164} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\subsection{The Sealed v4.4 TRAIN-Eval Batch}
+\label{app:train-eval}
+The preceding v4.4 cycle was run to completion on the TRAIN-only splits with the confirmation
+set left sealed, in order to decide whether local gain averaging with a lower-confidence gate
+should be promoted to the main experiment. It was not promoted. We report the batch because
+the decision it motivated is part of the final method's justification.
+
+Table~\ref{tab:app-train-eval} gives the source-macro MASE of the frozen v4.4 configuration and
+of its own ablations, on the two development backbones. Four observations are load-bearing.
+\textbf{(i)}~Counterfactual replay does carry downstream decision signal: the full
+configuration is below \textsc{Native Keep} on both backbones. \textbf{(ii)}~The
+lower-confidence gate lowers the harmful-intervention rate but pays for it in average accuracy:
+removing it (\textsc{A4}) improves MASE on both backbones, so the gate is a governance
+trade-off rather than an accuracy gain. \textbf{(iii)}~The local-matching component does not
+carry independent evidence: the parametric gain regressors are at least as good as, and
+usually better than, the full configuration. \textbf{(iv)}~Gain-estimation accuracy and action
+ordering are not the same objective, which is why the final formulation optimises the ordering
+directly rather than the point-wise error of a gain vector.
+
+The batch is development evidence on TRAIN-only splits with the confirmation set unread. It is
+not a promotion, it is not independent confirmation, and its numbers are not comparable with
+Tables~\ref{tab:main}--\ref{tab:ablation}.
+
+\begin{table}[h]
+  \caption{Sealed v4.4 TRAIN-eval batch, retained as development evidence. Values are
+  source-macro MASE from the development protocol; the confirmation set was not read. HIR is
+  the harmful-intervention rate relative to \textsc{Native Keep}. These numbers belong to a
+  different configuration and protocol and are \emph{not} comparable with any table in the main
+  text.}
+  \label{tab:app-train-eval}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{llcc}
+    \toprule
+    Backbone & Configuration & MASE $\downarrow$ & HIR $\downarrow$ \\
+    \midrule
+    Bolt     & Native KEEP            & 1.179735 & 0.000000 \\
+    Bolt     & Best Fixed             & 1.179735 & 0.000000 \\
+    Bolt     & R2-CART                & 1.178209 & 0.048913 \\
+    Bolt     & Full v4.4              & 1.165800 & 0.084239 \\
+    Bolt     & A4 (no gate)           & 1.142909 & 0.274457 \\
+    Bolt     & A5 gain regression (ridge) & 1.140129 & 0.290761 \\
+    Bolt     & A5 gain regression (CART)  & 1.153831 & 0.296196 \\
+    \midrule
+    TimesFM  & Native KEEP            & 1.242208 & 0.000000 \\
+    TimesFM  & Best Fixed             & 1.103034 & 0.282609 \\
+    TimesFM  & R2-CART                & 1.146845 & 0.078804 \\
+    TimesFM  & Full v4.4              & 1.101261 & 0.187500 \\
+    TimesFM  & A4 (no gate)           & 1.085381 & 0.339674 \\
+    TimesFM  & A5 gain regression (ridge) & 1.088242 & 0.290761 \\
+    TimesFM  & A5 gain regression (CART)  & 1.080967 & 0.334239 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Complete-Input Contract}
 \label{app:complete}
 Under a complete and valid input, \introact{} must return \textsc{Keep}. No forecasting
 improvement is claimed in this regime; the purpose of this appendix is to document the
@@ -1472,7 +1853,7 @@ regimes and the required behaviour in each.
   \end{tabular}}
 \end{table}
 
-\section{Finance Case Study}
+\section{Financial Case Study}
 \label{app:finance}
 The two finance parents currently available are reported as a case study only. We do not
 claim financial generalisation. Results are reported separately for the complete-observed
@@ -1494,17 +1875,17 @@ observations.
     \toprule
     Parent & Condition & MASE $\downarrow$ & QLIKE $\downarrow$ & Harmful Rate & Note \\
     \midrule
-    \ph{FIN-P1} & complete observed     & \ph{FIN-P1-COMP-MASE} & \ph{FIN-P1-COMP-QLIKE} & --- & no-op check \\
-    \ph{FIN-P1} & controlled deletion   & \ph{FIN-P1-DEL-MASE}  & \ph{FIN-P1-DEL-QLIKE}  & \ph{FIN-P1-HIR} & \ph{FIN-P1-NOTE} \\
-    \ph{FIN-P2} & complete observed     & \ph{FIN-P2-COMP-MASE} & \ph{FIN-P2-COMP-QLIKE} & --- & no-op check \\
-    \ph{FIN-P2} & controlled deletion   & \ph{FIN-P2-DEL-MASE}  & \ph{FIN-P2-DEL-QLIKE}  & \ph{FIN-P2-HIR} & \ph{FIN-P2-NOTE} \\
+    \ph{FIN_P1} & complete observed     & \ph{FIN-P1-COMP-MASE} & \ph{FIN-P1-COMP-QLIKE} & --- & no-op check \\
+    \ph{FIN_P1} & controlled deletion   & \ph{FIN-P1-DEL-MASE}  & \ph{FIN-P1-DEL-QLIKE}  & \ph{FIN-P1-HIR} & \ph{FIN-P1-NOTE} \\
+    \ph{FIN_P2} & complete observed     & \ph{FIN-P2-COMP-MASE} & \ph{FIN-P2-COMP-QLIKE} & --- & no-op check \\
+    \ph{FIN_P2} & controlled deletion   & \ph{FIN-P2-DEL-MASE}  & \ph{FIN-P2-DEL-QLIKE}  & \ph{FIN-P2-HIR} & \ph{FIN-P2-NOTE} \\
     \midrule
     \multicolumn{6}{l}{\footnotesize Verified natural missingness: \ph{FIN-NATURAL-STATUS}} \\
     \bottomrule
   \end{tabular}}
 \end{table}
 
-\section{Ten Mask Seeds}
+\section{Additional Seeds and Sensitivity}
 \label{app:seeds}
 The main experiment uses one deterministic mask per parent. This appendix reruns a
 pre-registered representative protocol with ten additional mask seeds to show that the
@@ -1525,23 +1906,22 @@ same parent set.
     \toprule
     Mask seed & MASE $\downarrow$ & $\Delta$ vs \textsc{Keep} $\uparrow$ & Intervention Rate \\
     \midrule
-    \ph{SEED-1}  & \ph{SEED1-MASE}  & \ph{SEED1-DELTA}  & \ph{SEED1-IR} \\
-    \ph{SEED-2}  & \ph{SEED2-MASE}  & \ph{SEED2-DELTA}  & \ph{SEED2-IR} \\
-    \ph{SEED-3}  & \ph{SEED3-MASE}  & \ph{SEED3-DELTA}  & \ph{SEED3-IR} \\
-    \ph{SEED-4}  & \ph{SEED4-MASE}  & \ph{SEED4-DELTA}  & \ph{SEED4-IR} \\
-    \ph{SEED-5}  & \ph{SEED5-MASE}  & \ph{SEED5-DELTA}  & \ph{SEED5-IR} \\
-    \ph{SEED-6}  & \ph{SEED6-MASE}  & \ph{SEED6-DELTA}  & \ph{SEED6-IR} \\
-    \ph{SEED-7}  & \ph{SEED7-MASE}  & \ph{SEED7-DELTA}  & \ph{SEED7-IR} \\
-    \ph{SEED-8}  & \ph{SEED8-MASE}  & \ph{SEED8-DELTA}  & \ph{SEED8-IR} \\
-    \ph{SEED-9}  & \ph{SEED9-MASE}  & \ph{SEED9-DELTA}  & \ph{SEED9-IR} \\
-    \ph{SEED-10} & \ph{SEED10-MASE} & \ph{SEED10-DELTA} & \ph{SEED10-IR} \\
+    \ph{SEED_1}  & \ph{SEED1_MASE}  & \ph{SEED1_DELTA}  & \ph{SEED1_IR} \\
+    \ph{SEED_2}  & \ph{SEED2_MASE}  & \ph{SEED2_DELTA}  & \ph{SEED2_IR} \\
+    \ph{SEED_3}  & \ph{SEED3_MASE}  & \ph{SEED3_DELTA}  & \ph{SEED3_IR} \\
+    \ph{SEED_4}  & \ph{SEED4_MASE}  & \ph{SEED4_DELTA}  & \ph{SEED4_IR} \\
+    \ph{SEED_5}  & \ph{SEED5_MASE}  & \ph{SEED5_DELTA}  & \ph{SEED5_IR} \\
+    \ph{SEED_6}  & \ph{SEED6_MASE}  & \ph{SEED6_DELTA}  & \ph{SEED6_IR} \\
+    \ph{SEED_7}  & \ph{SEED7_MASE}  & \ph{SEED7_DELTA}  & \ph{SEED7_IR} \\
+    \ph{SEED_8}  & \ph{SEED8_MASE}  & \ph{SEED8_DELTA}  & \ph{SEED8_IR} \\
+    \ph{SEED_9}  & \ph{SEED9_MASE}  & \ph{SEED9_DELTA}  & \ph{SEED9_IR} \\
+    \ph{SEED_10} & \ph{SEED10_MASE} & \ph{SEED10_DELTA} & \ph{SEED10_IR} \\
     \midrule
-    Spread (max $-$ min) & \ph{SEED-SPREAD} & --- & \ph{SEED-IR-SPREAD} \\
+    Spread (max $-$ min) & \ph{SEED_SPREAD} & --- & \ph{SEED-IR-SPREAD} \\
     \bottomrule
   \end{tabular}
 \end{table}
-
-\section{Additional Horizons}
+\subsection{Additional Horizons}
 \label{app:horizons}
 Longer horizons are reported here and are excluded from the main text, so that the main
 comparison stays on the two horizons that every baseline can serve. These horizons are
@@ -1557,21 +1937,20 @@ presented as a main claim.
   \setlength{\tabcolsep}{4pt}
 \resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
     \toprule
-    Horizon & Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSSE $\downarrow$ \\
+    Horizon & Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ \\
     \midrule
-    \ph{HX1} & \introact{} & \ph{HX1-OURS-MASE} & \ph{HX1-OURS-MSE} & \ph{HX1-OURS-MAE} & \ph{HX1-OURS-RMSSE} \\
-    \ph{HX1} & \textsc{Native Keep} & \ph{HX1-KEEP-MASE} & \ph{HX1-KEEP-MSE} & \ph{HX1-KEEP-MAE} & \ph{HX1-KEEP-RMSSE} \\
-    \ph{HX2} & \introact{} & \ph{HX2-OURS-MASE} & \ph{HX2-OURS-MSE} & \ph{HX2-OURS-MAE} & \ph{HX2-OURS-RMSSE} \\
-    \ph{HX2} & \textsc{Native Keep} & \ph{HX2-KEEP-MASE} & \ph{HX2-KEEP-MSE} & \ph{HX2-KEEP-MAE} & \ph{HX2-KEEP-RMSSE} \\
+    \ph{HX1} & \introact{} & \ph{HX1-OURS-MASE} & \ph{HX1-OURS-MSE} & \ph{HX1-OURS-MAE} & \ph{HX1-OURS-RMSE} \\
+    \ph{HX1} & \textsc{Native Keep} & \ph{HX1-KEEP-MASE} & \ph{HX1-KEEP-MSE} & \ph{HX1-KEEP-MAE} & \ph{HX1-KEEP-RMSE} \\
+    \ph{HX2} & \introact{} & \ph{HX2-OURS-MASE} & \ph{HX2-OURS-MSE} & \ph{HX2-OURS-MAE} & \ph{HX2-OURS-RMSE} \\
+    \ph{HX2} & \textsc{Native Keep} & \ph{HX2-KEEP-MASE} & \ph{HX2-KEEP-MSE} & \ph{HX2-KEEP-MAE} & \ph{HX2-KEEP-RMSE} \\
     \bottomrule
   \end{tabular}}
 \end{table}
-
-\section{Reproducibility Details}
+\subsection{Reproducibility Details}
 \label{app:reprodetails}
 Each record in the result files contains: source, parent, origin, horizon, pattern,
 severity, mask hash, backbone, backbone revision, method, action, input hash, prediction
-hash, forecast, target reference id, MASE, MSE, MAE, RMSSE, reconstruction MSE where
+hash, forecast, target reference id, MASE, MSE, MAE, RMSE, reconstruction MSE where
 applicable, runtime components, failure, fallback, code SHA, and resolved configuration.
 Results are written to the logical result groups listed in Table~\ref{tab:app-groups}, each
 in CSV, JSON, and Markdown form, with raw predictions retained alongside the aggregates.
@@ -1587,7 +1966,7 @@ in CSV, JSON, and Markdown form, with raw predictions retained alongside the agg
     \toprule
     Result group & Contents & Consumed by \\
     \midrule
-    \texttt{v44\_protocol}       & frozen protocol, source manifests, split bounds & Appendix~\ref{app:protocol} \\
+    \texttt{v44\_protocol}       & frozen protocol, source manifests, split bounds & Appendix~\ref{app:replay} \\
     \texttt{v44\_replay\_bank}   & replay records $(z_i, a, g_{i,a})$ with input and prediction hashes & \S\ref{sec:method-replay} \\
     \texttt{v44\_baselines}      & baseline training runs, resolved hyperparameters, checkpoints & \S\ref{sec:exp-main} \\
     \texttt{v44\_train\_eval}    & TRAIN-eval acceptance check before freezing & Appendix~\ref{app:splits} \\
