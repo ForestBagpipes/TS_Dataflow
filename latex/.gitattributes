@@ -1,0 +1,22 @@
+# latex/ 的换行与空白策略
+#
+# 官方 ICLR 2027 模板文件必须按字节原样保存：不得做行尾空白清理，
+# 也不得做 CRLF/LF 转换，否则等于改动了模板。
+iclr2027_conference.sty  -text -whitespace
+iclr2027_conference.bst  -text -whitespace
+fancyhdr.sty             -text -whitespace
+natbib.sty               -text -whitespace
+math_commands.tex        -text -whitespace
+
+# 脚本必须在 Linux 上可直接执行，强制 LF。
+*.sh  text eol=lf
+*.py  text eol=lf
+
+# 图源为生成的矢量/二进制内容，不做换行转换。
+*.eps  -text
+*.pptx -text
+
+# 论文源码与文献库用 LF，避免 Windows/Linux 之间反复改动。
+*.tex  text eol=lf
+*.bib  text eol=lf
+*.md   text eol=lf
