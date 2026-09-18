@@ -1,0 +1,63 @@
+{
+ "rank_grid": [
+  [
+   178,
+   160,
+   133,
+   99
+  ],
+  [
+   120,
+   206,
+   168,
+   76
+  ],
+  [
+   121,
+   136,
+   173,
+   140
+  ],
+  [
+   151,
+   68,
+   96,
+   255
+  ]
+ ],
+ "stage": "v46-reconstruction-vs-utility",
+ "backbone": "chronos2",
+ "block": "test",
+ "episodes_compared": 760,
+ "winner_agreement": 0.325,
+ "discordant_rate": 0.42280701754385963,
+ "pairs": 3990,
+ "mean_within_episode_spearman": 0.16421052631578947,
+ "per_action": {
+  "FFILL": {
+   "rec_mse": 77.46760716601145,
+   "rec_mae": 4.077008099329716,
+   "mean_utility": -0.12713880422705237,
+   "n": 760
+  },
+  "SINGLE_TSICL": {
+   "rec_mse": 29.607884284555112,
+   "rec_mae": 2.031090636596578,
+   "mean_utility": 0.004480852876296048,
+   "n": 760
+  },
+  "MULTI_TSICL": {
+   "rec_mse": 29.515365064000967,
+   "rec_mae": 1.848062051798285,
+   "mean_utility": 0.03886315998121978,
+   "n": 760
+  },
+  "CONTEXT_RIDGE": {
+   "rec_mse": 30.192341916443368,
+   "rec_mae": 1.473013965115742,
+   "mean_utility": 0.08580757590849655,
+   "n": 570
+  }
+ },
+ "runtime_seconds": 7.778220168000189
+}

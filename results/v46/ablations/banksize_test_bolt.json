@@ -1,0 +1,105 @@
+{
+ "stage": "v46-bank-size",
+ "backbone": "bolt",
+ "block": "test",
+ "frozen": {
+  "k": 8,
+  "beta": 0.0
+ },
+ "rows": [
+  {
+   "fraction": 0.25,
+   "runs": [
+    {
+     "seed": 1,
+     "parents": 56,
+     "episodes": 448,
+     "mase": 1.364178326381586,
+     "intervention_rate": 0.7065789473684211,
+     "conditional_hir": 0.4134078212290503,
+     "harmful_loss": 0.03474709547995047
+    },
+    {
+     "seed": 2,
+     "parents": 56,
+     "episodes": 448,
+     "mase": 1.3884883664924292,
+     "intervention_rate": 0.6960526315789474,
+     "conditional_hir": 0.42911153119092627,
+     "harmful_loss": 0.033614659927608266
+    },
+    {
+     "seed": 3,
+     "parents": 56,
+     "episodes": 448,
+     "mase": 1.3753861816235187,
+     "intervention_rate": 0.8421052631578947,
+     "conditional_hir": 0.434375,
+     "harmful_loss": 0.04125699224803758
+    }
+   ],
+   "mase": 1.3760176248325113,
+   "intervention_rate": 0.7482456140350878,
+   "conditional_hir": 0.4256314508066588,
+   "harmful_loss": 0.036539582551865436,
+   "parents": 56
+  },
+  {
+   "fraction": 0.5,
+   "runs": [
+    {
+     "seed": 1,
+     "parents": 112,
+     "episodes": 896,
+     "mase": 1.3786705319560455,
+     "intervention_rate": 0.7539473684210526,
+     "conditional_hir": 0.4293193717277487,
+     "harmful_loss": 0.0329195862914873
+    },
+    {
+     "seed": 2,
+     "parents": 112,
+     "episodes": 896,
+     "mase": 1.3772646149483534,
+     "intervention_rate": 0.6578947368421053,
+     "conditional_hir": 0.434,
+     "harmful_loss": 0.03539284281981681
+    },
+    {
+     "seed": 3,
+     "parents": 112,
+     "episodes": 896,
+     "mase": 1.361309640115484,
+     "intervention_rate": 0.8671052631578947,
+     "conditional_hir": 0.4385432473444613,
+     "harmful_loss": 0.042732973727554545
+    }
+   ],
+   "mase": 1.3724149290066279,
+   "intervention_rate": 0.7596491228070175,
+   "conditional_hir": 0.43395420635740334,
+   "harmful_loss": 0.037015134279619555,
+   "parents": 112
+  },
+  {
+   "fraction": 1.0,
+   "runs": [
+    {
+     "seed": 1,
+     "parents": 223,
+     "episodes": 1784,
+     "mase": 1.3707058404501644,
+     "intervention_rate": 0.7552631578947369,
+     "conditional_hir": 0.43205574912891986,
+     "harmful_loss": 0.03443859999188851
+    }
+   ],
+   "mase": 1.3707058404501644,
+   "intervention_rate": 0.7552631578947369,
+   "conditional_hir": 0.43205574912891986,
+   "harmful_loss": 0.03443859999188851,
+   "parents": 223
+  }
+ ],
+ "runtime_seconds": 15.210490853999545
+}

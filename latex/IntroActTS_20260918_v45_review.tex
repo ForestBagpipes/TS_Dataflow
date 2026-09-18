@@ -488,11 +488,12 @@ it returns a forecast from an executed input rather than a reconstruction.
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.62\textwidth]{figure/fig3_why_selective.pdf}
-  \caption{\textbf{(a)}~Within-episode reconstruction rank against realised-utility rank
-  over the four catalog interventions on the held-out episodes. Points off the diagonal are
-  episodes where the more accurate reconstruction is not the more useful intervention.
-  \textbf{(b)}~Conditional harmful rate against intervention rate along the penalty grid,
-  with the selected operating point marked.}
+  \caption{\textbf{(a)}~Joint distribution of the within-episode reconstruction rank and the
+  within-episode realised-utility rank over the four catalog interventions, row-normalised over
+  the held-out episodes of all three backbones. Off-diagonal mass is episodes on which the more
+  accurate reconstruction is not the more useful intervention. \textbf{(b)}~Cross-validated
+  conditional harmful rate against intervention rate over the neighbourhood and penalty grid,
+  one point per grid cell per backbone, with the selected point enlarged and the cap marked.}
   \label{fig:why-selective}
 \end{figure}
 

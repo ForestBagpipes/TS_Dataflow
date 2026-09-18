@@ -488,11 +488,12 @@ it returns a forecast from an executed input rather than a reconstruction.
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.62\textwidth]{figure/fig3_why_selective.pdf}
-  \caption{\textbf{(a)}~Within-episode reconstruction rank against realised-utility rank
-  over the four catalog interventions on the held-out episodes. Points off the diagonal are
-  episodes where the more accurate reconstruction is not the more useful intervention.
-  \textbf{(b)}~Conditional harmful rate against intervention rate along the penalty grid,
-  with the selected operating point marked.}
+  \caption{\textbf{(a)}~Joint distribution of the within-episode reconstruction rank and the
+  within-episode realised-utility rank over the four catalog interventions, row-normalised over
+  the held-out episodes of all three backbones. Off-diagonal mass is episodes on which the more
+  accurate reconstruction is not the more useful intervention. \textbf{(b)}~Cross-validated
+  conditional harmful rate against intervention rate over the neighbourhood and penalty grid,
+  one point per grid cell per backbone, with the selected point enlarged and the cap marked.}
   \label{fig:why-selective}
 \end{figure}
 
@@ -602,7 +603,7 @@ that the replay bank samples from, so this is a within-grid robustness check and
 unseen-severity stress test. and the roster is the one of Table~\ref{tab:main}.
 Table~\ref{tab:robust} in Appendix~\ref{app:severity-full} reports the severity trend and the worst pattern cell, and the
 held-out backbone is the Chronos-2 column of Table~\ref{tab:main}.
-Against the untouched input the frozen configuration holds at every level: 10\% 1.447 against 1.576, 30\% 1.484 against 1.684, 50\% 1.701 against 1.792. The ordering between the deployable rows does change with severity: at 10\% the best fixed intervention reaches 1.438, at 30\% the simple selector reaches 1.392, at 50\% the simple selector reaches 1.688. The configuration is frozen on a bank that mixes the three levels, so the sweep shows how far one operating point carries rather than what a per-level tuning could reach. On the held-out family the frozen procedure improves on the untouched input, 1.442 against 1.579 with a paired interval that excludes zero, and it has the best average rank of the deployable rows at 3.13. It does not reach the lowest macro average there. Applying context ridge to every request where it is admissible reaches 1.353, and the rule executes an intervention on 74\% of requests while leaving 28\% of the positive-opportunity episodes untouched. The frozen procedure carries over in the sense that it still beats leaving the input alone and wins more cells than any other deployable row, and not in the sense that it beats every fixed policy everywhere.
+Against the untouched input the frozen configuration holds at every level: 10\% 1.447 against 1.576, 30\% 1.475 against 1.794, 50\% 1.561 against 1.875. The ordering between the deployable rows does change with severity: at 10\% the best fixed intervention reaches 1.438, at 30\% the simple selector reaches 1.469. The configuration is frozen on a bank that mixes the three levels, so the sweep shows how far one operating point carries rather than what a per-level tuning could reach. On the held-out family the frozen procedure improves on the untouched input, 1.442 against 1.579 with a paired interval that excludes zero, and it has the best average rank of the deployable rows at 3.13. It does not reach the lowest macro average there. Applying context ridge to every request where it is admissible reaches 1.353, and the rule executes an intervention on 74\% of requests while leaving 28\% of the positive-opportunity episodes untouched. The frozen procedure carries over in the sense that it still beats leaving the input alone and wins more cells than any other deployable row, and not in the sense that it beats every fixed policy everywhere.
 Appendix~\ref{app:severity-full} holds the complete per-severity tables and
 Appendix~\ref{app:pattern} holds the per-pattern tables.
 \subsection{Ablation and Cost}
@@ -1514,14 +1515,14 @@ because the replay bank already samples from the same three levels.\begin{table}
     \toprule
     Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & 1.684 & \ph{SEV30-KEEP-MSE} & \ph{SEV30-KEEP-MAE} & \ph{SEV30-KEEP-RMSE} & \ph{SEV30-KEEP-RANK} \\
-    \textsc{Best Fixed} & 1.517 & \ph{SEV30-BF-MSE} & \ph{SEV30-BF-MAE} & \ph{SEV30-BF-RMSE} & \ph{SEV30-BF-RANK} \\
-    R2-CART & 1.392 & \ph{SEV30-R2-MSE} & \ph{SEV30-R2-MAE} & \ph{SEV30-R2-RMSE} & \ph{SEV30-R2-RANK} \\
+    \textsc{Native Keep} & 1.794 & \ph{SEV30-KEEP-MSE} & \ph{SEV30-KEEP-MAE} & \ph{SEV30-KEEP-RMSE} & \ph{SEV30-KEEP-RANK} \\
+    \textsc{Best Fixed} & 1.483 & \ph{SEV30-BF-MSE} & \ph{SEV30-BF-MAE} & \ph{SEV30-BF-RMSE} & \ph{SEV30-BF-RANK} \\
+    R2-CART & 1.469 & \ph{SEV30-R2-MSE} & \ph{SEV30-R2-MAE} & \ph{SEV30-R2-RMSE} & \ph{SEV30-R2-RANK} \\
     SAITS & \ph{SEV30-SAITS-MASE} & \ph{SEV30-SAITS-MSE} & \ph{SEV30-SAITS-MAE} & \ph{SEV30-SAITS-RMSE} & \ph{SEV30-SAITS-RANK} \\
     TOI & \ph{SEV30-TOI-MASE} & \ph{SEV30-TOI-MSE} & \ph{SEV30-TOI-MAE} & \ph{SEV30-TOI-RMSE} & \ph{SEV30-TOI-RANK} \\
     TATO & \ph{SEV30-TATO-MASE} & \ph{SEV30-TATO-MSE} & \ph{SEV30-TATO-MAE} & \ph{SEV30-TATO-RMSE} & \ph{SEV30-TATO-RANK} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & 1.484 & \ph{SEV30-OURS-MSE} & \ph{SEV30-OURS-MAE} & \ph{SEV30-OURS-RMSE} & \ph{SEV30-OURS-RANK} \\
+    \rowcolor{bestgray}\introact{} & 1.475 & \ph{SEV30-OURS-MSE} & \ph{SEV30-OURS-MAE} & \ph{SEV30-OURS-RMSE} & \ph{SEV30-OURS-RANK} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1536,14 +1537,14 @@ because the replay bank already samples from the same three levels.\begin{table}
     \toprule
     Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & 1.792 & \ph{SEV50-KEEP-MSE} & \ph{SEV50-KEEP-MAE} & \ph{SEV50-KEEP-RMSE} & \ph{SEV50-KEEP-RANK} \\
-    \textsc{Best Fixed} & 1.736 & \ph{SEV50-BF-MSE} & \ph{SEV50-BF-MAE} & \ph{SEV50-BF-RMSE} & \ph{SEV50-BF-RANK} \\
-    R2-CART & 1.688 & \ph{SEV50-R2-MSE} & \ph{SEV50-R2-MAE} & \ph{SEV50-R2-RMSE} & \ph{SEV50-R2-RANK} \\
+    \textsc{Native Keep} & 1.875 & \ph{SEV50-KEEP-MSE} & \ph{SEV50-KEEP-MAE} & \ph{SEV50-KEEP-RMSE} & \ph{SEV50-KEEP-RANK} \\
+    \textsc{Best Fixed} & 1.605 & \ph{SEV50-BF-MSE} & \ph{SEV50-BF-MAE} & \ph{SEV50-BF-RMSE} & \ph{SEV50-BF-RANK} \\
+    R2-CART & 1.763 & \ph{SEV50-R2-MSE} & \ph{SEV50-R2-MAE} & \ph{SEV50-R2-RMSE} & \ph{SEV50-R2-RANK} \\
     SAITS & \ph{SEV50-SAITS-MASE} & \ph{SEV50-SAITS-MSE} & \ph{SEV50-SAITS-MAE} & \ph{SEV50-SAITS-RMSE} & \ph{SEV50-SAITS-RANK} \\
     TOI & \ph{SEV50-TOI-MASE} & \ph{SEV50-TOI-MSE} & \ph{SEV50-TOI-MAE} & \ph{SEV50-TOI-RMSE} & \ph{SEV50-TOI-RANK} \\
     TATO & \ph{SEV50-TATO-MASE} & \ph{SEV50-TATO-MSE} & \ph{SEV50-TATO-MAE} & \ph{SEV50-TATO-RMSE} & \ph{SEV50-TATO-RANK} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & 1.701 & \ph{SEV50-OURS-MSE} & \ph{SEV50-OURS-MAE} & \ph{SEV50-OURS-RMSE} & \ph{SEV50-OURS-RANK} \\
+    \rowcolor{bestgray}\introact{} & 1.561 & \ph{SEV50-OURS-MSE} & \ph{SEV50-OURS-MAE} & \ph{SEV50-OURS-RMSE} & \ph{SEV50-OURS-RANK} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1562,14 +1563,14 @@ because the replay bank already samples from the same three levels.\begin{table}
     \toprule
     Method & 10\% MASE $\downarrow$ & 30\% MASE $\downarrow$ & 50\% MASE $\downarrow$ & Worst pattern $\downarrow$ \\
     \midrule
-    Native KEEP        & 1.576    & 1.684    & 1.792    & \ph{RB_KEEP_WORST} \\
-    Best Fixed         & 1.438      & 1.517      & 1.736      & \ph{RB_BF_WORST} \\
-    R2-CART            & 1.456      & 1.392      & 1.688      & \ph{RB_R2_WORST} \\
+    Native KEEP        & 1.576    & 1.794    & 1.875    & \ph{RB_KEEP_WORST} \\
+    Best Fixed         & 1.438      & 1.483      & 1.605      & \ph{RB_BF_WORST} \\
+    R2-CART            & 1.456      & 1.469      & 1.763      & \ph{RB_R2_WORST} \\
     SAITS              & \ph{RB_SAITS_10}      & \ph{RB_SAITS_30}      & \ph{RB_SAITS_50}      & \ph{RB_SAITS_WORST} \\
     TOI                & \ph{RB_TOI_10}     & \ph{RB_TOI_30}     & \ph{RB_TOI_50}     & \ph{RB_TOI_WORST} \\
     TATO               & \ph{RB_TATO_10}    & \ph{RB_TATO_30}    & \ph{RB_TATO_50}    & \ph{RB_TATO_WORST} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & 1.447 & 1.484 & 1.701 & \ph{RB_OURS_WORST} \\
+    \rowcolor{bestgray}\introact{} & 1.447 & 1.475 & 1.561 & \ph{RB_OURS_WORST} \\
     \bottomrule
   \end{tabular}}
 \end{table}
