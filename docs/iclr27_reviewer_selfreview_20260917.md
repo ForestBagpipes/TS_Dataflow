@@ -546,3 +546,71 @@ K Complete-Input Contract / L Financial Case Study / M Additional Seeds。
 正文方法推导不假装上一轮成功；v4.4 的结果只作为 TRAIN-only development evidence，
 除非实验 Agent 允许否则不进 Main Results；旧结果以方法演化依据形式留附录 J
 "Development Negative Results"。
+
+---
+
+# v45 改稿记录（评审日志 §1–§58 逐条落地）
+
+日期：2026-09-17 晚
+文件：`latex/IntroActTS_20260918_v45_review.tex`（新建版本；v44 保留不动）
+依据：`G:/introact_ts_iclr27_review_log.md`
+
+## M. 与 v44 的实质差异
+
+| 维度 | v44 | v45 |
+|---|---|---|
+| 方法叙事 | Regret-Aware Scoring 与 pairwise selector 并列，留 `% FREEZE_AFTER_R2_SELECTOR` | 冻结为 §52.2 三层：Full-Action Replay → Local Utility Estimation → Conservative Act-or-Keep |
+| 评分公式 | Regret-aware 一整套 | 回退为 KNN 局部均值减方差惩罚 `S_a = μ̂_a − β σ̂_a / sqrt(n_eff,a)`，β ∈ {0,1,1.64} |
+| 动作集 | 含独立 ABSTAIN | 删 ABSTAIN；$\mathcal{A}^{+}=\mathcal{A}\setminus\{a_0\}$，`max S_a > 0` 才执行 |
+| 符号 | 动作数 $A$、近邻 $m$ | 动作数 $J$、近邻 $k$（§11） |
+| Related Work | 4 节 | 3 节（合并 Incomplete Time-Series Modeling 与 Task-Oriented Imputation） |
+| 附录 | A–P + 补遗 | A–G + 无编号 supplementary |
+| 稳定性 | 10-seed 全量规划 | 3-mask 代表性稳定性（§48） |
+| 成本口径 | `model calls` | `forecasting-backbone calls`（§46） |
+| 结果组名 | `v44_*` | 语义化 `protocol`/`replay_bank`/`baselines`/`train_eval`/`main_results`/`ablations`/`robustness`/`diagnostics`/`cost_audit` |
+
+## N. 逐条落地核查（§11 / §37 / §46 / §48 / §52–§57）
+
+- §11 十三条 A 级形式化修正：全部落地，包括 $F$ 定义为完整冻结部署推理管线、
+  call-budget constraint 取代「候选预测不可查看」的模糊表述、bank 按 backbone revision +
+  source 构建、显式声明 local utility transferability assumption、$\beta=1.64$ 仅作 gate grid 候选。
+- §37 P0 冻结项：写进 `docs/IntroActTS_20260918_v45_experiment_plan.md` §2，正文口径与之一致。
+- §37 P1/P1.5/P2：正文 4.2–4.6 与附录 B–E 的表结构按此设计，删除项（P5、support gate/OOD、
+  extra horizons、finance 全量、learned selector、10-seed 全量）在正文与附录均无对应 claim。
+- §46 J：删除 `Lower is better except for the call count`，改为「offline 与 online 成本不可直接比较」
+  的分列说明。
+- §48 N：`Mask-Realisation Stability` 改 3 realisation × Bolt/Chronos-2 + 两行 spread，
+  seed 明确不作独立统计样本。
+- §52.2：三层叙事与贡献三条一一对应。
+- §53：正文 3 图 + 4 表，与冻结结构一致。
+- §55：结果解释规则写进实验规划 §9，先于数字冻结。
+- §56：AI use statement 如实披露；三段声明不计页数已用官方模板确认。
+- §57：一句话总指令写进实验规划 §0。
+
+## O. 用户反馈与相应修正
+
+1. **「架构图不能移到附录！！！」** 我在压页数时把 Figure 2 搬到附录 A，被否决。
+   已移回方法章节，宽度 `0.48\textwidth`，题注压缩但保留 offline/online 双路径与
+   「既不读未来也不读未选中候选预测」的闭环信息。
+2. **「可以将部分详细内容放到附录，不一定要压缩，保证正文的故事浑然一体就行！正文的故事必须闭环！」**
+   压缩策略改为细节下沉。正文叙事保留闭环：三条动机性质 → 三条贡献 → 4.2 验前提、
+   4.3 主比较、4.4 harm、4.5 robustness+transfer、4.6 ablation+cost → 结论重述三 claim 与边界。
+
+## P. 页数收敛结果
+
+| 阶段 | 正文页数 | 总页数 | 备注 |
+|---|---|---|---|
+| v44（已提交态） | 10 | 26 | 超限 |
+| v45 初编译 | 10 | 26 | 仍超限 |
+| **v45 收敛后** | **9** | **26** | 细节下沉 + 题注压缩 + 图幅收窄 |
+
+编译：`pdflatex × 2`，0 error / 0 Overfull / 0 undefined reference / 0 missing citation /
+无重复 label / 无悬空 ref。`sec:conclusion` 落在第 9 页。
+
+## Q. 占位符与实验规划
+
+- v45 共 1322 个唯一 `\ph{KEY}`，完整清单 `docs/v45_placeholder_keys.csv`。
+- 实验侧执行规划：`docs/IntroActTS_20260918_v45_experiment_plan.md`，
+  含 P0 冻结清单、P1 七项主证据、P1.5 缩减稳健性、P2 低成本附录、删除清单、
+  GPU unique-input prediction cache 的 DAG 与六条缓存原则、10–15 分钟吞吐探针、
+  固定裁剪顺序、结果解释规则、占位符回填契约、`fig1_stats.json` schema。
