@@ -210,7 +210,7 @@ def build(evals: dict, selections: dict) -> dict:
         tail_fixed = "and the interval excludes zero on " + ", ".join(sorted(sig_fixed))
     out["MAIN_DELTA_CI"] = (
         "Against the untouched input the paired difference is "
-        + "; ".join(keep_parts) + ", " + tail_keep
+        + ", ".join(keep_parts) + ", " + tail_keep
         + ", and against the best fixed intervention " + tail_fixed)
     out["MAIN_INTERVENTION_RATE"] = pct(mean_over(evals, "FULL_INTROACT", "intervention_rate"))
     out["HARM_HIR_OURS"] = pct(mean_over(evals, "FULL_INTROACT", "conditional_hir"))

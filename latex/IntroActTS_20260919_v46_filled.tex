@@ -117,8 +117,8 @@ only on positions where the data is missing.
 
 The usual response is imputation, and it is scored on how accurately the missing entries come
 back~\citep{cao2018brits,tashiro2021csdi,du2023saits}. A second line handles missingness inside
-the forecasting model instead~\citep{chen2024bitgraph,peng2025s4m}. Both lines need to train or
-redesign the predictor, which is what a frozen foundation model takes off the table. A third
+the forecasting model instead~\citep{chen2024bitgraph,peng2025s4m}. Both lines train or
+redesign the predictor, which a frozen foundation model takes off the table. A third
 line moves the objective from recovery to downstream utility, estimating how imputed values
 affect the forecaster and combining strategies by the estimated
 gain~\citep{wang2024taskoriented,hao2025toivsf,xu2026srdi}, and TATO adapts a frozen \tsfm{} to
@@ -179,7 +179,7 @@ reconstructs the hidden values and is scored on how close the reconstruction
 is~\citep{cao2018brits,tashiro2021csdi,yoon2018gain,du2023saits,park2026t1}. The second builds
 a forecaster that reads the missing pattern directly, on the argument that imputing first and
 forecasting afterwards accumulates error~\citep{chen2024bitgraph,peng2025s4m,
-jang2026channeltokenformer}; these are complete models whose parameters are part of the
+jang2026channeltokenformer}. These are complete models whose parameters are part of the
 contribution. The third replaces the recovery objective with a downstream
 one~\citep{wang2024taskoriented,hao2025toivsf,hao2025gimcc,liang2025vida,xu2026srdi}, mostly in
 \emph{variable subset forecasting}, where whole variables are absent at inference rather than
@@ -198,13 +198,13 @@ without parameter updates. It searches a transformation pipeline, including cont
 scale normalisation, and outlier correction, and selects the pipeline from historical task
 performance. The unit of adaptation is a target domain. TS-ICL~\citep{tsicl2026} is a
 foundation model that natively supports imputation, irregular observations, and partially
-observed look-back windows; here it appears only as the in-context regression backend of two
+observed look-back windows. It appears here only as the in-context regression backend of two
 catalog actions, so two of the five actions cost one call to a frozen imputation model on top
 of the forecasting call (\S\ref{sec:method-deploy}).
 
 The unit of decision is what separates them from \introact{}. TATO selects one transformation
 per domain and applies it to every request from that domain. \introact{} selects per request,
-and the pipeline it selects from is a closed catalog rather than a search space.
+and it selects from a closed catalog.
 
 \subsection{Selective Decision Making}
 \label{sec:related-selective}
@@ -213,10 +213,10 @@ risk~\citep{chow1970optimum,vovk2005algorithmic,geifman2017selective,lei2018dist
 learning to defer routes it to another decision maker~\citep{madras2018predict,
 mozannar2020consistent}. Both change who or what produces the answer. Here the same frozen
 forecaster answers every request and what is selected is whether the input is modified first.
-The decision layer is also a supervised local estimation problem rather than an off-policy
-one~\citep{dudik2011doubly,swaminathan2015counterfactual}, because replay executes every action
-on the same window against the same realised future, so the bank holds full action outcomes and
-no propensity correction arises. Appendix~\ref{app:ope-positioning} states the positioning in
+The decision layer is a supervised local estimation problem. Replay executes every action on
+the same window against the same realised future, so the bank holds full action outcomes and no
+propensity correction arises, which is what separates it from off-policy
+evaluation~\citep{dudik2011doubly,swaminathan2015counterfactual}. Appendix~\ref{app:ope-positioning} states the positioning in
 full.
 
 % ===========================================================================
@@ -245,8 +245,8 @@ $p = F(X)$ and includes whatever preprocessing the backbone applies internally, 
 $F$ is exactly the call the deployed system makes. The reference action hands the incomplete
 context to that pipeline unchanged, so what \textsc{Keep} means in practice is whatever
 missing-value handling the backbone already performs, which differs between backbone families.
-We measure it rather than assume it, and \S\ref{sec:exp-exists} reports how far the two
-development backbones diverge on exactly this point.
+We measure it, and \S\ref{sec:exp-exists} reports how far the two development backbones diverge
+on this point.
 
 Let $\calA = \{a_0, a_1, \dots, a_J\}$ be a fixed catalog of admissible interventions, with
 $J$ interventions in addition to the reference. Each action $a$ materialises an admissible
@@ -266,8 +266,8 @@ number of frozen-backbone calls small.
 Three constraints define the deployment protocol. No observation that has arrived and is valid
 may be overwritten, so every $X^{a}$ differs from $X^{a_0}$ only at positions where $M = 0$.
 The future target is unavailable, so no realised loss is observable at deployment time. The
-reference forecast is the only forecast that may be computed before the decision, which is a
-call budget rather than a statement about the future: a request may spend one
+reference forecast is the only forecast that may be computed before the decision, This is a
+call budget, not a claim about what is knowable: a request may spend one
 forecasting-backbone call to obtain $p_0 = F(X^{a_0})$, and the forecasts of the remaining
 candidates must not be inspected when the action is chosen.
 
@@ -427,9 +427,9 @@ The main matrix covers eight public forecasting sources (ETTh1, ETTh2, ETTm1, ET
 Electricity, Exchange, Traffic, and Weather) and three frozen \tsfm{} families:
 Chronos-Bolt~\citep{chronosbolt2025}, TimesFM-2.5~\citep{das2024timesfm}, and
 Chronos-2~\citep{chronos2_2025}. The first two are used for method development. Chronos-2
-enters only after the configuration is frozen, with the identical algorithm and hyperparameters
-and a replay bank rebuilt with Chronos-2 itself, so the held-out result is transfer of a frozen
-configuration across backbone families rather than transfer of a replay bank across backbones.
+enters only after the configuration is frozen, with the identical algorithm and the same
+selection rule applied to a replay bank rebuilt with Chronos-2 itself, so what transfers is the
+procedure and not the bank.
 Context length is $L = 512$ and the main horizons are $H \in \{96, 192\}$. Four deterministic
 missingness patterns are frozen before any method runs, and every mask is derived by a
 deterministic hash of source, parent, origin, horizon, pattern, and protocol seed. The main
@@ -506,7 +506,7 @@ learning a simple selector, across sources and frozen \tsfm{} backbones?}
 
 Table~\ref{tab:main} reports the main comparison at $10\%$ severity over all eight sources,
 three backbones, two horizons, and four patterns. \introact{} reaches 1.447 source-macro MASE against 1.576 for the untouched input, 1.438 for the best fixed intervention and 1.456 for the simple selector, and it improves on the untouched input on every backbone.
-Against the untouched input the paired difference is Bolt -0.0957 [-0.1525, -0.0397]; TimesFM -0.1554 [-0.2055, -0.1050]; Chronos-2 -0.1370 [-0.1625, -0.1124], and every interval excludes zero, and against the best fixed intervention and the interval excludes zero on Bolt. It is the lowest deployable row on Bolt and TimesFM, and on Chronos-2 one fixed repair reaches a lower macro average, which \S\ref{sec:exp-robust} returns to. The deployable rows span 1.438 to 1.576 and the catalog oracle sits at 1.307, so the room to recover is bounded and the gaps between rows are a visible part of it. Against the simple selector and no interval excludes zero, so accuracy alone does not separate the two and what does is in Table~\ref{tab:harm}.
+Against the untouched input the paired difference is Bolt -0.0957 [-0.1525, -0.0397], TimesFM -0.1554 [-0.2055, -0.1050], Chronos-2 -0.1370 [-0.1625, -0.1124], and every interval excludes zero, and against the best fixed intervention and the interval excludes zero on Bolt. It is the lowest deployable row on Bolt and TimesFM, and on Chronos-2 one fixed repair reaches a lower macro average, which \S\ref{sec:exp-robust} returns to. The deployable rows span 1.438 to 1.576 and the catalog oracle sits at 1.307, so the room to recover is bounded and the gaps between rows are a visible part of it. Against the simple selector and no interval excludes zero, so accuracy alone does not separate the two and what does is in Table~\ref{tab:harm}.
 Average rank over the evaluation cells is Bolt 3.29, TimesFM 2.90, Chronos-2 3.13, the best of the 9 rows that carry one on every backbone, so the aggregate is not driven by a handful of cells. Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
 deployment cost is reported separately in Appendix~\ref{app:calls}.
 
@@ -968,12 +968,14 @@ cost is paid once. Appendix~\ref{app:calls} separates it from the per-request on
 
 \subsubsection{Replay Bank Size}
 \label{app:replaysize}
-The replay bank is subsampled to $25\%$, $50\%$, and $100\%$ of its parents to
-measure how much the method depends on the amount of historical evidence. This analysis is
-not part of the main text and was not used to select any hyperparameter. The frozen
-configuration is the one trained on the full bank. If performance at $25\%$ matches
-performance at $100\%$, the honest reading is that the bank is already saturated at this
-scale, not that the method is data-efficient in general.
+The replay bank is subsampled by parent to $25\%$, $50\%$ and $100\%$, with the frozen $k$ and
+$\beta$ unchanged, to measure how much the result depends on the amount of historical evidence.
+The subsamples are diagnostics: no hyperparameter and no configuration was selected on them,
+and the reported configuration is the one that reads the full bank. On the two development
+backbones more history helps or saturates. On the held-out backbone the full bank is worse than
+the quarter bank at the frozen neighbourhood size, which says that the neighbourhood size and
+the amount of history interact and that a configuration frozen on one backbone's bank does not
+automatically sit at the right point on another's.
 
 \begin{table}[h]
   \caption{Replay-bank size ablation. The bank is subsampled by parent, keeping
@@ -987,9 +989,9 @@ scale, not that the method is data-efficient in general.
     \toprule
     Bank fraction & MASE $\downarrow$ & Intervention Rate & HIR $\downarrow$ & Harmful Loss $\downarrow$ & Calls $\downarrow$ \\
     \midrule
-    $25\%$  & \ph{RS25_MASE}  & \ph{RS25_IR}  & \ph{RS25_HIR}  & \ph{RS25_HL}  & \ph{RS25_CALLS} \\
-    $50\%$  & \ph{RS50_MASE}  & \ph{RS50_IR}  & \ph{RS50_HIR}  & \ph{RS50_HL}  & \ph{RS50_CALLS} \\
-    $100\%$ & \ph{RS100_MASE} & \ph{RS100_IR} & \ph{RS100_HIR} & \ph{RS100_HL} & \ph{RS100_CALLS} \\
+    $25\%$  & 1.443  & 84.1\%  & 43.1\%  & 0.0474  & 1.84 \\
+    $50\%$  & 1.424  & 85.4\%  & 43.1\%  & 0.0445  & 1.85 \\
+    $100\%$ & 1.447 & 82.6\% & 44.2\% & 0.0451 & 1.83 \\
     \bottomrule
   \end{tabular}
 \end{table}

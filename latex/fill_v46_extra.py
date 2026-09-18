@@ -65,6 +65,21 @@ def build(evals: dict, selections: dict, num, pct) -> dict:
         for key, values in methods.items():
             out[f"RB_{key}_{level}"] = num(sum(values) / len(values))
             out[f"SEV{level}-{key}-MASE"] = num(sum(values) / len(values))
+    # Replay-bank size, averaged over the backbones that ran it.
+    sizes: dict[str, list[dict]] = {}
+    for backbone in ("bolt", "timesfm", "chronos2"):
+        path = ROOT / f"results/v46/ablations/banksize_test_{backbone}.json"
+        if path.exists():
+            for row in json.loads(path.read_text())["rows"]:
+                sizes.setdefault(f"{int(row['fraction'] * 100)}", []).append(row)
+    for tag, rows in sizes.items():
+        n = len(rows)
+        out[f"RS{tag}_MASE"] = num(sum(r["mase"] for r in rows) / n)
+        out[f"RS{tag}_IR"] = pct(sum(r["intervention_rate"] for r in rows) / n)
+        out[f"RS{tag}_HIR"] = pct(sum(r["conditional_hir"] for r in rows) / n)
+        out[f"RS{tag}_HL"] = num(sum(r["harmful_loss"] for r in rows) / n, 4)
+        out[f"RS{tag}_CALLS"] = num(1.0 + sum(r["intervention_rate"] for r in rows) / n, 2)
+
     # The severity reading, written from the sweep itself.
     levels = [lv for lv in ("10", "30", "50") if lv in severity]
     if len(levels) >= 2:
