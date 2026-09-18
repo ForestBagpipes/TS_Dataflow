@@ -93,6 +93,19 @@ def heterogeneity(queries: SEL.Queries) -> dict:
     }
 
 
+def per_source_horizon(queries: SEL.Queries, mase: np.ndarray) -> dict:
+    """Source-macro MASE split by horizon, for the per-source appendix tables."""
+    by_parent: dict[tuple, list[float]] = collections.defaultdict(list)
+    for i in range(len(mase)):
+        if np.isfinite(mase[i]):
+            key = (int(queries.horizon[i]), queries.source[i], queries.parent[i])
+            by_parent[key].append(float(mase[i]))
+    by_source: dict[str, list[float]] = collections.defaultdict(list)
+    for (horizon, source, _parent), values in by_parent.items():
+        by_source[f"h{horizon}|{source}"].append(float(np.mean(values)))
+    return {k: float(np.mean(v)) for k, v in sorted(by_source.items())}
+
+
 def summarise(queries: SEL.Queries, selected: np.ndarray, name: str) -> dict:
     out = SEL.outcomes(queries, selected)
     row = {
@@ -106,6 +119,7 @@ def summarise(queries: SEL.Queries, selected: np.ndarray, name: str) -> dict:
         "n_acted": out["n_acted"],
         "n_zero_utility": out["n_zero_utility"],
         "per_source_mase": SEL.macro_by_source(queries, out["mase"]),
+        "per_source_horizon_mase": per_source_horizon(queries, out["mase"]),
         "per_cell_mase": SEL.macro_by_cell(queries, out["mase"]),
         "action_counts": {a: int((selected == a).sum()) for a in SEL.ACTIONS},
     }
@@ -128,7 +142,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", default=str(ROOT))
     parser.add_argument("--backbone", default="bolt")
-    parser.add_argument("--block", default="test", choices=["train_eval", "test"])
+    parser.add_argument("--block", default="test", choices=["train_eval", "test", "test30", "test50"])
     parser.add_argument("--resamples", type=int, default=2000)
     args = parser.parse_args()
 

@@ -141,16 +141,17 @@ def build(evals: dict, selections: dict) -> dict:
             row = e["rows"].get(method)
             if not row:
                 continue
-            for source, skey in SOURCE_KEY.items():
-                value = row["per_source_mase"].get(source)
-                for horizon in (96, 192):
-                    cell = [v for c, v in row["per_cell_mase"].items()
-                            if c.startswith(f"h{horizon}|")]
-                    out.setdefault(f"SRC_{tag}_{key}_{horizon}_{skey}", num(value))
-                out[f"SRC_{tag}_{key}_96_{skey}"] = num(value)
-                out[f"SRC_{tag}_{key}_192_{skey}"] = num(value)
-            out[f"SRC_{tag}_{key}_96_MACRO"] = num(row["mase"])
-            out[f"SRC_{tag}_{key}_192_MACRO"] = num(row["mase"])
+            split = row.get("per_source_horizon_mase", {})
+            for horizon in (96, 192):
+                values = []
+                for source, skey in SOURCE_KEY.items():
+                    value = split.get(f"h{horizon}|{source}",
+                                      row["per_source_mase"].get(source))
+                    out[f"SRC_{tag}_{key}_{horizon}_{skey}"] = num(value)
+                    if value is not None:
+                        values.append(value)
+                if values:
+                    out[f"SRC_{tag}_{key}_{horizon}_MACRO"] = num(sum(values) / len(values))
 
     # Heterogeneity and the two premises of Section 4.2.
     het = primary["heterogeneity"]
