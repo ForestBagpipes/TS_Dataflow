@@ -88,6 +88,8 @@ def main() -> None:
     winner_agree = winner_total = 0
     rhos = []
     episodes = 0
+    # Joint distribution of the two within-episode ranks, for Figure 3(a).
+    rank_grid = np.zeros((len(REPAIRS), len(REPAIRS)), dtype=int)
 
     store = np.load(root / "results/v46/replay/inputs" / f"{args.block}.npz",
                     allow_pickle=False)
@@ -130,6 +132,11 @@ def main() -> None:
             r = np.array([rec[a][0] for a in actions])
             u = np.array([util[a] for a in actions])
             rhos.append(spearman(-r, u))
+            if len(actions) == len(REPAIRS):
+                rec_rank = np.argsort(np.argsort(r))
+                util_rank = np.argsort(np.argsort(-u))
+                for a, b in zip(rec_rank, util_rank):
+                    rank_grid[int(a), int(b)] += 1
             winner_total += 1
             if actions[int(np.argmin(r))] == actions[int(np.argmax(u))]:
                 winner_agree += 1
@@ -147,6 +154,7 @@ def main() -> None:
 
     pairs = concordant + discordant
     payload = {
+        "rank_grid": rank_grid.tolist(),
         "stage": "v46-reconstruction-vs-utility",
         "backbone": args.backbone, "block": args.block,
         "episodes_compared": episodes,
