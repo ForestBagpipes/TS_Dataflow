@@ -1,3 +1,9 @@
+> **本文件已作废（2026-09-18）。** 它与 LaTeX 存在 13 处口径冲突
+> （主表 roster、CTF 身份、30/50% 方法集、全 baseline support refit、replay bank 分片、
+> harm cap、Figure 1 schema、占位符数量等）。
+> 请执行 `docs/IntroActTS_20260918_v46_experiment_plan.md`，不要按本文件跑。
+> 本文件仅保留作差异对照。
+
 # IntroAct-TS 实验执行规划（v45 冻结版）
 
 面向对象：执行实验的 Agent。

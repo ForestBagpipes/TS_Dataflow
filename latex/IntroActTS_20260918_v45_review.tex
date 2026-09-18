@@ -1,20 +1,25 @@
 % ===========================================================================
 %  IntroAct-TS —— ICLR 2027 投稿正文
 % ---------------------------------------------------------------------------
-%  版本      : v4.4（2026-09-17 首版）
+%  版本      : v4.5 review（2026-09-18，评审日志逐条落地版；占位符集记作 v46）
 %  模板      : 用户提供的 ICLR 2027 style files（未作任何改动）
-%  上一版    : 无（v4.3.1-r5 只有 Markdown 草稿，本文件是第一个 LaTeX 正文）
+%  上一版    : introact_ts_iclr27_v44.tex
 %
 %  重要约定
 %  ---------
 %  1. 所有尚未在服务器上跑出的数字，一律写成占位符 \ph{KEY}，渲染为灰色
 %     [KEY]。绝不允许用估计值、旧协议值或"看起来合理"的数填充。
-%     占位符命名规范见 latex/README.md。
+%     占位符命名规范见 latex/README.md，完整清单见 docs/v46_placeholder_keys.csv
+%     （1111 个唯一 KEY），执行侧规划见
+%     docs/IntroActTS_20260918_v46_experiment_plan.md。
 %  2. 只有 v4.3.1-r5 台账里已经独立审核过的历史数字，才允许以真实数值出现在
-%     Appendix G，并且必须显式标注其属于旧协议、不得与 v4.4 主表比较。
-%  3. 正文只保留 4.1-4.6 六个小节，效率并入 4.2 末尾。其余全部进 Appendix。
+%     Appendix G，并且必须显式标注其属于旧协议、不得与 v4.5 主表比较。
+%  3. 正文只保留 4.1-4.6 六个小节。其余全部进 Appendix。
 %  4. 结论措辞受 docs/v431_r5_* 与规划 §41 的 claim 边界约束：在独立主实验完成
 %     前不写 SOTA、不写 significantly outperforms、不写 safe/robust/generalizes。
+%  5. 主表 roster 冻结为 KEEP / Best Fixed / R2-CART / T1 / TOI / TATO / SRDI
+%     加 IntroAct-TS；ChannelTokenFormer 只作 external reference；Catalog Oracle
+%     只作诊断。附录 C 的 30/50 与 Table 3 使用同一套七方法。
 % ===========================================================================
 \documentclass{article}
 
@@ -323,9 +328,13 @@ replay bank is
 \end{equation}
 built once from TRAIN history and then frozen. Deployment reads it and never writes to it.
 
-The bank is indexed by the frozen backbone revision and by the source, and it covers only the
-missingness protocol registered in advance. Both properties are load-bearing, and
-Appendix~\ref{app:replay} states what they imply for the scope of the method.
+The realised utility in \eqref{eq:replay-gain} is measured over the forecast horizon, so
+$g_{i,a}$ at $H=96$ and at $H=192$ are different quantities and must not share a
+neighbourhood. The bank is therefore indexed by the frozen backbone revision, by the source,
+and by the horizon, and a request is scored only against the bank slice that matches its own
+horizon. It also covers only the missingness protocol registered in advance. These properties
+are load-bearing, and Appendix~\ref{app:replay} states what they imply for the scope of the
+method.
 
 The step from the bank to a decision rests on one empirical assumption, stated explicitly.
 Requests whose action-conditioned states are close in the state space have similar action
@@ -399,9 +408,13 @@ not distinguish the action from leaving the input unchanged.
 
 The two hyperparameters $k$ and $\beta$ are selected on the TRAIN gate before any evaluation
 run, under a criterion fixed in advance. Among the grid points whose harmful-intervention rate
-on the gate stays below a pre-registered cap, we take the point with the best gate MASE, so
-harm enters as a constraint rather than as a quantity to trade against accuracy. No evaluation
-data is used.
+on the gate stays at or below a cap of \ph{GATE_HARM_CAP}, we take the point with the best gate
+MASE, so harm enters as a constraint rather than as a quantity to trade against accuracy. The
+cap is a protocol constant frozen before any evaluation run and recorded with the resolved
+configuration, so neither the cap nor the selected grid point is chosen on evaluation data. If
+no grid point satisfies the cap, the configuration falls back to the most conservative grid
+point, which is the one with the largest penalty strength. No evaluation data is used at any
+step.
 
 Two consequences of \eqref{eq:decision} matter. The reference action is always available, so
 the rule always returns a forecast. This is a statement about availability only and does not
@@ -448,18 +461,21 @@ The catalog is fixed at five admissible actions with \textsc{Keep} as the refere
 a complete and valid input is always mapped to \textsc{Keep}. Appendix~\ref{app:catalog}
 defines each action and the status rules for unsupported, aliased, or failed executions.
 
-Five published baselines are fixed in advance and never swapped after results are seen:
-TOI~\citep{wang2024taskoriented}, TOI-VSF~\citep{hao2025toivsf},
-GIMCC~\citep{hao2025gimcc}, SRDI~\citep{xu2026srdi}, and
-ChannelTokenFormer~\citep{jang2026channeltokenformer}. The four data-side methods compose with
-each frozen backbone, whereas ChannelTokenFormer is a complete forecasting architecture trained
-for the task and therefore has no per-frozen-backbone column. Three controls accompany them:
-\textsc{Native Keep}, \textsc{Best Fixed}, and \textbf{R2-CART}. A \emph{Catalog Oracle}
+The core comparison is fixed in advance and never reordered after results are seen. Four
+published methods compose with each frozen backbone and therefore share one reference contract:
+T1~\citep{park2026t1} covers reconstruction-based imputation,
+TOI~\citep{wang2024taskoriented} covers task-oriented utility,
+TATO~\citep{qiu2026tato} covers data-side adaptation of a frozen \tsfm{}, and
+SRDI~\citep{xu2026srdi} covers missing-input repair.
+ChannelTokenFormer~\citep{jang2026channeltokenformer} is a complete forecasting architecture
+trained for the task rather than a data-side adapter, so it is reported as an external
+forecasting reference and carries no per-backbone column. Three controls accompany the core
+set: \textsc{Native Keep}, \textsc{Best Fixed}, and \textbf{R2-CART}. A \emph{Catalog Oracle}
 that reads the future target is reported as a diagnostic reference and excluded from all ranks.
-The severity matrix of \S\ref{sec:exp-robust} uses a reduced but type-complete set in which
-T1~\citep{park2026t1} stands for reconstruction-based imputation and
-TATO~\citep{qiu2026tato} for data-side adaptation, and Appendix~\ref{app:datasets} documents
-the baseline roster, the held-back VIDA comparison, and the per-source tables.
+The severity matrix of \S\ref{sec:exp-robust} keeps the same frozen configuration and reuses a
+reduced but type-complete set of seven methods, which omits SRDI so that the high-severity runs
+stay bounded while every control type is still represented. Appendix~\ref{app:datasets}
+documents the roster, the extended comparison, and the per-source tables.
 
 Each source is split chronologically into TRAIN and TEST with an $L + H$ purge, and TRAIN is
 partitioned by origin time into replay-fit, gate, and TRAIN-eval blocks. All design,
@@ -468,7 +484,10 @@ table is computed once on TEST after the configuration is frozen. MASE~\citep{hy
 is the primary metric and RMSSE the secondary one, aggregated source-macro with the parent as
 the statistical unit and paired cluster bootstrap confidence intervals against each baseline.
 Appendix~\ref{app:splits} records the split boundaries and the TEST manifest, and
-Appendix~\ref{app:metric-conventions} gives the full metric and statistics conventions.
+Appendix~\ref{app:metric-conventions} gives the full metric and statistics conventions, and
+Appendix~\ref{app:diagnostic-conventions} fixes the counting rules that the diagnostics rely
+on, including tie-breaking for the oracle-best action and the treatment of zero-utility
+interventions.
 
 \subsection{Does Selective Intervention Need to Exist?}
 \label{sec:exp-exists}
@@ -485,9 +504,11 @@ The second premise is that reconstruction quality and forecasting utility are no
 criterion. For the methods that produce an explicit reconstruction, we compare the
 reconstruction rank against the forecasting-utility rank within each parent and report winner
 agreement and pairwise discordance, with a pooled Spearman correlation as a descriptive
-summary. Figure~\ref{fig:why-selective}(a) shows the comparison, and
-Appendix~\ref{app:recutils} adds the Reconstruction Oracle diagnostic.
-\ph{RANK_DISAGREE_STATS}.
+summary. The comparison covers the core methods that emit an explicit estimate of the hidden
+positions, and \introact{} is not placed in it, because it returns a forecast from an executed
+input rather than a reconstruction of the missing values.
+Figure~\ref{fig:why-selective}(a) shows the comparison, and Appendix~\ref{app:recutils} adds
+the Reconstruction Oracle diagnostic. \ph{RANK_DISAGREE_STATS}.
 
 \begin{figure}[t]
   \centering
@@ -519,10 +540,12 @@ deployment cost is reported separately in Appendix~\ref{app:calls}.
 
 \begin{table}[t]
   \caption{Main comparison at $10\%$ missingness. MASE and RMSSE are source-macro averaged
-  and lower is better everywhere. \emph{Type} separates data-side methods, which compose with a
-  frozen backbone, from ChannelTokenFormer, a complete forecasting architecture trained for the
-  task that has no per-frozen-backbone column. \best{Bold} marks the best deployable method and
-  \second{underline} the second best. The oracle row reads the future target for diagnosis
+  and lower is better everywhere. The first block holds the methods that compose with a frozen
+  backbone and therefore share one reference contract, and these are the rows that carry a
+  rank. \best{Bold} marks the best deployable method and \second{underline} the second best.
+  ChannelTokenFormer is a complete forecasting architecture trained for the task rather than a
+  data-side adapter, so it has no per-backbone column and is reported as an external
+  forecasting reference outside the ranks. The oracle row reads the future target for diagnosis
   only and is excluded from the ranks. Chronos-2 is a held-out backbone whose configuration is
   not retuned.}
   \label{tab:main}
@@ -538,20 +561,22 @@ deployment cost is reported separately in Appendix~\ref{app:calls}.
     Native KEEP        & Frozen \tsfm{}          & \ph{KEEP_BOLT}   & \ph{KEEP_TF}   & \ph{KEEP_CH2}   & \ph{KEEP_OVR}   & \ph{KEEP_RMSSE}   & \ph{KEEP_RANK} \\
     Best Fixed         & Frozen \tsfm{}          & \ph{BF_BOLT}     & \ph{BF_TF}     & \ph{BF_CH2}     & \ph{BF_OVR}     & \ph{BF_RMSSE}     & \ph{BF_RANK} \\
     R2-CART            & Selector                & \ph{R2_BOLT}     & \ph{R2_TF}     & \ph{R2_CH2}     & \ph{R2_OVR}     & \ph{R2_RMSSE}     & \ph{R2_RANK} \\
+    T1                 & Reconstruction          & \ph{T1_BOLT}     & \ph{T1_TF}     & \ph{T1_CH2}     & \ph{T1_OVR}     & \ph{T1_RMSSE}     & \ph{T1_RANK} \\
     TOI                & Task-oriented           & \ph{TOI_BOLT}    & \ph{TOI_TF}    & \ph{TOI_CH2}    & \ph{TOI_OVR}    & \ph{TOI_RMSSE}    & \ph{TOI_RANK} \\
-    TOI-VSF            & VSF                     & \ph{TOIVSF_BOLT} & \ph{TOIVSF_TF} & \ph{TOIVSF_CH2} & \ph{TOIVSF_OVR} & \ph{TOIVSF_RMSSE} & \ph{TOIVSF_RANK} \\
-    GIMCC              & VSF                     & \ph{GIMCC_BOLT}  & \ph{GIMCC_TF}  & \ph{GIMCC_CH2}  & \ph{GIMCC_OVR}  & \ph{GIMCC_RMSSE}  & \ph{GIMCC_RANK} \\
-    SRDI               & VSF                     & \ph{SRDI_BOLT}   & \ph{SRDI_TF}   & \ph{SRDI_CH2}   & \ph{SRDI_OVR}   & \ph{SRDI_RMSSE}   & \ph{SRDI_RANK} \\
-    ChannelTokenFormer & Forecast model          & N/A\textsuperscript{*} & N/A\textsuperscript{*} & N/A\textsuperscript{*} & \ph{CTF_OVR} & \ph{CTF_RMSSE} & \ph{CTF_RANK} \\
+    TATO               & Data-side adaptation    & \ph{TATO_BOLT}   & \ph{TATO_TF}   & \ph{TATO_CH2}   & \ph{TATO_OVR}   & \ph{TATO_RMSSE}   & \ph{TATO_RANK} \\
+    SRDI               & Missing-input repair    & \ph{SRDI_BOLT}   & \ph{SRDI_TF}   & \ph{SRDI_CH2}   & \ph{SRDI_OVR}   & \ph{SRDI_RMSSE}   & \ph{SRDI_RANK} \\
     \midrule
     \rowcolor{bestgray}\introact{} & Frozen governance & \ph{OURS_BOLT} & \ph{OURS_TF} & \ph{OURS_CH2} & \ph{OURS_OVR} & \ph{OURS_RMSSE} & \ph{OURS_RANK} \\
     \midrule
+    ChannelTokenFormer & External reference      & N/A\textsuperscript{*} & N/A\textsuperscript{*} & N/A\textsuperscript{*} & \ph{CTF_OVR} & \ph{CTF_RMSSE} & -- \\
     Catalog Oracle     & Diagnostic              & \oracle{\ph{ORACLE_BOLT}} & \oracle{\ph{ORACLE_TF}} & \oracle{\ph{ORACLE_CH2}} & \oracle{\ph{ORACLE_OVR}} & \oracle{\ph{ORACLE_RMSSE}} & \oracle{--} \\
     \bottomrule
   \end{tabular}}
   \vspace{-2pt}
   {\footnotesize\textsuperscript{*}Not applicable: ChannelTokenFormer is a trained forecasting
-  architecture rather than a data-side adapter over a frozen backbone.}
+  architecture rather than a data-side adapter over a frozen backbone. It has no reference
+  action on a frozen backbone, so it is excluded from the ranks rather than ranked on a
+  different scale.}
 \end{table}
 
 \subsection{Does Selective Replay Reduce Harm?}
@@ -590,19 +615,21 @@ Appendix~\ref{app:governance-fig} reports the curve cell by cell. \ph{HARM_RISKC
     Native KEEP        & \ph{HARM_MASE_KEEP}   & \ph{HARM_IR_KEEP}   & \ph{HARM_HIR_KEEP}   & \ph{HARM_HL_KEEP}   & \ph{HARM_BP_KEEP}   & \ph{HARM_MO_KEEP} \\
     Best Fixed         & \ph{HARM_MASE_BF}     & \ph{HARM_IR_BF}     & \ph{HARM_HIR_BF}     & \ph{HARM_HL_BF}     & \ph{HARM_BP_BF}     & \ph{HARM_MO_BF} \\
     R2-CART            & \ph{HARM_MASE_R2}     & \ph{HARM_IR_R2}     & \ph{HARM_HIR_R2}     & \ph{HARM_HL_R2}     & \ph{HARM_BP_R2}     & \ph{HARM_MO_R2} \\
+    T1                 & \ph{HARM_MASE_T1}     & \ph{HARM_IR_T1}     & \ph{HARM_HIR_T1}     & \ph{HARM_HL_T1}     & \ph{HARM_BP_T1}     & \ph{HARM_MO_T1} \\
     TOI                & \ph{HARM_MASE_TOI}    & \ph{HARM_IR_TOI}    & \ph{HARM_HIR_TOI}    & \ph{HARM_HL_TOI}    & \ph{HARM_BP_TOI}    & \ph{HARM_MO_TOI} \\
-    TOI-VSF            & \ph{HARM_MASE_TOIVSF} & \ph{HARM_IR_TOIVSF} & \ph{HARM_HIR_TOIVSF} & \ph{HARM_HL_TOIVSF} & \ph{HARM_BP_TOIVSF} & \ph{HARM_MO_TOIVSF} \\
-    GIMCC              & \ph{HARM_MASE_GIMCC}  & \ph{HARM_IR_GIMCC}  & \ph{HARM_HIR_GIMCC}  & \ph{HARM_HL_GIMCC}  & \ph{HARM_BP_GIMCC}  & \ph{HARM_MO_GIMCC} \\
+    TATO               & \ph{HARM_MASE_TATO}   & \ph{HARM_IR_TATO}   & \ph{HARM_HIR_TATO}   & \ph{HARM_HL_TATO}   & \ph{HARM_BP_TATO}   & \ph{HARM_MO_TATO} \\
     SRDI               & \ph{HARM_MASE_SRDI}   & \ph{HARM_IR_SRDI}   & \ph{HARM_HIR_SRDI}   & \ph{HARM_HL_SRDI}   & \ph{HARM_BP_SRDI}   & \ph{HARM_MO_SRDI} \\
-    ChannelTokenFormer & \ph{HARM_MASE_CTF}    & \ph{HARM_IR_CTF}    & \ph{HARM_HIR_CTF}    & \ph{HARM_HL_CTF}    & \ph{HARM_BP_CTF}    & \ph{HARM_MO_CTF} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{HARM_MASE_OURS} & \ph{HARM_IR_OURS} & \ph{HARM_HIR_OURS} & \ph{HARM_HL_OURS} & \ph{HARM_BP_OURS} & \ph{HARM_MO_OURS} \\
     \bottomrule
   \end{tabular}}
   \vspace{-2pt}
-  {\footnotesize Methods that always return a repaired input intervene on every incomplete
-  request by construction, so their intervention rate is one and their harmful rate is
-  unconditional.}
+  {\footnotesize Only methods that share the frozen-backbone reference contract appear here,
+  because the harmful rate of an intervention is defined against the reference forecast of the
+  same backbone. ChannelTokenFormer has no such reference and is therefore reported in
+  Table~\ref{tab:main} only. Methods that always return a repaired input intervene on every
+  incomplete request by construction, so their intervention rate is one and their harmful rate
+  is unconditional.}
 \end{table}
 
 \subsection{Robustness and Transfer}
@@ -613,16 +640,20 @@ it carry over to a backbone family that was not used during development?}
 Severities are $10\%$, $30\%$, and $50\%$, crossed with the four patterns and the three
 backbones, and no method is retuned between levels. The levels lie inside the registered grid
 that the replay bank samples from, so this is a within-grid robustness check and not an
-unseen-severity stress test. Table~\ref{tab:robust} reports the severity trend, the worst
-pattern cell, and the held-out Chronos-2 backbone under an unchanged configuration.
+unseen-severity stress test. The sweep uses a reduced but type-complete set of seven methods,
+which omits SRDI so that the high-severity runs stay bounded, and the full core set is
+compared at $10\%$ in Table~\ref{tab:main}. Table~\ref{tab:robust} reports the severity trend,
+the worst pattern cell, and the held-out Chronos-2 backbone under an unchanged configuration.
 \ph{ROBUST_READING}. \ph{ROBUST_30}. \ph{ROBUST_50}. \ph{ROBUST_WORST}. \ph{ROBUST_CH2}.
-Appendix~\ref{app:severity-full} holds the complete per-severity and per-pattern tables.
+Appendix~\ref{app:severity-full} holds the complete per-severity tables and
+Appendix~\ref{app:pattern} holds the per-pattern tables.
 
 \begin{table}[t]
   \caption{Within-grid robustness to missingness severity, with no method retuned between
-  levels. The worst-pattern column is the largest degradation relative to \textsc{Native Keep}
-  over all pattern and backbone cells at that severity. The Chronos-2 column is the held-out
-  backbone under an unchanged configuration.}
+  levels. The seven rows cover every control type, and the same set is used at all three
+  severities and in Appendix~\ref{app:severity-full}. The worst-pattern column is the largest
+  degradation relative to \textsc{Native Keep} over all pattern and backbone cells at that
+  severity. The Chronos-2 column is the held-out backbone under an unchanged configuration.}
   \label{tab:robust}
   \centering
   \small
@@ -749,9 +780,11 @@ All reported tables are generated from retained raw predictions and versioned co
 Table~\ref{tab:app-map} lists what each appendix section contains. The appendix is organised
 by evidence type rather than by individual analysis. Section~A fixes the protocol, the final
 evaluation split, and the method details. Sections~B--D carry the evidence behind the
-main-text tables. Section~E carries the ablations, the replay-size study, and the sensitivity
-grid. Sections~F and~G record cost and reproducibility. A final unnumbered section holds
-exploratory material that does not support any claim in the main text.
+main-text tables. Section~E carries the ablations, the sensitivity grid, and the
+mask-realisation stability check, and the replay-size study of our own bank sits in
+Section~A with the rest of the bank construction. Sections~F and~G record cost and
+reproducibility. A final unnumbered section holds exploratory material that does not support
+any claim in the main text.
 
 \begin{table}[h]
   \caption{Appendix map. Sections are lettered in order of appearance. The final
@@ -764,14 +797,14 @@ exploratory material that does not support any claim in the main text.
     \toprule
     Section & Contents & Question it answers \\
     \midrule
-    A. Protocol and method details & final TRAIN and TEST split with purging, scope and assumptions, the action catalog, the state feature definitions, the registered missingness patterns, the complete-input contract & what exactly was fixed before the evaluation ran, and which claims are out of scope? \\
+    A. Protocol and method details & final TRAIN and TEST split with purging, scope and assumptions, the action catalog, the state feature definitions, the registered missingness patterns, the metric conventions, the diagnostic counting rules, the complete-input contract & what exactly was fixed before the evaluation ran, and which claims are out of scope? \\
     B. Full per-source and per-pattern results & per-source tables for every method, opportunity strata, per-pattern tables, extended comparison & does the aggregate hold source by source, stratum by stratum, and pattern by pattern? \\
     C. Full severity results & $10/30/50\%$ tables and the severity trend & does one frozen configuration hold across the registered severity grid? \\
     D. Reconstruction and utility diagnostics & within-parent rank comparison, Reconstruction Oracle, governance diagnostics & is reconstruction quality a usable substitute for forecasting utility? \\
-    E. Ablations, replay size, and sensitivity & the full ablation vector, every method re-fitted at $25/50/100\%$ support, the $k$ and $\beta$ gate grid, mask-realisation stability & which component carries the gain, how much history is needed, and is the result an artefact of one mask? \\
+    E. Ablations and stability & the full ablation vector, the $k$ and $\beta$ gate grid, and mask-realisation stability & which component carries the gain, and is the result an artefact of one mask? \\
     F. Cost, failures, and memory & latency, call counts, candidate materialisation, failures, timeouts, cold start & what does a request actually cost? \\
     G. Reproducibility and artefact schema & record schema, revisions, seeds, environment, manifests & can every reported number be traced back to a stored artefact? \\
-    Supplementary (unnumbered) & the preceding development cycle and the finance case study & what was tried and rejected, and what lies outside the benchmark sources? \\
+    Supplementary (unnumbered) & the preceding development cycle & what was tried and rejected before the present formulation? \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -992,8 +1025,11 @@ so that $g_{i,a} > 0$ means the action reduced the forecasting loss and $g_{i,a}
 increased it. The bank is
 $\calB = \{(z_{i,a}, a, g_{i,a})\}$, where $z_{i,a}$ is the action-conditioned state defined
 in Appendix~\ref{app:features}. Because a utility measured with one model revision does not
-describe another, and because the state distribution differs across sources, the bank is built
-per frozen backbone revision and per source. Pseudo-deployment severities are drawn from
+describe another, because the state distribution differs across sources, and because $g_{i,a}$
+is a loss over the forecast horizon and therefore a different quantity at $H=96$ and at
+$H=192$, the bank is built per frozen backbone revision, per source, and per horizon. A request
+is scored only against the slice that matches its own horizon, and no horizon indicator is
+needed in the state because the horizon is fixed by the slice. Pseudo-deployment severities are drawn from
 $\{10\%, 30\%, 50\%\}$ by deterministic hash of the same key that defines the mask, so the
 bank covers the registered severity range without the method being retuned per severity.
 Because the bank is built once from TRAIN and never rebuilt at deployment time, the offline
@@ -1072,37 +1108,74 @@ paired differences with confidence intervals. Mask variants of the same parent a
 treated as independent samples, and pattern, severity, and backbone breakdowns are secondary
 analyses without cell-by-cell significance testing.
 
-MASE~\citep{hyndman2006mase} is the primary metric and RMSSE is the secondary metric. For both,
-the denominator is the mean absolute first difference of the target channel computed on the
-TRAIN portion of that source, so the scaling constant of a source never depends on the
-evaluation block. The denominator is computed per channel before any aggregation over
-channels, and the per-source seasonal periods used by the seasonal variants are listed in
-Table~\ref{tab:app-seasonality}. Aggregation is source-macro, first over parents within a
-source and then equally over the eight sources, and the same order is applied inside every
-bootstrap resample. MAE and RMSE are reported per source and are never averaged across
-sources, because the sources have different scales and a cross-source average of a raw error
-has no common unit.
+MASE~\citep{hyndman2006mase} is the primary metric and RMSSE is the secondary metric. Both
+scale the error of a source by its own seasonal naive error, computed on the TRAIN portion of
+that source and therefore never on the evaluation block. With $y_t$ the target channel and $m$
+the registered seasonal period of the source,
+\begin{equation}
+  \mathrm{MASE} = \frac{\mathrm{MAE}}{\frac{1}{T-m}\sum_{t} \lvert y_t - y_{t-m} \rvert},
+  \qquad
+  \mathrm{RMSSE} = \sqrt{\frac{\mathrm{MSE}}{\frac{1}{T-m}\sum_{t} (y_t - y_{t-m})^2}},
+  \label{eq:metrics}
+\end{equation}
+so the two metrics share the same seasonal naive difference series but not the same power of
+it, and RMSSE is not the square root of MASE. The scaling constants are computed per channel
+before any aggregation over channels, and the registered periods are listed in
+Table~\ref{tab:app-seasonality}. A degenerate seasonal naive error, meaning a constant or
+all-missing TRAIN series, leaves the metric undefined and is reported as missing rather than
+as zero. Aggregation is source-macro, first over parents within a source and then equally over
+the eight sources, and the same order is applied inside every bootstrap resample. MAE and RMSE
+are reported per source and are never averaged across sources, because the sources have
+different scales and a cross-source average of a raw error has no common unit.
 
 \begin{table}[h]
   \caption{Per-source seasonal periods and context conventions used by the metric
-  denominators. Context length is $L = 512$ for every source.}
+  denominators. Context length is $L = 512$ for every source. The seasonal period is the
+  sampling-frequency period registered before any run, not a tuned quantity.}
   \label{tab:app-seasonality}
   \centering
   \small
   \setlength{\tabcolsep}{4pt}
 \resizebox{\textwidth}{!}{\begin{tabular}{lccc}
     \toprule
-    Source & Seasonal period & Channels & Scaling constant source \\
+    Source & Seasonal period $m$ & Channels & Scaling \\
     \midrule
-    ETTh1 / ETTh2 & 24 & 7 & TRAIN first difference of the target channel \\
-    ETTm1 / ETTm2 & 96 & 7 & TRAIN first difference of the target channel \\
-    Electricity & 24 & 321 & TRAIN first difference of the target channel \\
-    Exchange & 7 & 8 & TRAIN first difference of the target channel \\
-    Traffic & 24 & 862 & TRAIN first difference of the target channel \\
-    Weather & 144 & 21 & TRAIN first difference of the target channel \\
+    ETTh1 / ETTh2 & 24 & 7 & TRAIN seasonal naive error of the target channel \\
+    ETTm1 / ETTm2 & 96 & 7 & TRAIN seasonal naive error of the target channel \\
+    Electricity & 24 & 321 & TRAIN seasonal naive error of the target channel \\
+    Exchange & 5 & 8 & TRAIN seasonal naive error of the target channel \\
+    Traffic & 24 & 862 & TRAIN seasonal naive error of the target channel \\
+    Weather & 144 & 21 & TRAIN seasonal naive error of the target channel \\
     \bottomrule
   \end{tabular}}
 \end{table}
+
+\subsubsection{Diagnostic Conventions}
+\label{app:diagnostic-conventions}
+Four quantities in the diagnostics are counting rules rather than metrics, and each one is
+fixed before any evaluation record is read, because a different convention would change the
+reported numbers without changing a single forecast.
+
+\emph{Oracle-best action.} The oracle-best action of an episode is the admissible action with
+the smallest realised loss. Ties are broken by the frozen catalog order, so the first action in
+that order wins and the reported shares of episodes on which each action is best sum to one. An
+action that is unsupported, aliased, or failed is not admissible and is excluded from the
+argmin rather than being counted as a loss.
+
+\emph{Utility sign.} Utility is defined relative to the reference action in
+\eqref{eq:utility}, so $g_{i,a} = 0$ means the action and the reference are indistinguishable on
+that episode. An intervention counts as harmful only when $g_{i,a} < 0$ strictly and as
+beneficial only when $g_{i,a} > 0$ strictly, so the zero cases enter neither the conditional
+harmful rate nor beneficial precision and are reported as their own count.
+
+\emph{Beneficial precision.} It is the number of executed interventions with strictly positive
+utility divided by the number of executed interventions, and it is undefined when nothing was
+executed. It is reported as missing rather than as zero in that case.
+
+\emph{Opportunity strata.} The no-op boundary and the low-to-high boundary are the two
+pre-declared quantiles of $\Delta_i$ computed on the gate split, computed once and applied
+unchanged to TEST. The same two values partition every method, and no boundary is recomputed
+per method. Both values are recorded with the resolved configuration.
 
 \subsection{Complete-Input Contract}
 \label{app:contract}
@@ -1161,11 +1234,10 @@ are not averaged across sources.
     Native KEEP & \ph{SRC_BOLT_KEEP_96_ETTH1} & \ph{SRC_BOLT_KEEP_96_ETTH2} & \ph{SRC_BOLT_KEEP_96_ETTM1} & \ph{SRC_BOLT_KEEP_96_ETTM2} & \ph{SRC_BOLT_KEEP_96_ELEC} & \ph{SRC_BOLT_KEEP_96_EXCH} & \ph{SRC_BOLT_KEEP_96_TRAF} & \ph{SRC_BOLT_KEEP_96_WEA} & \ph{SRC_BOLT_KEEP_96_MACRO} \\
     Best Fixed & \ph{SRC_BOLT_BF_96_ETTH1} & \ph{SRC_BOLT_BF_96_ETTH2} & \ph{SRC_BOLT_BF_96_ETTM1} & \ph{SRC_BOLT_BF_96_ETTM2} & \ph{SRC_BOLT_BF_96_ELEC} & \ph{SRC_BOLT_BF_96_EXCH} & \ph{SRC_BOLT_BF_96_TRAF} & \ph{SRC_BOLT_BF_96_WEA} & \ph{SRC_BOLT_BF_96_MACRO} \\
     R2-CART & \ph{SRC_BOLT_R2_96_ETTH1} & \ph{SRC_BOLT_R2_96_ETTH2} & \ph{SRC_BOLT_R2_96_ETTM1} & \ph{SRC_BOLT_R2_96_ETTM2} & \ph{SRC_BOLT_R2_96_ELEC} & \ph{SRC_BOLT_R2_96_EXCH} & \ph{SRC_BOLT_R2_96_TRAF} & \ph{SRC_BOLT_R2_96_WEA} & \ph{SRC_BOLT_R2_96_MACRO} \\
+    T1 & \ph{SRC_BOLT_T1_96_ETTH1} & \ph{SRC_BOLT_T1_96_ETTH2} & \ph{SRC_BOLT_T1_96_ETTM1} & \ph{SRC_BOLT_T1_96_ETTM2} & \ph{SRC_BOLT_T1_96_ELEC} & \ph{SRC_BOLT_T1_96_EXCH} & \ph{SRC_BOLT_T1_96_TRAF} & \ph{SRC_BOLT_T1_96_WEA} & \ph{SRC_BOLT_T1_96_MACRO} \\
     TOI & \ph{SRC_BOLT_TOI_96_ETTH1} & \ph{SRC_BOLT_TOI_96_ETTH2} & \ph{SRC_BOLT_TOI_96_ETTM1} & \ph{SRC_BOLT_TOI_96_ETTM2} & \ph{SRC_BOLT_TOI_96_ELEC} & \ph{SRC_BOLT_TOI_96_EXCH} & \ph{SRC_BOLT_TOI_96_TRAF} & \ph{SRC_BOLT_TOI_96_WEA} & \ph{SRC_BOLT_TOI_96_MACRO} \\
-    TOI-VSF & \ph{SRC_BOLT_TOIVSF_96_ETTH1} & \ph{SRC_BOLT_TOIVSF_96_ETTH2} & \ph{SRC_BOLT_TOIVSF_96_ETTM1} & \ph{SRC_BOLT_TOIVSF_96_ETTM2} & \ph{SRC_BOLT_TOIVSF_96_ELEC} & \ph{SRC_BOLT_TOIVSF_96_EXCH} & \ph{SRC_BOLT_TOIVSF_96_TRAF} & \ph{SRC_BOLT_TOIVSF_96_WEA} & \ph{SRC_BOLT_TOIVSF_96_MACRO} \\
-    GIMCC & \ph{SRC_BOLT_GIMCC_96_ETTH1} & \ph{SRC_BOLT_GIMCC_96_ETTH2} & \ph{SRC_BOLT_GIMCC_96_ETTM1} & \ph{SRC_BOLT_GIMCC_96_ETTM2} & \ph{SRC_BOLT_GIMCC_96_ELEC} & \ph{SRC_BOLT_GIMCC_96_EXCH} & \ph{SRC_BOLT_GIMCC_96_TRAF} & \ph{SRC_BOLT_GIMCC_96_WEA} & \ph{SRC_BOLT_GIMCC_96_MACRO} \\
+    TATO & \ph{SRC_BOLT_TATO_96_ETTH1} & \ph{SRC_BOLT_TATO_96_ETTH2} & \ph{SRC_BOLT_TATO_96_ETTM1} & \ph{SRC_BOLT_TATO_96_ETTM2} & \ph{SRC_BOLT_TATO_96_ELEC} & \ph{SRC_BOLT_TATO_96_EXCH} & \ph{SRC_BOLT_TATO_96_TRAF} & \ph{SRC_BOLT_TATO_96_WEA} & \ph{SRC_BOLT_TATO_96_MACRO} \\
     SRDI & \ph{SRC_BOLT_SRDI_96_ETTH1} & \ph{SRC_BOLT_SRDI_96_ETTH2} & \ph{SRC_BOLT_SRDI_96_ETTM1} & \ph{SRC_BOLT_SRDI_96_ETTM2} & \ph{SRC_BOLT_SRDI_96_ELEC} & \ph{SRC_BOLT_SRDI_96_EXCH} & \ph{SRC_BOLT_SRDI_96_TRAF} & \ph{SRC_BOLT_SRDI_96_WEA} & \ph{SRC_BOLT_SRDI_96_MACRO} \\
-    ChannelTokenFormer & \ph{SRC_BOLT_CTF_96_ETTH1} & \ph{SRC_BOLT_CTF_96_ETTH2} & \ph{SRC_BOLT_CTF_96_ETTM1} & \ph{SRC_BOLT_CTF_96_ETTM2} & \ph{SRC_BOLT_CTF_96_ELEC} & \ph{SRC_BOLT_CTF_96_EXCH} & \ph{SRC_BOLT_CTF_96_TRAF} & \ph{SRC_BOLT_CTF_96_WEA} & \ph{SRC_BOLT_CTF_96_MACRO} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{SRC_BOLT_OURS_96_ETTH1} & \ph{SRC_BOLT_OURS_96_ETTH2} & \ph{SRC_BOLT_OURS_96_ETTM1} & \ph{SRC_BOLT_OURS_96_ETTM2} & \ph{SRC_BOLT_OURS_96_ELEC} & \ph{SRC_BOLT_OURS_96_EXCH} & \ph{SRC_BOLT_OURS_96_TRAF} & \ph{SRC_BOLT_OURS_96_WEA} & \ph{SRC_BOLT_OURS_96_MACRO} \\
     \midrule
@@ -1189,11 +1261,10 @@ are not averaged across sources.
     Native KEEP & \ph{SRC_BOLT_KEEP_192_ETTH1} & \ph{SRC_BOLT_KEEP_192_ETTH2} & \ph{SRC_BOLT_KEEP_192_ETTM1} & \ph{SRC_BOLT_KEEP_192_ETTM2} & \ph{SRC_BOLT_KEEP_192_ELEC} & \ph{SRC_BOLT_KEEP_192_EXCH} & \ph{SRC_BOLT_KEEP_192_TRAF} & \ph{SRC_BOLT_KEEP_192_WEA} & \ph{SRC_BOLT_KEEP_192_MACRO} \\
     Best Fixed & \ph{SRC_BOLT_BF_192_ETTH1} & \ph{SRC_BOLT_BF_192_ETTH2} & \ph{SRC_BOLT_BF_192_ETTM1} & \ph{SRC_BOLT_BF_192_ETTM2} & \ph{SRC_BOLT_BF_192_ELEC} & \ph{SRC_BOLT_BF_192_EXCH} & \ph{SRC_BOLT_BF_192_TRAF} & \ph{SRC_BOLT_BF_192_WEA} & \ph{SRC_BOLT_BF_192_MACRO} \\
     R2-CART & \ph{SRC_BOLT_R2_192_ETTH1} & \ph{SRC_BOLT_R2_192_ETTH2} & \ph{SRC_BOLT_R2_192_ETTM1} & \ph{SRC_BOLT_R2_192_ETTM2} & \ph{SRC_BOLT_R2_192_ELEC} & \ph{SRC_BOLT_R2_192_EXCH} & \ph{SRC_BOLT_R2_192_TRAF} & \ph{SRC_BOLT_R2_192_WEA} & \ph{SRC_BOLT_R2_192_MACRO} \\
+    T1 & \ph{SRC_BOLT_T1_192_ETTH1} & \ph{SRC_BOLT_T1_192_ETTH2} & \ph{SRC_BOLT_T1_192_ETTM1} & \ph{SRC_BOLT_T1_192_ETTM2} & \ph{SRC_BOLT_T1_192_ELEC} & \ph{SRC_BOLT_T1_192_EXCH} & \ph{SRC_BOLT_T1_192_TRAF} & \ph{SRC_BOLT_T1_192_WEA} & \ph{SRC_BOLT_T1_192_MACRO} \\
     TOI & \ph{SRC_BOLT_TOI_192_ETTH1} & \ph{SRC_BOLT_TOI_192_ETTH2} & \ph{SRC_BOLT_TOI_192_ETTM1} & \ph{SRC_BOLT_TOI_192_ETTM2} & \ph{SRC_BOLT_TOI_192_ELEC} & \ph{SRC_BOLT_TOI_192_EXCH} & \ph{SRC_BOLT_TOI_192_TRAF} & \ph{SRC_BOLT_TOI_192_WEA} & \ph{SRC_BOLT_TOI_192_MACRO} \\
-    TOI-VSF & \ph{SRC_BOLT_TOIVSF_192_ETTH1} & \ph{SRC_BOLT_TOIVSF_192_ETTH2} & \ph{SRC_BOLT_TOIVSF_192_ETTM1} & \ph{SRC_BOLT_TOIVSF_192_ETTM2} & \ph{SRC_BOLT_TOIVSF_192_ELEC} & \ph{SRC_BOLT_TOIVSF_192_EXCH} & \ph{SRC_BOLT_TOIVSF_192_TRAF} & \ph{SRC_BOLT_TOIVSF_192_WEA} & \ph{SRC_BOLT_TOIVSF_192_MACRO} \\
-    GIMCC & \ph{SRC_BOLT_GIMCC_192_ETTH1} & \ph{SRC_BOLT_GIMCC_192_ETTH2} & \ph{SRC_BOLT_GIMCC_192_ETTM1} & \ph{SRC_BOLT_GIMCC_192_ETTM2} & \ph{SRC_BOLT_GIMCC_192_ELEC} & \ph{SRC_BOLT_GIMCC_192_EXCH} & \ph{SRC_BOLT_GIMCC_192_TRAF} & \ph{SRC_BOLT_GIMCC_192_WEA} & \ph{SRC_BOLT_GIMCC_192_MACRO} \\
+    TATO & \ph{SRC_BOLT_TATO_192_ETTH1} & \ph{SRC_BOLT_TATO_192_ETTH2} & \ph{SRC_BOLT_TATO_192_ETTM1} & \ph{SRC_BOLT_TATO_192_ETTM2} & \ph{SRC_BOLT_TATO_192_ELEC} & \ph{SRC_BOLT_TATO_192_EXCH} & \ph{SRC_BOLT_TATO_192_TRAF} & \ph{SRC_BOLT_TATO_192_WEA} & \ph{SRC_BOLT_TATO_192_MACRO} \\
     SRDI & \ph{SRC_BOLT_SRDI_192_ETTH1} & \ph{SRC_BOLT_SRDI_192_ETTH2} & \ph{SRC_BOLT_SRDI_192_ETTM1} & \ph{SRC_BOLT_SRDI_192_ETTM2} & \ph{SRC_BOLT_SRDI_192_ELEC} & \ph{SRC_BOLT_SRDI_192_EXCH} & \ph{SRC_BOLT_SRDI_192_TRAF} & \ph{SRC_BOLT_SRDI_192_WEA} & \ph{SRC_BOLT_SRDI_192_MACRO} \\
-    ChannelTokenFormer & \ph{SRC_BOLT_CTF_192_ETTH1} & \ph{SRC_BOLT_CTF_192_ETTH2} & \ph{SRC_BOLT_CTF_192_ETTM1} & \ph{SRC_BOLT_CTF_192_ETTM2} & \ph{SRC_BOLT_CTF_192_ELEC} & \ph{SRC_BOLT_CTF_192_EXCH} & \ph{SRC_BOLT_CTF_192_TRAF} & \ph{SRC_BOLT_CTF_192_WEA} & \ph{SRC_BOLT_CTF_192_MACRO} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{SRC_BOLT_OURS_192_ETTH1} & \ph{SRC_BOLT_OURS_192_ETTH2} & \ph{SRC_BOLT_OURS_192_ETTM1} & \ph{SRC_BOLT_OURS_192_ETTM2} & \ph{SRC_BOLT_OURS_192_ELEC} & \ph{SRC_BOLT_OURS_192_EXCH} & \ph{SRC_BOLT_OURS_192_TRAF} & \ph{SRC_BOLT_OURS_192_WEA} & \ph{SRC_BOLT_OURS_192_MACRO} \\
     \midrule
@@ -1217,11 +1288,10 @@ are not averaged across sources.
     Native KEEP & \ph{SRC_TF_KEEP_96_ETTH1} & \ph{SRC_TF_KEEP_96_ETTH2} & \ph{SRC_TF_KEEP_96_ETTM1} & \ph{SRC_TF_KEEP_96_ETTM2} & \ph{SRC_TF_KEEP_96_ELEC} & \ph{SRC_TF_KEEP_96_EXCH} & \ph{SRC_TF_KEEP_96_TRAF} & \ph{SRC_TF_KEEP_96_WEA} & \ph{SRC_TF_KEEP_96_MACRO} \\
     Best Fixed & \ph{SRC_TF_BF_96_ETTH1} & \ph{SRC_TF_BF_96_ETTH2} & \ph{SRC_TF_BF_96_ETTM1} & \ph{SRC_TF_BF_96_ETTM2} & \ph{SRC_TF_BF_96_ELEC} & \ph{SRC_TF_BF_96_EXCH} & \ph{SRC_TF_BF_96_TRAF} & \ph{SRC_TF_BF_96_WEA} & \ph{SRC_TF_BF_96_MACRO} \\
     R2-CART & \ph{SRC_TF_R2_96_ETTH1} & \ph{SRC_TF_R2_96_ETTH2} & \ph{SRC_TF_R2_96_ETTM1} & \ph{SRC_TF_R2_96_ETTM2} & \ph{SRC_TF_R2_96_ELEC} & \ph{SRC_TF_R2_96_EXCH} & \ph{SRC_TF_R2_96_TRAF} & \ph{SRC_TF_R2_96_WEA} & \ph{SRC_TF_R2_96_MACRO} \\
+    T1 & \ph{SRC_TF_T1_96_ETTH1} & \ph{SRC_TF_T1_96_ETTH2} & \ph{SRC_TF_T1_96_ETTM1} & \ph{SRC_TF_T1_96_ETTM2} & \ph{SRC_TF_T1_96_ELEC} & \ph{SRC_TF_T1_96_EXCH} & \ph{SRC_TF_T1_96_TRAF} & \ph{SRC_TF_T1_96_WEA} & \ph{SRC_TF_T1_96_MACRO} \\
     TOI & \ph{SRC_TF_TOI_96_ETTH1} & \ph{SRC_TF_TOI_96_ETTH2} & \ph{SRC_TF_TOI_96_ETTM1} & \ph{SRC_TF_TOI_96_ETTM2} & \ph{SRC_TF_TOI_96_ELEC} & \ph{SRC_TF_TOI_96_EXCH} & \ph{SRC_TF_TOI_96_TRAF} & \ph{SRC_TF_TOI_96_WEA} & \ph{SRC_TF_TOI_96_MACRO} \\
-    TOI-VSF & \ph{SRC_TF_TOIVSF_96_ETTH1} & \ph{SRC_TF_TOIVSF_96_ETTH2} & \ph{SRC_TF_TOIVSF_96_ETTM1} & \ph{SRC_TF_TOIVSF_96_ETTM2} & \ph{SRC_TF_TOIVSF_96_ELEC} & \ph{SRC_TF_TOIVSF_96_EXCH} & \ph{SRC_TF_TOIVSF_96_TRAF} & \ph{SRC_TF_TOIVSF_96_WEA} & \ph{SRC_TF_TOIVSF_96_MACRO} \\
-    GIMCC & \ph{SRC_TF_GIMCC_96_ETTH1} & \ph{SRC_TF_GIMCC_96_ETTH2} & \ph{SRC_TF_GIMCC_96_ETTM1} & \ph{SRC_TF_GIMCC_96_ETTM2} & \ph{SRC_TF_GIMCC_96_ELEC} & \ph{SRC_TF_GIMCC_96_EXCH} & \ph{SRC_TF_GIMCC_96_TRAF} & \ph{SRC_TF_GIMCC_96_WEA} & \ph{SRC_TF_GIMCC_96_MACRO} \\
+    TATO & \ph{SRC_TF_TATO_96_ETTH1} & \ph{SRC_TF_TATO_96_ETTH2} & \ph{SRC_TF_TATO_96_ETTM1} & \ph{SRC_TF_TATO_96_ETTM2} & \ph{SRC_TF_TATO_96_ELEC} & \ph{SRC_TF_TATO_96_EXCH} & \ph{SRC_TF_TATO_96_TRAF} & \ph{SRC_TF_TATO_96_WEA} & \ph{SRC_TF_TATO_96_MACRO} \\
     SRDI & \ph{SRC_TF_SRDI_96_ETTH1} & \ph{SRC_TF_SRDI_96_ETTH2} & \ph{SRC_TF_SRDI_96_ETTM1} & \ph{SRC_TF_SRDI_96_ETTM2} & \ph{SRC_TF_SRDI_96_ELEC} & \ph{SRC_TF_SRDI_96_EXCH} & \ph{SRC_TF_SRDI_96_TRAF} & \ph{SRC_TF_SRDI_96_WEA} & \ph{SRC_TF_SRDI_96_MACRO} \\
-    ChannelTokenFormer & \ph{SRC_TF_CTF_96_ETTH1} & \ph{SRC_TF_CTF_96_ETTH2} & \ph{SRC_TF_CTF_96_ETTM1} & \ph{SRC_TF_CTF_96_ETTM2} & \ph{SRC_TF_CTF_96_ELEC} & \ph{SRC_TF_CTF_96_EXCH} & \ph{SRC_TF_CTF_96_TRAF} & \ph{SRC_TF_CTF_96_WEA} & \ph{SRC_TF_CTF_96_MACRO} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{SRC_TF_OURS_96_ETTH1} & \ph{SRC_TF_OURS_96_ETTH2} & \ph{SRC_TF_OURS_96_ETTM1} & \ph{SRC_TF_OURS_96_ETTM2} & \ph{SRC_TF_OURS_96_ELEC} & \ph{SRC_TF_OURS_96_EXCH} & \ph{SRC_TF_OURS_96_TRAF} & \ph{SRC_TF_OURS_96_WEA} & \ph{SRC_TF_OURS_96_MACRO} \\
     \midrule
@@ -1245,11 +1315,10 @@ are not averaged across sources.
     Native KEEP & \ph{SRC_TF_KEEP_192_ETTH1} & \ph{SRC_TF_KEEP_192_ETTH2} & \ph{SRC_TF_KEEP_192_ETTM1} & \ph{SRC_TF_KEEP_192_ETTM2} & \ph{SRC_TF_KEEP_192_ELEC} & \ph{SRC_TF_KEEP_192_EXCH} & \ph{SRC_TF_KEEP_192_TRAF} & \ph{SRC_TF_KEEP_192_WEA} & \ph{SRC_TF_KEEP_192_MACRO} \\
     Best Fixed & \ph{SRC_TF_BF_192_ETTH1} & \ph{SRC_TF_BF_192_ETTH2} & \ph{SRC_TF_BF_192_ETTM1} & \ph{SRC_TF_BF_192_ETTM2} & \ph{SRC_TF_BF_192_ELEC} & \ph{SRC_TF_BF_192_EXCH} & \ph{SRC_TF_BF_192_TRAF} & \ph{SRC_TF_BF_192_WEA} & \ph{SRC_TF_BF_192_MACRO} \\
     R2-CART & \ph{SRC_TF_R2_192_ETTH1} & \ph{SRC_TF_R2_192_ETTH2} & \ph{SRC_TF_R2_192_ETTM1} & \ph{SRC_TF_R2_192_ETTM2} & \ph{SRC_TF_R2_192_ELEC} & \ph{SRC_TF_R2_192_EXCH} & \ph{SRC_TF_R2_192_TRAF} & \ph{SRC_TF_R2_192_WEA} & \ph{SRC_TF_R2_192_MACRO} \\
+    T1 & \ph{SRC_TF_T1_192_ETTH1} & \ph{SRC_TF_T1_192_ETTH2} & \ph{SRC_TF_T1_192_ETTM1} & \ph{SRC_TF_T1_192_ETTM2} & \ph{SRC_TF_T1_192_ELEC} & \ph{SRC_TF_T1_192_EXCH} & \ph{SRC_TF_T1_192_TRAF} & \ph{SRC_TF_T1_192_WEA} & \ph{SRC_TF_T1_192_MACRO} \\
     TOI & \ph{SRC_TF_TOI_192_ETTH1} & \ph{SRC_TF_TOI_192_ETTH2} & \ph{SRC_TF_TOI_192_ETTM1} & \ph{SRC_TF_TOI_192_ETTM2} & \ph{SRC_TF_TOI_192_ELEC} & \ph{SRC_TF_TOI_192_EXCH} & \ph{SRC_TF_TOI_192_TRAF} & \ph{SRC_TF_TOI_192_WEA} & \ph{SRC_TF_TOI_192_MACRO} \\
-    TOI-VSF & \ph{SRC_TF_TOIVSF_192_ETTH1} & \ph{SRC_TF_TOIVSF_192_ETTH2} & \ph{SRC_TF_TOIVSF_192_ETTM1} & \ph{SRC_TF_TOIVSF_192_ETTM2} & \ph{SRC_TF_TOIVSF_192_ELEC} & \ph{SRC_TF_TOIVSF_192_EXCH} & \ph{SRC_TF_TOIVSF_192_TRAF} & \ph{SRC_TF_TOIVSF_192_WEA} & \ph{SRC_TF_TOIVSF_192_MACRO} \\
-    GIMCC & \ph{SRC_TF_GIMCC_192_ETTH1} & \ph{SRC_TF_GIMCC_192_ETTH2} & \ph{SRC_TF_GIMCC_192_ETTM1} & \ph{SRC_TF_GIMCC_192_ETTM2} & \ph{SRC_TF_GIMCC_192_ELEC} & \ph{SRC_TF_GIMCC_192_EXCH} & \ph{SRC_TF_GIMCC_192_TRAF} & \ph{SRC_TF_GIMCC_192_WEA} & \ph{SRC_TF_GIMCC_192_MACRO} \\
+    TATO & \ph{SRC_TF_TATO_192_ETTH1} & \ph{SRC_TF_TATO_192_ETTH2} & \ph{SRC_TF_TATO_192_ETTM1} & \ph{SRC_TF_TATO_192_ETTM2} & \ph{SRC_TF_TATO_192_ELEC} & \ph{SRC_TF_TATO_192_EXCH} & \ph{SRC_TF_TATO_192_TRAF} & \ph{SRC_TF_TATO_192_WEA} & \ph{SRC_TF_TATO_192_MACRO} \\
     SRDI & \ph{SRC_TF_SRDI_192_ETTH1} & \ph{SRC_TF_SRDI_192_ETTH2} & \ph{SRC_TF_SRDI_192_ETTM1} & \ph{SRC_TF_SRDI_192_ETTM2} & \ph{SRC_TF_SRDI_192_ELEC} & \ph{SRC_TF_SRDI_192_EXCH} & \ph{SRC_TF_SRDI_192_TRAF} & \ph{SRC_TF_SRDI_192_WEA} & \ph{SRC_TF_SRDI_192_MACRO} \\
-    ChannelTokenFormer & \ph{SRC_TF_CTF_192_ETTH1} & \ph{SRC_TF_CTF_192_ETTH2} & \ph{SRC_TF_CTF_192_ETTM1} & \ph{SRC_TF_CTF_192_ETTM2} & \ph{SRC_TF_CTF_192_ELEC} & \ph{SRC_TF_CTF_192_EXCH} & \ph{SRC_TF_CTF_192_TRAF} & \ph{SRC_TF_CTF_192_WEA} & \ph{SRC_TF_CTF_192_MACRO} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{SRC_TF_OURS_192_ETTH1} & \ph{SRC_TF_OURS_192_ETTH2} & \ph{SRC_TF_OURS_192_ETTM1} & \ph{SRC_TF_OURS_192_ETTM2} & \ph{SRC_TF_OURS_192_ELEC} & \ph{SRC_TF_OURS_192_EXCH} & \ph{SRC_TF_OURS_192_TRAF} & \ph{SRC_TF_OURS_192_WEA} & \ph{SRC_TF_OURS_192_MACRO} \\
     \midrule
@@ -1273,11 +1342,10 @@ are not averaged across sources.
     Native KEEP & \ph{SRC_CH2_KEEP_96_ETTH1} & \ph{SRC_CH2_KEEP_96_ETTH2} & \ph{SRC_CH2_KEEP_96_ETTM1} & \ph{SRC_CH2_KEEP_96_ETTM2} & \ph{SRC_CH2_KEEP_96_ELEC} & \ph{SRC_CH2_KEEP_96_EXCH} & \ph{SRC_CH2_KEEP_96_TRAF} & \ph{SRC_CH2_KEEP_96_WEA} & \ph{SRC_CH2_KEEP_96_MACRO} \\
     Best Fixed & \ph{SRC_CH2_BF_96_ETTH1} & \ph{SRC_CH2_BF_96_ETTH2} & \ph{SRC_CH2_BF_96_ETTM1} & \ph{SRC_CH2_BF_96_ETTM2} & \ph{SRC_CH2_BF_96_ELEC} & \ph{SRC_CH2_BF_96_EXCH} & \ph{SRC_CH2_BF_96_TRAF} & \ph{SRC_CH2_BF_96_WEA} & \ph{SRC_CH2_BF_96_MACRO} \\
     R2-CART & \ph{SRC_CH2_R2_96_ETTH1} & \ph{SRC_CH2_R2_96_ETTH2} & \ph{SRC_CH2_R2_96_ETTM1} & \ph{SRC_CH2_R2_96_ETTM2} & \ph{SRC_CH2_R2_96_ELEC} & \ph{SRC_CH2_R2_96_EXCH} & \ph{SRC_CH2_R2_96_TRAF} & \ph{SRC_CH2_R2_96_WEA} & \ph{SRC_CH2_R2_96_MACRO} \\
+    T1 & \ph{SRC_CH2_T1_96_ETTH1} & \ph{SRC_CH2_T1_96_ETTH2} & \ph{SRC_CH2_T1_96_ETTM1} & \ph{SRC_CH2_T1_96_ETTM2} & \ph{SRC_CH2_T1_96_ELEC} & \ph{SRC_CH2_T1_96_EXCH} & \ph{SRC_CH2_T1_96_TRAF} & \ph{SRC_CH2_T1_96_WEA} & \ph{SRC_CH2_T1_96_MACRO} \\
     TOI & \ph{SRC_CH2_TOI_96_ETTH1} & \ph{SRC_CH2_TOI_96_ETTH2} & \ph{SRC_CH2_TOI_96_ETTM1} & \ph{SRC_CH2_TOI_96_ETTM2} & \ph{SRC_CH2_TOI_96_ELEC} & \ph{SRC_CH2_TOI_96_EXCH} & \ph{SRC_CH2_TOI_96_TRAF} & \ph{SRC_CH2_TOI_96_WEA} & \ph{SRC_CH2_TOI_96_MACRO} \\
-    TOI-VSF & \ph{SRC_CH2_TOIVSF_96_ETTH1} & \ph{SRC_CH2_TOIVSF_96_ETTH2} & \ph{SRC_CH2_TOIVSF_96_ETTM1} & \ph{SRC_CH2_TOIVSF_96_ETTM2} & \ph{SRC_CH2_TOIVSF_96_ELEC} & \ph{SRC_CH2_TOIVSF_96_EXCH} & \ph{SRC_CH2_TOIVSF_96_TRAF} & \ph{SRC_CH2_TOIVSF_96_WEA} & \ph{SRC_CH2_TOIVSF_96_MACRO} \\
-    GIMCC & \ph{SRC_CH2_GIMCC_96_ETTH1} & \ph{SRC_CH2_GIMCC_96_ETTH2} & \ph{SRC_CH2_GIMCC_96_ETTM1} & \ph{SRC_CH2_GIMCC_96_ETTM2} & \ph{SRC_CH2_GIMCC_96_ELEC} & \ph{SRC_CH2_GIMCC_96_EXCH} & \ph{SRC_CH2_GIMCC_96_TRAF} & \ph{SRC_CH2_GIMCC_96_WEA} & \ph{SRC_CH2_GIMCC_96_MACRO} \\
+    TATO & \ph{SRC_CH2_TATO_96_ETTH1} & \ph{SRC_CH2_TATO_96_ETTH2} & \ph{SRC_CH2_TATO_96_ETTM1} & \ph{SRC_CH2_TATO_96_ETTM2} & \ph{SRC_CH2_TATO_96_ELEC} & \ph{SRC_CH2_TATO_96_EXCH} & \ph{SRC_CH2_TATO_96_TRAF} & \ph{SRC_CH2_TATO_96_WEA} & \ph{SRC_CH2_TATO_96_MACRO} \\
     SRDI & \ph{SRC_CH2_SRDI_96_ETTH1} & \ph{SRC_CH2_SRDI_96_ETTH2} & \ph{SRC_CH2_SRDI_96_ETTM1} & \ph{SRC_CH2_SRDI_96_ETTM2} & \ph{SRC_CH2_SRDI_96_ELEC} & \ph{SRC_CH2_SRDI_96_EXCH} & \ph{SRC_CH2_SRDI_96_TRAF} & \ph{SRC_CH2_SRDI_96_WEA} & \ph{SRC_CH2_SRDI_96_MACRO} \\
-    ChannelTokenFormer & \ph{SRC_CH2_CTF_96_ETTH1} & \ph{SRC_CH2_CTF_96_ETTH2} & \ph{SRC_CH2_CTF_96_ETTM1} & \ph{SRC_CH2_CTF_96_ETTM2} & \ph{SRC_CH2_CTF_96_ELEC} & \ph{SRC_CH2_CTF_96_EXCH} & \ph{SRC_CH2_CTF_96_TRAF} & \ph{SRC_CH2_CTF_96_WEA} & \ph{SRC_CH2_CTF_96_MACRO} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{SRC_CH2_OURS_96_ETTH1} & \ph{SRC_CH2_OURS_96_ETTH2} & \ph{SRC_CH2_OURS_96_ETTM1} & \ph{SRC_CH2_OURS_96_ETTM2} & \ph{SRC_CH2_OURS_96_ELEC} & \ph{SRC_CH2_OURS_96_EXCH} & \ph{SRC_CH2_OURS_96_TRAF} & \ph{SRC_CH2_OURS_96_WEA} & \ph{SRC_CH2_OURS_96_MACRO} \\
     \midrule
@@ -1301,11 +1369,10 @@ are not averaged across sources.
     Native KEEP & \ph{SRC_CH2_KEEP_192_ETTH1} & \ph{SRC_CH2_KEEP_192_ETTH2} & \ph{SRC_CH2_KEEP_192_ETTM1} & \ph{SRC_CH2_KEEP_192_ETTM2} & \ph{SRC_CH2_KEEP_192_ELEC} & \ph{SRC_CH2_KEEP_192_EXCH} & \ph{SRC_CH2_KEEP_192_TRAF} & \ph{SRC_CH2_KEEP_192_WEA} & \ph{SRC_CH2_KEEP_192_MACRO} \\
     Best Fixed & \ph{SRC_CH2_BF_192_ETTH1} & \ph{SRC_CH2_BF_192_ETTH2} & \ph{SRC_CH2_BF_192_ETTM1} & \ph{SRC_CH2_BF_192_ETTM2} & \ph{SRC_CH2_BF_192_ELEC} & \ph{SRC_CH2_BF_192_EXCH} & \ph{SRC_CH2_BF_192_TRAF} & \ph{SRC_CH2_BF_192_WEA} & \ph{SRC_CH2_BF_192_MACRO} \\
     R2-CART & \ph{SRC_CH2_R2_192_ETTH1} & \ph{SRC_CH2_R2_192_ETTH2} & \ph{SRC_CH2_R2_192_ETTM1} & \ph{SRC_CH2_R2_192_ETTM2} & \ph{SRC_CH2_R2_192_ELEC} & \ph{SRC_CH2_R2_192_EXCH} & \ph{SRC_CH2_R2_192_TRAF} & \ph{SRC_CH2_R2_192_WEA} & \ph{SRC_CH2_R2_192_MACRO} \\
+    T1 & \ph{SRC_CH2_T1_192_ETTH1} & \ph{SRC_CH2_T1_192_ETTH2} & \ph{SRC_CH2_T1_192_ETTM1} & \ph{SRC_CH2_T1_192_ETTM2} & \ph{SRC_CH2_T1_192_ELEC} & \ph{SRC_CH2_T1_192_EXCH} & \ph{SRC_CH2_T1_192_TRAF} & \ph{SRC_CH2_T1_192_WEA} & \ph{SRC_CH2_T1_192_MACRO} \\
     TOI & \ph{SRC_CH2_TOI_192_ETTH1} & \ph{SRC_CH2_TOI_192_ETTH2} & \ph{SRC_CH2_TOI_192_ETTM1} & \ph{SRC_CH2_TOI_192_ETTM2} & \ph{SRC_CH2_TOI_192_ELEC} & \ph{SRC_CH2_TOI_192_EXCH} & \ph{SRC_CH2_TOI_192_TRAF} & \ph{SRC_CH2_TOI_192_WEA} & \ph{SRC_CH2_TOI_192_MACRO} \\
-    TOI-VSF & \ph{SRC_CH2_TOIVSF_192_ETTH1} & \ph{SRC_CH2_TOIVSF_192_ETTH2} & \ph{SRC_CH2_TOIVSF_192_ETTM1} & \ph{SRC_CH2_TOIVSF_192_ETTM2} & \ph{SRC_CH2_TOIVSF_192_ELEC} & \ph{SRC_CH2_TOIVSF_192_EXCH} & \ph{SRC_CH2_TOIVSF_192_TRAF} & \ph{SRC_CH2_TOIVSF_192_WEA} & \ph{SRC_CH2_TOIVSF_192_MACRO} \\
-    GIMCC & \ph{SRC_CH2_GIMCC_192_ETTH1} & \ph{SRC_CH2_GIMCC_192_ETTH2} & \ph{SRC_CH2_GIMCC_192_ETTM1} & \ph{SRC_CH2_GIMCC_192_ETTM2} & \ph{SRC_CH2_GIMCC_192_ELEC} & \ph{SRC_CH2_GIMCC_192_EXCH} & \ph{SRC_CH2_GIMCC_192_TRAF} & \ph{SRC_CH2_GIMCC_192_WEA} & \ph{SRC_CH2_GIMCC_192_MACRO} \\
+    TATO & \ph{SRC_CH2_TATO_192_ETTH1} & \ph{SRC_CH2_TATO_192_ETTH2} & \ph{SRC_CH2_TATO_192_ETTM1} & \ph{SRC_CH2_TATO_192_ETTM2} & \ph{SRC_CH2_TATO_192_ELEC} & \ph{SRC_CH2_TATO_192_EXCH} & \ph{SRC_CH2_TATO_192_TRAF} & \ph{SRC_CH2_TATO_192_WEA} & \ph{SRC_CH2_TATO_192_MACRO} \\
     SRDI & \ph{SRC_CH2_SRDI_192_ETTH1} & \ph{SRC_CH2_SRDI_192_ETTH2} & \ph{SRC_CH2_SRDI_192_ETTM1} & \ph{SRC_CH2_SRDI_192_ETTM2} & \ph{SRC_CH2_SRDI_192_ELEC} & \ph{SRC_CH2_SRDI_192_EXCH} & \ph{SRC_CH2_SRDI_192_TRAF} & \ph{SRC_CH2_SRDI_192_WEA} & \ph{SRC_CH2_SRDI_192_MACRO} \\
-    ChannelTokenFormer & \ph{SRC_CH2_CTF_192_ETTH1} & \ph{SRC_CH2_CTF_192_ETTH2} & \ph{SRC_CH2_CTF_192_ETTM1} & \ph{SRC_CH2_CTF_192_ETTM2} & \ph{SRC_CH2_CTF_192_ELEC} & \ph{SRC_CH2_CTF_192_EXCH} & \ph{SRC_CH2_CTF_192_TRAF} & \ph{SRC_CH2_CTF_192_WEA} & \ph{SRC_CH2_CTF_192_MACRO} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{SRC_CH2_OURS_192_ETTH1} & \ph{SRC_CH2_OURS_192_ETTH2} & \ph{SRC_CH2_OURS_192_ETTM1} & \ph{SRC_CH2_OURS_192_ETTM2} & \ph{SRC_CH2_OURS_192_ELEC} & \ph{SRC_CH2_OURS_192_EXCH} & \ph{SRC_CH2_OURS_192_TRAF} & \ph{SRC_CH2_OURS_192_WEA} & \ph{SRC_CH2_OURS_192_MACRO} \\
     \midrule
@@ -1367,11 +1434,10 @@ effect depends on where the boundary was drawn.
     Native KEEP        & \ph{NOOP_KEEP}    & \ph{LOWOP_KEEP}    & \ph{HIGHOP_KEEP}    & \ph{OVR_KEEP} \\
     Best Fixed         & \ph{NOOP_BF}      & \ph{LOWOP_BF}      & \ph{HIGHOP_BF}      & \ph{OVR_BF} \\
     R2-CART            & \ph{NOOP_R2}      & \ph{LOWOP_R2}      & \ph{HIGHOP_R2}      & \ph{OVR_R2} \\
+    T1                 & \ph{NOOP_T1}      & \ph{LOWOP_T1}      & \ph{HIGHOP_T1}      & \ph{OVR_T1} \\
     TOI                & \ph{NOOP_TOI}     & \ph{LOWOP_TOI}     & \ph{HIGHOP_TOI}     & \ph{OVR_TOI} \\
-    TOI-VSF            & \ph{NOOP_TOIVSF}  & \ph{LOWOP_TOIVSF}  & \ph{HIGHOP_TOIVSF}  & \ph{OVR_TOIVSF} \\
-    GIMCC              & \ph{NOOP_GIMCC}   & \ph{LOWOP_GIMCC}   & \ph{HIGHOP_GIMCC}   & \ph{OVR_GIMCC} \\
+    TATO               & \ph{NOOP_TATO}    & \ph{LOWOP_TATO}    & \ph{HIGHOP_TATO}    & \ph{OVR_TATO} \\
     SRDI               & \ph{NOOP_SRDI}    & \ph{LOWOP_SRDI}    & \ph{HIGHOP_SRDI}    & \ph{OVR_SRDI} \\
-    ChannelTokenFormer & \ph{NOOP_CTF}     & \ph{LOWOP_CTF}     & \ph{HIGHOP_CTF}     & \ph{OVR_CTF} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{NOOP_OURS} & \ph{LOWOP_OURS} & \ph{HIGHOP_OURS} & \ph{OVR_OURS} \\
     \bottomrule
@@ -1400,22 +1466,25 @@ effect depends on where the boundary was drawn.
 
 \subsubsection{Extended Comparison}
 \label{app:extended}
-VIDA~\citep{liang2025vida} is a closely related variable-subset-forecasting framework that
-reframes the problem as cross-domain knowledge transfer. It is not part of the five core
-baselines: the core set is fixed at five published methods before any result is seen, and
-VIDA's adaptation procedure targets a training regime that differs from our frozen-backbone
-contract. We therefore report it as an extended comparison rather than substituting it for a
-core baseline. Table~\ref{tab:app-vida} gives the comparison on the main protocol.
+Table~\ref{tab:app-extended} reports the two remaining published baselines of the same type
+that are not part of the core set of Table~\ref{tab:main}. Both are variable-subset imputation
+methods, so they overlap in type with TOI and SRDI, and keeping them out of the core set keeps
+the main comparison balanced across the control types the paper argues about. They are excluded
+from every rank in the main text. TOI-VSF~\citep{hao2025toivsf} has an official implementation
+and is reported in full. GIMCC~\citep{hao2025gimcc} and VIDA~\citep{liang2025vida} have no
+public implementation, and a reimplementation would not be comparable to the numbers those
+papers report, so their rows are reported as unavailable rather than estimated.
 
-If a core baseline turns out not to admit an admissible adaptation to our protocol, we report that
-to the reader instead of replacing it silently, and any change to the core set is an explicit
-protocol revision rather than an editorial one.
+If a core baseline turns out not to admit an admissible adaptation to our protocol, we report
+that to the reader instead of replacing it silently, and any change to the core set is an
+explicit protocol revision rather than an editorial one.
 
 \begin{table}[h]
-  \caption{Extended comparison on the main protocol ($10\%$ severity, source-macro MASE,
-  lower is better). VIDA is reported for completeness and is excluded from the core average
-  ranks of Table~\ref{tab:main}.}
-  \label{tab:app-vida}
+  \caption{Extended comparison on the main protocol, $10\%$ severity, source-macro MASE, lower
+  is better. Both methods are excluded from the core average ranks of Table~\ref{tab:main}.
+  A GIMCC cell is reported only if a comparable implementation is available, and is otherwise
+  reported as unavailable rather than estimated.}
+  \label{tab:app-extended}
   \centering
   \small
   \setlength{\tabcolsep}{4pt}
@@ -1423,8 +1492,8 @@ protocol revision rather than an editorial one.
     \toprule
     Method & Bolt $\downarrow$ & TimesFM $\downarrow$ & Chronos-2 $\downarrow$ & Overall $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    VIDA           & \ph{VIDA_BOLT} & \ph{VIDA_TF} & \ph{VIDA_CH2} & \ph{VIDA_OVR} & \ph{VIDA_RANK} \\
-    \introact{}    & \ph{OURS_BOLT} & \ph{OURS_TF} & \ph{OURS_CH2} & \ph{OURS_OVR} & \ph{OURS_RANK} \\
+    TOI-VSF        & \ph{TOIVSF_BOLT} & \ph{TOIVSF_TF} & \ph{TOIVSF_CH2} & \ph{TOIVSF_OVR} & \ph{TOIVSF_RANK} \\
+    GIMCC          & \ph{GIMCC_BOLT}  & \ph{GIMCC_TF}  & \ph{GIMCC_CH2}  & \ph{GIMCC_OVR}  & \ph{GIMCC_RANK} \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1451,11 +1520,10 @@ main table.
     \textsc{Native Keep} & \ph{P1_KEEP} & \ph{P2_KEEP} & \ph{P3_KEEP} & \ph{P4_KEEP} & \ph{PR_KEEP} \\
     \textsc{Best Fixed}  & \ph{P1_BF}   & \ph{P2_BF}   & \ph{P3_BF}   & \ph{P4_BF}   & \ph{PR_BF} \\
     R2-CART              & \ph{P1_R2}   & \ph{P2_R2}   & \ph{P3_R2}   & \ph{P4_R2}   & \ph{PR_R2} \\
+    T1 & \ph{P1_T1} & \ph{P2_T1} & \ph{P3_T1} & \ph{P4_T1} & \ph{PR_T1} \\
     TOI                   & \ph{P1_TOI}& \ph{P2_TOI}& \ph{P3_TOI}& \ph{P4_TOI}& \ph{PR_TOI} \\
-    TOI-VSF               & \ph{P1_TOIVSF} & \ph{P2_TOIVSF} & \ph{P3_TOIVSF} & \ph{P4_TOIVSF} & \ph{PR_TOIVSF} \\
-    GIMCC                 & \ph{P1_GIMCC}  & \ph{P2_GIMCC}  & \ph{P3_GIMCC}  & \ph{P4_GIMCC}  & \ph{PR_GIMCC} \\
+    TATO & \ph{P1_TATO} & \ph{P2_TATO} & \ph{P3_TATO} & \ph{P4_TATO} & \ph{PR_TATO} \\
     SRDI                  & \ph{P1_SRDI}   & \ph{P2_SRDI}   & \ph{P3_SRDI}   & \ph{P4_SRDI}   & \ph{PR_SRDI} \\
-    ChannelTokenFormer    & \ph{P1_CTF} & \ph{P2_CTF} & \ph{P3_CTF} & \ph{P4_CTF} & \ph{PR_CTF} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{P1_OURS} & \ph{P2_OURS} & \ph{P3_OURS} & \ph{P4_OURS} & \ph{PR_OURS} \\
     \bottomrule
@@ -1468,16 +1536,17 @@ main table.
 \subsubsection{Severity Tables}
 \label{app:severity}
 Tables~\ref{tab:app-sev10}--\ref{tab:app-sev50} give the full severity sweep for the reduced
-type-complete set. No method is retuned between severities. \introact{} reuses the $k$ and
-$\beta$ frozen on the gate, and every baseline reuses the models and rules fixed on TRAIN.
-The $10\%$ column is the main-text condition. The $30\%$ and $50\%$ columns test whether one
-frozen configuration holds across the registered severity grid, and they are not a
-generalisation test to unseen severity, because the replay bank already samples from the same
-three levels.
+but type-complete set, and all three tables use the same seven methods. No method is retuned
+between severities. \introact{} reuses the $k$ and $\beta$ frozen on the gate, and every
+baseline reuses the models and rules fixed on TRAIN. The $10\%$ column is the main-text
+condition. The $30\%$ and $50\%$ columns test whether one frozen configuration holds across
+the registered severity grid, and they are not a generalisation test to unseen severity,
+because the replay bank already samples from the same three levels. SRDI is the one published
+method outside this reduced set, and it is compared at $10\%$ only, in Table~\ref{tab:main} and
+Appendix~\ref{app:extended}.
 
 \begin{table}[h]
-  \caption{Complete results at $10\%$ severity, all four metrics, source-macro averaged.
-  Ranks are over deployable methods only and exclude the oracle row.}
+  \caption{Complete results at $10\%$ severity for the reduced but type-complete set, all four metrics, source-macro averaged. Ranks are over deployable methods only and exclude the diagnostic row. This is the same seven-method set that Table~\ref{tab:robust} summarises, and the two tables are computed from the same records.}
   \label{tab:app-sev10}
   \centering
   \small
@@ -1487,13 +1556,11 @@ three levels.
     Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
     \textsc{Native Keep} & \ph{SEV10-KEEP-MASE} & \ph{SEV10-KEEP-MSE} & \ph{SEV10-KEEP-MAE} & \ph{SEV10-KEEP-RMSE} & \ph{SEV10-KEEP-RANK} \\
-    \textsc{Best Fixed}  & \ph{SEV10-BF-MASE}   & \ph{SEV10-BF-MSE}   & \ph{SEV10-BF-MAE}   & \ph{SEV10-BF-RMSE}   & \ph{SEV10-BF-RANK} \\
-    R2-CART              & \ph{SEV10-R2-MASE}   & \ph{SEV10-R2-MSE}   & \ph{SEV10-R2-MAE}   & \ph{SEV10-R2-RMSE}   & \ph{SEV10-R2-RANK} \\
-    TOI                   & \ph{SEV10_TOI_MASE}& \ph{SEV10_TOI_MSE}& \ph{SEV10_TOI_MAE}& \ph{SEV10_TOI_RMSE}& \ph{SEV10_TOI_RANK} \\
-    TOI-VSF               & \ph{SEV10_TOIVSF_MASE} & \ph{SEV10_TOIVSF_MSE} & \ph{SEV10_TOIVSF_MAE} & \ph{SEV10_TOIVSF_RMSE} & \ph{SEV10_TOIVSF_RANK} \\
-    GIMCC                 & \ph{SEV10_GIMCC_MASE}  & \ph{SEV10_GIMCC_MSE}  & \ph{SEV10_GIMCC_MAE}  & \ph{SEV10_GIMCC_RMSE}  & \ph{SEV10_GIMCC_RANK} \\
-    SRDI                  & \ph{SEV10_SRDI_MASE}   & \ph{SEV10_SRDI_MSE}   & \ph{SEV10_SRDI_MAE}   & \ph{SEV10_SRDI_RMSE}   & \ph{SEV10_SRDI_RANK} \\
-    ChannelTokenFormer    & \ph{SEV10_CTF_MASE} & \ph{SEV10_CTF_MSE} & \ph{SEV10_CTF_MAE} & \ph{SEV10_CTF_RMSE} & \ph{SEV10_CTF_RANK} \\
+    \textsc{Best Fixed} & \ph{SEV10-BF-MASE} & \ph{SEV10-BF-MSE} & \ph{SEV10-BF-MAE} & \ph{SEV10-BF-RMSE} & \ph{SEV10-BF-RANK} \\
+    R2-CART & \ph{SEV10-R2-MASE} & \ph{SEV10-R2-MSE} & \ph{SEV10-R2-MAE} & \ph{SEV10-R2-RMSE} & \ph{SEV10-R2-RANK} \\
+    T1 & \ph{SEV10-T1-MASE} & \ph{SEV10-T1-MSE} & \ph{SEV10-T1-MAE} & \ph{SEV10-T1-RMSE} & \ph{SEV10-T1-RANK} \\
+    TOI & \ph{SEV10-TOI-MASE} & \ph{SEV10-TOI-MSE} & \ph{SEV10-TOI-MAE} & \ph{SEV10-TOI-RMSE} & \ph{SEV10-TOI-RANK} \\
+    TATO & \ph{SEV10-TATO-MASE} & \ph{SEV10-TATO-MSE} & \ph{SEV10-TATO-MAE} & \ph{SEV10-TATO-RMSE} & \ph{SEV10-TATO-RANK} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{SEV10-OURS-MASE} & \ph{SEV10-OURS-MSE} & \ph{SEV10-OURS-MAE} & \ph{SEV10-OURS-RMSE} & \ph{SEV10-OURS-RANK} \\
     \midrule
@@ -1503,8 +1570,7 @@ three levels.
 \end{table}
 
 \begin{table}[h]
-  \caption{Complete results at $30\%$ severity. Identical frozen configuration as the
-  $10\%$ table and nothing is retuned.}
+  \caption{Complete results at $30\%$ severity for the same seven-method set, all four metrics, source-macro averaged. The configuration is identical to the $10\%$ table and nothing is retuned.}
   \label{tab:app-sev30}
   \centering
   \small
@@ -1514,13 +1580,11 @@ three levels.
     Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
     \textsc{Native Keep} & \ph{SEV30-KEEP-MASE} & \ph{SEV30-KEEP-MSE} & \ph{SEV30-KEEP-MAE} & \ph{SEV30-KEEP-RMSE} & \ph{SEV30-KEEP-RANK} \\
-    \textsc{Best Fixed}  & \ph{SEV30-BF-MASE}   & \ph{SEV30-BF-MSE}   & \ph{SEV30-BF-MAE}   & \ph{SEV30-BF-RMSE}   & \ph{SEV30-BF-RANK} \\
-    R2-CART              & \ph{SEV30-R2-MASE}   & \ph{SEV30-R2-MSE}   & \ph{SEV30-R2-MAE}   & \ph{SEV30-R2-RMSE}   & \ph{SEV30-R2-RANK} \\
-    TOI                   & \ph{SEV30_TOI_MASE}& \ph{SEV30_TOI_MSE}& \ph{SEV30_TOI_MAE}& \ph{SEV30_TOI_RMSE}& \ph{SEV30_TOI_RANK} \\
-    TOI-VSF               & \ph{SEV30_TOIVSF_MASE} & \ph{SEV30_TOIVSF_MSE} & \ph{SEV30_TOIVSF_MAE} & \ph{SEV30_TOIVSF_RMSE} & \ph{SEV30_TOIVSF_RANK} \\
-    GIMCC                 & \ph{SEV30_GIMCC_MASE}  & \ph{SEV30_GIMCC_MSE}  & \ph{SEV30_GIMCC_MAE}  & \ph{SEV30_GIMCC_RMSE}  & \ph{SEV30_GIMCC_RANK} \\
-    SRDI                  & \ph{SEV30_SRDI_MASE}   & \ph{SEV30_SRDI_MSE}   & \ph{SEV30_SRDI_MAE}   & \ph{SEV30_SRDI_RMSE}   & \ph{SEV30_SRDI_RANK} \\
-    ChannelTokenFormer    & \ph{SEV30_CTF_MASE} & \ph{SEV30_CTF_MSE} & \ph{SEV30_CTF_MAE} & \ph{SEV30_CTF_RMSE} & \ph{SEV30_CTF_RANK} \\
+    \textsc{Best Fixed} & \ph{SEV30-BF-MASE} & \ph{SEV30-BF-MSE} & \ph{SEV30-BF-MAE} & \ph{SEV30-BF-RMSE} & \ph{SEV30-BF-RANK} \\
+    R2-CART & \ph{SEV30-R2-MASE} & \ph{SEV30-R2-MSE} & \ph{SEV30-R2-MAE} & \ph{SEV30-R2-RMSE} & \ph{SEV30-R2-RANK} \\
+    T1 & \ph{SEV30-T1-MASE} & \ph{SEV30-T1-MSE} & \ph{SEV30-T1-MAE} & \ph{SEV30-T1-RMSE} & \ph{SEV30-T1-RANK} \\
+    TOI & \ph{SEV30-TOI-MASE} & \ph{SEV30-TOI-MSE} & \ph{SEV30-TOI-MAE} & \ph{SEV30-TOI-RMSE} & \ph{SEV30-TOI-RANK} \\
+    TATO & \ph{SEV30-TATO-MASE} & \ph{SEV30-TATO-MSE} & \ph{SEV30-TATO-MAE} & \ph{SEV30-TATO-RMSE} & \ph{SEV30-TATO-RANK} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{SEV30-OURS-MASE} & \ph{SEV30-OURS-MSE} & \ph{SEV30-OURS-MAE} & \ph{SEV30-OURS-RMSE} & \ph{SEV30-OURS-RANK} \\
     \bottomrule
@@ -1528,9 +1592,7 @@ three levels.
 \end{table}
 
 \begin{table}[h]
-  \caption{Complete results at $50\%$ severity. This level is inside the registered grid that
-  the replay bank samples from, so the row shows within-grid robustness of one frozen
-  configuration and not behaviour on unseen severity.}
+  \caption{Complete results at $50\%$ severity for the same seven-method set. This level is inside the registered grid that the replay bank samples from, so the rows show within-grid robustness of one frozen configuration and not behaviour on unseen severity.}
   \label{tab:app-sev50}
   \centering
   \small
@@ -1540,13 +1602,11 @@ three levels.
     Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
     \textsc{Native Keep} & \ph{SEV50-KEEP-MASE} & \ph{SEV50-KEEP-MSE} & \ph{SEV50-KEEP-MAE} & \ph{SEV50-KEEP-RMSE} & \ph{SEV50-KEEP-RANK} \\
-    \textsc{Best Fixed}  & \ph{SEV50-BF-MASE}   & \ph{SEV50-BF-MSE}   & \ph{SEV50-BF-MAE}   & \ph{SEV50-BF-RMSE}   & \ph{SEV50-BF-RANK} \\
-    R2-CART              & \ph{SEV50-R2-MASE}   & \ph{SEV50-R2-MSE}   & \ph{SEV50-R2-MAE}   & \ph{SEV50-R2-RMSE}   & \ph{SEV50-R2-RANK} \\
-    TOI                   & \ph{SEV50_TOI_MASE}& \ph{SEV50_TOI_MSE}& \ph{SEV50_TOI_MAE}& \ph{SEV50_TOI_RMSE}& \ph{SEV50_TOI_RANK} \\
-    TOI-VSF               & \ph{SEV50_TOIVSF_MASE} & \ph{SEV50_TOIVSF_MSE} & \ph{SEV50_TOIVSF_MAE} & \ph{SEV50_TOIVSF_RMSE} & \ph{SEV50_TOIVSF_RANK} \\
-    GIMCC                 & \ph{SEV50_GIMCC_MASE}  & \ph{SEV50_GIMCC_MSE}  & \ph{SEV50_GIMCC_MAE}  & \ph{SEV50_GIMCC_RMSE}  & \ph{SEV50_GIMCC_RANK} \\
-    SRDI                  & \ph{SEV50_SRDI_MASE}   & \ph{SEV50_SRDI_MSE}   & \ph{SEV50_SRDI_MAE}   & \ph{SEV50_SRDI_RMSE}   & \ph{SEV50_SRDI_RANK} \\
-    ChannelTokenFormer    & \ph{SEV50_CTF_MASE} & \ph{SEV50_CTF_MSE} & \ph{SEV50_CTF_MAE} & \ph{SEV50_CTF_RMSE} & \ph{SEV50_CTF_RANK} \\
+    \textsc{Best Fixed} & \ph{SEV50-BF-MASE} & \ph{SEV50-BF-MSE} & \ph{SEV50-BF-MAE} & \ph{SEV50-BF-RMSE} & \ph{SEV50-BF-RANK} \\
+    R2-CART & \ph{SEV50-R2-MASE} & \ph{SEV50-R2-MSE} & \ph{SEV50-R2-MAE} & \ph{SEV50-R2-RMSE} & \ph{SEV50-R2-RANK} \\
+    T1 & \ph{SEV50-T1-MASE} & \ph{SEV50-T1-MSE} & \ph{SEV50-T1-MAE} & \ph{SEV50-T1-RMSE} & \ph{SEV50-T1-RANK} \\
+    TOI & \ph{SEV50-TOI-MASE} & \ph{SEV50-TOI-MSE} & \ph{SEV50-TOI-MAE} & \ph{SEV50-TOI-RMSE} & \ph{SEV50-TOI-RANK} \\
+    TATO & \ph{SEV50-TATO-MASE} & \ph{SEV50-TATO-MSE} & \ph{SEV50-TATO-MAE} & \ph{SEV50-TATO-RMSE} & \ph{SEV50-TATO-RANK} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{SEV50-OURS-MASE} & \ph{SEV50-OURS-MSE} & \ph{SEV50-OURS-MAE} & \ph{SEV50-OURS-RMSE} & \ph{SEV50-OURS-RANK} \\
     \bottomrule
@@ -1575,11 +1635,14 @@ panels can be compared directly.
 \subsubsection{Reconstruction versus Forecasting Utility}
 \label{app:recutils}
 This subsection supports \S\ref{sec:exp-exists}. Reconstruction error is only defined for
-methods that produce an explicit imputation of the hidden positions, so \textsc{Keep}, the
-transformation-based actions, and a selected intervention are not placed on a common
-reconstruction scale. The comparison is therefore restricted to the methods that emit
-reconstructed values, and the ranking analysis is performed within each parent rather than on
-a pooled sample, because parents differ in scale and in difficulty. Table~\ref{tab:app-recutils}
+methods that emit an explicit estimate of the hidden positions, so \textsc{Keep}, a
+transformation pipeline such as TATO, the selected intervention of \introact{}, and the
+external reference ChannelTokenFormer are not placed on a common reconstruction scale. The
+table is therefore restricted to the core methods that do emit reconstructed values, and the
+ranking analysis is performed within each parent rather than on a pooled sample, because
+parents differ in scale and in difficulty. A method that does not reconstruct is not ranked
+against a method that does, and \introact{} never enters this ranking because it returns a
+forecast from an executed input rather than a reconstruction. Table~\ref{tab:app-recutils}
 gives the per-method numbers. Reconstruction error uses the artificially hidden positions,
 which are known because the mask is synthetic, and forecast gain is measured against
 \textsc{Native Keep} on the same backbone. The discordant rate is the fraction of method pairs
@@ -1592,9 +1655,10 @@ forecasting improvement a reconstruction criterion would capture if it were appl
 knowledge of the missing entries. \ph{RECON_ORACLE_MASE}.
 
 \begin{table}[h]
-  \caption{Full paired reconstruction-versus-utility table. The Spearman $\rho$ row compares
-  the reconstruction ranking with the forecasting ranking within each backbone. A $\rho$
-  close to zero means the two rankings carry different information.}
+  \caption{Paired reconstruction-versus-utility table, restricted to the core methods that
+  emit an explicit reconstruction of the hidden positions. The Spearman $\rho$ row compares the
+  reconstruction ranking with the forecasting ranking within each backbone. A $\rho$ close to
+  zero means the two rankings carry different information.}
   \label{tab:app-recutils}
   \centering
   \small
@@ -1604,12 +1668,9 @@ knowledge of the missing entries. \ph{RECON_ORACLE_MASE}.
     Method & Rec.\ MSE $\downarrow$ & Rec.\ MAE $\downarrow$ & Forecast MASE $\downarrow$
            & Forecast Gain $\uparrow$ & Discordant Rate $\downarrow$ \\
     \midrule
-    TOI                & \ph{REC_TOI_MSE}    & \ph{REC_TOI_MAE}    & \ph{REC_TOI_MASE}    & \ph{REC_TOI_GAIN}    & \multirow{6}{*}{\ph{DISCORDANT_RATE}} \\
-    TOI-VSF            & \ph{REC_TOIVSF_MSE} & \ph{REC_TOIVSF_MAE} & \ph{REC_TOIVSF_MASE} & \ph{REC_TOIVSF_GAIN} & \\
-    GIMCC              & \ph{REC_GIMCC_MSE}  & \ph{REC_GIMCC_MAE}  & \ph{REC_GIMCC_MASE}  & \ph{REC_GIMCC_GAIN}  & \\
-    SRDI               & \ph{REC_SRDI_MSE}   & \ph{REC_SRDI_MAE}   & \ph{REC_SRDI_MASE}   & \ph{REC_SRDI_GAIN}   & \\
-    ChannelTokenFormer & \ph{REC_CTF_MSE}    & \ph{REC_CTF_MAE}    & \ph{REC_CTF_MASE}    & \ph{REC_CTF_GAIN}    & \\
-    \rowcolor{bestgray}\introact{} & \ph{REC_OURS_MSE} & \ph{REC_OURS_MAE} & \ph{REC_OURS_MASE} & \ph{REC_OURS_GAIN} & \\
+    T1                 & \ph{REC_T1_MSE}    & \ph{REC_T1_MAE}    & \ph{REC_T1_MASE}    & \ph{REC_T1_GAIN}    & \multirow{3}{*}{\ph{DISCORDANT_RATE}} \\
+    TOI                & \ph{REC_TOI_MSE}   & \ph{REC_TOI_MAE}   & \ph{REC_TOI_MASE}   & \ph{REC_TOI_GAIN}   & \\
+    SRDI               & \ph{REC_SRDI_MSE}  & \ph{REC_SRDI_MAE}  & \ph{REC_SRDI_MASE}  & \ph{REC_SRDI_GAIN}  & \\
     \midrule
     \multicolumn{6}{l}{\footnotesize Spearman $\rho$ between reconstruction rank and
     forecasting rank: Bolt \ph{RHO_BOLT}, TimesFM \ph{RHO_TF}, Chronos-2 \ph{RHO_CH2}} \\
@@ -1635,100 +1696,14 @@ is a calibrated probability.
 
 
 
-\section{Ablations, Replay Size, and Sensitivity}
+\section{Ablations and Stability}
 \label{app:ablations-full}
-\subsection{Historical Support Results}
-\label{app:support}
-\label{app:support-details}
-Every method is re-fitted from scratch under
-$25\%$, $50\%$, and $100\%$ of the replay-fit portion of TRAIN, using the identical split rule
-and purge of Appendix~\ref{app:splits}. Table~\ref{tab:support} collects the compact reading
-statement and Table~\ref{tab:app-support-full} reports all four metrics at each support level.
-Table~\ref{tab:app-support-cost} separates the one-off offline fitting cost from the
-per-request online cost at each level.
-
-The bank-size check in Appendix~\ref{app:replaysize} is the corresponding internal ablation: it
-subsamples the replay bank while holding the baseline training set fixed, whereas this section
-restricts the available history for every method at the same time. The two are not
-interchangeable, and a disagreement between them is informative rather than contradictory.
-
-\begin{table}[h]
-  \caption{Historical support efficiency. Every method is re-fitted under the same
-  restriction on how much of replay-fit is available. MASE is source-macro averaged and lower
-  is better. Offline cost is the one-off fitting cost of the method and is reported separately
-  from the online cost of a request.}
-  \label{tab:support}
-  \centering
-  \small
-  \setlength{\tabcolsep}{3pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
-    \toprule
-    Method & 25\% support $\downarrow$ & 50\% support $\downarrow$ & 100\% support $\downarrow$ & Offline cost $\downarrow$ \\
-    \midrule
-    TOI                & \ph{SUPPORT25_TOI}    & \ph{SUPPORT50_TOI}    & \ph{SUPPORT100_TOI}    & \ph{OFFLINE_TOI} \\
-    TOI-VSF            & \ph{SUPPORT25_TOIVSF} & \ph{SUPPORT50_TOIVSF} & \ph{SUPPORT100_TOIVSF} & \ph{OFFLINE_TOIVSF} \\
-    GIMCC              & \ph{SUPPORT25_GIMCC}  & \ph{SUPPORT50_GIMCC}  & \ph{SUPPORT100_GIMCC}  & \ph{OFFLINE_GIMCC} \\
-    SRDI               & \ph{SUPPORT25_SRDI}   & \ph{SUPPORT50_SRDI}   & \ph{SUPPORT100_SRDI}   & \ph{OFFLINE_SRDI} \\
-    ChannelTokenFormer & \ph{SUPPORT25_CTF}    & \ph{SUPPORT50_CTF}    & \ph{SUPPORT100_CTF}    & \ph{OFFLINE_CTF} \\
-    \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SUPPORT25_OURS} & \ph{SUPPORT50_OURS} & \ph{SUPPORT100_OURS} & \ph{OFFLINE_OURS} \\
-    \bottomrule
-  \end{tabular}}
-\end{table}
-
-\begin{table}[h]
-  \caption{Historical support efficiency, all four metrics, source-macro averaged. Every
-  method is re-fitted under the same restriction. Lower is better in every metric column.}
-  \label{tab:app-support-full}
-  \centering
-  \small
-  \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{llcccc}
-    \toprule
-    Method & Support & MASE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & MSE $\downarrow$ \\
-    \midrule
-    TOI                & 25\% / 50\% / 100\% & \ph{TOI_S25_MASE} & \ph{TOI_S25_MAE} & \ph{TOI_S25_RMSE} & \ph{TOI_S25_MSE} \\
-    TOI-VSF            & 25\% / 50\% / 100\% & \ph{TOIVSF_S25_MASE} & \ph{TOIVSF_S25_MAE} & \ph{TOIVSF_S25_RMSE} & \ph{TOIVSF_S25_MSE} \\
-    GIMCC              & 25\% / 50\% / 100\% & \ph{GIMCC_S25_MASE} & \ph{GIMCC_S25_MAE} & \ph{GIMCC_S25_RMSE} & \ph{GIMCC_S25_MSE} \\
-    SRDI               & 25\% / 50\% / 100\% & \ph{SRDI_S25_MASE} & \ph{SRDI_S25_MAE} & \ph{SRDI_S25_RMSE} & \ph{SRDI_S25_MSE} \\
-    ChannelTokenFormer & 25\% / 50\% / 100\% & \ph{CTF_S25_MASE} & \ph{CTF_S25_MAE} & \ph{CTF_S25_RMSE} & \ph{CTF_S25_MSE} \\
-    \introact{}        & 25\% / 50\% / 100\% & \ph{OURS_S25_MASE} & \ph{OURS_S25_MAE} & \ph{OURS_S25_RMSE} & \ph{OURS_S25_MSE} \\
-    \bottomrule
-  \end{tabular}}
-\end{table}
-
-\begin{table}[h]
-  \caption{Offline and online cost by support level. Offline cost is the one-off fitting cost, and
-  online cost is per request and excludes cold start. The two are never summed into a single
-  number, because they are paid on different schedules.}
-  \label{tab:app-support-cost}
-  \centering
-  \small
-  \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{lcccccc}
-    \toprule
-    Method & Offline 25\% & Offline 50\% & Offline 100\% & Online 25\% & Online 50\% & Online 100\% \\
-    \midrule
-    TOI                & \ph{TOI_OFF25} & \ph{TOI_OFF50} & \ph{TOI_OFF100} & \ph{TOI_ON25} & \ph{TOI_ON50} & \ph{TOI_ON100} \\
-    TOI-VSF            & \ph{TOIVSF_OFF25} & \ph{TOIVSF_OFF50} & \ph{TOIVSF_OFF100} & \ph{TOIVSF_ON25} & \ph{TOIVSF_ON50} & \ph{TOIVSF_ON100} \\
-    GIMCC              & \ph{GIMCC_OFF25} & \ph{GIMCC_OFF50} & \ph{GIMCC_OFF100} & \ph{GIMCC_ON25} & \ph{GIMCC_ON50} & \ph{GIMCC_ON100} \\
-    SRDI               & \ph{SRDI_OFF25} & \ph{SRDI_OFF50} & \ph{SRDI_OFF100} & \ph{SRDI_ON25} & \ph{SRDI_ON50} & \ph{SRDI_ON100} \\
-    ChannelTokenFormer & \ph{CTF_OFF25} & \ph{CTF_OFF50} & \ph{CTF_OFF100} & \ph{CTF_ON25} & \ph{CTF_ON50} & \ph{CTF_ON100} \\
-    \introact{}        & \ph{OURS_OFF25} & \ph{OURS_OFF50} & \ph{OURS_OFF100} & \ph{OURS_ON25} & \ph{OURS_ON50} & \ph{OURS_ON100} \\
-    \bottomrule
-  \end{tabular}}
-\end{table}
-
-
 \subsection{Ablation Details}
 \label{app:ablation-details}
 This section supports \S\ref{sec:exp-ablation}. Every variant reads the same catalog
 prediction cache, so the rows differ only in how the stored utilities are summarised and
 thresholded. Table~\ref{tab:app-ablation} reports the full outcome vector behind the compact
-Table~\ref{tab:ablation}, and Table~\ref{tab:app-ablation-stab} repeats the ablation under a
-different deterministic ordering of the replay records, so that a reader can see whether a
-variant's position depends on the order in which records were consumed. The variant
-definitions follow \S\ref{sec:exp-ablation} exactly.
+Table~\ref{tab:ablation}. The variant definitions follow \S\ref{sec:exp-ablation} exactly.
 
 \begin{table}[h]
   \caption{Ablation, full outcome vector. The Reconstruction Oracle reads the hidden values,
@@ -1753,27 +1728,6 @@ definitions follow \S\ref{sec:exp-ablation} exactly.
     Reconstruction Oracle (diagnostic) & \oracle{\ph{AF_ORACLE_MASE}} & \oracle{\ph{AF_ORACLE_MAE}} & \oracle{\ph{AF_ORACLE_RMSE}} & \oracle{\ph{AF_ORACLE_MSE}} & \oracle{\ph{AF_ORACLE_IR}} & \oracle{\ph{AF_ORACLE_CHIR}} & \oracle{\ph{AF_ORACLE_HL}} & \oracle{--} \\
     \bottomrule
   \end{tabular}}
-\end{table}
-
-\begin{table}[h]
-  \caption{Ordering stability of the ablation. The whole ablation is repeated after a
-  deterministic reshuffle of the replay records. The column reports the Spearman correlation
-  between the two rankings of the six selector variants, per backbone. A high value means the
-  variant ordering is not an artefact of record order. The Reconstruction Oracle is excluded
-  because it is not a selector variant.}
-  \label{tab:app-ablation-stab}
-  \centering
-  \small
-  \setlength{\tabcolsep}{4pt}
-  \begin{tabular}{lcc}
-    \toprule
-    Backbone & Spearman $\rho$ between orderings $\uparrow$ & Rank of the full variant \\
-    \midrule
-    Bolt      & \ph{ABL_STAB_BOLT} & \ph{ABL_RANKFULL_BOLT} \\
-    TimesFM   & \ph{ABL_STAB_TF}   & \ph{ABL_RANKFULL_TF} \\
-    Chronos-2 & \ph{ABL_STAB_CH2}  & \ph{ABL_RANKFULL_CH2} \\
-    \bottomrule
-  \end{tabular}
 \end{table}
 
 \subsection{Mask-Realisation Stability}
@@ -1823,18 +1777,19 @@ is not an additional estimate of variance.
 \label{app:calls}
 Table~\ref{tab:app-efficiency} gives the full cost breakdown behind the summary in
 \S\ref{sec:exp-ablation}. Offline cost and online cost are kept in separate columns because
-they are not directly comparable: the offline replay bank is built once per backbone revision
-and per source, whereas the online columns are per request. Within each column a lower value
-is better, and the two columns are read separately rather than combined into a single score.
-Latency percentiles are measured per request and exclude cold start, which is reported on its
-own line. Candidate materialisation is a separate line because it is paid before the decision
-is made and is not a forecasting-backbone call.
+they are not directly comparable: the offline replay bank is built once per backbone revision,
+per source, and per horizon, whereas the online columns are per request. Within each column a
+lower value is better, and the two columns are read separately rather than combined into a
+single score. Latency percentiles are measured per request and exclude cold start, which is
+reported on its own line. Candidate materialisation is a separate line because it is paid
+before the decision is made and is not a forecasting-backbone call.
 
 \begin{table}[t]
-  \caption{Deployment cost for all methods, offline and online kept separate. Latency
-  percentiles are per request and exclude cold start, reported on its own line. Backbone calls
-  counts forecasting-backbone calls per request and excludes candidate materialisation, which
-  is reported in its own column.}
+  \caption{Deployment cost for the methods that carry a claim, offline and online kept
+  separate. Latency percentiles are per request and exclude cold start, reported on its own
+  line. Backbone calls counts forecasting-backbone calls per request and excludes candidate
+  materialisation, which is reported in its own column. The two extended methods of
+  Appendix~\ref{app:extended} are not given separate cost rows because they carry no claim.}
   \label{tab:app-efficiency}
   \centering
   \small
@@ -1843,9 +1798,9 @@ is made and is not a forecasting-backbone call.
     \toprule
     Method & Offline train/search & Candidate constr. & Backbone calls/req.\ & Mean lat.\ $\downarrow$ & P95 $\downarrow$ & Max $\downarrow$ \\
     \midrule
+    T1                 & \ph{T1_OFF}     & \ph{T1_CAND}     & \ph{T1_CALLS}     & \ph{T1_MEAN}     & \ph{T1_P95}     & \ph{T1_MAX} \\
     TOI                & \ph{TOI_OFF}    & \ph{TOI_CAND}    & \ph{TOI_CALLS}    & \ph{TOI_MEAN}    & \ph{TOI_P95}    & \ph{TOI_MAX} \\
-    TOI-VSF            & \ph{TOIVSF_OFF} & \ph{TOIVSF_CAND} & \ph{TOIVSF_CALLS} & \ph{TOIVSF_MEAN} & \ph{TOIVSF_P95} & \ph{TOIVSF_MAX} \\
-    GIMCC              & \ph{GIMCC_OFF}  & \ph{GIMCC_CAND}  & \ph{GIMCC_CALLS}  & \ph{GIMCC_MEAN}  & \ph{GIMCC_P95}  & \ph{GIMCC_MAX} \\
+    TATO               & \ph{TATO_OFF}   & \ph{TATO_CAND}   & \ph{TATO_CALLS}   & \ph{TATO_MEAN}   & \ph{TATO_P95}   & \ph{TATO_MAX} \\
     SRDI               & \ph{SRDI_OFF}   & \ph{SRDI_CAND}   & \ph{SRDI_CALLS}   & \ph{SRDI_MEAN}   & \ph{SRDI_P95}   & \ph{SRDI_MAX} \\
     ChannelTokenFormer & \ph{CTF_OFF}    & \ph{CTF_CAND}    & \ph{CTF_CALLS}    & \ph{CTF_MEAN}    & \ph{CTF_P95}    & \ph{CTF_MAX} \\
     \rowcolor{bestgray}\introact{} & \ph{OURS_OFF} & \ph{OURS_CAND} & \ph{OURS_CALLS} & \ph{OURS_MEAN} & \ph{OURS_P95} & \ph{OURS_MAX} \\
@@ -2001,38 +1956,5 @@ The measurements behind that decision come from a different protocol, with a sma
 development split, fewer sources, and different budget accounting, so they are not reproduced
 here as numbers. They are recorded in the released artefact ledger and must not be compared
 numerically with any table in this paper.
-
-\subsection{Financial Case Study}
-\label{app:finance}
-The two finance parents available to us are reported as a case study only and are not part of
-any claim of generalisation. QLIKE appears here and nowhere else. Results are reported
-separately for the complete-observed condition, which is the no-op check, and for controlled
-deletion, which carries the only quantitative comparison. Verified natural missingness is
-reported only where it exists, and where it does not exist that is stated rather than
-substituted with synthetic gaps. Finance series contain real jumps such as market closures,
-and those are neither smoothed nor treated as missing observations.
-
-\begin{table}[h]
-  \caption{Finance case study. The complete-observed rows are the no-op check, and the
-  controlled-deletion rows carry the only quantitative comparison. Natural missingness is
-  listed only where it has been verified. No claim of financial generalisation is made from
-  this table.}
-  \label{tab:app-finance}
-  \centering
-  \small
-  \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{llcccc}
-    \toprule
-    Parent & Condition & MASE $\downarrow$ & QLIKE $\downarrow$ & Harmful rate & Note \\
-    \midrule
-    \ph{FIN_P1} & complete observed   & \ph{FIN-P1-COMP-MASE} & \ph{FIN-P1-COMP-QLIKE} & --- & no-op check \\
-    \ph{FIN_P1} & controlled deletion & \ph{FIN-P1-DEL-MASE}  & \ph{FIN-P1-DEL-QLIKE}  & \ph{FIN-P1-HIR} & \ph{FIN-P1-NOTE} \\
-    \ph{FIN_P2} & complete observed   & \ph{FIN-P2-COMP-MASE} & \ph{FIN-P2-COMP-QLIKE} & --- & no-op check \\
-    \ph{FIN_P2} & controlled deletion & \ph{FIN-P2-DEL-MASE}  & \ph{FIN-P2-DEL-QLIKE}  & \ph{FIN-P2-HIR} & \ph{FIN-P2-NOTE} \\
-    \midrule
-    \multicolumn{6}{l}{\footnotesize Verified natural missingness: \ph{FIN-NATURAL-STATUS}} \\
-    \bottomrule
-  \end{tabular}}
-\end{table}
 
 \end{document}
