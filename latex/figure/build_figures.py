@@ -451,7 +451,9 @@ def fig1():
         f.line(cx, ay0 + ah, cx, ay0 + ah + 2.5, INK, 0.6)
         f.text(cx, ay0 + ah + 9.0, lab, size=4.8, color=MUTED, align="c")
         if stats is not None:
-            v = float(stats["best_action_share"].get(keys[i], 0.0))
+            # The axis tops out at 0.50, so a share maps to twice its value in
+            # axis units.  Drawing the share directly would halve every bar.
+            v = float(stats["best_action_share"].get(keys[i], 0.0)) / 0.5
             v = max(0.0, min(1.0, v))
             if v > 0.0:
                 f.rect(cx - slot * 0.26, ay0 + ah - v * ah, slot * 0.52, v * ah,

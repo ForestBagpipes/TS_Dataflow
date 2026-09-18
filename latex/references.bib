@@ -29,7 +29,7 @@
 % BiTGraph —— ICLR 2024。直接研究缺失值下的多变量预测，并讨论先插补再预测的误差累积。
 @inproceedings{chen2024bitgraph,
   title     = {Biased Temporal Convolution Graph Network for Time Series Forecasting with Missing Values},
-  author    = {Chen, Xiaodan and Li, Xiang and Wu, Jun and Zhang, Wei and Xu, Ming},
+  author    = {Chen, Xiaodan and Li, Xiucheng and Liu, Bo and Li, Zhijun},
   booktitle = {International Conference on Learning Representations},
   year      = {2024},
   url       = {https://openreview.net/forum?id=O9nZCwdGcG}
@@ -114,7 +114,7 @@
 
 @inproceedings{qiu2026tato,
   title     = {Adapt Data to Model: Adaptive Transformation Optimization for Domain-shared Time Series Foundation Models},
-  author    = {Qiu and others},
+  author    = {Qiu, Yunzhong and Cen, Zhiyao and Pei, Zhongyi and Wang, Chen and Wang, Jianmin},
   booktitle = {International Conference on Learning Representations},
   year      = {2026},
   url       = {https://openreview.net/forum?id=uTK1SNgi1N}
@@ -153,10 +153,10 @@
   note         = {Weights released under Apache-2.0; the revision used here is pinned in the experiment ledger}
 }
 
-@article{woo2024moirai,
-  title   = {Unified Training of Universal Time Series Forecasting Transformers},
-  author  = {Woo, Gerald and Liu, Chenghao and Kumar, Akshat and Xiong, Caiming and Savarese, Silvio and Sahoo, Doyen},
-  journal = {International Conference on Machine Learning},
+@inproceedings{woo2024moirai,
+  title     = {Unified Training of Universal Time Series Forecasting Transformers},
+  author    = {Woo, Gerald and Liu, Chenghao and Kumar, Akshat and Xiong, Caiming and Savarese, Silvio and Sahoo, Doyen},
+  booktitle = {International Conference on Machine Learning},
   year    = {2024},
   url     = {https://arxiv.org/abs/2402.02592}
 }
@@ -268,10 +268,10 @@
   year      = {2005}
 }
 
-@inproceedings{lei2018distribution,
+@article{lei2018distribution,
   title     = {Distribution-Free Predictive Inference for Regression},
   author    = {Lei, Jing and G'Sell, Max and Rinaldo, Alessandro and Tibshirani, Ryan J. and Wasserman, Larry},
-  booktitle = {Journal of the American Statistical Association},
+  journal   = {Journal of the American Statistical Association},
   volume    = {113},
   number    = {523},
   pages     = {1094--1111},
@@ -281,7 +281,7 @@
 % ------------------------------------------------- 动态特征选择（相关，仅作边界说明）
 @inproceedings{he2024dime,
   title     = {Estimating Conditional Mutual Information for Dynamic Feature Selection},
-  author    = {He, Siyan and others},
+  author    = {Gadgil, Soham and Covert, Ian and Lee, Su-In},
   booktitle = {International Conference on Learning Representations},
   year      = {2024},
   url       = {https://openreview.net/forum?id=Oju2Qu9jvn}
@@ -312,10 +312,10 @@
   year      = {2004}
 }
 
-@article{jaggi2013revisiting,
-  title   = {Revisiting Frank-Wolfe: Projection-Free Sparse Convex Optimization},
-  author  = {Jaggi, Martin},
-  journal = {International Conference on Machine Learning},
+@inproceedings{jaggi2013revisiting,
+  title     = {Revisiting Frank-Wolfe: Projection-Free Sparse Convex Optimization},
+  author    = {Jaggi, Martin},
+  booktitle = {International Conference on Machine Learning},
   year    = {2013}
 }
 
@@ -451,4 +451,22 @@
   edition   = {2},
   publisher = {Chapman and Hall/CRC},
   year      = {2018}
+}
+
+% PyPOTS —— SAITS 的官方工具箱，主表 reconstruction baseline 由它提供实现。
+@article{du2023pypots,
+  title   = {{PyPOTS}: A Python Toolbox for Data Mining on Partially-Observed Time Series},
+  author  = {Du, Wenjie},
+  journal = {arXiv preprint arXiv:2305.18811},
+  year    = {2023},
+  url     = {https://arxiv.org/abs/2305.18811}
+}
+
+% Conformal risk control —— 仅用于说明本文的 conservative score 不是校准风险控制。
+@inproceedings{angelopoulos2024conformal,
+  title     = {Conformal Risk Control},
+  author    = {Angelopoulos, Anastasios N. and Bates, Stephen and Fisch, Adam and Lei, Lihua and Schuster, Tal},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2208.02814}
 }

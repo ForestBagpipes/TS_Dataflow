@@ -1,0 +1,16 @@
+{
+ "best_action_share": {
+  "KEEP": 0.24473684210526317,
+  "FFILL": 0.24210526315789474,
+  "SINGLE_TSICL": 0.1763157894736842,
+  "MULTI_TSICL": 0.14736842105263157,
+  "CONTEXT_RIDGE": 0.18947368421052632
+ },
+ "best_fixed_gap": 0.1237,
+ "backbones": [
+  "bolt"
+ ],
+ "keep_mase": 1.4664,
+ "best_fixed_mase": 1.3857,
+ "catalog_oracle_mase": 1.262
+}

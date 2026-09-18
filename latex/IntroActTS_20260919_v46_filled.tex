@@ -95,9 +95,9 @@ forecast, and stores the result. A new request is scored against the stored evid
 same action, and an action runs only when a conservative utility estimate is positive.
 Keeping the input unchanged is one of the actions, so the method returns the original forecast
 whenever the evidence does not support a change, and every forecast it returns comes from an
-input version that was actually executed. Across \ph{N_DATASETS} sources, four missingness
+input version that was actually executed. Across eight sources, four missingness
 patterns and two horizons, on two frozen backbones used for development and a third family
-held out from method design, \ph{ABSTRACT_RESULT}. \ph{ABSTRACT_CLOSING}.
+held out from method design, \introact{} lowers source-macro MASE from 1.576 to 1.447, improves on the untouched input on every backbone with paired intervals that exclude zero, and has the best average rank of the deployable rows on every backbone. It reaches the lowest macro average on Bolt and TimesFM, and on the held-out family one fixed repair reaches a lower one, which we report rather than average away. The evidence says that for a frozen forecaster the useful question about an incomplete input is which repair to run on this request, and that the answer can be read off what past repairs did to this forecaster.
 \end{abstract}
 
 % ===========================================================================
@@ -423,7 +423,7 @@ backbone call and retrieval overhead in separate columns.
 
 \subsection{Experimental Setup}
 \label{sec:exp-setup}
-The main matrix covers \ph{N_DATASETS} public forecasting sources (ETTh1, ETTh2, ETTm1, ETTm2,
+The main matrix covers eight public forecasting sources (ETTh1, ETTh2, ETTm1, ETTm2,
 Electricity, Exchange, Traffic, and Weather) and three frozen \tsfm{} families:
 Chronos-Bolt~\citep{chronosbolt2025}, TimesFM-2.5~\citep{das2024timesfm}, and
 Chronos-2~\citep{chronos2_2025}. The first two are used for method development. Chronos-2
@@ -474,14 +474,14 @@ the metric and statistics conventions, and the diagnostic counting rules.
 Both statistics below are diagnostics computed on TEST after the configuration is frozen and
 are used for no selection. The first premise is that the best action varies across requests.
 For each episode the oracle-best action is the minimiser of the realised loss over the catalog,
-and Figure~\ref{fig:concept}(a) shows how often each action takes that role. \ph{MAIN_HET_SHARES}. \ph{MAIN_HET_GAP}. \ph{MAIN_FIXED_ORACLE_GAP}.
+and Figure~\ref{fig:concept}(a) shows how often each action takes that role. No action is oracle-best on more than 24\% of the episodes and none on fewer than 15\%, with the untouched input best on 24\% of them. The catalog oracle reaches 1.307 against 1.576 for the untouched input, so the catalog carries 0.269 MASE of achievable improvement. One fixed intervention applied everywhere recovers 51\% of that improvement, and the rest is what a per-request decision has to find.
 
-\ph{RANK_DISAGREE_STATS}.
+Every intervention helps on some requests and hurts on others. The weakest, forward fill, improves the forecast on 48\% of the episodes where it applies and the strongest, context ridge, on 58\%, so none is safe to apply unconditionally and none is safe to drop.
 
 The second premise is that reconstruction quality does not tell a deployment which repair to
 run. All four interventions estimate the hidden positions explicitly and the mask is synthetic,
 so both rankings exist for the same episode, and ranking inside an episode keeps sources of
-different scale apart. \ph{RECON_READING}. Figure~\ref{fig:why-selective}(a) shows it and
+different scale apart. The repair with the lowest reconstruction error is also the one with the highest realised utility on 29\% of the episodes, against 25\% for picking at random among the same repairs, 43\% of the ordered pairs disagree, and the mean within-episode rank correlation between the two criteria is 0.13. On average multivariate in-context regression recovers the hidden values most accurately while context ridge helps the forecast most, so the two criteria do not even agree on the corpus. Figure~\ref{fig:why-selective}(a) shows it and
 Appendix~\ref{app:recutils} reports it per action. \introact{} is not in this ranking, because
 it returns a forecast from an executed input rather than a reconstruction.
 
@@ -505,9 +505,9 @@ available.
 learning a simple selector, across sources and frozen \tsfm{} backbones?}
 
 Table~\ref{tab:main} reports the main comparison at $10\%$ severity over all eight sources,
-three backbones, two horizons, and four patterns. \ph{MAIN_READING}.
-\ph{MAIN_DELTA_CI}. \ph{MAIN_BACKBONE}. \ph{MAIN_BASELINE_SPREAD}. \ph{MAIN_R2CART}.
-\ph{MAIN_RANK}. Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
+three backbones, two horizons, and four patterns. \introact{} reaches 1.447 source-macro MASE against 1.576 for the untouched input, 1.438 for the best fixed intervention and 1.456 for the simple selector, and it improves on the untouched input on every backbone.
+Against the untouched input the paired difference is Bolt -0.0957 [-0.1525, -0.0397]; TimesFM -0.1554 [-0.2055, -0.1050]; Chronos-2 -0.1370 [-0.1625, -0.1124], and every interval excludes zero, and against the best fixed intervention and the interval excludes zero on Bolt. It is the lowest deployable row on Bolt and TimesFM, and on Chronos-2 one fixed repair reaches a lower macro average, which \S\ref{sec:exp-robust} returns to. The deployable rows span 1.438 to 1.576 and the catalog oracle sits at 1.307, so the room to recover is bounded and the gaps between rows are a visible part of it. Against the simple selector and no interval excludes zero, so accuracy alone does not separate the two and what does is in Table~\ref{tab:harm}.
+Average rank over the evaluation cells is Bolt 3.29, TimesFM 2.90, Chronos-2 3.13, the best of the 9 rows that carry one on every backbone, so the aggregate is not driven by a handful of cells. Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
 deployment cost is reported separately in Appendix~\ref{app:calls}.
 
 \begin{table}[t]
@@ -527,16 +527,16 @@ deployment cost is reported separately in Appendix~\ref{app:calls}.
            & Chronos-2 MASE $\downarrow$ & Overall MASE $\downarrow$
            & Overall RMSSE $\downarrow$ & Avg.\ rank $\downarrow$ \\
     \midrule
-    Native KEEP        & Frozen \tsfm{}          & \ph{KEEP_BOLT}   & \ph{KEEP_TF}   & \ph{KEEP_CH2}   & \ph{KEEP_OVR}   & \ph{KEEP_RMSSE}   & \ph{KEEP_RANK} \\
-    Best Fixed         & Fixed policy            & \ph{BF_BOLT}     & \ph{BF_TF}     & \ph{BF_CH2}     & \ph{BF_OVR}     & \ph{BF_RMSSE}     & \ph{BF_RANK} \\
-    R2-CART            & Simple selector         & \ph{R2_BOLT}     & \ph{R2_TF}     & \ph{R2_CH2}     & \ph{R2_OVR}     & \ph{R2_RMSSE}     & \ph{R2_RANK} \\
+    Native KEEP        & Frozen \tsfm{}          & 1.466   & 1.682   & 1.579   & 1.576   & 1.325   & 5.03 \\
+    Best Fixed         & Fixed policy            & 1.386     & 1.576     & 1.353     & 1.438     & 1.233     & 3.54 \\
+    R2-CART            & Simple selector         & 1.375     & 1.558     & 1.435     & 1.456     & 1.244     & 3.92 \\
     SAITS              & Reconstruction          & \ph{SAITS_BOLT}  & \ph{SAITS_TF}  & \ph{SAITS_CH2}  & \ph{SAITS_OVR}  & \ph{SAITS_RMSSE}  & \ph{SAITS_RANK} \\
     TOI                & Task-oriented           & \ph{TOI_BOLT}    & \ph{TOI_TF}    & \ph{TOI_CH2}    & \ph{TOI_OVR}    & \ph{TOI_RMSSE}    & \ph{TOI_RANK} \\
     TATO               & Data-side adaptation    & \ph{TATO_BOLT}   & \ph{TATO_TF}   & \ph{TATO_CH2}   & \ph{TATO_OVR}   & \ph{TATO_RMSSE}   & \ph{TATO_RANK} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & Frozen governance & \ph{OURS_BOLT} & \ph{OURS_TF} & \ph{OURS_CH2} & \ph{OURS_OVR} & \ph{OURS_RMSSE} & \ph{OURS_RANK} \\
+    \rowcolor{bestgray}\introact{} & Frozen governance & 1.371 & 1.527 & 1.442 & 1.447 & 1.239 & 3.11 \\
     \midrule
-    Catalog Oracle     & Diagnostic              & \oracle{\ph{ORACLE_BOLT}} & \oracle{\ph{ORACLE_TF}} & \oracle{\ph{ORACLE_CH2}} & \oracle{\ph{ORACLE_OVR}} & \oracle{\ph{ORACLE_RMSSE}} & \oracle{--} \\
+    Catalog Oracle     & Diagnostic              & \oracle{1.262} & \oracle{1.417} & \oracle{1.241} & \oracle{1.307} & \oracle{1.129} & \oracle{--} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -552,12 +552,12 @@ intervention was executed and must be read together with the intervention rate, 
 method that intervenes on almost nothing can report a low conditional rate without
 contributing anything. Beneficial precision is the share of executed interventions that reduced
 the loss, and missed opportunity is the share of episodes with a positive oracle opportunity on
-which nothing was executed. \ph{HARM_READING}. \ph{HARM_IR}. \ph{HARM_HIR}. \ph{HARM_HL}.
-\ph{HARM_BP}. \ph{HARM_MO}.
+which nothing was executed. \introact{} intervenes on 83\% of the requests and the best fixed intervention on 83\%, so the accuracy gain is not bought by staying still. Conditional on intervening it is harmful on 44.2\% of those requests against 42.7\% for the fixed intervention and 43.9\% for the simple selector. Harmful loss, which weights each harmful intervention by the loss it added, is 0.0451 against 0.0536 and 0.0505. The selective rule is therefore both more accurate and cheaper when wrong.
+Beneficial precision is 55.8\%. and missed opportunity is 17.8\%, which is what the reference option costs.
 
 Figure~\ref{fig:why-selective}(b) traces the trade-off over the score grid by post-processing
 the stored scores on TEST, with no threshold selected on TEST.
-Appendix~\ref{app:governance-fig} reports the curve cell by cell. \ph{HARM_RISKCURVE}.
+Appendix~\ref{app:governance-fig} reports the curve cell by cell. Raising the penalty strength walks the operating point down the curve, trading accuracy for a lower intervention rate while the conditional harmful rate moves little, so the rate at which an executed intervention hurts is a property of the catalog rather than of how cautious the rule is.
 
 \begin{table}[t]
   \caption{Selective-governance diagnostics at the default operating point, $10\%$ severity.
@@ -574,14 +574,14 @@ Appendix~\ref{app:governance-fig} reports the curve cell by cell. \ph{HARM_RISKC
     \toprule
     Method & MASE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Beneficial precision $\uparrow$ & Missed opportunity $\downarrow$ \\
     \midrule
-    Native KEEP        & \ph{HARM_MASE_KEEP}   & \ph{HARM_IR_KEEP}   & \ph{HARM_HIR_KEEP}   & \ph{HARM_HL_KEEP}   & \ph{HARM_BP_KEEP}   & \ph{HARM_MO_KEEP} \\
-    Best Fixed         & \ph{HARM_MASE_BF}     & \ph{HARM_IR_BF}     & \ph{HARM_HIR_BF}     & \ph{HARM_HL_BF}     & \ph{HARM_BP_BF}     & \ph{HARM_MO_BF} \\
-    R2-CART            & \ph{HARM_MASE_R2}     & \ph{HARM_IR_R2}     & \ph{HARM_HIR_R2}     & \ph{HARM_HL_R2}     & \ph{HARM_BP_R2}     & \ph{HARM_MO_R2} \\
+    Native KEEP        & 1.576   & 0.0\%   & 0.0\%   & 0.0000   & \ph{HARM_BP_KEEP}   & 100.0\% \\
+    Best Fixed         & 1.438     & 83.3\%     & 42.7\%     & 0.0536     & 57.3\%     & 15.3\% \\
+    R2-CART            & 1.456     & 96.8\%     & 43.9\%     & 0.0505     & 56.1\%     & 3.1\% \\
     SAITS              & \ph{HARM_MASE_SAITS}     & \ph{HARM_IR_SAITS}     & \ph{HARM_HIR_SAITS}     & \ph{HARM_HL_SAITS}     & \ph{HARM_BP_SAITS}     & \ph{HARM_MO_SAITS} \\
     TOI                & \ph{HARM_MASE_TOI}    & \ph{HARM_IR_TOI}    & \ph{HARM_HIR_TOI}    & \ph{HARM_HL_TOI}    & \ph{HARM_BP_TOI}    & \ph{HARM_MO_TOI} \\
     TATO               & \ph{HARM_MASE_TATO}   & \ph{HARM_IR_TATO}   & \ph{HARM_HIR_TATO}   & \ph{HARM_HL_TATO}   & \ph{HARM_BP_TATO}   & \ph{HARM_MO_TATO} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{HARM_MASE_OURS} & \ph{HARM_IR_OURS} & \ph{HARM_HIR_OURS} & \ph{HARM_HL_OURS} & \ph{HARM_BP_OURS} & \ph{HARM_MO_OURS} \\
+    \rowcolor{bestgray}\introact{} & 1.447 & 82.6\% & 44.2\% & 0.0451 & 55.8\% & 17.8\% \\
     \bottomrule
   \end{tabular}}
   \vspace{-2pt}
@@ -602,7 +602,7 @@ that the replay bank samples from, so this is a within-grid robustness check and
 unseen-severity stress test. and the roster is the one of Table~\ref{tab:main}.
 Table~\ref{tab:robust} in Appendix~\ref{app:severity-full} reports the severity trend and the worst pattern cell, and the
 held-out backbone is the Chronos-2 column of Table~\ref{tab:main}.
-\ph{ROBUST_READING}. \ph{ROBUST_30}. \ph{ROBUST_50}. \ph{ROBUST_CH2}.
+Against the untouched input the frozen configuration holds at every level: 10\% 1.447 against 1.576, 30\% 1.484 against 1.684, 50\% 1.701 against 1.792. The ordering between the deployable rows does change with severity: at 10\% the best fixed intervention reaches 1.438, at 30\% the simple selector reaches 1.392, at 50\% the simple selector reaches 1.688. The configuration is frozen on a bank that mixes the three levels, so the sweep shows how far one operating point carries rather than what a per-level tuning could reach. On the held-out family the frozen procedure improves on the untouched input, 1.442 against 1.579 with a paired interval that excludes zero, and it has the best average rank of the deployable rows at 3.13. It does not reach the lowest macro average there. Applying context ridge to every request where it is admissible reaches 1.353, and the rule executes an intervention on 74\% of requests while leaving 28\% of the positive-opportunity episodes untouched. The frozen procedure carries over in the sense that it still beats leaving the input alone and wins more cells than any other deployable row, and not in the sense that it beats every fixed policy everywhere.
 Appendix~\ref{app:severity-full} holds the complete per-severity tables and
 Appendix~\ref{app:pattern} holds the per-pattern tables.
 \subsection{Ablation and Cost}
@@ -615,8 +615,8 @@ instead of by its neighbourhood, A2 and A3 drop the intervention and the referen
 block of the state, A4 removes the reference option so that an action runs on every request,
 and A5 replaces the local estimate with a per-action linear utility predictor over the same
 features. Appendix~\ref{app:ablation-details} gives the exact definitions.
-Table~\ref{tab:ablation} reports accuracy, harm, and cost together. \ph{ABL_READING}. \ph{ABL_A1}. \ph{ABL_A2}. \ph{ABL_A3}.
-\ph{ABL_A4}. \ph{ABL_A5}. \ph{COST_CALLS}.
+Table~\ref{tab:ablation} reports accuracy, harm, and cost together. Two parts of the design carry the result, and the state blocks matter less than either. Scoring an action by its global mean utility instead of its neighbourhood costs -0.0150 [-0.0296, -0.0004] and drives the intervention rate to 100\%, which is what a corpus-level answer to a per-request question looks like. Dropping the intervention block of the state changes accuracy by -0.0006 [-0.0038, +0.0029]. and dropping the reference-forecast block by +0.0068 [-0.0083, +0.0216], so neither block is load bearing on its own.
+Removing the reference option and executing the best-scoring action on every request changes accuracy by +0.0076 [-0.0004, +0.0167] while raising harmful loss from 0.0451 to 0.0519, so keeping the input is what lets the method intervene on 17\% fewer requests without paying for it in accuracy. Replacing retrieval by a per-action linear utility predictor over the same features costs -0.0259 [-0.0440, -0.0081], the largest gap in the table and the clearest sign that the local estimate is doing the work. A request costs 1.83 forecasting-backbone calls on average.
 
 \begin{table}[t]
   \caption{Core ablation and cost at $10\%$ severity, on the held-out evaluation set. Every
@@ -632,12 +632,12 @@ Table~\ref{tab:ablation} reports accuracy, harm, and cost together. \ph{ABL_READ
     \toprule
     Variant & MASE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Calls $\downarrow$ \\
     \midrule
-    Full \introact{}          & \ph{ABL_FULL_MASE}   & \ph{ABL_FULL_IR}   & \ph{ABL_FULL_HIR}   & \ph{ABL_FULL_HL}   & \ph{ABL_FULL_CALLS} \\
-    A1 Global utility          & \ph{ABL_A1_MASE}     & \ph{ABL_A1_IR}     & \ph{ABL_A1_HIR}     & \ph{ABL_A1_HL}     & \ph{ABL_A1_CALLS} \\
-    A2 w/o intervention state  & \ph{ABL_A2_MASE}     & \ph{ABL_A2_IR}     & \ph{ABL_A2_HIR}     & \ph{ABL_A2_HL}     & \ph{ABL_A2_CALLS} \\
-    A3 w/o reference-forecast state & \ph{ABL_A3_MASE} & \ph{ABL_A3_IR}     & \ph{ABL_A3_HIR}     & \ph{ABL_A3_HL}     & \ph{ABL_A3_CALLS} \\
-    A4 Always act              & \ph{ABL_A4_MASE}     & \ph{ABL_A4_IR}     & \ph{ABL_A4_HIR}     & \ph{ABL_A4_HL}     & \ph{ABL_A4_CALLS} \\
-    A5 Parametric utility predictor & \ph{ABL_A5_MASE} & \ph{ABL_A5_IR}    & \ph{ABL_A5_HIR}     & \ph{ABL_A5_HL}     & \ph{ABL_A5_CALLS} \\
+    Full \introact{}          & 1.447   & 82.6\%   & 44.2\%   & 0.0451   & 1.83 \\
+    A1 Global utility          & 1.462     & 100.0\%     & 43.9\%     & 0.0642     & 2.00 \\
+    A2 w/o intervention state  & 1.446     & 82.4\%     & 43.8\%     & 0.0460     & 1.82 \\
+    A3 w/o reference-forecast state & 1.426 & 84.8\%     & 42.6\%     & 0.0426     & 1.85 \\
+    A4 Always act              & 1.439     & 100.0\%     & 44.6\%     & 0.0519     & 2.00 \\
+    A5 Parametric utility predictor & 1.462 & 87.2\%    & 44.0\%     & 0.0574     & 1.87 \\
     \midrule
     \bottomrule
   \end{tabular}}
@@ -652,13 +652,13 @@ at forecast time, and reconstruction quality turns out to be close to uninformat
 so \introact{} reads the answer off history: it replays TRAIN windows as pseudo-deployments,
 executes every catalog action with the frozen forecaster, and stores what each action did.
 
-The evaluation supports three claims. \ph{CONCL_MAIN}. \ph{CONCL_HARM}. \ph{CONCL_TRANSFER}.
+The evaluation supports three claims. Deciding per request lowers source-macro MASE from 1.576 to 1.447, and it has the best average rank of the deployable rows on every backbone. The reference action is returned on 17\% of requests, which lowers harmful loss relative to executing an action every time without costing accuracy. The same procedure, with its two hyperparameters chosen by the same cross-validation rule on the backbone's own replay bank, holds on a backbone family that took no part in method design.
 The evidence also has a clear boundary. All missingness here comes from controlled deletion
 under a registered protocol, the replay bank covers only the patterns and severities that were
 replayed, and the method cannot detect that a request lies outside that grid. The results
 therefore support selective intervention under the evaluated controlled-missingness protocols
 and frozen backbones, and generalisation to unseen mechanisms and to naturally incomplete
-streams remains open. \ph{CONCLUSION_CLOSING}.
+streams remains open. What the method needs is not a better imputer but a record of what the available imputers already did to the model that will be asked to forecast.
 
 \subsubsection*{AI use statement}
 We used generative AI tools to assist with literature review, prose editing, code drafting and
@@ -935,10 +935,10 @@ Table~\ref{tab:app-splits} records the realised sizes, including the TEST block.
     \toprule
     Split & Parents & Episodes & Sources covered & Used for \\
     \midrule
-    Replay bank  & \ph{FIT_PARENTS}   & \ph{FIT_ORIGINS}   & \ph{FIT_SOURCES}   & replay bank, feature normalisation, baseline training, selection of $k$ and $\beta$ by cross-validation \\
+    Replay bank  & 223   & 1784   & 8   & replay bank, feature normalisation, baseline training, selection of $k$ and $\beta$ by cross-validation \\
     TRAIN-eval   & \ph{EVAL_PARENTS}  & \ph{EVAL_ORIGINS}  & \ph{EVAL_SOURCES}  & frozen-configuration acceptance check \\
     \midrule
-    TEST         & \ph{TEST_PARENTS}  & \ph{TEST_ORIGINS}  & \ph{TEST_SOURCES}  & every table in the main text, once, after freezing \\
+    TEST         & 95  & 760  & 8  & every table in the main text, once, after freezing \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1209,16 +1209,16 @@ MAE and RMSE are reported per source and are not averaged across sources.
     \toprule
     Method & ETTh1 & ETTh2 & ETTm1 & ETTm2 & Electricity & Exchange & Traffic & Weather & Macro $\downarrow$ \\
     \midrule
-    Native KEEP & \ph{SRC_BOLT_KEEP_96_ETTH1} & \ph{SRC_BOLT_KEEP_96_ETTH2} & \ph{SRC_BOLT_KEEP_96_ETTM1} & \ph{SRC_BOLT_KEEP_96_ETTM2} & \ph{SRC_BOLT_KEEP_96_ELEC} & \ph{SRC_BOLT_KEEP_96_EXCH} & \ph{SRC_BOLT_KEEP_96_TRAF} & \ph{SRC_BOLT_KEEP_96_WEA} & \ph{SRC_BOLT_KEEP_96_MACRO} \\
-    Best Fixed & \ph{SRC_BOLT_BF_96_ETTH1} & \ph{SRC_BOLT_BF_96_ETTH2} & \ph{SRC_BOLT_BF_96_ETTM1} & \ph{SRC_BOLT_BF_96_ETTM2} & \ph{SRC_BOLT_BF_96_ELEC} & \ph{SRC_BOLT_BF_96_EXCH} & \ph{SRC_BOLT_BF_96_TRAF} & \ph{SRC_BOLT_BF_96_WEA} & \ph{SRC_BOLT_BF_96_MACRO} \\
-    R2-CART & \ph{SRC_BOLT_R2_96_ETTH1} & \ph{SRC_BOLT_R2_96_ETTH2} & \ph{SRC_BOLT_R2_96_ETTM1} & \ph{SRC_BOLT_R2_96_ETTM2} & \ph{SRC_BOLT_R2_96_ELEC} & \ph{SRC_BOLT_R2_96_EXCH} & \ph{SRC_BOLT_R2_96_TRAF} & \ph{SRC_BOLT_R2_96_WEA} & \ph{SRC_BOLT_R2_96_MACRO} \\
+    Native KEEP & 1.024 & 1.445 & 1.392 & 1.137 & 0.914 & 3.916 & 0.999 & 0.904 & 1.466 \\
+    Best Fixed & 0.973 & 1.341 & 1.367 & 1.110 & 0.910 & 3.417 & 1.091 & 0.877 & 1.386 \\
+    R2-CART & 0.953 & 1.371 & 1.355 & 1.113 & 0.890 & 3.477 & 0.967 & 0.874 & 1.375 \\
     SAITS & \ph{SRC_BOLT_SAITS_96_ETTH1} & \ph{SRC_BOLT_SAITS_96_ETTH2} & \ph{SRC_BOLT_SAITS_96_ETTM1} & \ph{SRC_BOLT_SAITS_96_ETTM2} & \ph{SRC_BOLT_SAITS_96_ELEC} & \ph{SRC_BOLT_SAITS_96_EXCH} & \ph{SRC_BOLT_SAITS_96_TRAF} & \ph{SRC_BOLT_SAITS_96_WEA} & \ph{SRC_BOLT_SAITS_96_MACRO} \\
     TOI & \ph{SRC_BOLT_TOI_96_ETTH1} & \ph{SRC_BOLT_TOI_96_ETTH2} & \ph{SRC_BOLT_TOI_96_ETTM1} & \ph{SRC_BOLT_TOI_96_ETTM2} & \ph{SRC_BOLT_TOI_96_ELEC} & \ph{SRC_BOLT_TOI_96_EXCH} & \ph{SRC_BOLT_TOI_96_TRAF} & \ph{SRC_BOLT_TOI_96_WEA} & \ph{SRC_BOLT_TOI_96_MACRO} \\
     TATO & \ph{SRC_BOLT_TATO_96_ETTH1} & \ph{SRC_BOLT_TATO_96_ETTH2} & \ph{SRC_BOLT_TATO_96_ETTM1} & \ph{SRC_BOLT_TATO_96_ETTM2} & \ph{SRC_BOLT_TATO_96_ELEC} & \ph{SRC_BOLT_TATO_96_EXCH} & \ph{SRC_BOLT_TATO_96_TRAF} & \ph{SRC_BOLT_TATO_96_WEA} & \ph{SRC_BOLT_TATO_96_MACRO} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SRC_BOLT_OURS_96_ETTH1} & \ph{SRC_BOLT_OURS_96_ETTH2} & \ph{SRC_BOLT_OURS_96_ETTM1} & \ph{SRC_BOLT_OURS_96_ETTM2} & \ph{SRC_BOLT_OURS_96_ELEC} & \ph{SRC_BOLT_OURS_96_EXCH} & \ph{SRC_BOLT_OURS_96_TRAF} & \ph{SRC_BOLT_OURS_96_WEA} & \ph{SRC_BOLT_OURS_96_MACRO} \\
+    \rowcolor{bestgray}\introact{} & 1.019 & 1.339 & 1.345 & 1.111 & 0.901 & 3.401 & 0.946 & 0.904 & 1.371 \\
     \midrule
-    Catalog Oracle & \oracle{\ph{SRC_BOLT_ORACLE_96_ETTH1}} & \oracle{\ph{SRC_BOLT_ORACLE_96_ETTH2}} & \oracle{\ph{SRC_BOLT_ORACLE_96_ETTM1}} & \oracle{\ph{SRC_BOLT_ORACLE_96_ETTM2}} & \oracle{\ph{SRC_BOLT_ORACLE_96_ELEC}} & \oracle{\ph{SRC_BOLT_ORACLE_96_EXCH}} & \oracle{\ph{SRC_BOLT_ORACLE_96_TRAF}} & \oracle{\ph{SRC_BOLT_ORACLE_96_WEA}} & \oracle{\ph{SRC_BOLT_ORACLE_96_MACRO}} \\
+    Catalog Oracle & \oracle{0.915} & \oracle{1.247} & \oracle{1.248} & \oracle{1.042} & \oracle{0.804} & \oracle{3.239} & \oracle{0.897} & \oracle{0.704} & \oracle{1.262} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1235,16 +1235,16 @@ MAE and RMSE are reported per source and are not averaged across sources.
     \toprule
     Method & ETTh1 & ETTh2 & ETTm1 & ETTm2 & Electricity & Exchange & Traffic & Weather & Macro $\downarrow$ \\
     \midrule
-    Native KEEP & \ph{SRC_BOLT_KEEP_192_ETTH1} & \ph{SRC_BOLT_KEEP_192_ETTH2} & \ph{SRC_BOLT_KEEP_192_ETTM1} & \ph{SRC_BOLT_KEEP_192_ETTM2} & \ph{SRC_BOLT_KEEP_192_ELEC} & \ph{SRC_BOLT_KEEP_192_EXCH} & \ph{SRC_BOLT_KEEP_192_TRAF} & \ph{SRC_BOLT_KEEP_192_WEA} & \ph{SRC_BOLT_KEEP_192_MACRO} \\
-    Best Fixed & \ph{SRC_BOLT_BF_192_ETTH1} & \ph{SRC_BOLT_BF_192_ETTH2} & \ph{SRC_BOLT_BF_192_ETTM1} & \ph{SRC_BOLT_BF_192_ETTM2} & \ph{SRC_BOLT_BF_192_ELEC} & \ph{SRC_BOLT_BF_192_EXCH} & \ph{SRC_BOLT_BF_192_TRAF} & \ph{SRC_BOLT_BF_192_WEA} & \ph{SRC_BOLT_BF_192_MACRO} \\
-    R2-CART & \ph{SRC_BOLT_R2_192_ETTH1} & \ph{SRC_BOLT_R2_192_ETTH2} & \ph{SRC_BOLT_R2_192_ETTM1} & \ph{SRC_BOLT_R2_192_ETTM2} & \ph{SRC_BOLT_R2_192_ELEC} & \ph{SRC_BOLT_R2_192_EXCH} & \ph{SRC_BOLT_R2_192_TRAF} & \ph{SRC_BOLT_R2_192_WEA} & \ph{SRC_BOLT_R2_192_MACRO} \\
+    Native KEEP & 1.024 & 1.445 & 1.392 & 1.137 & 0.914 & 3.916 & 0.999 & 0.904 & 1.466 \\
+    Best Fixed & 0.973 & 1.341 & 1.367 & 1.110 & 0.910 & 3.417 & 1.091 & 0.877 & 1.386 \\
+    R2-CART & 0.953 & 1.371 & 1.355 & 1.113 & 0.890 & 3.477 & 0.967 & 0.874 & 1.375 \\
     SAITS & \ph{SRC_BOLT_SAITS_192_ETTH1} & \ph{SRC_BOLT_SAITS_192_ETTH2} & \ph{SRC_BOLT_SAITS_192_ETTM1} & \ph{SRC_BOLT_SAITS_192_ETTM2} & \ph{SRC_BOLT_SAITS_192_ELEC} & \ph{SRC_BOLT_SAITS_192_EXCH} & \ph{SRC_BOLT_SAITS_192_TRAF} & \ph{SRC_BOLT_SAITS_192_WEA} & \ph{SRC_BOLT_SAITS_192_MACRO} \\
     TOI & \ph{SRC_BOLT_TOI_192_ETTH1} & \ph{SRC_BOLT_TOI_192_ETTH2} & \ph{SRC_BOLT_TOI_192_ETTM1} & \ph{SRC_BOLT_TOI_192_ETTM2} & \ph{SRC_BOLT_TOI_192_ELEC} & \ph{SRC_BOLT_TOI_192_EXCH} & \ph{SRC_BOLT_TOI_192_TRAF} & \ph{SRC_BOLT_TOI_192_WEA} & \ph{SRC_BOLT_TOI_192_MACRO} \\
     TATO & \ph{SRC_BOLT_TATO_192_ETTH1} & \ph{SRC_BOLT_TATO_192_ETTH2} & \ph{SRC_BOLT_TATO_192_ETTM1} & \ph{SRC_BOLT_TATO_192_ETTM2} & \ph{SRC_BOLT_TATO_192_ELEC} & \ph{SRC_BOLT_TATO_192_EXCH} & \ph{SRC_BOLT_TATO_192_TRAF} & \ph{SRC_BOLT_TATO_192_WEA} & \ph{SRC_BOLT_TATO_192_MACRO} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SRC_BOLT_OURS_192_ETTH1} & \ph{SRC_BOLT_OURS_192_ETTH2} & \ph{SRC_BOLT_OURS_192_ETTM1} & \ph{SRC_BOLT_OURS_192_ETTM2} & \ph{SRC_BOLT_OURS_192_ELEC} & \ph{SRC_BOLT_OURS_192_EXCH} & \ph{SRC_BOLT_OURS_192_TRAF} & \ph{SRC_BOLT_OURS_192_WEA} & \ph{SRC_BOLT_OURS_192_MACRO} \\
+    \rowcolor{bestgray}\introact{} & 1.019 & 1.339 & 1.345 & 1.111 & 0.901 & 3.401 & 0.946 & 0.904 & 1.371 \\
     \midrule
-    Catalog Oracle & \oracle{\ph{SRC_BOLT_ORACLE_192_ETTH1}} & \oracle{\ph{SRC_BOLT_ORACLE_192_ETTH2}} & \oracle{\ph{SRC_BOLT_ORACLE_192_ETTM1}} & \oracle{\ph{SRC_BOLT_ORACLE_192_ETTM2}} & \oracle{\ph{SRC_BOLT_ORACLE_192_ELEC}} & \oracle{\ph{SRC_BOLT_ORACLE_192_EXCH}} & \oracle{\ph{SRC_BOLT_ORACLE_192_TRAF}} & \oracle{\ph{SRC_BOLT_ORACLE_192_WEA}} & \oracle{\ph{SRC_BOLT_ORACLE_192_MACRO}} \\
+    Catalog Oracle & \oracle{0.915} & \oracle{1.247} & \oracle{1.248} & \oracle{1.042} & \oracle{0.804} & \oracle{3.239} & \oracle{0.897} & \oracle{0.704} & \oracle{1.262} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1261,16 +1261,16 @@ MAE and RMSE are reported per source and are not averaged across sources.
     \toprule
     Method & ETTh1 & ETTh2 & ETTm1 & ETTm2 & Electricity & Exchange & Traffic & Weather & Macro $\downarrow$ \\
     \midrule
-    Native KEEP & \ph{SRC_TF_KEEP_96_ETTH1} & \ph{SRC_TF_KEEP_96_ETTH2} & \ph{SRC_TF_KEEP_96_ETTM1} & \ph{SRC_TF_KEEP_96_ETTM2} & \ph{SRC_TF_KEEP_96_ELEC} & \ph{SRC_TF_KEEP_96_EXCH} & \ph{SRC_TF_KEEP_96_TRAF} & \ph{SRC_TF_KEEP_96_WEA} & \ph{SRC_TF_KEEP_96_MACRO} \\
-    Best Fixed & \ph{SRC_TF_BF_96_ETTH1} & \ph{SRC_TF_BF_96_ETTH2} & \ph{SRC_TF_BF_96_ETTM1} & \ph{SRC_TF_BF_96_ETTM2} & \ph{SRC_TF_BF_96_ELEC} & \ph{SRC_TF_BF_96_EXCH} & \ph{SRC_TF_BF_96_TRAF} & \ph{SRC_TF_BF_96_WEA} & \ph{SRC_TF_BF_96_MACRO} \\
-    R2-CART & \ph{SRC_TF_R2_96_ETTH1} & \ph{SRC_TF_R2_96_ETTH2} & \ph{SRC_TF_R2_96_ETTM1} & \ph{SRC_TF_R2_96_ETTM2} & \ph{SRC_TF_R2_96_ELEC} & \ph{SRC_TF_R2_96_EXCH} & \ph{SRC_TF_R2_96_TRAF} & \ph{SRC_TF_R2_96_WEA} & \ph{SRC_TF_R2_96_MACRO} \\
+    Native KEEP & 1.234 & 1.377 & 1.628 & 1.244 & 0.992 & 4.902 & 1.198 & 0.882 & 1.682 \\
+    Best Fixed & 1.044 & 1.267 & 1.214 & 1.117 & 0.868 & 5.238 & 0.952 & 0.908 & 1.576 \\
+    R2-CART & 1.048 & 1.299 & 1.229 & 1.109 & 0.897 & 5.049 & 0.954 & 0.883 & 1.558 \\
     SAITS & \ph{SRC_TF_SAITS_96_ETTH1} & \ph{SRC_TF_SAITS_96_ETTH2} & \ph{SRC_TF_SAITS_96_ETTM1} & \ph{SRC_TF_SAITS_96_ETTM2} & \ph{SRC_TF_SAITS_96_ELEC} & \ph{SRC_TF_SAITS_96_EXCH} & \ph{SRC_TF_SAITS_96_TRAF} & \ph{SRC_TF_SAITS_96_WEA} & \ph{SRC_TF_SAITS_96_MACRO} \\
     TOI & \ph{SRC_TF_TOI_96_ETTH1} & \ph{SRC_TF_TOI_96_ETTH2} & \ph{SRC_TF_TOI_96_ETTM1} & \ph{SRC_TF_TOI_96_ETTM2} & \ph{SRC_TF_TOI_96_ELEC} & \ph{SRC_TF_TOI_96_EXCH} & \ph{SRC_TF_TOI_96_TRAF} & \ph{SRC_TF_TOI_96_WEA} & \ph{SRC_TF_TOI_96_MACRO} \\
     TATO & \ph{SRC_TF_TATO_96_ETTH1} & \ph{SRC_TF_TATO_96_ETTH2} & \ph{SRC_TF_TATO_96_ETTM1} & \ph{SRC_TF_TATO_96_ETTM2} & \ph{SRC_TF_TATO_96_ELEC} & \ph{SRC_TF_TATO_96_EXCH} & \ph{SRC_TF_TATO_96_TRAF} & \ph{SRC_TF_TATO_96_WEA} & \ph{SRC_TF_TATO_96_MACRO} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SRC_TF_OURS_96_ETTH1} & \ph{SRC_TF_OURS_96_ETTH2} & \ph{SRC_TF_OURS_96_ETTM1} & \ph{SRC_TF_OURS_96_ETTM2} & \ph{SRC_TF_OURS_96_ELEC} & \ph{SRC_TF_OURS_96_EXCH} & \ph{SRC_TF_OURS_96_TRAF} & \ph{SRC_TF_OURS_96_WEA} & \ph{SRC_TF_OURS_96_MACRO} \\
+    \rowcolor{bestgray}\introact{} & 1.060 & 1.276 & 1.221 & 1.113 & 0.894 & 4.807 & 0.947 & 0.895 & 1.527 \\
     \midrule
-    Catalog Oracle & \oracle{\ph{SRC_TF_ORACLE_96_ETTH1}} & \oracle{\ph{SRC_TF_ORACLE_96_ETTH2}} & \oracle{\ph{SRC_TF_ORACLE_96_ETTM1}} & \oracle{\ph{SRC_TF_ORACLE_96_ETTM2}} & \oracle{\ph{SRC_TF_ORACLE_96_ELEC}} & \oracle{\ph{SRC_TF_ORACLE_96_EXCH}} & \oracle{\ph{SRC_TF_ORACLE_96_TRAF}} & \oracle{\ph{SRC_TF_ORACLE_96_WEA}} & \oracle{\ph{SRC_TF_ORACLE_96_MACRO}} \\
+    Catalog Oracle & \oracle{0.973} & \oracle{1.192} & \oracle{1.146} & \oracle{1.056} & \oracle{0.807} & \oracle{4.537} & \oracle{0.919} & \oracle{0.707} & \oracle{1.417} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1287,16 +1287,16 @@ MAE and RMSE are reported per source and are not averaged across sources.
     \toprule
     Method & ETTh1 & ETTh2 & ETTm1 & ETTm2 & Electricity & Exchange & Traffic & Weather & Macro $\downarrow$ \\
     \midrule
-    Native KEEP & \ph{SRC_TF_KEEP_192_ETTH1} & \ph{SRC_TF_KEEP_192_ETTH2} & \ph{SRC_TF_KEEP_192_ETTM1} & \ph{SRC_TF_KEEP_192_ETTM2} & \ph{SRC_TF_KEEP_192_ELEC} & \ph{SRC_TF_KEEP_192_EXCH} & \ph{SRC_TF_KEEP_192_TRAF} & \ph{SRC_TF_KEEP_192_WEA} & \ph{SRC_TF_KEEP_192_MACRO} \\
-    Best Fixed & \ph{SRC_TF_BF_192_ETTH1} & \ph{SRC_TF_BF_192_ETTH2} & \ph{SRC_TF_BF_192_ETTM1} & \ph{SRC_TF_BF_192_ETTM2} & \ph{SRC_TF_BF_192_ELEC} & \ph{SRC_TF_BF_192_EXCH} & \ph{SRC_TF_BF_192_TRAF} & \ph{SRC_TF_BF_192_WEA} & \ph{SRC_TF_BF_192_MACRO} \\
-    R2-CART & \ph{SRC_TF_R2_192_ETTH1} & \ph{SRC_TF_R2_192_ETTH2} & \ph{SRC_TF_R2_192_ETTM1} & \ph{SRC_TF_R2_192_ETTM2} & \ph{SRC_TF_R2_192_ELEC} & \ph{SRC_TF_R2_192_EXCH} & \ph{SRC_TF_R2_192_TRAF} & \ph{SRC_TF_R2_192_WEA} & \ph{SRC_TF_R2_192_MACRO} \\
+    Native KEEP & 1.234 & 1.377 & 1.628 & 1.244 & 0.992 & 4.902 & 1.198 & 0.882 & 1.682 \\
+    Best Fixed & 1.044 & 1.267 & 1.214 & 1.117 & 0.868 & 5.238 & 0.952 & 0.908 & 1.576 \\
+    R2-CART & 1.048 & 1.299 & 1.229 & 1.109 & 0.897 & 5.049 & 0.954 & 0.883 & 1.558 \\
     SAITS & \ph{SRC_TF_SAITS_192_ETTH1} & \ph{SRC_TF_SAITS_192_ETTH2} & \ph{SRC_TF_SAITS_192_ETTM1} & \ph{SRC_TF_SAITS_192_ETTM2} & \ph{SRC_TF_SAITS_192_ELEC} & \ph{SRC_TF_SAITS_192_EXCH} & \ph{SRC_TF_SAITS_192_TRAF} & \ph{SRC_TF_SAITS_192_WEA} & \ph{SRC_TF_SAITS_192_MACRO} \\
     TOI & \ph{SRC_TF_TOI_192_ETTH1} & \ph{SRC_TF_TOI_192_ETTH2} & \ph{SRC_TF_TOI_192_ETTM1} & \ph{SRC_TF_TOI_192_ETTM2} & \ph{SRC_TF_TOI_192_ELEC} & \ph{SRC_TF_TOI_192_EXCH} & \ph{SRC_TF_TOI_192_TRAF} & \ph{SRC_TF_TOI_192_WEA} & \ph{SRC_TF_TOI_192_MACRO} \\
     TATO & \ph{SRC_TF_TATO_192_ETTH1} & \ph{SRC_TF_TATO_192_ETTH2} & \ph{SRC_TF_TATO_192_ETTM1} & \ph{SRC_TF_TATO_192_ETTM2} & \ph{SRC_TF_TATO_192_ELEC} & \ph{SRC_TF_TATO_192_EXCH} & \ph{SRC_TF_TATO_192_TRAF} & \ph{SRC_TF_TATO_192_WEA} & \ph{SRC_TF_TATO_192_MACRO} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SRC_TF_OURS_192_ETTH1} & \ph{SRC_TF_OURS_192_ETTH2} & \ph{SRC_TF_OURS_192_ETTM1} & \ph{SRC_TF_OURS_192_ETTM2} & \ph{SRC_TF_OURS_192_ELEC} & \ph{SRC_TF_OURS_192_EXCH} & \ph{SRC_TF_OURS_192_TRAF} & \ph{SRC_TF_OURS_192_WEA} & \ph{SRC_TF_OURS_192_MACRO} \\
+    \rowcolor{bestgray}\introact{} & 1.060 & 1.276 & 1.221 & 1.113 & 0.894 & 4.807 & 0.947 & 0.895 & 1.527 \\
     \midrule
-    Catalog Oracle & \oracle{\ph{SRC_TF_ORACLE_192_ETTH1}} & \oracle{\ph{SRC_TF_ORACLE_192_ETTH2}} & \oracle{\ph{SRC_TF_ORACLE_192_ETTM1}} & \oracle{\ph{SRC_TF_ORACLE_192_ETTM2}} & \oracle{\ph{SRC_TF_ORACLE_192_ELEC}} & \oracle{\ph{SRC_TF_ORACLE_192_EXCH}} & \oracle{\ph{SRC_TF_ORACLE_192_TRAF}} & \oracle{\ph{SRC_TF_ORACLE_192_WEA}} & \oracle{\ph{SRC_TF_ORACLE_192_MACRO}} \\
+    Catalog Oracle & \oracle{0.973} & \oracle{1.192} & \oracle{1.146} & \oracle{1.056} & \oracle{0.807} & \oracle{4.537} & \oracle{0.919} & \oracle{0.707} & \oracle{1.417} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1313,16 +1313,16 @@ MAE and RMSE are reported per source and are not averaged across sources.
     \toprule
     Method & ETTh1 & ETTh2 & ETTm1 & ETTm2 & Electricity & Exchange & Traffic & Weather & Macro $\downarrow$ \\
     \midrule
-    Native KEEP & \ph{SRC_CH2_KEEP_96_ETTH1} & \ph{SRC_CH2_KEEP_96_ETTH2} & \ph{SRC_CH2_KEEP_96_ETTM1} & \ph{SRC_CH2_KEEP_96_ETTM2} & \ph{SRC_CH2_KEEP_96_ELEC} & \ph{SRC_CH2_KEEP_96_EXCH} & \ph{SRC_CH2_KEEP_96_TRAF} & \ph{SRC_CH2_KEEP_96_WEA} & \ph{SRC_CH2_KEEP_96_MACRO} \\
-    Best Fixed & \ph{SRC_CH2_BF_96_ETTH1} & \ph{SRC_CH2_BF_96_ETTH2} & \ph{SRC_CH2_BF_96_ETTM1} & \ph{SRC_CH2_BF_96_ETTM2} & \ph{SRC_CH2_BF_96_ELEC} & \ph{SRC_CH2_BF_96_EXCH} & \ph{SRC_CH2_BF_96_TRAF} & \ph{SRC_CH2_BF_96_WEA} & \ph{SRC_CH2_BF_96_MACRO} \\
-    R2-CART & \ph{SRC_CH2_R2_96_ETTH1} & \ph{SRC_CH2_R2_96_ETTH2} & \ph{SRC_CH2_R2_96_ETTM1} & \ph{SRC_CH2_R2_96_ETTM2} & \ph{SRC_CH2_R2_96_ELEC} & \ph{SRC_CH2_R2_96_EXCH} & \ph{SRC_CH2_R2_96_TRAF} & \ph{SRC_CH2_R2_96_WEA} & \ph{SRC_CH2_R2_96_MACRO} \\
+    Native KEEP & 1.129 & 1.268 & 1.325 & 1.118 & 0.805 & 5.106 & 0.911 & 0.972 & 1.579 \\
+    Best Fixed & 1.077 & 1.222 & 1.245 & 1.120 & 0.826 & 3.491 & 0.896 & 0.943 & 1.353 \\
+    R2-CART & 1.087 & 1.268 & 1.274 & 1.124 & 0.822 & 4.105 & 0.890 & 0.909 & 1.435 \\
     SAITS & \ph{SRC_CH2_SAITS_96_ETTH1} & \ph{SRC_CH2_SAITS_96_ETTH2} & \ph{SRC_CH2_SAITS_96_ETTM1} & \ph{SRC_CH2_SAITS_96_ETTM2} & \ph{SRC_CH2_SAITS_96_ELEC} & \ph{SRC_CH2_SAITS_96_EXCH} & \ph{SRC_CH2_SAITS_96_TRAF} & \ph{SRC_CH2_SAITS_96_WEA} & \ph{SRC_CH2_SAITS_96_MACRO} \\
     TOI & \ph{SRC_CH2_TOI_96_ETTH1} & \ph{SRC_CH2_TOI_96_ETTH2} & \ph{SRC_CH2_TOI_96_ETTM1} & \ph{SRC_CH2_TOI_96_ETTM2} & \ph{SRC_CH2_TOI_96_ELEC} & \ph{SRC_CH2_TOI_96_EXCH} & \ph{SRC_CH2_TOI_96_TRAF} & \ph{SRC_CH2_TOI_96_WEA} & \ph{SRC_CH2_TOI_96_MACRO} \\
     TATO & \ph{SRC_CH2_TATO_96_ETTH1} & \ph{SRC_CH2_TATO_96_ETTH2} & \ph{SRC_CH2_TATO_96_ETTM1} & \ph{SRC_CH2_TATO_96_ETTM2} & \ph{SRC_CH2_TATO_96_ELEC} & \ph{SRC_CH2_TATO_96_EXCH} & \ph{SRC_CH2_TATO_96_TRAF} & \ph{SRC_CH2_TATO_96_WEA} & \ph{SRC_CH2_TATO_96_MACRO} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SRC_CH2_OURS_96_ETTH1} & \ph{SRC_CH2_OURS_96_ETTH2} & \ph{SRC_CH2_OURS_96_ETTM1} & \ph{SRC_CH2_OURS_96_ETTM2} & \ph{SRC_CH2_OURS_96_ELEC} & \ph{SRC_CH2_OURS_96_EXCH} & \ph{SRC_CH2_OURS_96_TRAF} & \ph{SRC_CH2_OURS_96_WEA} & \ph{SRC_CH2_OURS_96_MACRO} \\
+    \rowcolor{bestgray}\introact{} & 1.079 & 1.222 & 1.245 & 1.120 & 0.826 & 4.226 & 0.897 & 0.925 & 1.442 \\
     \midrule
-    Catalog Oracle & \oracle{\ph{SRC_CH2_ORACLE_96_ETTH1}} & \oracle{\ph{SRC_CH2_ORACLE_96_ETTH2}} & \oracle{\ph{SRC_CH2_ORACLE_96_ETTM1}} & \oracle{\ph{SRC_CH2_ORACLE_96_ETTM2}} & \oracle{\ph{SRC_CH2_ORACLE_96_ELEC}} & \oracle{\ph{SRC_CH2_ORACLE_96_EXCH}} & \oracle{\ph{SRC_CH2_ORACLE_96_TRAF}} & \oracle{\ph{SRC_CH2_ORACLE_96_WEA}} & \oracle{\ph{SRC_CH2_ORACLE_96_MACRO}} \\
+    Catalog Oracle & \oracle{0.997} & \oracle{1.111} & \oracle{1.156} & \oracle{1.037} & \oracle{0.727} & \oracle{3.311} & \oracle{0.857} & \oracle{0.732} & \oracle{1.241} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1339,16 +1339,16 @@ MAE and RMSE are reported per source and are not averaged across sources.
     \toprule
     Method & ETTh1 & ETTh2 & ETTm1 & ETTm2 & Electricity & Exchange & Traffic & Weather & Macro $\downarrow$ \\
     \midrule
-    Native KEEP & \ph{SRC_CH2_KEEP_192_ETTH1} & \ph{SRC_CH2_KEEP_192_ETTH2} & \ph{SRC_CH2_KEEP_192_ETTM1} & \ph{SRC_CH2_KEEP_192_ETTM2} & \ph{SRC_CH2_KEEP_192_ELEC} & \ph{SRC_CH2_KEEP_192_EXCH} & \ph{SRC_CH2_KEEP_192_TRAF} & \ph{SRC_CH2_KEEP_192_WEA} & \ph{SRC_CH2_KEEP_192_MACRO} \\
-    Best Fixed & \ph{SRC_CH2_BF_192_ETTH1} & \ph{SRC_CH2_BF_192_ETTH2} & \ph{SRC_CH2_BF_192_ETTM1} & \ph{SRC_CH2_BF_192_ETTM2} & \ph{SRC_CH2_BF_192_ELEC} & \ph{SRC_CH2_BF_192_EXCH} & \ph{SRC_CH2_BF_192_TRAF} & \ph{SRC_CH2_BF_192_WEA} & \ph{SRC_CH2_BF_192_MACRO} \\
-    R2-CART & \ph{SRC_CH2_R2_192_ETTH1} & \ph{SRC_CH2_R2_192_ETTH2} & \ph{SRC_CH2_R2_192_ETTM1} & \ph{SRC_CH2_R2_192_ETTM2} & \ph{SRC_CH2_R2_192_ELEC} & \ph{SRC_CH2_R2_192_EXCH} & \ph{SRC_CH2_R2_192_TRAF} & \ph{SRC_CH2_R2_192_WEA} & \ph{SRC_CH2_R2_192_MACRO} \\
+    Native KEEP & 1.129 & 1.268 & 1.325 & 1.118 & 0.805 & 5.106 & 0.911 & 0.972 & 1.579 \\
+    Best Fixed & 1.077 & 1.222 & 1.245 & 1.120 & 0.826 & 3.491 & 0.896 & 0.943 & 1.353 \\
+    R2-CART & 1.087 & 1.268 & 1.274 & 1.124 & 0.822 & 4.105 & 0.890 & 0.909 & 1.435 \\
     SAITS & \ph{SRC_CH2_SAITS_192_ETTH1} & \ph{SRC_CH2_SAITS_192_ETTH2} & \ph{SRC_CH2_SAITS_192_ETTM1} & \ph{SRC_CH2_SAITS_192_ETTM2} & \ph{SRC_CH2_SAITS_192_ELEC} & \ph{SRC_CH2_SAITS_192_EXCH} & \ph{SRC_CH2_SAITS_192_TRAF} & \ph{SRC_CH2_SAITS_192_WEA} & \ph{SRC_CH2_SAITS_192_MACRO} \\
     TOI & \ph{SRC_CH2_TOI_192_ETTH1} & \ph{SRC_CH2_TOI_192_ETTH2} & \ph{SRC_CH2_TOI_192_ETTM1} & \ph{SRC_CH2_TOI_192_ETTM2} & \ph{SRC_CH2_TOI_192_ELEC} & \ph{SRC_CH2_TOI_192_EXCH} & \ph{SRC_CH2_TOI_192_TRAF} & \ph{SRC_CH2_TOI_192_WEA} & \ph{SRC_CH2_TOI_192_MACRO} \\
     TATO & \ph{SRC_CH2_TATO_192_ETTH1} & \ph{SRC_CH2_TATO_192_ETTH2} & \ph{SRC_CH2_TATO_192_ETTM1} & \ph{SRC_CH2_TATO_192_ETTM2} & \ph{SRC_CH2_TATO_192_ELEC} & \ph{SRC_CH2_TATO_192_EXCH} & \ph{SRC_CH2_TATO_192_TRAF} & \ph{SRC_CH2_TATO_192_WEA} & \ph{SRC_CH2_TATO_192_MACRO} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SRC_CH2_OURS_192_ETTH1} & \ph{SRC_CH2_OURS_192_ETTH2} & \ph{SRC_CH2_OURS_192_ETTM1} & \ph{SRC_CH2_OURS_192_ETTM2} & \ph{SRC_CH2_OURS_192_ELEC} & \ph{SRC_CH2_OURS_192_EXCH} & \ph{SRC_CH2_OURS_192_TRAF} & \ph{SRC_CH2_OURS_192_WEA} & \ph{SRC_CH2_OURS_192_MACRO} \\
+    \rowcolor{bestgray}\introact{} & 1.079 & 1.222 & 1.245 & 1.120 & 0.826 & 4.226 & 0.897 & 0.925 & 1.442 \\
     \midrule
-    Catalog Oracle & \oracle{\ph{SRC_CH2_ORACLE_192_ETTH1}} & \oracle{\ph{SRC_CH2_ORACLE_192_ETTH2}} & \oracle{\ph{SRC_CH2_ORACLE_192_ETTM1}} & \oracle{\ph{SRC_CH2_ORACLE_192_ETTM2}} & \oracle{\ph{SRC_CH2_ORACLE_192_ELEC}} & \oracle{\ph{SRC_CH2_ORACLE_192_EXCH}} & \oracle{\ph{SRC_CH2_ORACLE_192_TRAF}} & \oracle{\ph{SRC_CH2_ORACLE_192_WEA}} & \oracle{\ph{SRC_CH2_ORACLE_192_MACRO}} \\
+    Catalog Oracle & \oracle{0.997} & \oracle{1.111} & \oracle{1.156} & \oracle{1.037} & \oracle{0.727} & \oracle{3.311} & \oracle{0.857} & \oracle{0.732} & \oracle{1.241} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1455,14 +1455,14 @@ main table.
     \toprule
     Method & P1 Point & P2 Target Block & P3 Shared Block & P4 Tail & Avg.\ Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & \ph{P1_KEEP} & \ph{P2_KEEP} & \ph{P3_KEEP} & \ph{P4_KEEP} & \ph{PR_KEEP} \\
-    \textsc{Best Fixed}  & \ph{P1_BF}   & \ph{P2_BF}   & \ph{P3_BF}   & \ph{P4_BF}   & \ph{PR_BF} \\
-    R2-CART              & \ph{P1_R2}   & \ph{P2_R2}   & \ph{P3_R2}   & \ph{P4_R2}   & \ph{PR_R2} \\
+    \textsc{Native Keep} & 1.436 & 1.379 & 1.400 & 2.088 & 5.03 \\
+    \textsc{Best Fixed}  & 1.416   & 1.391   & 1.401   & 1.545   & 3.54 \\
+    R2-CART              & 1.409   & 1.357   & 1.489   & 1.568   & 3.92 \\
     SAITS & \ph{P1_SAITS} & \ph{P2_SAITS} & \ph{P3_SAITS} & \ph{P4_SAITS} & \ph{PR_SAITS} \\
     TOI                   & \ph{P1_TOI}& \ph{P2_TOI}& \ph{P3_TOI}& \ph{P4_TOI}& \ph{PR_TOI} \\
     TATO & \ph{P1_TATO} & \ph{P2_TATO} & \ph{P3_TATO} & \ph{P4_TATO} & \ph{PR_TATO} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{P1_OURS} & \ph{P2_OURS} & \ph{P3_OURS} & \ph{P4_OURS} & \ph{PR_OURS} \\
+    \rowcolor{bestgray}\introact{} & 1.394 & 1.363 & 1.490 & 1.540 & 3.11 \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1488,14 +1488,14 @@ because the replay bank already samples from the same three levels.\begin{table}
     \toprule
     Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & \ph{SEV10-KEEP-MASE} & \ph{SEV10-KEEP-MSE} & \ph{SEV10-KEEP-MAE} & \ph{SEV10-KEEP-RMSE} & \ph{SEV10-KEEP-RANK} \\
-    \textsc{Best Fixed} & \ph{SEV10-BF-MASE} & \ph{SEV10-BF-MSE} & \ph{SEV10-BF-MAE} & \ph{SEV10-BF-RMSE} & \ph{SEV10-BF-RANK} \\
-    R2-CART & \ph{SEV10-R2-MASE} & \ph{SEV10-R2-MSE} & \ph{SEV10-R2-MAE} & \ph{SEV10-R2-RMSE} & \ph{SEV10-R2-RANK} \\
+    \textsc{Native Keep} & 1.576 & \ph{SEV10-KEEP-MSE} & \ph{SEV10-KEEP-MAE} & \ph{SEV10-KEEP-RMSE} & \ph{SEV10-KEEP-RANK} \\
+    \textsc{Best Fixed} & 1.438 & \ph{SEV10-BF-MSE} & \ph{SEV10-BF-MAE} & \ph{SEV10-BF-RMSE} & \ph{SEV10-BF-RANK} \\
+    R2-CART & 1.456 & \ph{SEV10-R2-MSE} & \ph{SEV10-R2-MAE} & \ph{SEV10-R2-RMSE} & \ph{SEV10-R2-RANK} \\
     SAITS & \ph{SEV10-SAITS-MASE} & \ph{SEV10-SAITS-MSE} & \ph{SEV10-SAITS-MAE} & \ph{SEV10-SAITS-RMSE} & \ph{SEV10-SAITS-RANK} \\
     TOI & \ph{SEV10-TOI-MASE} & \ph{SEV10-TOI-MSE} & \ph{SEV10-TOI-MAE} & \ph{SEV10-TOI-RMSE} & \ph{SEV10-TOI-RANK} \\
     TATO & \ph{SEV10-TATO-MASE} & \ph{SEV10-TATO-MSE} & \ph{SEV10-TATO-MAE} & \ph{SEV10-TATO-RMSE} & \ph{SEV10-TATO-RANK} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SEV10-OURS-MASE} & \ph{SEV10-OURS-MSE} & \ph{SEV10-OURS-MAE} & \ph{SEV10-OURS-RMSE} & \ph{SEV10-OURS-RANK} \\
+    \rowcolor{bestgray}\introact{} & 1.447 & \ph{SEV10-OURS-MSE} & \ph{SEV10-OURS-MAE} & \ph{SEV10-OURS-RMSE} & \ph{SEV10-OURS-RANK} \\
     \midrule
     \oracle{Catalog Oracle (diagnostic)} & \oracle{\ph{SEV10-ORACLE-MASE}} & \oracle{\ph{SEV10-ORACLE-MSE}} & \oracle{\ph{SEV10-ORACLE-MAE}} & \oracle{\ph{SEV10-ORACLE-RMSE}} & \oracle{---} \\
     \bottomrule
@@ -1512,14 +1512,14 @@ because the replay bank already samples from the same three levels.\begin{table}
     \toprule
     Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & \ph{SEV30-KEEP-MASE} & \ph{SEV30-KEEP-MSE} & \ph{SEV30-KEEP-MAE} & \ph{SEV30-KEEP-RMSE} & \ph{SEV30-KEEP-RANK} \\
-    \textsc{Best Fixed} & \ph{SEV30-BF-MASE} & \ph{SEV30-BF-MSE} & \ph{SEV30-BF-MAE} & \ph{SEV30-BF-RMSE} & \ph{SEV30-BF-RANK} \\
-    R2-CART & \ph{SEV30-R2-MASE} & \ph{SEV30-R2-MSE} & \ph{SEV30-R2-MAE} & \ph{SEV30-R2-RMSE} & \ph{SEV30-R2-RANK} \\
+    \textsc{Native Keep} & 1.684 & \ph{SEV30-KEEP-MSE} & \ph{SEV30-KEEP-MAE} & \ph{SEV30-KEEP-RMSE} & \ph{SEV30-KEEP-RANK} \\
+    \textsc{Best Fixed} & 1.517 & \ph{SEV30-BF-MSE} & \ph{SEV30-BF-MAE} & \ph{SEV30-BF-RMSE} & \ph{SEV30-BF-RANK} \\
+    R2-CART & 1.392 & \ph{SEV30-R2-MSE} & \ph{SEV30-R2-MAE} & \ph{SEV30-R2-RMSE} & \ph{SEV30-R2-RANK} \\
     SAITS & \ph{SEV30-SAITS-MASE} & \ph{SEV30-SAITS-MSE} & \ph{SEV30-SAITS-MAE} & \ph{SEV30-SAITS-RMSE} & \ph{SEV30-SAITS-RANK} \\
     TOI & \ph{SEV30-TOI-MASE} & \ph{SEV30-TOI-MSE} & \ph{SEV30-TOI-MAE} & \ph{SEV30-TOI-RMSE} & \ph{SEV30-TOI-RANK} \\
     TATO & \ph{SEV30-TATO-MASE} & \ph{SEV30-TATO-MSE} & \ph{SEV30-TATO-MAE} & \ph{SEV30-TATO-RMSE} & \ph{SEV30-TATO-RANK} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SEV30-OURS-MASE} & \ph{SEV30-OURS-MSE} & \ph{SEV30-OURS-MAE} & \ph{SEV30-OURS-RMSE} & \ph{SEV30-OURS-RANK} \\
+    \rowcolor{bestgray}\introact{} & 1.484 & \ph{SEV30-OURS-MSE} & \ph{SEV30-OURS-MAE} & \ph{SEV30-OURS-RMSE} & \ph{SEV30-OURS-RANK} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1534,14 +1534,14 @@ because the replay bank already samples from the same three levels.\begin{table}
     \toprule
     Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & \ph{SEV50-KEEP-MASE} & \ph{SEV50-KEEP-MSE} & \ph{SEV50-KEEP-MAE} & \ph{SEV50-KEEP-RMSE} & \ph{SEV50-KEEP-RANK} \\
-    \textsc{Best Fixed} & \ph{SEV50-BF-MASE} & \ph{SEV50-BF-MSE} & \ph{SEV50-BF-MAE} & \ph{SEV50-BF-RMSE} & \ph{SEV50-BF-RANK} \\
-    R2-CART & \ph{SEV50-R2-MASE} & \ph{SEV50-R2-MSE} & \ph{SEV50-R2-MAE} & \ph{SEV50-R2-RMSE} & \ph{SEV50-R2-RANK} \\
+    \textsc{Native Keep} & 1.792 & \ph{SEV50-KEEP-MSE} & \ph{SEV50-KEEP-MAE} & \ph{SEV50-KEEP-RMSE} & \ph{SEV50-KEEP-RANK} \\
+    \textsc{Best Fixed} & 1.736 & \ph{SEV50-BF-MSE} & \ph{SEV50-BF-MAE} & \ph{SEV50-BF-RMSE} & \ph{SEV50-BF-RANK} \\
+    R2-CART & 1.688 & \ph{SEV50-R2-MSE} & \ph{SEV50-R2-MAE} & \ph{SEV50-R2-RMSE} & \ph{SEV50-R2-RANK} \\
     SAITS & \ph{SEV50-SAITS-MASE} & \ph{SEV50-SAITS-MSE} & \ph{SEV50-SAITS-MAE} & \ph{SEV50-SAITS-RMSE} & \ph{SEV50-SAITS-RANK} \\
     TOI & \ph{SEV50-TOI-MASE} & \ph{SEV50-TOI-MSE} & \ph{SEV50-TOI-MAE} & \ph{SEV50-TOI-RMSE} & \ph{SEV50-TOI-RANK} \\
     TATO & \ph{SEV50-TATO-MASE} & \ph{SEV50-TATO-MSE} & \ph{SEV50-TATO-MAE} & \ph{SEV50-TATO-RMSE} & \ph{SEV50-TATO-RANK} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{SEV50-OURS-MASE} & \ph{SEV50-OURS-MSE} & \ph{SEV50-OURS-MAE} & \ph{SEV50-OURS-RMSE} & \ph{SEV50-OURS-RANK} \\
+    \rowcolor{bestgray}\introact{} & 1.701 & \ph{SEV50-OURS-MSE} & \ph{SEV50-OURS-MAE} & \ph{SEV50-OURS-RMSE} & \ph{SEV50-OURS-RANK} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1560,14 +1560,14 @@ because the replay bank already samples from the same three levels.\begin{table}
     \toprule
     Method & 10\% MASE $\downarrow$ & 30\% MASE $\downarrow$ & 50\% MASE $\downarrow$ & Worst pattern $\downarrow$ \\
     \midrule
-    Native KEEP        & \ph{RB_KEEP_10}    & \ph{RB_KEEP_30}    & \ph{RB_KEEP_50}    & \ph{RB_KEEP_WORST} \\
-    Best Fixed         & \ph{RB_BF_10}      & \ph{RB_BF_30}      & \ph{RB_BF_50}      & \ph{RB_BF_WORST} \\
-    R2-CART            & \ph{RB_R2_10}      & \ph{RB_R2_30}      & \ph{RB_R2_50}      & \ph{RB_R2_WORST} \\
+    Native KEEP        & 1.576    & 1.684    & 1.792    & \ph{RB_KEEP_WORST} \\
+    Best Fixed         & 1.438      & 1.517      & 1.736      & \ph{RB_BF_WORST} \\
+    R2-CART            & 1.456      & 1.392      & 1.688      & \ph{RB_R2_WORST} \\
     SAITS              & \ph{RB_SAITS_10}      & \ph{RB_SAITS_30}      & \ph{RB_SAITS_50}      & \ph{RB_SAITS_WORST} \\
     TOI                & \ph{RB_TOI_10}     & \ph{RB_TOI_30}     & \ph{RB_TOI_50}     & \ph{RB_TOI_WORST} \\
     TATO               & \ph{RB_TATO_10}    & \ph{RB_TATO_30}    & \ph{RB_TATO_50}    & \ph{RB_TATO_WORST} \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{RB_OURS_10} & \ph{RB_OURS_30} & \ph{RB_OURS_50} & \ph{RB_OURS_WORST} \\
+    \rowcolor{bestgray}\introact{} & 1.447 & 1.484 & 1.701 & \ph{RB_OURS_WORST} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1624,13 +1624,13 @@ per-action averages and the two rank statistics.
     Intervention & Rec.\ MSE $\downarrow$ & Rec.\ MAE $\downarrow$
                  & Mean realised utility $\uparrow$ & Episodes \\
     \midrule
-    \textsc{Ffill}         & \ph{REC_FFILL_MSE}  & \ph{REC_FFILL_MAE}  & \ph{REC_FFILL_UTIL}  & \ph{REC_FFILL_N} \\
-    \textsc{Single TS-ICL} & \ph{REC_SINGLE_MSE} & \ph{REC_SINGLE_MAE} & \ph{REC_SINGLE_UTIL} & \ph{REC_SINGLE_N} \\
-    \textsc{Multi TS-ICL}  & \ph{REC_MULTI_MSE}  & \ph{REC_MULTI_MAE}  & \ph{REC_MULTI_UTIL}  & \ph{REC_MULTI_N} \\
-    \textsc{Context Ridge} & \ph{REC_RIDGE_MSE}  & \ph{REC_RIDGE_MAE}  & \ph{REC_RIDGE_UTIL}  & \ph{REC_RIDGE_N} \\
+    \textsc{Ffill}         & 77.47  & 4.08  & -0.139  & 760 \\
+    \textsc{Single TS-ICL} & 29.61 & 2.03 & +0.013 & 760 \\
+    \textsc{Multi TS-ICL}  & 29.52  & 1.85  & +0.033  & 760 \\
+    \textsc{Context Ridge} & 30.19  & 1.47  & +0.052  & 570 \\
     \midrule
-    \multicolumn{5}{l}{\footnotesize Winner agreement \ph{RECON_AGREE}, discordant rate
-    \ph{DISCORDANT_RATE}, mean within-episode Spearman $\rho$ \ph{RECON_RHO}} \\
+    \multicolumn{5}{l}{\footnotesize Winner agreement 28.6\%, discordant rate
+    43.2\%, mean within-episode Spearman $\rho$ 0.13} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1679,12 +1679,12 @@ Table~\ref{tab:ablation}. The variant definitions follow \S\ref{sec:exp-ablation
     \toprule
     Variant & MASE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & MSE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Calls $\downarrow$ \\
     \midrule
-    Full \introact{}            & \ph{AF_FULL_MASE} & \ph{AF_FULL_MAE} & \ph{AF_FULL_RMSE} & \ph{AF_FULL_MSE} & \ph{AF_FULL_IR} & \ph{AF_FULL_CHIR} & \ph{AF_FULL_HL} & \ph{AF_FULL_CALLS} \\
-    A1 Global utility           & \ph{AF_A1_MASE}   & \ph{AF_A1_MAE}   & \ph{AF_A1_RMSE}   & \ph{AF_A1_MSE}   & \ph{AF_A1_IR}   & \ph{AF_A1_CHIR}   & \ph{AF_A1_HL}   & \ph{AF_A1_CALLS} \\
-    A2 w/o intervention state   & \ph{AF_A2_MASE}   & \ph{AF_A2_MAE}   & \ph{AF_A2_RMSE}   & \ph{AF_A2_MSE}   & \ph{AF_A2_IR}   & \ph{AF_A2_CHIR}   & \ph{AF_A2_HL}   & \ph{AF_A2_CALLS} \\
-    A3 w/o reference-forecast state & \ph{AF_A3_MASE} & \ph{AF_A3_MAE} & \ph{AF_A3_RMSE} & \ph{AF_A3_MSE}   & \ph{AF_A3_IR}   & \ph{AF_A3_CHIR}   & \ph{AF_A3_HL}   & \ph{AF_A3_CALLS} \\
-    A4 Always act               & \ph{AF_A4_MASE}   & \ph{AF_A4_MAE}   & \ph{AF_A4_RMSE}   & \ph{AF_A4_MSE}   & \ph{AF_A4_IR}   & \ph{AF_A4_CHIR}   & \ph{AF_A4_HL}   & \ph{AF_A4_CALLS} \\
-    A5 Parametric utility predictor & \ph{AF_A5_MASE} & \ph{AF_A5_MAE} & \ph{AF_A5_RMSE} & \ph{AF_A5_MSE} & \ph{AF_A5_IR} & \ph{AF_A5_CHIR} & \ph{AF_A5_HL} & \ph{AF_A5_CALLS} \\
+    Full \introact{}            & 1.447 & \ph{AF_FULL_MAE} & \ph{AF_FULL_RMSE} & \ph{AF_FULL_MSE} & 82.6\% & 44.2\% & 0.0451 & 1.83 \\
+    A1 Global utility           & 1.462   & \ph{AF_A1_MAE}   & \ph{AF_A1_RMSE}   & \ph{AF_A1_MSE}   & 100.0\%   & 43.9\%   & 0.0642   & 2.00 \\
+    A2 w/o intervention state   & 1.446   & \ph{AF_A2_MAE}   & \ph{AF_A2_RMSE}   & \ph{AF_A2_MSE}   & 82.4\%   & 43.8\%   & 0.0460   & 1.82 \\
+    A3 w/o reference-forecast state & 1.426 & \ph{AF_A3_MAE} & \ph{AF_A3_RMSE} & \ph{AF_A3_MSE}   & 84.8\%   & 42.6\%   & 0.0426   & 1.85 \\
+    A4 Always act               & 1.439   & \ph{AF_A4_MAE}   & \ph{AF_A4_RMSE}   & \ph{AF_A4_MSE}   & 100.0\%   & 44.6\%   & 0.0519   & 2.00 \\
+    A5 Parametric utility predictor & 1.462 & \ph{AF_A5_MAE} & \ph{AF_A5_RMSE} & \ph{AF_A5_MSE} & 87.2\% & 44.0\% & 0.0574 & 1.87 \\
     \midrule
     \bottomrule
   \end{tabular}}
