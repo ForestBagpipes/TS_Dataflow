@@ -121,21 +121,28 @@ def build(evals: dict, primary: dict, mean_over, ci,
             tail = ("the interval excludes zero on "
                     + ", ".join(BACKBONE_NAME[b] for b in sig))
         out["MAIN_R2CART"] = "Against the simple selector " + tail
-    per_rank = {b: evals[b]["average_rank"] for b in order}
+    # The claim is about the deployable rows of Table 1.  The ablation variants
+    # are ranked in the same pass, but they are variants of this method and are
+    # reported in the ablation table, so they are not what the claim is about.
+    deployable_rows = ("NATIVE_KEEP", "BEST_FIXED", "R2_CART", "SAITS", "TATO",
+                       "FULL_INTROACT")
+    per_rank = {b: {k: v for k, v in evals[b]["average_rank"].items()
+                    if k in deployable_rows} for b in order}
     ours_best = all(min(r.items(), key=lambda kv: kv[1])[0] == "FULL_INTROACT"
-                    for r in per_rank.values())
+                    for r in per_rank.values() if r)
     rank_parts = ", ".join(f"{BACKBONE_NAME[b]} {per_rank[b]['FULL_INTROACT']:.2f}"
-                           for b in order)
+                           for b in order if "FULL_INTROACT" in per_rank[b])
+    count = len(per_rank[order[0]]) if order else 0
     if ours_best:
         out["MAIN_RANK"] = (
-            f"Average rank over the evaluation cells is {rank_parts}, the best of the "
-            f"{len(ranks)} rows that carry one on every backbone, so the aggregate is not driven "
-            f"by a handful of cells")
+            f"Average rank over the evaluation cells is {rank_parts}, the best of the {count} "
+            f"deployable rows on every backbone, so the aggregate is not driven by a handful of "
+            f"cells")
     else:
         out["MAIN_RANK"] = (
             f"Average rank over the evaluation cells is {rank_parts}, against "
             + ", ".join(f"{BACKBONE_NAME[b]} {min(per_rank[b].values()):.2f}" for b in order)
-            + " for the best row on each")
+            + " for the best deployable row on each")
 
     ir = m("FULL_INTROACT", "intervention_rate")
     hir = m("FULL_INTROACT", "conditional_hir")
@@ -287,8 +294,11 @@ def build(evals: dict, primary: dict, mean_over, ci,
             "rule on the backbone's own replay bank, still improves on the untouched input and "
             "still ranks first among the deployable rows on a backbone family that took no part "
             "in method design, without reaching the lowest average there")
-    rank_all = all(min(evals[b]["average_rank"].items(), key=lambda kv: kv[1])[0]
-                   == "FULL_INTROACT" for b in seq)
+    deployable_rows = ("NATIVE_KEEP", "BEST_FIXED", "R2_CART", "SAITS", "TATO",
+                       "FULL_INTROACT")
+    rank_all = all(
+        min(((k, v) for k, v in evals[b]["average_rank"].items() if k in deployable_rows),
+            key=lambda kv: kv[1])[0] == "FULL_INTROACT" for b in seq)
     lowest = " and ".join(BACKBONE_NAME[b] for b in won) if won else "no backbone"
     out["ABSTRACT_RESULT"] = (
         f"{INTRO} lowers source-macro MASE from {keep:.3f} to {ours:.3f}, improves on the "
@@ -299,8 +309,11 @@ def build(evals: dict, primary: dict, mean_over, ci,
             f". It reaches the lowest macro average on {lowest}, and on the held-out family one "
             f"fixed repair reaches a lower one, which we report rather than average away")
 
-    rank_best = all(min(evals[b]["average_rank"].items(), key=lambda kv: kv[1])[0]
-                    == "FULL_INTROACT" for b in seq)
+    deployable_rows = ("NATIVE_KEEP", "BEST_FIXED", "R2_CART", "SAITS", "TATO",
+                       "FULL_INTROACT")
+    rank_best = all(
+        min(((k, v) for k, v in evals[b]["average_rank"].items() if k in deployable_rows),
+            key=lambda kv: kv[1])[0] == "FULL_INTROACT" for b in seq)
     where = (" on every backbone" if not lost else
              " on " + " and ".join(BACKBONE_NAME[b] for b in won))
     out["CONTRIB_RESULT"] = (

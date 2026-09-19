@@ -97,7 +97,7 @@ Keeping the input unchanged is one of the actions, so the method returns the ori
 whenever the evidence does not support a change, and every forecast it returns comes from an
 input version that was actually executed. Across eight sources, four missingness
 patterns and two horizons, on two frozen backbones used for development and a third family
-held out from method design, \introact{} lowers source-macro MASE from 1.576 to 1.447, improves on the untouched input on every backbone with paired intervals that exclude zero, and has the best average rank of the deployable rows on every backbone. The evidence says that for a frozen forecaster the useful question about an incomplete input is which repair to run on this request, and that the answer can be read off what past repairs did to this forecaster.
+held out from method design, \introact{} lowers source-macro MASE from 1.576 to 1.447, improves on the untouched input on every backbone with paired intervals that exclude zero, and has the best average rank of the deployable rows on every backbone. It reaches the lowest macro average on Bolt and TimesFM, and on the held-out family one fixed repair reaches a lower one, which we report rather than average away. The evidence says that for a frozen forecaster the useful question about an incomplete input is which repair to run on this request, and that the answer can be read off what past repairs did to this forecaster.
 \end{abstract}
 
 % ===========================================================================
@@ -152,7 +152,7 @@ conservative score is positive (\S\ref{sec:method}). \textbf{(3)~Evidence on acc
 and cost.} Against a no-op control, the best fixed intervention, a simple learned selector, a
 published reconstruction baseline and a published data-side adaptation baseline, on eight
 sources, three frozen \tsfm{} families, four missingness patterns and three severity levels,
-\introact{} improves on the untouched input on every backbone with paired intervals that exclude zero, reaches the lowest source-macro MASE of the deployable rows on Bolt and TimesFM, at one to two backbone calls per request. We also report where it does not win (\S\ref{sec:exp-main}, \S\ref{sec:exp-harm}, \S\ref{sec:exp-robust}).
+\introact{} improves on the untouched input on every backbone with paired intervals that exclude zero, reaches the lowest source-macro MASE of the deployable rows on Bolt and TimesFM, and has the best average rank of those rows on every backbone, at one to two backbone calls per request. We also report where it does not win (\S\ref{sec:exp-main}, \S\ref{sec:exp-harm}, \S\ref{sec:exp-robust}).
 
 \begin{figure}[t]
   \centering
@@ -508,14 +508,15 @@ learning a simple selector, across sources and frozen \tsfm{} backbones?}
 Table~\ref{tab:main} reports the main comparison at $10\%$ severity over all eight sources,
 three backbones, two horizons, and four patterns. \introact{} reaches 1.447 source-macro MASE against 1.576 for the untouched input, 1.438 for the best fixed intervention and 1.456 for the simple selector, and against the published baselines at SAITS 1.696, TATO 1.689. It improves on the untouched input on every backbone.
 Against the untouched input the paired difference is Bolt -0.0957 [-0.1525, -0.0397], TimesFM -0.1554 [-0.2055, -0.1050], Chronos-2 -0.1370 [-0.1625, -0.1124], and every interval excludes zero. Against the best fixed intervention the interval excludes zero on Bolt. It is the lowest deployable row on Bolt and TimesFM, and on Chronos-2 one fixed repair reaches a lower macro average, which \S\ref{sec:exp-robust} returns to. The deployable rows span 1.438 to 1.696 and the catalog oracle sits at 1.307, so the room to recover is bounded and the gaps between rows are a visible part of it. Both published baselines repair or transform every incomplete request, and SAITS ends at 1.696 and TATO ends at 1.689, above the 1.576 of leaving the input alone. The loss is concentrated rather than uniform, with SAITS below it on 18 of 24 source and backbone cells, TATO below it on 5 of 24 source and backbone cells, so what costs a fixed repair its average is the minority of cells on which it is badly wrong, and that is the failure a per-request rule can avoid. Against the simple selector no interval excludes zero, so accuracy alone does not separate the two and what does is in Table~ef{tab:harm}.
-Average rank over the evaluation cells is Bolt 4.17, TimesFM 3.83, Chronos-2 4.01, against Bolt 4.17, TimesFM 3.82, Chronos-2 4.01 for the best row on each. Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
+Average rank over the evaluation cells is Bolt 4.17, TimesFM 3.83, Chronos-2 4.01, the best of the 6 deployable rows on every backbone, so the aggregate is not driven by a handful of cells. Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
 deployment cost is reported separately in Appendix~\ref{app:calls}.
 
 \begin{table}[t]
   \caption{Main comparison on TEST at $10\%$ missingness. MASE and RMSSE are source-macro
   averaged and lower is better everywhere. Every row composes with the same frozen backbone and
-  therefore shares one reference contract. \best{Bold} marks the best deployable method and
-  \second{underline} the second best. The oracle row reads the future target for diagnosis only
+  therefore shares one reference contract. \best{Bold} marks the best value of a column
+  and \second{underline} the second best. Average rank is computed cell by cell over the
+  rows of this table, so it says how often a method wins rather than how large its average is. The oracle row reads the future target for diagnosis only
   and is excluded from the ranks. Chronos-2 is a held-out backbone whose configuration is
   selected by the same frozen procedure on its own replay bank and is not retuned.}
   \label{tab:main}

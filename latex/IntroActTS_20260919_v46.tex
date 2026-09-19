@@ -514,8 +514,9 @@ deployment cost is reported separately in Appendix~\ref{app:calls}.
 \begin{table}[t]
   \caption{Main comparison on TEST at $10\%$ missingness. MASE and RMSSE are source-macro
   averaged and lower is better everywhere. Every row composes with the same frozen backbone and
-  therefore shares one reference contract. \best{Bold} marks the best deployable method and
-  \second{underline} the second best. The oracle row reads the future target for diagnosis only
+  therefore shares one reference contract. \best{Bold} marks the best value of a column
+  and \second{underline} the second best. Average rank is computed cell by cell over the
+  rows of this table, so it says how often a method wins rather than how large its average is. The oracle row reads the future target for diagnosis only
   and is excluded from the ranks. Chronos-2 is a held-out backbone whose configuration is
   selected by the same frozen procedure on its own replay bank and is not retuned.}
   \label{tab:main}
