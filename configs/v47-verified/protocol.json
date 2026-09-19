@@ -1,0 +1,34 @@
+{
+  "version": "v47-verified-posthoc",
+  "evidence_boundary": "TRAIN-only development; TEST remains disabled until the gate passes",
+  "context_length": 512,
+  "horizons": [96, 192],
+  "patterns": ["P1_point", "P2_target_block", "P3_shared_block", "P4_tail"],
+  "bank_severities": [0.1, 0.3, 0.5],
+  "bank_mask_seeds": [20260917, 20260918],
+  "train_parent_split": {"bank": 0.8, "train_eval": 0.2},
+  "actions": ["KEEP", "FFILL", "SINGLE_TSICL", "MULTI_TSICL", "CONTEXT_RIDGE", "SAITS"],
+  "saits": {
+    "folds": 4,
+    "fold_unit": "parent",
+    "epochs": 100,
+    "patience": 10,
+    "max_channels": 64,
+    "seed": 101
+  },
+  "selector": {
+    "k_grid": [8, 16, 32, 64, 128, 256],
+    "beta_grid": [0.0, 0.5, 1.0, 1.64],
+    "objective": "minimum_LOPO_source_macro_MASE_subject_to_conditional_harm_cap",
+    "plausibility_scales": 3.0
+  },
+  "backbones": ["bolt", "timesfm", "chronos2"],
+  "inference_batching": {
+    "bolt": {"batch_size": 1, "probe": "failed_batch32_equivalence"},
+    "timesfm": {"batch_size": 32, "probe": "passed_train_context_equivalence"},
+    "chronos2": {"batch_size": 32, "probe": "passed_train_context_equivalence"}
+  },
+  "bootstrap": {"resamples": 2000, "seed": 101, "unit": "parent", "source_macro": true},
+  "gpu_policy": "one_heavy_task_under_locks/gpu.lock",
+  "test_policy": "posthoc_design_disclosed; no TEST read before development gate"
+}

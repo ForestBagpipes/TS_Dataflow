@@ -1,0 +1,32 @@
+{
+  "stage": "v47-verified-train-context-batch-equivalence",
+  "input_sha256": "e2152a5b13a82a68df5e90e27c21cebc8678a34c93479d9b661d4a1450179eb9",
+  "future_arrays_read": 0,
+  "test_records_read": 0,
+  "probe_batch_size": 32,
+  "decision": {"bolt": 1, "timesfm": 32, "chronos2": 32},
+  "backbones": {
+    "bolt": {
+      "weight_sha256": "31f875483a3215bc6880a0837ea608a13ce55f88ad90538c3cdd0b29aeb60b36",
+      "tolerance": 0.01,
+      "h96_max_context_scaled_error": 0.04023638099969813,
+      "h192_max_context_scaled_error": 0.07072287688235464,
+      "status": "failed"
+    },
+    "timesfm": {
+      "weight_sha256": "2f776efe6245e42b24bc4153ffdf61810140210e4bd3b01fb21f7aa779ab6ce8",
+      "source_commit": "8cb0628371af142e16b8c232cc9fbf667ffb12f9",
+      "tolerance": 0.0001,
+      "h96_max_context_scaled_error": 0.000011588819412355453,
+      "h192_max_context_scaled_error": 0.000011588819412355453,
+      "status": "passed"
+    },
+    "chronos2": {
+      "weight_sha256": "ddcda3c7508bf2528087723e98a20707cc04b7f370ae275a9fd88078ddba4f42",
+      "tolerance": 0.0001,
+      "h96_max_context_scaled_error": 0.000023177638824710905,
+      "h192_max_context_scaled_error": 0.000023177638824710905,
+      "status": "passed"
+    }
+  }
+}
