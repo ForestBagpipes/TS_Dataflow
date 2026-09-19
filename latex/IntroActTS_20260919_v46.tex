@@ -727,7 +727,7 @@ exploratory material that supports no claim in the main text.
     B. Full per-source and per-pattern results & per-source tables for every method, opportunity strata, per-pattern tables, extended comparison & does the aggregate hold source by source, stratum by stratum, and pattern by pattern? \\
     C. Full severity results & $10/30/50\%$ tables and the severity trend & does one frozen configuration hold across the registered severity grid? \\
     D. Reconstruction and utility diagnostics & within-episode rank comparison over the catalog, governance diagnostics & is reconstruction quality a usable substitute for forecasting utility? \\
-    E. Ablations and stability & the full ablation vector, the $k$ and $\beta$ gate grid, and mask-realisation stability & which component carries the gain, and is the result an artefact of one mask? \\
+    E. Ablations and stability & the full ablation vector, the $k$ and $\beta$ grid, selection stability under bank subsampling, and mask-realisation stability & which component carries the gain, and does the result rest on one configuration or one mask? \\
     F. Cost, failures, and memory & latency, call counts, candidate materialisation, failures, timeouts, cold start & what does a request actually cost? \\
     G. Reproducibility and artefact schema & record schema, revisions, seeds, environment, manifests & can every reported number be traced back to a stored artefact? \\
     Supplementary (unnumbered) & the preceding development cycle & what was tried and rejected before the present formulation? \\
@@ -1803,6 +1803,34 @@ Table~\ref{tab:ablation}. The variant definitions follow \S\ref{sec:exp-ablation
     A4 Always act & \ph{AF_A4_MASE} & \ph{AF_A4_RMSSE} & \ph{AF_A4_IR} & \ph{AF_A4_CHIR} & \ph{AF_A4_HL} & \ph{AF_A4_CALLS} \\
     A5 Parametric utility predictor & \ph{AF_A5_MASE} & \ph{AF_A5_RMSSE} & \ph{AF_A5_IR} & \ph{AF_A5_CHIR} & \ph{AF_A5_HL} & \ph{AF_A5_CALLS} \\
     \midrule
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\subsection{Selection Stability}
+\label{app:selstability}
+The cross-validated surface over the grid is rough, so the pair the bank selects is worth
+questioning directly. This subsection repeats the whole selection procedure on parent-level
+subsamples of the replay bank, at half and at three quarters of its parents with three draws
+each, and records what the rule picks and what that pick produces on the evaluation block. The
+evaluation figures are diagnostics. Nothing in the paper is selected from them, and the
+reported configuration stays the one the full bank chooses.
+
+\ph{SELSTAB_READING}.
+
+\begin{table}[h]
+  \caption{Selection stability. Each row is one subsample of the replay bank, with the pair the
+  rule selected on it and the evaluation outcome that pair produces. The first row of each
+  backbone is the configuration the paper reports.}
+  \label{tab:app-selstab}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
+    \toprule
+    Backbone & Bank share & Selected $k$ & Selected $\beta$ & MASE $\downarrow$ & Intervention rate \\
+    \midrule
+\ph{SELSTAB_ROWS}
     \bottomrule
   \end{tabular}}
 \end{table}

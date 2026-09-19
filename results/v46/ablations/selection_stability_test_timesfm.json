@@ -1,0 +1,91 @@
+{
+ "stage": "v46-selection-stability",
+ "backbone": "timesfm",
+ "block": "test",
+ "frozen": {
+  "k": 16,
+  "beta": 1.0
+ },
+ "rows": [
+  {
+   "fraction": 1.0,
+   "seed": null,
+   "k": 16,
+   "beta": 1.0,
+   "mase": 1.5356310173475216,
+   "intervention_rate": 0.6921052631578948,
+   "conditional_hir": 0.42585551330798477
+  },
+  {
+   "fraction": 0.5,
+   "seed": 1,
+   "k": 8,
+   "beta": 0.0,
+   "parents": 112,
+   "same_as_frozen": false,
+   "mase": 1.5283151494280711,
+   "intervention_rate": 0.8934210526315789,
+   "conditional_hir": 0.4167893961708395
+  },
+  {
+   "fraction": 0.5,
+   "seed": 2,
+   "k": 32,
+   "beta": 1.0,
+   "parents": 112,
+   "same_as_frozen": false,
+   "mase": 1.5361006074764587,
+   "intervention_rate": 0.7881578947368421,
+   "conditional_hir": 0.4307178631051753
+  },
+  {
+   "fraction": 0.5,
+   "seed": 3,
+   "k": 32,
+   "beta": 0.0,
+   "parents": 112,
+   "same_as_frozen": false,
+   "mase": 1.5439935669037566,
+   "intervention_rate": 0.9605263157894737,
+   "conditional_hir": 0.4438356164383562
+  },
+  {
+   "fraction": 0.75,
+   "seed": 1,
+   "k": 16,
+   "beta": 0.0,
+   "parents": 167,
+   "same_as_frozen": false,
+   "mase": 1.537578985852225,
+   "intervention_rate": 0.9157894736842105,
+   "conditional_hir": 0.42528735632183906
+  },
+  {
+   "fraction": 0.75,
+   "seed": 2,
+   "k": 16,
+   "beta": 0.5,
+   "parents": 167,
+   "same_as_frozen": false,
+   "mase": 1.5316215340410944,
+   "intervention_rate": 0.8236842105263158,
+   "conditional_hir": 0.4233226837060703
+  },
+  {
+   "fraction": 0.75,
+   "seed": 3,
+   "k": 32,
+   "beta": 1.0,
+   "parents": 167,
+   "same_as_frozen": false,
+   "mase": 1.5361006074764587,
+   "intervention_rate": 0.7881578947368421,
+   "conditional_hir": 0.4307178631051753
+  }
+ ],
+ "same_choice_share": 0.0,
+ "mase_spread": 0.015678417475685436,
+ "worst_gap_to_frozen": 0.008362549556234944,
+ "note": "the evaluation figures are diagnostics and select nothing",
+ "runtime_seconds": 34.22257379700022
+}

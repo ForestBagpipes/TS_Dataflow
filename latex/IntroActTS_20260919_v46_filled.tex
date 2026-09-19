@@ -727,7 +727,7 @@ exploratory material that supports no claim in the main text.
     B. Full per-source and per-pattern results & per-source tables for every method, opportunity strata, per-pattern tables, extended comparison & does the aggregate hold source by source, stratum by stratum, and pattern by pattern? \\
     C. Full severity results & $10/30/50\%$ tables and the severity trend & does one frozen configuration hold across the registered severity grid? \\
     D. Reconstruction and utility diagnostics & within-episode rank comparison over the catalog, governance diagnostics & is reconstruction quality a usable substitute for forecasting utility? \\
-    E. Ablations and stability & the full ablation vector, the $k$ and $\beta$ gate grid, and mask-realisation stability & which component carries the gain, and is the result an artefact of one mask? \\
+    E. Ablations and stability & the full ablation vector, the $k$ and $\beta$ grid, selection stability under bank subsampling, and mask-realisation stability & which component carries the gain, and does the result rest on one configuration or one mask? \\
     F. Cost, failures, and memory & latency, call counts, candidate materialisation, failures, timeouts, cold start & what does a request actually cost? \\
     G. Reproducibility and artefact schema & record schema, revisions, seeds, environment, manifests & can every reported number be traced back to a stored artefact? \\
     Supplementary (unnumbered) & the preceding development cycle & what was tried and rejected before the present formulation? \\
@@ -1817,6 +1817,54 @@ Table~\ref{tab:ablation}. The variant definitions follow \S\ref{sec:exp-ablation
     A4 Always act & 1.434 & 1.226 & 100.0\% & 43.1\% & 0.0505 & 2.00 \\
     A5 Parametric utility predictor & 1.462 & 1.247 & 87.2\% & 44.0\% & 0.0574 & 1.87 \\
     \midrule
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\subsection{Selection Stability}
+\label{app:selstability}
+The cross-validated surface over the grid is rough, so the pair the bank selects is worth
+questioning directly. This subsection repeats the whole selection procedure on parent-level
+subsamples of the replay bank, at half and at three quarters of its parents with three draws
+each, and records what the rule picks and what that pick produces on the evaluation block. The
+evaluation figures are diagnostics. Nothing in the paper is selected from them, and the
+reported configuration stays the one the full bank chooses.
+
+The rule reproduces the frozen pair on 17\% of the subsamples, so the pair itself is not a stable point of the grid. The outcome is steadier than the pair: the worst subsample choice costs 0.043 MASE against the frozen one, and every subsample choice still improves on the untouched input. This is what the standard-error rule is for, because on a bank of this size the settings inside one standard error of the leader cannot be told apart.
+
+\begin{table}[h]
+  \caption{Selection stability. Each row is one subsample of the replay bank, with the pair the
+  rule selected on it and the evaluation outcome that pair produces. The first row of each
+  backbone is the configuration the paper reports.}
+  \label{tab:app-selstab}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
+    \toprule
+    Backbone & Bank share & Selected $k$ & Selected $\beta$ & MASE $\downarrow$ & Intervention rate \\
+    \midrule
+    Bolt & full bank & 128 & 1 & 1.366 & 53.0\% \\
+    Bolt & 50\% & 8 & 1.64 & 1.393 & 26.8\% \\
+    Bolt & 50\% & 32 & 1 & 1.364 & 50.3\% \\
+    Bolt & 50\% & 8 & 1 & 1.384 & 48.2\% \\
+    Bolt & 75\% & 128 & 1 & 1.366 & 53.0\% \\
+    Bolt & 75\% & 32 & 0.5 & 1.361 & 61.1\% \\
+    Bolt & 75\% & 16 & 1.64 & 1.404 & 25.1\% \\
+    TimesFM & full bank & 16 & 1 & 1.536 & 69.2\% \\
+    TimesFM & 50\% & 8 & 0 & 1.528 & 89.3\% \\
+    TimesFM & 50\% & 32 & 1 & 1.536 & 78.8\% \\
+    TimesFM & 50\% & 32 & 0 & 1.544 & 96.1\% \\
+    TimesFM & 75\% & 16 & 0 & 1.538 & 91.6\% \\
+    TimesFM & 75\% & 16 & 0.5 & 1.532 & 82.4\% \\
+    TimesFM & 75\% & 32 & 1 & 1.536 & 78.8\% \\
+    Chronos-2 & full bank & 16 & 1.64 & 1.367 & 31.1\% \\
+    Chronos-2 & 50\% & 8 & 1.64 & 1.410 & 29.7\% \\
+    Chronos-2 & 50\% & 16 & 1.64 & 1.367 & 31.1\% \\
+    Chronos-2 & 50\% & 8 & 1.64 & 1.410 & 29.7\% \\
+    Chronos-2 & 75\% & 16 & 1.64 & 1.367 & 31.1\% \\
+    Chronos-2 & 75\% & 8 & 1.64 & 1.410 & 29.7\% \\
+    Chronos-2 & 75\% & 8 & 1.64 & 1.410 & 29.7\% \\
     \bottomrule
   \end{tabular}}
 \end{table}

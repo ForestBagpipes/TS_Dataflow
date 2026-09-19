@@ -1,0 +1,91 @@
+{
+ "stage": "v46-selection-stability",
+ "backbone": "chronos2",
+ "block": "test",
+ "frozen": {
+  "k": 16,
+  "beta": 1.64
+ },
+ "rows": [
+  {
+   "fraction": 1.0,
+   "seed": null,
+   "k": 16,
+   "beta": 1.64,
+   "mase": 1.3674232369210126,
+   "intervention_rate": 0.3105263157894737,
+   "conditional_hir": 0.4406779661016949
+  },
+  {
+   "fraction": 0.5,
+   "seed": 1,
+   "k": 8,
+   "beta": 1.64,
+   "parents": 112,
+   "same_as_frozen": false,
+   "mase": 1.4100099209590837,
+   "intervention_rate": 0.29736842105263156,
+   "conditional_hir": 0.4424778761061947
+  },
+  {
+   "fraction": 0.5,
+   "seed": 2,
+   "k": 16,
+   "beta": 1.64,
+   "parents": 112,
+   "same_as_frozen": true,
+   "mase": 1.3674232369210126,
+   "intervention_rate": 0.3105263157894737,
+   "conditional_hir": 0.4406779661016949
+  },
+  {
+   "fraction": 0.5,
+   "seed": 3,
+   "k": 8,
+   "beta": 1.64,
+   "parents": 112,
+   "same_as_frozen": false,
+   "mase": 1.4100099209590837,
+   "intervention_rate": 0.29736842105263156,
+   "conditional_hir": 0.4424778761061947
+  },
+  {
+   "fraction": 0.75,
+   "seed": 1,
+   "k": 16,
+   "beta": 1.64,
+   "parents": 167,
+   "same_as_frozen": true,
+   "mase": 1.3674232369210126,
+   "intervention_rate": 0.3105263157894737,
+   "conditional_hir": 0.4406779661016949
+  },
+  {
+   "fraction": 0.75,
+   "seed": 2,
+   "k": 8,
+   "beta": 1.64,
+   "parents": 167,
+   "same_as_frozen": false,
+   "mase": 1.4100099209590837,
+   "intervention_rate": 0.29736842105263156,
+   "conditional_hir": 0.4424778761061947
+  },
+  {
+   "fraction": 0.75,
+   "seed": 3,
+   "k": 8,
+   "beta": 1.64,
+   "parents": 167,
+   "same_as_frozen": false,
+   "mase": 1.4100099209590837,
+   "intervention_rate": 0.29736842105263156,
+   "conditional_hir": 0.4424778761061947
+  }
+ ],
+ "same_choice_share": 0.3333333333333333,
+ "mase_spread": 0.04258668403807109,
+ "worst_gap_to_frozen": 0.04258668403807109,
+ "note": "the evaluation figures are diagnostics and select nothing",
+ "runtime_seconds": 33.93179237000004
+}

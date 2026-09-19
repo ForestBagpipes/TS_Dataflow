@@ -129,6 +129,42 @@ def build(evals: dict, selections: dict, num, pct) -> dict:
                          + " and ".join(against_fixed))
         out["MAIN_HOLM"] = sentence
 
+    # Selection stability over parent-level subsamples of the replay bank.
+    titles = {"bolt": "Bolt", "timesfm": "TimesFM", "chronos2": "Chronos-2"}
+    stab_rows, same, worst, all_better = [], [], [], True
+    for backbone in ("bolt", "timesfm", "chronos2"):
+        path = ROOT / f"results/v46/ablations/selection_stability_test_{backbone}.json"
+        if not path.exists():
+            continue
+        payload = json.loads(path.read_text())
+        keep = None
+        eval_path = ROOT / f"results/v46/evaluation/test_{backbone}.json"
+        if eval_path.exists():
+            keep = json.loads(eval_path.read_text())["rows"]["NATIVE_KEEP"]["mase"]
+        for row in payload["rows"]:
+            share = "full bank" if row["seed"] is None else f"{row['fraction'] * 100:.0f}\\%"
+            stab_rows.append("    %s & %s & %d & %s & %.3f & %.1f\\%% %s" % (
+                titles.get(backbone, backbone), share, row["k"],
+                ("%.2f" % row["beta"]).rstrip("0").rstrip("."),
+                row["mase"], row["intervention_rate"] * 100, chr(92) * 2))
+            if keep is not None and row["mase"] >= keep:
+                all_better = False
+        same.append(payload["same_choice_share"])
+        worst.append(payload["worst_gap_to_frozen"])
+    if stab_rows:
+        out["SELSTAB_ROWS"] = chr(10).join(stab_rows)
+        share = sum(same) / len(same) * 100.0
+        out["SELSTAB_READING"] = (
+            f"The rule reproduces the frozen pair on {share:.0f}\\% of the subsamples, so the "
+            f"pair itself is not a stable point of the grid. The outcome is steadier than the "
+            f"pair: the worst subsample choice costs {max(worst):.3f} MASE against the frozen "
+            f"one")
+        if all_better:
+            out["SELSTAB_READING"] += (
+                ", and every subsample choice still improves on the untouched input. This is "
+                "what the standard-error rule is for, because on a bank of this size the "
+                "settings inside one standard error of the leader cannot be told apart")
+
     # The governance figure reading, from the score-against-utility records.
     agree, positive, negative, pairs = [], [], [], 0
     for backbone in ("bolt", "timesfm", "chronos2"):
