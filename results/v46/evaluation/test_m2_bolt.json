@@ -1,0 +1,849 @@
+{
+ "stage": "v46-evaluation",
+ "backbone": "bolt",
+ "block": "test_m2",
+ "frozen": {
+  "k": 8,
+  "beta": 0.0,
+  "best_fixed_action": "MULTI_TSICL",
+  "selection_file": "results/v46/protocol/selection_bolt.json"
+ },
+ "episodes": 760,
+ "external_baselines": {},
+ "parents": 95,
+ "sources": [
+  "ETTh1",
+  "ETTh2",
+  "ETTm1",
+  "ETTm2",
+  "Electricity",
+  "Exchange",
+  "Traffic",
+  "Weather"
+ ],
+ "rows": {
+  "NATIVE_KEEP": {
+   "method": "NATIVE_KEEP",
+   "mase": 1.4609724287599395,
+   "rmsse": 1.2325275108078038,
+   "intervention_rate": 0.0,
+   "conditional_hir": 0.0,
+   "harmful_loss": 0.0,
+   "beneficial_precision": null,
+   "n_acted": 0,
+   "n_zero_utility": 0,
+   "per_source_mase": {
+    "ETTh1": 1.0305762569628618,
+    "ETTh2": 1.4447650766816078,
+    "ETTm1": 1.392942996343006,
+    "ETTm2": 1.1345825023775493,
+    "Electricity": 0.8799941597841517,
+    "Exchange": 3.8800670243897364,
+    "Traffic": 1.0097459695852786,
+    "Weather": 0.9151054439553248
+   },
+   "per_source_horizon_mase": {
+    "h192|ETTh1": 1.0823259398124778,
+    "h192|ETTh2": 1.4557518177350932,
+    "h192|ETTm1": 1.4182028927039176,
+    "h192|ETTm2": 1.249403988506397,
+    "h192|Electricity": 0.8829992619148672,
+    "h192|Exchange": 5.048271078987073,
+    "h192|Traffic": 1.0328583168633245,
+    "h192|Weather": 1.1691878365293473,
+    "h96|ETTh1": 0.9788265741132459,
+    "h96|ETTh2": 1.4337783356281217,
+    "h96|ETTm1": 1.3676830999820944,
+    "h96|ETTm2": 1.0197610162487014,
+    "h96|Electricity": 0.8769890576534364,
+    "h96|Exchange": 2.7118629697924006,
+    "h96|Traffic": 0.9866336223072328,
+    "h96|Weather": 0.661023051381302
+   },
+   "per_cell_mase": {
+    "h192|P1_point|s10": 1.5462148186808666,
+    "h192|P2_target_block|s10": 1.5357752462004934,
+    "h192|P3_shared_block|s10": 1.5593236162772022,
+    "h192|P4_tail|s10": 2.028186885367687,
+    "h96|P1_point|s10": 1.1596591225302402,
+    "h96|P2_target_block|s10": 1.126162316921652,
+    "h96|P3_shared_block|s10": 1.153882257503183,
+    "h96|P4_tail|s10": 1.5785751665981926
+   },
+   "action_counts": {
+    "KEEP": 760,
+    "FFILL": 0,
+    "SINGLE_TSICL": 0,
+    "MULTI_TSICL": 0,
+    "CONTEXT_RIDGE": 0
+   },
+   "missed_opportunity": 1.0
+  },
+  "BEST_FIXED": {
+   "method": "BEST_FIXED",
+   "mase": 1.3945347779134858,
+   "rmsse": 1.1823892765435744,
+   "intervention_rate": 1.0,
+   "conditional_hir": 0.4697368421052632,
+   "harmful_loss": 0.05327097682072187,
+   "beneficial_precision": 0.5302631578947369,
+   "n_acted": 760,
+   "n_zero_utility": 0,
+   "per_source_mase": {
+    "ETTh1": 0.9725198686592895,
+    "ETTh2": 1.335956722415869,
+    "ETTm1": 1.3662133874543543,
+    "ETTm2": 1.1189768309426396,
+    "Electricity": 0.9096367877942451,
+    "Exchange": 3.440807984771516,
+    "Traffic": 1.1177631426106036,
+    "Weather": 0.8944034986593693
+   },
+   "per_source_horizon_mase": {
+    "h192|ETTh1": 1.037622057512263,
+    "h192|ETTh2": 1.3753644718341054,
+    "h192|ETTm1": 1.392521034381393,
+    "h192|ETTm2": 1.2267441216482837,
+    "h192|Electricity": 0.9093919912361778,
+    "h192|Exchange": 4.469195694451568,
+    "h192|Traffic": 1.1141942944447807,
+    "h192|Weather": 1.1579027320899142,
+    "h96|ETTh1": 0.9074176798063159,
+    "h96|ETTh2": 1.2965489729976325,
+    "h96|ETTm1": 1.339905740527316,
+    "h96|ETTm2": 1.0112095402369954,
+    "h96|Electricity": 0.9098815843523125,
+    "h96|Exchange": 2.412420275091464,
+    "h96|Traffic": 1.121331990776426,
+    "h96|Weather": 0.6309042652288244
+   },
+   "per_cell_mase": {
+    "h192|P1_point|s10": 1.5310447380946242,
+    "h192|P2_target_block|s10": 1.5447542469350268,
+    "h192|P3_shared_block|s10": 1.5849351318840568,
+    "h192|P4_tail|s10": 1.6807340818855352,
+    "h96|P1_point|s10": 1.1755754839319268,
+    "h96|P2_target_block|s10": 1.1369138251664288,
+    "h96|P3_shared_block|s10": 1.1601441683692335,
+    "h96|P4_tail|s10": 1.3421765470410545
+   },
+   "action_counts": {
+    "KEEP": 0,
+    "FFILL": 0,
+    "SINGLE_TSICL": 0,
+    "MULTI_TSICL": 760,
+    "CONTEXT_RIDGE": 0
+   },
+   "missed_opportunity": 0.0
+  },
+  "R2_CART": {
+   "method": "R2_CART",
+   "mase": 1.3782713955433454,
+   "rmsse": 1.1836654696485478,
+   "intervention_rate": 0.9486842105263158,
+   "conditional_hir": 0.42163661581137307,
+   "harmful_loss": 0.04224606754713868,
+   "beneficial_precision": 0.5783633841886269,
+   "n_acted": 721,
+   "n_zero_utility": 0,
+   "per_source_mase": {
+    "ETTh1": 0.9532101562315223,
+    "ETTh2": 1.3746022703019258,
+    "ETTm1": 1.3613976066875366,
+    "ETTm2": 1.1222484258576084,
+    "Electricity": 0.8629799354380101,
+    "Exchange": 3.4933614453523116,
+    "Traffic": 0.9757013414072541,
+    "Weather": 0.882669983070594
+   },
+   "per_source_horizon_mase": {
+    "h192|ETTh1": 1.0285449243954403,
+    "h192|ETTh2": 1.4011603345898866,
+    "h192|ETTm1": 1.3897741335813212,
+    "h192|ETTm2": 1.229932465973123,
+    "h192|Electricity": 0.8516011142876633,
+    "h192|Exchange": 4.5916540780941055,
+    "h192|Traffic": 1.0079282037733333,
+    "h192|Weather": 1.1470877278751017,
+    "h96|ETTh1": 0.8778753880676047,
+    "h96|ETTh2": 1.3480442060139648,
+    "h96|ETTm1": 1.333021079793752,
+    "h96|ETTm2": 1.0145643857420936,
+    "h96|Electricity": 0.8743587565883568,
+    "h96|Exchange": 2.3950688126105177,
+    "h96|Traffic": 0.9434744790411754,
+    "h96|Weather": 0.618252238266086
+   },
+   "per_cell_mase": {
+    "h192|P1_point|s10": 1.5284075748583716,
+    "h192|P2_target_block|s10": 1.4713425698313933,
+    "h192|P3_shared_block|s10": 1.5692917896009544,
+    "h192|P4_tail|s10": 1.7547995569942683,
+    "h96|P1_point|s10": 1.153891894651586,
+    "h96|P2_target_block|s10": 1.127994141515342,
+    "h96|P3_shared_block|s10": 1.1381947334910127,
+    "h96|P4_tail|s10": 1.282248903403835
+   },
+   "action_counts": {
+    "KEEP": 39,
+    "FFILL": 70,
+    "SINGLE_TSICL": 236,
+    "MULTI_TSICL": 235,
+    "CONTEXT_RIDGE": 180
+   },
+   "missed_opportunity": 0.05944055944055944
+  },
+  "FULL_INTROACT": {
+   "method": "FULL_INTROACT",
+   "mase": 1.3685477753953976,
+   "rmsse": 1.1671146092232598,
+   "intervention_rate": 0.7552631578947369,
+   "conditional_hir": 0.44773519163763065,
+   "harmful_loss": 0.03588644135114102,
+   "beneficial_precision": 0.5522648083623694,
+   "n_acted": 574,
+   "n_zero_utility": 0,
+   "per_source_mase": {
+    "ETTh1": 1.0194116062783263,
+    "ETTh2": 1.317026747650552,
+    "ETTm1": 1.3496853228895132,
+    "ETTm2": 1.1183842296606603,
+    "Electricity": 0.8910112244213444,
+    "Exchange": 3.3600649282130597,
+    "Traffic": 0.9655787368994962,
+    "Weather": 0.9272194071502311
+   },
+   "per_source_horizon_mase": {
+    "h192|ETTh1": 1.083650001699494,
+    "h192|ETTh2": 1.3407207887324233,
+    "h192|ETTm1": 1.3736977658974725,
+    "h192|ETTm2": 1.237632328431647,
+    "h192|Electricity": 0.879499992345592,
+    "h192|Exchange": 4.402630342990064,
+    "h192|Traffic": 0.9837521541707356,
+    "h192|Weather": 1.1779724651454946,
+    "h96|ETTh1": 0.9551732108571586,
+    "h96|ETTh2": 1.2933327065686806,
+    "h96|ETTm1": 1.3256728798815536,
+    "h96|ETTm2": 0.9991361308896737,
+    "h96|Electricity": 0.9025224564970967,
+    "h96|Exchange": 2.3174995134360548,
+    "h96|Traffic": 0.9474053196282567,
+    "h96|Weather": 0.6764663491549673
+   },
+   "per_cell_mase": {
+    "h192|P1_point|s10": 1.528904854101599,
+    "h192|P2_target_block|s10": 1.498284700725716,
+    "h192|P3_shared_block|s10": 1.561515055101828,
+    "h192|P4_tail|s10": 1.6510733097773185,
+    "h96|P1_point|s10": 1.1604769144752778,
+    "h96|P2_target_block|s10": 1.0967432123505094,
+    "h96|P3_shared_block|s10": 1.1351946348733772,
+    "h96|P4_tail|s10": 1.3161895217575568
+   },
+   "action_counts": {
+    "KEEP": 186,
+    "FFILL": 107,
+    "SINGLE_TSICL": 153,
+    "MULTI_TSICL": 115,
+    "CONTEXT_RIDGE": 199
+   },
+   "missed_opportunity": 0.25524475524475526
+  },
+  "A1_GLOBAL_UTILITY": {
+   "method": "A1_GLOBAL_UTILITY",
+   "mase": 1.3945347779134858,
+   "rmsse": 1.1823892765435744,
+   "intervention_rate": 1.0,
+   "conditional_hir": 0.4697368421052632,
+   "harmful_loss": 0.05327097682072187,
+   "beneficial_precision": 0.5302631578947369,
+   "n_acted": 760,
+   "n_zero_utility": 0,
+   "per_source_mase": {
+    "ETTh1": 0.9725198686592895,
+    "ETTh2": 1.335956722415869,
+    "ETTm1": 1.3662133874543543,
+    "ETTm2": 1.1189768309426396,
+    "Electricity": 0.9096367877942451,
+    "Exchange": 3.440807984771516,
+    "Traffic": 1.1177631426106036,
+    "Weather": 0.8944034986593693
+   },
+   "per_source_horizon_mase": {
+    "h192|ETTh1": 1.037622057512263,
+    "h192|ETTh2": 1.3753644718341054,
+    "h192|ETTm1": 1.392521034381393,
+    "h192|ETTm2": 1.2267441216482837,
+    "h192|Electricity": 0.9093919912361778,
+    "h192|Exchange": 4.469195694451568,
+    "h192|Traffic": 1.1141942944447807,
+    "h192|Weather": 1.1579027320899142,
+    "h96|ETTh1": 0.9074176798063159,
+    "h96|ETTh2": 1.2965489729976325,
+    "h96|ETTm1": 1.339905740527316,
+    "h96|ETTm2": 1.0112095402369954,
+    "h96|Electricity": 0.9098815843523125,
+    "h96|Exchange": 2.412420275091464,
+    "h96|Traffic": 1.121331990776426,
+    "h96|Weather": 0.6309042652288244
+   },
+   "per_cell_mase": {
+    "h192|P1_point|s10": 1.5310447380946242,
+    "h192|P2_target_block|s10": 1.5447542469350268,
+    "h192|P3_shared_block|s10": 1.5849351318840568,
+    "h192|P4_tail|s10": 1.6807340818855352,
+    "h96|P1_point|s10": 1.1755754839319268,
+    "h96|P2_target_block|s10": 1.1369138251664288,
+    "h96|P3_shared_block|s10": 1.1601441683692335,
+    "h96|P4_tail|s10": 1.3421765470410545
+   },
+   "action_counts": {
+    "KEEP": 0,
+    "FFILL": 0,
+    "SINGLE_TSICL": 0,
+    "MULTI_TSICL": 760,
+    "CONTEXT_RIDGE": 0
+   },
+   "missed_opportunity": 0.0
+  },
+  "A4_ALWAYS_ACT": {
+   "method": "A4_ALWAYS_ACT",
+   "mase": 1.361319492014037,
+   "rmsse": 1.1618074780402154,
+   "intervention_rate": 1.0,
+   "conditional_hir": 0.4513157894736842,
+   "harmful_loss": 0.04424763977563723,
+   "beneficial_precision": 0.5486842105263158,
+   "n_acted": 760,
+   "n_zero_utility": 0,
+   "per_source_mase": {
+    "ETTh1": 0.9857343827055343,
+    "ETTh2": 1.2881623495178838,
+    "ETTm1": 1.3482510173197024,
+    "ETTm2": 1.1150678567982084,
+    "Electricity": 0.8860213977279509,
+    "Exchange": 3.365958296049414,
+    "Traffic": 0.9654218568558318,
+    "Weather": 0.9359387791377713
+   },
+   "per_source_horizon_mase": {
+    "h192|ETTh1": 1.0626274991285272,
+    "h192|ETTh2": 1.3349242626189561,
+    "h192|ETTm1": 1.377224485683259,
+    "h192|ETTm2": 1.2271969685368453,
+    "h192|Electricity": 0.8728346596342358,
+    "h192|Exchange": 4.40212924209147,
+    "h192|Traffic": 0.9915075044928106,
+    "h192|Weather": 1.1861812137024503,
+    "h96|ETTh1": 0.9088412662825415,
+    "h96|ETTh2": 1.241400436416811,
+    "h96|ETTm1": 1.3192775489561466,
+    "h96|ETTm2": 1.0029387450595717,
+    "h96|Electricity": 0.8992081358216658,
+    "h96|Exchange": 2.329787350007358,
+    "h96|Traffic": 0.939336209218853,
+    "h96|Weather": 0.6856963445730926
+   },
+   "per_cell_mase": {
+    "h192|P1_point|s10": 1.5253467690320945,
+    "h192|P2_target_block|s10": 1.4837646693646414,
+    "h192|P3_shared_block|s10": 1.5712816116404267,
+    "h192|P4_tail|s10": 1.6469198679071144,
+    "h96|P1_point|s10": 1.1586286809084156,
+    "h96|P2_target_block|s10": 1.0967981425334432,
+    "h96|P3_shared_block|s10": 1.1310165558227576,
+    "h96|P4_tail|s10": 1.2767996389034033
+   },
+   "action_counts": {
+    "KEEP": 0,
+    "FFILL": 133,
+    "SINGLE_TSICL": 211,
+    "MULTI_TSICL": 176,
+    "CONTEXT_RIDGE": 240
+   },
+   "missed_opportunity": 0.0
+  },
+  "A5_PARAMETRIC_RIDGE": {
+   "method": "A5_PARAMETRIC_RIDGE",
+   "mase": 1.4030235534052626,
+   "rmsse": 1.1939879556654325,
+   "intervention_rate": 0.8789473684210526,
+   "conditional_hir": 0.4550898203592814,
+   "harmful_loss": 0.05544715572688358,
+   "beneficial_precision": 0.5449101796407185,
+   "n_acted": 668,
+   "n_zero_utility": 0,
+   "per_source_mase": {
+    "ETTh1": 0.9884070646468203,
+    "ETTh2": 1.3214374843541348,
+    "ETTm1": 1.3884926057590075,
+    "ETTm2": 1.1181169300487965,
+    "Electricity": 0.933552756609994,
+    "Exchange": 3.608058622531905,
+    "Traffic": 1.0066845633444004,
+    "Weather": 0.8594383999470432
+   },
+   "per_source_horizon_mase": {
+    "h192|ETTh1": 1.0566852694489681,
+    "h192|ETTh2": 1.3464073122867435,
+    "h192|ETTm1": 1.4158706193135486,
+    "h192|ETTm2": 1.2352144715212978,
+    "h192|Electricity": 0.9339637200098534,
+    "h192|Exchange": 4.6360178327905235,
+    "h192|Traffic": 1.0225973550566303,
+    "h192|Weather": 1.1169286728261367,
+    "h96|ETTh1": 0.9201288598446724,
+    "h96|ETTh2": 1.2964676564215256,
+    "h96|ETTm1": 1.3611145922044665,
+    "h96|ETTm2": 1.0010193885762952,
+    "h96|Electricity": 0.9331417932101349,
+    "h96|Exchange": 2.5800994122732854,
+    "h96|Traffic": 0.9907717716321708,
+    "h96|Weather": 0.6019481270679495
+   },
+   "per_cell_mase": {
+    "h192|P1_point|s10": 1.5208946042626084,
+    "h192|P2_target_block|s10": 1.5502138997226054,
+    "h192|P3_shared_block|s10": 1.5801849960304688,
+    "h192|P4_tail|s10": 1.730549126611168,
+    "h96|P1_point|s10": 1.146353282599749,
+    "h96|P2_target_block|s10": 1.1360056422431153,
+    "h96|P3_shared_block|s10": 1.1428881178483188,
+    "h96|P4_tail|s10": 1.4170987579240675
+   },
+   "action_counts": {
+    "KEEP": 92,
+    "FFILL": 167,
+    "SINGLE_TSICL": 19,
+    "MULTI_TSICL": 205,
+    "CONTEXT_RIDGE": 277
+   },
+   "missed_opportunity": 0.13111888111888112
+  },
+  "CATALOG_ORACLE": {
+   "method": "CATALOG_ORACLE",
+   "mase": 1.2572762844305876,
+   "rmsse": 1.0806714879494912,
+   "intervention_rate": 0.7526315789473684,
+   "conditional_hir": 0.0,
+   "harmful_loss": 0.0,
+   "beneficial_precision": 1.0,
+   "n_acted": 572,
+   "n_zero_utility": 0,
+   "per_source_mase": {
+    "ETTh1": 0.9240832995841627,
+    "ETTh2": 1.2511166595795313,
+    "ETTm1": 1.2425640500443822,
+    "ETTm2": 1.0462321958158833,
+    "Electricity": 0.7845156398213156,
+    "Exchange": 3.182158170779095,
+    "Traffic": 0.9079771204004657,
+    "Weather": 0.7195631394198657
+   },
+   "per_source_horizon_mase": {
+    "h192|ETTh1": 0.9990833277831239,
+    "h192|ETTh2": 1.3047013185997909,
+    "h192|ETTm1": 1.2864233609220228,
+    "h192|ETTm2": 1.1520758914639442,
+    "h192|Electricity": 0.7781115836550164,
+    "h192|Exchange": 4.161154082426423,
+    "h192|Traffic": 0.9422537575376101,
+    "h192|Weather": 0.9530379893760923,
+    "h96|ETTh1": 0.8490832713852011,
+    "h96|ETTh2": 1.1975320005592718,
+    "h96|ETTm1": 1.1987047391667414,
+    "h96|ETTm2": 0.9403885001678228,
+    "h96|Electricity": 0.7909196959876144,
+    "h96|Exchange": 2.2031622591317666,
+    "h96|Traffic": 0.8737004832633216,
+    "h96|Weather": 0.4860882894636391
+   },
+   "per_cell_mase": {
+    "h192|P1_point|s10": 1.4496761739796933,
+    "h192|P2_target_block|s10": 1.4126219415218664,
+    "h192|P3_shared_block|s10": 1.464080053399985,
+    "h192|P4_tail|s10": 1.462042486980467,
+    "h96|P1_point|s10": 1.0849299878425502,
+    "h96|P2_target_block|s10": 1.0418823309795777,
+    "h96|P3_shared_block|s10": 1.057414579624748,
+    "h96|P4_tail|s10": 1.0855627211158132
+   },
+   "action_counts": {
+    "KEEP": 188,
+    "FFILL": 173,
+    "SINGLE_TSICL": 148,
+    "MULTI_TSICL": 98,
+    "CONTEXT_RIDGE": 153
+   },
+   "missed_opportunity": 0.0
+  },
+  "A2_WO_INTERVENTION": {
+   "method": "A2_WO_INTERVENTION",
+   "mase": 1.3744651298661243,
+   "rmsse": 1.1723766679030234,
+   "intervention_rate": 0.7486842105263158,
+   "conditional_hir": 0.4446397188049209,
+   "harmful_loss": 0.03782697239089505,
+   "beneficial_precision": 0.5553602811950791,
+   "n_acted": 569,
+   "n_zero_utility": 0,
+   "per_source_mase": {
+    "ETTh1": 1.018634457578911,
+    "ETTh2": 1.3171969904941567,
+    "ETTm1": 1.354141673515727,
+    "ETTm2": 1.118400414865789,
+    "Electricity": 0.905359346757608,
+    "Exchange": 3.377664333317286,
+    "Traffic": 0.9662812833861177,
+    "Weather": 0.9380425390133998
+   },
+   "per_source_horizon_mase": {
+    "h192|ETTh1": 1.0823247976138024,
+    "h192|ETTh2": 1.3410612744196326,
+    "h192|ETTm1": 1.37534781096174,
+    "h192|ETTm2": 1.237632328431647,
+    "h192|Electricity": 0.9178184964966207,
+    "h192|Exchange": 4.437829153198518,
+    "h192|Traffic": 0.9851572471439786,
+    "h192|Weather": 1.1972622691393704,
+    "h96|ETTh1": 0.9549441175440196,
+    "h96|ETTh2": 1.2933327065686806,
+    "h96|ETTm1": 1.332935536069714,
+    "h96|ETTm2": 0.999168501299931,
+    "h96|Electricity": 0.8929001970185954,
+    "h96|Exchange": 2.3174995134360548,
+    "h96|Traffic": 0.9474053196282567,
+    "h96|Weather": 0.678822808887429
+   },
+   "per_cell_mase": {
+    "h192|P1_point|s10": 1.5536043465589136,
+    "h192|P2_target_block|s10": 1.5180739042666025,
+    "h192|P3_shared_block|s10": 1.5611725715878042,
+    "h192|P4_tail|s10": 1.6543658662893344,
+    "h96|P1_point|s10": 1.1507642897786416,
+    "h96|P2_target_block|s10": 1.0978876932189856,
+    "h96|P3_shared_block|s10": 1.13612317113471,
+    "h96|P4_tail|s10": 1.3237291960940034
+   },
+   "action_counts": {
+    "KEEP": 191,
+    "FFILL": 106,
+    "SINGLE_TSICL": 152,
+    "MULTI_TSICL": 112,
+    "CONTEXT_RIDGE": 199
+   },
+   "missed_opportunity": 0.256993006993007
+  },
+  "A3_WO_FORECAST": {
+   "method": "A3_WO_FORECAST",
+   "mase": 1.3671502579533588,
+   "rmsse": 1.162538568067799,
+   "intervention_rate": 0.8013157894736842,
+   "conditional_hir": 0.4318555008210181,
+   "harmful_loss": 0.040725371540452,
+   "beneficial_precision": 0.5681444991789819,
+   "n_acted": 609,
+   "n_zero_utility": 0,
+   "per_source_mase": {
+    "ETTh1": 0.9671625256219234,
+    "ETTh2": 1.2930362362603303,
+    "ETTm1": 1.3648679621586444,
+    "ETTm2": 1.127579423613095,
+    "Electricity": 0.9042623434809168,
+    "Exchange": 3.389325490878195,
+    "Traffic": 0.9665997986242854,
+    "Weather": 0.9243682829894807
+   },
+   "per_source_horizon_mase": {
+    "h192|ETTh1": 1.026613589796952,
+    "h192|ETTh2": 1.3387187830587701,
+    "h192|ETTm1": 1.3914866202540128,
+    "h192|ETTm2": 1.2341628509955331,
+    "h192|Electricity": 0.9136254539021093,
+    "h192|Exchange": 4.402630342990064,
+    "h192|Traffic": 1.0060588521779648,
+    "h192|Weather": 1.1726834013305136,
+    "h96|ETTh1": 0.9077114614468953,
+    "h96|ETTh2": 1.2473536894618904,
+    "h96|ETTm1": 1.338249304063276,
+    "h96|ETTm2": 1.020995996230657,
+    "h96|Electricity": 0.8948992330597242,
+    "h96|Exchange": 2.3760206387663256,
+    "h96|Traffic": 0.9271407450706058,
+    "h96|Weather": 0.6760531646484478
+   },
+   "per_cell_mase": {
+    "h192|P1_point|s10": 1.5485204648763808,
+    "h192|P2_target_block|s10": 1.5071500839458059,
+    "h192|P3_shared_block|s10": 1.5589529979777317,
+    "h192|P4_tail|s10": 1.6283664004530418,
+    "h96|P1_point|s10": 1.165957572286739,
+    "h96|P2_target_block|s10": 1.1256382013608508,
+    "h96|P3_shared_block|s10": 1.1316104844714512,
+    "h96|P4_tail|s10": 1.27100585825487
+   },
+   "action_counts": {
+    "KEEP": 151,
+    "FFILL": 124,
+    "SINGLE_TSICL": 138,
+    "MULTI_TSICL": 139,
+    "CONTEXT_RIDGE": 208
+   },
+   "missed_opportunity": 0.1958041958041958
+  }
+ },
+ "average_rank": {
+  "FULL_INTROACT": 3.2039473684210527,
+  "A2_WO_INTERVENTION": 3.292105263157895,
+  "A4_ALWAYS_ACT": 3.3118421052631577,
+  "BEST_FIXED": 3.971052631578947,
+  "R2_CART": 3.817105263157895,
+  "A1_GLOBAL_UTILITY": 3.971052631578947,
+  "A3_WO_FORECAST": 3.5355263157894736,
+  "NATIVE_KEEP": 4.925,
+  "A5_PARAMETRIC_RIDGE": 3.721052631578947
+ },
+ "comparisons": {
+  "FULL_INTROACT_vs_NATIVE_KEEP": {
+   "difference": -0.09242465336454171,
+   "ci_low": -0.14674546051362852,
+   "ci_high": -0.03891418239046402,
+   "excludes_zero": 1,
+   "parents": 95,
+   "resamples": 2000,
+   "seed": 101
+  },
+  "FULL_INTROACT_vs_BEST_FIXED": {
+   "difference": -0.025987002518087964,
+   "ci_low": -0.042788895903436146,
+   "ci_high": -0.009523394856480245,
+   "excludes_zero": 1,
+   "parents": 95,
+   "resamples": 2000,
+   "seed": 101
+  },
+  "FULL_INTROACT_vs_R2_CART": {
+   "difference": -0.00972362014794754,
+   "ci_low": -0.02894030238849335,
+   "ci_high": 0.011049745588033988,
+   "excludes_zero": 0,
+   "parents": 95,
+   "resamples": 2000,
+   "seed": 101
+  },
+  "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+   "difference": -0.025987002518087964,
+   "ci_low": -0.042788895903436146,
+   "ci_high": -0.009523394856480245,
+   "excludes_zero": 1,
+   "parents": 95,
+   "resamples": 2000,
+   "seed": 101
+  },
+  "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+   "difference": 0.007228283381360761,
+   "ci_low": -0.001925960525184555,
+   "ci_high": 0.016934820296912997,
+   "excludes_zero": 0,
+   "parents": 95,
+   "resamples": 2000,
+   "seed": 101
+  },
+  "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+   "difference": -0.034475778009864795,
+   "ci_low": -0.05429136137467762,
+   "ci_high": -0.014594737521488547,
+   "excludes_zero": 1,
+   "parents": 95,
+   "resamples": 2000,
+   "seed": 101
+  },
+  "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+   "difference": -0.0059173544707265685,
+   "ci_low": -0.011058955002614562,
+   "ci_high": -0.001455636621289357,
+   "excludes_zero": 1,
+   "parents": 95,
+   "resamples": 2000,
+   "seed": 101
+  },
+  "FULL_INTROACT_vs_A3_WO_FORECAST": {
+   "difference": 0.0013975174420389584,
+   "ci_low": -0.012064831059582042,
+   "ci_high": 0.015057967719972568,
+   "excludes_zero": 0,
+   "parents": 95,
+   "resamples": 2000,
+   "seed": 101
+  }
+ },
+ "heterogeneity": {
+  "oracle_best_share": {
+   "KEEP": 0.24736842105263157,
+   "FFILL": 0.22763157894736843,
+   "SINGLE_TSICL": 0.19473684210526315,
+   "MULTI_TSICL": 0.12894736842105264,
+   "CONTEXT_RIDGE": 0.2013157894736842
+  },
+  "oracle_best_count": {
+   "KEEP": 188,
+   "FFILL": 173,
+   "SINGLE_TSICL": 148,
+   "MULTI_TSICL": 98,
+   "CONTEXT_RIDGE": 153
+  },
+  "per_action_utility": {
+   "FFILL": {
+    "applicable": 760,
+    "p_positive": 0.46578947368421053,
+    "p_negative": 0.5342105263157895,
+    "p_zero": 0.0,
+    "mean_utility": -0.13887992980292813
+   },
+   "SINGLE_TSICL": {
+    "applicable": 760,
+    "p_positive": 0.5355263157894737,
+    "p_negative": 0.4644736842105263,
+    "p_zero": 0.0,
+    "mean_utility": 0.008009702482055682
+   },
+   "MULTI_TSICL": {
+    "applicable": 760,
+    "p_positive": 0.5302631578947369,
+    "p_negative": 0.4697368421052632,
+    "p_zero": 0.0,
+    "mean_utility": 0.024773700921075604
+   },
+   "CONTEXT_RIDGE": {
+    "applicable": 570,
+    "p_positive": 0.5701754385964912,
+    "p_negative": 0.4298245614035088,
+    "p_zero": 0.0,
+    "mean_utility": 0.043124500779879955
+   }
+  },
+  "opportunity": {
+   "mean": 0.1464826239912164,
+   "median": 0.04616773641831562,
+   "p90": 0.394174596623183,
+   "share_zero": 0.24736842105263157
+  },
+  "episodes": 760
+ },
+ "opportunity_strata": {
+  "boundaries": {
+   "no_op": 1e-09,
+   "low_to_high": 0.10890815924804806,
+   "upper_reference": 0.4410944705325751,
+   "quantiles": [
+    0.5,
+    0.85
+   ],
+   "fitted_on": "replay bank"
+  },
+  "sizes": {
+   "no-op": {
+    "episodes": 188,
+    "share": 0.24736842105263157,
+    "parents": 76,
+    "median": 0.0,
+    "p90": 0.0
+   },
+   "low": {
+    "episodes": 312,
+    "share": 0.4105263157894737,
+    "parents": 90,
+    "median": 0.0380791370251683,
+    "p90": 0.087532453742571
+   },
+   "high": {
+    "episodes": 260,
+    "share": 0.34210526315789475,
+    "parents": 79,
+    "median": 0.2413136430479199,
+    "p90": 0.7312779595328792
+   }
+  },
+  "per_method": {
+   "NATIVE_KEEP": {
+    "no-op": 1.5397576865297298,
+    "low": 1.3065249604679092,
+    "high": 1.813203396680632,
+    "overall": 1.4609724287599395
+   },
+   "BEST_FIXED": {
+    "no-op": 1.6661053833304855,
+    "low": 1.319927902501179,
+    "high": 1.5546431677270205,
+    "overall": 1.3945347779134858
+   },
+   "R2_CART": {
+    "no-op": 1.6630362158834404,
+    "low": 1.3202628099315121,
+    "high": 1.5192316971153543,
+    "overall": 1.3782713955433454
+   },
+   "FULL_INTROACT": {
+    "no-op": 1.6276834990166773,
+    "low": 1.3209738410333978,
+    "high": 1.5168973016775498,
+    "overall": 1.3685477753953976
+   },
+   "A1_GLOBAL_UTILITY": {
+    "no-op": 1.6661053833304855,
+    "low": 1.319927902501179,
+    "high": 1.5546431677270205,
+    "overall": 1.3945347779134858
+   },
+   "A4_ALWAYS_ACT": {
+    "no-op": 1.6633449238354114,
+    "low": 1.320584843317751,
+    "high": 1.481547122354903,
+    "overall": 1.361319492014037
+   },
+   "A5_PARAMETRIC_RIDGE": {
+    "no-op": 1.656335634604381,
+    "low": 1.3224653556654098,
+    "high": 1.5938496848973187,
+    "overall": 1.4030235534052626
+   },
+   "CATALOG_ORACLE": {
+    "no-op": 1.5397576865297298,
+    "low": 1.2625271206265918,
+    "high": 1.3233509391488123,
+    "overall": 1.2572762844305876
+   },
+   "A2_WO_INTERVENTION": {
+    "no-op": 1.6330697770463936,
+    "low": 1.321841988827639,
+    "high": 1.5233328399906574,
+    "overall": 1.3744651298661243
+   },
+   "A3_WO_FORECAST": {
+    "no-op": 1.639907159047246,
+    "low": 1.3186329502167236,
+    "high": 1.5042263665638977,
+    "overall": 1.3671502579533588
+   }
+  }
+ },
+ "bank": {
+  "episodes": 1784,
+  "support": {
+   "KEEP": 1784,
+   "FFILL": 1784,
+   "SINGLE_TSICL": 1784,
+   "MULTI_TSICL": 1784,
+   "CONTEXT_RIDGE": 1338
+  },
+  "mean_utility": {
+   "KEEP": 0.0,
+   "FFILL": -0.17018627187375668,
+   "SINGLE_TSICL": 0.026149910199815624,
+   "MULTI_TSICL": 0.04243924670178325,
+   "CONTEXT_RIDGE": -0.372215232865403
+  }
+ },
+ "runtime_seconds": 30.38239803200031
+}

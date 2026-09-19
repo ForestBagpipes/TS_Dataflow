@@ -99,8 +99,8 @@ def build(evals: dict, primary: dict, mean_over, ci,
     if worse:
         out["MAIN_BASELINE_SPREAD"] += (
             ". Both published baselines repair or transform every incomplete request, and "
-            + " and ".join(sorted(worse))
-            + f" end above the untouched input at {keep:.3f}")
+            + " and ".join(f"{name} ends at {published[name]:.3f}" for name in sorted(worse))
+            + f", above the {keep:.3f} of leaving the input alone")
         if detail:
             out["MAIN_BASELINE_SPREAD"] += (
                 ". The loss is concentrated rather than uniform, with " + ", ".join(detail)
@@ -113,12 +113,12 @@ def build(evals: dict, primary: dict, mean_over, ci,
         sig = [b for b in order
                if evals[b]["comparisons"]["FULL_INTROACT_vs_R2_CART"]["excludes_zero"]]
         if not sig:
-            tail = ("and no interval excludes zero, so accuracy alone does not separate the two "
-                    "and what does is in Table~\\ref{tab:harm}")
+            tail = ("no interval excludes zero, so accuracy alone does not separate the two "
+                    "and what does is in Table~\ref{tab:harm}")
         elif len(sig) == len(order):
-            tail = "and every interval excludes zero"
+            tail = "every interval excludes zero"
         else:
-            tail = ("and the interval excludes zero on "
+            tail = ("the interval excludes zero on "
                     + ", ".join(BACKBONE_NAME[b] for b in sig))
         out["MAIN_R2CART"] = "Against the simple selector " + tail
     per_rank = {b: evals[b]["average_rank"] for b in order}
@@ -145,12 +145,10 @@ def build(evals: dict, primary: dict, mean_over, ci,
     tail = ""
     if always:
         tail = (", while the published baselines repair or transform every incomplete request by "
-                "construction and reach "
-                + ", ".join(f"{name} {m(name):.3f}" for name in always))
+                "construction, so their intervention rate is one")
     out["HARM_READING"] = (
-        f"{INTRO} intervenes on {ir * 100:.0f}{PCT} of the requests and the best fixed "
-        f"intervention on {m('BEST_FIXED', 'intervention_rate') * 100:.0f}{PCT}, so the accuracy "
-        f"gain is not bought by staying still{tail}")
+        f"{INTRO} executes an intervention on {ir * 100:.0f}{PCT} of the requests, so its "
+        f"accuracy is not bought by staying still{tail}")
     out["HARM_IR"] = (
         f"Conditional on intervening it is harmful on {hir * 100:.1f}{PCT} of those requests "
         f"against {m('BEST_FIXED', 'conditional_hir') * 100:.1f}{PCT} for the fixed intervention "
@@ -190,8 +188,8 @@ def build(evals: dict, primary: dict, mean_over, ci,
             f"{ci(a['A2_WO_INTERVENTION'])}")
     if a["A3_WO_FORECAST"]:
         out["ABL_A3"] = (
-            f"and dropping the reference-forecast block by {ci(a['A3_WO_FORECAST'])}, so neither "
-            f"block is load bearing on its own")
+            f"Dropping the reference-forecast block changes it by {ci(a['A3_WO_FORECAST'])}, so "
+            f"neither state block is load bearing on its own")
     if a["A4_ALWAYS_ACT"]:
         out["ABL_A4"] = (
             f"Removing the reference option and executing the best-scoring action on every "
@@ -261,7 +259,7 @@ def build(evals: dict, primary: dict, mean_over, ci,
         ch2_best = min(("NATIVE_KEEP", "BEST_FIXED", "R2_CART", "SAITS", "TATO",
                         "FULL_INTROACT"),
                        key=lambda k: rows_ch2[k]["mase"] if k in rows_ch2 else 9e9)
-        tail = ("and it reaches the lowest macro average of the deployable rows"
+        ch2_tail = ("and it reaches the lowest macro average of the deployable rows"
                 if ch2_best == "FULL_INTROACT" else
                 f"and the lowest macro average there belongs to "
                 f"{DISPLAY.get(ch2_best, ch2_best)} at {rows_ch2[ch2_best]['mase']:.3f}")
@@ -270,18 +268,25 @@ def build(evals: dict, primary: dict, mean_over, ci,
             f"{rows_ch2['FULL_INTROACT']['mase']:.3f} against "
             f"{rows_ch2['NATIVE_KEEP']['mase']:.3f} with a paired interval that excludes zero, "
             f"it has the best average rank of the deployable rows at "
-            f"{ch2['average_rank']['FULL_INTROACT']:.2f}, " + tail)
+            f"{ch2['average_rank']['FULL_INTROACT']:.2f}, " + ch2_tail)
 
+    sig_fixed = [b for b in seq
+                 if evals[b]["comparisons"]["FULL_INTROACT_vs_BEST_FIXED"]["excludes_zero"]]
+    concl_tail = ("and the paired difference against the best fixed intervention excludes zero "
+                  "on every backbone" if len(sig_fixed) == len(seq) and sig_fixed else
+                  "and it has the best average rank of the deployable rows on every backbone")
     out["CONCL_MAIN"] = (
-        f"Deciding per request lowers source-macro MASE from {keep:.3f} to {ours:.3f}, {tail}")
+        f"Deciding per request lowers source-macro MASE from {keep:.3f} to {ours:.3f}, "
+        f"{concl_tail}")
     out["CONCL_HARM"] = (
         f"The reference action is returned on {(1 - ir) * 100:.0f}{PCT} of requests, which lowers "
         f"harmful loss relative to executing an action every time without costing accuracy")
     if "chronos2" in evals:
         out["CONCL_TRANSFER"] = (
             "The same procedure, with its two hyperparameters chosen by the same cross-validation "
-            "rule on the backbone's own replay bank, holds on a backbone family that took no part "
-            "in method design")
+            "rule on the backbone's own replay bank, still improves on the untouched input and "
+            "still ranks first among the deployable rows on a backbone family that took no part "
+            "in method design, without reaching the lowest average there")
     rank_all = all(min(evals[b]["average_rank"].items(), key=lambda kv: kv[1])[0]
                    == "FULL_INTROACT" for b in seq)
     lowest = " and ".join(BACKBONE_NAME[b] for b in won) if won else "no backbone"

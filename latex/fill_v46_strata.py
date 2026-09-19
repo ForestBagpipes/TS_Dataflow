@@ -83,4 +83,70 @@ def build(num, pct) -> dict:
                 out[f"SEV{level}-{key}-RMSSE"] = num(sum(store["rmsse"]) / len(store["rmsse"]))
             if ranks.get(key):
                 out[f"SEV{level}-{key}-RANK"] = num(sum(ranks[key]) / len(ranks[key]), 2)
+    # Boundary sensitivity: the same partition under a half and a double
+    # threshold, so a reader can see how much the stratum reading depends on
+    # where the line was drawn.
+    factors = {"x0.5": "HALF", "x1.0": "ONE", "x2.0": "TWO"}
+    for factor, tag in factors.items():
+        rows_f = [p["opportunity_strata_sensitivity"][factor] for p in payloads.values()
+                  if p.get("opportunity_strata_sensitivity", {}).get(factor)]
+        if not rows_f:
+            continue
+        for name, column in (("no-op", "NOOP"), ("low", "LOW"), ("high", "HIGH"),
+                             ("overall", "OVR")):
+            values = [r["per_method"]["FULL_INTROACT"][name] for r in rows_f
+                      if r["per_method"].get("FULL_INTROACT", {}).get(name) is not None]
+            if values:
+                out[f"OPPSENS_{tag}_{column}"] = num(sum(values) / len(values))
+
+    # Worst pattern of the severity table: the largest degradation relative to
+    # the untouched input over all pattern and backbone cells at that severity.
+    for block, level in SEV_BLOCK.items():
+        worst: dict[str, float] = {}
+        for backbone in BACKBONES:
+            path = ROOT / f"results/v46/evaluation/{block}_{backbone}.json"
+            if not path.exists():
+                continue
+            payload = json.loads(path.read_text())
+            keep = payload["rows"].get("NATIVE_KEEP")
+            if not keep:
+                continue
+            for method, key in METHOD_KEY.items():
+                row = payload["rows"].get(method)
+                if not row:
+                    continue
+                for cell, value in row["per_cell_mase"].items():
+                    reference = keep["per_cell_mase"].get(cell)
+                    if reference is None or value is None:
+                        continue
+                    gap = value - reference
+                    if key not in worst or gap > worst[key]:
+                        worst[key] = gap
+        for key, gap in worst.items():
+            out[f"RB_{key}_WORST"] = f"{gap:+.3f}"
+
+    # Mask-realisation stability: the same TEST parents under three deterministic
+    # deletion patterns.  The spread is a stability diagnostic and is never
+    # treated as a third sample of parents.
+    plan = [("bolt", ("test", "test_m2", "test_m3"), (1, 2, 3), "BOLT"),
+            ("chronos2", ("test", "test_m2", "test_m3"), (4, 5, 6), "CH2")]
+    for backbone, blocks, indices, tag in plan:
+        mases, rates = [], []
+        for block, index in zip(blocks, indices):
+            path = ROOT / f"results/v46/evaluation/{block}_{backbone}.json"
+            if not path.exists():
+                continue
+            payload = json.loads(path.read_text())
+            ours = payload["rows"].get("FULL_INTROACT")
+            keep = payload["rows"].get("NATIVE_KEEP")
+            if not ours or not keep:
+                continue
+            out[f"SEED{index}_MASE"] = num(ours["mase"])
+            out[f"SEED{index}_DELTA"] = f"{ours['mase'] - keep['mase']:+.3f}"
+            out[f"SEED{index}_IR"] = pct(ours["intervention_rate"])
+            mases.append(ours["mase"])
+            rates.append(ours["intervention_rate"])
+        if len(mases) >= 2:
+            out[f"SEED_SPREAD_{tag}"] = num(max(mases) - min(mases))
+            out[f"SEED_IR_SPREAD_{tag}"] = pct(max(rates) - min(rates))
     return out

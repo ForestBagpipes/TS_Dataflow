@@ -363,6 +363,11 @@ def main() -> None:
         "heterogeneity": heterogeneity(queries),
         "opportunity_strata": opportunity_strata(
             SEL.Queries(bank_catalogs, blocks=full_blocks), queries, rows, mase_of),
+        "opportunity_strata_sensitivity": {
+            f"x{factor}": opportunity_strata(
+                SEL.Queries(bank_catalogs, blocks=full_blocks), queries, rows, mase_of,
+                quantiles=(min(0.95, 0.50 * factor), min(0.98, 0.85 * factor)))
+            for factor in (0.5, 1.0, 2.0)},
         "bank": {"episodes": len(bank_catalogs), "support": bank.support(),
                  "mean_utility": bank.mean_utility()},
         "runtime_seconds": time.perf_counter() - began,

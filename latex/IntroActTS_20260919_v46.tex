@@ -1439,7 +1439,7 @@ effect depends on where the boundary was drawn.
     Native KEEP        & \ph{NOOP_KEEP}    & \ph{LOWOP_KEEP}    & \ph{HIGHOP_KEEP}    & \ph{OVR_KEEP} \\
     Best Fixed         & \ph{NOOP_BF}      & \ph{LOWOP_BF}      & \ph{HIGHOP_BF}      & \ph{OVR_BF} \\
     R2-CART            & \ph{NOOP_R2}      & \ph{LOWOP_R2}      & \ph{HIGHOP_R2}      & \ph{OVR_R2} \\
-    SAITS                 & \ph{NOOP_T1}      & \ph{LOWOP_T1}      & \ph{HIGHOP_T1}      & \ph{OVR_T1} \\
+    SAITS                 & \ph{NOOP_SAITS}      & \ph{LOWOP_SAITS}      & \ph{HIGHOP_SAITS}      & \ph{OVR_SAITS} \\
     TATO               & \ph{NOOP_TATO}    & \ph{LOWOP_TATO}    & \ph{HIGHOP_TATO}    & \ph{OVR_TATO} \\
     \midrule
     \rowcolor{bestgray}\introact{} & \ph{NOOP_OURS} & \ph{LOWOP_OURS} & \ph{HIGHOP_OURS} & \ph{OVR_OURS} \\
@@ -1753,22 +1753,24 @@ thresholded. Table~\ref{tab:app-ablation} reports the full outcome vector behind
 Table~\ref{tab:ablation}. The variant definitions follow \S\ref{sec:exp-ablation} exactly.
 
 \begin{table}[h]
-  \caption{Ablation, full outcome vector. Calls counts forecasting-backbone calls per request,
-  and harmful loss is measured relative to \textsc{Keep}.}
+  \caption{Ablation, full outcome vector in the two scaled metrics. Raw errors are not
+  averaged across sources anywhere in this paper, so they are not shown here either. Calls
+  counts forecasting-backbone calls per request and harmful loss is relative to
+  \textsc{Keep}.}
   \label{tab:app-ablation}
   \centering
   \small
   \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{lcccccccc}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccc}
     \toprule
-    Variant & MASE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & MSE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Calls $\downarrow$ \\
+    Variant & MASE $\downarrow$ & RMSSE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Calls $\downarrow$ \\
     \midrule
-    Full \introact{}            & \ph{AF_FULL_MASE} & \ph{AF_FULL_MAE} & \ph{AF_FULL_RMSE} & \ph{AF_FULL_MSE} & \ph{AF_FULL_IR} & \ph{AF_FULL_CHIR} & \ph{AF_FULL_HL} & \ph{AF_FULL_CALLS} \\
-    A1 Global utility           & \ph{AF_A1_MASE}   & \ph{AF_A1_MAE}   & \ph{AF_A1_RMSE}   & \ph{AF_A1_MSE}   & \ph{AF_A1_IR}   & \ph{AF_A1_CHIR}   & \ph{AF_A1_HL}   & \ph{AF_A1_CALLS} \\
-    A2 w/o intervention state   & \ph{AF_A2_MASE}   & \ph{AF_A2_MAE}   & \ph{AF_A2_RMSE}   & \ph{AF_A2_MSE}   & \ph{AF_A2_IR}   & \ph{AF_A2_CHIR}   & \ph{AF_A2_HL}   & \ph{AF_A2_CALLS} \\
-    A3 w/o reference-forecast state & \ph{AF_A3_MASE} & \ph{AF_A3_MAE} & \ph{AF_A3_RMSE} & \ph{AF_A3_MSE}   & \ph{AF_A3_IR}   & \ph{AF_A3_CHIR}   & \ph{AF_A3_HL}   & \ph{AF_A3_CALLS} \\
-    A4 Always act               & \ph{AF_A4_MASE}   & \ph{AF_A4_MAE}   & \ph{AF_A4_RMSE}   & \ph{AF_A4_MSE}   & \ph{AF_A4_IR}   & \ph{AF_A4_CHIR}   & \ph{AF_A4_HL}   & \ph{AF_A4_CALLS} \\
-    A5 Parametric utility predictor & \ph{AF_A5_MASE} & \ph{AF_A5_MAE} & \ph{AF_A5_RMSE} & \ph{AF_A5_MSE} & \ph{AF_A5_IR} & \ph{AF_A5_CHIR} & \ph{AF_A5_HL} & \ph{AF_A5_CALLS} \\
+    Full \introact{}            & \ph{AF_FULL_MASE} & \ph{AF_FULL_RMSSE} & \ph{AF_FULL_IR} & \ph{AF_FULL_CHIR} & \ph{AF_FULL_HL} & \ph{AF_FULL_CALLS} \\
+    A1 Global utility & \ph{AF_A1_MASE} & \ph{AF_A1_RMSSE} & \ph{AF_A1_IR} & \ph{AF_A1_CHIR} & \ph{AF_A1_HL} & \ph{AF_A1_CALLS} \\
+    A2 w/o intervention state & \ph{AF_A2_MASE} & \ph{AF_A2_RMSSE} & \ph{AF_A2_IR} & \ph{AF_A2_CHIR} & \ph{AF_A2_HL} & \ph{AF_A2_CALLS} \\
+    A3 w/o reference-forecast state & \ph{AF_A3_MASE} & \ph{AF_A3_RMSSE} & \ph{AF_A3_IR} & \ph{AF_A3_CHIR} & \ph{AF_A3_HL} & \ph{AF_A3_CALLS} \\
+    A4 Always act & \ph{AF_A4_MASE} & \ph{AF_A4_RMSSE} & \ph{AF_A4_IR} & \ph{AF_A4_CHIR} & \ph{AF_A4_HL} & \ph{AF_A4_CALLS} \\
+    A5 Parametric utility predictor & \ph{AF_A5_MASE} & \ph{AF_A5_RMSSE} & \ph{AF_A5_IR} & \ph{AF_A5_CHIR} & \ph{AF_A5_HL} & \ph{AF_A5_CALLS} \\
     \midrule
     \bottomrule
   \end{tabular}}

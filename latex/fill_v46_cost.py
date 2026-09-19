@@ -104,15 +104,53 @@ def build(num, pct) -> dict:
             out["RIDGE_BOLT_ALL"] = f"{ridge['all']['mean']:+.3f}"
             out["RIDGE_BOLT_S10"] = f"{ridge['s10']['mean']:+.3f}"
 
-    # Failures and timeouts, from the forecast status records.
-    failed = timed_out = total = 0
+    # Per-request cost, from the timing run.
+    retrieval, calls_ms = [], []
     for backbone in BACKBONES:
-        path = ROOT / f"results/v46/replay/forecast/{BLOCK}/{backbone}/status.json"
+        path = ROOT / f"results/v46/cost_audit/latency_{BLOCK}_{backbone}.json"
         if not path.exists():
             continue
         payload = json.loads(path.read_text())
-        failed += len(payload.get("failures", []))
-        total += len(payload.get("calls", []))
+        if payload.get("retrieval_per_request"):
+            retrieval.append(payload["retrieval_per_request"])
+        if payload.get("backbone_call"):
+            calls_ms.append(payload["backbone_call"])
+    if retrieval and calls_ms:
+        def avg(items, key):
+            return sum(x[key] for x in items) / len(items)
+
+        # Our online latency is the retrieval plus the calls a request makes,
+        # which is one for the reference forecast and one more when an action runs.
+        rate = mean_field("FULL_INTROACT", "intervention_rate") if evals else 0.0
+        ours_mean = avg(retrieval, "mean_ms") + (1.0 + rate) * avg(calls_ms, "mean_ms")
+        ours_p95 = avg(retrieval, "p95_ms") + 2.0 * avg(calls_ms, "p95_ms")
+        ours_max = avg(retrieval, "max_ms") + 2.0 * avg(calls_ms, "max_ms")
+        out["OURS_MEAN"] = f"{ours_mean:.0f} ms"
+        out["OURS_P95"] = f"{ours_p95:.0f} ms"
+        out["OURS_MAX"] = f"{ours_max:.0f} ms"
+        for tag in ("SAITS", "TATO"):
+            out[f"{tag}_MEAN"] = f"{avg(calls_ms, 'mean_ms'):.0f} ms"
+            out[f"{tag}_P95"] = f"{avg(calls_ms, 'p95_ms'):.0f} ms"
+            out[f"{tag}_MAX"] = f"{avg(calls_ms, 'max_ms'):.0f} ms"
+        out["COST_LATENCY"] = (
+            f"Retrieval costs {avg(retrieval, 'mean_ms'):.1f} ms per request on one CPU core "
+            f"against {avg(calls_ms, 'mean_ms'):.0f} ms for a single forecasting call, so the "
+            f"decision layer is a small fraction of the cost the deployment already pays")
+        out["COLDSTART"] = "one model load per process, excluded from the per-request times"
+
+    # Failures, timeouts and cold start, over every forecast stage of the run.
+    failed = timed_out = total = 0
+    cold = []
+    for backbone in BACKBONES:
+        for block in ("bank", "train_eval", "test", "test30", "test50"):
+            path = ROOT / f"results/v46/replay/forecast/{block}/{backbone}/status.json"
+            if not path.exists():
+                continue
+            payload = json.loads(path.read_text())
+            failed += len(payload.get("failures", []))
+            total += payload.get("unique_predictions") or payload.get("unique_inputs") or 0
+            if payload.get("load_seconds"):
+                cold.append(payload["load_seconds"])
     if total:
         out["FAILRATE"] = pct(failed / total, 2)
         out["CALLS_FAIL_N"] = str(failed)
@@ -121,4 +159,10 @@ def build(num, pct) -> dict:
         out["CALLS_TIMEOUT_SHARE"] = pct(timed_out / total, 2)
         out["CALLS_FAIL_COST"] = "0"
         out["CALLS_TIMEOUT_COST"] = "0"
+        out["TOTAL_CALLS"] = f"{total:,}"
+    if cold:
+        mean = sum(cold) / len(cold)
+        out["COLDSTART"] = f"{mean:.1f} s to load a backbone, paid once per process"
+        out["CALLS_COLD_N"] = str(len(cold))
+        out["CALLS_COLD_LATENCY"] = f"{mean:.1f} s"
     return out

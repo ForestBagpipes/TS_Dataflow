@@ -115,7 +115,8 @@ def build(evals: dict, selections: dict) -> dict:
         out[f"HARM_IR_{key}"] = pct(mean_over(evals, method, "intervention_rate"))
         out[f"HARM_HIR_{key}"] = pct(mean_over(evals, method, "conditional_hir"))
         out[f"HARM_HL_{key}"] = num(mean_over(evals, method, "harmful_loss"), 4)
-        out[f"HARM_BP_{key}"] = pct(mean_over(evals, method, "beneficial_precision"))
+        value = mean_over(evals, method, "beneficial_precision")
+        out[f"HARM_BP_{key}"] = pct(value) if value is not None else "---"
         out[f"HARM_MO_{key}"] = pct(mean_over(evals, method, "missed_opportunity"))
 
     # Ablation and cost.
@@ -129,6 +130,7 @@ def build(evals: dict, selections: dict) -> dict:
         rate = mean_over(evals, method, "intervention_rate")
         out[f"ABL_{key}_CALLS"] = num(1.0 + rate, 2) if rate is not None else None
         out[f"AF_{key}_MASE"] = out[f"ABL_{key}_MASE"]
+        out[f"AF_{key}_RMSSE"] = num(mean_over(evals, method, "rmsse"))
         out[f"AF_{key}_IR"] = out[f"ABL_{key}_IR"]
         out[f"AF_{key}_CHIR"] = out[f"ABL_{key}_HIR"]
         out[f"AF_{key}_HL"] = out[f"ABL_{key}_HL"]
@@ -186,6 +188,14 @@ def build(evals: dict, selections: dict) -> dict:
         out["FIT_ORIGINS"] = str(first["episodes"])
         out["FIT_SOURCES"] = str(first["sources"])
         out["GATE_HARM_CAP"] = pct(first["harm_cap"]["cap"])
+    for backbone in ("bolt", "timesfm", "chronos2"):
+        path = EVAL / f"train_eval_{backbone}.json"
+        if path.exists():
+            payload = json.loads(path.read_text())
+            out["EVAL_PARENTS"] = str(payload["parents"])
+            out["EVAL_ORIGINS"] = str(payload["episodes"])
+            out["EVAL_SOURCES"] = str(len(payload["sources"]))
+            break
 
     # Headline differences.
     comp = primary["comparisons"]
@@ -206,18 +216,19 @@ def build(evals: dict, selections: dict) -> dict:
     tail_keep = ("and every interval excludes zero" if len(sig_keep) == len(evals)
                  else "and the interval excludes zero on " + ", ".join(sorted(sig_keep)))
     if not sig_fixed:
-        tail_fixed = "and no interval excludes zero"
+        tail_fixed = "no interval excludes zero"
     elif len(sig_fixed) == len(evals):
-        tail_fixed = "and every interval excludes zero"
+        tail_fixed = "every interval excludes zero"
     else:
-        tail_fixed = "and the interval excludes zero on " + ", ".join(sorted(sig_fixed))
+        tail_fixed = "the interval excludes zero on " + ", ".join(sorted(sig_fixed))
     out["MAIN_DELTA_CI"] = (
         "Against the untouched input the paired difference is "
         + ", ".join(keep_parts) + ", " + tail_keep
-        + ", and against the best fixed intervention " + tail_fixed)
+        + ". Against the best fixed intervention " + tail_fixed)
     out["MAIN_INTERVENTION_RATE"] = pct(mean_over(evals, "FULL_INTROACT", "intervention_rate"))
     out["HARM_HIR_OURS"] = pct(mean_over(evals, "FULL_INTROACT", "conditional_hir"))
     out["STRONG_BASELINE"] = "the best fixed intervention"
+    out["N_BOOTSTRAP"] = "2,000"
 
     import fill_v46_reading
     recon = primary.get("reconstruction")

@@ -1,0 +1,24 @@
+{
+ "stage": "v46-latency",
+ "backbone": "bolt",
+ "block": "test",
+ "frozen": {
+  "k": 8,
+  "beta": 0.0
+ },
+ "bank_records": 8474,
+ "retrieval_per_request": {
+  "mean_ms": 1.174788160539576,
+  "p95_ms": 1.2045315497744014,
+  "max_ms": 1.6155749999597901,
+  "n": 760
+ },
+ "backbone_call": {
+  "mean_ms": 42.438383522720144,
+  "p95_ms": 51.022993099900305,
+  "max_ms": 644.0681770000083,
+  "n": 3610
+ },
+ "note": "retrieval is measured one request at a time on this machine; the backbone call time is the runtime the forecast stage recorded for the same block",
+ "runtime_seconds": 19.127750765999735
+}

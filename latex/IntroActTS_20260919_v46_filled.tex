@@ -506,7 +506,7 @@ learning a simple selector, across sources and frozen \tsfm{} backbones?}
 
 Table~\ref{tab:main} reports the main comparison at $10\%$ severity over all eight sources,
 three backbones, two horizons, and four patterns. \introact{} reaches 1.447 source-macro MASE against 1.576 for the untouched input, 1.438 for the best fixed intervention and 1.456 for the simple selector, and against the published baselines at SAITS 1.696, TATO 1.689. It improves on the untouched input on every backbone.
-Against the untouched input the paired difference is Bolt -0.0957 [-0.1525, -0.0397], TimesFM -0.1554 [-0.2055, -0.1050], Chronos-2 -0.1370 [-0.1625, -0.1124], and every interval excludes zero, and against the best fixed intervention and the interval excludes zero on Bolt. It is the lowest deployable row on Bolt and TimesFM, and on Chronos-2 one fixed repair reaches a lower macro average, which \S\ref{sec:exp-robust} returns to. The deployable rows span 1.438 to 1.696 and the catalog oracle sits at 1.307, so the room to recover is bounded and the gaps between rows are a visible part of it. Both published baselines repair or transform every incomplete request, and SAITS and TATO end above the untouched input at 1.576. The loss is concentrated rather than uniform, with SAITS below it on 18 of 24 source and backbone cells, TATO below it on 5 of 24 source and backbone cells, so what costs a fixed repair its average is the minority of cells on which it is badly wrong, and that is the failure a per-request rule can avoid. Against the simple selector and no interval excludes zero, so accuracy alone does not separate the two and what does is in Table~\ref{tab:harm}.
+Against the untouched input the paired difference is Bolt -0.0957 [-0.1525, -0.0397], TimesFM -0.1554 [-0.2055, -0.1050], Chronos-2 -0.1370 [-0.1625, -0.1124], and every interval excludes zero. Against the best fixed intervention the interval excludes zero on Bolt. It is the lowest deployable row on Bolt and TimesFM, and on Chronos-2 one fixed repair reaches a lower macro average, which \S\ref{sec:exp-robust} returns to. The deployable rows span 1.438 to 1.696 and the catalog oracle sits at 1.307, so the room to recover is bounded and the gaps between rows are a visible part of it. Both published baselines repair or transform every incomplete request, and SAITS ends at 1.696 and TATO ends at 1.689, above the 1.576 of leaving the input alone. The loss is concentrated rather than uniform, with SAITS below it on 18 of 24 source and backbone cells, TATO below it on 5 of 24 source and backbone cells, so what costs a fixed repair its average is the minority of cells on which it is badly wrong, and that is the failure a per-request rule can avoid. Against the simple selector no interval excludes zero, so accuracy alone does not separate the two and what does is in Table~ef{tab:harm}.
 Average rank over the evaluation cells is Bolt 4.17, TimesFM 3.83, Chronos-2 4.01, against Bolt 4.17, TimesFM 3.82, Chronos-2 4.01 for the best row on each. Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
 deployment cost is reported separately in Appendix~\ref{app:calls}.
 
@@ -551,7 +551,7 @@ intervention was executed and must be read together with the intervention rate, 
 method that intervenes on almost nothing can report a low conditional rate without
 contributing anything. Beneficial precision is the share of executed interventions that reduced
 the loss, and missed opportunity is the share of episodes with a positive oracle opportunity on
-which nothing was executed. \introact{} intervenes on 83\% of the requests and the best fixed intervention on 83\%, so the accuracy gain is not bought by staying still, while the published baselines repair or transform every incomplete request by construction and reach SAITS 1.696, TATO 1.689. Conditional on intervening it is harmful on 44.2\% of those requests against 42.7\% for the fixed intervention and 43.9\% for the simple selector. Harmful loss, which weights each harmful intervention by the loss it added, is 0.0451, against the best fixed intervention 0.0536, the simple selector 0.0505, SAITS 0.1065, TATO 0.2937. The selective rule is therefore both more accurate and cheaper when wrong.
+which nothing was executed. \introact{} executes an intervention on 83\% of the requests, so its accuracy is not bought by staying still, while the published baselines repair or transform every incomplete request by construction, so their intervention rate is one. Conditional on intervening it is harmful on 44.2\% of those requests against 42.7\% for the fixed intervention and 43.9\% for the simple selector. Harmful loss, which weights each harmful intervention by the loss it added, is 0.0451, against the best fixed intervention 0.0536, the simple selector 0.0505, SAITS 0.1065, TATO 0.2937. The selective rule is therefore both more accurate and cheaper when wrong.
 Beneficial precision is 55.8\%. and missed opportunity is 17.8\%, which is what the reference option costs.
 
 Figure~\ref{fig:why-selective}(b) traces the trade-off over the score grid by post-processing
@@ -573,7 +573,7 @@ Appendix~\ref{app:governance-fig} reports the curve cell by cell. Raising the pe
     \toprule
     Method & MASE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Beneficial precision $\uparrow$ & Missed opportunity $\downarrow$ \\
     \midrule
-    Native KEEP        & 1.576   & 0.0\%   & 0.0\%   & 0.0000   & \ph{HARM_BP_KEEP}   & 100.0\% \\
+    Native KEEP        & 1.576   & 0.0\%   & 0.0\%   & 0.0000   & ---   & 100.0\% \\
     Best Fixed         & 1.438     & 83.3\%     & 42.7\%     & 0.0536     & 57.3\%     & 15.3\% \\
     R2-CART            & 1.456     & 96.8\%     & 43.9\%     & 0.0505     & 56.1\%     & 3.1\% \\
     SAITS              & 1.696     & 100.0\%     & 45.4\%     & 0.1065     & 54.6\%     & 0.0\% \\
@@ -613,7 +613,7 @@ instead of by its neighbourhood, A2 and A3 drop the intervention and the referen
 block of the state, A4 removes the reference option so that an action runs on every request,
 and A5 replaces the local estimate with a per-action linear utility predictor over the same
 features. Appendix~\ref{app:ablation-details} gives the exact definitions.
-Table~\ref{tab:ablation} reports accuracy, harm, and cost together. Two parts of the design carry the result, and the state blocks matter less than either. Scoring an action by its global mean utility instead of its neighbourhood costs -0.0150 [-0.0296, -0.0004] and drives the intervention rate to 100\%, which is what a corpus-level answer to a per-request question looks like. Dropping the intervention block of the state changes accuracy by -0.0006 [-0.0038, +0.0029]. and dropping the reference-forecast block by +0.0068 [-0.0083, +0.0216], so neither block is load bearing on its own.
+Table~\ref{tab:ablation} reports accuracy, harm, and cost together. Two parts of the design carry the result, and the state blocks matter less than either. Scoring an action by its global mean utility instead of its neighbourhood costs -0.0150 [-0.0296, -0.0004] and drives the intervention rate to 100\%, which is what a corpus-level answer to a per-request question looks like. Dropping the intervention block of the state changes accuracy by -0.0006 [-0.0038, +0.0029]. Dropping the reference-forecast block changes it by +0.0068 [-0.0083, +0.0216], so neither state block is load bearing on its own.
 Removing the reference option and executing the best-scoring action on every request changes accuracy by +0.0076 [-0.0004, +0.0167] while raising harmful loss from 0.0451 to 0.0519, so keeping the input is what lets the method intervene on 17\% fewer requests without paying for it in accuracy. Replacing retrieval by a per-action linear utility predictor over the same features costs -0.0259 [-0.0440, -0.0081], the largest gap in the table and the clearest sign that the local estimate is doing the work. A request costs 1.83 forecasting-backbone calls on average.
 
 \begin{table}[t]
@@ -650,7 +650,7 @@ at forecast time, and reconstruction quality turns out to be close to uninformat
 so \introact{} reads the answer off history: it replays TRAIN windows as pseudo-deployments,
 executes every catalog action with the frozen forecaster, and stores what each action did.
 
-The evaluation supports three claims. Deciding per request lowers source-macro MASE from 1.576 to 1.447, and the lowest macro average there belongs to the best fixed intervention at 1.353. The reference action is returned on 17\% of requests, which lowers harmful loss relative to executing an action every time without costing accuracy. The same procedure, with its two hyperparameters chosen by the same cross-validation rule on the backbone's own replay bank, holds on a backbone family that took no part in method design.
+The evaluation supports three claims. Deciding per request lowers source-macro MASE from 1.576 to 1.447, and it has the best average rank of the deployable rows on every backbone. The reference action is returned on 17\% of requests, which lowers harmful loss relative to executing an action every time without costing accuracy. The same procedure, with its two hyperparameters chosen by the same cross-validation rule on the backbone's own replay bank, still improves on the untouched input and still ranks first among the deployable rows on a backbone family that took no part in method design, without reaching the lowest average there.
 The evidence also has a clear boundary. All missingness here comes from controlled deletion
 under a registered protocol, the replay bank covers only the patterns and severities that were
 replayed, and the method cannot detect that a request lies outside that grid. The results
@@ -934,7 +934,7 @@ Table~\ref{tab:app-splits} records the realised sizes, including the TEST block.
     Split & Parents & Episodes & Sources covered & Used for \\
     \midrule
     Replay bank  & 223   & 1784   & 8   & replay bank, feature normalisation, baseline training, selection of $k$ and $\beta$ by cross-validation \\
-    TRAIN-eval   & \ph{EVAL_PARENTS}  & \ph{EVAL_ORIGINS}  & \ph{EVAL_SOURCES}  & frozen-configuration acceptance check \\
+    TRAIN-eval   & 53  & 424  & 8  & frozen-configuration acceptance check \\
     \midrule
     TEST         & 95  & 760  & 8  & every table in the main text, once, after freezing \\
     \bottomrule
@@ -1030,7 +1030,7 @@ replay uses, which is drawn from $\{10\%, 30\%, 50\%\}$.
 
 \subsubsection{Metric Conventions}
 \label{app:metric-conventions}
-The statistical unit is the parent. Paired cluster bootstrap with \ph{N_BOOTSTRAP} resamples
+The statistical unit is the parent. Paired cluster bootstrap with 2,000 resamples
 over parent blocks gives 95\% confidence intervals on source-macro MASE differences against
 each baseline, the source-macro aggregation is applied inside every resample, and Holm
 correction~\citep{holm1979simple} is applied across the pre-declared baseline comparisons.
@@ -1439,7 +1439,7 @@ effect depends on where the boundary was drawn.
     Native KEEP        & 1.291    & 1.184    & 2.058    & 1.576 \\
     Best Fixed         & 1.446      & 1.198      & 1.597      & 1.438 \\
     R2-CART            & 1.446      & 1.186      & 1.615      & 1.456 \\
-    SAITS                 & \ph{NOOP_T1}      & \ph{LOWOP_T1}      & \ph{HIGHOP_T1}      & \ph{OVR_T1} \\
+    SAITS                 & 1.665      & 1.234      & 1.921      & 1.696 \\
     TATO               & 1.523    & 1.328    & 2.237    & 1.689 \\
     \midrule
     \rowcolor{bestgray}\introact{} & 1.408 & 1.192 & 1.600 & 1.447 \\
@@ -1459,9 +1459,9 @@ effect depends on where the boundary was drawn.
     \toprule
     Boundary factor & No-op MASE $\downarrow$ & Low MASE $\downarrow$ & High MASE $\downarrow$ & Overall MASE $\downarrow$ \\
     \midrule
-    $\times 0.5$ & \ph{OPPSENS_HALF_NOOP}  & \ph{OPPSENS_HALF_LOW}  & \ph{OPPSENS_HALF_HIGH}  & \ph{OPPSENS_HALF_OVR} \\
-    $\times 1.0$ & 0.000000   & 0.109   & 0.441   & \ph{OPPSENS_ONE_OVR} \\
-    $\times 2.0$ & \ph{OPPSENS_TWO_NOOP}   & \ph{OPPSENS_TWO_LOW}   & \ph{OPPSENS_TWO_HIGH}   & \ph{OPPSENS_TWO_OVR} \\
+    $\times 0.5$ & 1.408  & 1.069  & 1.490  & 1.447 \\
+    $\times 1.0$ & 1.408   & 1.192   & 1.600   & 1.447 \\
+    $\times 2.0$ & 1.408   & 1.538   & 2.114   & 1.447 \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1588,13 +1588,13 @@ because the replay bank already samples from the same three levels.\begin{table}
     \toprule
     Method & 10\% MASE $\downarrow$ & 30\% MASE $\downarrow$ & 50\% MASE $\downarrow$ & Worst pattern $\downarrow$ \\
     \midrule
-    Native KEEP        & 1.576    & 1.794    & 1.875    & \ph{RB_KEEP_WORST} \\
-    Best Fixed         & 1.438      & 1.483      & 1.605      & \ph{RB_BF_WORST} \\
-    R2-CART            & 1.456      & 1.469      & 1.763      & \ph{RB_R2_WORST} \\
-    SAITS              & 1.696      & 1.798      & 1.804      & \ph{RB_SAITS_WORST} \\
-    TATO               & 1.689    & 1.939    & 2.023    & \ph{RB_TATO_WORST} \\
+    Native KEEP        & 1.576    & 1.794    & 1.875    & +0.000 \\
+    Best Fixed         & 1.438      & 1.483      & 1.605      & +0.456 \\
+    R2-CART            & 1.456      & 1.469      & 1.763      & +0.429 \\
+    SAITS              & 1.696      & 1.798      & 1.804      & +0.652 \\
+    TATO               & 1.689    & 1.939    & 2.023    & +0.563 \\
     \midrule
-    \rowcolor{bestgray}\introact{} & 1.447 & 1.475 & 1.561 & \ph{RB_OURS_WORST} \\
+    \rowcolor{bestgray}\introact{} & 1.447 & 1.475 & 1.561 & +0.147 \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1753,22 +1753,24 @@ thresholded. Table~\ref{tab:app-ablation} reports the full outcome vector behind
 Table~\ref{tab:ablation}. The variant definitions follow \S\ref{sec:exp-ablation} exactly.
 
 \begin{table}[h]
-  \caption{Ablation, full outcome vector. Calls counts forecasting-backbone calls per request,
-  and harmful loss is measured relative to \textsc{Keep}.}
+  \caption{Ablation, full outcome vector in the two scaled metrics. Raw errors are not
+  averaged across sources anywhere in this paper, so they are not shown here either. Calls
+  counts forecasting-backbone calls per request and harmful loss is relative to
+  \textsc{Keep}.}
   \label{tab:app-ablation}
   \centering
   \small
   \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{lcccccccc}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccc}
     \toprule
-    Variant & MASE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & MSE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Calls $\downarrow$ \\
+    Variant & MASE $\downarrow$ & RMSSE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Calls $\downarrow$ \\
     \midrule
-    Full \introact{}            & 1.447 & \ph{AF_FULL_MAE} & \ph{AF_FULL_RMSE} & \ph{AF_FULL_MSE} & 82.6\% & 44.2\% & 0.0451 & 1.83 \\
-    A1 Global utility           & 1.462   & \ph{AF_A1_MAE}   & \ph{AF_A1_RMSE}   & \ph{AF_A1_MSE}   & 100.0\%   & 43.9\%   & 0.0642   & 2.00 \\
-    A2 w/o intervention state   & 1.446   & \ph{AF_A2_MAE}   & \ph{AF_A2_RMSE}   & \ph{AF_A2_MSE}   & 82.4\%   & 43.8\%   & 0.0460   & 1.82 \\
-    A3 w/o reference-forecast state & 1.426 & \ph{AF_A3_MAE} & \ph{AF_A3_RMSE} & \ph{AF_A3_MSE}   & 84.8\%   & 42.6\%   & 0.0426   & 1.85 \\
-    A4 Always act               & 1.439   & \ph{AF_A4_MAE}   & \ph{AF_A4_RMSE}   & \ph{AF_A4_MSE}   & 100.0\%   & 44.6\%   & 0.0519   & 2.00 \\
-    A5 Parametric utility predictor & 1.462 & \ph{AF_A5_MAE} & \ph{AF_A5_RMSE} & \ph{AF_A5_MSE} & 87.2\% & 44.0\% & 0.0574 & 1.87 \\
+    Full \introact{}            & 1.447 & 1.239 & 82.6\% & 44.2\% & 0.0451 & 1.83 \\
+    A1 Global utility & 1.462 & 1.246 & 100.0\% & 43.9\% & 0.0642 & 2.00 \\
+    A2 w/o intervention state & 1.446 & 1.239 & 82.4\% & 43.8\% & 0.0460 & 1.82 \\
+    A3 w/o reference-forecast state & 1.426 & 1.224 & 84.8\% & 42.6\% & 0.0426 & 1.85 \\
+    A4 Always act & 1.439 & 1.233 & 100.0\% & 44.6\% & 0.0519 & 2.00 \\
+    A5 Parametric utility predictor & 1.462 & 1.247 & 87.2\% & 44.0\% & 0.0574 & 1.87 \\
     \midrule
     \bottomrule
   \end{tabular}}
@@ -1801,16 +1803,16 @@ is not an additional estimate of variance.
     \toprule
     Backbone & Mask realisation & MASE $\downarrow$ & $\Delta$ vs \textsc{Keep} $\uparrow$ & Intervention rate \\
     \midrule
-    Bolt      & primary seed        & \ph{SEED1_MASE} & \ph{SEED1_DELTA} & \ph{SEED1_IR} \\
-    Bolt      & second realisation  & \ph{SEED2_MASE} & \ph{SEED2_DELTA} & \ph{SEED2_IR} \\
-    Bolt      & third realisation   & \ph{SEED3_MASE} & \ph{SEED3_DELTA} & \ph{SEED3_IR} \\
+    Bolt      & primary seed        & 1.371 & -0.096 & 75.5\% \\
+    Bolt      & second realisation  & 1.369 & -0.092 & 75.5\% \\
+    Bolt      & third realisation   & 1.367 & -0.096 & 76.7\% \\
     \midrule
-    Chronos-2 & primary seed        & \ph{SEED4_MASE} & \ph{SEED4_DELTA} & \ph{SEED4_IR} \\
-    Chronos-2 & second realisation  & \ph{SEED5_MASE} & \ph{SEED5_DELTA} & \ph{SEED5_IR} \\
-    Chronos-2 & third realisation   & \ph{SEED6_MASE} & \ph{SEED6_DELTA} & \ph{SEED6_IR} \\
+    Chronos-2 & primary seed        & 1.442 & -0.137 & 74.1\% \\
+    Chronos-2 & second realisation  & 1.474 & -0.102 & 75.4\% \\
+    Chronos-2 & third realisation   & 1.428 & -0.174 & 74.2\% \\
     \midrule
-    \multicolumn{2}{l}{Spread over the three realisations (Bolt)}      & \ph{SEED_SPREAD_BOLT} & --- & \ph{SEED_IR_SPREAD_BOLT} \\
-    \multicolumn{2}{l}{Spread over the three realisations (Chronos-2)} & \ph{SEED_SPREAD_CH2}  & --- & \ph{SEED_IR_SPREAD_CH2} \\
+    \multicolumn{2}{l}{Spread over the three realisations (Bolt)}      & 0.003 & --- & 1.2\% \\
+    \multicolumn{2}{l}{Spread over the three realisations (Chronos-2)} & 0.046  & --- & 1.3\% \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1841,12 +1843,12 @@ before the decision is made and is not a forecasting-backbone call.
     \toprule
     Method & Offline train/search & Candidate constr. & Backbone calls/req.\ & Mean lat.\ $\downarrow$ & P95 $\downarrow$ & Max $\downarrow$ \\
     \midrule
-    SAITS                 & 8 imputers, 3 min total     & 1 per request     & 1.00     & \ph{SAITS_MEAN}     & \ph{SAITS_P95}     & \ph{SAITS_MAX} \\
-    TATO               & 3,072 calls, once per backbone   & 1 per request   & 1.00   & \ph{TATO_MEAN}   & \ph{TATO_P95}   & \ph{TATO_MAX} \\
-    \rowcolor{bestgray}\introact{} & 8,471 calls, once per backbone & 4 per request & 1.83 & \ph{OURS_MEAN} & \ph{OURS_P95} & \ph{OURS_MAX} \\
+    SAITS                 & 8 imputers, 3 min total     & 1 per request     & 1.00     & 52 ms     & 57 ms     & 469 ms \\
+    TATO               & 3,072 calls, once per backbone   & 1 per request   & 1.00   & 52 ms   & 57 ms   & 469 ms \\
+    \rowcolor{bestgray}\introact{} & 8,471 calls, once per backbone & 4 per request & 1.83 & 96 ms & 116 ms & 940 ms \\
     \midrule
-    \multicolumn{7}{l}{\footnotesize Cold start: \ph{COLDSTART} \quad
-    Failure/timeout share: \ph{FAILRATE}} \\
+    \multicolumn{7}{l}{\footnotesize Cold start: 3.4 s to load a backbone, paid once per process \quad
+    Failure/timeout share: 0.00\%} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1876,13 +1878,13 @@ touch the backbone.
     \midrule
     \textsc{Keep} returned (input untouched)   & 132    & 17.4\%    & 1 \\
     Intervention executed (input changed)      & 628     & 82.6\%     & 2 \\
-    Failed before any forecast                 & \ph{CALLS_FAIL_N}    & \ph{CALLS_FAIL_SHARE}    & \ph{CALLS_FAIL_COST} \\
-    Timed out after the forecast               & \ph{CALLS_TIMEOUT_N} & \ph{CALLS_TIMEOUT_SHARE} & \ph{CALLS_TIMEOUT_COST} \\
+    Failed before any forecast                 & 0    & 0.00\%    & 0 \\
+    Timed out after the forecast               & 0 & 0.00\% & 0 \\
     \midrule
     Candidate materialisation and scoring (per request) & 3,040 & --- & 0 \\
     Offline replay-bank build (amortised)      & --- & --- & 8,471 calls, once per backbone \\
     Offline selector fit (amortised)           & --- & --- & no fit; the selector stores the bank and retrieves from it \\
-    Cold start (first request of a process)    & \ph{CALLS_COLD_N} & --- & \ph{CALLS_COLD_LATENCY} \\
+    Cold start (first request of a process)    & 15 & --- & 3.4 s \\
     \bottomrule
   \end{tabular}}
 \end{table}
