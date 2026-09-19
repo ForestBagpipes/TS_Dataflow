@@ -110,13 +110,13 @@ def build(evals: dict, primary: dict, mean_over, ci,
             out["MAIN_BASELINE_SPREAD"] += (
                 ". " + " and ".join(f"{name} is below it on {wins} of {total} source and "
                                     f"backbone cells" for name, wins, total in concentrated)
-                + ", so what costs that repair its average is the minority of cells on which it "
-                  "is badly wrong, and that is the failure a per-request rule can avoid")
+                + ", so what costs it its average is the minority of cells on which it is badly "
+                  "wrong, which is the failure a per-request rule can avoid")
         if broad:
             out["MAIN_BASELINE_SPREAD"] += (
                 ". " + " and ".join(f"{name} is below it on only {wins} of {total} such cells"
                                     for name, wins, total in broad)
-                + ", so that one loses broadly rather than on a few cells")
+                + ", so that one loses broadly")
     order = [b for b in ("bolt", "timesfm", "chronos2") if b in evals]
     parts = [f"{BACKBONE_NAME[b]} {ci(evals[b]['comparisons']['FULL_INTROACT_vs_R2_CART'])}"
              for b in order if "FULL_INTROACT_vs_R2_CART" in evals[b]["comparisons"]]
@@ -166,13 +166,12 @@ def build(evals: dict, primary: dict, mean_over, ci,
                          + " and ".join(BACKBONE_NAME[b] for b in lead))
         for b in behind:
             name, value = min(per_rank[b].items(), key=lambda kv: kv[1])
-            sentence += (f". On {BACKBONE_NAME[b]} {DISPLAY.get(name, name)} ranks "
-                         f"{value:.2f} against our {per_rank[b]['FULL_INTROACT']:.2f}")
+            sentence += (f", against {value:.2f} for {DISPLAY.get(name, name)} on "
+                         f"{BACKBONE_NAME[b]}")
         if rival is not None and "FULL_INTROACT" in mean_rank:
-            sentence += (f". Averaged over the three backbones the rank is "
+            sentence += (f", and over the three backbones it averages "
                          f"{mean_rank['FULL_INTROACT']:.2f} against {rival[1]:.2f} for "
-                         f"{DISPLAY.get(rival[0], rival[0])}, which is the closest "
-                         f"deployable row")
+                         f"{DISPLAY.get(rival[0], rival[0])}")
         out["MAIN_RANK"] = sentence
 
     ir = m("FULL_INTROACT", "intervention_rate")
@@ -214,8 +213,8 @@ def build(evals: dict, primary: dict, mean_over, ci,
           "A4_ALWAYS_ACT", "A5_PARAMETRIC_RIDGE")}
     out["ABL_READING"] = (
         "Two parts of the design carry the result, and the state blocks matter less than either. "
-        "Each interval below is the paired difference on the primary backbone, while the table "
-        "columns average over the three")
+        "Intervals are paired differences on the primary backbone and table columns average "
+        "over the three")
     if a["A1_GLOBAL_UTILITY"]:
         out["ABL_A1"] = (
             f"Scoring an action by its global mean utility instead of its neighbourhood costs "
@@ -230,11 +229,10 @@ def build(evals: dict, primary: dict, mean_over, ci,
             + (", so on that backbone the block does not pay for itself" if against_us else ""))
     if a["A3_WO_FORECAST"]:
         out["ABL_A3"] = (
-            f"Dropping the reference-forecast block changes it by {ci(a['A3_WO_FORECAST'])}. "
-            f"Averaged over the three backbones the first ablation lands at "
-            f"{m('A2_WO_INTERVENTION'):.3f} and the second at {m('A3_WO_FORECAST'):.3f} against "
-            f"{ours:.3f} for the full method, so the reference-forecast block is the one that "
-            f"shows up in the average")
+            f"Dropping the reference-forecast block changes it by {ci(a['A3_WO_FORECAST'])}, "
+            f"and over the three backbones the two land at {m('A2_WO_INTERVENTION'):.3f} and "
+            f"{m('A3_WO_FORECAST'):.3f} against {ours:.3f}, so only the second block shows up "
+            f"in the average")
     if a["A4_ALWAYS_ACT"]:
         out["ABL_A4"] = (
             f"Removing the reference option and executing the best-scoring action on every "

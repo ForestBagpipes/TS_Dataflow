@@ -94,6 +94,41 @@ def build(evals: dict, selections: dict, num, pct) -> dict:
         out[f"BANK_F_{tag}"] = num(values[-1])
         out[f"BANK_SPREAD_{tag}"] = num(max(values) - min(values), 3)
 
+    # Holm across the pre-declared baseline comparisons, reported in full.
+    names = {"NATIVE_KEEP": "the untouched input", "BEST_FIXED": "the best fixed intervention",
+             "R2_CART": "the simple selector", "SAITS": "SAITS", "TATO": "TATO"}
+    titles = {"bolt": "Bolt", "timesfm": "TimesFM", "chronos2": "Chronos-2"}
+    rows, survived, against_fixed = [], {}, []
+    for backbone in ("bolt", "timesfm", "chronos2"):
+        payload = evals.get(backbone)
+        if not payload:
+            continue
+        for key, label in names.items():
+            entry = payload["comparisons"].get(f"FULL_INTROACT_vs_{key}")
+            if not entry or "p_holm" not in entry:
+                continue
+            rows.append("    %s & %s & %+.4f & [%+.4f, %+.4f] & %.4f & %.4f %s" % (
+                titles.get(backbone, backbone), label, entry["difference"],
+                entry["ci_low"], entry["ci_high"], entry["p_value"], entry["p_holm"],
+                chr(92) * 2))
+            if entry["significant_holm"]:
+                survived.setdefault(key, []).append(titles.get(backbone, backbone))
+            if key == "BEST_FIXED" and entry["significant_holm"]:
+                against_fixed.append(titles.get(backbone, backbone))
+    if rows:
+        out["HOLM_ROWS"] = chr(10).join(rows)
+        keep_where = survived.get("NATIVE_KEEP", [])
+        sentence = "Holm correction over the five baseline comparisons leaves the difference"
+        if len(keep_where) == 3:
+            sentence += " against the untouched input below $0.05$ on every backbone"
+        elif keep_where:
+            sentence += (" against the untouched input below $0.05$ on "
+                         + " and ".join(keep_where))
+        if against_fixed:
+            sentence += (" and the one against the best fixed intervention below $0.05$ on "
+                         + " and ".join(against_fixed))
+        out["MAIN_HOLM"] = sentence
+
     # The governance figure reading, from the score-against-utility records.
     agree, positive, negative, pairs = [], [], [], 0
     for backbone in ("bolt", "timesfm", "chronos2"):
@@ -149,7 +184,19 @@ def build(evals: dict, selections: dict, num, pct) -> dict:
                 "shows how far one operating point carries rather than what a per-level tuning "
                 "could reach")
         else:
-            out["ROBUST_30"] = "The ordering between the deployable rows is unchanged by severity"
+            # We lead at every level.  Whether the rows below keep their order is
+            # a separate question, and the answer does not have to be yes.
+            orders = []
+            for level in levels:
+                values = {k: row(level, k) for k in ("KEEP", "BF", "R2", "SAITS", "TATO")
+                          if row(level, k) is not None}
+                orders.append(tuple(sorted(values, key=values.get)))
+            stable = len(set(orders)) == 1
+            out["ROBUST_30"] = (
+                "The method holds the lowest macro average at every level"
+                + (", and the rows below it hold their order too" if stable else
+                   ", and the rows below it change order between levels, so the sweep separates "
+                   "the method from the roster rather than reproducing one ranking"))
             out["ROBUST_50"] = (
                 "The configuration is frozen on a bank that mixes the three levels and is not "
                 "retuned per level")

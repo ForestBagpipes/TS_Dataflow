@@ -719,33 +719,46 @@
    "ci_low": -0.15295717876611659,
    "ci_high": -0.04960992993989858,
    "excludes_zero": 1,
+   "p_value": 0.0005,
    "parents": 95,
    "resamples": 2000,
-   "seed": 101
+   "seed": 101,
+   "p_holm": 0.0025,
+   "significant_holm": 1,
+   "in_holm_family": 1
   },
   "FULL_INTROACT_vs_BEST_FIXED": {
    "difference": -0.01945862435252593,
    "ci_low": -0.03619361297908616,
    "ci_high": -0.0039010245691790857,
    "excludes_zero": 1,
+   "p_value": 0.011,
    "parents": 95,
    "resamples": 2000,
-   "seed": 101
+   "seed": 101,
+   "p_holm": 0.022,
+   "significant_holm": 1,
+   "in_holm_family": 1
   },
   "FULL_INTROACT_vs_R2_CART": {
    "difference": -0.008898043182319071,
    "ci_low": -0.03160414466622863,
    "ci_high": 0.013869386774689655,
    "excludes_zero": 0,
+   "p_value": 0.523,
    "parents": 95,
    "resamples": 2000,
-   "seed": 101
+   "seed": 101,
+   "p_holm": 0.523,
+   "significant_holm": 0,
+   "in_holm_family": 1
   },
   "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
    "difference": -0.01945862435252593,
    "ci_low": -0.03619361297908616,
    "ci_high": -0.0039010245691790857,
    "excludes_zero": 1,
+   "p_value": 0.011,
    "parents": 95,
    "resamples": 2000,
    "seed": 101
@@ -755,6 +768,7 @@
    "ci_low": -0.0008207693854429464,
    "ci_high": 0.01771712018190191,
    "excludes_zero": 0,
+   "p_value": 0.074,
    "parents": 95,
    "resamples": 2000,
    "seed": 101
@@ -764,6 +778,7 @@
    "ci_low": -0.050681574896208524,
    "ci_high": -0.011762486557486749,
    "excludes_zero": 1,
+   "p_value": 0.0005,
    "parents": 95,
    "resamples": 2000,
    "seed": 101
@@ -773,6 +788,7 @@
    "ci_low": 0.0006111242505929066,
    "ci_high": 0.009374740974571654,
    "excludes_zero": 1,
+   "p_value": 0.019,
    "parents": 95,
    "resamples": 2000,
    "seed": 101
@@ -782,6 +798,7 @@
    "ci_low": -0.005620285339587655,
    "ci_high": 0.010653226630460222,
    "excludes_zero": 0,
+   "p_value": 0.554,
    "parents": 95,
    "resamples": 2000,
    "seed": 101
@@ -791,18 +808,26 @@
    "ci_low": -0.3927640370593026,
    "ci_high": -0.22309095954217859,
    "excludes_zero": 1,
+   "p_value": 0.0005,
    "parents": 95,
    "resamples": 2000,
-   "seed": 101
+   "seed": 101,
+   "p_holm": 0.0025,
+   "significant_holm": 1,
+   "in_holm_family": 1
   },
   "FULL_INTROACT_vs_TATO": {
    "difference": -0.37628422105460213,
    "ci_low": -0.5606004459654527,
    "ci_high": -0.22229787493775252,
    "excludes_zero": 1,
+   "p_value": 0.0005,
    "parents": 95,
    "resamples": 2000,
-   "seed": 101
+   "seed": 101,
+   "p_holm": 0.0025,
+   "significant_holm": 1,
+   "in_holm_family": 1
   }
  },
  "heterogeneity": {
@@ -1313,5 +1338,5 @@
    "CONTEXT_RIDGE": -0.372215232865403
   }
  },
- "runtime_seconds": 35.230112223000106
+ "runtime_seconds": 32.49786864899943
 }

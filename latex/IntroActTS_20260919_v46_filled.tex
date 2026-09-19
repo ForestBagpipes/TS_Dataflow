@@ -384,24 +384,19 @@ The two hyperparameters are selected once per backbone, on the replay bank, by
 leave-one-parent-out cross-validation: every bank episode is scored against a bank from which
 all records of its own parent have been removed, which makes the cross-validated score a
 statement about a request the bank has not seen. The grid is
-$k \in \{8, 16, 32, 64, 128, 256\}$ and $\beta \in \{0, 0.5, 1, 1.64\}$, where the largest
-penalty is the one-sided $95\%$ normal quantile and the largest neighbourhood is a seventh of
-the bank. A setting is admissible when its cross-validated conditional harmful rate stays at or
-below a cap. The cap is not a free number: it is the conditional harmful rate of the action
+$k \in \{8, 16, 32, 64, 128, 256\}$ and $\beta \in \{0, 0.5, 1, 1.64\}$, whose largest penalty
+is the one-sided $95\%$ normal quantile. A setting is admissible when its cross-validated
+conditional harmful rate stays at or below a cap. The cap is not a free number: it is the conditional harmful rate of the action
 with the highest mean realised utility on the same bank, so the constraint says that choosing
 per request may not be more harmful, given that it intervenes, than always applying the
 strongest single intervention. If no setting satisfies it the configuration falls back to the
-largest penalty strength.
-
-A few requests on which an intervention fails badly move the source macro further than the
-ordinary spread between neighbouring settings, so the cross-validated surface is rough and its
-minimum carries noise. Selection therefore runs in two steps over the admissible settings.
-Each one is compared against the leading setting by a paired difference clustered on the
-parent, and those whose gap falls inside one standard error are kept. Among them the rule
-takes the setting that intervenes least, on the same reasoning as the cap: where the bank
-cannot separate two settings, the one that touches fewer requests carries less exposure to
-harm. The anchor, the cap, the retained settings and the selected pair are recorded before any
-evaluation record is scored.
+largest penalty strength. A few requests on which an intervention fails badly move the source
+macro further than the spread between neighbouring settings, so the cross-validated surface is
+rough and its minimum carries noise. Each admissible setting is therefore compared against the
+leading one by a paired difference clustered on the parent, and among those whose gap falls
+inside one standard error the rule takes the setting that intervenes least, on the same
+reasoning as the cap. The anchor, the cap, the retained settings and the selected pair are
+recorded before any evaluation record is scored.
 
 The reference action is always available, so the rule always returns a forecast. It has no way
 to detect that a request lies outside the replay support, so it applies to the registered
@@ -518,8 +513,9 @@ learning a simple selector, across sources and frozen \tsfm{} backbones?}
 
 Table~\ref{tab:main} reports the main comparison at $10\%$ severity over all eight sources,
 three backbones, two horizons, and four patterns. \introact{} reaches 1.423 source-macro MASE against 1.576 for the untouched input, 1.438 for the best fixed intervention and 1.456 for the simple selector, and against the published baselines at SAITS 1.696, TATO 1.689. It improves on the untouched input on every backbone.
-Against the untouched input the paired difference is Bolt -0.1002 [-0.1530, -0.0496], TimesFM -0.1464 [-0.1985, -0.0932], Chronos-2 -0.2119 [-0.3053, -0.1203], and every interval excludes zero. Against the best fixed intervention the interval excludes zero on Bolt. It is the lowest deployable row on Bolt and TimesFM, and on Chronos-2 one fixed repair reaches a lower macro average, which \S\ref{sec:exp-robust} returns to. The deployable rows span 1.423 to 1.696 and the catalog oracle sits at 1.307, so the room to recover is bounded and the gaps between rows are a visible part of it. Both published baselines repair or transform every incomplete request, and SAITS ends at 1.696 and TATO ends at 1.689, above the 1.576 of leaving the input alone. SAITS is below it on 18 of 24 source and backbone cells, so what costs that repair its average is the minority of cells on which it is badly wrong, and that is the failure a per-request rule can avoid. TATO is below it on only 5 of 24 such cells, so that one loses broadly rather than on a few cells. Against the simple selector no interval excludes zero, so accuracy alone does not separate the two and what does is in Table~\ref{tab:harm}.
-Average rank over the evaluation cells is Bolt 4.05, TimesFM 3.99, Chronos-2 4.28, the best of the six deployable rows on Bolt and TimesFM. On Chronos-2 the best fixed intervention ranks 4.14 against our 4.28. Averaged over the three backbones the rank is 4.11 against 4.37 for the best fixed intervention, which is the closest deployable row. Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
+Against the untouched input the paired difference is Bolt -0.1002 [-0.1530, -0.0496], TimesFM -0.1464 [-0.1985, -0.0932], Chronos-2 -0.2119 [-0.3053, -0.1203], and every interval excludes zero. Against the best fixed intervention the interval excludes zero on Bolt. It is the lowest deployable row on Bolt and TimesFM, and on Chronos-2 one fixed repair reaches a lower macro average, which \S\ref{sec:exp-robust} returns to. The deployable rows span 1.423 to 1.696 and the catalog oracle sits at 1.307, so the room to recover is bounded and the gaps between rows are a visible part of it. Both published baselines repair or transform every incomplete request, and SAITS ends at 1.696 and TATO ends at 1.689, above the 1.576 of leaving the input alone. SAITS is below it on 18 of 24 source and backbone cells, so what costs it its average is the minority of cells on which it is badly wrong, which is the failure a per-request rule can avoid. TATO is below it on only 5 of 24 such cells, so that one loses broadly. Against the simple selector no interval excludes zero, so accuracy alone does not separate the two and what does is in Table~\ref{tab:harm}.
+Average rank over the evaluation cells is Bolt 4.05, TimesFM 3.99, Chronos-2 4.28, the best of the six deployable rows on Bolt and TimesFM, against 4.14 for the best fixed intervention on Chronos-2, and over the three backbones it averages 4.11 against 4.37 for the best fixed intervention. Holm correction over the five baseline comparisons leaves the difference against the untouched input below $0.05$ on every backbone and the one against the best fixed intervention below $0.05$ on Bolt.
+Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
 deployment cost is reported separately in Appendix~\ref{app:calls}.
 
 \begin{table}[t]
@@ -558,13 +554,10 @@ deployment cost is reported separately in Appendix~\ref{app:calls}.
 \emph{Is the gain produced by choosing better interventions, or by intervening less often?}
 
 Table~\ref{tab:harm} reports the selective-governance diagnostics at the default operating
-point. An intervention is harmful when it increases the realised loss relative to leaving the
-input unchanged, so the conditional harmful rate is conditioned on the requests where an
-intervention was executed and must be read together with the intervention rate, because a
-method that intervenes on almost nothing can report a low conditional rate without
-contributing anything. Beneficial precision is the share of executed interventions that reduced
-the loss, and missed opportunity is the share of episodes with a positive oracle opportunity on
-which nothing was executed. \introact{} executes an intervention on 51\% of the requests, so its accuracy is not bought by staying still, while the published baselines repair or transform every incomplete request by construction, so their intervention rate is one. Conditional on intervening it is harmful on 42.4\% of those requests against 42.7\% for the fixed intervention and 43.9\% for the simple selector. Harmful loss, which weights each harmful intervention by the loss it added, is 0.0294, against the best fixed intervention 0.0536, the simple selector 0.0505, SAITS 0.1065, TATO 0.2937. The selective rule is therefore both more accurate and cheaper when wrong.
+point, where an intervention counts as harmful when it raises the realised loss relative to
+leaving the input unchanged. The conditional harmful rate covers only the requests on which an
+intervention ran, so it has to be read together with the intervention rate: a method that
+almost never intervenes can report a low rate without contributing anything. \introact{} executes an intervention on 51\% of the requests, so its accuracy is not bought by staying still, while the published baselines repair or transform every incomplete request by construction, so their intervention rate is one. Conditional on intervening it is harmful on 42.4\% of those requests against 42.7\% for the fixed intervention and 43.9\% for the simple selector. Harmful loss, which weights each harmful intervention by the loss it added, is 0.0294, against the best fixed intervention 0.0536, the simple selector 0.0505, SAITS 0.1065, TATO 0.2937. The selective rule is therefore both more accurate and cheaper when wrong.
 Beneficial precision is 57.6\%. Missed opportunity is 49.2\%, which is what the reference option costs.
 
 Figure~\ref{fig:why-selective}(b) traces the trade-off over the score grid by post-processing
@@ -608,12 +601,11 @@ Appendix~\ref{app:governance-fig} reports the curve cell by cell. Raising the pe
 it carry over to a backbone family that was not used during development?}
 
 Severities are $10\%$, $30\%$, and $50\%$, crossed with the four patterns and the three
-backbones, and no method is retuned between levels. The levels lie inside the registered grid
-that the replay bank samples from, so this is a within-grid robustness check and not an
-unseen-severity stress test, and the roster is the one of Table~\ref{tab:main}.
+backbones, with the roster of Table~\ref{tab:main} and no retuning between levels. The levels
+lie inside the registered grid the replay bank samples from, so this is a within-grid check.
 Table~\ref{tab:robust} in Appendix~\ref{app:severity-full} reports the severity trend and the worst pattern cell, and the
 held-out backbone is the Chronos-2 column of Table~\ref{tab:main}.
-Against the untouched input the frozen configuration holds at every level: 10\% 1.423 against 1.576, 30\% 1.466 against 1.794, 50\% 1.580 against 1.875. The ordering between the deployable rows is unchanged by severity. The configuration is frozen on a bank that mixes the three levels and is not retuned per level. On the held-out family the frozen procedure improves on the untouched input, 1.367 against 1.579 with a paired interval that excludes zero, its average rank is 4.28 against the 4.14 of the best fixed intervention, and the lowest macro average there belongs to the best fixed intervention at 1.353.
+Against the untouched input the frozen configuration holds at every level: 10\% 1.423 against 1.576, 30\% 1.466 against 1.794, 50\% 1.580 against 1.875. The method holds the lowest macro average at every level, and the rows below it change order between levels, so the sweep separates the method from the roster rather than reproducing one ranking. The configuration is frozen on a bank that mixes the three levels and is not retuned per level. On the held-out family the frozen procedure improves on the untouched input, 1.367 against 1.579 with a paired interval that excludes zero, its average rank is 4.28 against the 4.14 of the best fixed intervention, and the lowest macro average there belongs to the best fixed intervention at 1.353.
 Appendix~\ref{app:severity-full} holds the complete per-severity tables and
 Appendix~\ref{app:pattern} holds the per-pattern tables.
 \subsection{Ablation and Cost}
@@ -626,7 +618,7 @@ instead of by its neighbourhood, A2 and A3 drop the intervention and the referen
 block of the state, A4 removes the reference option so that an action runs on every request,
 and A5 replaces the local estimate with a per-action linear utility predictor over the same
 features. Appendix~\ref{app:ablation-details} gives the exact definitions.
-Table~\ref{tab:ablation} reports accuracy, harm, and cost together. Two parts of the design carry the result, and the state blocks matter less than either. Each interval below is the paired difference on the primary backbone, while the table columns average over the three. Scoring an action by its global mean utility instead of its neighbourhood costs -0.0195 [-0.0362, -0.0039] and drives the intervention rate to 100\%, which is what a corpus-level answer to a per-request question looks like. Dropping the intervention block of the state changes accuracy by +0.0050 [+0.0006, +0.0094], so on that backbone the block does not pay for itself. Dropping the reference-forecast block changes it by +0.0026 [-0.0056, +0.0107]. Averaged over the three backbones the first ablation lands at 1.424 and the second at 1.445 against 1.423 for the full method, so the reference-forecast block is the one that shows up in the average.
+Table~\ref{tab:ablation} reports accuracy, harm, and cost together. Two parts of the design carry the result, and the state blocks matter less than either. Intervals are paired differences on the primary backbone and table columns average over the three. Scoring an action by its global mean utility instead of its neighbourhood costs -0.0195 [-0.0362, -0.0039] and drives the intervention rate to 100\%, which is what a corpus-level answer to a per-request question looks like. Dropping the intervention block of the state changes accuracy by +0.0050 [+0.0006, +0.0094], so on that backbone the block does not pay for itself. Dropping the reference-forecast block changes it by +0.0026 [-0.0056, +0.0107], and over the three backbones the two land at 1.424 and 1.445 against 1.423, so only the second block shows up in the average.
 Removing the reference option and executing the best-scoring action on every request changes accuracy by +0.0086 [-0.0008, +0.0177] while raising harmful loss from 0.0294 to 0.0505, so keeping the input is what lets the method intervene on 49\% fewer requests without paying for it in accuracy. Replacing retrieval by a per-action linear utility predictor over the same features costs -0.0303 [-0.0507, -0.0118], the largest gap in the table and the clearest sign that the local estimate is doing the work. A request costs 1.51 forecasting-backbone calls on average.
 
 \begin{table}[t]
@@ -1049,8 +1041,44 @@ The statistical unit is the parent. Paired cluster bootstrap with 2,000 resample
 over parent blocks gives 95\% confidence intervals on source-macro MASE differences against
 each baseline, the source-macro aggregation is applied inside every resample, and Holm
 correction~\citep{holm1979simple} is applied across the pre-declared baseline comparisons.
+The family is the five comparisons of \introact{} against the deployable baselines on one
+backbone, and the ablations stay outside it because they are variants of this method rather
+than competing claims. Table~\ref{tab:app-holm} lists every raw and adjusted value.
 Average rank and won cells are descriptive summaries only, and the headline claim rests on
-paired differences with confidence intervals. Mask variants of the same parent are never
+paired differences with confidence intervals.
+
+\begin{table}[h]
+  \caption{Paired differences against the deployable baselines with the Holm adjustment.
+  A negative difference favours \introact{}. The p-value is two sided and read off the same
+  bootstrap draws as the interval, so it cannot fall below one over the number of resamples.}
+  \label{tab:app-holm}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{llcccc}
+    \toprule
+    Backbone & Comparison & Difference & 95\% interval & $p$ & $p$ after Holm \\
+    \midrule
+    Bolt & the untouched input & -0.1002 & [-0.1530, -0.0496] & 0.0005 & 0.0025 \\
+    Bolt & the best fixed intervention & -0.0195 & [-0.0362, -0.0039] & 0.0110 & 0.0220 \\
+    Bolt & the simple selector & -0.0089 & [-0.0316, +0.0139] & 0.5230 & 0.5230 \\
+    Bolt & SAITS & -0.3067 & [-0.3928, -0.2231] & 0.0005 & 0.0025 \\
+    Bolt & TATO & -0.3763 & [-0.5606, -0.2223] & 0.0005 & 0.0025 \\
+    TimesFM & the untouched input & -0.1464 & [-0.1985, -0.0932] & 0.0005 & 0.0025 \\
+    TimesFM & the best fixed intervention & -0.0404 & [-0.0983, +0.0178] & 0.3490 & 1.0000 \\
+    TimesFM & the simple selector & -0.0227 & [-0.0628, +0.0175] & 0.4760 & 1.0000 \\
+    TimesFM & SAITS & -0.2031 & [-0.4509, +0.0425] & 0.4080 & 1.0000 \\
+    TimesFM & TATO & -0.0853 & [-0.3052, +0.1273] & 0.5120 & 1.0000 \\
+    Chronos-2 & the untouched input & -0.2119 & [-0.3053, -0.1203] & 0.0005 & 0.0025 \\
+    Chronos-2 & the best fixed intervention & +0.0149 & [-0.0150, +0.0451] & 0.3550 & 0.7100 \\
+    Chronos-2 & the simple selector & -0.0674 & [-0.1706, +0.0352] & 0.4820 & 0.7100 \\
+    Chronos-2 & SAITS & -0.3090 & [-0.4936, -0.1251] & 0.0005 & 0.0025 \\
+    Chronos-2 & TATO & -0.3361 & [-0.4989, -0.1817] & 0.0005 & 0.0025 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+Mask variants of the same parent are never
 treated as independent samples, and pattern, severity, and backbone breakdowns are secondary
 analyses without cell-by-cell significance testing.
 

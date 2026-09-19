@@ -350,8 +350,12 @@ def paired_cluster_bootstrap(queries: Queries, mase_a: np.ndarray, mase_b: np.nd
             sample.extend((keys[j], t) for t, j in enumerate(pick))
         draws[r] = macro(sample)
     lo, hi = np.percentile(draws, [2.5, 97.5])
+    # A two-sided p-value read off the same draws.  It cannot go below one over
+    # the number of resamples, and it is reported at that floor when it hits it.
+    tail = min(float((draws <= 0).mean()), float((draws >= 0).mean()))
+    p_value = min(1.0, max(2.0 * tail, 1.0 / resamples))
     return {"difference": point, "ci_low": float(lo), "ci_high": float(hi),
-            "excludes_zero": bool(lo > 0 or hi < 0),
+            "excludes_zero": bool(lo > 0 or hi < 0), "p_value": p_value,
             "parents": len(by_parent), "resamples": resamples, "seed": seed}
 
 

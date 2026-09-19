@@ -384,24 +384,19 @@ The two hyperparameters are selected once per backbone, on the replay bank, by
 leave-one-parent-out cross-validation: every bank episode is scored against a bank from which
 all records of its own parent have been removed, which makes the cross-validated score a
 statement about a request the bank has not seen. The grid is
-$k \in \{8, 16, 32, 64, 128, 256\}$ and $\beta \in \{0, 0.5, 1, 1.64\}$, where the largest
-penalty is the one-sided $95\%$ normal quantile and the largest neighbourhood is a seventh of
-the bank. A setting is admissible when its cross-validated conditional harmful rate stays at or
-below a cap. The cap is not a free number: it is the conditional harmful rate of the action
+$k \in \{8, 16, 32, 64, 128, 256\}$ and $\beta \in \{0, 0.5, 1, 1.64\}$, whose largest penalty
+is the one-sided $95\%$ normal quantile. A setting is admissible when its cross-validated
+conditional harmful rate stays at or below a cap. The cap is not a free number: it is the conditional harmful rate of the action
 with the highest mean realised utility on the same bank, so the constraint says that choosing
 per request may not be more harmful, given that it intervenes, than always applying the
 strongest single intervention. If no setting satisfies it the configuration falls back to the
-largest penalty strength.
-
-A few requests on which an intervention fails badly move the source macro further than the
-ordinary spread between neighbouring settings, so the cross-validated surface is rough and its
-minimum carries noise. Selection therefore runs in two steps over the admissible settings.
-Each one is compared against the leading setting by a paired difference clustered on the
-parent, and those whose gap falls inside one standard error are kept. Among them the rule
-takes the setting that intervenes least, on the same reasoning as the cap: where the bank
-cannot separate two settings, the one that touches fewer requests carries less exposure to
-harm. The anchor, the cap, the retained settings and the selected pair are recorded before any
-evaluation record is scored.
+largest penalty strength. A few requests on which an intervention fails badly move the source
+macro further than the spread between neighbouring settings, so the cross-validated surface is
+rough and its minimum carries noise. Each admissible setting is therefore compared against the
+leading one by a paired difference clustered on the parent, and among those whose gap falls
+inside one standard error the rule takes the setting that intervenes least, on the same
+reasoning as the cap. The anchor, the cap, the retained settings and the selected pair are
+recorded before any evaluation record is scored.
 
 The reference action is always available, so the rule always returns a forecast. It has no way
 to detect that a request lies outside the replay support, so it applies to the registered
@@ -519,7 +514,8 @@ learning a simple selector, across sources and frozen \tsfm{} backbones?}
 Table~\ref{tab:main} reports the main comparison at $10\%$ severity over all eight sources,
 three backbones, two horizons, and four patterns. \ph{MAIN_READING}.
 \ph{MAIN_DELTA_CI}. \ph{MAIN_BACKBONE}. \ph{MAIN_BASELINE_SPREAD}. \ph{MAIN_R2CART}.
-\ph{MAIN_RANK}. Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
+\ph{MAIN_RANK}. \ph{MAIN_HOLM}.
+Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
 deployment cost is reported separately in Appendix~\ref{app:calls}.
 
 \begin{table}[t]
@@ -558,13 +554,10 @@ deployment cost is reported separately in Appendix~\ref{app:calls}.
 \emph{Is the gain produced by choosing better interventions, or by intervening less often?}
 
 Table~\ref{tab:harm} reports the selective-governance diagnostics at the default operating
-point. An intervention is harmful when it increases the realised loss relative to leaving the
-input unchanged, so the conditional harmful rate is conditioned on the requests where an
-intervention was executed and must be read together with the intervention rate, because a
-method that intervenes on almost nothing can report a low conditional rate without
-contributing anything. Beneficial precision is the share of executed interventions that reduced
-the loss, and missed opportunity is the share of episodes with a positive oracle opportunity on
-which nothing was executed. \ph{HARM_READING}. \ph{HARM_IR}. \ph{HARM_HIR}. \ph{HARM_HL}.
+point, where an intervention counts as harmful when it raises the realised loss relative to
+leaving the input unchanged. The conditional harmful rate covers only the requests on which an
+intervention ran, so it has to be read together with the intervention rate: a method that
+almost never intervenes can report a low rate without contributing anything. \ph{HARM_READING}. \ph{HARM_IR}. \ph{HARM_HIR}. \ph{HARM_HL}.
 \ph{HARM_BP}. \ph{HARM_MO}.
 
 Figure~\ref{fig:why-selective}(b) traces the trade-off over the score grid by post-processing
@@ -608,9 +601,8 @@ Appendix~\ref{app:governance-fig} reports the curve cell by cell. \ph{HARM_RISKC
 it carry over to a backbone family that was not used during development?}
 
 Severities are $10\%$, $30\%$, and $50\%$, crossed with the four patterns and the three
-backbones, and no method is retuned between levels. The levels lie inside the registered grid
-that the replay bank samples from, so this is a within-grid robustness check and not an
-unseen-severity stress test, and the roster is the one of Table~\ref{tab:main}.
+backbones, with the roster of Table~\ref{tab:main} and no retuning between levels. The levels
+lie inside the registered grid the replay bank samples from, so this is a within-grid check.
 Table~\ref{tab:robust} in Appendix~\ref{app:severity-full} reports the severity trend and the worst pattern cell, and the
 held-out backbone is the Chronos-2 column of Table~\ref{tab:main}.
 \ph{ROBUST_READING}. \ph{ROBUST_30}. \ph{ROBUST_50}. \ph{ROBUST_CH2}.
@@ -1049,8 +1041,30 @@ The statistical unit is the parent. Paired cluster bootstrap with \ph{N_BOOTSTRA
 over parent blocks gives 95\% confidence intervals on source-macro MASE differences against
 each baseline, the source-macro aggregation is applied inside every resample, and Holm
 correction~\citep{holm1979simple} is applied across the pre-declared baseline comparisons.
+The family is the five comparisons of \introact{} against the deployable baselines on one
+backbone, and the ablations stay outside it because they are variants of this method rather
+than competing claims. Table~\ref{tab:app-holm} lists every raw and adjusted value.
 Average rank and won cells are descriptive summaries only, and the headline claim rests on
-paired differences with confidence intervals. Mask variants of the same parent are never
+paired differences with confidence intervals.
+
+\begin{table}[h]
+  \caption{Paired differences against the deployable baselines with the Holm adjustment.
+  A negative difference favours \introact{}. The p-value is two sided and read off the same
+  bootstrap draws as the interval, so it cannot fall below one over the number of resamples.}
+  \label{tab:app-holm}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{llcccc}
+    \toprule
+    Backbone & Comparison & Difference & 95\% interval & $p$ & $p$ after Holm \\
+    \midrule
+\ph{HOLM_ROWS}
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+Mask variants of the same parent are never
 treated as independent samples, and pattern, severity, and backbone breakdowns are secondary
 analyses without cell-by-cell significance testing.
 
