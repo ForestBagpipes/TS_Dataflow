@@ -1,0 +1,133 @@
+{
+ "stage": "v46-saits",
+ "config": {
+  "n_layers": 2,
+  "d_model": 128,
+  "n_heads": 4,
+  "d_k": 32,
+  "d_v": 32,
+  "d_ffn": 128,
+  "dropout": 0.1,
+  "epochs": 100,
+  "batch_size": 16,
+  "patience": 10
+ },
+ "epochs": 100,
+ "train_block": "bank",
+ "max_channels": 64,
+ "standardisation": "per source and channel, statistics from the TRAIN panels only",
+ "blocks": [
+  "test",
+  "test30",
+  "test50"
+ ],
+ "per_source": {
+  "ETTh1": {
+   "status": "ok",
+   "train_windows": 104,
+   "channels_used": 7,
+   "channels_available": 7,
+   "fit_seconds": 11.189144479000333,
+   "episodes": {
+    "test": 48,
+    "test30": 48,
+    "test50": 48
+   },
+   "total_seconds": 12.250638812000034
+  },
+  "ETTh2": {
+   "status": "ok",
+   "train_windows": 104,
+   "channels_used": 7,
+   "channels_available": 7,
+   "fit_seconds": 10.702348970999992,
+   "episodes": {
+    "test": 48,
+    "test30": 48,
+    "test50": 48
+   },
+   "total_seconds": 11.75534165199997
+  },
+  "ETTm1": {
+   "status": "ok",
+   "train_windows": 464,
+   "channels_used": 7,
+   "channels_available": 7,
+   "fit_seconds": 44.30643337299989,
+   "episodes": {
+    "test": 192,
+    "test30": 192,
+    "test50": 192
+   },
+   "total_seconds": 48.52634056499983
+  },
+  "ETTm2": {
+   "status": "ok",
+   "train_windows": 464,
+   "channels_used": 7,
+   "channels_available": 7,
+   "fit_seconds": 44.13144139399992,
+   "episodes": {
+    "test": 192,
+    "test30": 192,
+    "test50": 192
+   },
+   "total_seconds": 48.440230681999765
+  },
+  "Electricity": {
+   "status": "ok",
+   "train_windows": 168,
+   "channels_used": 64,
+   "channels_available": 321,
+   "fit_seconds": 29.510758015000192,
+   "episodes": {
+    "test": 72,
+    "test30": 72,
+    "test50": 72
+   },
+   "total_seconds": 39.981016465000266
+  },
+  "Exchange": {
+   "status": "ok",
+   "train_windows": 40,
+   "channels_used": 8,
+   "channels_available": 8,
+   "fit_seconds": 4.651067374000377,
+   "episodes": {
+    "test": 16,
+    "test30": 16,
+    "test50": 16
+   },
+   "total_seconds": 4.91235686400023
+  },
+  "Traffic": {
+   "status": "ok",
+   "train_windows": 104,
+   "channels_used": 64,
+   "channels_available": 862,
+   "fit_seconds": 21.035937200999797,
+   "episodes": {
+    "test": 48,
+    "test30": 48,
+    "test50": 48
+   },
+   "total_seconds": 35.366810718000124
+  },
+  "Weather": {
+   "status": "ok",
+   "train_windows": 336,
+   "channels_used": 21,
+   "channels_available": 21,
+   "fit_seconds": 36.754640747000394,
+   "episodes": {
+    "test": 144,
+    "test30": 144,
+    "test50": 144
+   },
+   "total_seconds": 40.154863518000184
+  }
+ },
+ "arrays": 2280,
+ "heldout_labels_read": 0,
+ "runtime_seconds": 241.73024747199997
+}

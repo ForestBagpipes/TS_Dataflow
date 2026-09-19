@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PATTERN_KEY = {"P1_point": "P1", "P2_target_block": "P2",
                "P3_shared_block": "P3", "P4_tail": "P4"}
 METHOD_KEY = {"NATIVE_KEEP": "KEEP", "BEST_FIXED": "BF", "R2_CART": "R2",
-              "FULL_INTROACT": "OURS"}
+              "SAITS": "SAITS", "TATO": "TATO", "FULL_INTROACT": "OURS"}
 SEV_KEY = {"test": "10", "test30": "30", "test50": "50"}
 
 

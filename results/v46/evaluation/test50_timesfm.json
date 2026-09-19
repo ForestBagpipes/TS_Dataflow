@@ -9,6 +9,10 @@
   "selection_file": "results/v46/protocol/selection_timesfm.json"
  },
  "episodes": 760,
+ "external_baselines": {
+  "SAITS": 760,
+  "TATO": 760
+ },
  "parents": 95,
  "sources": [
   "ETTh1",
@@ -590,18 +594,124 @@
     "CONTEXT_RIDGE": 403
    },
    "missed_opportunity": 0.0
+  },
+  "SAITS": {
+   "method": "SAITS",
+   "mase": 1.7768534239444602,
+   "rmsse": 1.4527792183615569,
+   "intervention_rate": 1.0,
+   "conditional_hir": 0.45394736842105265,
+   "harmful_loss": 0.18371892022600408,
+   "beneficial_precision": 0.5460526315789473,
+   "n_acted": 760,
+   "n_zero_utility": 0,
+   "per_source_mase": {
+    "ETTh1": 1.0460440586187365,
+    "ETTh2": 1.4304154453809002,
+    "ETTm1": 1.3006427950423805,
+    "ETTm2": 1.0976902818410414,
+    "Electricity": 1.020668305629366,
+    "Exchange": 6.24351709205417,
+    "Traffic": 1.1285077802960213,
+    "Weather": 0.9473416326930667
+   },
+   "per_source_horizon_mase": {
+    "h192|ETTh1": 1.0648190118676373,
+    "h192|ETTh2": 1.441498706320233,
+    "h192|ETTm1": 1.3626074434787894,
+    "h192|ETTm2": 1.1993717127953716,
+    "h192|Electricity": 1.029967572488088,
+    "h192|Exchange": 7.061768364426578,
+    "h192|Traffic": 1.1152939047528643,
+    "h192|Weather": 1.1743577001370105,
+    "h96|ETTh1": 1.0272691053698355,
+    "h96|ETTh2": 1.4193321844415667,
+    "h96|ETTm1": 1.2386781466059722,
+    "h96|ETTm2": 0.996008850886711,
+    "h96|Electricity": 1.0113690387706444,
+    "h96|Exchange": 5.425265819681763,
+    "h96|Traffic": 1.1417216558391785,
+    "h96|Weather": 0.7203255652491225
+   },
+   "per_cell_mase": {
+    "h192|P1_point|s50": 1.6065905643752472,
+    "h192|P2_target_block|s50": 1.8095105780407144,
+    "h192|P3_shared_block|s50": 1.9357622881045202,
+    "h192|P4_tail|s50": 2.3729787776128046,
+    "h96|P1_point|s50": 1.5551827475911062,
+    "h96|P2_target_block|s50": 1.1662656237338016,
+    "h96|P3_shared_block|s50": 1.3406484931675497,
+    "h96|P4_tail|s50": 2.4278883189299396
+   },
+   "action_counts": {},
+   "missed_opportunity": 0.0,
+   "scored_episodes": 760
+  },
+  "TATO": {
+   "method": "TATO",
+   "mase": 1.945822872898445,
+   "rmsse": 1.487835307949986,
+   "intervention_rate": 1.0,
+   "conditional_hir": 0.5631578947368421,
+   "harmful_loss": 0.15011963925050933,
+   "beneficial_precision": 0.4368421052631579,
+   "n_acted": 760,
+   "n_zero_utility": 0,
+   "per_source_mase": {
+    "ETTh1": 1.4123916152943208,
+    "ETTh2": 1.3825963828791619,
+    "ETTm1": 1.7356239913160134,
+    "ETTm2": 1.2684628577803883,
+    "Electricity": 1.1080787548095599,
+    "Exchange": 5.8584971740809895,
+    "Traffic": 1.8317091158770067,
+    "Weather": 0.9692230911501214
+   },
+   "per_source_horizon_mase": {
+    "h192|ETTh1": 1.4096693817195576,
+    "h192|ETTh2": 1.3762000304228794,
+    "h192|ETTm1": 1.8233011864613407,
+    "h192|ETTm2": 1.366539649089476,
+    "h192|Electricity": 1.0956123259138293,
+    "h192|Exchange": 6.9423312177808665,
+    "h192|Traffic": 1.7751312854713157,
+    "h192|Weather": 1.1906836005327905,
+    "h96|ETTh1": 1.415113848869084,
+    "h96|ETTh2": 1.388992735335444,
+    "h96|ETTm1": 1.647946796170686,
+    "h96|ETTm2": 1.1703860664713004,
+    "h96|Electricity": 1.12054518370529,
+    "h96|Exchange": 4.774663130381111,
+    "h96|Traffic": 1.8882869462826977,
+    "h96|Weather": 0.7477625817674521
+   },
+   "per_cell_mase": {
+    "h192|P1_point|s50": 1.6771129455793348,
+    "h192|P2_target_block|s50": 1.7173666043247993,
+    "h192|P3_shared_block|s50": 1.6964619302692066,
+    "h192|P4_tail|s50": 3.3987928585226874,
+    "h96|P1_point|s50": 1.3051224891100082,
+    "h96|P2_target_block|s50": 1.2368825073429353,
+    "h96|P3_shared_block|s50": 1.37409495246545,
+    "h96|P4_tail|s50": 3.1607486955731394
+   },
+   "action_counts": {},
+   "missed_opportunity": 0.0,
+   "scored_episodes": 760
   }
  },
  "average_rank": {
-  "NATIVE_KEEP": 5.625,
-  "FULL_INTROACT": 2.317105263157895,
-  "A2_WO_INTERVENTION": 2.3855263157894737,
-  "A4_ALWAYS_ACT": 2.3236842105263156,
-  "BEST_FIXED": 3.0842105263157893,
-  "R2_CART": 3.251315789473684,
-  "A1_GLOBAL_UTILITY": 2.8802631578947366,
-  "A3_WO_FORECAST": 2.443421052631579,
-  "A5_PARAMETRIC_RIDGE": 2.8236842105263156
+  "TATO": 7.065789473684211,
+  "SAITS": 6.169736842105263,
+  "NATIVE_KEEP": 6.6078947368421055,
+  "FULL_INTROACT": 3.1473684210526316,
+  "A2_WO_INTERVENTION": 3.2171052631578947,
+  "A4_ALWAYS_ACT": 3.153947368421053,
+  "BEST_FIXED": 3.9657894736842105,
+  "R2_CART": 4.125,
+  "A1_GLOBAL_UTILITY": 3.7539473684210525,
+  "A3_WO_FORECAST": 3.2776315789473682,
+  "A5_PARAMETRIC_RIDGE": 3.65
  },
  "comparisons": {
   "FULL_INTROACT_vs_NATIVE_KEEP": {
@@ -675,6 +785,24 @@
    "parents": 95,
    "resamples": 2000,
    "seed": 101
+  },
+  "FULL_INTROACT_vs_SAITS": {
+   "difference": -0.310722540405566,
+   "ci_low": -0.5643350585638285,
+   "ci_high": -0.051561663906065175,
+   "excludes_zero": 1,
+   "parents": 95,
+   "resamples": 2000,
+   "seed": 101
+  },
+  "FULL_INTROACT_vs_TATO": {
+   "difference": -0.4796919893595507,
+   "ci_low": -0.8139995099351771,
+   "ci_high": -0.14052129250656872,
+   "excludes_zero": 1,
+   "parents": 95,
+   "resamples": 2000,
+   "seed": 101
   }
  },
  "heterogeneity": {
@@ -730,6 +858,115 @@
   },
   "episodes": 760
  },
+ "opportunity_strata": {
+  "boundaries": {
+   "no_op": 1e-09,
+   "low_to_high": 0.1514825870084766,
+   "upper_reference": 0.7855174827051876,
+   "quantiles": [
+    0.5,
+    0.85
+   ],
+   "fitted_on": "replay bank"
+  },
+  "sizes": {
+   "no-op": {
+    "episodes": 144,
+    "share": 0.18947368421052632,
+    "parents": 66,
+    "median": 0.0,
+    "p90": 0.0
+   },
+   "low": {
+    "episodes": 246,
+    "share": 0.3236842105263158,
+    "parents": 84,
+    "median": 0.06458188684033822,
+    "p90": 0.132955132023219
+   },
+   "high": {
+    "episodes": 370,
+    "share": 0.4868421052631579,
+    "parents": 90,
+    "median": 0.4133982261815031,
+    "p90": 1.730235698307526
+   }
+  },
+  "per_method": {
+   "NATIVE_KEEP": {
+    "no-op": 1.2376141037483126,
+    "low": 1.4475618367990284,
+    "high": 2.2734602077412935,
+    "overall": 1.946541483904545
+   },
+   "BEST_FIXED": {
+    "no-op": 1.5870691194661979,
+    "low": 1.4919519798724992,
+    "high": 1.6647471875739903,
+    "overall": 1.6065108797434493
+   },
+   "R2_CART": {
+    "no-op": 1.6471942230494703,
+    "low": 1.4817107468707427,
+    "high": 1.8574416536610008,
+    "overall": 1.79578459740248
+   },
+   "FULL_INTROACT": {
+    "no-op": 1.6787942918953682,
+    "low": 1.4940540726069522,
+    "high": 1.493626559119669,
+    "overall": 1.4661308835388942
+   },
+   "A1_GLOBAL_UTILITY": {
+    "no-op": 1.6713517586264581,
+    "low": 1.4935459352663594,
+    "high": 1.5989146039388598,
+    "overall": 1.5641379901293506
+   },
+   "A4_ALWAYS_ACT": {
+    "no-op": 1.6787942918953682,
+    "low": 1.4940708923884687,
+    "high": 1.493491929273941,
+    "overall": 1.4660364655185851
+   },
+   "A5_PARAMETRIC_RIDGE": {
+    "no-op": 1.6395448792931864,
+    "low": 1.4867739397407551,
+    "high": 1.577446619819484,
+    "overall": 1.5339603529783066
+   },
+   "CATALOG_ORACLE": {
+    "no-op": 1.2376141037483126,
+    "low": 1.3831711021787725,
+    "high": 1.3401308876532134,
+    "overall": 1.2842718312105244
+   },
+   "A2_WO_INTERVENTION": {
+    "no-op": 1.675794404141651,
+    "low": 1.4978592513666973,
+    "high": 1.4941125085454807,
+    "overall": 1.4689894020639531
+   },
+   "A3_WO_FORECAST": {
+    "no-op": 1.6610477385138684,
+    "low": 1.4955836122287687,
+    "high": 1.5303889317202115,
+    "overall": 1.4964549683496153
+   },
+   "SAITS": {
+    "no-op": 2.0926642770106985,
+    "low": 1.804179213762519,
+    "high": 1.80939637758939,
+    "overall": 1.7768534239444602
+   },
+   "TATO": {
+    "no-op": 1.3183873442105367,
+    "low": 1.4761698300777144,
+    "high": 2.2472440105573717,
+    "overall": 1.945822872898445
+   }
+  }
+ },
  "bank": {
   "episodes": 1784,
   "support": {
@@ -747,5 +984,5 @@
    "CONTEXT_RIDGE": 0.2871336348890842
   }
  },
- "runtime_seconds": 22.950024210000265
+ "runtime_seconds": 32.5395658110001
 }

@@ -35,6 +35,10 @@ ROOT = Path(__file__).resolve().parent.parent
 C.REPLAY = "results/v46/replay"
 OUT = ROOT / "results/v46/diagnostics"
 REPAIRS = ("FFILL", "SINGLE_TSICL", "MULTI_TSICL", "CONTEXT_RIDGE")
+#: The published reconstruction baseline enters the same comparison when its
+#: repaired inputs and its forecasts are both on disk, which is what makes the
+#: two criteria comparable for it as well.
+EXTERNAL = {"SAITS": ("saits", "SAITS")}
 
 
 def write(path: Path, payload) -> None:
@@ -95,6 +99,16 @@ def main() -> None:
                     allow_pickle=False)
     tsicl = np.load(root / "results/v46/replay/tsicl" / f"{args.block}.npz",
                     allow_pickle=False)
+    external_inputs, external_loss, names = {}, {}, list(REPAIRS)
+    for label, (method, _tag) in EXTERNAL.items():
+        cand = root / f"results/v46/baselines/{method}/candidates.npz"
+        recs = root / f"results/v46/baselines/{method}_{args.block}_{args.backbone}/records.json"
+        if cand.exists() and recs.exists():
+            external_inputs[label] = np.load(cand, allow_pickle=False)
+            external_loss[label] = json.loads(recs.read_text())["records"]
+            names.append(label)
+            per_action[label] = {"rec_mse": [], "rec_mae": [], "utility": []}
+    rank_grid = np.zeros((len(names), len(names)), dtype=int)
     try:
         for cat in catalogs:
             truth = raw.get(cat.parent)
@@ -125,6 +139,23 @@ def main() -> None:
                 per_action[action]["rec_mse"].append(rec[action][0])
                 per_action[action]["rec_mae"].append(rec[action][1])
                 per_action[action]["utility"].append(util[action])
+            for label in external_inputs:
+                name = f"{args.block}|{cat.episode}"
+                item = external_loss[label].get(cat.episode)
+                if name not in external_inputs[label].files or item is None:
+                    continue
+                if item.get("mase") is None or cat.reference_mase is None:
+                    continue
+                values = np.asarray(external_inputs[label][name], dtype=np.float64)
+                error = values[hidden] - truth[hidden]
+                error = error[np.isfinite(error)]
+                if error.size == 0:
+                    continue
+                rec[label] = (float(np.mean(error ** 2)), float(np.mean(np.abs(error))))
+                util[label] = float(cat.reference_mase - item["mase"])
+                per_action[label]["rec_mse"].append(rec[label][0])
+                per_action[label]["rec_mae"].append(rec[label][1])
+                per_action[label]["utility"].append(util[label])
             if len(rec) < 2:
                 continue
             episodes += 1
@@ -132,7 +163,7 @@ def main() -> None:
             r = np.array([rec[a][0] for a in actions])
             u = np.array([util[a] for a in actions])
             rhos.append(spearman(-r, u))
-            if len(actions) == len(REPAIRS):
+            if len(actions) == len(names):
                 rec_rank = np.argsort(np.argsort(r))
                 util_rank = np.argsort(np.argsort(-u))
                 for a, b in zip(rec_rank, util_rank):
@@ -151,10 +182,13 @@ def main() -> None:
     finally:
         store.close()
         tsicl.close()
+        for handle in external_inputs.values():
+            handle.close()
 
     pairs = concordant + discordant
     payload = {
         "rank_grid": rank_grid.tolist(),
+        "rank_grid_order": sorted(names),
         "stage": "v46-reconstruction-vs-utility",
         "backbone": args.backbone, "block": args.block,
         "episodes_compared": episodes,

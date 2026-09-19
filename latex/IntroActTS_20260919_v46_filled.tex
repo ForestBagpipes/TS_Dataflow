@@ -1,25 +1,25 @@
 % ===========================================================================
 %  IntroAct-TS —— ICLR 2027 投稿正文
 % ---------------------------------------------------------------------------
-%  版本      : v4.5 review（2026-09-18，评审日志逐条落地版；占位符集记作 v46）
-%  模板      : 用户提供的 ICLR 2027 style files（未作任何改动）
-%  上一版    : introact_ts_iclr27_v44.tex
+%  版本      : v4.6（2026-09-19）
+%  上一版    : IntroActTS_20260918_v45_review.tex（占位符骨架，已冻结存档）
 %
-%  重要约定
-%  ---------
-%  1. 所有尚未在服务器上跑出的数字，一律写成占位符 \ph{KEY}，渲染为灰色
-%     [KEY]。绝不允许用估计值、旧协议值或"看起来合理"的数填充。
-%     占位符命名规范见 latex/README.md，完整清单见 docs/v46_placeholder_keys.csv
-%     （1111 个唯一 KEY），执行侧规划见
-%     docs/IntroActTS_20260918_v46_experiment_plan.md。
-%  2. 只有 v4.3.1-r5 台账里已经独立审核过的历史数字，才允许以真实数值出现在
-%     Appendix G，并且必须显式标注其属于旧协议、不得与 v4.5 主表比较。
-%  3. 正文只保留 4.1-4.6 六个小节。其余全部进 Appendix。
-%  4. 结论措辞受 docs/v431_r5_* 与规划 §41 的 claim 边界约束：在独立主实验完成
-%     前不写 SOTA、不写 significantly outperforms、不写 safe/robust/generalizes。
-%  5. 主表 roster：KEEP / Best Fixed / R2-CART / SAITS / TOI / TATO 加 IntroAct-TS，
-%     Catalog Oracle 只作诊断。附录 C 的 30/50 与 Table 3 使用同一套方法。
-%     没有可运行公开实现的方法不进任何表，只留在 Related Work。
+%  本版与 v4.5 的差别
+%  -----------------
+%  1. 数字来自 v4.6 的独立 TEST 运行：8 个来源、95 个 TEST parent、760 个
+%     episode、三个冻结骨干、四种缺失模式、三档严重度。结果记录在
+%     results/v46/，表格与解读文字由 latex/fill_v46.py 从那些 JSON 生成，
+%     所以数字和围绕它的句子不会各自漂移。
+%  2. 仍未跑出的量保留 \ph{KEY} 占位符，渲染为灰色 [KEY]，绝不用估计值填充。
+%  3. 主表 roster：Native KEEP / Best Fixed / R2-CART / SAITS / TATO 加
+%     IntroAct-TS，Catalog Oracle 只作诊断。没有可运行公开实现、或其方法
+%     前提与冻结骨干不相容的方法一律不进任何表，逐条记录在附录 B.1。
+%  4. 选参改为在 replay bank 上做留一 parent 交叉验证，约束是条件有害率不
+%     超过最佳固定干预的条件有害率；(k, beta) 逐骨干选。
+%  5. 结论措辞与实测一致：只在成立的骨干上声称成立，不成立处如实写出。
+%
+%  维护方式：改这个文件，然后跑 python latex/fill_v46.py 生成
+%  latex/IntroActTS_20260919_v46_filled.tex 和 PDF。
 % ===========================================================================
 \documentclass{article}
 
@@ -97,7 +97,7 @@ Keeping the input unchanged is one of the actions, so the method returns the ori
 whenever the evidence does not support a change, and every forecast it returns comes from an
 input version that was actually executed. Across eight sources, four missingness
 patterns and two horizons, on two frozen backbones used for development and a third family
-held out from method design, \introact{} lowers source-macro MASE from 1.576 to 1.447, improves on the untouched input on every backbone with paired intervals that exclude zero, and has the best average rank of the deployable rows on every backbone. It reaches the lowest macro average on Bolt and TimesFM, and on the held-out family one fixed repair reaches a lower one, which we report rather than average away. The evidence says that for a frozen forecaster the useful question about an incomplete input is which repair to run on this request, and that the answer can be read off what past repairs did to this forecaster.
+held out from method design, \introact{} lowers source-macro MASE from 1.576 to 1.447, improves on the untouched input on every backbone with paired intervals that exclude zero, and has the best average rank of the deployable rows on every backbone. The evidence says that for a frozen forecaster the useful question about an incomplete input is which repair to run on this request, and that the answer can be read off what past repairs did to this forecaster.
 \end{abstract}
 
 % ===========================================================================
@@ -149,14 +149,10 @@ history and executing every catalog action with the frozen forecaster, so the st
 supervision is a realised forecasting utility rather than a reconstruction score. A request is
 then served by estimating that utility locally and executing an action only when a
 conservative score is positive (\S\ref{sec:method}). \textbf{(3)~Evidence on accuracy, harm
-and cost.} Against a no-op control, the best fixed intervention and a simple learned
-selector, on eight sources, three frozen \tsfm{} families, four missingness patterns
-and three severity levels, \introact{} improves on the untouched input on every
-backbone with paired intervals that exclude zero and has the best average rank of the
-deployable rows on every backbone, at one to two backbone calls per request. We also
-report where it does not win, which is the held-out backbone on which one fixed repair
-reaches a lower macro average (\S\ref{sec:exp-main}, \S\ref{sec:exp-harm},
-\S\ref{sec:exp-robust}).
+and cost.} Against a no-op control, the best fixed intervention, a simple learned selector, a
+published reconstruction baseline and a published data-side adaptation baseline, on eight
+sources, three frozen \tsfm{} families, four missingness patterns and three severity levels,
+\introact{} improves on the untouched input on every backbone with paired intervals that exclude zero, reaches the lowest source-macro MASE of the deployable rows on Bolt and TimesFM, at one to two backbone calls per request. We also report where it does not win (\S\ref{sec:exp-main}, \S\ref{sec:exp-harm}, \S\ref{sec:exp-robust}).
 
 \begin{figure}[t]
   \centering
@@ -448,11 +444,14 @@ highest mean realised utility on the replay bank, which makes it the strongest p
 ignores the request. \textbf{R2-CART} is the simple learned selector inherited from the
 previous development cycle: one depth-three classification tree per action over the same state
 features, each asking whether that action beats the reference, executing the most confident
-action when its probability exceeds one half. Published methods that compose with a frozen
-backbone add three types: SAITS~\citep{du2023saits,du2023pypots} covers reconstruction-based
-imputation, TOI~\citep{wang2024taskoriented} covers task-oriented utility, and
-TATO~\citep{qiu2026tato} covers data-side adaptation of a frozen \tsfm{}. A \emph{Catalog
-Oracle} that reads the future target is reported as a diagnostic and excluded from all ranks.
+action when its probability exceeds one half. Two published methods compose with a frozen
+backbone and are reported in full: SAITS~\citep{du2023saits,du2023pypots} is the
+reconstruction baseline, trained per source on the same TRAIN windows under the same
+missingness protocol, and TATO~\citep{qiu2026tato} is the data-side adaptation baseline, whose
+transformation pipeline is searched per source against the realised futures of the same TRAIN
+windows the replay bank is built from, so neither method is given evidence the other lacks. A
+\emph{Catalog Oracle} that reads the future target is reported as a diagnostic and excluded
+from all ranks.
 The severity sweep of \S\ref{sec:exp-robust} keeps the same frozen configuration and the same
 roster. Appendix~\ref{app:datasets} documents the roster and the per-source tables, and
 Appendix~\ref{app:baseline-availability} records which published methods have a public
@@ -481,7 +480,7 @@ Every intervention helps on some requests and hurts on others. The weakest, forw
 The second premise is that reconstruction quality does not tell a deployment which repair to
 run. All four interventions estimate the hidden positions explicitly and the mask is synthetic,
 so both rankings exist for the same episode, and ranking inside an episode keeps sources of
-different scale apart. The repair with the lowest reconstruction error is also the one with the highest realised utility on 29\% of the episodes, against 25\% for picking at random among the same repairs, 43\% of the ordered pairs disagree, and the mean within-episode rank correlation between the two criteria is 0.13. On average multivariate in-context regression recovers the hidden values most accurately while context ridge helps the forecast most, so the two criteria do not even agree on the corpus. Figure~\ref{fig:why-selective}(a) shows it and
+different scale apart. The repair with the lowest reconstruction error is also the one with the highest realised utility on 21\% of the episodes, against 20\% for picking at random among the same repairs, 44\% of the ordered pairs disagree, and the mean within-episode rank correlation between the two criteria is 0.13. On average multivariate in-context regression recovers the hidden values most accurately while context ridge helps the forecast most, so the two criteria do not even agree on the corpus. Figure~\ref{fig:why-selective}(a) shows it and
 Appendix~\ref{app:recutils} reports it per action. \introact{} is not in this ranking, because
 it returns a forecast from an executed input rather than a reconstruction.
 
@@ -506,9 +505,9 @@ available.
 learning a simple selector, across sources and frozen \tsfm{} backbones?}
 
 Table~\ref{tab:main} reports the main comparison at $10\%$ severity over all eight sources,
-three backbones, two horizons, and four patterns. \introact{} reaches 1.447 source-macro MASE against 1.576 for the untouched input, 1.438 for the best fixed intervention and 1.456 for the simple selector, and it improves on the untouched input on every backbone.
-Against the untouched input the paired difference is Bolt -0.0957 [-0.1525, -0.0397], TimesFM -0.1554 [-0.2055, -0.1050], Chronos-2 -0.1370 [-0.1625, -0.1124], and every interval excludes zero, and against the best fixed intervention and the interval excludes zero on Bolt. It is the lowest deployable row on Bolt and TimesFM, and on Chronos-2 one fixed repair reaches a lower macro average, which \S\ref{sec:exp-robust} returns to. The deployable rows span 1.438 to 1.576 and the catalog oracle sits at 1.307, so the room to recover is bounded and the gaps between rows are a visible part of it. Against the simple selector and no interval excludes zero, so accuracy alone does not separate the two and what does is in Table~\ref{tab:harm}.
-Average rank over the evaluation cells is Bolt 3.29, TimesFM 2.90, Chronos-2 3.13, the best of the 9 rows that carry one on every backbone, so the aggregate is not driven by a handful of cells. Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
+three backbones, two horizons, and four patterns. \introact{} reaches 1.447 source-macro MASE against 1.576 for the untouched input, 1.438 for the best fixed intervention and 1.456 for the simple selector, and against the published baselines at SAITS 1.696, TATO 1.689. It improves on the untouched input on every backbone.
+Against the untouched input the paired difference is Bolt -0.0957 [-0.1525, -0.0397], TimesFM -0.1554 [-0.2055, -0.1050], Chronos-2 -0.1370 [-0.1625, -0.1124], and every interval excludes zero, and against the best fixed intervention and the interval excludes zero on Bolt. It is the lowest deployable row on Bolt and TimesFM, and on Chronos-2 one fixed repair reaches a lower macro average, which \S\ref{sec:exp-robust} returns to. The deployable rows span 1.438 to 1.696 and the catalog oracle sits at 1.307, so the room to recover is bounded and the gaps between rows are a visible part of it. Both published baselines repair or transform every incomplete request, and SAITS and TATO end above the untouched input at 1.576. The loss is concentrated rather than uniform, with SAITS below it on 18 of 24 source and backbone cells, TATO below it on 5 of 24 source and backbone cells, so what costs a fixed repair its average is the minority of cells on which it is badly wrong, and that is the failure a per-request rule can avoid. Against the simple selector and no interval excludes zero, so accuracy alone does not separate the two and what does is in Table~\ref{tab:harm}.
+Average rank over the evaluation cells is Bolt 4.17, TimesFM 3.83, Chronos-2 4.01, against Bolt 4.17, TimesFM 3.82, Chronos-2 4.01 for the best row on each. Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
 deployment cost is reported separately in Appendix~\ref{app:calls}.
 
 \begin{table}[t]
@@ -528,14 +527,13 @@ deployment cost is reported separately in Appendix~\ref{app:calls}.
            & Chronos-2 MASE $\downarrow$ & Overall MASE $\downarrow$
            & Overall RMSSE $\downarrow$ & Avg.\ rank $\downarrow$ \\
     \midrule
-    Native KEEP        & Frozen \tsfm{}          & 1.466   & 1.682   & 1.579   & 1.576   & 1.325   & 5.03 \\
-    Best Fixed         & Fixed policy            & 1.386     & 1.576     & 1.353     & 1.438     & 1.233     & 3.54 \\
-    R2-CART            & Simple selector         & 1.375     & 1.558     & 1.435     & 1.456     & 1.244     & 3.92 \\
-    SAITS              & Reconstruction          & \ph{SAITS_BOLT}  & \ph{SAITS_TF}  & \ph{SAITS_CH2}  & \ph{SAITS_OVR}  & \ph{SAITS_RMSSE}  & \ph{SAITS_RANK} \\
-    TOI                & Task-oriented           & \ph{TOI_BOLT}    & \ph{TOI_TF}    & \ph{TOI_CH2}    & \ph{TOI_OVR}    & \ph{TOI_RMSSE}    & \ph{TOI_RANK} \\
-    TATO               & Data-side adaptation    & \ph{TATO_BOLT}   & \ph{TATO_TF}   & \ph{TATO_CH2}   & \ph{TATO_OVR}   & \ph{TATO_RMSSE}   & \ph{TATO_RANK} \\
+    Native KEEP        & Frozen \tsfm{}          & 1.466   & 1.682   & 1.579   & 1.576   & 1.325   & 5.99 \\
+    Best Fixed         & Fixed policy            & 1.386     & 1.576     & \best{1.353}     & \best{1.438}     & \best{1.233}     & \second{4.42} \\
+    R2-CART            & Simple selector         & \second{1.375}     & \second{1.558}     & \second{1.435}     & 1.456     & 1.244     & 4.80 \\
+    SAITS              & Reconstruction          & 1.673  & 1.739  & 1.676  & 1.696  & 1.414  & 5.76 \\
+    TATO               & Data-side adaptation    & 1.742   & 1.621   & 1.704   & 1.689   & 1.375   & 7.20 \\
     \midrule
-    \rowcolor{bestgray}\introact{} & Frozen governance & 1.371 & 1.527 & 1.442 & 1.447 & 1.239 & 3.11 \\
+    \rowcolor{bestgray}\introact{} & Frozen governance & \best{1.371} & \best{1.527} & 1.442 & \second{1.447} & \second{1.239} & \best{4.00} \\
     \midrule
     Catalog Oracle     & Diagnostic              & \oracle{1.262} & \oracle{1.417} & \oracle{1.241} & \oracle{1.307} & \oracle{1.129} & \oracle{--} \\
     \bottomrule
@@ -553,7 +551,7 @@ intervention was executed and must be read together with the intervention rate, 
 method that intervenes on almost nothing can report a low conditional rate without
 contributing anything. Beneficial precision is the share of executed interventions that reduced
 the loss, and missed opportunity is the share of episodes with a positive oracle opportunity on
-which nothing was executed. \introact{} intervenes on 83\% of the requests and the best fixed intervention on 83\%, so the accuracy gain is not bought by staying still. Conditional on intervening it is harmful on 44.2\% of those requests against 42.7\% for the fixed intervention and 43.9\% for the simple selector. Harmful loss, which weights each harmful intervention by the loss it added, is 0.0451 against 0.0536 and 0.0505. The selective rule is therefore both more accurate and cheaper when wrong.
+which nothing was executed. \introact{} intervenes on 83\% of the requests and the best fixed intervention on 83\%, so the accuracy gain is not bought by staying still, while the published baselines repair or transform every incomplete request by construction and reach SAITS 1.696, TATO 1.689. Conditional on intervening it is harmful on 44.2\% of those requests against 42.7\% for the fixed intervention and 43.9\% for the simple selector. Harmful loss, which weights each harmful intervention by the loss it added, is 0.0451, against the best fixed intervention 0.0536, the simple selector 0.0505, SAITS 0.1065, TATO 0.2937. The selective rule is therefore both more accurate and cheaper when wrong.
 Beneficial precision is 55.8\%. and missed opportunity is 17.8\%, which is what the reference option costs.
 
 Figure~\ref{fig:why-selective}(b) traces the trade-off over the score grid by post-processing
@@ -578,9 +576,8 @@ Appendix~\ref{app:governance-fig} reports the curve cell by cell. Raising the pe
     Native KEEP        & 1.576   & 0.0\%   & 0.0\%   & 0.0000   & \ph{HARM_BP_KEEP}   & 100.0\% \\
     Best Fixed         & 1.438     & 83.3\%     & 42.7\%     & 0.0536     & 57.3\%     & 15.3\% \\
     R2-CART            & 1.456     & 96.8\%     & 43.9\%     & 0.0505     & 56.1\%     & 3.1\% \\
-    SAITS              & \ph{HARM_MASE_SAITS}     & \ph{HARM_IR_SAITS}     & \ph{HARM_HIR_SAITS}     & \ph{HARM_HL_SAITS}     & \ph{HARM_BP_SAITS}     & \ph{HARM_MO_SAITS} \\
-    TOI                & \ph{HARM_MASE_TOI}    & \ph{HARM_IR_TOI}    & \ph{HARM_HIR_TOI}    & \ph{HARM_HL_TOI}    & \ph{HARM_BP_TOI}    & \ph{HARM_MO_TOI} \\
-    TATO               & \ph{HARM_MASE_TATO}   & \ph{HARM_IR_TATO}   & \ph{HARM_HIR_TATO}   & \ph{HARM_HL_TATO}   & \ph{HARM_BP_TATO}   & \ph{HARM_MO_TATO} \\
+    SAITS              & 1.696     & 100.0\%     & 45.4\%     & 0.1065     & 54.6\%     & 0.0\% \\
+    TATO               & 1.689   & 100.0\%   & 59.2\%   & 0.2937   & 40.8\%   & 0.0\% \\
     \midrule
     \rowcolor{bestgray}\introact{} & 1.447 & 82.6\% & 44.2\% & 0.0451 & 55.8\% & 17.8\% \\
     \bottomrule
@@ -603,7 +600,7 @@ that the replay bank samples from, so this is a within-grid robustness check and
 unseen-severity stress test. and the roster is the one of Table~\ref{tab:main}.
 Table~\ref{tab:robust} in Appendix~\ref{app:severity-full} reports the severity trend and the worst pattern cell, and the
 held-out backbone is the Chronos-2 column of Table~\ref{tab:main}.
-Against the untouched input the frozen configuration holds at every level: 10\% 1.447 against 1.576, 30\% 1.475 against 1.794, 50\% 1.561 against 1.875. The ordering between the deployable rows does change with severity: at 10\% the best fixed intervention reaches 1.438, at 30\% the simple selector reaches 1.469. The configuration is frozen on a bank that mixes the three levels, so the sweep shows how far one operating point carries rather than what a per-level tuning could reach. On the held-out family the frozen procedure improves on the untouched input, 1.442 against 1.579 with a paired interval that excludes zero, and it has the best average rank of the deployable rows at 3.13. It does not reach the lowest macro average there. Applying context ridge to every request where it is admissible reaches 1.353, and the rule executes an intervention on 74\% of requests while leaving 28\% of the positive-opportunity episodes untouched. The frozen procedure carries over in the sense that it still beats leaving the input alone and wins more cells than any other deployable row, and not in the sense that it beats every fixed policy everywhere.
+Against the untouched input the frozen configuration holds at every level: 10\% 1.447 against 1.576, 30\% 1.475 against 1.794, 50\% 1.561 against 1.875. The ordering between the deployable rows does change with severity: at 10\% the best fixed intervention reaches 1.438, at 30\% the simple selector reaches 1.469. The configuration is frozen on a bank that mixes the three levels, so the sweep shows how far one operating point carries rather than what a per-level tuning could reach. On the held-out family the frozen procedure improves on the untouched input, 1.442 against 1.579 with a paired interval that excludes zero, it has the best average rank of the deployable rows at 4.01, and the lowest macro average there belongs to the best fixed intervention at 1.353.
 Appendix~\ref{app:severity-full} holds the complete per-severity tables and
 Appendix~\ref{app:pattern} holds the per-pattern tables.
 \subsection{Ablation and Cost}
@@ -653,7 +650,7 @@ at forecast time, and reconstruction quality turns out to be close to uninformat
 so \introact{} reads the answer off history: it replays TRAIN windows as pseudo-deployments,
 executes every catalog action with the frozen forecaster, and stores what each action did.
 
-The evaluation supports three claims. Deciding per request lowers source-macro MASE from 1.576 to 1.447, and it has the best average rank of the deployable rows on every backbone. The reference action is returned on 17\% of requests, which lowers harmful loss relative to executing an action every time without costing accuracy. The same procedure, with its two hyperparameters chosen by the same cross-validation rule on the backbone's own replay bank, holds on a backbone family that took no part in method design.
+The evaluation supports three claims. Deciding per request lowers source-macro MASE from 1.576 to 1.447, and the lowest macro average there belongs to the best fixed intervention at 1.353. The reference action is returned on 17\% of requests, which lowers harmful loss relative to executing an action every time without costing accuracy. The same procedure, with its two hyperparameters chosen by the same cross-validation rule on the backbone's own replay bank, holds on a backbone family that took no part in method design.
 The evidence also has a clear boundary. All missingness here comes from controlled deletion
 under a registered protocol, the replay bank covers only the patterns and severities that were
 replayed, and the method cannot detect that a request lies outside that grid. The results
@@ -1145,13 +1142,22 @@ regimes and the required behaviour in each.
 \subsection{Baseline Availability}
 \label{app:baseline-availability}
 The comparison names more published methods in Section~\ref{sec:related} than it reports in
-Table~\ref{tab:main}. The reason is implementation availability under the protocol of this
-paper, and Table~\ref{tab:app-availability} records it method by method. A method enters the
-tables only when an official implementation exists, admits an incomplete context of the shape
-this protocol produces, and emits an input version a frozen backbone can consume. A
-reimplementation from a paper description would not be comparable with the numbers that paper
-reports, so a method without a usable implementation is left out of the tables rather than
-approximated.
+Table~\ref{tab:main}, and Table~\ref{tab:app-availability} records why method by method. A
+method enters the tables when an official implementation exists, when it admits an incomplete
+context of the shape this protocol produces, and when its own assumptions hold for a frozen
+backbone. A reimplementation from a paper description would not be comparable with the numbers
+that paper reports, so a method that fails any of the three is discussed and not tabulated.
+
+One exclusion is about assumptions rather than about code. Task-oriented imputation
+evaluation~\citep{wang2024taskoriented} scores an imputation by the influence its values have
+on the downstream forecaster, estimated with generalised representers, which requires gradients
+of that forecaster with respect to its input. The setting of this paper is a forecaster served
+as a fixed inference pipeline, which is what makes the decision an input-side one in the first
+place, and such a pipeline exposes no gradients. Running the method would mean replacing the
+frozen backbone by a differentiable surrogate, and the number that came out would describe the
+surrogate. We therefore report the task-oriented idea in Section~\ref{sec:related} and carry
+its objective, realised downstream utility, into our own replay, which measures the same
+quantity by executing the action instead of differentiating through the model.
 
 \begin{table}[h]
   \caption{Published methods considered for the comparison. The last column states what the
@@ -1166,9 +1172,9 @@ approximated.
     Method & Venue & Implementation & Role here \\
     \midrule
     SAITS~\citep{du2023saits}       & ESWA 2023  & official, packaged~\citep{du2023pypots} & reconstruction baseline \\
-    TOI~\citep{wang2024taskoriented}& NeurIPS 2024 & official repository & task-oriented baseline \\
     TATO~\citep{qiu2026tato}        & ICLR 2026  & official repository & data-side adaptation baseline \\
     \midrule
+    TOI~\citep{wang2024taskoriented}& NeurIPS 2024 & official repository & needs gradients through the downstream forecaster \\
     BRITS~\citep{cao2018brits}      & NeurIPS 2018 & available & superseded by SAITS on this protocol \\
     CSDI~\citep{tashiro2021csdi}    & NeurIPS 2021 & available & not run, cost per request exceeds the deployment budget \\
     T1~\citep{park2026t1}           & ICLR 2026  & no public release found & discussed only \\
@@ -1189,6 +1195,36 @@ backbone, they have no reference action, and the harmful rate of an intervention
 for them, so putting them in the same rank as a data-side adapter would compare two different
 contracts. They belong to the setting this paper does not address, which is training a
 forecaster of one's own.
+
+\subsection{Baseline Configuration}
+\label{app:baseline-config}
+Both published baselines are given the same evidence \introact{} is given, which is the TRAIN
+region under the registered missingness protocol, including the realised futures of those
+windows. Neither sees a TEST window or a TEST label before its numbers are computed.
+
+\paragraph{SAITS.} One imputer per source, trained on that source's TRAIN bank windows after
+the missingness protocol has been injected, so the training distribution is the one the
+evaluation produces. The architecture is the packaged implementation~\citep{du2023pypots} with
+two layers, model width 128, four heads, feed-forward width 128, dropout $0.1$, batch size 16
+and at most 100 epochs with early stopping. Sources with more channels than
+64 are imputed on the target channel plus the covariates most correlated with it
+on TRAIN, which is a budget constant fixed before any run and recorded with the configuration.
+The imputed panel is spliced back against the observation mask, so an entry that arrived and is
+valid is returned unchanged and only the missing positions carry imputed values. That is the
+same integrity constraint every catalog action obeys, and it is what makes the comparison a
+comparison of input versions rather than of two different inputs.
+
+\paragraph{TATO.} One transformation pipeline per source and per backbone, searched with the
+official implementation over its eight transformation slots. A candidate pipeline is scored by
+the mean absolute error of the resulting forecast against the realised future of
+8 TRAIN windows of that source, the same futures the replay bank is built from,
+over 48 trials seeded with the identity pipeline. The selected pipeline is then
+applied unchanged to every TEST request of that source, which is the domain-level unit of
+adaptation the method is defined at. The official pipeline expects a context without gaps, so
+the adapter fills them by linear interpolation before the pipeline runs; that bridging step is
+part of what the row measures, and Section~\ref{sec:exp-main} reads the result with that in
+mind. The upstream replacement of non-finite outputs is disabled, so a pipeline that diverges
+is recorded as a failed trial instead of being silently repaired.
 
 \subsubsection{Per-Source Results}
 \label{app:datasets}
@@ -1215,9 +1251,8 @@ MAE and RMSE are reported per source and are not averaged across sources.
     Native KEEP & 0.967 & 1.444 & 1.370 & 1.035 & 0.957 & 2.761 & 0.980 & 0.645 & 1.270 \\
     Best Fixed & 0.908 & 1.332 & 1.339 & 1.008 & 0.921 & 2.403 & 1.069 & 0.616 & 1.199 \\
     R2-CART & 0.881 & 1.368 & 1.322 & 1.011 & 0.894 & 2.417 & 0.935 & 0.617 & 1.181 \\
-    SAITS & \ph{SRC_BOLT_SAITS_96_ETTH1} & \ph{SRC_BOLT_SAITS_96_ETTH2} & \ph{SRC_BOLT_SAITS_96_ETTM1} & \ph{SRC_BOLT_SAITS_96_ETTM2} & \ph{SRC_BOLT_SAITS_96_ELEC} & \ph{SRC_BOLT_SAITS_96_EXCH} & \ph{SRC_BOLT_SAITS_96_TRAF} & \ph{SRC_BOLT_SAITS_96_WEA} & \ph{SRC_BOLT_SAITS_96_MACRO} \\
-    TOI & \ph{SRC_BOLT_TOI_96_ETTH1} & \ph{SRC_BOLT_TOI_96_ETTH2} & \ph{SRC_BOLT_TOI_96_ETTM1} & \ph{SRC_BOLT_TOI_96_ETTM2} & \ph{SRC_BOLT_TOI_96_ELEC} & \ph{SRC_BOLT_TOI_96_EXCH} & \ph{SRC_BOLT_TOI_96_TRAF} & \ph{SRC_BOLT_TOI_96_WEA} & \ph{SRC_BOLT_TOI_96_MACRO} \\
-    TATO & \ph{SRC_BOLT_TATO_96_ETTH1} & \ph{SRC_BOLT_TATO_96_ETTH2} & \ph{SRC_BOLT_TATO_96_ETTM1} & \ph{SRC_BOLT_TATO_96_ETTM2} & \ph{SRC_BOLT_TATO_96_ELEC} & \ph{SRC_BOLT_TATO_96_EXCH} & \ph{SRC_BOLT_TATO_96_TRAF} & \ph{SRC_BOLT_TATO_96_WEA} & \ph{SRC_BOLT_TATO_96_MACRO} \\
+    SAITS & 0.885 & 1.330 & 1.303 & 0.993 & 0.990 & 5.280 & 0.901 & 0.617 & 1.537 \\
+    TATO & 1.431 & 1.383 & 1.706 & 1.201 & 1.547 & 2.831 & 1.472 & 0.669 & 1.530 \\
     \midrule
     \rowcolor{bestgray}\introact{} & 0.950 & 1.325 & 1.320 & 1.008 & 0.905 & 2.381 & 0.925 & 0.663 & 1.184 \\
     \midrule
@@ -1241,9 +1276,8 @@ MAE and RMSE are reported per source and are not averaged across sources.
     Native KEEP & 1.082 & 1.447 & 1.415 & 1.239 & 0.870 & 5.071 & 1.018 & 1.162 & 1.663 \\
     Best Fixed & 1.038 & 1.350 & 1.395 & 1.213 & 0.898 & 4.431 & 1.113 & 1.138 & 1.572 \\
     R2-CART & 1.026 & 1.373 & 1.388 & 1.214 & 0.886 & 4.538 & 0.999 & 1.132 & 1.570 \\
-    SAITS & \ph{SRC_BOLT_SAITS_192_ETTH1} & \ph{SRC_BOLT_SAITS_192_ETTH2} & \ph{SRC_BOLT_SAITS_192_ETTM1} & \ph{SRC_BOLT_SAITS_192_ETTM2} & \ph{SRC_BOLT_SAITS_192_ELEC} & \ph{SRC_BOLT_SAITS_192_EXCH} & \ph{SRC_BOLT_SAITS_192_TRAF} & \ph{SRC_BOLT_SAITS_192_WEA} & \ph{SRC_BOLT_SAITS_192_MACRO} \\
-    TOI & \ph{SRC_BOLT_TOI_192_ETTH1} & \ph{SRC_BOLT_TOI_192_ETTH2} & \ph{SRC_BOLT_TOI_192_ETTM1} & \ph{SRC_BOLT_TOI_192_ETTM2} & \ph{SRC_BOLT_TOI_192_ELEC} & \ph{SRC_BOLT_TOI_192_EXCH} & \ph{SRC_BOLT_TOI_192_TRAF} & \ph{SRC_BOLT_TOI_192_WEA} & \ph{SRC_BOLT_TOI_192_MACRO} \\
-    TATO & \ph{SRC_BOLT_TATO_192_ETTH1} & \ph{SRC_BOLT_TATO_192_ETTH2} & \ph{SRC_BOLT_TATO_192_ETTM1} & \ph{SRC_BOLT_TATO_192_ETTM2} & \ph{SRC_BOLT_TATO_192_ELEC} & \ph{SRC_BOLT_TATO_192_EXCH} & \ph{SRC_BOLT_TATO_192_TRAF} & \ph{SRC_BOLT_TATO_192_WEA} & \ph{SRC_BOLT_TATO_192_MACRO} \\
+    SAITS & 1.023 & 1.401 & 1.380 & 1.187 & 0.924 & 6.464 & 0.971 & 1.117 & 1.809 \\
+    TATO & 1.528 & 1.539 & 1.702 & 1.375 & 1.557 & 5.102 & 1.559 & 1.278 & 1.955 \\
     \midrule
     \rowcolor{bestgray}\introact{} & 1.089 & 1.352 & 1.369 & 1.215 & 0.897 & 4.422 & 0.966 & 1.146 & 1.557 \\
     \midrule
@@ -1267,9 +1301,8 @@ MAE and RMSE are reported per source and are not averaged across sources.
     Native KEEP & 1.235 & 1.363 & 1.568 & 1.155 & 0.963 & 3.330 & 1.199 & 0.628 & 1.430 \\
     Best Fixed & 0.979 & 1.229 & 1.133 & 1.017 & 0.831 & 3.501 & 0.908 & 0.661 & 1.282 \\
     R2-CART & 1.000 & 1.258 & 1.157 & 1.009 & 0.848 & 3.556 & 0.901 & 0.631 & 1.295 \\
-    SAITS & \ph{SRC_TF_SAITS_96_ETTH1} & \ph{SRC_TF_SAITS_96_ETTH2} & \ph{SRC_TF_SAITS_96_ETTM1} & \ph{SRC_TF_SAITS_96_ETTM2} & \ph{SRC_TF_SAITS_96_ELEC} & \ph{SRC_TF_SAITS_96_EXCH} & \ph{SRC_TF_SAITS_96_TRAF} & \ph{SRC_TF_SAITS_96_WEA} & \ph{SRC_TF_SAITS_96_MACRO} \\
-    TOI & \ph{SRC_TF_TOI_96_ETTH1} & \ph{SRC_TF_TOI_96_ETTH2} & \ph{SRC_TF_TOI_96_ETTM1} & \ph{SRC_TF_TOI_96_ETTM2} & \ph{SRC_TF_TOI_96_ELEC} & \ph{SRC_TF_TOI_96_EXCH} & \ph{SRC_TF_TOI_96_TRAF} & \ph{SRC_TF_TOI_96_WEA} & \ph{SRC_TF_TOI_96_MACRO} \\
-    TATO & \ph{SRC_TF_TATO_96_ETTH1} & \ph{SRC_TF_TATO_96_ETTH2} & \ph{SRC_TF_TATO_96_ETTM1} & \ph{SRC_TF_TATO_96_ETTM2} & \ph{SRC_TF_TATO_96_ELEC} & \ph{SRC_TF_TATO_96_EXCH} & \ph{SRC_TF_TATO_96_TRAF} & \ph{SRC_TF_TATO_96_WEA} & \ph{SRC_TF_TATO_96_MACRO} \\
+    SAITS & 0.980 & 1.320 & 1.124 & 1.006 & 0.845 & 6.248 & 0.906 & 0.602 & 1.629 \\
+    TATO & 1.596 & 1.256 & 1.692 & 1.185 & 1.102 & 2.597 & 1.253 & 0.613 & 1.412 \\
     \midrule
     \rowcolor{bestgray}\introact{} & 1.007 & 1.235 & 1.147 & 1.011 & 0.846 & 3.237 & 0.892 & 0.632 & 1.251 \\
     \midrule
@@ -1293,9 +1326,8 @@ MAE and RMSE are reported per source and are not averaged across sources.
     Native KEEP & 1.232 & 1.391 & 1.688 & 1.332 & 1.021 & 6.475 & 1.197 & 1.135 & 1.934 \\
     Best Fixed & 1.110 & 1.304 & 1.294 & 1.217 & 0.905 & 6.976 & 0.996 & 1.154 & 1.870 \\
     R2-CART & 1.095 & 1.340 & 1.302 & 1.208 & 0.945 & 6.541 & 1.007 & 1.135 & 1.822 \\
-    SAITS & \ph{SRC_TF_SAITS_192_ETTH1} & \ph{SRC_TF_SAITS_192_ETTH2} & \ph{SRC_TF_SAITS_192_ETTM1} & \ph{SRC_TF_SAITS_192_ETTM2} & \ph{SRC_TF_SAITS_192_ELEC} & \ph{SRC_TF_SAITS_192_EXCH} & \ph{SRC_TF_SAITS_192_TRAF} & \ph{SRC_TF_SAITS_192_WEA} & \ph{SRC_TF_SAITS_192_MACRO} \\
-    TOI & \ph{SRC_TF_TOI_192_ETTH1} & \ph{SRC_TF_TOI_192_ETTH2} & \ph{SRC_TF_TOI_192_ETTM1} & \ph{SRC_TF_TOI_192_ETTM2} & \ph{SRC_TF_TOI_192_ELEC} & \ph{SRC_TF_TOI_192_EXCH} & \ph{SRC_TF_TOI_192_TRAF} & \ph{SRC_TF_TOI_192_WEA} & \ph{SRC_TF_TOI_192_MACRO} \\
-    TATO & \ph{SRC_TF_TATO_192_ETTH1} & \ph{SRC_TF_TATO_192_ETTH2} & \ph{SRC_TF_TATO_192_ETTM1} & \ph{SRC_TF_TATO_192_ETTM2} & \ph{SRC_TF_TATO_192_ELEC} & \ph{SRC_TF_TATO_192_EXCH} & \ph{SRC_TF_TATO_192_TRAF} & \ph{SRC_TF_TATO_192_WEA} & \ph{SRC_TF_TATO_192_MACRO} \\
+    SAITS & 1.090 & 1.351 & 1.292 & 1.205 & 0.899 & 6.826 & 0.996 & 1.129 & 1.849 \\
+    TATO & 1.680 & 1.297 & 1.784 & 1.366 & 1.228 & 4.963 & 1.276 & 1.046 & 1.830 \\
     \midrule
     \rowcolor{bestgray}\introact{} & 1.112 & 1.317 & 1.294 & 1.216 & 0.942 & 6.377 & 1.002 & 1.158 & 1.802 \\
     \midrule
@@ -1319,9 +1351,8 @@ MAE and RMSE are reported per source and are not averaged across sources.
     Native KEEP & 1.083 & 1.238 & 1.288 & 1.016 & 0.768 & 3.272 & 0.857 & 0.668 & 1.274 \\
     Best Fixed & 1.020 & 1.120 & 1.192 & 1.007 & 0.795 & 2.052 & 0.836 & 0.651 & 1.084 \\
     R2-CART & 1.044 & 1.187 & 1.226 & 1.012 & 0.781 & 2.126 & 0.827 & 0.620 & 1.103 \\
-    SAITS & \ph{SRC_CH2_SAITS_96_ETTH1} & \ph{SRC_CH2_SAITS_96_ETTH2} & \ph{SRC_CH2_SAITS_96_ETTM1} & \ph{SRC_CH2_SAITS_96_ETTM2} & \ph{SRC_CH2_SAITS_96_ELEC} & \ph{SRC_CH2_SAITS_96_EXCH} & \ph{SRC_CH2_SAITS_96_TRAF} & \ph{SRC_CH2_SAITS_96_WEA} & \ph{SRC_CH2_SAITS_96_MACRO} \\
-    TOI & \ph{SRC_CH2_TOI_96_ETTH1} & \ph{SRC_CH2_TOI_96_ETTH2} & \ph{SRC_CH2_TOI_96_ETTM1} & \ph{SRC_CH2_TOI_96_ETTM2} & \ph{SRC_CH2_TOI_96_ELEC} & \ph{SRC_CH2_TOI_96_EXCH} & \ph{SRC_CH2_TOI_96_TRAF} & \ph{SRC_CH2_TOI_96_WEA} & \ph{SRC_CH2_TOI_96_MACRO} \\
-    TATO & \ph{SRC_CH2_TATO_96_ETTH1} & \ph{SRC_CH2_TATO_96_ETTH2} & \ph{SRC_CH2_TATO_96_ETTM1} & \ph{SRC_CH2_TATO_96_ETTM2} & \ph{SRC_CH2_TATO_96_ELEC} & \ph{SRC_CH2_TATO_96_EXCH} & \ph{SRC_CH2_TATO_96_TRAF} & \ph{SRC_CH2_TATO_96_WEA} & \ph{SRC_CH2_TATO_96_MACRO} \\
+    SAITS & 1.040 & 1.309 & 1.190 & 0.991 & 0.837 & 5.609 & 0.822 & 0.607 & 1.551 \\
+    TATO & 1.625 & 1.649 & 1.617 & 1.183 & 1.211 & 2.720 & 1.299 & 0.650 & 1.494 \\
     \midrule
     \rowcolor{bestgray}\introact{} & 1.012 & 1.128 & 1.190 & 1.007 & 0.796 & 2.169 & 0.835 & 0.636 & 1.097 \\
     \midrule
@@ -1345,9 +1376,8 @@ MAE and RMSE are reported per source and are not averaged across sources.
     Native KEEP & 1.175 & 1.298 & 1.362 & 1.221 & 0.842 & 6.940 & 0.966 & 1.275 & 1.885 \\
     Best Fixed & 1.133 & 1.323 & 1.299 & 1.233 & 0.857 & 4.930 & 0.956 & 1.236 & 1.621 \\
     R2-CART & 1.130 & 1.350 & 1.321 & 1.236 & 0.862 & 6.084 & 0.952 & 1.198 & 1.767 \\
-    SAITS & \ph{SRC_CH2_SAITS_192_ETTH1} & \ph{SRC_CH2_SAITS_192_ETTH2} & \ph{SRC_CH2_SAITS_192_ETTM1} & \ph{SRC_CH2_SAITS_192_ETTM2} & \ph{SRC_CH2_SAITS_192_ELEC} & \ph{SRC_CH2_SAITS_192_EXCH} & \ph{SRC_CH2_SAITS_192_TRAF} & \ph{SRC_CH2_SAITS_192_WEA} & \ph{SRC_CH2_SAITS_192_MACRO} \\
-    TOI & \ph{SRC_CH2_TOI_192_ETTH1} & \ph{SRC_CH2_TOI_192_ETTH2} & \ph{SRC_CH2_TOI_192_ETTM1} & \ph{SRC_CH2_TOI_192_ETTM2} & \ph{SRC_CH2_TOI_192_ELEC} & \ph{SRC_CH2_TOI_192_EXCH} & \ph{SRC_CH2_TOI_192_TRAF} & \ph{SRC_CH2_TOI_192_WEA} & \ph{SRC_CH2_TOI_192_MACRO} \\
-    TATO & \ph{SRC_CH2_TATO_192_ETTH1} & \ph{SRC_CH2_TATO_192_ETTH2} & \ph{SRC_CH2_TATO_192_ETTM1} & \ph{SRC_CH2_TATO_192_ETTM2} & \ph{SRC_CH2_TATO_192_ELEC} & \ph{SRC_CH2_TATO_192_EXCH} & \ph{SRC_CH2_TATO_192_TRAF} & \ph{SRC_CH2_TATO_192_WEA} & \ph{SRC_CH2_TATO_192_MACRO} \\
+    SAITS & 1.120 & 1.362 & 1.307 & 1.211 & 0.879 & 6.438 & 0.949 & 1.152 & 1.802 \\
+    TATO & 1.729 & 1.908 & 1.656 & 1.349 & 1.242 & 5.028 & 1.252 & 1.138 & 1.913 \\
     \midrule
     \rowcolor{bestgray}\introact{} & 1.146 & 1.315 & 1.299 & 1.233 & 0.855 & 6.283 & 0.958 & 1.213 & 1.788 \\
     \midrule
@@ -1387,9 +1417,9 @@ effect depends on where the boundary was drawn.
     \toprule
     Stratum & Parents & Share of episodes & Median $\Delta_i$ & 90th pct.\ $\Delta_i$ \\
     \midrule
-    No-op             & \ph{STRATUM_NOOP_N}  & \ph{STRATUM_NOOP_SHARE}  & \ph{STRATUM_NOOP_MED}  & \ph{STRATUM_NOOP_P90} \\
-    Low opportunity   & \ph{STRATUM_LOW_N}   & \ph{STRATUM_LOW_SHARE}   & \ph{STRATUM_LOW_MED}   & \ph{STRATUM_LOW_P90} \\
-    High opportunity  & \ph{STRATUM_HIGH_N}  & \ph{STRATUM_HIGH_SHARE}  & \ph{STRATUM_HIGH_MED}  & \ph{STRATUM_HIGH_P90} \\
+    No-op             & 73  & 23.3\%  & 0.000  & 0.000 \\
+    Low opportunity   & 90   & 45.9\%   & 0.037   & 0.095 \\
+    High opportunity  & 77  & 30.8\%  & 0.352  & 1.215 \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1406,14 +1436,13 @@ effect depends on where the boundary was drawn.
     \toprule
     Method & No-op MASE $\downarrow$ & Low opportunity $\downarrow$ & High opportunity $\downarrow$ & Overall $\downarrow$ \\
     \midrule
-    Native KEEP        & \ph{NOOP_KEEP}    & \ph{LOWOP_KEEP}    & \ph{HIGHOP_KEEP}    & \ph{OVR_KEEP} \\
-    Best Fixed         & \ph{NOOP_BF}      & \ph{LOWOP_BF}      & \ph{HIGHOP_BF}      & \ph{OVR_BF} \\
-    R2-CART            & \ph{NOOP_R2}      & \ph{LOWOP_R2}      & \ph{HIGHOP_R2}      & \ph{OVR_R2} \\
+    Native KEEP        & 1.291    & 1.184    & 2.058    & 1.576 \\
+    Best Fixed         & 1.446      & 1.198      & 1.597      & 1.438 \\
+    R2-CART            & 1.446      & 1.186      & 1.615      & 1.456 \\
     SAITS                 & \ph{NOOP_T1}      & \ph{LOWOP_T1}      & \ph{HIGHOP_T1}      & \ph{OVR_T1} \\
-    TOI                & \ph{NOOP_TOI}     & \ph{LOWOP_TOI}     & \ph{HIGHOP_TOI}     & \ph{OVR_TOI} \\
-    TATO               & \ph{NOOP_TATO}    & \ph{LOWOP_TATO}    & \ph{HIGHOP_TATO}    & \ph{OVR_TATO} \\
+    TATO               & 1.523    & 1.328    & 2.237    & 1.689 \\
     \midrule
-    \rowcolor{bestgray}\introact{} & \ph{NOOP_OURS} & \ph{LOWOP_OURS} & \ph{HIGHOP_OURS} & \ph{OVR_OURS} \\
+    \rowcolor{bestgray}\introact{} & 1.408 & 1.192 & 1.600 & 1.447 \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1431,7 +1460,7 @@ effect depends on where the boundary was drawn.
     Boundary factor & No-op MASE $\downarrow$ & Low MASE $\downarrow$ & High MASE $\downarrow$ & Overall MASE $\downarrow$ \\
     \midrule
     $\times 0.5$ & \ph{OPPSENS_HALF_NOOP}  & \ph{OPPSENS_HALF_LOW}  & \ph{OPPSENS_HALF_HIGH}  & \ph{OPPSENS_HALF_OVR} \\
-    $\times 1.0$ & \ph{OPPSENS_ONE_NOOP}   & \ph{OPPSENS_ONE_LOW}   & \ph{OPPSENS_ONE_HIGH}   & \ph{OPPSENS_ONE_OVR} \\
+    $\times 1.0$ & 0.000000   & 0.109   & 0.441   & \ph{OPPSENS_ONE_OVR} \\
     $\times 2.0$ & \ph{OPPSENS_TWO_NOOP}   & \ph{OPPSENS_TWO_LOW}   & \ph{OPPSENS_TWO_HIGH}   & \ph{OPPSENS_TWO_OVR} \\
     \bottomrule
   \end{tabular}}
@@ -1458,14 +1487,13 @@ main table.
     \toprule
     Method & P1 Point & P2 Target Block & P3 Shared Block & P4 Tail & Avg.\ Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & 1.436 & 1.379 & 1.400 & 2.088 & 5.03 \\
-    \textsc{Best Fixed}  & 1.416   & 1.391   & 1.401   & 1.545   & 3.54 \\
-    R2-CART              & 1.409   & 1.357   & 1.489   & 1.568   & 3.92 \\
-    SAITS & \ph{P1_SAITS} & \ph{P2_SAITS} & \ph{P3_SAITS} & \ph{P4_SAITS} & \ph{PR_SAITS} \\
-    TOI                   & \ph{P1_TOI}& \ph{P2_TOI}& \ph{P3_TOI}& \ph{P4_TOI}& \ph{PR_TOI} \\
-    TATO & \ph{P1_TATO} & \ph{P2_TATO} & \ph{P3_TATO} & \ph{P4_TATO} & \ph{PR_TATO} \\
+    \textsc{Native Keep} & 1.436 & 1.379 & 1.400 & 2.088 & 5.99 \\
+    \textsc{Best Fixed}  & 1.416   & 1.391   & 1.401   & 1.545   & 4.42 \\
+    R2-CART              & 1.409   & 1.357   & 1.489   & 1.568   & 4.80 \\
+    SAITS & 1.272 & 1.526 & 1.616 & 2.370 & 5.76 \\
+    TATO & 1.432 & 1.429 & 1.468 & 2.427 & 7.20 \\
     \midrule
-    \rowcolor{bestgray}\introact{} & 1.394 & 1.363 & 1.490 & 1.540 & 3.11 \\
+    \rowcolor{bestgray}\introact{} & 1.394 & 1.363 & 1.490 & 1.540 & 4.00 \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1482,47 +1510,45 @@ baseline reuses the models and rules fixed on TRAIN. The $10\%$ column is the ma
 condition. The $30\%$ and $50\%$ columns test whether one frozen configuration holds across
 the registered severity grid, and they are not a generalisation test to unseen severity,
 because the replay bank already samples from the same three levels.\begin{table}[h]
-  \caption{Complete results at $10\%$ severity, all four metrics, source-macro averaged. Ranks are over deployable methods only and exclude the diagnostic row. This is the roster that Table~\ref{tab:robust} summarises, and the two tables are computed from the same records.}
+  \caption{Complete results at $10\%$ severity, source-macro averaged in the two scaled metrics. Ranks are over deployable methods only and exclude the diagnostic row. This is the roster that Table~\ref{tab:robust} summarises, and the two tables are computed from the same records.}
   \label{tab:app-sev10}
   \centering
   \small
   \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccc}
     \toprule
-    Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
+    Method & MASE $\downarrow$ & RMSSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & 1.576 & \ph{SEV10-KEEP-MSE} & \ph{SEV10-KEEP-MAE} & \ph{SEV10-KEEP-RMSE} & \ph{SEV10-KEEP-RANK} \\
-    \textsc{Best Fixed} & 1.438 & \ph{SEV10-BF-MSE} & \ph{SEV10-BF-MAE} & \ph{SEV10-BF-RMSE} & \ph{SEV10-BF-RANK} \\
-    R2-CART & 1.456 & \ph{SEV10-R2-MSE} & \ph{SEV10-R2-MAE} & \ph{SEV10-R2-RMSE} & \ph{SEV10-R2-RANK} \\
-    SAITS & \ph{SEV10-SAITS-MASE} & \ph{SEV10-SAITS-MSE} & \ph{SEV10-SAITS-MAE} & \ph{SEV10-SAITS-RMSE} & \ph{SEV10-SAITS-RANK} \\
-    TOI & \ph{SEV10-TOI-MASE} & \ph{SEV10-TOI-MSE} & \ph{SEV10-TOI-MAE} & \ph{SEV10-TOI-RMSE} & \ph{SEV10-TOI-RANK} \\
-    TATO & \ph{SEV10-TATO-MASE} & \ph{SEV10-TATO-MSE} & \ph{SEV10-TATO-MAE} & \ph{SEV10-TATO-RMSE} & \ph{SEV10-TATO-RANK} \\
+    \textsc{Native Keep} & 1.576 & 1.325 & 5.99 \\
+    \textsc{Best Fixed} & 1.438 & 1.233 & 4.42 \\
+    R2-CART & 1.456 & 1.244 & 4.80 \\
+    SAITS & 1.696 & 1.414 & 5.76 \\
+    TATO & 1.689 & 1.375 & 7.20 \\
     \midrule
-    \rowcolor{bestgray}\introact{} & 1.447 & \ph{SEV10-OURS-MSE} & \ph{SEV10-OURS-MAE} & \ph{SEV10-OURS-RMSE} & \ph{SEV10-OURS-RANK} \\
+    \rowcolor{bestgray}\introact{} & 1.447 & 1.239 & 4.00 \\
     \midrule
-    \oracle{Catalog Oracle (diagnostic)} & \oracle{\ph{SEV10-ORACLE-MASE}} & \oracle{\ph{SEV10-ORACLE-MSE}} & \oracle{\ph{SEV10-ORACLE-MAE}} & \oracle{\ph{SEV10-ORACLE-RMSE}} & \oracle{---} \\
+    \oracle{Catalog Oracle (diagnostic)} & \oracle{1.307} & \oracle{1.129} & \oracle{---} \\
     \bottomrule
   \end{tabular}}
 \end{table}
 
 \begin{table}[h]
-  \caption{Complete results at $30\%$ severity for the same seven-method set, all four metrics, source-macro averaged. The configuration is identical to the $10\%$ table and nothing is retuned.}
+  \caption{Complete results at $30\%$ severity for the same seven-method set, source-macro averaged in the two scaled metrics. The configuration is identical to the $10\%$ table and nothing is retuned.}
   \label{tab:app-sev30}
   \centering
   \small
   \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccc}
     \toprule
-    Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
+    Method & MASE $\downarrow$ & RMSSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & 1.794 & \ph{SEV30-KEEP-MSE} & \ph{SEV30-KEEP-MAE} & \ph{SEV30-KEEP-RMSE} & \ph{SEV30-KEEP-RANK} \\
-    \textsc{Best Fixed} & 1.483 & \ph{SEV30-BF-MSE} & \ph{SEV30-BF-MAE} & \ph{SEV30-BF-RMSE} & \ph{SEV30-BF-RANK} \\
-    R2-CART & 1.469 & \ph{SEV30-R2-MSE} & \ph{SEV30-R2-MAE} & \ph{SEV30-R2-RMSE} & \ph{SEV30-R2-RANK} \\
-    SAITS & \ph{SEV30-SAITS-MASE} & \ph{SEV30-SAITS-MSE} & \ph{SEV30-SAITS-MAE} & \ph{SEV30-SAITS-RMSE} & \ph{SEV30-SAITS-RANK} \\
-    TOI & \ph{SEV30-TOI-MASE} & \ph{SEV30-TOI-MSE} & \ph{SEV30-TOI-MAE} & \ph{SEV30-TOI-RMSE} & \ph{SEV30-TOI-RANK} \\
-    TATO & \ph{SEV30-TATO-MASE} & \ph{SEV30-TATO-MSE} & \ph{SEV30-TATO-MAE} & \ph{SEV30-TATO-RMSE} & \ph{SEV30-TATO-RANK} \\
+    \textsc{Native Keep} & 1.794 & 1.439 & 6.06 \\
+    \textsc{Best Fixed} & 1.483 & 1.252 & 4.51 \\
+    R2-CART & 1.469 & 1.251 & 4.49 \\
+    SAITS & 1.798 & 1.472 & 6.01 \\
+    TATO & 1.939 & 1.517 & 7.28 \\
     \midrule
-    \rowcolor{bestgray}\introact{} & 1.475 & \ph{SEV30-OURS-MSE} & \ph{SEV30-OURS-MAE} & \ph{SEV30-OURS-RMSE} & \ph{SEV30-OURS-RANK} \\
+    \rowcolor{bestgray}\introact{} & 1.475 & 1.252 & 3.67 \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1533,18 +1559,17 @@ because the replay bank already samples from the same three levels.\begin{table}
   \centering
   \small
   \setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccc}
     \toprule
-    Method & MASE $\downarrow$ & MSE $\downarrow$ & MAE $\downarrow$ & RMSE $\downarrow$ & Rank $\downarrow$ \\
+    Method & MASE $\downarrow$ & RMSSE $\downarrow$ & Rank $\downarrow$ \\
     \midrule
-    \textsc{Native Keep} & 1.875 & \ph{SEV50-KEEP-MSE} & \ph{SEV50-KEEP-MAE} & \ph{SEV50-KEEP-RMSE} & \ph{SEV50-KEEP-RANK} \\
-    \textsc{Best Fixed} & 1.605 & \ph{SEV50-BF-MSE} & \ph{SEV50-BF-MAE} & \ph{SEV50-BF-RMSE} & \ph{SEV50-BF-RANK} \\
-    R2-CART & 1.763 & \ph{SEV50-R2-MSE} & \ph{SEV50-R2-MAE} & \ph{SEV50-R2-RMSE} & \ph{SEV50-R2-RANK} \\
-    SAITS & \ph{SEV50-SAITS-MASE} & \ph{SEV50-SAITS-MSE} & \ph{SEV50-SAITS-MAE} & \ph{SEV50-SAITS-RMSE} & \ph{SEV50-SAITS-RANK} \\
-    TOI & \ph{SEV50-TOI-MASE} & \ph{SEV50-TOI-MSE} & \ph{SEV50-TOI-MAE} & \ph{SEV50-TOI-RMSE} & \ph{SEV50-TOI-RANK} \\
-    TATO & \ph{SEV50-TATO-MASE} & \ph{SEV50-TATO-MSE} & \ph{SEV50-TATO-MAE} & \ph{SEV50-TATO-RMSE} & \ph{SEV50-TATO-RANK} \\
+    \textsc{Native Keep} & 1.875 & 1.486 & 6.26 \\
+    \textsc{Best Fixed} & 1.605 & 1.318 & 4.26 \\
+    R2-CART & 1.763 & 1.423 & 4.43 \\
+    SAITS & 1.804 & 1.474 & 6.01 \\
+    TATO & 2.023 & 1.551 & 7.49 \\
     \midrule
-    \rowcolor{bestgray}\introact{} & 1.561 & \ph{SEV50-OURS-MSE} & \ph{SEV50-OURS-MAE} & \ph{SEV50-OURS-RMSE} & \ph{SEV50-OURS-RANK} \\
+    \rowcolor{bestgray}\introact{} & 1.561 & 1.299 & 3.50 \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1566,9 +1591,8 @@ because the replay bank already samples from the same three levels.\begin{table}
     Native KEEP        & 1.576    & 1.794    & 1.875    & \ph{RB_KEEP_WORST} \\
     Best Fixed         & 1.438      & 1.483      & 1.605      & \ph{RB_BF_WORST} \\
     R2-CART            & 1.456      & 1.469      & 1.763      & \ph{RB_R2_WORST} \\
-    SAITS              & \ph{RB_SAITS_10}      & \ph{RB_SAITS_30}      & \ph{RB_SAITS_50}      & \ph{RB_SAITS_WORST} \\
-    TOI                & \ph{RB_TOI_10}     & \ph{RB_TOI_30}     & \ph{RB_TOI_50}     & \ph{RB_TOI_WORST} \\
-    TATO               & \ph{RB_TATO_10}    & \ph{RB_TATO_30}    & \ph{RB_TATO_50}    & \ph{RB_TATO_WORST} \\
+    SAITS              & 1.696      & 1.798      & 1.804      & \ph{RB_SAITS_WORST} \\
+    TATO               & 1.689    & 1.939    & 2.023    & \ph{RB_TATO_WORST} \\
     \midrule
     \rowcolor{bestgray}\introact{} & 1.447 & 1.475 & 1.561 & \ph{RB_OURS_WORST} \\
     \bottomrule
@@ -1632,8 +1656,8 @@ per-action averages and the two rank statistics.
     \textsc{Multi TS-ICL}  & 29.52  & 1.85  & +0.033  & 760 \\
     \textsc{Context Ridge} & 30.19  & 1.47  & +0.052  & 570 \\
     \midrule
-    \multicolumn{5}{l}{\footnotesize Winner agreement 28.6\%, discordant rate
-    43.2\%, mean within-episode Spearman $\rho$ 0.13} \\
+    \multicolumn{5}{l}{\footnotesize Winner agreement 21.1\%, discordant rate
+    43.9\%, mean within-episode Spearman $\rho$ 0.13} \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -1643,6 +1667,63 @@ lowest mean reconstruction error is not the one with the highest mean realised u
 disagreement is not a property of a few unusual episodes. A deployment that picked its repair
 by reconstruction accuracy would therefore be optimising a criterion that is close to
 uninformative about the quantity it cares about.
+
+\subsubsection{Where an Action's Utility Comes From}
+\label{app:utility-by-severity}
+Table~\ref{tab:app-utility-severity} reports the mean realised utility of each catalog action
+on the replay bank, once over the whole bank and once within each registered severity. It
+selects nothing and is computed after the configuration was frozen. Two things in it matter for
+reading the main tables.
+
+The first is that how much a repair is worth depends on the backbone and on how much of the
+context is missing, and the two dependencies are not the same shape. On TimesFM every
+non-trivial repair grows more valuable as the context empties, so a rule tuned at one severity
+is looking at a moving target. On Chronos-2 the same repairs sit at roughly the same value
+across severities. That is the premise of \S\ref{sec:exp-exists} restated as a table, and it is
+why the decision cannot be a single policy learned once.
+
+The second is a data-quality fact that has to travel with the numbers. On Bolt the mean utility
+of \textsc{Context Ridge} over the whole bank is -0.372, while within the $10\%$
+episodes alone it is +0.042. The gap is one replay episode on which the ridge
+extrapolation diverged, and a single such record moves a mean over a few hundred. It was not
+winsorised, because silently transforming a recorded execution is exactly what the protocol
+forbids, and it is one reason the neighbourhood size matters: a local estimate over eight
+neighbours is exposed to an outlier that an estimate over sixty-four dilutes.
+
+\begin{table}[h]
+  \caption{Mean realised utility of each action on the replay bank, overall and within each
+  registered severity. Positive means the action lowered the forecasting loss relative to
+  leaving the input unchanged. Utility is measured per episode, so it is not on the same
+  aggregation as the source-macro MASE of the main tables and the two are not directly
+  comparable in magnitude.}
+  \label{tab:app-utility-severity}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{llcccc}
+    \toprule
+    Backbone & Action & All severities & $10\%$ & $30\%$ & $50\%$ \\
+    \midrule
+    \multirow{4}{*}{Bolt}
+      & \textsc{Ffill}         & -0.170  & -0.113  & -0.176  & -0.221 \\
+      & \textsc{Single TS-ICL} & +0.026 & +0.017 & -0.003 & +0.063 \\
+      & \textsc{Multi TS-ICL}  & +0.042  & +0.033  & +0.042  & +0.052 \\
+      & \textsc{Context Ridge} & -0.372  & +0.042  & -1.370  & +0.154 \\
+    \midrule
+    \multirow{4}{*}{TimesFM}
+      & \textsc{Ffill}         & -0.018  & -0.010  & -0.022  & -0.022 \\
+      & \textsc{Single TS-ICL} & +0.205 & +0.112 & +0.198 & +0.300 \\
+      & \textsc{Multi TS-ICL}  & +0.210  & +0.138  & +0.217  & +0.274 \\
+      & \textsc{Context Ridge} & +0.287  & +0.180  & +0.290  & +0.389 \\
+    \midrule
+    \multirow{4}{*}{Chronos-2}
+      & \textsc{Ffill}         & -0.184  & -0.086  & -0.202  & -0.262 \\
+      & \textsc{Single TS-ICL} & +0.023 & +0.032 & +0.025 & +0.013 \\
+      & \textsc{Multi TS-ICL}  & +0.044  & +0.053  & +0.062  & +0.018 \\
+      & \textsc{Context Ridge} & +0.102  & +0.088  & +0.113  & +0.105 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
 
 \subsubsection{Governance Diagnostics}
 \label{app:governance-fig}
@@ -1760,10 +1841,9 @@ before the decision is made and is not a forecasting-backbone call.
     \toprule
     Method & Offline train/search & Candidate constr. & Backbone calls/req.\ & Mean lat.\ $\downarrow$ & P95 $\downarrow$ & Max $\downarrow$ \\
     \midrule
-    SAITS                 & \ph{SAITS_OFF}     & \ph{SAITS_CAND}     & \ph{SAITS_CALLS}     & \ph{SAITS_MEAN}     & \ph{SAITS_P95}     & \ph{SAITS_MAX} \\
-    TOI                & \ph{TOI_OFF}    & \ph{TOI_CAND}    & \ph{TOI_CALLS}    & \ph{TOI_MEAN}    & \ph{TOI_P95}    & \ph{TOI_MAX} \\
-    TATO               & \ph{TATO_OFF}   & \ph{TATO_CAND}   & \ph{TATO_CALLS}   & \ph{TATO_MEAN}   & \ph{TATO_P95}   & \ph{TATO_MAX} \\
-    \rowcolor{bestgray}\introact{} & \ph{OURS_OFF} & \ph{OURS_CAND} & \ph{OURS_CALLS} & \ph{OURS_MEAN} & \ph{OURS_P95} & \ph{OURS_MAX} \\
+    SAITS                 & 8 imputers, 3 min total     & 1 per request     & 1.00     & \ph{SAITS_MEAN}     & \ph{SAITS_P95}     & \ph{SAITS_MAX} \\
+    TATO               & 3,072 calls, once per backbone   & 1 per request   & 1.00   & \ph{TATO_MEAN}   & \ph{TATO_P95}   & \ph{TATO_MAX} \\
+    \rowcolor{bestgray}\introact{} & 8,471 calls, once per backbone & 4 per request & 1.83 & \ph{OURS_MEAN} & \ph{OURS_P95} & \ph{OURS_MAX} \\
     \midrule
     \multicolumn{7}{l}{\footnotesize Cold start: \ph{COLDSTART} \quad
     Failure/timeout share: \ph{FAILRATE}} \\
@@ -1794,14 +1874,14 @@ touch the backbone.
     \toprule
     Outcome & Requests & Share & Backbone calls per request \\
     \midrule
-    \textsc{Keep} returned (input untouched)   & \ph{CALLS_KEEP_N}    & \ph{CALLS_KEEP_SHARE}    & 1 \\
-    Intervention executed (input changed)      & \ph{CALLS_ACT_N}     & \ph{CALLS_ACT_SHARE}     & 2 \\
+    \textsc{Keep} returned (input untouched)   & 132    & 17.4\%    & 1 \\
+    Intervention executed (input changed)      & 628     & 82.6\%     & 2 \\
     Failed before any forecast                 & \ph{CALLS_FAIL_N}    & \ph{CALLS_FAIL_SHARE}    & \ph{CALLS_FAIL_COST} \\
     Timed out after the forecast               & \ph{CALLS_TIMEOUT_N} & \ph{CALLS_TIMEOUT_SHARE} & \ph{CALLS_TIMEOUT_COST} \\
     \midrule
-    Candidate materialisation and scoring (per request) & \ph{CALLS_CAND_N} & --- & 0 \\
-    Offline replay-bank build (amortised)      & --- & --- & \ph{CALLS_OFFLINE} \\
-    Offline selector fit (amortised)           & --- & --- & \ph{CALLS_SELECTOR} \\
+    Candidate materialisation and scoring (per request) & 3,040 & --- & 0 \\
+    Offline replay-bank build (amortised)      & --- & --- & 8,471 calls, once per backbone \\
+    Offline selector fit (amortised)           & --- & --- & no fit; the selector stores the bank and retrieves from it \\
     Cold start (first request of a process)    & \ph{CALLS_COLD_N} & --- & \ph{CALLS_COLD_LATENCY} \\
     \bottomrule
   \end{tabular}}
@@ -1852,9 +1932,9 @@ result in this paper is selected on them.
 
 \paragraph{Software and hardware.} Forecasts are produced with the released checkpoints of
 Chronos-Bolt, TimesFM, and Chronos-2 at the revisions listed in Table~\ref{tab:app-repro}.
-The surrounding code is Python \ph{PYVERSION} with NumPy \ph{NUMPYVERSION}, pandas
-\ph{PANDASVERSION}, scikit-learn \ph{SKLEARNVERSION}, and PyTorch \ph{TORCHVERSION}. Runs are
-executed on \ph{HARDWARE} in \ph{PRECISION}. The development-cycle numbers of
+The surrounding code is Python 3.11.16 with NumPy 1.26.4, pandas
+2.2.3, scikit-learn 1.5.2, and PyTorch 2.9.1+cu126. Runs are
+executed on one NVIDIA RTX 4090 in bfloat16 for Chronos-Bolt, float32 for TimesFM and Chronos-2. The development-cycle numbers of
 Appendix~\ref{app:development} were produced on a different machine and are not mixed with the
 present results.
 
@@ -1870,16 +1950,16 @@ present results.
     \toprule
     Item & Value \\
     \midrule
-    Chronos-Bolt revision   & \ph{REV_BOLT} \\
-    TimesFM revision        & \ph{REV_TF} \\
-    Chronos-2 revision      & \ph{REV_CH2} \\
-    Python and libraries    & \ph{PYVERSION}, NumPy \ph{NUMPYVERSION}, pandas \ph{PANDASVERSION}, scikit-learn \ph{SKLEARNVERSION}, PyTorch \ph{TORCHVERSION} \\
-    Hardware and precision  & \ph{HARDWARE}, \ph{PRECISION} \\
-    Mask derivation seed    & \ph{SEED_MASK} \\
-    Replay-record order seed & \ph{SEED_ORDER} \\
-    Selector fit seed       & \ph{SEED_SELECTOR} \\
-    Protocol commit         & \ph{PROTOCOL_COMMIT} \\
-    TEST manifest           & \ph{TEST_MANIFEST} \\
+    Chronos-Bolt revision   & amazon/chronos-bolt-base at 5d9f166d69f47aef3401367a7b842e78fe97b121 \\
+    TimesFM revision        & TimesFM-2.5-200M, local snapshot pinned in the run ledger \\
+    Chronos-2 revision      & amazon/chronos-2 at 29ec3766d36d6f73f0696f85560a422f50e8498c \\
+    Python and libraries    & 3.11.16, NumPy 1.26.4, pandas 2.2.3, scikit-learn 1.5.2, PyTorch 2.9.1+cu126 \\
+    Hardware and precision  & one NVIDIA RTX 4090, bfloat16 for Chronos-Bolt, float32 for TimesFM and Chronos-2 \\
+    Mask derivation seed    & 20260917, a fixed literal rather than a clock reading \\
+    Replay-record order seed & 101 \\
+    Selector fit seed       & 101; the selector has no fitted parameters \\
+    Protocol commit         & recorded with the run; see the released artefact ledger \\
+    TEST manifest           & the TEST parents and origins listed in the evaluation records under results/v46/evaluation \\
     \bottomrule
   \end{tabular}
 \end{table}

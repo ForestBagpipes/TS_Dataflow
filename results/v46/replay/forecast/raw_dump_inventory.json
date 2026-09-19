@@ -1,0 +1,65 @@
+{
+ "note": "per-call raw dumps removed after the run; predictions.npz and status.json retain every prediction and its hash",
+ "per_run": {
+  "bank/bolt": {
+   "raw_call_dumps": 8471,
+   "bytes": 89888492
+  },
+  "bank/chronos2": {
+   "raw_call_dumps": 8471,
+   "bytes": 148433132
+  },
+  "bank/timesfm": {
+   "raw_call_dumps": 8471,
+   "bytes": 94767212
+  },
+  "test/bolt": {
+   "raw_call_dumps": 3610,
+   "bytes": 38309320
+  },
+  "test/chronos2": {
+   "raw_call_dumps": 3610,
+   "bytes": 63261640
+  },
+  "test/timesfm": {
+   "raw_call_dumps": 3610,
+   "bytes": 40388680
+  },
+  "test30/bolt": {
+   "raw_call_dumps": 3607,
+   "bytes": 38283244
+  },
+  "test30/chronos2": {
+   "raw_call_dumps": 3607,
+   "bytes": 63221740
+  },
+  "test30/timesfm": {
+   "raw_call_dumps": 3607,
+   "bytes": 40361452
+  },
+  "test50/bolt": {
+   "raw_call_dumps": 3604,
+   "bytes": 38245648
+  },
+  "test50/chronos2": {
+   "raw_call_dumps": 3604,
+   "bytes": 63156496
+  },
+  "test50/timesfm": {
+   "raw_call_dumps": 3604,
+   "bytes": 40321552
+  },
+  "train_eval/bolt": {
+   "raw_call_dumps": 2014,
+   "bytes": 21372568
+  },
+  "train_eval/chronos2": {
+   "raw_call_dumps": 2014,
+   "bytes": 35293336
+  },
+  "train_eval/timesfm": {
+   "raw_call_dumps": 2014,
+   "bytes": 22532632
+  }
+ }
+}

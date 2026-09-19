@@ -24,6 +24,7 @@ PROTO = ROOT / "results/v46/protocol"
 BACKBONES = [("bolt", "BOLT"), ("timesfm", "TF"), ("chronos2", "CH2")]
 METHOD_KEY = {
     "NATIVE_KEEP": "KEEP", "BEST_FIXED": "BF", "R2_CART": "R2",
+    "SAITS": "SAITS", "TATO": "TATO",
     "FULL_INTROACT": "OURS", "CATALOG_ORACLE": "ORACLE",
 }
 ABL_KEY = {
@@ -31,7 +32,8 @@ ABL_KEY = {
     "A3_WO_FORECAST": "A3", "A4_ALWAYS_ACT": "A4", "A5_PARAMETRIC_RIDGE": "A5",
 }
 HARM_KEY = {
-    "NATIVE_KEEP": "KEEP", "BEST_FIXED": "BF", "R2_CART": "R2", "FULL_INTROACT": "OURS",
+    "NATIVE_KEEP": "KEEP", "BEST_FIXED": "BF", "R2_CART": "R2",
+    "SAITS": "SAITS", "TATO": "TATO", "FULL_INTROACT": "OURS",
 }
 SOURCE_KEY = {"ETTh1": "ETTH1", "ETTh2": "ETTH2", "ETTm1": "ETTM1", "ETTm2": "ETTM2",
               "Electricity": "ELEC", "Exchange": "EXCH", "Traffic": "TRAF", "Weather": "WEA"}
@@ -234,14 +236,53 @@ def build(evals: dict, selections: dict) -> dict:
         out["DISCORDANT_RATE"] = pct(recon["discordant_rate"])
         out["RECON_RHO"] = num(recon["mean_within_episode_spearman"], 2)
 
+    # The caption promises that the best deployable value in each column is
+    # bold and the second best underlined, so mark them here rather than
+    # leaving the promise unkept.
+    deployable = ("KEEP", "BF", "R2", "SAITS", "TATO", "OURS")
+    for column in [f"_{tag}" for tag in ("BOLT", "TF", "CH2", "OVR", "RMSSE")]:
+        values = {}
+        for key in deployable:
+            text = out.get(f"{key}{column}")
+            if text is None:
+                continue
+            try:
+                values[key] = float(text)
+            except ValueError:
+                continue
+        if len(values) < 2:
+            continue
+        order = sorted(values, key=lambda k: values[k])
+        out[f"{order[0]}{column}"] = chr(92) + "best{" + out[f"{order[0]}{column}"] + "}"
+        out[f"{order[1]}{column}"] = chr(92) + "second{" + out[f"{order[1]}{column}"] + "}"
+    ranks = {}
+    for key in deployable:
+        text = out.get(f"{key}_RANK")
+        if text is None:
+            continue
+        try:
+            ranks[key] = float(text)
+        except ValueError:
+            continue
+    if len(ranks) >= 2:
+        order = sorted(ranks, key=lambda k: ranks[k])
+        out[f"{order[0]}_RANK"] = chr(92) + "best{" + out[f"{order[0]}_RANK"] + "}"
+        out[f"{order[1]}_RANK"] = chr(92) + "second{" + out[f"{order[1]}_RANK"] + "}"
+
     out.update(fill_v46_reading.build(evals, primary, mean_over, ci, selections))
     import fill_v46_extra
     out.update(fill_v46_extra.build(evals, selections, num, pct))
+    import fill_v46_cost
+    out.update(fill_v46_cost.build(num, pct))
+    import fill_v46_strata
+    out.update(fill_v46_strata.build(num, pct))
+    import fill_v46_env
+    out.update(fill_v46_env.build())
     return {k: v for k, v in out.items() if v is not None}
 
 
 def main() -> None:
-    src = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "latex/IntroActTS_20260918_v45_review.tex"
+    src = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "latex/IntroActTS_20260919_v46.tex"
     dst = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "latex/IntroActTS_20260919_v46_filled.tex"
     evals, selections = load()
     table = build(evals, selections)

@@ -1,38 +1,56 @@
 {
  "rank_grid": [
   [
+   125,
+   155,
+   127,
+   100,
+   63
+  ],
+  [
+   93,
+   149,
    175,
-   182,
-   122,
-   91
+   99,
+   54
   ],
   [
-   114,
-   217,
-   171,
-   68
-  ],
-  [
+   83,
    115,
-   115,
-   190,
-   150
+   152,
+   143,
+   77
   ],
   [
-   166,
-   56,
-   87,
-   261
+   123,
+   93,
+   70,
+   158,
+   126
+  ],
+  [
+   146,
+   58,
+   46,
+   70,
+   250
   ]
+ ],
+ "rank_grid_order": [
+  "CONTEXT_RIDGE",
+  "FFILL",
+  "MULTI_TSICL",
+  "SAITS",
+  "SINGLE_TSICL"
  ],
  "stage": "v46-reconstruction-vs-utility",
  "backbone": "timesfm",
  "block": "test",
  "episodes_compared": 760,
- "winner_agreement": 0.30526315789473685,
- "discordant_rate": 0.41904761904761906,
- "pairs": 3990,
- "mean_within_episode_spearman": 0.1656578947368421,
+ "winner_agreement": 0.22631578947368422,
+ "discordant_rate": 0.4305555555555556,
+ "pairs": 6840,
+ "mean_within_episode_spearman": 0.1496052631578947,
  "per_action": {
   "FFILL": {
    "rec_mse": 77.46760716601145,
@@ -57,7 +75,13 @@
    "rec_mae": 1.473013965115742,
    "mean_utility": 0.22794382651990525,
    "n": 570
+  },
+  "SAITS": {
+   "rec_mse": 77.60135874913877,
+   "rec_mae": 3.346958152792731,
+   "mean_utility": 0.15179171245820774,
+   "n": 760
   }
  },
- "runtime_seconds": 7.764955598000597
+ "runtime_seconds": 9.796521508999831
 }

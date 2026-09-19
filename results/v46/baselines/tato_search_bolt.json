@@ -1,0 +1,2466 @@
+{
+ "stage": "v46-tato-search",
+ "backbone": "bolt",
+ "trials": 48,
+ "windows_per_source": 8,
+ "selected": {
+  "ETTh1": {
+   "loss": 3.468740371405147,
+   "params": {
+    "inference_mode": "infer0",
+    "clip_factor": "0.25",
+    "trimmer_seq_l": 11,
+    "inputer_detect_method": "1.5_iqr",
+    "inputer_fill_method": "linear_interpolate",
+    "denoiser_method": "none",
+    "warper_method": "none",
+    "differentiator_n": 0,
+    "normalizer_method": "none",
+    "normalizer_mode": "input",
+    "sampler_factor": 1,
+    "aligner_mode": "none",
+    "aligner_method": "edge_pad"
+   },
+   "trial": 43
+  },
+  "ETTh2": {
+   "loss": 7.292264276556137,
+   "params": {
+    "inference_mode": "infer0",
+    "clip_factor": "0",
+    "trimmer_seq_l": 5,
+    "inputer_detect_method": "3_sigma",
+    "inputer_fill_method": "linear_interpolate",
+    "denoiser_method": "none",
+    "warper_method": "none",
+    "differentiator_n": 0,
+    "normalizer_method": "standard",
+    "normalizer_mode": "input",
+    "sampler_factor": 2,
+    "aligner_mode": "none",
+    "aligner_method": "edge_pad"
+   },
+   "trial": 34
+  },
+  "ETTm1": {
+   "loss": 3.0055912097644373,
+   "params": {
+    "inference_mode": "infer0",
+    "clip_factor": "0.25",
+    "trimmer_seq_l": 11,
+    "inputer_detect_method": "none",
+    "inputer_fill_method": "linear_interpolate",
+    "denoiser_method": "none",
+    "warper_method": "none",
+    "differentiator_n": 0,
+    "normalizer_method": "standard",
+    "normalizer_mode": "input",
+    "sampler_factor": 1,
+    "aligner_mode": "none",
+    "aligner_method": "edge_pad"
+   },
+   "trial": 25
+  },
+  "ETTm2": {
+   "loss": 3.050828695297241,
+   "params": {
+    "inference_mode": "infer0",
+    "clip_factor": "0.25",
+    "trimmer_seq_l": 11,
+    "inputer_detect_method": "none",
+    "inputer_fill_method": "linear_interpolate",
+    "denoiser_method": "none",
+    "warper_method": "none",
+    "differentiator_n": 0,
+    "normalizer_method": "standard",
+    "normalizer_mode": "input",
+    "sampler_factor": 1,
+    "aligner_mode": "none",
+    "aligner_method": "edge_pad"
+   },
+   "trial": 30
+  },
+  "Electricity": {
+   "loss": 7.1491324199984465,
+   "params": {
+    "inference_mode": "infer0",
+    "clip_factor": "0.25",
+    "trimmer_seq_l": 15,
+    "inputer_detect_method": "1.5_iqr",
+    "inputer_fill_method": "linear_interpolate",
+    "denoiser_method": "ewma",
+    "warper_method": "none",
+    "differentiator_n": 0,
+    "normalizer_method": "none",
+    "normalizer_mode": "input",
+    "sampler_factor": 2,
+    "aligner_mode": "data_patch",
+    "aligner_method": "edge_pad"
+   },
+   "trial": 2
+  },
+  "Exchange": {
+   "loss": 0.02703910465429285,
+   "params": {
+    "inference_mode": "infer1",
+    "clip_factor": "none",
+    "trimmer_seq_l": 13,
+    "inputer_detect_method": "1.5_iqr",
+    "inputer_fill_method": "linear_interpolate",
+    "denoiser_method": "none",
+    "warper_method": "log",
+    "differentiator_n": 1,
+    "normalizer_method": "none",
+    "normalizer_mode": "input",
+    "sampler_factor": 2,
+    "aligner_mode": "none",
+    "aligner_method": "edge_pad"
+   },
+   "trial": 29
+  },
+  "Traffic": {
+   "loss": 0.020688131889916257,
+   "params": {
+    "inference_mode": "infer1",
+    "clip_factor": "none",
+    "trimmer_seq_l": 15,
+    "inputer_detect_method": "none",
+    "inputer_fill_method": "linear_interpolate",
+    "denoiser_method": "none",
+    "warper_method": "none",
+    "differentiator_n": 0,
+    "normalizer_method": "none",
+    "normalizer_mode": "input",
+    "sampler_factor": 1,
+    "aligner_mode": "none",
+    "aligner_method": "edge_pad"
+   },
+   "trial": 0
+  },
+  "Weather": {
+   "loss": 2.5851893409093205,
+   "params": {
+    "inference_mode": "infer1",
+    "clip_factor": "none",
+    "trimmer_seq_l": 15,
+    "inputer_detect_method": "none",
+    "inputer_fill_method": "linear_interpolate",
+    "denoiser_method": "none",
+    "warper_method": "none",
+    "differentiator_n": 0,
+    "normalizer_method": "none",
+    "normalizer_mode": "input",
+    "sampler_factor": 1,
+    "aligner_mode": "none",
+    "aligner_method": "edge_pad"
+   },
+   "trial": 0
+  }
+ },
+ "search_log": [
+  {
+   "source": "ETTh1",
+   "trial": 0,
+   "status": "completed",
+   "loss": 3.5147513247017437
+  },
+  {
+   "source": "ETTh1",
+   "trial": 1,
+   "status": "completed",
+   "loss": 5.454013373553699
+  },
+  {
+   "source": "ETTh1",
+   "trial": 2,
+   "status": "completed",
+   "loss": 5.080553029694178
+  },
+  {
+   "source": "ETTh1",
+   "trial": 3,
+   "status": "completed",
+   "loss": 5.086488471211244
+  },
+  {
+   "source": "ETTh1",
+   "trial": 4,
+   "status": "completed",
+   "loss": 5.2011524772648645
+  },
+  {
+   "source": "ETTh1",
+   "trial": 5,
+   "status": "completed",
+   "loss": 4.372468726436859
+  },
+  {
+   "source": "ETTh1",
+   "trial": 6,
+   "status": "completed",
+   "loss": 5.171082971147068
+  },
+  {
+   "source": "ETTh1",
+   "trial": 7,
+   "status": "completed",
+   "loss": 10.571915889732281
+  },
+  {
+   "source": "ETTh1",
+   "trial": 8,
+   "status": "completed",
+   "loss": 5.5439207018357495
+  },
+  {
+   "source": "ETTh1",
+   "trial": 9,
+   "status": "completed",
+   "loss": 5.372117128842316
+  },
+  {
+   "source": "ETTh1",
+   "trial": 10,
+   "status": "completed",
+   "loss": 3.930922830904213
+  },
+  {
+   "source": "ETTh1",
+   "trial": 11,
+   "status": "completed",
+   "loss": 4.272783613142868
+  },
+  {
+   "source": "ETTh1",
+   "trial": 12,
+   "status": "completed",
+   "loss": 3.6641980446487046
+  },
+  {
+   "source": "ETTh1",
+   "trial": 13,
+   "status": "completed",
+   "loss": 4.129004689399153
+  },
+  {
+   "source": "ETTh1",
+   "trial": 14,
+   "status": "completed",
+   "loss": 3.6643709518248215
+  },
+  {
+   "source": "ETTh1",
+   "trial": 15,
+   "status": "completed",
+   "loss": 4.200691301065187
+  },
+  {
+   "source": "ETTh1",
+   "trial": 16,
+   "status": "completed",
+   "loss": 4.050072534911834
+  },
+  {
+   "source": "ETTh1",
+   "trial": 17,
+   "status": "completed",
+   "loss": 10.770243380621555
+  },
+  {
+   "source": "ETTh1",
+   "trial": 18,
+   "status": "completed",
+   "loss": 3.6360669343654686
+  },
+  {
+   "source": "ETTh1",
+   "trial": 19,
+   "status": "completed",
+   "loss": 4.084180021736151
+  },
+  {
+   "source": "ETTh1",
+   "trial": 20,
+   "status": "completed",
+   "loss": 6.330206673684268
+  },
+  {
+   "source": "ETTh1",
+   "trial": 21,
+   "status": "completed",
+   "loss": 4.651987236806722
+  },
+  {
+   "source": "ETTh1",
+   "trial": 22,
+   "status": "completed",
+   "loss": 3.886186092199447
+  },
+  {
+   "source": "ETTh1",
+   "trial": 23,
+   "status": "completed",
+   "loss": 3.647714603963929
+  },
+  {
+   "source": "ETTh1",
+   "trial": 24,
+   "status": "completed",
+   "loss": 4.222713983617723
+  },
+  {
+   "source": "ETTh1",
+   "trial": 25,
+   "status": "completed",
+   "loss": 3.647763572594461
+  },
+  {
+   "source": "ETTh1",
+   "trial": 26,
+   "status": "completed",
+   "loss": 4.218882582771282
+  },
+  {
+   "source": "ETTh1",
+   "trial": 27,
+   "status": "completed",
+   "loss": 4.215303908412655
+  },
+  {
+   "source": "ETTh1",
+   "trial": 28,
+   "status": "completed",
+   "loss": 4.087706702838963
+  },
+  {
+   "source": "ETTh1",
+   "trial": 29,
+   "status": "completed",
+   "loss": 5.395575381921051
+  },
+  {
+   "source": "ETTh1",
+   "trial": 30,
+   "status": "completed",
+   "loss": 4.225812152648966
+  },
+  {
+   "source": "ETTh1",
+   "trial": 31,
+   "status": "completed",
+   "loss": 4.179870978239726
+  },
+  {
+   "source": "ETTh1",
+   "trial": 32,
+   "status": "completed",
+   "loss": 4.433199020552668
+  },
+  {
+   "source": "ETTh1",
+   "trial": 33,
+   "status": "completed",
+   "loss": 6.97268748122886
+  },
+  {
+   "source": "ETTh1",
+   "trial": 34,
+   "status": "completed",
+   "loss": 10.0147253231299
+  },
+  {
+   "source": "ETTh1",
+   "trial": 35,
+   "status": "completed",
+   "loss": 7.521002006488824
+  },
+  {
+   "source": "ETTh1",
+   "trial": 36,
+   "status": "completed",
+   "loss": 14.461810038680985
+  },
+  {
+   "source": "ETTh1",
+   "trial": 37,
+   "status": "completed",
+   "loss": 5.169399268989274
+  },
+  {
+   "source": "ETTh1",
+   "trial": 38,
+   "status": "completed",
+   "loss": 4.254641467666109
+  },
+  {
+   "source": "ETTh1",
+   "trial": 39,
+   "status": "completed",
+   "loss": 4.22242322628353
+  },
+  {
+   "source": "ETTh1",
+   "trial": 40,
+   "status": "completed",
+   "loss": 3.8695400765088075
+  },
+  {
+   "source": "ETTh1",
+   "trial": 41,
+   "status": "completed",
+   "loss": 3.647763572594461
+  },
+  {
+   "source": "ETTh1",
+   "trial": 42,
+   "status": "completed",
+   "loss": 3.4727089412820837
+  },
+  {
+   "source": "ETTh1",
+   "trial": 43,
+   "status": "completed",
+   "loss": 3.468740371405147
+  },
+  {
+   "source": "ETTh1",
+   "trial": 44,
+   "status": "completed",
+   "loss": 3.6423767944797873
+  },
+  {
+   "source": "ETTh1",
+   "trial": 45,
+   "status": "completed",
+   "loss": 3.668962752524142
+  },
+  {
+   "source": "ETTh1",
+   "trial": 46,
+   "status": "completed",
+   "loss": 4.6190070747009795
+  },
+  {
+   "source": "ETTh1",
+   "trial": 47,
+   "status": "completed",
+   "loss": 4.1010102887327475
+  },
+  {
+   "source": "ETTh2",
+   "trial": 0,
+   "status": "completed",
+   "loss": 7.7584227009986835
+  },
+  {
+   "source": "ETTh2",
+   "trial": 1,
+   "status": "completed",
+   "loss": 8.159542569260267
+  },
+  {
+   "source": "ETTh2",
+   "trial": 2,
+   "status": "completed",
+   "loss": 8.0848718356962
+  },
+  {
+   "source": "ETTh2",
+   "trial": 3,
+   "status": "completed",
+   "loss": 8.22526488918811
+  },
+  {
+   "source": "ETTh2",
+   "trial": 4,
+   "status": "completed",
+   "loss": 8.087696091271937
+  },
+  {
+   "source": "ETTh2",
+   "trial": 5,
+   "status": "completed",
+   "loss": 7.455882551903832
+  },
+  {
+   "source": "ETTh2",
+   "trial": 6,
+   "status": "completed",
+   "loss": 8.20145106036216
+  },
+  {
+   "source": "ETTh2",
+   "trial": 7,
+   "status": "completed",
+   "loss": 12.014419603799297
+  },
+  {
+   "source": "ETTh2",
+   "trial": 8,
+   "status": "completed",
+   "loss": 9.944818731244377
+  },
+  {
+   "source": "ETTh2",
+   "trial": 9,
+   "status": "completed",
+   "loss": 8.159939702437468
+  },
+  {
+   "source": "ETTh2",
+   "trial": 10,
+   "status": "completed",
+   "loss": 7.811463081277907
+  },
+  {
+   "source": "ETTh2",
+   "trial": 11,
+   "status": "completed",
+   "loss": 7.890523072021703
+  },
+  {
+   "source": "ETTh2",
+   "trial": 12,
+   "status": "completed",
+   "loss": 7.811463081277907
+  },
+  {
+   "source": "ETTh2",
+   "trial": 13,
+   "status": "completed",
+   "loss": 7.746591556506852
+  },
+  {
+   "source": "ETTh2",
+   "trial": 14,
+   "status": "completed",
+   "loss": 8.005901991919346
+  },
+  {
+   "source": "ETTh2",
+   "trial": 15,
+   "status": "completed",
+   "loss": 8.011088896232346
+  },
+  {
+   "source": "ETTh2",
+   "trial": 16,
+   "status": "completed",
+   "loss": 7.799250335432589
+  },
+  {
+   "source": "ETTh2",
+   "trial": 17,
+   "status": "completed",
+   "loss": 13.613769809837294
+  },
+  {
+   "source": "ETTh2",
+   "trial": 18,
+   "status": "completed",
+   "loss": 8.088848306176562
+  },
+  {
+   "source": "ETTh2",
+   "trial": 19,
+   "status": "completed",
+   "loss": 8.004503576981053
+  },
+  {
+   "source": "ETTh2",
+   "trial": 20,
+   "status": "completed",
+   "loss": 10.481734785971465
+  },
+  {
+   "source": "ETTh2",
+   "trial": 21,
+   "status": "completed",
+   "loss": 7.748898569184045
+  },
+  {
+   "source": "ETTh2",
+   "trial": 22,
+   "status": "completed",
+   "loss": 7.641849371760774
+  },
+  {
+   "source": "ETTh2",
+   "trial": 23,
+   "status": "completed",
+   "loss": 7.4398988025667645
+  },
+  {
+   "source": "ETTh2",
+   "trial": 24,
+   "status": "completed",
+   "loss": 8.205080765920382
+  },
+  {
+   "source": "ETTh2",
+   "trial": 25,
+   "status": "completed",
+   "loss": 10.023122565099168
+  },
+  {
+   "source": "ETTh2",
+   "trial": 26,
+   "status": "completed",
+   "loss": 12.572559964473195
+  },
+  {
+   "source": "ETTh2",
+   "trial": 27,
+   "status": "completed",
+   "loss": 7.660096691636438
+  },
+  {
+   "source": "ETTh2",
+   "trial": 28,
+   "status": "completed",
+   "loss": 8.919735026128441
+  },
+  {
+   "source": "ETTh2",
+   "trial": 29,
+   "status": "completed",
+   "loss": 13.613770882269112
+  },
+  {
+   "source": "ETTh2",
+   "trial": 30,
+   "status": "completed",
+   "loss": 7.8286383435877065
+  },
+  {
+   "source": "ETTh2",
+   "trial": 31,
+   "status": "completed",
+   "loss": 7.839164552934653
+  },
+  {
+   "source": "ETTh2",
+   "trial": 32,
+   "status": "completed",
+   "loss": 8.016549379564822
+  },
+  {
+   "source": "ETTh2",
+   "trial": 33,
+   "status": "completed",
+   "loss": 7.711734703345457
+  },
+  {
+   "source": "ETTh2",
+   "trial": 34,
+   "status": "completed",
+   "loss": 7.292264276556137
+  },
+  {
+   "source": "ETTh2",
+   "trial": 35,
+   "status": "completed",
+   "loss": 7.4412481171279286
+  },
+  {
+   "source": "ETTh2",
+   "trial": 36,
+   "status": "completed",
+   "loss": 8.198818285949528
+  },
+  {
+   "source": "ETTh2",
+   "trial": 37,
+   "status": "completed",
+   "loss": 7.720914365139658
+  },
+  {
+   "source": "ETTh2",
+   "trial": 38,
+   "status": "completed",
+   "loss": 7.611444626136716
+  },
+  {
+   "source": "ETTh2",
+   "trial": 39,
+   "status": "completed",
+   "loss": 7.953030636178431
+  },
+  {
+   "source": "ETTh2",
+   "trial": 40,
+   "status": "completed",
+   "loss": 8.001811645044187
+  },
+  {
+   "source": "ETTh2",
+   "trial": 41,
+   "status": "completed",
+   "loss": 7.395762472142655
+  },
+  {
+   "source": "ETTh2",
+   "trial": 42,
+   "status": "completed",
+   "loss": 7.395762432865186
+  },
+  {
+   "source": "ETTh2",
+   "trial": 43,
+   "status": "completed",
+   "loss": 8.565716607806582
+  },
+  {
+   "source": "ETTh2",
+   "trial": 44,
+   "status": "completed",
+   "loss": 7.98827322151446
+  },
+  {
+   "source": "ETTh2",
+   "trial": 45,
+   "status": "completed",
+   "loss": 8.289305814031724
+  },
+  {
+   "source": "ETTh2",
+   "trial": 46,
+   "status": "completed",
+   "loss": 7.85500338866819
+  },
+  {
+   "source": "ETTh2",
+   "trial": 47,
+   "status": "completed",
+   "loss": 8.22526488918811
+  },
+  {
+   "source": "ETTm1",
+   "trial": 0,
+   "status": "completed",
+   "loss": 3.0469547125394456
+  },
+  {
+   "source": "ETTm1",
+   "trial": 1,
+   "status": "completed",
+   "loss": 3.8681529203079634
+  },
+  {
+   "source": "ETTm1",
+   "trial": 2,
+   "status": "completed",
+   "loss": 3.8979297227730663
+  },
+  {
+   "source": "ETTm1",
+   "trial": 3,
+   "status": "completed",
+   "loss": 3.917568629937402
+  },
+  {
+   "source": "ETTm1",
+   "trial": 4,
+   "status": "completed",
+   "loss": 3.7808279223390855
+  },
+  {
+   "source": "ETTm1",
+   "trial": 5,
+   "status": "completed",
+   "loss": 4.0250459852006095
+  },
+  {
+   "source": "ETTm1",
+   "trial": 6,
+   "status": "completed",
+   "loss": 4.89385102908515
+  },
+  {
+   "source": "ETTm1",
+   "trial": 7,
+   "status": "completed",
+   "loss": 7.6858820829677175
+  },
+  {
+   "source": "ETTm1",
+   "trial": 8,
+   "status": "completed",
+   "loss": 4.91776254970949
+  },
+  {
+   "source": "ETTm1",
+   "trial": 9,
+   "status": "completed",
+   "loss": 4.626210946053031
+  },
+  {
+   "source": "ETTm1",
+   "trial": 10,
+   "status": "completed",
+   "loss": 3.0615047399769537
+  },
+  {
+   "source": "ETTm1",
+   "trial": 11,
+   "status": "completed",
+   "loss": 3.041842478346856
+  },
+  {
+   "source": "ETTm1",
+   "trial": 12,
+   "status": "completed",
+   "loss": 4.1571633248797335
+  },
+  {
+   "source": "ETTm1",
+   "trial": 13,
+   "status": "completed",
+   "loss": 3.5297909927903675
+  },
+  {
+   "source": "ETTm1",
+   "trial": 14,
+   "status": "completed",
+   "loss": 3.065012570179533
+  },
+  {
+   "source": "ETTm1",
+   "trial": 15,
+   "status": "completed",
+   "loss": 5.003074610133102
+  },
+  {
+   "source": "ETTm1",
+   "trial": 16,
+   "status": "completed",
+   "loss": 3.0603875288312943
+  },
+  {
+   "source": "ETTm1",
+   "trial": 17,
+   "status": "completed",
+   "loss": 3.042071152497859
+  },
+  {
+   "source": "ETTm1",
+   "trial": 18,
+   "status": "completed",
+   "loss": 7.279640108730632
+  },
+  {
+   "source": "ETTm1",
+   "trial": 19,
+   "status": "completed",
+   "loss": 3.040783846459817
+  },
+  {
+   "source": "ETTm1",
+   "trial": 20,
+   "status": "completed",
+   "loss": 3.0613960236660205
+  },
+  {
+   "source": "ETTm1",
+   "trial": 21,
+   "status": "completed",
+   "loss": 9.41637106846597
+  },
+  {
+   "source": "ETTm1",
+   "trial": 22,
+   "status": "completed",
+   "loss": 11.945113105858528
+  },
+  {
+   "source": "ETTm1",
+   "trial": 23,
+   "status": "completed",
+   "loss": 3.585499695168683
+  },
+  {
+   "source": "ETTm1",
+   "trial": 24,
+   "status": "completed",
+   "loss": 3.078033410561757
+  },
+  {
+   "source": "ETTm1",
+   "trial": 25,
+   "status": "completed",
+   "loss": 3.0055912097644373
+  },
+  {
+   "source": "ETTm1",
+   "trial": 26,
+   "status": "completed",
+   "loss": 3.621810144887737
+  },
+  {
+   "source": "ETTm1",
+   "trial": 27,
+   "status": "completed",
+   "loss": 4.167286231042853
+  },
+  {
+   "source": "ETTm1",
+   "trial": 28,
+   "status": "completed",
+   "loss": 4.892939878647061
+  },
+  {
+   "source": "ETTm1",
+   "trial": 29,
+   "status": "completed",
+   "loss": 3.9551194683322866
+  },
+  {
+   "source": "ETTm1",
+   "trial": 30,
+   "status": "completed",
+   "loss": 3.639965322028041
+  },
+  {
+   "source": "ETTm1",
+   "trial": 31,
+   "status": "completed",
+   "loss": 4.5010504334682775
+  },
+  {
+   "source": "ETTm1",
+   "trial": 32,
+   "status": "completed",
+   "loss": 3.515172056730187
+  },
+  {
+   "source": "ETTm1",
+   "trial": 33,
+   "status": "completed",
+   "loss": 3.5882937397497394
+  },
+  {
+   "source": "ETTm1",
+   "trial": 34,
+   "status": "completed",
+   "loss": 3.5184695735781317
+  },
+  {
+   "source": "ETTm1",
+   "trial": 35,
+   "status": "completed",
+   "loss": 3.041842478346856
+  },
+  {
+   "source": "ETTm1",
+   "trial": 36,
+   "status": "completed",
+   "loss": 3.8519508913353397
+  },
+  {
+   "source": "ETTm1",
+   "trial": 37,
+   "status": "completed",
+   "loss": 3.9555029645041415
+  },
+  {
+   "source": "ETTm1",
+   "trial": 38,
+   "status": "completed",
+   "loss": 3.917568629937402
+  },
+  {
+   "source": "ETTm1",
+   "trial": 39,
+   "status": "completed",
+   "loss": 3.9745559193976296
+  },
+  {
+   "source": "ETTm1",
+   "trial": 40,
+   "status": "completed",
+   "loss": 4.50197453675373
+  },
+  {
+   "source": "ETTm1",
+   "trial": 41,
+   "status": "completed",
+   "loss": 5.387713551345627
+  },
+  {
+   "source": "ETTm1",
+   "trial": 42,
+   "status": "completed",
+   "loss": 4.658701621014002
+  },
+  {
+   "source": "ETTm1",
+   "trial": 43,
+   "status": "completed",
+   "loss": 5.765690438547766
+  },
+  {
+   "source": "ETTm1",
+   "trial": 44,
+   "status": "completed",
+   "loss": 3.488073134034276
+  },
+  {
+   "source": "ETTm1",
+   "trial": 45,
+   "status": "completed",
+   "loss": 4.375152059821687
+  },
+  {
+   "source": "ETTm1",
+   "trial": 46,
+   "status": "completed",
+   "loss": 3.5035351675378545
+  },
+  {
+   "source": "ETTm1",
+   "trial": 47,
+   "status": "completed",
+   "loss": 4.558286192252337
+  },
+  {
+   "source": "ETTm2",
+   "trial": 0,
+   "status": "completed",
+   "loss": 3.0985826030373573
+  },
+  {
+   "source": "ETTm2",
+   "trial": 1,
+   "status": "completed",
+   "loss": 3.41963358691992
+  },
+  {
+   "source": "ETTm2",
+   "trial": 2,
+   "status": "completed",
+   "loss": 3.461602196097374
+  },
+  {
+   "source": "ETTm2",
+   "trial": 3,
+   "status": "completed",
+   "loss": 3.6297206841409206
+  },
+  {
+   "source": "ETTm2",
+   "trial": 4,
+   "status": "completed",
+   "loss": 3.617336016148329
+  },
+  {
+   "source": "ETTm2",
+   "trial": 5,
+   "status": "completed",
+   "loss": 3.802547183330448
+  },
+  {
+   "source": "ETTm2",
+   "trial": 6,
+   "status": "completed",
+   "loss": 4.613225108633439
+  },
+  {
+   "source": "ETTm2",
+   "trial": 7,
+   "status": "completed",
+   "loss": 10.068757417740473
+  },
+  {
+   "source": "ETTm2",
+   "trial": 8,
+   "status": "completed",
+   "loss": 5.647516264444176
+  },
+  {
+   "source": "ETTm2",
+   "trial": 9,
+   "status": "completed",
+   "loss": 3.6262873290580346
+  },
+  {
+   "source": "ETTm2",
+   "trial": 10,
+   "status": "completed",
+   "loss": 3.2580544774730997
+  },
+  {
+   "source": "ETTm2",
+   "trial": 11,
+   "status": "completed",
+   "loss": 3.2204363842805224
+  },
+  {
+   "source": "ETTm2",
+   "trial": 12,
+   "status": "completed",
+   "loss": 3.4046471054329497
+  },
+  {
+   "source": "ETTm2",
+   "trial": 13,
+   "status": "completed",
+   "loss": 3.454261751224597
+  },
+  {
+   "source": "ETTm2",
+   "trial": 14,
+   "status": "completed",
+   "loss": 3.1923265581329665
+  },
+  {
+   "source": "ETTm2",
+   "trial": 15,
+   "status": "completed",
+   "loss": 3.1803525773187475
+  },
+  {
+   "source": "ETTm2",
+   "trial": 16,
+   "status": "completed",
+   "loss": 3.180598543335994
+  },
+  {
+   "source": "ETTm2",
+   "trial": 17,
+   "status": "completed",
+   "loss": 7.828844990878468
+  },
+  {
+   "source": "ETTm2",
+   "trial": 18,
+   "status": "completed",
+   "loss": 3.2204363842805224
+  },
+  {
+   "source": "ETTm2",
+   "trial": 19,
+   "status": "completed",
+   "loss": 3.185359218468269
+  },
+  {
+   "source": "ETTm2",
+   "trial": 20,
+   "status": "completed",
+   "loss": 7.135233221712302
+  },
+  {
+   "source": "ETTm2",
+   "trial": 21,
+   "status": "completed",
+   "loss": 7.527577046470071
+  },
+  {
+   "source": "ETTm2",
+   "trial": 22,
+   "status": "completed",
+   "loss": 3.1918498687446117
+  },
+  {
+   "source": "ETTm2",
+   "trial": 23,
+   "status": "completed",
+   "loss": 11.394363666996734
+  },
+  {
+   "source": "ETTm2",
+   "trial": 24,
+   "status": "completed",
+   "loss": 4.194573802579596
+  },
+  {
+   "source": "ETTm2",
+   "trial": 25,
+   "status": "completed",
+   "loss": 11.663894067674606
+  },
+  {
+   "source": "ETTm2",
+   "trial": 26,
+   "status": "completed",
+   "loss": 3.180598543335994
+  },
+  {
+   "source": "ETTm2",
+   "trial": 27,
+   "status": "completed",
+   "loss": 3.2579489536583424
+  },
+  {
+   "source": "ETTm2",
+   "trial": 28,
+   "status": "completed",
+   "loss": 4.1494418939814395
+  },
+  {
+   "source": "ETTm2",
+   "trial": 29,
+   "status": "completed",
+   "loss": 3.9242378353540923
+  },
+  {
+   "source": "ETTm2",
+   "trial": 30,
+   "status": "completed",
+   "loss": 3.050828695297241
+  },
+  {
+   "source": "ETTm2",
+   "trial": 31,
+   "status": "completed",
+   "loss": 3.2897398322820663
+  },
+  {
+   "source": "ETTm2",
+   "trial": 32,
+   "status": "completed",
+   "loss": 3.0985826030373573
+  },
+  {
+   "source": "ETTm2",
+   "trial": 33,
+   "status": "completed",
+   "loss": 3.2896676883101463
+  },
+  {
+   "source": "ETTm2",
+   "trial": 34,
+   "status": "completed",
+   "loss": 3.266822480907043
+  },
+  {
+   "source": "ETTm2",
+   "trial": 35,
+   "status": "completed",
+   "loss": 3.0949601531028748
+  },
+  {
+   "source": "ETTm2",
+   "trial": 36,
+   "status": "completed",
+   "loss": 3.278029507646958
+  },
+  {
+   "source": "ETTm2",
+   "trial": 37,
+   "status": "completed",
+   "loss": 3.0624821757276854
+  },
+  {
+   "source": "ETTm2",
+   "trial": 38,
+   "status": "completed",
+   "loss": 3.369122638056676
+  },
+  {
+   "source": "ETTm2",
+   "trial": 39,
+   "status": "completed",
+   "loss": 3.277704529464245
+  },
+  {
+   "source": "ETTm2",
+   "trial": 40,
+   "status": "completed",
+   "loss": 3.5316089127338826
+  },
+  {
+   "source": "ETTm2",
+   "trial": 41,
+   "status": "completed",
+   "loss": 3.2287809314827127
+  },
+  {
+   "source": "ETTm2",
+   "trial": 42,
+   "status": "completed",
+   "loss": 3.415530754975536
+  },
+  {
+   "source": "ETTm2",
+   "trial": 43,
+   "status": "completed",
+   "loss": 4.61902933443586
+  },
+  {
+   "source": "ETTm2",
+   "trial": 44,
+   "status": "completed",
+   "loss": 3.370758290476245
+  },
+  {
+   "source": "ETTm2",
+   "trial": 45,
+   "status": "completed",
+   "loss": 3.721931857142646
+  },
+  {
+   "source": "ETTm2",
+   "trial": 46,
+   "status": "completed",
+   "loss": 4.410708417479709
+  },
+  {
+   "source": "ETTm2",
+   "trial": 47,
+   "status": "completed",
+   "loss": 3.7074945271015167
+  },
+  {
+   "source": "Electricity",
+   "trial": 0,
+   "status": "completed",
+   "loss": 7.468145902734249
+  },
+  {
+   "source": "Electricity",
+   "trial": 1,
+   "status": "completed",
+   "loss": 9.489434789970609
+  },
+  {
+   "source": "Electricity",
+   "trial": 2,
+   "status": "completed",
+   "loss": 7.1491324199984465
+  },
+  {
+   "source": "Electricity",
+   "trial": 3,
+   "status": "completed",
+   "loss": 8.634676463901997
+  },
+  {
+   "source": "Electricity",
+   "trial": 4,
+   "status": "completed",
+   "loss": 8.014125250590343
+  },
+  {
+   "source": "Electricity",
+   "trial": 5,
+   "status": "completed",
+   "loss": 7.711842790096751
+  },
+  {
+   "source": "Electricity",
+   "trial": 6,
+   "status": "completed",
+   "loss": 8.508122854555646
+  },
+  {
+   "source": "Electricity",
+   "trial": 7,
+   "status": "completed",
+   "loss": 24.573960761353874
+  },
+  {
+   "source": "Electricity",
+   "trial": 8,
+   "status": "completed",
+   "loss": 13.614937745343235
+  },
+  {
+   "source": "Electricity",
+   "trial": 9,
+   "status": "completed",
+   "loss": 8.698919420414338
+  },
+  {
+   "source": "Electricity",
+   "trial": 10,
+   "status": "completed",
+   "loss": 8.090180075106522
+  },
+  {
+   "source": "Electricity",
+   "trial": 11,
+   "status": "completed",
+   "loss": 7.4860116584847365
+  },
+  {
+   "source": "Electricity",
+   "trial": 12,
+   "status": "completed",
+   "loss": 7.652785022898268
+  },
+  {
+   "source": "Electricity",
+   "trial": 13,
+   "status": "completed",
+   "loss": 7.426630226119111
+  },
+  {
+   "source": "Electricity",
+   "trial": 14,
+   "status": "completed",
+   "loss": 8.94395199387024
+  },
+  {
+   "source": "Electricity",
+   "trial": 15,
+   "status": "completed",
+   "loss": 7.562937134721627
+  },
+  {
+   "source": "Electricity",
+   "trial": 16,
+   "status": "completed",
+   "loss": 7.759617163799703
+  },
+  {
+   "source": "Electricity",
+   "trial": 17,
+   "status": "completed",
+   "loss": 14.23395588988468
+  },
+  {
+   "source": "Electricity",
+   "trial": 18,
+   "status": "completed",
+   "loss": 7.587274280997615
+  },
+  {
+   "source": "Electricity",
+   "trial": 19,
+   "status": "completed",
+   "loss": 7.269113154242506
+  },
+  {
+   "source": "Electricity",
+   "trial": 20,
+   "status": "completed",
+   "loss": 8.714836663224844
+  },
+  {
+   "source": "Electricity",
+   "trial": 21,
+   "status": "completed",
+   "loss": 7.29060094864068
+  },
+  {
+   "source": "Electricity",
+   "trial": 22,
+   "status": "completed",
+   "loss": 8.393822685537174
+  },
+  {
+   "source": "Electricity",
+   "trial": 23,
+   "status": "completed",
+   "loss": 9.544510647344092
+  },
+  {
+   "source": "Electricity",
+   "trial": 24,
+   "status": "completed",
+   "loss": 18.393302205118534
+  },
+  {
+   "source": "Electricity",
+   "trial": 25,
+   "status": "completed",
+   "loss": 30.009736730320355
+  },
+  {
+   "source": "Electricity",
+   "trial": 26,
+   "status": "completed",
+   "loss": 7.209899858970641
+  },
+  {
+   "source": "Electricity",
+   "trial": 27,
+   "status": "completed",
+   "loss": 9.620084889909462
+  },
+  {
+   "source": "Electricity",
+   "trial": 28,
+   "status": "completed",
+   "loss": 7.288011491844705
+  },
+  {
+   "source": "Electricity",
+   "trial": 29,
+   "status": "completed",
+   "loss": 15.955172259136079
+  },
+  {
+   "source": "Electricity",
+   "trial": 30,
+   "status": "completed",
+   "loss": 7.888894833477407
+  },
+  {
+   "source": "Electricity",
+   "trial": 31,
+   "status": "completed",
+   "loss": 7.794673656867572
+  },
+  {
+   "source": "Electricity",
+   "trial": 32,
+   "status": "completed",
+   "loss": 7.623426208738238
+  },
+  {
+   "source": "Electricity",
+   "trial": 33,
+   "status": "completed",
+   "loss": 7.603537618778843
+  },
+  {
+   "source": "Electricity",
+   "trial": 34,
+   "status": "completed",
+   "loss": 7.9013054549453035
+  },
+  {
+   "source": "Electricity",
+   "trial": 35,
+   "status": "completed",
+   "loss": 8.560821052640676
+  },
+  {
+   "source": "Electricity",
+   "trial": 36,
+   "status": "completed",
+   "loss": 7.739778591183765
+  },
+  {
+   "source": "Electricity",
+   "trial": 37,
+   "status": "completed",
+   "loss": 9.037390726487507
+  },
+  {
+   "source": "Electricity",
+   "trial": 38,
+   "status": "completed",
+   "loss": 7.906477302685197
+  },
+  {
+   "source": "Electricity",
+   "trial": 39,
+   "status": "completed",
+   "loss": 9.022845557548823
+  },
+  {
+   "source": "Electricity",
+   "trial": 40,
+   "status": "completed",
+   "loss": 7.70505231245769
+  },
+  {
+   "source": "Electricity",
+   "trial": 41,
+   "status": "completed",
+   "loss": 8.193218866984049
+  },
+  {
+   "source": "Electricity",
+   "trial": 42,
+   "status": "completed",
+   "loss": 7.734172329890213
+  },
+  {
+   "source": "Electricity",
+   "trial": 43,
+   "status": "completed",
+   "loss": 7.744574771728367
+  },
+  {
+   "source": "Electricity",
+   "trial": 44,
+   "status": "completed",
+   "loss": 8.458646972717052
+  },
+  {
+   "source": "Electricity",
+   "trial": 45,
+   "status": "completed",
+   "loss": 8.634676463901997
+  },
+  {
+   "source": "Electricity",
+   "trial": 46,
+   "status": "completed",
+   "loss": 9.14708053514344
+  },
+  {
+   "source": "Electricity",
+   "trial": 47,
+   "status": "completed",
+   "loss": 9.15029361413897
+  },
+  {
+   "source": "Exchange",
+   "trial": 0,
+   "status": "completed",
+   "loss": 0.03853530242083966
+  },
+  {
+   "source": "Exchange",
+   "trial": 1,
+   "status": "completed",
+   "loss": 0.04631000701539878
+  },
+  {
+   "source": "Exchange",
+   "trial": 2,
+   "status": "completed",
+   "loss": 0.030934255401685835
+  },
+  {
+   "source": "Exchange",
+   "trial": 3,
+   "status": "completed",
+   "loss": 0.051818401074012116
+  },
+  {
+   "source": "Exchange",
+   "trial": 4,
+   "status": "completed",
+   "loss": 0.04729437818918378
+  },
+  {
+   "source": "Exchange",
+   "trial": 5,
+   "status": "completed",
+   "loss": 0.03997242898736576
+  },
+  {
+   "source": "Exchange",
+   "trial": 6,
+   "status": "completed",
+   "loss": 0.03836945058216651
+  },
+  {
+   "source": "Exchange",
+   "trial": 7,
+   "status": "completed",
+   "loss": 0.030643452221136694
+  },
+  {
+   "source": "Exchange",
+   "trial": 8,
+   "status": "completed",
+   "loss": 0.03608650467698307
+  },
+  {
+   "source": "Exchange",
+   "trial": 9,
+   "status": "completed",
+   "loss": 0.040020305154496116
+  },
+  {
+   "source": "Exchange",
+   "trial": 10,
+   "status": "completed",
+   "loss": 0.037255072303975845
+  },
+  {
+   "source": "Exchange",
+   "trial": 11,
+   "status": "completed",
+   "loss": 0.03232236234618818
+  },
+  {
+   "source": "Exchange",
+   "trial": 12,
+   "status": "completed",
+   "loss": 0.04654139510549808
+  },
+  {
+   "source": "Exchange",
+   "trial": 13,
+   "status": "completed",
+   "loss": 0.041875671852427215
+  },
+  {
+   "source": "Exchange",
+   "trial": 14,
+   "status": "completed",
+   "loss": 0.04508698286413512
+  },
+  {
+   "source": "Exchange",
+   "trial": 15,
+   "status": "completed",
+   "loss": 0.03267774097735494
+  },
+  {
+   "source": "Exchange",
+   "trial": 16,
+   "status": "completed",
+   "loss": 0.04443644665688276
+  },
+  {
+   "source": "Exchange",
+   "trial": 17,
+   "status": "completed",
+   "loss": 0.031509096815383136
+  },
+  {
+   "source": "Exchange",
+   "trial": 18,
+   "status": "completed",
+   "loss": 0.04084402156762778
+  },
+  {
+   "source": "Exchange",
+   "trial": 19,
+   "status": "completed",
+   "loss": 0.04950345625965949
+  },
+  {
+   "source": "Exchange",
+   "trial": 20,
+   "status": "completed",
+   "loss": 0.049839487874234714
+  },
+  {
+   "source": "Exchange",
+   "trial": 21,
+   "status": "completed",
+   "loss": 0.0315072641666994
+  },
+  {
+   "source": "Exchange",
+   "trial": 22,
+   "status": "completed",
+   "loss": 0.030914022047492176
+  },
+  {
+   "source": "Exchange",
+   "trial": 23,
+   "status": "completed",
+   "loss": 0.04117112433185482
+  },
+  {
+   "source": "Exchange",
+   "trial": 24,
+   "status": "completed",
+   "loss": 0.04932843080692738
+  },
+  {
+   "source": "Exchange",
+   "trial": 25,
+   "status": "completed",
+   "loss": 0.033630730197839104
+  },
+  {
+   "source": "Exchange",
+   "trial": 26,
+   "status": "completed",
+   "loss": 0.030914022047492176
+  },
+  {
+   "source": "Exchange",
+   "trial": 27,
+   "status": "completed",
+   "loss": 0.03065562761476612
+  },
+  {
+   "source": "Exchange",
+   "trial": 28,
+   "status": "completed",
+   "loss": 0.030791812108003976
+  },
+  {
+   "source": "Exchange",
+   "trial": 29,
+   "status": "completed",
+   "loss": 0.02703910465429285
+  },
+  {
+   "source": "Exchange",
+   "trial": 30,
+   "status": "completed",
+   "loss": 0.027941490084675814
+  },
+  {
+   "source": "Exchange",
+   "trial": 31,
+   "status": "completed",
+   "loss": 0.02913890160661761
+  },
+  {
+   "source": "Exchange",
+   "trial": 32,
+   "status": "completed",
+   "loss": 0.02925315296418316
+  },
+  {
+   "source": "Exchange",
+   "trial": 33,
+   "status": "completed",
+   "loss": 0.031243721371330628
+  },
+  {
+   "source": "Exchange",
+   "trial": 34,
+   "status": "completed",
+   "loss": 0.0338052368013401
+  },
+  {
+   "source": "Exchange",
+   "trial": 35,
+   "status": "completed",
+   "loss": 0.050359970377384725
+  },
+  {
+   "source": "Exchange",
+   "trial": 36,
+   "status": "completed",
+   "loss": 0.029827507388692567
+  },
+  {
+   "source": "Exchange",
+   "trial": 37,
+   "status": "completed",
+   "loss": 0.04318761459835892
+  },
+  {
+   "source": "Exchange",
+   "trial": 38,
+   "status": "completed",
+   "loss": 0.03762998924187739
+  },
+  {
+   "source": "Exchange",
+   "trial": 39,
+   "status": "completed",
+   "loss": 0.029253155613262943
+  },
+  {
+   "source": "Exchange",
+   "trial": 40,
+   "status": "completed",
+   "loss": 0.030464747475436885
+  },
+  {
+   "source": "Exchange",
+   "trial": 41,
+   "status": "completed",
+   "loss": 0.04039591641753663
+  },
+  {
+   "source": "Exchange",
+   "trial": 42,
+   "status": "completed",
+   "loss": 0.03848548174913398
+  },
+  {
+   "source": "Exchange",
+   "trial": 43,
+   "status": "completed",
+   "loss": 0.04014414419186173
+  },
+  {
+   "source": "Exchange",
+   "trial": 44,
+   "status": "completed",
+   "loss": 0.03844466954839726
+  },
+  {
+   "source": "Exchange",
+   "trial": 45,
+   "status": "completed",
+   "loss": 0.04713849042142853
+  },
+  {
+   "source": "Exchange",
+   "trial": 46,
+   "status": "completed",
+   "loss": 0.03647118579721087
+  },
+  {
+   "source": "Exchange",
+   "trial": 47,
+   "status": "completed",
+   "loss": 0.04878927806945114
+  },
+  {
+   "source": "Traffic",
+   "trial": 0,
+   "status": "completed",
+   "loss": 0.020688131889916257
+  },
+  {
+   "source": "Traffic",
+   "trial": 1,
+   "status": "completed",
+   "loss": 0.03606072748951858
+  },
+  {
+   "source": "Traffic",
+   "trial": 2,
+   "status": "completed",
+   "loss": 0.03520688211753295
+  },
+  {
+   "source": "Traffic",
+   "trial": 3,
+   "status": "completed",
+   "loss": 0.03556786868056321
+  },
+  {
+   "source": "Traffic",
+   "trial": 4,
+   "status": "completed",
+   "loss": 0.03854175820071344
+  },
+  {
+   "source": "Traffic",
+   "trial": 5,
+   "status": "completed",
+   "loss": 0.0259302950944278
+  },
+  {
+   "source": "Traffic",
+   "trial": 6,
+   "status": "completed",
+   "loss": 0.033967426949403794
+  },
+  {
+   "source": "Traffic",
+   "trial": 7,
+   "status": "completed",
+   "loss": 0.11410290361358587
+  },
+  {
+   "source": "Traffic",
+   "trial": 8,
+   "status": "completed",
+   "loss": 0.10115867044948618
+  },
+  {
+   "source": "Traffic",
+   "trial": 9,
+   "status": "completed",
+   "loss": 0.03886474258317267
+  },
+  {
+   "source": "Traffic",
+   "trial": 10,
+   "status": "completed",
+   "loss": 0.021248303799393284
+  },
+  {
+   "source": "Traffic",
+   "trial": 11,
+   "status": "completed",
+   "loss": 0.02093605559033653
+  },
+  {
+   "source": "Traffic",
+   "trial": 12,
+   "status": "completed",
+   "loss": 0.028323291264407136
+  },
+  {
+   "source": "Traffic",
+   "trial": 13,
+   "status": "completed",
+   "loss": 0.032649987018197615
+  },
+  {
+   "source": "Traffic",
+   "trial": 14,
+   "status": "completed",
+   "loss": 0.021385527979955087
+  },
+  {
+   "source": "Traffic",
+   "trial": 15,
+   "status": "completed",
+   "loss": 0.10459593278038837
+  },
+  {
+   "source": "Traffic",
+   "trial": 16,
+   "status": "completed",
+   "loss": 0.021247455403332914
+  },
+  {
+   "source": "Traffic",
+   "trial": 17,
+   "status": "completed",
+   "loss": 0.020935952368751173
+  },
+  {
+   "source": "Traffic",
+   "trial": 18,
+   "status": "completed",
+   "loss": 0.09676588518059281
+  },
+  {
+   "source": "Traffic",
+   "trial": 19,
+   "status": "completed",
+   "loss": 0.021682106510166894
+  },
+  {
+   "source": "Traffic",
+   "trial": 20,
+   "status": "completed",
+   "loss": 0.02138535758672904
+  },
+  {
+   "source": "Traffic",
+   "trial": 21,
+   "status": "completed",
+   "loss": 0.0510493627680671
+  },
+  {
+   "source": "Traffic",
+   "trial": 22,
+   "status": "completed",
+   "loss": 0.13386352471452212
+  },
+  {
+   "source": "Traffic",
+   "trial": 23,
+   "status": "completed",
+   "loss": 0.03466914848311566
+  },
+  {
+   "source": "Traffic",
+   "trial": 24,
+   "status": "completed",
+   "loss": 0.02552766121857071
+  },
+  {
+   "source": "Traffic",
+   "trial": 25,
+   "status": "completed",
+   "loss": 0.021613571090201976
+  },
+  {
+   "source": "Traffic",
+   "trial": 26,
+   "status": "completed",
+   "loss": 0.025428780726447754
+  },
+  {
+   "source": "Traffic",
+   "trial": 27,
+   "status": "completed",
+   "loss": 0.025965150256593336
+  },
+  {
+   "source": "Traffic",
+   "trial": 28,
+   "status": "completed",
+   "loss": 0.033905174982448806
+  },
+  {
+   "source": "Traffic",
+   "trial": 29,
+   "status": "completed",
+   "loss": 0.03992275319134249
+  },
+  {
+   "source": "Traffic",
+   "trial": 30,
+   "status": "completed",
+   "loss": 0.024750956738181076
+  },
+  {
+   "source": "Traffic",
+   "trial": 31,
+   "status": "completed",
+   "loss": 0.020935952368751173
+  },
+  {
+   "source": "Traffic",
+   "trial": 32,
+   "status": "completed",
+   "loss": 0.04137292468107593
+  },
+  {
+   "source": "Traffic",
+   "trial": 33,
+   "status": "completed",
+   "loss": 0.03217221611657767
+  },
+  {
+   "source": "Traffic",
+   "trial": 34,
+   "status": "completed",
+   "loss": 0.039432471679863135
+  },
+  {
+   "source": "Traffic",
+   "trial": 35,
+   "status": "completed",
+   "loss": 0.03397117005226588
+  },
+  {
+   "source": "Traffic",
+   "trial": 36,
+   "status": "completed",
+   "loss": 0.020890518754130106
+  },
+  {
+   "source": "Traffic",
+   "trial": 37,
+   "status": "completed",
+   "loss": 0.0398848753855017
+  },
+  {
+   "source": "Traffic",
+   "trial": 38,
+   "status": "completed",
+   "loss": 0.03556786868056321
+  },
+  {
+   "source": "Traffic",
+   "trial": 39,
+   "status": "completed",
+   "loss": 0.03981137231242209
+  },
+  {
+   "source": "Traffic",
+   "trial": 40,
+   "status": "completed",
+   "loss": 0.041491993674509293
+  },
+  {
+   "source": "Traffic",
+   "trial": 41,
+   "status": "completed",
+   "loss": 0.08761565939524293
+  },
+  {
+   "source": "Traffic",
+   "trial": 42,
+   "status": "completed",
+   "loss": 0.033264207111559155
+  },
+  {
+   "source": "Traffic",
+   "trial": 43,
+   "status": "completed",
+   "loss": 0.08173154371456984
+  },
+  {
+   "source": "Traffic",
+   "trial": 44,
+   "status": "completed",
+   "loss": 0.034103318186492974
+  },
+  {
+   "source": "Traffic",
+   "trial": 45,
+   "status": "completed",
+   "loss": 0.12528118224171034
+  },
+  {
+   "source": "Traffic",
+   "trial": 46,
+   "status": "completed",
+   "loss": 0.040485381700908624
+  },
+  {
+   "source": "Traffic",
+   "trial": 47,
+   "status": "completed",
+   "loss": 0.032322807776428764
+  },
+  {
+   "source": "Weather",
+   "trial": 0,
+   "status": "completed",
+   "loss": 2.5851893409093205
+  },
+  {
+   "source": "Weather",
+   "trial": 1,
+   "status": "completed",
+   "loss": 3.784337354818674
+  },
+  {
+   "source": "Weather",
+   "trial": 2,
+   "status": "completed",
+   "loss": 3.185160967508951
+  },
+  {
+   "source": "Weather",
+   "trial": 3,
+   "status": "completed",
+   "loss": 3.437618916829426
+  },
+  {
+   "source": "Weather",
+   "trial": 4,
+   "status": "completed",
+   "loss": 2.923091559410094
+  },
+  {
+   "source": "Weather",
+   "trial": 5,
+   "status": "completed",
+   "loss": 2.877798910724463
+  },
+  {
+   "source": "Weather",
+   "trial": 6,
+   "status": "completed",
+   "loss": 3.041757521629333
+  },
+  {
+   "source": "Weather",
+   "trial": 7,
+   "status": "completed",
+   "loss": 3.604533451051864
+  },
+  {
+   "source": "Weather",
+   "trial": 8,
+   "status": "completed",
+   "loss": 3.1456820335361098
+  },
+  {
+   "source": "Weather",
+   "trial": 9,
+   "status": "completed",
+   "loss": 3.592452593246608
+  },
+  {
+   "source": "Weather",
+   "trial": 10,
+   "status": "completed",
+   "loss": 2.7715906143188462
+  },
+  {
+   "source": "Weather",
+   "trial": 11,
+   "status": "completed",
+   "loss": 2.7564507325490304
+  },
+  {
+   "source": "Weather",
+   "trial": 12,
+   "status": "completed",
+   "loss": 2.784231909177433
+  },
+  {
+   "source": "Weather",
+   "trial": 13,
+   "status": "completed",
+   "loss": 2.9892126210530594
+  },
+  {
+   "source": "Weather",
+   "trial": 14,
+   "status": "completed",
+   "loss": 2.6302867555618272
+  },
+  {
+   "source": "Weather",
+   "trial": 15,
+   "status": "completed",
+   "loss": 2.5887410036722804
+  },
+  {
+   "source": "Weather",
+   "trial": 16,
+   "status": "completed",
+   "loss": 2.587947227160134
+  },
+  {
+   "source": "Weather",
+   "trial": 17,
+   "status": "completed",
+   "loss": 4.0311518359625795
+  },
+  {
+   "source": "Weather",
+   "trial": 18,
+   "status": "completed",
+   "loss": 2.758898576100666
+  },
+  {
+   "source": "Weather",
+   "trial": 19,
+   "status": "completed",
+   "loss": 2.683914372292013
+  },
+  {
+   "source": "Weather",
+   "trial": 20,
+   "status": "completed",
+   "loss": 4.430356208739145
+  },
+  {
+   "source": "Weather",
+   "trial": 21,
+   "status": "completed",
+   "loss": 4.722648449143894
+  },
+  {
+   "source": "Weather",
+   "trial": 22,
+   "status": "completed",
+   "loss": 2.6300624815622955
+  },
+  {
+   "source": "Weather",
+   "trial": 23,
+   "status": "completed",
+   "loss": 3.532012610798705
+  },
+  {
+   "source": "Weather",
+   "trial": 24,
+   "status": "completed",
+   "loss": 5.50332246632506
+  },
+  {
+   "source": "Weather",
+   "trial": 25,
+   "status": "completed",
+   "loss": 4.088225539833717
+  },
+  {
+   "source": "Weather",
+   "trial": 26,
+   "status": "completed",
+   "loss": 2.683914372292013
+  },
+  {
+   "source": "Weather",
+   "trial": 27,
+   "status": "completed",
+   "loss": 2.7715906143188462
+  },
+  {
+   "source": "Weather",
+   "trial": 28,
+   "status": "completed",
+   "loss": 3.305014302131602
+  },
+  {
+   "source": "Weather",
+   "trial": 29,
+   "status": "completed",
+   "loss": 3.3451504641850485
+  },
+  {
+   "source": "Weather",
+   "trial": 30,
+   "status": "completed",
+   "loss": 2.733296551704406
+  },
+  {
+   "source": "Weather",
+   "trial": 31,
+   "status": "completed",
+   "loss": 3.378143672172308
+  },
+  {
+   "source": "Weather",
+   "trial": 32,
+   "status": "completed",
+   "loss": 2.759321570252418
+  },
+  {
+   "source": "Weather",
+   "trial": 33,
+   "status": "completed",
+   "loss": 3.041757521629333
+  },
+  {
+   "source": "Weather",
+   "trial": 34,
+   "status": "completed",
+   "loss": 3.210043387302581
+  },
+  {
+   "source": "Weather",
+   "trial": 35,
+   "status": "completed",
+   "loss": 3.172989517448051
+  },
+  {
+   "source": "Weather",
+   "trial": 36,
+   "status": "completed",
+   "loss": 2.8617378744930564
+  },
+  {
+   "source": "Weather",
+   "trial": 37,
+   "status": "completed",
+   "loss": 2.6536456685974255
+  },
+  {
+   "source": "Weather",
+   "trial": 38,
+   "status": "completed",
+   "loss": 2.7521674791971833
+  },
+  {
+   "source": "Weather",
+   "trial": 39,
+   "status": "completed",
+   "loss": 2.6466690093162697
+  },
+  {
+   "source": "Weather",
+   "trial": 40,
+   "status": "completed",
+   "loss": 3.3030657031435866
+  },
+  {
+   "source": "Weather",
+   "trial": 41,
+   "status": "completed",
+   "loss": 3.5729376216971547
+  },
+  {
+   "source": "Weather",
+   "trial": 42,
+   "status": "completed",
+   "loss": 3.437618916829426
+  },
+  {
+   "source": "Weather",
+   "trial": 43,
+   "status": "completed",
+   "loss": 3.010929527817086
+  },
+  {
+   "source": "Weather",
+   "trial": 44,
+   "status": "completed",
+   "loss": 3.403925041979976
+  },
+  {
+   "source": "Weather",
+   "trial": 45,
+   "status": "completed",
+   "loss": 4.028426720124509
+  },
+  {
+   "source": "Weather",
+   "trial": 46,
+   "status": "completed",
+   "loss": 3.408074088124752
+  },
+  {
+   "source": "Weather",
+   "trial": 47,
+   "status": "completed",
+   "loss": 3.138757160901706
+  }
+ ]
+}

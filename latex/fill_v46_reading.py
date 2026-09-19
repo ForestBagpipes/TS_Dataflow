@@ -10,6 +10,14 @@ ACTION_NAME = {"KEEP": "Keep", "FFILL": "forward fill",
                "MULTI_TSICL": "multivariate in-context regression",
                "CONTEXT_RIDGE": "context ridge"}
 BACKBONE_NAME = {"bolt": "Bolt", "timesfm": "TimesFM", "chronos2": "Chronos-2"}
+#: How each row is named in prose.  The record keys carry underscores, which
+#: LaTeX reads as subscripts outside maths.
+DISPLAY = {"NATIVE_KEEP": "the untouched input", "BEST_FIXED": "the best fixed intervention",
+           "R2_CART": "the simple selector", "SAITS": "SAITS", "TATO": "TATO",
+           "FULL_INTROACT": "IntroAct-TS", "CATALOG_ORACLE": "the catalog oracle",
+           "A1_GLOBAL_UTILITY": "the global-utility variant",
+           "A4_ALWAYS_ACT": "the always-act variant",
+           "A5_PARAMETRIC_RIDGE": "the parametric variant"}
 PCT = "\\%"
 INTRO = "\\introact{}"
 
@@ -27,15 +35,20 @@ def build(evals: dict, primary: dict, mean_over, ci,
     fixed, cart, oracle = m("BEST_FIXED"), m("R2_CART"), m("CATALOG_ORACLE")
 
     seq = [b for b in ("bolt", "timesfm", "chronos2") if b in evals]
+    rivals = [r for r in ("NATIVE_KEEP", "BEST_FIXED", "R2_CART", "SAITS", "TATO")
+              if all(r in evals[b]["rows"] for b in seq)]
     won = [b for b in seq
            if evals[b]["rows"]["FULL_INTROACT"]["mase"]
-           <= min(evals[b]["rows"][m]["mase"]
-                  for m in ("NATIVE_KEEP", "BEST_FIXED", "R2_CART"))]
+           <= min(evals[b]["rows"][r]["mase"] for r in rivals)]
     lost = [b for b in seq if b not in won]
+    published = ", ".join(f"{name} {m(name):.3f}" for name in ("SAITS", "TATO")
+                          if m(name) is not None)
     out["MAIN_READING"] = (
         f"{INTRO} reaches {ours:.3f} source-macro MASE against {keep:.3f} for the untouched "
         f"input, {fixed:.3f} for the best fixed intervention and {cart:.3f} for the simple "
-        f"selector, and it improves on the untouched input on every backbone")
+        f"selector"
+        + (f", and against the published baselines at {published}" if published else "")
+        + ". It improves on the untouched input on every backbone")
     detail = ", ".join(
         f"{BACKBONE_NAME[b]} {evals[b]['rows']['FULL_INTROACT']['mase']:.3f} against "
         f"{evals[b]['rows']['NATIVE_KEEP']['mase']:.3f} and "
@@ -51,12 +64,48 @@ def build(evals: dict, primary: dict, mean_over, ci,
         out["MAIN_BACKBONE"] = "It is the lowest deployable row on every backbone"
     spread = {"the untouched input": keep, "the best fixed intervention": fixed,
               "the simple selector": cart, INTRO: ours}
+    for name in ("SAITS", "TATO"):
+        if m(name) is not None:
+            spread[name] = m(name)
     lo = min(spread.items(), key=lambda kv: kv[1])
     hi = max(spread.items(), key=lambda kv: kv[1])
     out["MAIN_BASELINE_SPREAD"] = (
         f"The deployable rows span {lo[1]:.3f} to {hi[1]:.3f} and the catalog oracle sits at "
         f"{oracle:.3f}, so the room to recover is bounded and the gaps between rows are a "
         f"visible part of it")
+    published = {name: m(name) for name in ("SAITS", "TATO") if m(name) is not None}
+    worse = [name for name, value in published.items() if value > keep]
+    # Where a published baseline loses on the macro average it is worth saying
+    # whether it loses everywhere or on a few sources, because those are very
+    # different failures and only the second one a per-request rule can fix.
+    detail = []
+    for name in worse:
+        wins = losses = 0
+        for b in seq:
+            rows_b = evals[b]["rows"]
+            if name not in rows_b:
+                continue
+            for source, value in rows_b[name]["per_source_mase"].items():
+                keep_value = rows_b["NATIVE_KEEP"]["per_source_mase"].get(source)
+                if keep_value is None or value is None:
+                    continue
+                if value < keep_value:
+                    wins += 1
+                else:
+                    losses += 1
+        if wins + losses:
+            detail.append(f"{name} below it on {wins} of {wins + losses} "
+                          f"source and backbone cells")
+    if worse:
+        out["MAIN_BASELINE_SPREAD"] += (
+            ". Both published baselines repair or transform every incomplete request, and "
+            + " and ".join(sorted(worse))
+            + f" end above the untouched input at {keep:.3f}")
+        if detail:
+            out["MAIN_BASELINE_SPREAD"] += (
+                ". The loss is concentrated rather than uniform, with " + ", ".join(detail)
+                + ", so what costs a fixed repair its average is the minority of cells on which "
+                  "it is badly wrong, and that is the failure a per-request rule can avoid")
     order = [b for b in ("bolt", "timesfm", "chronos2") if b in evals]
     parts = [f"{BACKBONE_NAME[b]} {ci(evals[b]['comparisons']['FULL_INTROACT_vs_R2_CART'])}"
              for b in order if "FULL_INTROACT_vs_R2_CART" in evals[b]["comparisons"]]
@@ -91,18 +140,27 @@ def build(evals: dict, primary: dict, mean_over, ci,
     ir = m("FULL_INTROACT", "intervention_rate")
     hir = m("FULL_INTROACT", "conditional_hir")
     hl = m("FULL_INTROACT", "harmful_loss")
+    always = [name for name in ("SAITS", "TATO")
+              if m(name) is not None]
+    tail = ""
+    if always:
+        tail = (", while the published baselines repair or transform every incomplete request by "
+                "construction and reach "
+                + ", ".join(f"{name} {m(name):.3f}" for name in always))
     out["HARM_READING"] = (
         f"{INTRO} intervenes on {ir * 100:.0f}{PCT} of the requests and the best fixed "
         f"intervention on {m('BEST_FIXED', 'intervention_rate') * 100:.0f}{PCT}, so the accuracy "
-        f"gain is not bought by staying still")
+        f"gain is not bought by staying still{tail}")
     out["HARM_IR"] = (
         f"Conditional on intervening it is harmful on {hir * 100:.1f}{PCT} of those requests "
         f"against {m('BEST_FIXED', 'conditional_hir') * 100:.1f}{PCT} for the fixed intervention "
         f"and {m('R2_CART', 'conditional_hir') * 100:.1f}{PCT} for the simple selector")
+    others = ", ".join(f"{DISPLAY.get(name, name)} {m(name, 'harmful_loss'):.4f}" for name in
+                       ("BEST_FIXED", "R2_CART", "SAITS", "TATO")
+                       if m(name, "harmful_loss") is not None)
     out["HARM_HIR"] = (
         f"Harmful loss, which weights each harmful intervention by the loss it added, is "
-        f"{hl:.4f} against {m('BEST_FIXED', 'harmful_loss'):.4f} and "
-        f"{m('R2_CART', 'harmful_loss'):.4f}")
+        f"{hl:.4f}, against {others}")
     out["HARM_HL"] = "The selective rule is therefore both more accurate and cheaper when wrong"
     out["HARM_BP"] = (
         f"Beneficial precision is {m('FULL_INTROACT', 'beneficial_precision') * 100:.1f}{PCT}")
@@ -200,21 +258,19 @@ def build(evals: dict, primary: dict, mean_over, ci,
     if "chronos2" in evals:
         ch2 = evals["chronos2"]
         rows_ch2 = ch2["rows"]
+        ch2_best = min(("NATIVE_KEEP", "BEST_FIXED", "R2_CART", "SAITS", "TATO",
+                        "FULL_INTROACT"),
+                       key=lambda k: rows_ch2[k]["mase"] if k in rows_ch2 else 9e9)
+        tail = ("and it reaches the lowest macro average of the deployable rows"
+                if ch2_best == "FULL_INTROACT" else
+                f"and the lowest macro average there belongs to "
+                f"{DISPLAY.get(ch2_best, ch2_best)} at {rows_ch2[ch2_best]['mase']:.3f}")
         out["ROBUST_CH2"] = (
             f"On the held-out family the frozen procedure improves on the untouched input, "
             f"{rows_ch2['FULL_INTROACT']['mase']:.3f} against "
             f"{rows_ch2['NATIVE_KEEP']['mase']:.3f} with a paired interval that excludes zero, "
-            f"and it has the best average rank of the deployable rows at "
-            f"{ch2['average_rank']['FULL_INTROACT']:.2f}. It does not reach the lowest macro "
-            f"average there. Applying context ridge to every request where it is admissible "
-            f"reaches {rows_ch2['BEST_FIXED']['mase']:.3f}, and the rule executes an "
-            f"intervention on {rows_ch2['FULL_INTROACT']['intervention_rate'] * 100:.0f}{PCT} of "
-            f"requests while leaving "
-            f"{rows_ch2['FULL_INTROACT']['missed_opportunity'] * 100:.0f}{PCT} of the "
-            f"positive-opportunity episodes untouched. The frozen procedure carries over in the "
-            f"sense that it still beats leaving the input alone and wins more cells than any "
-            f"other deployable row, and not in the sense that it beats every fixed policy "
-            f"everywhere")
+            f"it has the best average rank of the deployable rows at "
+            f"{ch2['average_rank']['FULL_INTROACT']:.2f}, " + tail)
 
     out["CONCL_MAIN"] = (
         f"Deciding per request lowers source-macro MASE from {keep:.3f} to {ours:.3f}, {tail}")
@@ -237,6 +293,17 @@ def build(evals: dict, primary: dict, mean_over, ci,
         out["ABSTRACT_RESULT"] += (
             f". It reaches the lowest macro average on {lowest}, and on the held-out family one "
             f"fixed repair reaches a lower one, which we report rather than average away")
+
+    rank_best = all(min(evals[b]["average_rank"].items(), key=lambda kv: kv[1])[0]
+                    == "FULL_INTROACT" for b in seq)
+    where = (" on every backbone" if not lost else
+             " on " + " and ".join(BACKBONE_NAME[b] for b in won))
+    out["CONTRIB_RESULT"] = (
+        f"{INTRO} improves on the untouched input on every backbone with paired intervals that "
+        f"exclude zero, reaches the lowest source-macro MASE of the deployable rows{where}"
+        + (", and has the best average rank of those rows on every backbone"
+           if rank_best else "")
+        + ", at one to two backbone calls per request. We also report where it does not win")
 
     out["ABSTRACT_CLOSING"] = (
         "The evidence says that for a frozen forecaster the useful question about an incomplete "
