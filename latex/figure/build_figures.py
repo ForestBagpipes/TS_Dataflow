@@ -637,12 +637,18 @@ def fig3():
     # ---- (a) rank agreement between the two criteria ----
     f.text(4.0, 9.0, "(a) Reconstruction rank vs realised-utility rank", size=6.0, bold=True)
     ax, ay, aw, ah = 42.0, 30.0, 120.0, 92.0
+    n_rank = len(stats["rank_grid"]) if stats and stats.get("rank_grid") else 4
+    step = 1.0 / n_rank
+    ticks_x = [((i + 0.5) * step, str(i + 1)) for i in range(n_rank)]
+    # Row j of the grid is utility rank j+1 and is drawn from the top, while the
+    # axis fraction runs upward, so the y labels count down.
+    ticks_y = [((i + 0.5) * step, str(n_rank - i)) for i in range(n_rank)]
     f.axes(ax, ay, aw, ah, ylabel="realised utility rank",
-           ticks_x=[(0.125, "1"), (0.375, "2"), (0.625, "3"), (0.875, "4")],
-           ticks_y=[(0.125, "4"), (0.375, "3"), (0.625, "2"), (0.875, "1")])
+           ticks_x=ticks_x, ticks_y=ticks_y)
     if stats is not None and stats.get("rank_grid"):
         grid = stats["rank_grid"]
-        cw, ch = aw / 4.0, ah / 4.0
+        cw, ch = aw / n_rank, ah / n_rank
+        labels = []
         for i, row in enumerate(grid):
             total = float(sum(row)) or 1.0
             for j, count in enumerate(row):
@@ -652,17 +658,20 @@ def fig3():
                 fill = (BLUE_L[0] + (BLUE[0] - BLUE_L[0]) * t,
                         BLUE_L[1] + (BLUE[1] - BLUE_L[1]) * t,
                         BLUE_L[2] + (BLUE[2] - BLUE_L[2]) * t)
-                f.rect(ax + i * cw, ay + j * ch, cw, ch, fill=fill, stroke=WHITE, lw=0.5)
-                f.text(ax + (i + 0.5) * cw, ay + (j + 0.5) * ch + 1.6,
-                       "%.2f" % share, size=4.6,
-                       color=(WHITE if t > 0.62 else INK), align="c")
-        # Cell (i, j) sits at column i and row j from the top, so agreement runs
-        # from the top-left corner to the bottom-right one.
-        f.line(ax, ay, ax + aw, ay + ah, INK, 0.7, dash=(2.5, 2.0))
+                # Cell (i, j) sits at column i and row j from the top, so the
+                # two criteria agree exactly on the diagonal.  Those cells are
+                # outlined rather than crossed by a line, which would run
+                # through the numbers printed inside them.
+                f.rect(ax + i * cw, ay + j * ch, cw, ch, fill=fill,
+                       stroke=(INK if i == j else WHITE), lw=(0.9 if i == j else 0.5))
+                labels.append((ax + (i + 0.5) * cw, ay + (j + 0.5) * ch + 1.4,
+                               "%.2f" % share, WHITE if t > 0.62 else INK))
+        for tx, ty, label, colour in labels:
+            f.text(tx, ty, label, size=4.2, color=colour, align="c")
         f.text(ax + aw / 2, ay + ah + 20.0, "reconstruction rank within episode",
                size=4.9, color=MUTED, align="c")
         f.text(ax + aw / 2, ay + ah + 29.0,
-               "diagonal = the two criteria agree; agreement %.0f%%"
+               "outlined cells = the two criteria agree; agreement %.0f%%"
                % (100.0 * stats["winner_agreement"]), size=4.9, color=INK, align="c")
         f.text(ax + aw / 2, ay + ah + 37.0,
                "discordant pairs %.0f%%, within-episode rho %.2f"
