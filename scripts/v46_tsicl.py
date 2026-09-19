@@ -66,7 +66,7 @@ def verify_record(record: dict) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", default=str(ROOT))
-    parser.add_argument("--block", default="bank", choices=["bank", "train_eval", "test", "test30", "test50"])
+    parser.add_argument("--block", default="bank", choices=["bank", "train_eval", "test", "test30", "test50", "test_m2", "test_m3"])
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--only-source", default=None,
                         help="probe a single source before the full run")

@@ -33,7 +33,17 @@ from introact_ts.v44.splits import ParentWindow
 #: ``test`` is the held-out region every reported table is computed on, and
 #: ``test30`` / ``test50`` are the same TEST parents at the two higher
 #: registered severities, used for the within-grid robustness sweep.
-BLOCKS = ("bank", "train_eval", "test", "test30", "test50")
+BLOCKS = ("bank", "train_eval", "test", "test30", "test50", "test_m2", "test_m3")
+
+#: Mask realisation of a block.  Every block uses the registered protocol seed
+#: except the two stability blocks, which re-derive the masks of the same TEST
+#: parents from a different seed.  Nothing else about them differs, so a
+#: difference between them is a difference in the deletion pattern alone.
+MASK_SEED = {"test_m2": P.PROTOCOL_SEED + 1, "test_m3": P.PROTOCOL_SEED + 2}
+
+
+def mask_seed_of(block: str) -> int:
+    return MASK_SEED.get(block, P.PROTOCOL_SEED)
 
 #: TRAIN is split by origin time; the bank gets the earlier parents.
 BANK_FRACTION = 0.80
@@ -48,6 +58,8 @@ BLOCK_SEVERITIES = {
     "test": (P.MAIN_SEVERITY,),
     "test30": (0.30,),
     "test50": (0.50,),
+    "test_m2": (P.MAIN_SEVERITY,),
+    "test_m3": (P.MAIN_SEVERITY,),
 }
 
 
@@ -195,7 +207,8 @@ def episode_specs(root: str | Path, block: str, *, horizons=P.HORIZONS,
                 continue
             for pattern in P.PATTERNS:
                 chosen = (M.mixed_severity(parent.source, parent.parent,
-                                           parent.origin, horizon, pattern)
+                                           parent.origin, horizon, pattern,
+                                           protocol_seed=mask_seed_of(block))
                           if mixed else None)
                 for severity in ([chosen] if mixed else levels):
                     specs.append(EpisodeSpec(
@@ -249,7 +262,8 @@ def iter_panels(root: str | Path, specs: list[EpisodeSpec]
                         mask = M.build_mask(source, window.parent, window.origin,
                                             horizon, pattern, spec.severity,
                                             length=context.shape[0],
-                                            n_channels=context.shape[1])
+                                            n_channels=context.shape[1],
+                                            protocol_seed=mask_seed_of(spec.block))
                         yield spec, context, M.apply_mask(context, mask), future
 
 

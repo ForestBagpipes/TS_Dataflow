@@ -157,7 +157,7 @@ def build_block(root: Path, block: str) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", default=str(ROOT))
-    parser.add_argument("--block", default="bank", choices=["bank", "train_eval", "test", "test30", "test50"])
+    parser.add_argument("--block", default="bank", choices=["bank", "train_eval", "test", "test30", "test50", "test_m2", "test_m3"])
     args = parser.parse_args()
     manifest = build_block(Path(args.root), args.block)
     print(json.dumps({k: v for k, v in manifest.items() if k != "rows"},

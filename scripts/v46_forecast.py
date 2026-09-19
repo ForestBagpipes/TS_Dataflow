@@ -65,7 +65,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", default=str(ROOT))
     parser.add_argument("--block", default="bank",
-                        choices=["bank", "train_eval", "test", "test30", "test50"])
+                        choices=["bank", "train_eval", "test", "test30", "test50", "test_m2", "test_m3"])
     parser.add_argument("--backbone", default="bolt",
                         choices=list(P.ALL_BACKBONES))
     parser.add_argument("--limit", type=int, default=0,
