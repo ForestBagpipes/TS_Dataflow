@@ -488,8 +488,9 @@ and Figure~\ref{fig:concept}(a) shows how often each action takes that role. \ph
 \ph{RANK_DISAGREE_STATS}.
 
 The second premise is that reconstruction quality does not tell a deployment which repair to
-run. All four interventions estimate the hidden positions explicitly and the mask is synthetic,
-so both rankings exist for the same episode, and ranking inside an episode keeps sources of
+run. The four catalog interventions and the published reconstruction baseline all estimate the
+hidden positions explicitly and the mask is synthetic, so both rankings exist for the same
+episode, and ranking inside an episode keeps sources of
 different scale apart. \ph{RECON_READING}. Figure~\ref{fig:why-selective}(a) shows it and
 Appendix~\ref{app:recutils} reports it per action. \introact{} is not in this ranking, because
 it returns a forecast from an executed input rather than a reconstruction.
@@ -632,7 +633,7 @@ Table~\ref{tab:ablation} reports accuracy, harm, and cost together. \ph{ABL_READ
   \caption{Core ablation and cost at $10\%$ severity, on the held-out evaluation set. Every
   row reads the same catalog prediction cache, so the rows differ only in how the stored
   utilities are summarised and thresholded. Calls counts forecasting-backbone calls per
-  request and equals one plus the intervention rate; candidate materialisation is reported
+  request and equals one plus the intervention rate. Candidate materialisation is reported
   separately in Appendix~\ref{app:calls}.}
   \label{tab:ablation}
   \centering
@@ -1235,7 +1236,7 @@ the mean absolute error of the resulting forecast against the realised future of
 over \ph{TATO_TRIALS} trials seeded with the identity pipeline. The selected pipeline is then
 applied unchanged to every TEST request of that source, which is the domain-level unit of
 adaptation the method is defined at. The official pipeline expects a context without gaps, so
-the adapter fills them by linear interpolation before the pipeline runs; that bridging step is
+the adapter fills them by linear interpolation before the pipeline runs, and that step is
 part of what the row measures, and Section~\ref{sec:exp-main} reads the result with that in
 mind. The upstream replacement of non-finite outputs is disabled, so a pipeline that diverges
 is recorded as a failed trial instead of being silently repaired.
@@ -1803,9 +1804,11 @@ realisations are read as a stability check on the same parent set. Significance 
 never performed across them.
 
 The subset is fixed before the run: all eight sources, patterns P1 to P4, $10\%$ severity,
-$H=96$, on Bolt and Chronos-2, and the comparison is restricted to \textsc{Keep}, R2-CART,
-and \introact{}. Reporting the spread over three realisations is a stability diagnostic and
-is not an additional estimate of variance.
+$H=96$, on Bolt and Chronos-2. Table~\ref{tab:app-seeds} carries \introact{} against
+\textsc{Keep} on each realisation. The simple selector moves by \ph{SEED_SPREAD_CART_BOLT} on
+Bolt and \ph{SEED_SPREAD_CART_CH2} on the held-out backbone over the same three realisations,
+so neither method is carried by one deletion pattern. Reporting the spread over three
+realisations is a stability diagnostic and is not an additional estimate of variance.
 
 \begin{table}[h]
   \caption{Mask-realisation stability. Each row is one deterministic mask realisation on the

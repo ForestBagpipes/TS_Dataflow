@@ -42,8 +42,8 @@ def build() -> dict:
     seeds = protocol / "protocol_freeze.json"
     out["SEED_MASK"] = "20260917, a fixed literal rather than a clock reading"
     out["SEED_ORDER"] = "101"
-    out["SEED_SELECTOR"] = "101; the selector has no fitted parameters"
-    out["PROTOCOL_COMMIT"] = "recorded with the run; see the released artefact ledger"
+    out["SEED_SELECTOR"] = "101, and the selector has no fitted parameters"
+    out["PROTOCOL_COMMIT"] = "recorded with the run, in the released artefact ledger"
     manifest_path = protocol / "test_manifest.json"
     if manifest_path.exists():
         out["TEST_MANIFEST"] = "results/v46/protocol/test\\_manifest.json"

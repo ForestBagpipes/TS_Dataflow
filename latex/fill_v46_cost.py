@@ -30,7 +30,7 @@ def build(num, pct) -> dict:
     if bank_calls:
         out["CALLS_OFFLINE"] = f"{int(sum(bank_calls) / len(bank_calls)):,} calls, once per backbone"
         out["OURS_OFF"] = out["CALLS_OFFLINE"]
-    out["CALLS_SELECTOR"] = "no fit; the selector stores the bank and retrieves from it"
+    out["CALLS_SELECTOR"] = "no fit, the selector stores the bank and retrieves from it"
 
     # Per-request online cost of every method that carries a claim.
     evals = {}

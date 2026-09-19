@@ -488,8 +488,9 @@ and Figure~\ref{fig:concept}(a) shows how often each action takes that role. No 
 Every intervention helps on some requests and hurts on others. The weakest, forward fill, improves the forecast on 48\% of the episodes where it applies and the strongest, context ridge, on 58\%, so none is safe to apply unconditionally and none is safe to drop.
 
 The second premise is that reconstruction quality does not tell a deployment which repair to
-run. All four interventions estimate the hidden positions explicitly and the mask is synthetic,
-so both rankings exist for the same episode, and ranking inside an episode keeps sources of
+run. The four catalog interventions and the published reconstruction baseline all estimate the
+hidden positions explicitly and the mask is synthetic, so both rankings exist for the same
+episode, and ranking inside an episode keeps sources of
 different scale apart. The repair with the lowest reconstruction error is also the one with the highest realised utility on 21\% of the episodes, against 20\% for picking at random among the same repairs, 44\% of the ordered pairs disagree, and the mean within-episode rank correlation between the two criteria is 0.13. On average multivariate in-context regression recovers the hidden values most accurately while context ridge helps the forecast most, so the two criteria do not even agree on the corpus. Figure~\ref{fig:why-selective}(a) shows it and
 Appendix~\ref{app:recutils} reports it per action. \introact{} is not in this ranking, because
 it returns a forecast from an executed input rather than a reconstruction.
@@ -518,7 +519,7 @@ learning a simple selector, across sources and frozen \tsfm{} backbones?}
 Table~\ref{tab:main} reports the main comparison at $10\%$ severity over all eight sources,
 three backbones, two horizons, and four patterns. \introact{} reaches 1.423 source-macro MASE against 1.576 for the untouched input, 1.438 for the best fixed intervention and 1.456 for the simple selector, and against the published baselines at SAITS 1.696, TATO 1.689. It improves on the untouched input on every backbone.
 Against the untouched input the paired difference is Bolt -0.1002 [-0.1530, -0.0496], TimesFM -0.1464 [-0.1985, -0.0932], Chronos-2 -0.2119 [-0.3053, -0.1203], and every interval excludes zero. Against the best fixed intervention the interval excludes zero on Bolt. It is the lowest deployable row on Bolt and TimesFM, and on Chronos-2 one fixed repair reaches a lower macro average, which \S\ref{sec:exp-robust} returns to. The deployable rows span 1.423 to 1.696 and the catalog oracle sits at 1.307, so the room to recover is bounded and the gaps between rows are a visible part of it. Both published baselines repair or transform every incomplete request, and SAITS ends at 1.696 and TATO ends at 1.689, above the 1.576 of leaving the input alone. SAITS is below it on 18 of 24 source and backbone cells, so what costs that repair its average is the minority of cells on which it is badly wrong, and that is the failure a per-request rule can avoid. TATO is below it on only 5 of 24 such cells, so that one loses broadly rather than on a few cells. Against the simple selector no interval excludes zero, so accuracy alone does not separate the two and what does is in Table~\ref{tab:harm}.
-Average rank over the evaluation cells is Bolt 4.05, TimesFM 3.99, Chronos-2 4.28, the best of the 6 deployable rows on Bolt and TimesFM. On Chronos-2 the best fixed intervention ranks 4.14 against our 4.28. Averaged over the three backbones the rank is 4.11 against 4.37 for the best fixed intervention, which is the closest deployable row. Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
+Average rank over the evaluation cells is Bolt 4.05, TimesFM 3.99, Chronos-2 4.28, the best of the six deployable rows on Bolt and TimesFM. On Chronos-2 the best fixed intervention ranks 4.14 against our 4.28. Averaged over the three backbones the rank is 4.11 against 4.37 for the best fixed intervention, which is the closest deployable row. Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
 deployment cost is reported separately in Appendix~\ref{app:calls}.
 
 \begin{table}[t]
@@ -632,7 +633,7 @@ Removing the reference option and executing the best-scoring action on every req
   \caption{Core ablation and cost at $10\%$ severity, on the held-out evaluation set. Every
   row reads the same catalog prediction cache, so the rows differ only in how the stored
   utilities are summarised and thresholded. Calls counts forecasting-backbone calls per
-  request and equals one plus the intervention rate; candidate materialisation is reported
+  request and equals one plus the intervention rate. Candidate materialisation is reported
   separately in Appendix~\ref{app:calls}.}
   \label{tab:ablation}
   \centering
@@ -1235,7 +1236,7 @@ the mean absolute error of the resulting forecast against the realised future of
 over 48 trials seeded with the identity pipeline. The selected pipeline is then
 applied unchanged to every TEST request of that source, which is the domain-level unit of
 adaptation the method is defined at. The official pipeline expects a context without gaps, so
-the adapter fills them by linear interpolation before the pipeline runs; that bridging step is
+the adapter fills them by linear interpolation before the pipeline runs, and that step is
 part of what the row measures, and Section~\ref{sec:exp-main} reads the result with that in
 mind. The upstream replacement of non-finite outputs is disabled, so a pipeline that diverges
 is recorded as a failed trial instead of being silently repaired.
@@ -1803,9 +1804,11 @@ realisations are read as a stability check on the same parent set. Significance 
 never performed across them.
 
 The subset is fixed before the run: all eight sources, patterns P1 to P4, $10\%$ severity,
-$H=96$, on Bolt and Chronos-2, and the comparison is restricted to \textsc{Keep}, R2-CART,
-and \introact{}. Reporting the spread over three realisations is a stability diagnostic and
-is not an additional estimate of variance.
+$H=96$, on Bolt and Chronos-2. Table~\ref{tab:app-seeds} carries \introact{} against
+\textsc{Keep} on each realisation. The simple selector moves by 0.005 on
+Bolt and 0.039 on the held-out backbone over the same three realisations,
+so neither method is carried by one deletion pattern. Reporting the spread over three
+realisations is a stability diagnostic and is not an additional estimate of variance.
 
 \begin{table}[h]
   \caption{Mask-realisation stability. Each row is one deterministic mask realisation on the
@@ -1899,7 +1902,7 @@ touch the backbone.
     \midrule
     Candidate materialisation and scoring (per request) & 3,040 & --- & 0 \\
     Offline replay-bank build (amortised)      & --- & --- & 8,471 calls, once per backbone \\
-    Offline selector fit (amortised)           & --- & --- & no fit; the selector stores the bank and retrieves from it \\
+    Offline selector fit (amortised)           & --- & --- & no fit, the selector stores the bank and retrieves from it \\
     Cold start (first request of a process)    & 15 & --- & 3.4 s \\
     \bottomrule
   \end{tabular}}
@@ -1975,8 +1978,8 @@ present results.
     Hardware and precision  & one NVIDIA RTX 4090, bfloat16 for Chronos-Bolt, float32 for TimesFM and Chronos-2 \\
     Mask derivation seed    & 20260917, a fixed literal rather than a clock reading \\
     Replay-record order seed & 101 \\
-    Selector fit seed       & 101; the selector has no fitted parameters \\
-    Protocol commit         & recorded with the run; see the released artefact ledger \\
+    Selector fit seed       & 101, and the selector has no fitted parameters \\
+    Protocol commit         & recorded with the run, in the released artefact ledger \\
     TEST manifest           & the TEST parents and origins listed in the evaluation records under results/v46/evaluation \\
     \bottomrule
   \end{tabular}

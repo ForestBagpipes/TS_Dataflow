@@ -144,6 +144,8 @@ def build(evals: dict, primary: dict, mean_over, ci,
     rank_parts = ", ".join(f"{BACKBONE_NAME[b]} {per_rank[b]['FULL_INTROACT']:.2f}"
                            for b in order if "FULL_INTROACT" in per_rank[b])
     count = len(per_rank[order[0]]) if order else 0
+    WORDS = {4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight"}
+    count = WORDS.get(count, count)
     if ours_best:
         out["MAIN_RANK"] = (
             f"Average rank over the evaluation cells is {rank_parts}, the best of the {count} "

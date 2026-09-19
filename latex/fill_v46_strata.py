@@ -149,4 +149,16 @@ def build(num, pct) -> dict:
         if len(mases) >= 2:
             out[f"SEED_SPREAD_{tag}"] = num(max(mases) - min(mases))
             out[f"SEED_IR_SPREAD_{tag}"] = pct(max(rates) - min(rates))
+        # The rival on the same realisations, so the stability claim covers the
+        # comparison rather than one row of it.
+        rival = []
+        for block in blocks:
+            path = ROOT / f"results/v46/evaluation/{block}_{backbone}.json"
+            if not path.exists():
+                continue
+            row = json.loads(path.read_text())["rows"].get("R2_CART")
+            if row and row.get("mase") is not None:
+                rival.append(row["mase"])
+        if len(rival) >= 2:
+            out[f"SEED_SPREAD_CART_{tag}"] = num(max(rival) - min(rival))
     return out
