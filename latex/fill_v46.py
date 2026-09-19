@@ -56,7 +56,12 @@ def pct(value, digits=1):
 def signed(value, digits=3):
     if value is None:
         return None
-    return f"{float(value):+.{digits}f}"
+    value = float(value)
+    # A value that rounds to zero should not carry a sign that suggests a
+    # direction the measurement does not support.
+    if abs(round(value, digits)) < 10 ** -digits:
+        return f"{0.0:.{digits}f}"
+    return f"{value:+.{digits}f}"
 
 
 def ci(entry, digits=4):
@@ -234,7 +239,7 @@ def build(evals: dict, selections: dict) -> dict:
     recon = primary.get("reconstruction")
     if recon:
         tags = {"FFILL": "FFILL", "SINGLE_TSICL": "SINGLE", "MULTI_TSICL": "MULTI",
-                "CONTEXT_RIDGE": "RIDGE"}
+                "CONTEXT_RIDGE": "RIDGE", "SAITS": "SAITS"}
         for action, tag in tags.items():
             item = recon["per_action"].get(action)
             if not item:

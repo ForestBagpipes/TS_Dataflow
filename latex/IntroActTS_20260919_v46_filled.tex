@@ -488,7 +488,8 @@ it returns a forecast from an executed input rather than a reconstruction.
   \centering
   \includegraphics[width=0.62\textwidth]{figure/fig3_why_selective.pdf}
   \caption{\textbf{(a)}~Joint distribution of the within-episode reconstruction rank and the
-  within-episode realised-utility rank over the four catalog interventions, row-normalised over
+  within-episode realised-utility rank over the four catalog interventions and SAITS,
+  row-normalised over
   the held-out episodes of all three backbones. Off-diagonal mass is episodes on which the more
   accurate reconstruction is not the more useful intervention. \textbf{(b)}~Cross-validated
   conditional harmful rate against intervention rate over the neighbourhood and penalty grid,
@@ -1621,8 +1622,8 @@ panels can be compared directly.
 \subsubsection{Reconstruction versus Forecasting Utility}
 \label{app:recutils}
 This subsection supports \S\ref{sec:exp-exists}. Reconstruction error is defined only where a
-method emits an explicit estimate of the hidden positions, which the four interventions of the
-catalog all do. Running the comparison on the catalog keeps both criteria on one protocol and
+method emits an explicit estimate of the hidden positions, which the four catalog interventions
+and the published reconstruction baseline all do. Running the comparison on the catalog keeps both criteria on one protocol and
 one set of episodes: the same window, the same mask, the same frozen backbone, and the same
 realised future. \textsc{Keep} does not enter, because it estimates nothing, and \introact{}
 does not enter, because it returns a forecast from an executed input rather than a
@@ -1637,7 +1638,7 @@ per-action averages and the two rank statistics.
 
 \begin{table}[h]
   \caption{Reconstruction quality against realised forecasting utility, over the four catalog
-  interventions on the held-out evaluation episodes. Reconstruction error is measured on the
+  interventions and SAITS on the held-out evaluation episodes. Reconstruction error is measured on the
   hidden positions and realised utility against \textsc{Keep} on the same backbone. Winner
   agreement is the share of episodes on which the most accurate reconstruction is also the most
   useful intervention, and the discordant rate is the share of ordered pairs whose two rankings
@@ -1655,6 +1656,7 @@ per-action averages and the two rank statistics.
     \textsc{Single TS-ICL} & 29.61 & 2.03 & +0.013 & 760 \\
     \textsc{Multi TS-ICL}  & 29.52  & 1.85  & +0.033  & 760 \\
     \textsc{Context Ridge} & 30.19  & 1.47  & +0.052  & 570 \\
+    SAITS                  & 77.60  & 3.35  & 0.000  & 760 \\
     \midrule
     \multicolumn{5}{l}{\footnotesize Winner agreement 21.1\%, discordant rate
     43.9\%, mean within-episode Spearman $\rho$ 0.13} \\
