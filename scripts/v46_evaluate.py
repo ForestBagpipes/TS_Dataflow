@@ -328,6 +328,18 @@ def main() -> None:
             queries, mase_of["FULL_INTROACT"], mase_of[reference],
             resamples=args.resamples)
 
+    # Holm across the pre-declared baseline comparisons only.  The ablations are
+    # variants of this method rather than competing claims, so they are not in
+    # the family and are reported with intervals alone.
+    family = [f"FULL_INTROACT_vs_{name}" for name
+              in ("NATIVE_KEEP", "BEST_FIXED", "R2_CART") + tuple(external)
+              if f"FULL_INTROACT_vs_{name}" in comparisons]
+    adjusted = SEL.holm({key: comparisons[key]["p_value"] for key in family})
+    for key in family:
+        comparisons[key]["p_holm"] = adjusted[key]
+        comparisons[key]["significant_holm"] = bool(adjusted[key] < 0.05)
+        comparisons[key]["in_holm_family"] = True
+
     ranked = [name for name in list(DEPLOYABLE) + list(external) + list(ABLATIONS)]
     cell_rank = collections.defaultdict(list)
     for i in range(n):
