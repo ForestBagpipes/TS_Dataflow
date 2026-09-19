@@ -1,74 +1,863 @@
 %!PS-Adobe-3.0 EPSF-3.0
-%%BoundingBox: 0 0 396 154
+%%BoundingBox: 0 0 396 174
 %%Creator: IntroAct-TS figure generator
 %Title: fig5_robustness_missingness
 %%EndComments
 1 setlinejoin 1 setlinecap
-0 154 translate 1 -1 scale
+0 174 translate 1 -1 scale
 /Lft { gsave translate 1 -1 scale 0 0 moveto show grestore } bind def
 /Ctr { gsave translate 1 -1 scale 0 0 moveto dup stringwidth pop -0.5 mul 0 rmoveto show grestore } bind def
 /Rgt { gsave translate 1 -1 scale 0 0 moveto dup stringwidth pop -1 mul 0 rmoveto show grestore } bind def
 newpath gsave /Helvetica-Bold findfont 6.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (Bolt) 67.000 9.000 Ctr grestore newpath
-newpath 30.000 116.000 moveto 126.000 116.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.70 setlinewidth stroke grestore newpath
-newpath 30.000 30.000 moveto 30.000 116.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.70 setlinewidth stroke grestore newpath
-newpath 30.000 116.000 moveto 30.000 118.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (10%) 30.000 125.000 Ctr grestore newpath
-newpath 78.000 116.000 moveto 78.000 118.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (30%) 78.000 125.000 Ctr grestore newpath
-newpath 126.000 116.000 moveto 126.000 118.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (50%) 126.000 125.000 Ctr grestore newpath
-newpath 27.500 116.000 moveto 30.000 116.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (0) 26.400 117.900 Rgt grestore newpath
-newpath 27.500 73.000 moveto 30.000 73.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor () 26.400 74.900 Rgt grestore newpath
-newpath 27.500 30.000 moveto 30.000 30.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (+) 26.400 31.900 Rgt grestore newpath
-newpath gsave /Helvetica findfont 6.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (missing severity) 78.000 133.500 Ctr grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (relative MASE improvement vs KEEP) 27.000 25.000 Lft grestore newpath
+newpath 34.000 120.000 moveto 126.000 120.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.70 setlinewidth stroke grestore newpath
+newpath 34.000 36.000 moveto 34.000 120.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.70 setlinewidth stroke grestore newpath
+newpath 34.000 120.000 moveto 34.000 122.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (10%) 34.000 129.000 Ctr grestore newpath
+newpath 80.000 120.000 moveto 80.000 122.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (30%) 80.000 129.000 Ctr grestore newpath
+newpath 126.000 120.000 moveto 126.000 122.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (50%) 126.000 129.000 Ctr grestore newpath
+newpath 31.500 116.897 moveto 34.000 116.897 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (-20%) 30.400 118.797 Rgt grestore newpath
+newpath 31.500 99.900 moveto 34.000 99.900 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (-10%) 30.400 101.800 Rgt grestore newpath
+newpath 31.500 82.904 moveto 34.000 82.904 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (+0%) 30.400 84.804 Rgt grestore newpath
+newpath 31.500 65.908 moveto 34.000 65.908 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (+10%) 30.400 67.808 Rgt grestore newpath
+newpath 31.500 48.912 moveto 34.000 48.912 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (+20%) 30.400 50.812 Rgt grestore newpath
+newpath gsave /Helvetica findfont 6.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (missing severity) 80.000 137.500 Ctr grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (MASE improvement over the untouched input) 31.000 31.000 Lft grestore newpath
 [2.00 2.00] 0 setdash
-newpath 30.000 66.120 moveto 126.000 66.120 lineto gsave 0.8000 0.8100 0.8300 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath 34.000 82.904 moveto 126.000 82.904 lineto gsave 0.8000 0.8100 0.8300 setrgbcolor 0.60 setlinewidth stroke grestore newpath
 [] 0 setdash
-newpath gsave /Helvetica findfont 5.60 scalefont setfont 0.6800 0.1700 0.1700 setrgbcolor ([FIG-ROBUST-BOLT]) 78.000 91.000 Ctr grestore newpath
+newpath 34.000 71.289 moveto
+80.000 62.448 lineto
+126.000 53.890 lineto
+gsave 0.1300 0.3300 0.6000 setrgbcolor 1.40 setlinewidth stroke grestore newpath
+newpath
+32.700 69.989 moveto
+35.300 69.989 lineto
+35.300 72.589 lineto
+32.700 72.589 lineto
+closepath
+gsave 0.1300 0.3300 0.6000 setrgbcolor fill grestore
+newpath
+32.700 69.989 moveto
+35.300 69.989 lineto
+35.300 72.589 lineto
+32.700 72.589 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+78.700 61.148 moveto
+81.300 61.148 lineto
+81.300 63.748 lineto
+78.700 63.748 lineto
+closepath
+gsave 0.1300 0.3300 0.6000 setrgbcolor fill grestore
+newpath
+78.700 61.148 moveto
+81.300 61.148 lineto
+81.300 63.748 lineto
+78.700 63.748 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+124.700 52.590 moveto
+127.300 52.590 lineto
+127.300 55.190 lineto
+124.700 55.190 lineto
+closepath
+gsave 0.1300 0.3300 0.6000 setrgbcolor fill grestore
+newpath
+124.700 52.590 moveto
+127.300 52.590 lineto
+127.300 55.190 lineto
+124.700 55.190 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath 34.000 73.545 moveto
+80.000 66.001 lineto
+126.000 77.544 lineto
+gsave 0.6800 0.4200 0.0400 setrgbcolor 0.80 setlinewidth stroke grestore newpath
+newpath
+32.700 72.245 moveto
+35.300 72.245 lineto
+35.300 74.845 lineto
+32.700 74.845 lineto
+closepath
+gsave 0.6800 0.4200 0.0400 setrgbcolor fill grestore
+newpath
+32.700 72.245 moveto
+35.300 72.245 lineto
+35.300 74.845 lineto
+32.700 74.845 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+78.700 64.701 moveto
+81.300 64.701 lineto
+81.300 67.301 lineto
+78.700 67.301 lineto
+closepath
+gsave 0.6800 0.4200 0.0400 setrgbcolor fill grestore
+newpath
+78.700 64.701 moveto
+81.300 64.701 lineto
+81.300 67.301 lineto
+78.700 67.301 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+124.700 76.244 moveto
+127.300 76.244 lineto
+127.300 78.844 lineto
+124.700 78.844 lineto
+closepath
+gsave 0.6800 0.4200 0.0400 setrgbcolor fill grestore
+newpath
+124.700 76.244 moveto
+127.300 76.244 lineto
+127.300 78.844 lineto
+124.700 78.844 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath 34.000 72.321 moveto
+80.000 53.398 lineto
+126.000 73.040 lineto
+gsave 0.1000 0.4400 0.3100 setrgbcolor 0.80 setlinewidth stroke grestore newpath
+newpath
+32.700 71.021 moveto
+35.300 71.021 lineto
+35.300 73.621 lineto
+32.700 73.621 lineto
+closepath
+gsave 0.1000 0.4400 0.3100 setrgbcolor fill grestore
+newpath
+32.700 71.021 moveto
+35.300 71.021 lineto
+35.300 73.621 lineto
+32.700 73.621 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+78.700 52.098 moveto
+81.300 52.098 lineto
+81.300 54.698 lineto
+78.700 54.698 lineto
+closepath
+gsave 0.1000 0.4400 0.3100 setrgbcolor fill grestore
+newpath
+78.700 52.098 moveto
+81.300 52.098 lineto
+81.300 54.698 lineto
+78.700 54.698 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+124.700 71.740 moveto
+127.300 71.740 lineto
+127.300 74.340 lineto
+124.700 74.340 lineto
+closepath
+gsave 0.1000 0.4400 0.3100 setrgbcolor fill grestore
+newpath
+124.700 71.740 moveto
+127.300 71.740 lineto
+127.300 74.340 lineto
+124.700 74.340 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath 34.000 106.835 moveto
+80.000 83.094 lineto
+126.000 82.008 lineto
+gsave 0.6800 0.1700 0.1700 setrgbcolor 0.80 setlinewidth stroke grestore newpath
+newpath
+32.700 105.535 moveto
+35.300 105.535 lineto
+35.300 108.135 lineto
+32.700 108.135 lineto
+closepath
+gsave 0.6800 0.1700 0.1700 setrgbcolor fill grestore
+newpath
+32.700 105.535 moveto
+35.300 105.535 lineto
+35.300 108.135 lineto
+32.700 108.135 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+78.700 81.794 moveto
+81.300 81.794 lineto
+81.300 84.394 lineto
+78.700 84.394 lineto
+closepath
+gsave 0.6800 0.1700 0.1700 setrgbcolor fill grestore
+newpath
+78.700 81.794 moveto
+81.300 81.794 lineto
+81.300 84.394 lineto
+78.700 84.394 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+124.700 80.708 moveto
+127.300 80.708 lineto
+127.300 83.308 lineto
+124.700 83.308 lineto
+closepath
+gsave 0.6800 0.1700 0.1700 setrgbcolor fill grestore
+newpath
+124.700 80.708 moveto
+127.300 80.708 lineto
+127.300 83.308 lineto
+124.700 83.308 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath 34.000 114.901 moveto
+80.000 111.684 lineto
+126.000 109.742 lineto
+gsave 0.6200 0.6500 0.6800 setrgbcolor 0.80 setlinewidth stroke grestore newpath
+newpath
+32.700 113.601 moveto
+35.300 113.601 lineto
+35.300 116.201 lineto
+32.700 116.201 lineto
+closepath
+gsave 0.6200 0.6500 0.6800 setrgbcolor fill grestore
+newpath
+32.700 113.601 moveto
+35.300 113.601 lineto
+35.300 116.201 lineto
+32.700 116.201 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+78.700 110.384 moveto
+81.300 110.384 lineto
+81.300 112.984 lineto
+78.700 112.984 lineto
+closepath
+gsave 0.6200 0.6500 0.6800 setrgbcolor fill grestore
+newpath
+78.700 110.384 moveto
+81.300 110.384 lineto
+81.300 112.984 lineto
+78.700 112.984 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+124.700 108.442 moveto
+127.300 108.442 lineto
+127.300 111.042 lineto
+124.700 111.042 lineto
+closepath
+gsave 0.6200 0.6500 0.6800 setrgbcolor fill grestore
+newpath
+124.700 108.442 moveto
+127.300 108.442 lineto
+127.300 111.042 lineto
+124.700 111.042 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
 newpath gsave /Helvetica-Bold findfont 6.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (TimesFM) 195.000 9.000 Ctr grestore newpath
-newpath 158.000 116.000 moveto 254.000 116.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.70 setlinewidth stroke grestore newpath
-newpath 158.000 30.000 moveto 158.000 116.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.70 setlinewidth stroke grestore newpath
-newpath 158.000 116.000 moveto 158.000 118.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (10%) 158.000 125.000 Ctr grestore newpath
-newpath 206.000 116.000 moveto 206.000 118.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (30%) 206.000 125.000 Ctr grestore newpath
-newpath 254.000 116.000 moveto 254.000 118.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (50%) 254.000 125.000 Ctr grestore newpath
-newpath 155.500 116.000 moveto 158.000 116.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (0) 154.400 117.900 Rgt grestore newpath
-newpath 155.500 73.000 moveto 158.000 73.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor () 154.400 74.900 Rgt grestore newpath
-newpath 155.500 30.000 moveto 158.000 30.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (+) 154.400 31.900 Rgt grestore newpath
-newpath gsave /Helvetica findfont 6.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (missing severity) 206.000 133.500 Ctr grestore newpath
+newpath 162.000 120.000 moveto 254.000 120.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.70 setlinewidth stroke grestore newpath
+newpath 162.000 36.000 moveto 162.000 120.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.70 setlinewidth stroke grestore newpath
+newpath 162.000 120.000 moveto 162.000 122.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (10%) 162.000 129.000 Ctr grestore newpath
+newpath 208.000 120.000 moveto 208.000 122.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (30%) 208.000 129.000 Ctr grestore newpath
+newpath 254.000 120.000 moveto 254.000 122.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (50%) 254.000 129.000 Ctr grestore newpath
+newpath 159.500 116.897 moveto 162.000 116.897 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (-20%) 158.400 118.797 Rgt grestore newpath
+newpath 159.500 99.900 moveto 162.000 99.900 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (-10%) 158.400 101.800 Rgt grestore newpath
+newpath 159.500 82.904 moveto 162.000 82.904 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (+0%) 158.400 84.804 Rgt grestore newpath
+newpath 159.500 65.908 moveto 162.000 65.908 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (+10%) 158.400 67.808 Rgt grestore newpath
+newpath 159.500 48.912 moveto 162.000 48.912 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (+20%) 158.400 50.812 Rgt grestore newpath
+newpath gsave /Helvetica findfont 6.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (missing severity) 208.000 137.500 Ctr grestore newpath
 [2.00 2.00] 0 setdash
-newpath 158.000 66.120 moveto 254.000 66.120 lineto gsave 0.8000 0.8100 0.8300 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath 162.000 82.904 moveto 254.000 82.904 lineto gsave 0.8000 0.8100 0.8300 setrgbcolor 0.60 setlinewidth stroke grestore newpath
 [] 0 setdash
-newpath gsave /Helvetica findfont 5.60 scalefont setfont 0.6800 0.1700 0.1700 setrgbcolor ([FIG-ROBUST-TIMESFM]) 206.000 91.000 Ctr grestore newpath
+newpath 162.000 68.111 moveto
+208.000 47.086 lineto
+254.000 41.099 lineto
+gsave 0.1300 0.3300 0.6000 setrgbcolor 1.40 setlinewidth stroke grestore newpath
+newpath
+160.700 66.811 moveto
+163.300 66.811 lineto
+163.300 69.411 lineto
+160.700 69.411 lineto
+closepath
+gsave 0.1300 0.3300 0.6000 setrgbcolor fill grestore
+newpath
+160.700 66.811 moveto
+163.300 66.811 lineto
+163.300 69.411 lineto
+160.700 69.411 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+206.700 45.786 moveto
+209.300 45.786 lineto
+209.300 48.386 lineto
+206.700 48.386 lineto
+closepath
+gsave 0.1300 0.3300 0.6000 setrgbcolor fill grestore
+newpath
+206.700 45.786 moveto
+209.300 45.786 lineto
+209.300 48.386 lineto
+206.700 48.386 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+252.700 39.799 moveto
+255.300 39.799 lineto
+255.300 42.399 lineto
+252.700 42.399 lineto
+closepath
+gsave 0.1300 0.3300 0.6000 setrgbcolor fill grestore
+newpath
+252.700 39.799 moveto
+255.300 39.799 lineto
+255.300 42.399 lineto
+252.700 42.399 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath 162.000 72.189 moveto
+208.000 51.611 lineto
+254.000 53.215 lineto
+gsave 0.6800 0.4200 0.0400 setrgbcolor 0.80 setlinewidth stroke grestore newpath
+newpath
+160.700 70.889 moveto
+163.300 70.889 lineto
+163.300 73.489 lineto
+160.700 73.489 lineto
+closepath
+gsave 0.6800 0.4200 0.0400 setrgbcolor fill grestore
+newpath
+160.700 70.889 moveto
+163.300 70.889 lineto
+163.300 73.489 lineto
+160.700 73.489 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+206.700 50.311 moveto
+209.300 50.311 lineto
+209.300 52.911 lineto
+206.700 52.911 lineto
+closepath
+gsave 0.6800 0.4200 0.0400 setrgbcolor fill grestore
+newpath
+206.700 50.311 moveto
+209.300 50.311 lineto
+209.300 52.911 lineto
+206.700 52.911 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+252.700 51.915 moveto
+255.300 51.915 lineto
+255.300 54.515 lineto
+252.700 54.515 lineto
+closepath
+gsave 0.6800 0.4200 0.0400 setrgbcolor fill grestore
+newpath
+252.700 51.915 moveto
+255.300 51.915 lineto
+255.300 54.515 lineto
+252.700 54.515 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath 162.000 70.401 moveto
+208.000 59.674 lineto
+254.000 69.741 lineto
+gsave 0.1000 0.4400 0.3100 setrgbcolor 0.80 setlinewidth stroke grestore newpath
+newpath
+160.700 69.101 moveto
+163.300 69.101 lineto
+163.300 71.701 lineto
+160.700 71.701 lineto
+closepath
+gsave 0.1000 0.4400 0.3100 setrgbcolor fill grestore
+newpath
+160.700 69.101 moveto
+163.300 69.101 lineto
+163.300 71.701 lineto
+160.700 71.701 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+206.700 58.374 moveto
+209.300 58.374 lineto
+209.300 60.974 lineto
+206.700 60.974 lineto
+closepath
+gsave 0.1000 0.4400 0.3100 setrgbcolor fill grestore
+newpath
+206.700 58.374 moveto
+209.300 58.374 lineto
+209.300 60.974 lineto
+206.700 60.974 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+252.700 68.441 moveto
+255.300 68.441 lineto
+255.300 71.041 lineto
+252.700 71.041 lineto
+closepath
+gsave 0.1000 0.4400 0.3100 setrgbcolor fill grestore
+newpath
+252.700 68.441 moveto
+255.300 68.441 lineto
+255.300 71.041 lineto
+252.700 71.041 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath 162.000 88.637 moveto
+208.000 83.518 lineto
+254.000 68.088 lineto
+gsave 0.6800 0.1700 0.1700 setrgbcolor 0.80 setlinewidth stroke grestore newpath
+newpath
+160.700 87.337 moveto
+163.300 87.337 lineto
+163.300 89.937 lineto
+160.700 89.937 lineto
+closepath
+gsave 0.6800 0.1700 0.1700 setrgbcolor fill grestore
+newpath
+160.700 87.337 moveto
+163.300 87.337 lineto
+163.300 89.937 lineto
+160.700 89.937 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+206.700 82.218 moveto
+209.300 82.218 lineto
+209.300 84.818 lineto
+206.700 84.818 lineto
+closepath
+gsave 0.6800 0.1700 0.1700 setrgbcolor fill grestore
+newpath
+206.700 82.218 moveto
+209.300 82.218 lineto
+209.300 84.818 lineto
+206.700 84.818 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+252.700 66.788 moveto
+255.300 66.788 lineto
+255.300 69.388 lineto
+252.700 69.388 lineto
+closepath
+gsave 0.6800 0.1700 0.1700 setrgbcolor fill grestore
+newpath
+252.700 66.788 moveto
+255.300 66.788 lineto
+255.300 69.388 lineto
+252.700 69.388 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath 162.000 76.730 moveto
+208.000 80.676 lineto
+254.000 82.841 lineto
+gsave 0.6200 0.6500 0.6800 setrgbcolor 0.80 setlinewidth stroke grestore newpath
+newpath
+160.700 75.430 moveto
+163.300 75.430 lineto
+163.300 78.030 lineto
+160.700 78.030 lineto
+closepath
+gsave 0.6200 0.6500 0.6800 setrgbcolor fill grestore
+newpath
+160.700 75.430 moveto
+163.300 75.430 lineto
+163.300 78.030 lineto
+160.700 78.030 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+206.700 79.376 moveto
+209.300 79.376 lineto
+209.300 81.976 lineto
+206.700 81.976 lineto
+closepath
+gsave 0.6200 0.6500 0.6800 setrgbcolor fill grestore
+newpath
+206.700 79.376 moveto
+209.300 79.376 lineto
+209.300 81.976 lineto
+206.700 81.976 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+252.700 81.541 moveto
+255.300 81.541 lineto
+255.300 84.141 lineto
+252.700 84.141 lineto
+closepath
+gsave 0.6200 0.6500 0.6800 setrgbcolor fill grestore
+newpath
+252.700 81.541 moveto
+255.300 81.541 lineto
+255.300 84.141 lineto
+252.700 84.141 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
 newpath gsave /Helvetica-Bold findfont 6.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (Chronos-2) 323.000 9.000 Ctr grestore newpath
-newpath 286.000 116.000 moveto 382.000 116.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.70 setlinewidth stroke grestore newpath
-newpath 286.000 30.000 moveto 286.000 116.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.70 setlinewidth stroke grestore newpath
-newpath 286.000 116.000 moveto 286.000 118.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (10%) 286.000 125.000 Ctr grestore newpath
-newpath 334.000 116.000 moveto 334.000 118.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (30%) 334.000 125.000 Ctr grestore newpath
-newpath 382.000 116.000 moveto 382.000 118.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (50%) 382.000 125.000 Ctr grestore newpath
-newpath 283.500 116.000 moveto 286.000 116.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (0) 282.400 117.900 Rgt grestore newpath
-newpath 283.500 73.000 moveto 286.000 73.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor () 282.400 74.900 Rgt grestore newpath
-newpath 283.500 30.000 moveto 286.000 30.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
-newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (+) 282.400 31.900 Rgt grestore newpath
-newpath gsave /Helvetica findfont 6.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (missing severity) 334.000 133.500 Ctr grestore newpath
+newpath 290.000 120.000 moveto 382.000 120.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.70 setlinewidth stroke grestore newpath
+newpath 290.000 36.000 moveto 290.000 120.000 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.70 setlinewidth stroke grestore newpath
+newpath 290.000 120.000 moveto 290.000 122.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (10%) 290.000 129.000 Ctr grestore newpath
+newpath 336.000 120.000 moveto 336.000 122.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (30%) 336.000 129.000 Ctr grestore newpath
+newpath 382.000 120.000 moveto 382.000 122.500 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (50%) 382.000 129.000 Ctr grestore newpath
+newpath 287.500 116.897 moveto 290.000 116.897 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (-20%) 286.400 118.797 Rgt grestore newpath
+newpath 287.500 99.900 moveto 290.000 99.900 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (-10%) 286.400 101.800 Rgt grestore newpath
+newpath 287.500 82.904 moveto 290.000 82.904 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (+0%) 286.400 84.804 Rgt grestore newpath
+newpath 287.500 65.908 moveto 290.000 65.908 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (+10%) 286.400 67.808 Rgt grestore newpath
+newpath 287.500 48.912 moveto 290.000 48.912 lineto gsave 0.1100 0.1200 0.1400 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath gsave /Helvetica findfont 5.40 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (+20%) 286.400 50.812 Rgt grestore newpath
+newpath gsave /Helvetica findfont 6.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (missing severity) 336.000 137.500 Ctr grestore newpath
 [2.00 2.00] 0 setdash
-newpath 286.000 66.120 moveto 382.000 66.120 lineto gsave 0.8000 0.8100 0.8300 setrgbcolor 0.60 setlinewidth stroke grestore newpath
+newpath 290.000 82.904 moveto 382.000 82.904 lineto gsave 0.8000 0.8100 0.8300 setrgbcolor 0.60 setlinewidth stroke grestore newpath
 [] 0 setdash
-newpath gsave /Helvetica findfont 5.60 scalefont setfont 0.6800 0.1700 0.1700 setrgbcolor ([FIG-ROBUST-CHRONOS2]) 334.000 91.000 Ctr grestore newpath
-newpath gsave /Helvetica findfont 5.20 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (Each line is one method; all methods reuse the models and rules frozen on TRAIN, with no per-severity retuning.) 198.000 148.000 Ctr grestore newpath
+newpath 290.000 60.099 moveto
+336.000 46.957 lineto
+382.000 73.796 lineto
+gsave 0.1300 0.3300 0.6000 setrgbcolor 1.40 setlinewidth stroke grestore newpath
+newpath
+288.700 58.799 moveto
+291.300 58.799 lineto
+291.300 61.399 lineto
+288.700 61.399 lineto
+closepath
+gsave 0.1300 0.3300 0.6000 setrgbcolor fill grestore
+newpath
+288.700 58.799 moveto
+291.300 58.799 lineto
+291.300 61.399 lineto
+288.700 61.399 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+334.700 45.657 moveto
+337.300 45.657 lineto
+337.300 48.257 lineto
+334.700 48.257 lineto
+closepath
+gsave 0.1300 0.3300 0.6000 setrgbcolor fill grestore
+newpath
+334.700 45.657 moveto
+337.300 45.657 lineto
+337.300 48.257 lineto
+334.700 48.257 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+380.700 72.496 moveto
+383.300 72.496 lineto
+383.300 75.096 lineto
+380.700 75.096 lineto
+closepath
+gsave 0.1300 0.3300 0.6000 setrgbcolor fill grestore
+newpath
+380.700 72.496 moveto
+383.300 72.496 lineto
+383.300 75.096 lineto
+380.700 75.096 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath 290.000 58.494 moveto
+336.000 43.678 lineto
+382.000 45.545 lineto
+gsave 0.6800 0.4200 0.0400 setrgbcolor 0.80 setlinewidth stroke grestore newpath
+newpath
+288.700 57.194 moveto
+291.300 57.194 lineto
+291.300 59.794 lineto
+288.700 59.794 lineto
+closepath
+gsave 0.6800 0.4200 0.0400 setrgbcolor fill grestore
+newpath
+288.700 57.194 moveto
+291.300 57.194 lineto
+291.300 59.794 lineto
+288.700 59.794 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+334.700 42.378 moveto
+337.300 42.378 lineto
+337.300 44.978 lineto
+334.700 44.978 lineto
+closepath
+gsave 0.6800 0.4200 0.0400 setrgbcolor fill grestore
+newpath
+334.700 42.378 moveto
+337.300 42.378 lineto
+337.300 44.978 lineto
+334.700 44.978 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+380.700 44.245 moveto
+383.300 44.245 lineto
+383.300 46.845 lineto
+380.700 46.845 lineto
+closepath
+gsave 0.6800 0.4200 0.0400 setrgbcolor fill grestore
+newpath
+380.700 44.245 moveto
+383.300 44.245 lineto
+383.300 46.845 lineto
+380.700 46.845 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath 290.000 67.349 moveto
+336.000 43.301 lineto
+382.000 75.595 lineto
+gsave 0.1000 0.4400 0.3100 setrgbcolor 0.80 setlinewidth stroke grestore newpath
+newpath
+288.700 66.049 moveto
+291.300 66.049 lineto
+291.300 68.649 lineto
+288.700 68.649 lineto
+closepath
+gsave 0.1000 0.4400 0.3100 setrgbcolor fill grestore
+newpath
+288.700 66.049 moveto
+291.300 66.049 lineto
+291.300 68.649 lineto
+288.700 68.649 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+334.700 42.001 moveto
+337.300 42.001 lineto
+337.300 44.601 lineto
+334.700 44.601 lineto
+closepath
+gsave 0.1000 0.4400 0.3100 setrgbcolor fill grestore
+newpath
+334.700 42.001 moveto
+337.300 42.001 lineto
+337.300 44.601 lineto
+334.700 44.601 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+380.700 74.295 moveto
+383.300 74.295 lineto
+383.300 76.895 lineto
+380.700 76.895 lineto
+closepath
+gsave 0.1000 0.4400 0.3100 setrgbcolor fill grestore
+newpath
+380.700 74.295 moveto
+383.300 74.295 lineto
+383.300 76.895 lineto
+380.700 76.895 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath 290.000 93.354 moveto
+336.000 83.374 lineto
+382.000 79.876 lineto
+gsave 0.6800 0.1700 0.1700 setrgbcolor 0.80 setlinewidth stroke grestore newpath
+newpath
+288.700 92.054 moveto
+291.300 92.054 lineto
+291.300 94.654 lineto
+288.700 94.654 lineto
+closepath
+gsave 0.6800 0.1700 0.1700 setrgbcolor fill grestore
+newpath
+288.700 92.054 moveto
+291.300 92.054 lineto
+291.300 94.654 lineto
+288.700 94.654 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+334.700 82.074 moveto
+337.300 82.074 lineto
+337.300 84.674 lineto
+334.700 84.674 lineto
+closepath
+gsave 0.6800 0.1700 0.1700 setrgbcolor fill grestore
+newpath
+334.700 82.074 moveto
+337.300 82.074 lineto
+337.300 84.674 lineto
+334.700 84.674 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+380.700 78.576 moveto
+383.300 78.576 lineto
+383.300 81.176 lineto
+380.700 81.176 lineto
+closepath
+gsave 0.6800 0.1700 0.1700 setrgbcolor fill grestore
+newpath
+380.700 78.576 moveto
+383.300 78.576 lineto
+383.300 81.176 lineto
+380.700 81.176 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath 290.000 96.270 moveto
+336.000 99.049 lineto
+382.000 97.547 lineto
+gsave 0.6200 0.6500 0.6800 setrgbcolor 0.80 setlinewidth stroke grestore newpath
+newpath
+288.700 94.970 moveto
+291.300 94.970 lineto
+291.300 97.570 lineto
+288.700 97.570 lineto
+closepath
+gsave 0.6200 0.6500 0.6800 setrgbcolor fill grestore
+newpath
+288.700 94.970 moveto
+291.300 94.970 lineto
+291.300 97.570 lineto
+288.700 97.570 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+334.700 97.749 moveto
+337.300 97.749 lineto
+337.300 100.349 lineto
+334.700 100.349 lineto
+closepath
+gsave 0.6200 0.6500 0.6800 setrgbcolor fill grestore
+newpath
+334.700 97.749 moveto
+337.300 97.749 lineto
+337.300 100.349 lineto
+334.700 100.349 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+380.700 96.247 moveto
+383.300 96.247 lineto
+383.300 98.847 lineto
+380.700 98.847 lineto
+closepath
+gsave 0.6200 0.6500 0.6800 setrgbcolor fill grestore
+newpath
+380.700 96.247 moveto
+383.300 96.247 lineto
+383.300 98.847 lineto
+380.700 98.847 lineto
+closepath
+gsave 1.0000 1.0000 1.0000 setrgbcolor 0.30 setlinewidth stroke grestore
+newpath
+newpath
+30.000 148.000 moveto
+34.000 148.000 lineto
+34.000 152.000 lineto
+30.000 152.000 lineto
+closepath
+gsave 0.1300 0.3300 0.6000 setrgbcolor fill grestore
+newpath
+newpath gsave /Helvetica findfont 5.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (IntroAct-TS) 36.000 152.000 Lft grestore newpath
+newpath
+85.200 148.000 moveto
+89.200 148.000 lineto
+89.200 152.000 lineto
+85.200 152.000 lineto
+closepath
+gsave 0.6800 0.4200 0.0400 setrgbcolor fill grestore
+newpath
+newpath gsave /Helvetica findfont 5.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (Best Fixed) 91.200 152.000 Lft grestore newpath
+newpath
+137.200 148.000 moveto
+141.200 148.000 lineto
+141.200 152.000 lineto
+137.200 152.000 lineto
+closepath
+gsave 0.1000 0.4400 0.3100 setrgbcolor fill grestore
+newpath
+newpath gsave /Helvetica findfont 5.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (R2-CART) 143.200 152.000 Lft grestore newpath
+newpath
+179.600 148.000 moveto
+183.600 148.000 lineto
+183.600 152.000 lineto
+179.600 152.000 lineto
+closepath
+gsave 0.6800 0.1700 0.1700 setrgbcolor fill grestore
+newpath
+newpath gsave /Helvetica findfont 5.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (SAITS) 185.600 152.000 Lft grestore newpath
+newpath
+215.600 148.000 moveto
+219.600 148.000 lineto
+219.600 152.000 lineto
+215.600 152.000 lineto
+closepath
+gsave 0.6200 0.6500 0.6800 setrgbcolor fill grestore
+newpath
+newpath gsave /Helvetica findfont 5.00 scalefont setfont 0.1100 0.1200 0.1400 setrgbcolor (TATO) 221.600 152.000 Lft grestore newpath
+newpath gsave /Helvetica findfont 5.00 scalefont setfont 0.4200 0.4500 0.4900 setrgbcolor (Every method reuses the rule frozen on TRAIN, with no retuning between levels.) 198.000 167.000 Ctr grestore newpath
 showpage
 %%EOF

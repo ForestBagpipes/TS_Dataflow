@@ -80,6 +80,41 @@ def build(evals: dict, selections: dict, num, pct) -> dict:
         out[f"RS{tag}_HL"] = num(sum(r["harmful_loss"] for r in rows) / n, 4)
         out[f"RS{tag}_CALLS"] = num(1.0 + sum(r["intervention_rate"] for r in rows) / n, 2)
 
+    # Per-backbone bank-size anchors.  The averaged rows above hide the
+    # direction, and the appendix sentence is about the direction.
+    for backbone, tag in (("bolt", "BOLT"), ("timesfm", "TF"), ("chronos2", "CH2")):
+        path = ROOT / f"results/v46/ablations/banksize_test_{backbone}.json"
+        if not path.exists():
+            continue
+        rows = sorted(json.loads(path.read_text())["rows"], key=lambda r: r["fraction"])
+        values = [r["mase"] for r in rows if r.get("mase") is not None]
+        if not values:
+            continue
+        out[f"BANK_Q_{tag}"] = num(values[0])
+        out[f"BANK_F_{tag}"] = num(values[-1])
+        out[f"BANK_SPREAD_{tag}"] = num(max(values) - min(values), 3)
+
+    # The governance figure reading, from the score-against-utility records.
+    agree, positive, negative, pairs = [], [], [], 0
+    for backbone in ("bolt", "timesfm", "chronos2"):
+        path = ROOT / f"results/v46/diagnostics/score_utility_test_{backbone}.json"
+        if not path.exists():
+            continue
+        payload = json.loads(path.read_text())
+        agree.append(payload["sign_agreement"])
+        if payload.get("mean_utility_positive_score") is not None:
+            positive.append(payload["mean_utility_positive_score"])
+        if payload.get("mean_utility_negative_score") is not None:
+            negative.append(payload["mean_utility_negative_score"])
+        pairs += payload["pairs"]
+    if agree and positive and negative:
+        out["GOV_FIG_READING"] = (
+            f"Over {pairs} admissible pairs the sign of the score and the sign of the realised "
+            f"utility agree on {sum(agree) / len(agree) * 100:.0f}\\% of them, and the mean "
+            f"realised utility is {sum(positive) / len(positive):+.3f} where the score is "
+            f"positive against {sum(negative) / len(negative):+.3f} where it is negative, so the "
+            f"score carries the direction the decision needs without carrying the level")
+
     # The severity reading, written from the sweep itself.
     levels = [lv for lv in ("10", "30", "50") if lv in severity]
     if len(levels) >= 2:

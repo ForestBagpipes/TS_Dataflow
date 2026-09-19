@@ -3,14 +3,14 @@
  "backbone": "chronos2",
  "block": "test",
  "frozen": {
-  "k": 64,
-  "beta": 0.0
+  "k": 16,
+  "beta": 1.64
  },
  "bank_records": 8474,
  "retrieval_per_request": {
-  "mean_ms": 1.3026809631547192,
-  "p95_ms": 1.5120478004973847,
-  "max_ms": 2.0286700000724522,
+  "mean_ms": 1.1847698051760265,
+  "p95_ms": 1.2151516501035076,
+  "max_ms": 1.6110199994727736,
   "n": 760
  },
  "backbone_call": {
@@ -20,5 +20,5 @@
   "n": 3610
  },
  "note": "retrieval is measured one request at a time on this machine; the backbone call time is the runtime the forecast stage recorded for the same block",
- "runtime_seconds": 20.402104802000395
+ "runtime_seconds": 19.491684726999665
 }

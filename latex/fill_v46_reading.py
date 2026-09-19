@@ -12,6 +12,7 @@ ACTION_NAME = {"KEEP": "Keep", "FFILL": "forward fill",
 BACKBONE_NAME = {"bolt": "Bolt", "timesfm": "TimesFM", "chronos2": "Chronos-2"}
 #: How each row is named in prose.  The record keys carry underscores, which
 #: LaTeX reads as subscripts outside maths.
+DEPLOY = ("NATIVE_KEEP", "BEST_FIXED", "R2_CART", "SAITS", "TATO", "FULL_INTROACT")
 DISPLAY = {"NATIVE_KEEP": "the untouched input", "BEST_FIXED": "the best fixed intervention",
            "R2_CART": "the simple selector", "SAITS": "SAITS", "TATO": "TATO",
            "FULL_INTROACT": "IntroAct-TS", "CATALOG_ORACLE": "the catalog oracle",
@@ -94,18 +95,28 @@ def build(evals: dict, primary: dict, mean_over, ci,
                 else:
                     losses += 1
         if wins + losses:
-            detail.append(f"{name} below it on {wins} of {wins + losses} "
-                          f"source and backbone cells")
+            detail.append((name, wins, wins + losses))
     if worse:
         out["MAIN_BASELINE_SPREAD"] += (
             ". Both published baselines repair or transform every incomplete request, and "
             + " and ".join(f"{name} ends at {published[name]:.3f}" for name in sorted(worse))
             + f", above the {keep:.3f} of leaving the input alone")
-        if detail:
+        # A baseline that helps on most cells and still loses on the average is
+        # a different failure from one that loses nearly everywhere, and only
+        # the first is the failure a per-request rule is built to catch.
+        concentrated = [d for d in detail if d[1] * 2 > d[2]]
+        broad = [d for d in detail if d[1] * 2 <= d[2]]
+        if concentrated:
             out["MAIN_BASELINE_SPREAD"] += (
-                ". The loss is concentrated rather than uniform, with " + ", ".join(detail)
-                + ", so what costs a fixed repair its average is the minority of cells on which "
-                  "it is badly wrong, and that is the failure a per-request rule can avoid")
+                ". " + " and ".join(f"{name} is below it on {wins} of {total} source and "
+                                    f"backbone cells" for name, wins, total in concentrated)
+                + ", so what costs that repair its average is the minority of cells on which it "
+                  "is badly wrong, and that is the failure a per-request rule can avoid")
+        if broad:
+            out["MAIN_BASELINE_SPREAD"] += (
+                ". " + " and ".join(f"{name} is below it on only {wins} of {total} such cells"
+                                    for name, wins, total in broad)
+                + ", so that one loses broadly rather than on a few cells")
     order = [b for b in ("bolt", "timesfm", "chronos2") if b in evals]
     parts = [f"{BACKBONE_NAME[b]} {ci(evals[b]['comparisons']['FULL_INTROACT_vs_R2_CART'])}"
              for b in order if "FULL_INTROACT_vs_R2_CART" in evals[b]["comparisons"]]
@@ -114,7 +125,7 @@ def build(evals: dict, primary: dict, mean_over, ci,
                if evals[b]["comparisons"]["FULL_INTROACT_vs_R2_CART"]["excludes_zero"]]
         if not sig:
             tail = ("no interval excludes zero, so accuracy alone does not separate the two "
-                    "and what does is in Table~\ref{tab:harm}")
+                    "and what does is in Table~" + chr(92) + "ref{tab:harm}")
         elif len(sig) == len(order):
             tail = "every interval excludes zero"
         else:
@@ -139,10 +150,28 @@ def build(evals: dict, primary: dict, mean_over, ci,
             f"deployable rows on every backbone, so the aggregate is not driven by a handful of "
             f"cells")
     else:
-        out["MAIN_RANK"] = (
-            f"Average rank over the evaluation cells is {rank_parts}, against "
-            + ", ".join(f"{BACKBONE_NAME[b]} {min(per_rank[b].values()):.2f}" for b in order)
-            + " for the best deployable row on each")
+        lead = [b for b in order if per_rank[b]
+                and min(per_rank[b].items(), key=lambda kv: kv[1])[0] == "FULL_INTROACT"]
+        behind = [b for b in order if b not in lead and per_rank[b]]
+        mean_rank = {name: sum(per_rank[b][name] for b in order) / len(order)
+                     for name in deployable_rows
+                     if all(name in per_rank[b] for b in order)}
+        rival = min(((n, v) for n, v in mean_rank.items() if n != "FULL_INTROACT"),
+                    key=lambda kv: kv[1], default=None)
+        sentence = f"Average rank over the evaluation cells is {rank_parts}"
+        if lead:
+            sentence += (f", the best of the {count} deployable rows on "
+                         + " and ".join(BACKBONE_NAME[b] for b in lead))
+        for b in behind:
+            name, value = min(per_rank[b].items(), key=lambda kv: kv[1])
+            sentence += (f". On {BACKBONE_NAME[b]} {DISPLAY.get(name, name)} ranks "
+                         f"{value:.2f} against our {per_rank[b]['FULL_INTROACT']:.2f}")
+        if rival is not None and "FULL_INTROACT" in mean_rank:
+            sentence += (f". Averaged over the three backbones the rank is "
+                         f"{mean_rank['FULL_INTROACT']:.2f} against {rival[1]:.2f} for "
+                         f"{DISPLAY.get(rival[0], rival[0])}, which is the closest "
+                         f"deployable row")
+        out["MAIN_RANK"] = sentence
 
     ir = m("FULL_INTROACT", "intervention_rate")
     hir = m("FULL_INTROACT", "conditional_hir")
@@ -170,7 +199,7 @@ def build(evals: dict, primary: dict, mean_over, ci,
     out["HARM_BP"] = (
         f"Beneficial precision is {m('FULL_INTROACT', 'beneficial_precision') * 100:.1f}{PCT}")
     out["HARM_MO"] = (
-        f"and missed opportunity is {m('FULL_INTROACT', 'missed_opportunity') * 100:.1f}{PCT}, "
+        f"Missed opportunity is {m('FULL_INTROACT', 'missed_opportunity') * 100:.1f}{PCT}, "
         f"which is what the reference option costs")
     out["HARM_RISKCURVE"] = (
         "Raising the penalty strength walks the operating point down the curve, trading accuracy "
@@ -182,7 +211,9 @@ def build(evals: dict, primary: dict, mean_over, ci,
          ("A1_GLOBAL_UTILITY", "A2_WO_INTERVENTION", "A3_WO_FORECAST",
           "A4_ALWAYS_ACT", "A5_PARAMETRIC_RIDGE")}
     out["ABL_READING"] = (
-        "Two parts of the design carry the result, and the state blocks matter less than either")
+        "Two parts of the design carry the result, and the state blocks matter less than either. "
+        "Each interval below is the paired difference on the primary backbone, while the table "
+        "columns average over the three")
     if a["A1_GLOBAL_UTILITY"]:
         out["ABL_A1"] = (
             f"Scoring an action by its global mean utility instead of its neighbourhood costs "
@@ -190,13 +221,18 @@ def build(evals: dict, primary: dict, mean_over, ci,
             f"{m('A1_GLOBAL_UTILITY', 'intervention_rate') * 100:.0f}{PCT}, which is what a "
             f"corpus-level answer to a per-request question looks like")
     if a["A2_WO_INTERVENTION"]:
+        entry = a["A2_WO_INTERVENTION"]
+        against_us = entry["excludes_zero"] and entry["difference"] > 0
         out["ABL_A2"] = (
-            f"Dropping the intervention block of the state changes accuracy by "
-            f"{ci(a['A2_WO_INTERVENTION'])}")
+            f"Dropping the intervention block of the state changes accuracy by {ci(entry)}"
+            + (", so on that backbone the block does not pay for itself" if against_us else ""))
     if a["A3_WO_FORECAST"]:
         out["ABL_A3"] = (
-            f"Dropping the reference-forecast block changes it by {ci(a['A3_WO_FORECAST'])}, so "
-            f"neither state block is load bearing on its own")
+            f"Dropping the reference-forecast block changes it by {ci(a['A3_WO_FORECAST'])}. "
+            f"Averaged over the three backbones the first ablation lands at "
+            f"{m('A2_WO_INTERVENTION'):.3f} and the second at {m('A3_WO_FORECAST'):.3f} against "
+            f"{ours:.3f} for the full method, so the reference-forecast block is the one that "
+            f"shows up in the average")
     if a["A4_ALWAYS_ACT"]:
         out["ABL_A4"] = (
             f"Removing the reference option and executing the best-scoring action on every "
@@ -255,11 +291,6 @@ def build(evals: dict, primary: dict, mean_over, ci,
                 f"accurately while {ACTION_NAME[best_util[0]]} helps the forecast most, so the "
                 f"two criteria do not even agree on the corpus")
 
-    sig_fixed = [b for b in evals
-                 if evals[b]["comparisons"]["FULL_INTROACT_vs_BEST_FIXED"]["excludes_zero"]]
-    tail = ("and the paired difference against the best fixed intervention excludes zero on "
-            "every backbone" if len(sig_fixed) == len(evals) and sig_fixed else
-            "and it has the best average rank of the deployable rows on every backbone")
     if "chronos2" in evals:
         ch2 = evals["chronos2"]
         rows_ch2 = ch2["rows"]
@@ -270,18 +301,41 @@ def build(evals: dict, primary: dict, mean_over, ci,
                 if ch2_best == "FULL_INTROACT" else
                 f"and the lowest macro average there belongs to "
                 f"{DISPLAY.get(ch2_best, ch2_best)} at {rows_ch2[ch2_best]['mase']:.3f}")
+        ch2_rank = {k: v for k, v in ch2["average_rank"].items() if k in DEPLOY}
+        ch2_rank_best = min(ch2_rank.items(), key=lambda kv: kv[1])
+        ch2_rank_clause = (
+            f"it has the best average rank of the deployable rows at "
+            f"{ch2_rank['FULL_INTROACT']:.2f}"
+            if ch2_rank_best[0] == "FULL_INTROACT" else
+            f"its average rank is {ch2_rank['FULL_INTROACT']:.2f} against the "
+            f"{ch2_rank_best[1]:.2f} of {DISPLAY.get(ch2_rank_best[0], ch2_rank_best[0])}")
         out["ROBUST_CH2"] = (
             f"On the held-out family the frozen procedure improves on the untouched input, "
             f"{rows_ch2['FULL_INTROACT']['mase']:.3f} against "
             f"{rows_ch2['NATIVE_KEEP']['mase']:.3f} with a paired interval that excludes zero, "
-            f"it has the best average rank of the deployable rows at "
-            f"{ch2['average_rank']['FULL_INTROACT']:.2f}, " + ch2_tail)
+            + ch2_rank_clause + ", " + ch2_tail)
 
     sig_fixed = [b for b in seq
                  if evals[b]["comparisons"]["FULL_INTROACT_vs_BEST_FIXED"]["excludes_zero"]]
-    concl_tail = ("and the paired difference against the best fixed intervention excludes zero "
-                  "on every backbone" if len(sig_fixed) == len(seq) and sig_fixed else
-                  "and it has the best average rank of the deployable rows on every backbone")
+    mean_rank = {name: sum(evals[b]["average_rank"][name] for b in seq) / len(seq)
+                 for name in DEPLOY
+                 if all(name in evals[b]["average_rank"] for b in seq)}
+    rank_rival = min(((n, v) for n, v in mean_rank.items() if n != "FULL_INTROACT"),
+                     key=lambda kv: kv[1], default=None)
+    rank_clause = ""
+    if rank_rival is not None and "FULL_INTROACT" in mean_rank:
+        rank_clause = (f"the average rank over the deployable rows is "
+                       f"{mean_rank['FULL_INTROACT']:.2f} against {rank_rival[1]:.2f} for "
+                       f"{DISPLAY.get(rank_rival[0], rank_rival[0])}")
+    if len(sig_fixed) == len(seq) and sig_fixed:
+        concl_tail = ("and the paired difference against the best fixed intervention excludes "
+                      "zero on every backbone")
+    elif sig_fixed:
+        concl_tail = ("the paired difference against the best fixed intervention excludes zero "
+                      "on " + " and ".join(BACKBONE_NAME[b] for b in sig_fixed)
+                      + (", and " + rank_clause if rank_clause else ""))
+    else:
+        concl_tail = "and " + rank_clause
     out["CONCL_MAIN"] = (
         f"Deciding per request lowers source-macro MASE from {keep:.3f} to {ours:.3f}, "
         f"{concl_tail}")
@@ -293,34 +347,51 @@ def build(evals: dict, primary: dict, mean_over, ci,
             "The same procedure, with its two hyperparameters chosen by the same cross-validation "
             "rule on the backbone's own replay bank, still improves on the untouched input and "
             "still ranks first among the deployable rows on a backbone family that took no part "
-            "in method design, without reaching the lowest average there")
-    deployable_rows = ("NATIVE_KEEP", "BEST_FIXED", "R2_CART", "SAITS", "TATO",
-                       "FULL_INTROACT")
-    rank_all = all(
-        min(((k, v) for k, v in evals[b]["average_rank"].items() if k in deployable_rows),
-            key=lambda kv: kv[1])[0] == "FULL_INTROACT" for b in seq)
+            "in method design, without reaching the lowest average there"
+            if ch2_rank_best[0] == "FULL_INTROACT" else
+            "The same procedure, with its two hyperparameters chosen by the same cross-validation "
+            "rule on the backbone's own replay bank, still improves on the untouched input on a "
+            "backbone family that took no part in method design. One fixed repair reaches both a "
+            "lower average and a lower rank there, and the interval of that difference covers "
+            "zero, so the two are not separated on accuracy")
+    won_rank = [b for b in seq
+                if min(((k, v) for k, v in evals[b]["average_rank"].items() if k in DEPLOY),
+                       key=lambda kv: kv[1])[0] == "FULL_INTROACT"]
+    rank_all = len(won_rank) == len(seq)
     lowest = " and ".join(BACKBONE_NAME[b] for b in won) if won else "no backbone"
-    out["ABSTRACT_RESULT"] = (
-        f"{INTRO} lowers source-macro MASE from {keep:.3f} to {ours:.3f}, improves on the "
-        f"untouched input on every backbone with paired intervals that exclude zero, and has the "
-        f"best average rank of the deployable rows on every backbone")
-    if rank_all and lost:
+    lowest_rank = (" and ".join(BACKBONE_NAME[b] for b in won_rank)
+                   if won_rank else "no backbone")
+    rival_overall = min(((n, mean_over(evals, n, "mase")) for n in DEPLOY
+                         if n != "FULL_INTROACT" and mean_over(evals, n, "mase") is not None),
+                        key=lambda kv: kv[1], default=None)
+    opening = f"{INTRO} lowers source-macro MASE from {keep:.3f} to {ours:.3f}"
+    if rival_overall is not None:
+        opening += (f", against {rival_overall[1]:.3f} for "
+                    f"{DISPLAY.get(rival_overall[0], rival_overall[0])}")
+    opening += (", improves on the untouched input on every backbone with paired intervals "
+                "that exclude zero")
+    if rank_all:
+        opening += ", and has the best average rank of the deployable rows on every backbone"
+    elif set(won) == set(won_rank) and won:
+        opening += (f", and reaches the lowest macro average and the best average rank of the "
+                    f"deployable rows on {lowest}")
+    else:
+        opening += (f", reaches the lowest macro average of the deployable rows on {lowest} "
+                    f"and the best average rank of those rows on {lowest_rank}")
+    out["ABSTRACT_RESULT"] = opening
+    if lost:
         out["ABSTRACT_RESULT"] += (
-            f". It reaches the lowest macro average on {lowest}, and on the held-out family one "
-            f"fixed repair reaches a lower one, which we report rather than average away")
+            ". On the held-out family one fixed repair reaches a lower average, which we report "
+            "rather than average away")
 
-    deployable_rows = ("NATIVE_KEEP", "BEST_FIXED", "R2_CART", "SAITS", "TATO",
-                       "FULL_INTROACT")
-    rank_best = all(
-        min(((k, v) for k, v in evals[b]["average_rank"].items() if k in deployable_rows),
-            key=lambda kv: kv[1])[0] == "FULL_INTROACT" for b in seq)
     where = (" on every backbone" if not lost else
              " on " + " and ".join(BACKBONE_NAME[b] for b in won))
     out["CONTRIB_RESULT"] = (
         f"{INTRO} improves on the untouched input on every backbone with paired intervals that "
         f"exclude zero, reaches the lowest source-macro MASE of the deployable rows{where}"
         + (", and has the best average rank of those rows on every backbone"
-           if rank_best else "")
+           if rank_all else
+           f", and the lowest average over the three backbones at {ours:.3f}")
         + ", at one to two backbone calls per request. We also report where it does not win")
 
     out["ABSTRACT_CLOSING"] = (

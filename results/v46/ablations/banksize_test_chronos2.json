@@ -3,8 +3,8 @@
  "backbone": "chronos2",
  "block": "test",
  "frozen": {
-  "k": 64,
-  "beta": 0.0
+  "k": 16,
+  "beta": 1.64
  },
  "rows": [
   {
@@ -14,34 +14,34 @@
      "seed": 1,
      "parents": 56,
      "episodes": 448,
-     "mase": 1.3474650712914724,
-     "intervention_rate": 0.6986842105263158,
-     "conditional_hir": 0.4199623352165725,
-     "harmful_loss": 0.041222048492555584
+     "mase": 1.3772473492625608,
+     "intervention_rate": 0.26052631578947366,
+     "conditional_hir": 0.35858585858585856,
+     "harmful_loss": 0.02023856425373906
     },
     {
      "seed": 2,
      "parents": 56,
      "episodes": 448,
-     "mase": 1.366664650260177,
-     "intervention_rate": 0.7302631578947368,
-     "conditional_hir": 0.45045045045045046,
-     "harmful_loss": 0.04402123800008801
+     "mase": 1.552062769963873,
+     "intervention_rate": 0.20921052631578949,
+     "conditional_hir": 0.3836477987421384,
+     "harmful_loss": 0.012207089440827327
     },
     {
      "seed": 3,
      "parents": 56,
      "episodes": 448,
-     "mase": 1.4320969597013913,
-     "intervention_rate": 0.8960526315789473,
-     "conditional_hir": 0.4390602055800294,
-     "harmful_loss": 0.059998600590098976
+     "mase": 1.4916306305623492,
+     "intervention_rate": 0.35789473684210527,
+     "conditional_hir": 0.41911764705882354,
+     "harmful_loss": 0.03679208210264045
     }
    ],
-   "mase": 1.38207556041768,
-   "intervention_rate": 0.775,
-   "conditional_hir": 0.4364909970823508,
-   "harmful_loss": 0.04841396236091419,
+   "mase": 1.473646916596261,
+   "intervention_rate": 0.2758771929824561,
+   "conditional_hir": 0.38711710146227346,
+   "harmful_loss": 0.023079245265735612,
    "parents": 56
   },
   {
@@ -51,34 +51,34 @@
      "seed": 1,
      "parents": 112,
      "episodes": 896,
-     "mase": 1.3427554716256953,
-     "intervention_rate": 0.85,
-     "conditional_hir": 0.42569659442724456,
-     "harmful_loss": 0.048972966395161695
+     "mase": 1.4106313362403011,
+     "intervention_rate": 0.3763157894736842,
+     "conditional_hir": 0.4405594405594406,
+     "harmful_loss": 0.0269565866603592
     },
     {
      "seed": 2,
      "parents": 112,
      "episodes": 896,
-     "mase": 1.3556564558042725,
-     "intervention_rate": 0.7552631578947369,
-     "conditional_hir": 0.4268292682926829,
-     "harmful_loss": 0.041665206475559144
+     "mase": 1.3914961383630469,
+     "intervention_rate": 0.24868421052631579,
+     "conditional_hir": 0.43915343915343913,
+     "harmful_loss": 0.016015516880170465
     },
     {
      "seed": 3,
      "parents": 112,
      "episodes": 896,
-     "mase": 1.4240029708498638,
-     "intervention_rate": 0.8315789473684211,
-     "conditional_hir": 0.43670886075949367,
-     "harmful_loss": 0.05455694459738334
+     "mase": 1.430996664153309,
+     "intervention_rate": 0.27631578947368424,
+     "conditional_hir": 0.43333333333333335,
+     "harmful_loss": 0.028402627843677815
     }
    ],
-   "mase": 1.3741382994266107,
-   "intervention_rate": 0.8122807017543859,
-   "conditional_hir": 0.42974490782647373,
-   "harmful_loss": 0.04839837248936806,
+   "mase": 1.4110413795855523,
+   "intervention_rate": 0.3004385964912281,
+   "conditional_hir": 0.43768207101540435,
+   "harmful_loss": 0.023791577128069157,
    "parents": 112
   },
   {
@@ -88,18 +88,18 @@
      "seed": 1,
      "parents": 223,
      "episodes": 1784,
-     "mase": 1.4423010617107077,
-     "intervention_rate": 0.7407894736842106,
-     "conditional_hir": 0.4564831261101243,
-     "harmful_loss": 0.05370186187388569
+     "mase": 1.3674232369210126,
+     "intervention_rate": 0.3105263157894737,
+     "conditional_hir": 0.4406779661016949,
+     "harmful_loss": 0.019958070793410162
     }
    ],
-   "mase": 1.4423010617107077,
-   "intervention_rate": 0.7407894736842106,
-   "conditional_hir": 0.4564831261101243,
-   "harmful_loss": 0.05370186187388569,
+   "mase": 1.3674232369210126,
+   "intervention_rate": 0.3105263157894737,
+   "conditional_hir": 0.4406779661016949,
+   "harmful_loss": 0.019958070793410162,
    "parents": 223
   }
  ],
- "runtime_seconds": 15.016315906999807
+ "runtime_seconds": 18.63057691299946
 }

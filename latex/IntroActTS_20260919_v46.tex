@@ -384,14 +384,24 @@ The two hyperparameters are selected once per backbone, on the replay bank, by
 leave-one-parent-out cross-validation: every bank episode is scored against a bank from which
 all records of its own parent have been removed, which makes the cross-validated score a
 statement about a request the bank has not seen. The grid is
-$k \in \{8, 16, 32, 64\}$ and $\beta \in \{0, 0.5, 1, 1.64\}$. Among the grid points whose
-cross-validated conditional harmful rate stays at or below a cap, we take the point with the
-lowest cross-validated MASE. The cap is not a free number: it is the conditional harmful rate
-of the action with the highest mean realised utility on the same bank, so the constraint says
-that choosing per request may not be more harmful, given that it intervenes, than always
-applying the strongest single intervention. If no grid point satisfies it the configuration
-falls back to the largest penalty strength. The anchor, the cap and the selected pair are
-recorded before any evaluation record is scored.
+$k \in \{8, 16, 32, 64, 128, 256\}$ and $\beta \in \{0, 0.5, 1, 1.64\}$, where the largest
+penalty is the one-sided $95\%$ normal quantile and the largest neighbourhood is a seventh of
+the bank. A setting is admissible when its cross-validated conditional harmful rate stays at or
+below a cap. The cap is not a free number: it is the conditional harmful rate of the action
+with the highest mean realised utility on the same bank, so the constraint says that choosing
+per request may not be more harmful, given that it intervenes, than always applying the
+strongest single intervention. If no setting satisfies it the configuration falls back to the
+largest penalty strength.
+
+A few requests on which an intervention fails badly move the source macro further than the
+ordinary spread between neighbouring settings, so the cross-validated surface is rough and its
+minimum carries noise. Selection therefore runs in two steps over the admissible settings.
+Each one is compared against the leading setting by a paired difference clustered on the
+parent, and those whose gap falls inside one standard error are kept. Among them the rule
+takes the setting that intervenes least, on the same reasoning as the cap: where the bank
+cannot separate two settings, the one that touches fewer requests carries less exposure to
+harm. The anchor, the cap, the retained settings and the selected pair are recorded before any
+evaluation record is scored.
 
 The reference action is always available, so the rule always returns a forecast. It has no way
 to detect that a request lies outside the replay support, so it applies to the registered
@@ -599,7 +609,7 @@ it carry over to a backbone family that was not used during development?}
 Severities are $10\%$, $30\%$, and $50\%$, crossed with the four patterns and the three
 backbones, and no method is retuned between levels. The levels lie inside the registered grid
 that the replay bank samples from, so this is a within-grid robustness check and not an
-unseen-severity stress test. and the roster is the one of Table~\ref{tab:main}.
+unseen-severity stress test, and the roster is the one of Table~\ref{tab:main}.
 Table~\ref{tab:robust} in Appendix~\ref{app:severity-full} reports the severity trend and the worst pattern cell, and the
 held-out backbone is the Chronos-2 column of Table~\ref{tab:main}.
 \ph{ROBUST_READING}. \ph{ROBUST_30}. \ph{ROBUST_50}. \ph{ROBUST_CH2}.
@@ -971,11 +981,13 @@ cost is paid once. Appendix~\ref{app:calls} separates it from the per-request on
 The replay bank is subsampled by parent to $25\%$, $50\%$ and $100\%$, with the frozen $k$ and
 $\beta$ unchanged, to measure how much the result depends on the amount of historical evidence.
 The subsamples are diagnostics: no hyperparameter and no configuration was selected on them,
-and the reported configuration is the one that reads the full bank. On the two development
-backbones more history helps or saturates. On the held-out backbone the full bank is worse than
-the quarter bank at the frozen neighbourhood size, which says that the neighbourhood size and
-the amount of history interact and that a configuration frozen on one backbone's bank does not
-automatically sit at the right point on another's.
+and the reported configuration is the one that reads the full bank. On Bolt and on the
+held-out backbone the macro average falls with every step up in history, from \ph{BANK_Q_BOLT}
+to \ph{BANK_F_BOLT} and from \ph{BANK_Q_CH2} to \ph{BANK_F_CH2}. On TimesFM the three levels
+sit within \ph{BANK_SPREAD_TF} of each other, so history neither helps nor hurts there. The
+intervention rate moves with the bank on all three, which is the mechanism behind the trend:
+a denser bank changes how many requests clear the conservative threshold, so the amount of
+history and the penalty strength are not independent knobs.
 
 \begin{table}[h]
   \caption{Replay-bank size ablation. The bank is subsampled by parent, keeping
@@ -1691,7 +1703,7 @@ episodes alone it is \ph{RIDGE_BOLT_S10}. The gap is one replay episode on which
 extrapolation diverged, and a single such record moves a mean over a few hundred. It was not
 winsorised, because silently transforming a recorded execution is exactly what the protocol
 forbids, and it is one reason the neighbourhood size matters: a local estimate over eight
-neighbours is exposed to an outlier that an estimate over sixty-four dilutes.
+neighbours is exposed to an outlier that an estimate over two hundred and fifty-six dilutes.
 
 \begin{table}[h]
   \caption{Mean realised utility of each action on the replay bank, overall and within each
@@ -1731,16 +1743,17 @@ neighbours is exposed to an outlier that an estimate over sixty-four dilutes.
 \subsubsection{Governance Diagnostics}
 \label{app:governance-fig}
 Figure~\ref{fig:governance} visualises the diagnostics tabulated in
-Table~\ref{tab:harm}. Panel~(b) is a sign-agreement check rather than a calibration
-curve: the ranking score is used only to order actions, and we do not claim that its magnitude
-is a calibrated probability.
+Table~\ref{tab:harm}. Panel~(b) checks sign agreement. The ranking score is used only to order
+actions, and its magnitude is not claimed to be calibrated against the utility scale.
+\ph{GOV_FIG_READING}.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.84\textwidth]{figure/fig4_governance_diagnostics.pdf}
-  \caption{\textbf{(a)}~Harmful loss by method. \textbf{(b)}~Realised utility against the
-  binned ranking score with 95\% intervals. Panel~(b) is a sign agreement check, not a
-  calibration claim.}
+  \caption{\textbf{(a)}~Harmful loss per method, averaged over the three backbones.
+  \textbf{(b)}~Realised utility of every admissible action against the quantile bin of its
+  conservative score, with 95\% intervals that resample parents. Panel~(b) reports sign
+  agreement and makes no calibration claim.}
   \label{fig:governance}
 \end{figure}
 

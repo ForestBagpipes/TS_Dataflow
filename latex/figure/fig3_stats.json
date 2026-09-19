@@ -43,11 +43,53 @@
  "curve": [
   {
    "backbone": "bolt",
+   "k": 128,
+   "beta": 1.0,
+   "intervention_rate": 0.6933856502242153,
+   "conditional_hir": 0.3945028294260307,
+   "selected": true
+  },
+  {
+   "backbone": "bolt",
    "k": 8,
    "beta": 0.0,
    "intervention_rate": 0.8060538116591929,
-   "conditional_hir": 0.41863699582753827,
-   "selected": true
+   "conditional_hir": 0.41863699582753827
+  },
+  {
+   "backbone": "bolt",
+   "k": 256,
+   "beta": 1.0,
+   "intervention_rate": 0.7348654708520179,
+   "conditional_hir": 0.3890160183066362
+  },
+  {
+   "backbone": "bolt",
+   "k": 256,
+   "beta": 0.5,
+   "intervention_rate": 0.8402466367713004,
+   "conditional_hir": 0.3935957304869913
+  },
+  {
+   "backbone": "bolt",
+   "k": 256,
+   "beta": 1.64,
+   "intervention_rate": 0.5857623318385651,
+   "conditional_hir": 0.3712918660287081
+  },
+  {
+   "backbone": "bolt",
+   "k": 128,
+   "beta": 1.64,
+   "intervention_rate": 0.5459641255605381,
+   "conditional_hir": 0.3942505133470226
+  },
+  {
+   "backbone": "bolt",
+   "k": 256,
+   "beta": 0.0,
+   "intervention_rate": 0.9164798206278026,
+   "conditional_hir": 0.39204892966360855
   },
   {
    "backbone": "bolt",
@@ -111,6 +153,20 @@
    "beta": 0.0,
    "intervention_rate": 0.8352017937219731,
    "conditional_hir": 0.40268456375838924
+  },
+  {
+   "backbone": "bolt",
+   "k": 128,
+   "beta": 0.5,
+   "intervention_rate": 0.7920403587443946,
+   "conditional_hir": 0.40552016985138006
+  },
+  {
+   "backbone": "bolt",
+   "k": 128,
+   "beta": 0.0,
+   "intervention_rate": 0.8570627802690582,
+   "conditional_hir": 0.41268803139306737
   },
   {
    "backbone": "bolt",
@@ -180,15 +236,22 @@
    "k": 64,
    "beta": 0.0,
    "intervention_rate": 0.984304932735426,
-   "conditional_hir": 0.3246013667425968,
-   "selected": true
+   "conditional_hir": 0.3246013667425968
   },
   {
    "backbone": "timesfm",
    "k": 16,
    "beta": 1.0,
    "intervention_rate": 0.7948430493273543,
-   "conditional_hir": 0.31170662905500707
+   "conditional_hir": 0.31170662905500707,
+   "selected": true
+  },
+  {
+   "backbone": "timesfm",
+   "k": 256,
+   "beta": 0.5,
+   "intervention_rate": 1.0,
+   "conditional_hir": 0.3195067264573991
   },
   {
    "backbone": "timesfm",
@@ -196,6 +259,13 @@
    "beta": 0.5,
    "intervention_rate": 0.9428251121076233,
    "conditional_hir": 0.32520808561236625
+  },
+  {
+   "backbone": "timesfm",
+   "k": 256,
+   "beta": 0.0,
+   "intervention_rate": 1.0,
+   "conditional_hir": 0.32230941704035876
   },
   {
    "backbone": "timesfm",
@@ -227,6 +297,27 @@
   },
   {
    "backbone": "timesfm",
+   "k": 128,
+   "beta": 0.0,
+   "intervention_rate": 0.9949551569506726,
+   "conditional_hir": 0.3177464788732394
+  },
+  {
+   "backbone": "timesfm",
+   "k": 256,
+   "beta": 1.0,
+   "intervention_rate": 0.9988789237668162,
+   "conditional_hir": 0.3164983164983165
+  },
+  {
+   "backbone": "timesfm",
+   "k": 256,
+   "beta": 1.64,
+   "intervention_rate": 0.9955156950672646,
+   "conditional_hir": 0.32038288288288286
+  },
+  {
+   "backbone": "timesfm",
    "k": 8,
    "beta": 1.0,
    "intervention_rate": 0.7460762331838565,
@@ -238,6 +329,20 @@
    "beta": 1.0,
    "intervention_rate": 0.9310538116591929,
    "conditional_hir": 0.3136664659843468
+  },
+  {
+   "backbone": "timesfm",
+   "k": 128,
+   "beta": 0.5,
+   "intervention_rate": 0.9893497757847534,
+   "conditional_hir": 0.31728045325779036
+  },
+  {
+   "backbone": "timesfm",
+   "k": 128,
+   "beta": 1.0,
+   "intervention_rate": 0.977017937219731,
+   "conditional_hir": 0.31669535283993117
   },
   {
    "backbone": "timesfm",
@@ -262,6 +367,13 @@
   },
   {
    "backbone": "timesfm",
+   "k": 128,
+   "beta": 1.64,
+   "intervention_rate": 0.9411434977578476,
+   "conditional_hir": 0.31209053007742704
+  },
+  {
+   "backbone": "timesfm",
    "k": 8,
    "beta": 1.64,
    "intervention_rate": 0.5521300448430493,
@@ -269,11 +381,38 @@
   },
   {
    "backbone": "chronos2",
+   "k": 256,
+   "beta": 0.5,
+   "intervention_rate": 0.702354260089686,
+   "conditional_hir": 0.39584996009577017
+  },
+  {
+   "backbone": "chronos2",
+   "k": 256,
+   "beta": 0.0,
+   "intervention_rate": 0.7909192825112108,
+   "conditional_hir": 0.4145995747696669
+  },
+  {
+   "backbone": "chronos2",
+   "k": 256,
+   "beta": 1.64,
+   "intervention_rate": 0.5369955156950673,
+   "conditional_hir": 0.3747390396659708
+  },
+  {
+   "backbone": "chronos2",
+   "k": 256,
+   "beta": 1.0,
+   "intervention_rate": 0.6367713004484304,
+   "conditional_hir": 0.39348591549295775
+  },
+  {
+   "backbone": "chronos2",
    "k": 64,
    "beta": 0.0,
    "intervention_rate": 0.7612107623318386,
-   "conditional_hir": 0.4005891016200295,
-   "selected": true
+   "conditional_hir": 0.4005891016200295
   },
   {
    "backbone": "chronos2",
@@ -305,6 +444,13 @@
   },
   {
    "backbone": "chronos2",
+   "k": 128,
+   "beta": 0.5,
+   "intervention_rate": 0.648542600896861,
+   "conditional_hir": 0.38807260155574763
+  },
+  {
+   "backbone": "chronos2",
    "k": 8,
    "beta": 0.0,
    "intervention_rate": 0.7673766816143498,
@@ -329,7 +475,8 @@
    "k": 16,
    "beta": 1.64,
    "intervention_rate": 0.2797085201793722,
-   "conditional_hir": 0.3727454909819639
+   "conditional_hir": 0.3727454909819639,
+   "selected": true
   },
   {
    "backbone": "chronos2",
@@ -340,10 +487,24 @@
   },
   {
    "backbone": "chronos2",
+   "k": 128,
+   "beta": 0.0,
+   "intervention_rate": 0.7483183856502242,
+   "conditional_hir": 0.4052434456928839
+  },
+  {
+   "backbone": "chronos2",
    "k": 64,
    "beta": 1.64,
    "intervention_rate": 0.3811659192825112,
    "conditional_hir": 0.3426470588235294
+  },
+  {
+   "backbone": "chronos2",
+   "k": 128,
+   "beta": 1.0,
+   "intervention_rate": 0.547085201793722,
+   "conditional_hir": 0.3760245901639344
   },
   {
    "backbone": "chronos2",
@@ -368,6 +529,13 @@
   },
   {
    "backbone": "chronos2",
+   "k": 128,
+   "beta": 1.64,
+   "intervention_rate": 0.41816143497757846,
+   "conditional_hir": 0.3605898123324397
+  },
+  {
+   "backbone": "chronos2",
    "k": 16,
    "beta": 0.5,
    "intervention_rate": 0.6647982062780269,
@@ -383,10 +551,10 @@
  ],
  "selected": {
   "backbone": "bolt",
-  "k": 8,
-  "beta": 0.0,
-  "intervention_rate": 0.8060538116591929,
-  "conditional_hir": 0.41863699582753827,
+  "k": 128,
+  "beta": 1.0,
+  "intervention_rate": 0.6933856502242153,
+  "conditional_hir": 0.3945028294260307,
   "selected": true
  },
  "cap": 0.41853512705530643,

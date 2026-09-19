@@ -27,7 +27,10 @@ NONREF = tuple(a for a in ACTIONS if a != REFERENCE)
 
 #: Searched grids.  v4.4 searched 3 x 3 on a 48-parent gate; v4.6 searches
 #: 4 x 4 by cross-validation on the bank itself.
-K_GRID = (8, 16, 32, 64)
+# Cross-validation picked the largest neighbourhood in the earlier grid on two
+# of the three backbones, so the grid runs further out.  The bank holds 1784
+# episodes, and 256 neighbours is still a seventh of it.
+K_GRID = (8, 16, 32, 64, 128, 256)
 BETA_GRID = (0.0, 0.5, 1.0, 1.64)
 TAU_EPSILON = 1e-12
 
@@ -385,6 +388,37 @@ def harm_cap(bank: Bank, queries: Queries) -> dict:
             "anchor_applicable": int(usable.sum()), "action_mean_utility": means}
 
 
+def macro_difference(queries: Queries, mase_a: np.ndarray,
+                     mase_b: np.ndarray) -> dict:
+    """Source-macro of a paired difference and its parent-clustered standard error.
+
+    The parent is the resampling unit everywhere else in this paper, so it is
+    the unit here too.  Sources are equally weighted, which makes the variance
+    of the macro the equally weighted sum of the within-source variances of the
+    parent means.
+    """
+    diff = mase_a - mase_b
+    by_parent: dict[tuple, list[float]] = collections.defaultdict(list)
+    for i in range(len(diff)):
+        if np.isfinite(diff[i]):
+            by_parent[(queries.source[i], queries.parent[i])].append(float(diff[i]))
+    by_source: dict[str, list[float]] = collections.defaultdict(list)
+    for (source, _parent), items in by_parent.items():
+        by_source[source].append(float(np.mean(items)))
+    if not by_source:
+        return {"difference": float("nan"), "standard_error": float("nan")}
+    means = [float(np.mean(v)) for v in by_source.values()]
+    n_source = len(by_source)
+    variance = 0.0
+    for values in by_source.values():
+        n = len(values)
+        if n > 1:
+            variance += float(np.var(values, ddof=1)) / n
+    return {"difference": float(np.mean(means)),
+            "standard_error": float(np.sqrt(variance)) / n_source,
+            "sources": n_source, "parents": len(by_parent)}
+
+
 def select_hyperparameters(bank: Bank, queries: Queries, *, k_grid=K_GRID,
                            beta_grid=BETA_GRID, cap: float | None = None,
                            same_horizon: bool = False) -> dict:
@@ -397,6 +431,7 @@ def select_hyperparameters(bank: Bank, queries: Queries, *, k_grid=K_GRID,
             selected = decide(queries, scores)
             out = outcomes(queries, selected)
             rows.append({"k": int(k), "beta": float(beta),
+                         "mase": out["mase"],
                          "lopo_mase": source_macro(queries, out["mase"]),
                          "intervention_rate": out["intervention_rate"],
                          "conditional_hir": out["conditional_hir"],
@@ -406,9 +441,27 @@ def select_hyperparameters(bank: Bank, queries: Queries, *, k_grid=K_GRID,
     fallback = not feasible
     if fallback:
         feasible = [r for r in rows if r["beta"] == max(beta_grid)]
-    best = min(feasible, key=lambda r: (r["lopo_mase"], r["k"]))
+    leader = min(feasible, key=lambda r: (r["lopo_mase"], r["k"]))
+    # A paired comparison against the leader, clustered on the parent, says
+    # which of the remaining settings the bank cannot separate from it.
+    for r in feasible:
+        gap = macro_difference(queries, r["mase"], leader["mase"])
+        r["gap_to_leader"] = gap["difference"]
+        r["gap_se"] = gap["standard_error"]
+        r["tied_with_leader"] = bool(gap["difference"] <= gap["standard_error"])
+    tied = [r for r in feasible if r["tied_with_leader"]]
+    # Among settings the bank cannot separate, the one that intervenes least
+    # carries the least exposure to harm.
+    best = min(tied, key=lambda r: (r["intervention_rate"], -r["beta"], r["k"]))
+    for r in rows:
+        r.pop("mase", None)
     return {"selected": {"k": best["k"], "beta": best["beta"]},
             "cap": cap, "fallback_to_most_conservative": fallback,
+            "rule": "one clustered standard error of the leave-one-parent-out "
+                    "leader, then the least intervening setting",
+            "leader": {"k": leader["k"], "beta": leader["beta"],
+                       "lopo_mase": leader["lopo_mase"]},
+            "tied_settings": len(tied), "feasible_settings": len(feasible),
             "grid": sorted(rows, key=lambda r: r["lopo_mase"])}
 
 
