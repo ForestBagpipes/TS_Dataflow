@@ -754,14 +754,18 @@ a request as unsupported. We therefore read \S\ref{sec:exp-robust} as a within-g
 rather than as out-of-grid generalisation, and results in this paper should not be interpreted
 as out-of-grid generalisation.
 
-Three further assumptions are worth stating explicitly. First, the action catalog is closed and
+Four further assumptions are worth stating explicitly. First, the action catalog is closed and
 given. We do not search for new interventions, and a wider catalog would change every number
 in this paper without changing the decision problem. Second, the missingness mechanism that
 deployment encounters is assumed to be the one that the replay injects. A request produced by
 a different mechanism is handled by the same estimator but lies outside the scope of the
 reported results. Third, the frozen forecaster is assumed deterministic and revision pinned.
 Every replay record is tied to the exact model revision that produced it, and a model update
-invalidates the bank rather than silently degrading it.
+invalidates the bank rather than silently degrading it. Fourth, the neighbourhood size and the
+penalty strength are read off one bank. Appendix~\ref{app:selstability} measures how far that
+choice travels, and the pair a subsample selects is usually a different one, so the reported
+configuration should be read as one admissible point rather than as the only one the rule
+would ever pick.
 
 Four claims are therefore not made anywhere in this paper. We do not claim out-of-grid or
 out-of-distribution missingness generalisation. We do not claim that the method can detect
