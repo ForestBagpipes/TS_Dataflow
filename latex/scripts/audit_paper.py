@@ -12,7 +12,7 @@ from pypdf import PdfReader
 
 HERE = Path(__file__).resolve().parents[1]
 ROOT = HERE.parent
-NAME = 'IntroActTS_20260920_v48'
+NAME = 'IntroActTS_20260920_v49'
 tex = (HERE/(NAME+'.tex')).read_text(encoding='utf8')
 log = (HERE/'build'/(NAME+'.log')).read_text(encoding='utf8',errors='replace')
 labels = re.findall(r'\\label\{([^}]+)\}',tex)
@@ -29,12 +29,17 @@ provenance=json.loads((HERE/'figure/data/provenance.json').read_text())
 source=ROOT/provenance['source_manuscript']
 assert hashlib.sha256(source.read_bytes()).hexdigest()==provenance['sha256']
 original=source.read_text(encoding='utf8')
-for name,label in provenance['tables'].items():
-    table=next(m.group() for m in re.finditer(r'\\begin\{table\}.*?\\end\{table\}',original,re.S) if '\\label{'+label+'}' in m.group())
+sources={name:dict(source_manuscript=provenance['source_manuscript'],sha256=provenance['sha256'],table=label) for name,label in provenance['tables'].items()}
+sources.update(provenance.get('additional_sources',{}))
+for name,record in sources.items():
+    source_path=ROOT/record['source_manuscript']
+    assert hashlib.sha256(source_path.read_bytes()).hexdigest()==record['sha256']
+    source_text=source_path.read_text(encoding='utf8')
+    table=next(m.group() for m in re.finditer(r'\\begin\{table\}.*?\\end\{table\}',source_text,re.S) if '\\label{'+record['table']+'}' in m.group())
     with (HERE/'figure/data'/name).open(encoding='utf8',newline='') as f:
         for row in csv.DictReader(f):
             for key,value in row.items():
-                if key!='method' and value:
+                if key not in ['method','action','variant'] and value:
                     assert value in table, (name,key,value)
 
 for name in ['fig1_example','fig2_Architecture']:
@@ -45,7 +50,7 @@ for name in ['fig1_example','fig2_Architecture']:
     assert pixels==bmp.tobytes(), name+' pixel mismatch'
 
 graphic_refs=re.findall(r'\\includegraphics\[[^\]]*\]\{([^}]+)\}',tex)
-assert len(graphic_refs)==5 and all((HERE/p).exists() for p in graphic_refs)
+assert len(graphic_refs)==7 and all((HERE/p).exists() for p in graphic_refs)
 assert {Path(p).name for p in graphic_refs}=={p.name for p in (HERE/'figure').glob('*.eps')}
 pdf=PdfReader(HERE/(NAME+'.pdf'))
 report={

@@ -7,5 +7,22 @@
     "rank_agreement.csv": "tab:rankgrid"
   },
   "precision": "Exact displayed table values. No new experimental evaluation or statistical estimation.",
-  "status": "Existing v47 post-hoc results, not v47_verified acceptance."
+  "status": "Existing v47 post-hoc results, not v47_verified acceptance.",
+  "additional_sources": {
+    "utility.csv": {
+      "source_manuscript": "archive/paper_20260920/v48/IntroActTS_20260920_v48.tex",
+      "sha256": "9055a61d7ba0666d8d456d77d42782880298641a7ec19da4cc5311377e063f4d",
+      "table": "tab:heterogeneity"
+    },
+    "main.csv": {
+      "source_manuscript": "archive/paper_20260920/v48/IntroActTS_20260920_v48.tex",
+      "sha256": "9055a61d7ba0666d8d456d77d42782880298641a7ec19da4cc5311377e063f4d",
+      "table": "tab:main"
+    },
+    "ablation.csv": {
+      "source_manuscript": "archive/paper_20260920/v48/IntroActTS_20260920_v48.tex",
+      "sha256": "9055a61d7ba0666d8d456d77d42782880298641a7ec19da4cc5311377e063f4d",
+      "table": "tab:ablation"
+    }
+  }
 }

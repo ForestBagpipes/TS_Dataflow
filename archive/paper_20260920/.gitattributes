@@ -1,3 +1,4 @@
 # Immutable provenance copies retain their original bytes and historical spacing.
 source/** -text -whitespace
 figure/** -text -whitespace
+v48/** -text -whitespace

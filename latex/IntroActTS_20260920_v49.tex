@@ -1,4 +1,4 @@
-% Editorial v48. Recorded v47 post-hoc evaluation.
+% Editorial v49. Recorded v47 post-hoc evaluation.
 \PassOptionsToPackage{table}{xcolor}
 \documentclass{article}
 
@@ -386,7 +386,7 @@ verification effort has not been certified by this manuscript revision.
 \subsection{Variation in Intervention Utility}
 \label{sec:exp-exists}
 The recorded diagnostics show that no single action is best for every request.
-Table~\ref{tab:heterogeneity} reports oracle-best shares from $11.1\%$ to $24.8\%$, with
+Figure~\ref{fig:utility} reports oracle-best shares from $11.1\%$ to $24.8\%$, with
 \textsc{Keep} best on $19.3\%$ of episodes. The catalog oracle reaches 1.258 source-macro
 MASE compared with 1.576 for \textsc{Keep}, indicating room for better action selection.
 Each repair both helps and harms individual forecasts. These observations motivate a
@@ -399,41 +399,19 @@ correlation of 0.12. These statistics compare actions within the same episode, a
 cross-source scale differences. Appendix~\ref{app:recutils} reports the full comparison.
 Figure~\ref{fig:concept} illustrates how historical forecasting outcomes can inform selection.
 
-\begin{table}[t]
-  \caption{Why the choice has to be made per request, over the evaluation episodes of all three
-  backbones. Oracle-best share is how often an action attains the lowest realised loss of the
-  catalog and the shares sum to one. The last two columns cover the episodes where the action
-  applies and are measured against \textsc{Keep}.}
-  \label{tab:heterogeneity}
-  \centering
-  \small
-  \setlength{\tabcolsep}{4pt}
-\adjustbox{max width=\textwidth}{\begin{tabular}{lcccc}
-    \toprule
-    Action & Best share & Available episodes & Beneficial share & Mean utility \\
-    \midrule
-    \textsc{Keep} $a_0$ & 19.3\% & 760 & n/a & 0.000 \\
-    \textsc{Ffill} & 17.1\% & 760 & 42.1\% & -0.094 \\
-    \textsc{Single TS-ICL} & 15.4\% & 760 & 53.3\% & +0.055 \\
-    \textsc{Multi TS-ICL} & 12.3\% & 758 & 54.1\% & +0.076 \\
-    \textsc{Context Ridge} & 11.1\% & 566 & 58.3\% & +0.112 \\
-    \textsc{SAITS} & 24.8\% & 747 & 57.1\% & +0.101 \\
-    \bottomrule
-  \end{tabular}}
-  \vspace{-2pt}
-  {\footnotesize Reconstruction accuracy does not order the repairs the way realised utility
-  does. The most accurate reconstruction is the most useful repair on 19.3\% of the
-  episodes, 44.5\% of the ordered pairs disagree, and the mean within-episode
-  rank correlation is 0.12. Appendix~\ref{app:recutils} reports both criteria per
-  action.}
-\end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figure/fig3_action_utility.eps}
+\caption{Action-dependent forecasting utility. Panels show oracle-best frequency, the share of available episodes with a beneficial repair, and mean realised utility relative to KEEP. KEEP has zero utility by definition and is omitted from repair-only panels. Values reproduce the recorded diagnostic table. Numerical values are retained in Table~\ref{tab:heterogeneity}.}
+\label{fig:utility}
+\end{figure}
 
 Appendix~\ref{app:opportunity} breaks the same episodes down by how much improvement was
 available.
 
 \subsection{Main Comparison}
 \label{sec:exp-main}
-Table~\ref{tab:main} compares the methods at $10\%$ missingness.
+Figure~\ref{fig:main}(a,c) compares the methods at $10\%$ missingness.
 \introact{} reaches 1.437 source-macro MASE, compared with 1.576 for \textsc{Keep}, 1.488
 for Best Fixed and 1.458 for R2-CART. Fixed SAITS reaches 1.459 and TATO reaches 1.616.
 The lowest deployable MASE is achieved by \introact{} on Bolt and Chronos-2, and by fixed
@@ -453,35 +431,17 @@ The TATO result applies to the adaptation and search budget specified in
 Appendix~\ref{app:baseline-config}. Per-source results appear in Appendix~\ref{app:datasets},
 and costs are reported in Appendix~\ref{app:calls}.
 
-\begin{table}[t]
-  \caption{Main comparison on TEST at $10\%$ missingness, source-macro averaged, lower is
-  better everywhere. \best{Bold} is the best value of a column and \second{underline} the
-  second. Average rank is over the deployable rows of this table, cell by cell. The oracle
-  reads the future target and is excluded from every rank. Each backbone uses its own TRAIN replay bank. These are post-hoc comparisons. Table~\ref{tab:app-roster} defines the rows.}
-  \label{tab:main}
-  \centering
-  \small
-  \setlength{\tabcolsep}{3.5pt}
-\adjustbox{max width=\textwidth}{\begin{tabular}{lccccc}
-    \toprule
-    Method & Bolt & TimesFM & Chronos-2 & Overall MASE & Avg.\ rank \\
-    \midrule
-Native KEEP & 1.466 & 1.682 & 1.579 & 1.576 & 3.36 \\
-Best Fixed & 1.428 & 1.579 & 1.456 & 1.488 & \second{2.94} \\
-R2-CART & \second{1.402} & 1.588 & \second{1.385} & \second{1.458} & 2.97 \\
-Fixed SAITS & 1.469 & \best{1.465} & 1.441 & 1.459 & 2.98 \\
-TATO & 1.620 & 1.614 & 1.614 & 1.616 & 4.10 \\
-    \midrule
-\rowcolor{bestgray}\introact{} & \best{1.378} & \second{1.554} & \best{1.378} & \best{1.437} & \best{2.79} \\
-    \midrule
-Catalog Oracle & \oracle{1.234} & \oracle{1.315} & \oracle{1.226} & \oracle{1.258} & \oracle{n/a} \\
-    \bottomrule
-  \end{tabular}}
-\end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figure/fig4_main_harm.eps}
+\caption{Main comparison and intervention risk at $10\%$ missingness. Left panels report (a) source-macro MASE and (c) mean rank among deployable methods. Right panels report (b) harmful loss and (d) intervention frequency with conditional harmful rate. Filled bars in (d) denote intervention frequency and hatched bars denote harmful rate among executed interventions. KEEP never intervenes, so its conditional rate is undefined. Fixed denotes Best Fixed, CART denotes R2-CART, and Ours denotes IntroAct-TS. These descriptive post-hoc comparisons use recorded table values. Table~\ref{tab:main} retains the main numerical comparison.}
+\label{fig:main}
+\label{fig:harm}
+\end{figure}
 
 \subsection{Intervention Frequency and Harm}
 \label{sec:exp-harm}
-Figure~\ref{fig:harm} reports intervention frequency and harmful loss at the default
+Figure~\ref{fig:harm}(b,d) reports intervention frequency and harmful loss at the default
 operating point. \introact{} intervenes on $65.4\%$ of requests. Among executed
 interventions, $40.2\%$ increase loss, compared with $41.7\%$ for Best Fixed and $43.1\%$
 for R2-CART. Harmful loss is 0.0375, compared with 0.0513 and 0.0584 for those controls.
@@ -494,12 +454,7 @@ points across the penalty grid. Stronger penalties reduce intervention frequency
 conditional harmful rates change relatively little. This supports interpreting the penalty
 primarily as a control on intervention frequency within the measured range.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\textwidth]{figure/fig3_intervention_harm.eps}
-  \caption{Intervention frequency and harmful loss at $10\%$ missingness, averaged over the three backbones. Bars reproduce the recorded table values. Harmful loss measures the loss added by harmful interventions under the convention in Appendix~\ref{app:diagnostic-conventions}. Values are descriptive aggregates without uncertainty bars.}
-  \label{fig:harm}
-\end{figure}
+
 
 \subsection{Severity and Backbone Sensitivity}
 \label{sec:exp-robust}
@@ -517,14 +472,14 @@ Appendices~\ref{app:severity-full} and \ref{app:pattern} report the complete bre
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\textwidth]{figure/fig4_missingness_severity.eps}
-  \caption{Forecasting error across the registered missingness severities. Each point reproduces the source-macro MASE averaged over three backbones, two horizons and four patterns. Configurations are unchanged across levels. All three levels occur in replay construction. Full numerical results are retained in Appendix~\ref{app:severity-full}.}
+  \includegraphics[width=\textwidth]{figure/fig5_missingness_severity.eps}
+  \caption{Forecasting error across registered missingness severities and the largest degradation relative to KEEP in any pattern, backbone and severity cell. Each point reproduces the source-macro MASE averaged over three backbones, two horizons and four patterns. Configurations are unchanged across levels. All three levels occur in replay construction. Full numerical results are retained in Appendix~\ref{app:severity-full}.}
   \label{fig:robust}
 \end{figure}
 
 \subsection{Ablation and Cost}
 \label{sec:exp-ablation}
-Table~\ref{tab:ablation} compares selector variants using the same catalog prediction cache.
+Figure~\ref{fig:ablation} compares selector variants using the same catalog prediction cache.
 A1 replaces local retrieval with each action's global mean utility. A2 and A3 remove the
 intervention and reference-forecast features, respectively. A4 always executes a repair.
 A5 uses a per-action linear utility predictor.
@@ -541,29 +496,12 @@ The method uses 1.65 forecasting-backbone calls per request on average. Candidat
 is additional and is incurred before the choice, including calls to TS-ICL and SAITS.
 Appendix~\ref{app:calls} reports those costs separately.
 
-\begin{table}[t]
-  \caption{Core ablation and cost at $10\%$ severity. Every row reads the same catalog
-  prediction cache, so the rows differ only in how the stored utilities are summarised and
-  thresholded. Calls counts forecasting-backbone calls per request. Candidate materialisation
-  is reported separately in Appendix~\ref{app:calls}.}
-  \label{tab:ablation}
-  \centering
-  \small
-  \setlength{\tabcolsep}{3.5pt}
-\adjustbox{max width=\textwidth}{\begin{tabular}{lccccc}
-    \toprule
-    Variant & MASE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Calls $\downarrow$ \\
-    \midrule
-    Full \introact{}          & 1.437   & 65.4\%   & 40.2\%   & 0.0375   & 1.65 \\
-    A1 Global utility          & 1.475     & 100.0\%     & 43.9\%     & 0.0697     & 2.00 \\
-    A2 w/o intervention state  & 1.418     & 63.4\%     & 39.5\%     & 0.0330     & 1.63 \\
-    A3 w/o reference-forecast state & 1.446 & 67.4\%     & 40.4\%     & 0.0419     & 1.67 \\
-    A4 Always act              & 1.447     & 100.0\%     & 42.1\%     & 0.0533     & 2.00 \\
-    A5 Parametric utility predictor & 1.434 & 86.7\%    & 43.7\%     & 0.0549     & 1.87 \\
-    \midrule
-    \bottomrule
-  \end{tabular}}
-\end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figure/fig6_ablation_cost.eps}
+\caption{Ablation and forecasting cost under the same prediction cache. Panels report source-macro MASE, harmful loss and forecasting-backbone calls per request. A1 uses global utility, A2 removes intervention features, A3 removes forecast features, A4 always acts, and A5 uses a linear predictor. Candidate-generation costs are additional. Bars reproduce descriptive table values without uncertainty estimates. Numerical values are retained in Table~\ref{tab:ablation}.}
+\label{fig:ablation}
+\end{figure}
 
 \section{Conclusion}
 \label{sec:conclusion}
@@ -1172,7 +1110,7 @@ regimes and the required behaviour in each.
 \subsection{Baseline Availability}
 \label{app:baseline-availability}
 The comparison names more published methods in Section~\ref{sec:related} than it reports in
-Table~\ref{tab:main}, and Table~\ref{tab:app-availability} records why method by method. A
+Figure~\ref{fig:main}, and Table~\ref{tab:app-availability} records why method by method. A
 method enters the tables when an official implementation exists, when it admits an incomplete
 context of the shape this protocol produces, and when its own assumptions hold for a frozen
 backbone. A reimplementation from a paper description would not be comparable with the numbers
@@ -1307,7 +1245,7 @@ is recorded as a failed trial instead of being silently repaired.
 \label{app:datasets}
 Each table below reports one frozen backbone at $10\%$ severity, one horizon, and
 all eight sources, with one row per method. MASE is reported in every cell so that a
-reader can recompute the source-macro aggregate of Table~\ref{tab:main} directly from
+reader can recompute the source-macro aggregate of Figure~\ref{fig:main} directly from
 these tables. The \emph{macro} column is the equal-weight average over the eight sources
 and is the quantity the main table reports. Rows are generated from the recorded result
 group using the same aggregation as the main table.
@@ -1316,7 +1254,7 @@ MAE and RMSE are reported per source and are not averaged across sources.
 \begin{table}[htbp]
   \caption{Per-source MASE on Bolt at $10\%$ severity, $H=96$. The macro column is the
   equal-weight average over the eight sources and is the quantity reported in
-  Table~\ref{tab:main}. Lower is better everywhere.}
+  Figure~\ref{fig:main}. Lower is better everywhere.}
   \label{tab:app-src-bolt-96}
   \centering
   \small
@@ -1341,7 +1279,7 @@ MAE and RMSE are reported per source and are not averaged across sources.
 \begin{table}[htbp]
   \caption{Per-source MASE on Bolt at $10\%$ severity, $H=192$. The macro column is the
   equal-weight average over the eight sources and is the quantity reported in
-  Table~\ref{tab:main}. Lower is better everywhere.}
+  Figure~\ref{fig:main}. Lower is better everywhere.}
   \label{tab:app-src-bolt-192}
   \centering
   \small
@@ -1366,7 +1304,7 @@ MAE and RMSE are reported per source and are not averaged across sources.
 \begin{table}[htbp]
   \caption{Per-source MASE on TimesFM at $10\%$ severity, $H=96$. The macro column is the
   equal-weight average over the eight sources and is the quantity reported in
-  Table~\ref{tab:main}. Lower is better everywhere.}
+  Figure~\ref{fig:main}. Lower is better everywhere.}
   \label{tab:app-src-tf-96}
   \centering
   \small
@@ -1391,7 +1329,7 @@ MAE and RMSE are reported per source and are not averaged across sources.
 \begin{table}[htbp]
   \caption{Per-source MASE on TimesFM at $10\%$ severity, $H=192$. The macro column is the
   equal-weight average over the eight sources and is the quantity reported in
-  Table~\ref{tab:main}. Lower is better everywhere.}
+  Figure~\ref{fig:main}. Lower is better everywhere.}
   \label{tab:app-src-tf-192}
   \centering
   \small
@@ -1416,7 +1354,7 @@ MAE and RMSE are reported per source and are not averaged across sources.
 \begin{table}[htbp]
   \caption{Per-source MASE on Chronos-2 at $10\%$ severity, $H=96$. The macro column is the
   equal-weight average over the eight sources and is the quantity reported in
-  Table~\ref{tab:main}. Lower is better everywhere.}
+  Figure~\ref{fig:main}. Lower is better everywhere.}
   \label{tab:app-src-ch2-96}
   \centering
   \small
@@ -1441,7 +1379,7 @@ MAE and RMSE are reported per source and are not averaged across sources.
 \begin{table}[htbp]
   \caption{Per-source MASE on Chronos-2 at $10\%$ severity, $H=192$. The macro column is the
   equal-weight average over the eight sources and is the quantity reported in
-  Table~\ref{tab:main}. Lower is better everywhere.}
+  Figure~\ref{fig:main}. Lower is better everywhere.}
   \label{tab:app-src-ch2-192}
   \centering
   \small
@@ -1577,7 +1515,7 @@ main table.
 \subsubsection{Severity Tables}
 \label{app:severity}
 Tables~\ref{tab:app-sev10}--\ref{tab:app-sev50} give the full severity sweep for the reduced
-roster of Table~\ref{tab:main}, and all three tables use it. No method is retuned
+roster of Figure~\ref{fig:main}, and all three tables use it. No method is retuned
 between severities. \introact{} reuses the $k$ and $\beta$ frozen on the bank, and every
 baseline reuses the models and rules fixed on TRAIN. The $10\%$ column is the main-text
 condition. The $30\%$ and $50\%$ columns test whether one frozen configuration holds across
@@ -1657,7 +1595,7 @@ nothing is retuned per severity.
 \begin{table}[htbp]
   \caption{Source-macro MASE at each registered severity, one block of columns per frozen
   backbone. The evaluation set, the roster and the frozen configuration are the ones of
-  Table~\ref{tab:main}.}
+  Figure~\ref{fig:main}.}
   \label{tab:app-trend}
   \centering
   \small
@@ -1698,7 +1636,7 @@ per-action averages and the two rank statistics.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.75\textwidth]{figure/fig5_rank_agreement.eps}
+  \includegraphics[width=0.75\textwidth]{figure/fig7_rank_agreement.eps}
   \caption{Within-episode reconstruction rank against forecasting-utility rank for the five repairs. Each row is normalised to $100\%$ up to rounding. Concentration away from the diagonal shows disagreement between the criteria. Cells reproduce the recorded table percentages.}
   \label{fig:rankgrid}
 \end{figure}
@@ -1846,7 +1784,7 @@ to be calibrated against the utility scale. Over 10773 admissible pairs the sign
 This section supports \S\ref{sec:exp-ablation}. Every variant reads the same catalog
 prediction cache, so the rows differ only in how the stored utilities are summarised and
 thresholded. Table~\ref{tab:app-ablation} reports the full outcome vector behind the compact
-Table~\ref{tab:ablation}. The variant definitions follow \S\ref{sec:exp-ablation} exactly.
+Figure~\ref{fig:ablation}. The variant definitions follow \S\ref{sec:exp-ablation} exactly.
 
 \begin{table}[htbp]
   \caption{Ablation, full outcome vector in the two scaled metrics. Raw errors are not
@@ -2065,7 +2003,7 @@ a later revision of the protocol cannot be confused with the present one.
     \texttt{baselines}      & baseline training runs, resolved hyperparameters, checkpoints & \S\ref{sec:exp-main} \\
     \texttt{train\_eval}    & TRAIN-eval acceptance check before freezing & Appendix~\ref{app:splits} \\
     \texttt{main\_results}  & main matrix rows, all methods, all cells & Tables~\ref{tab:main}, \ref{tab:app-src-bolt-96}--\ref{tab:app-src-ch2-192} \\
-    \texttt{ablations}      & the five ablation variants and the catalog oracle diagnostic & Table~\ref{tab:ablation}, \ref{tab:app-ablation} \\
+    \texttt{ablations}      & the five ablation variants and the catalog oracle diagnostic & Figure~\ref{fig:ablation}, \ref{tab:app-ablation} \\
     \texttt{robustness}     & severity, pattern, and mask-realisation sweeps & Figure~\ref{fig:robust}, Tables~ \ref{tab:app-sev10}--\ref{tab:app-sev50}, \ref{tab:app-seeds} \\
     \texttt{diagnostics}    & reconstruction and utility diagnostics, rank agreement & Appendix~\ref{app:diagnostics} \\
     \texttt{cost\_audit}    & call counts, latency, failures, timeouts, memory & Table~\ref{tab:app-efficiency}, Appendix~\ref{app:calls} \\
@@ -2164,4 +2102,87 @@ development split, fewer sources, and different budget accounting, so they are n
 here as numbers. They are recorded in the released artefact ledger and must not be compared
 numerically with any table in this paper.
 
+\clearpage
+\section{Numerical Values for the Main Experiments}
+\label{app:main-values}
+The following tables preserve the values plotted in the main experimental figures.
+
+\begin{table}[t]
+  \caption{Why the choice has to be made per request, over the evaluation episodes of all three
+  backbones. Oracle-best share is how often an action attains the lowest realised loss of the
+  catalog and the shares sum to one. The last two columns cover the episodes where the action
+  applies and are measured against \textsc{Keep}.}
+  \label{tab:heterogeneity}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\adjustbox{max width=\textwidth}{\begin{tabular}{lcccc}
+    \toprule
+    Action & Best share & Available episodes & Beneficial share & Mean utility \\
+    \midrule
+    \textsc{Keep} $a_0$ & 19.3\% & 760 & n/a & 0.000 \\
+    \textsc{Ffill} & 17.1\% & 760 & 42.1\% & -0.094 \\
+    \textsc{Single TS-ICL} & 15.4\% & 760 & 53.3\% & +0.055 \\
+    \textsc{Multi TS-ICL} & 12.3\% & 758 & 54.1\% & +0.076 \\
+    \textsc{Context Ridge} & 11.1\% & 566 & 58.3\% & +0.112 \\
+    \textsc{SAITS} & 24.8\% & 747 & 57.1\% & +0.101 \\
+    \bottomrule
+  \end{tabular}}
+  \vspace{-2pt}
+  {\footnotesize Reconstruction accuracy does not order the repairs the way realised utility
+  does. The most accurate reconstruction is the most useful repair on 19.3\% of the
+  episodes, 44.5\% of the ordered pairs disagree, and the mean within-episode
+  rank correlation is 0.12. Appendix~\ref{app:recutils} reports both criteria per
+  action.}
+\end{table}
+
+\begin{table}[t]
+  \caption{Main comparison on TEST at $10\%$ missingness, source-macro averaged, lower is
+  better everywhere. \best{Bold} is the best value of a column and \second{underline} the
+  second. Average rank is over the deployable rows of this table, cell by cell. The oracle
+  reads the future target and is excluded from every rank. Each backbone uses its own TRAIN replay bank. These are post-hoc comparisons. Table~\ref{tab:app-roster} defines the rows.}
+  \label{tab:main}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3.5pt}
+\adjustbox{max width=\textwidth}{\begin{tabular}{lccccc}
+    \toprule
+    Method & Bolt & TimesFM & Chronos-2 & Overall MASE & Avg.\ rank \\
+    \midrule
+Native KEEP & 1.466 & 1.682 & 1.579 & 1.576 & 3.36 \\
+Best Fixed & 1.428 & 1.579 & 1.456 & 1.488 & \second{2.94} \\
+R2-CART & \second{1.402} & 1.588 & \second{1.385} & \second{1.458} & 2.97 \\
+Fixed SAITS & 1.469 & \best{1.465} & 1.441 & 1.459 & 2.98 \\
+TATO & 1.620 & 1.614 & 1.614 & 1.616 & 4.10 \\
+    \midrule
+\rowcolor{bestgray}\introact{} & \best{1.378} & \second{1.554} & \best{1.378} & \best{1.437} & \best{2.79} \\
+    \midrule
+Catalog Oracle & \oracle{1.234} & \oracle{1.315} & \oracle{1.226} & \oracle{1.258} & \oracle{n/a} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[t]
+  \caption{Core ablation and cost at $10\%$ severity. Every row reads the same catalog
+  prediction cache, so the rows differ only in how the stored utilities are summarised and
+  thresholded. Calls counts forecasting-backbone calls per request. Candidate materialisation
+  is reported separately in Appendix~\ref{app:calls}.}
+  \label{tab:ablation}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3.5pt}
+\adjustbox{max width=\textwidth}{\begin{tabular}{lccccc}
+    \toprule
+    Variant & MASE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Calls $\downarrow$ \\
+    \midrule
+    Full \introact{}          & 1.437   & 65.4\%   & 40.2\%   & 0.0375   & 1.65 \\
+    A1 Global utility          & 1.475     & 100.0\%     & 43.9\%     & 0.0697     & 2.00 \\
+    A2 w/o intervention state  & 1.418     & 63.4\%     & 39.5\%     & 0.0330     & 1.63 \\
+    A3 w/o reference-forecast state & 1.446 & 67.4\%     & 40.4\%     & 0.0419     & 1.67 \\
+    A4 Always act              & 1.447     & 100.0\%     & 42.1\%     & 0.0533     & 2.00 \\
+    A5 Parametric utility predictor & 1.434 & 86.7\%    & 43.7\%     & 0.0549     & 1.87 \\
+    \midrule
+    \bottomrule
+  \end{tabular}}
+\end{table}
 \end{document}
