@@ -12,7 +12,7 @@ from pypdf import PdfReader
 
 HERE = Path(__file__).resolve().parents[1]
 ROOT = HERE.parent
-NAME = 'IntroActTS_20260920_v49'
+NAME = 'IntroActTS_20260920_v50'
 tex = (HERE/(NAME+'.tex')).read_text(encoding='utf8')
 log = (HERE/'build'/(NAME+'.log')).read_text(encoding='utf8',errors='replace')
 labels = re.findall(r'\\label\{([^}]+)\}',tex)
@@ -24,6 +24,10 @@ assert 'undefined' not in log and 'Overfull' not in log
 assert r'\figph' not in tex and r'\ph{' not in tex
 assert not re.search(r'(?<!\\);',tex), 'Prose semicolon'
 assert '—' not in tex and '``' not in tex
+body = tex.split(r'\appendix', 1)[0]
+for label in ['tab:main', 'tab:ablation']:
+    assert any('\\label{'+label+'}' in table for table in re.findall(r'\\begin\{table\}.*?\\end\{table\}', body, re.S)), label+' must remain a main-text table'
+assert 'fig:main' not in tex and 'fig:ablation' not in tex
 
 provenance=json.loads((HERE/'figure/data/provenance.json').read_text())
 source=ROOT/provenance['source_manuscript']
@@ -50,7 +54,7 @@ for name in ['fig1_example','fig2_Architecture']:
     assert pixels==bmp.tobytes(), name+' pixel mismatch'
 
 graphic_refs=re.findall(r'\\includegraphics\[[^\]]*\]\{([^}]+)\}',tex)
-assert len(graphic_refs)==7 and all((HERE/p).exists() for p in graphic_refs)
+assert len(graphic_refs)==6 and all((HERE/p).exists() for p in graphic_refs)
 assert {Path(p).name for p in graphic_refs}=={p.name for p in (HERE/'figure').glob('*.eps')}
 pdf=PdfReader(HERE/(NAME+'.pdf'))
 report={

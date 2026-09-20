@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 HERE = Path(__file__).resolve().parents[1]
-NAME = 'IntroActTS_20260920_v49'
+NAME = 'IntroActTS_20260920_v50'
 BUILD = HERE / 'build'
 BUILD.mkdir(exist_ok=True)
 env = dict(os.environ)
@@ -30,8 +30,8 @@ if not gs and Path('D:/texlive/2025/tlpkg/tlgs/bin/gswin64c.exe').exists():
          'Resource/SubstCID','Resource/CIDFont','Resource/CIDFSubst','Resource/IdiomSet'])
 if not gs:
     raise SystemExit('Ghostscript is required for EPS compilation.')
-for name in ['fig1_example','fig2_Architecture','fig3_action_utility','fig4_main_harm',
-             'fig5_missingness_severity','fig6_ablation_cost','fig7_rank_agreement']:
+for name in ['fig1_example','fig2_Architecture','fig3_action_utility','fig4_intervention_harm',
+             'fig5_missingness_severity','fig6_rank_agreement']:
     run([gs, '-q', '-dBATCH', '-dNOPAUSE', '-dSAFER', '-dEPSCrop',
          '-sDEVICE=pdfwrite', '-dAutoRotatePages=/None',
          '-dDownsampleColorImages=false', '-dDownsampleGrayImages=false',
