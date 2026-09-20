@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 HERE = Path(__file__).resolve().parents[1]
-NAME = 'IntroActTS_20260920_v50'
+NAME = 'IntroActTS_20260920_v51'
 BUILD = HERE / 'build'
 BUILD.mkdir(exist_ok=True)
 env = dict(os.environ)

@@ -1,0 +1,538 @@
+{
+  "date": "2026-09-20",
+  "scope": "40 entries actually cited by v51, including appendices. Uncited historical bibliography entries are retained and are outside this audit.",
+  "method": "Google Scholar visible search results, DBLP publicly indexed records, and original proceedings, publisher or author pages. DBLP API returned an anti-bot page, so it was not used as metadata. Missing DBLP matches are not treated as verification.",
+  "conflicts": [
+    "S4M: DBLP conference entry lists Peng Jing, but official ICLR proceedings and arXiv list Jing Peng. Retained Peng, Jing and corrected title.",
+    "GAIN: DBLP displays 5675-5684, whereas official PMLR lists 5689-5698. Used PMLR.",
+    "Bandit Algorithms: Google Scholar displays 2019 on one record. Used publisher publication date 2020.",
+    "Chronos: author list differs across versions. Used arXiv v3 list including Hao Wang, and retained the TMLR 2024 publication.",
+    "Chronos-Bolt: no standalone matching Scholar paper identified. Cited official 2024 release announcement as a blog, not a peer-reviewed article."
+  ],
+  "records": [
+    {
+      "key": "cao2018brits",
+      "title": "{BRITS}: Bidirectional Recurrent Imputation for Time Series",
+      "author": "Cao, Wei and Wang, Dong and Li, Jian and Zhou, Hao and Li, Lei and Li, Yitan",
+      "year": "2018",
+      "venue": "Advances in Neural Information Processing Systems",
+      "source": "https://proceedings.neurips.cc/paper_files/paper/2018/hash/734e6bfcd358e25ac1db0a4241b95651-Abstract.html",
+      "dblp_record": "https://dblp.org/rec/conf/nips/CaoWLZLL18",
+      "changed_fields": [
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "tashiro2021csdi",
+      "title": "{CSDI}: Conditional Score-based Diffusion Models for Probabilistic Time Series Imputation",
+      "author": "Tashiro, Yusuke and Song, Jiaming and Song, Yang and Ermon, Stefano",
+      "year": "2021",
+      "venue": "Advances in Neural Information Processing Systems",
+      "source": "https://proceedings.neurips.cc/paper/2021/hash/cfe8504bda37b575c70ee1a8276f3486-Abstract.html",
+      "dblp_record": null,
+      "changed_fields": [],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "chen2024bitgraph",
+      "title": "Biased Temporal Convolution Graph Network for Time Series Forecasting with Missing Values",
+      "author": "Chen, Xiaodan and Li, Xiucheng and Liu, Bo and Li, Zhijun",
+      "year": "2024",
+      "venue": "International Conference on Learning Representations",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/7f3b25e39e0f0330435d1ffc1d6fa193-Abstract-Conference.html",
+      "dblp_record": "https://dblp.org/rec/conf/iclr/ChenLLL24",
+      "changed_fields": [],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "peng2025s4m",
+      "title": "{S4M}: S4 for Multivariate Time Series Forecasting with Missing Values",
+      "author": "Peng, Jing and Yang, Meiqi and Zhang, Qiong and Li, Xiaoxiao",
+      "year": "2025",
+      "venue": "International Conference on Learning Representations",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/7b2f0758334389b8ad0665a9bd165463-Abstract-Conference.html",
+      "dblp_record": "https://dblp.org/rec/conf/iclr/JingYZL25",
+      "changed_fields": [
+        "title",
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "wang2024taskoriented",
+      "title": "Task-oriented Time Series Imputation Evaluation via Generalized Representers",
+      "author": "Wang, Zhixian and Yang, Linxiao and Sun, Liang and Wen, Qingsong and Wang, Yi",
+      "year": "2024",
+      "venue": "Advances in Neural Information Processing Systems",
+      "source": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/f88264fcc54775ee1706116e90fe351a-Abstract-Conference.html",
+      "dblp_record": "https://dblp.org/rec/conf/nips/WangYSW024",
+      "changed_fields": [],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "hao2025toivsf",
+      "title": "Is Precise Recovery Necessary? A Task-Oriented Imputation Approach for Time Series Forecasting on Variable Subset",
+      "author": "Hao, Qi and Liang, Runchang and Gao, Yue and Dong, Hao and Fan, Wei and Jiang, Lu and Wang, Pengyang",
+      "year": "2025",
+      "venue": "IEEE Transactions on Knowledge and Data Engineering",
+      "source": "https://doi.org/10.1109/TKDE.2025.3594032",
+      "dblp_record": "https://dblp.org/rec/journals/tkde/HaoLGDFJW25",
+      "changed_fields": [],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "hao2025gimcc",
+      "title": "Generative Imputation with Multi-level Causal Consistency for Variable Subset Forecasting",
+      "author": "Hao, Qi and Gao, Yue and Liang, Runchang and Zhang, Yunhe and Wang, Pengyang",
+      "year": "2025",
+      "venue": "Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining",
+      "source": "https://doi.org/10.1145/3711896.3736980",
+      "dblp_record": "https://dblp.org/rec/conf/kdd/00010L0W25",
+      "changed_fields": [
+        "pages"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "xu2026srdi",
+      "title": "Shift-Resilient Diffusive Imputation for Variable Subset Forecasting",
+      "author": "Xu, Haihua and Hao, Qi and Zhang, He and Zhao, Jianpeng and Qiao, Ziyue and Jiang, Lu and Wang, Pengfei and Zhou, Yingjie and Wang, Pengyang",
+      "year": "2026",
+      "venue": "Proceedings of the ACM Web Conference 2026",
+      "source": "https://doi.org/10.1145/3774904.3792511",
+      "dblp_record": "https://dblp.org/rec/conf/www/XuHZZQJWZW26",
+      "changed_fields": [],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "jang2026channeltokenformer",
+      "title": "Towards Robust Real-World Multivariate Time Series Forecasting: A Unified Framework for Dependency, Asynchrony, and Missingness",
+      "author": "Jang, Jinkwan and Park, Hyungjin and Choi, Jinmyeong and Kim, Taesup",
+      "year": "2026",
+      "venue": "International Conference on Learning Representations",
+      "source": "https://arxiv.org/abs/2506.08660",
+      "dblp_record": "https://dblp.org/rec/journals/corr/abs-2506-08660",
+      "changed_fields": [],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "liang2025vida",
+      "title": "Imputation via Domain Adaptation: Rethinking Variable Subset Forecasting from Knowledge Transfer",
+      "author": "Liang, Runchang and Hao, Qi and Gao, Yue and Liu, Kunpeng and Jiang, Lu and Wang, Pengyang and Yin, Minghao",
+      "year": "2025",
+      "venue": "Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining",
+      "source": "https://doi.org/10.1145/3711896.3737007",
+      "dblp_record": "https://dblp.org/rec/conf/kdd/Liang0000WY25",
+      "changed_fields": [
+        "pages"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "park2026t1",
+      "title": "{T1}: One-to-One Channel-Head Binding for Multivariate Time-Series Imputation",
+      "author": "Park, Dongik and Ryu, Hyunwoo and Bae, Suahn and Park, Keondo and Kim, Hyung-Sin",
+      "year": "2026",
+      "venue": "International Conference on Learning Representations",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/41ff2b921a875902fad0c1840593c19a-Abstract-Conference.html",
+      "dblp_record": null,
+      "changed_fields": [],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "qiu2026tato",
+      "title": "Adapt Data to Model: Adaptive Transformation Optimization for Domain-shared Time Series Foundation Models",
+      "author": "Qiu, Yunzhong and Cen, Zhiyao and Pei, Zhongyi and Wang, Chen and Wang, Jianmin",
+      "year": "2026",
+      "venue": "International Conference on Learning Representations",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/48c5226582f41254026748c7e35d4ac2-Abstract-Conference.html",
+      "dblp_record": null,
+      "changed_fields": [],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "ansari2024chronos",
+      "title": "Chronos: Learning the Language of Time Series",
+      "author": "Ansari, Abdul Fatir and Stella, Lorenzo and Turkmen, Caner and Zhang, Xiyuan and Mercado, Pedro and Shen, Huibin and Shchur, Oleksandr and Rangapuram, Syama Sundar and Pineda Arango, Sebastian and Kapoor, Shubham and Zschiegner, Jasper and Maddix, Danielle C. and Wang, Hao and Mahoney, Michael W. and Torkkola, Kari and Wilson, Andrew Gordon and Bohlke-Schneider, Michael and Wang, Yuyang",
+      "year": "2024",
+      "venue": "Transactions on Machine Learning Research",
+      "source": "https://arxiv.org/abs/2403.07815",
+      "dblp_record": "https://dblp.org/rec/journals/corr/abs-2403-07815",
+      "changed_fields": [
+        "author",
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "chronosbolt2025",
+      "title": "Fast and Accurate Zero-Shot Forecasting with {Chronos-Bolt} and {AutoGluon}",
+      "author": "Ansari, Abdul Fatir and Turkmen, Caner and Shchur, Oleksandr and Stella, Lorenzo",
+      "year": "2024",
+      "venue": "AWS Machine Learning Blog",
+      "source": "https://aws.amazon.com/blogs/machine-learning/fast-and-accurate-zero-shot-forecasting-with-chronos-bolt-and-autogluon/",
+      "dblp_record": null,
+      "changed_fields": [
+        "howpublished",
+        "title",
+        "author",
+        "note",
+        "url",
+        "year"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "das2024timesfm",
+      "title": "A Decoder-only Foundation Model for Time-series Forecasting",
+      "author": "Das, Abhimanyu and Kong, Weihao and Sen, Rajat and Zhou, Yichen",
+      "year": "2024",
+      "venue": "International Conference on Machine Learning",
+      "source": "https://proceedings.mlr.press/v235/das24c.html",
+      "dblp_record": "https://dblp.org/rec/conf/icml/DasKSZ24",
+      "changed_fields": [
+        "volume",
+        "pages",
+        "url",
+        "series"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "chronos2_2025",
+      "title": "{Chronos-2}: From Univariate to Universal Forecasting",
+      "author": "Ansari, Abdul Fatir and Shchur, Oleksandr and K{\\\"u}ken, Jaris and Auer, Andreas and Han, Boran and Mercado, Pedro and Rangapuram, Syama Sundar and Shen, Huibin and Stella, Lorenzo and Zhang, Xiyuan and Goswami, Mononito and Kapoor, Shubham and Maddix, Danielle C. and Guerron, Pablo and Hu, Tony and Yin, Junming and Erickson, Nick and Desai, Prateek Mutalik and Wang, Hao and Rangwala, Huzefa and Karypis, George and Wang, Yuyang and Bohlke-Schneider, Michael",
+      "year": "2025",
+      "venue": "arXiv preprint arXiv:2510.15821",
+      "source": "https://arxiv.org/abs/2510.15821",
+      "dblp_record": "https://dblp.org/rec/journals/corr/abs-2510-15821",
+      "changed_fields": [
+        "howpublished",
+        "title",
+        "author",
+        "note",
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "woo2024moirai",
+      "title": "Unified Training of Universal Time Series Forecasting Transformers",
+      "author": "Woo, Gerald and Liu, Chenghao and Kumar, Akshat and Xiong, Caiming and Savarese, Silvio and Sahoo, Doyen",
+      "year": "2024",
+      "venue": "International Conference on Machine Learning",
+      "source": "https://proceedings.mlr.press/v235/woo24a.html",
+      "dblp_record": "https://dblp.org/rec/conf/icml/WooLKXSS24",
+      "changed_fields": [
+        "volume",
+        "pages",
+        "url",
+        "series"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "tsicl2026",
+      "title": "{TS-ICL}: A Flexible Time-Indexed Foundation Model for Time Series via In-Context Learning",
+      "author": "Le Naour, Etienne and Nabil, Tahar and Petralia, Adrien",
+      "year": "2026",
+      "venue": "arXiv preprint arXiv:2606.05878",
+      "source": "https://arxiv.org/abs/2606.05878",
+      "dblp_record": "https://dblp.org/rec/journals/corr/abs-2606-05878",
+      "changed_fields": [
+        "note"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "yoon2018gain",
+      "title": "{GAIN}: Missing Data Imputation using Generative Adversarial Nets",
+      "author": "Yoon, Jinsung and Jordon, James and van der Schaar, Mihaela",
+      "year": "2018",
+      "venue": "International Conference on Machine Learning",
+      "source": "https://proceedings.mlr.press/v80/yoon18a.html",
+      "dblp_record": "https://dblp.org/rec/conf/icml/YoonJS18",
+      "changed_fields": [
+        "volume",
+        "pages",
+        "url",
+        "series"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "du2023saits",
+      "title": "{SAITS}: Self-attention-based imputation for time series",
+      "author": "Du, Wenjie and C{\\^o}t{\\'e}, David and Liu, Yan",
+      "year": "2023",
+      "venue": "Expert Systems with Applications",
+      "source": "https://doi.org/10.1016/j.eswa.2023.119619",
+      "dblp_record": "https://dblp.org/rec/journals/eswa/DuCL23",
+      "changed_fields": [
+        "doi"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "chow1970optimum",
+      "title": "On Optimum Recognition Error and Reject Tradeoff",
+      "author": "Chow, C. K.",
+      "year": "1970",
+      "venue": "IEEE Transactions on Information Theory",
+      "source": "https://doi.org/10.1109/TIT.1970.1054406",
+      "dblp_record": "https://dblp.org/rec/journals/tit/Chow70",
+      "changed_fields": [
+        "doi"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "geifman2017selective",
+      "title": "Selective Classification for Deep Neural Networks",
+      "author": "Geifman, Yonatan and El-Yaniv, Ran",
+      "year": "2017",
+      "venue": "Advances in Neural Information Processing Systems",
+      "source": "https://proceedings.neurips.cc/paper_files/paper/7073-selective-classification-for-deep-neural-networks",
+      "dblp_record": "https://dblp.org/rec/conf/nips/GeifmanE17",
+      "changed_fields": [
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "vovk2005algorithmic",
+      "title": "Algorithmic Learning in a Random World",
+      "author": "Vovk, Vladimir and Gammerman, Alexander and Shafer, Glenn",
+      "year": "2005",
+      "venue": "Springer",
+      "source": "https://link.springer.com/book/10.1007/b106715",
+      "dblp_record": null,
+      "changed_fields": [
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "lei2018distribution",
+      "title": "Distribution-Free Predictive Inference for Regression",
+      "author": "Lei, Jing and G'Sell, Max and Rinaldo, Alessandro and Tibshirani, Ryan J. and Wasserman, Larry",
+      "year": "2018",
+      "venue": "Journal of the American Statistical Association",
+      "source": "https://doi.org/10.1080/01621459.2017.1307116",
+      "dblp_record": null,
+      "changed_fields": [
+        "doi"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "he2024dime",
+      "title": "Estimating Conditional Mutual Information for Dynamic Feature Selection",
+      "author": "Gadgil, Soham and Covert, Ian and Lee, Su-In",
+      "year": "2024",
+      "venue": "International Conference on Learning Representations",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/9682490bedc064aba8aac1ab3f703507-Abstract-Conference.html",
+      "dblp_record": "https://dblp.org/rec/conf/iclr/GadgilCL24",
+      "changed_fields": [],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "hyndman2006mase",
+      "title": "Another Look at Measures of Forecast Accuracy",
+      "author": "Hyndman, Rob J. and Koehler, Anne B.",
+      "year": "2006",
+      "venue": "International Journal of Forecasting",
+      "source": "https://talks.robjhyndman.com/publications/another-look-at-measures-of-forecast-accuracy/",
+      "dblp_record": null,
+      "changed_fields": [
+        "doi"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "holm1979simple",
+      "title": "A Simple Sequentially Rejective Multiple Test Procedure",
+      "author": "Holm, Sture",
+      "year": "1979",
+      "venue": "Scandinavian Journal of Statistics",
+      "source": "https://www.jstor.org/stable/4615733",
+      "dblp_record": null,
+      "changed_fields": [
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "dudik2011doubly",
+      "title": "Doubly Robust Policy Evaluation and Learning",
+      "author": "Dud{\\'i}k, Miroslav and Langford, John and Li, Lihong",
+      "year": "2011",
+      "venue": "Proceedings of the 28th International Conference on Machine Learning",
+      "source": "https://dblp.org/rec/conf/icml/DudikLL11",
+      "dblp_record": "https://dblp.org/rec/conf/icml/DudikLL11",
+      "changed_fields": [
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "swaminathan2015counterfactual",
+      "title": "Counterfactual Risk Minimization: Learning from Logged Bandit Feedback",
+      "author": "Swaminathan, Adith and Joachims, Thorsten",
+      "year": "2015",
+      "venue": "Proceedings of the 32nd International Conference on Machine Learning",
+      "source": "https://proceedings.mlr.press/v37/swaminathan15.html",
+      "dblp_record": "https://dblp.org/rec/conf/icml/SwaminathanJ15",
+      "changed_fields": [
+        "volume",
+        "journal",
+        "pages",
+        "booktitle",
+        "url",
+        "series"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "strehl2010learning",
+      "title": "Learning from Logged Implicit Exploration Data",
+      "author": "Strehl, Alex and Langford, John and Li, Lihong and Kakade, Sham M.",
+      "year": "2010",
+      "venue": "Advances in Neural Information Processing Systems",
+      "source": "https://proceedings.neurips.cc/paper_files/paper/3977-learning-from-logged-implicit-exploration-data",
+      "dblp_record": "https://dblp.org/rec/conf/nips/StrehlLLK10",
+      "changed_fields": [
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "jiang2016doubly",
+      "title": "Doubly Robust Off-policy Value Evaluation for Reinforcement Learning",
+      "author": "Jiang, Nan and Li, Lihong",
+      "year": "2016",
+      "venue": "Proceedings of the 33rd International Conference on Machine Learning",
+      "source": "https://proceedings.mlr.press/v48/jiang16.html",
+      "dblp_record": "https://dblp.org/rec/conf/icml/JiangL16",
+      "changed_fields": [
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "thomas2016data",
+      "title": "Data-Efficient Off-Policy Policy Evaluation for Reinforcement Learning",
+      "author": "Thomas, Philip S. and Brunskill, Emma",
+      "year": "2016",
+      "venue": "Proceedings of the 33rd International Conference on Machine Learning",
+      "source": "https://proceedings.mlr.press/v48/thomasa16.html",
+      "dblp_record": "https://dblp.org/rec/conf/icml/ThomasB16",
+      "changed_fields": [
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "abbasiyadkori2011improved",
+      "title": "Improved Algorithms for Linear Stochastic Bandits",
+      "author": "Abbasi-Yadkori, Yasin and P{\\'a}l, D{\\'a}vid and Szepesv{\\'a}ri, Csaba",
+      "year": "2011",
+      "venue": "Advances in Neural Information Processing Systems",
+      "source": "https://proceedings.neurips.cc/paper_files/paper/4417-improved-algorithms-for-linear-stochastic-bandits",
+      "dblp_record": "https://dblp.org/rec/conf/nips/Abbasi-YadkoriPS11",
+      "changed_fields": [
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "lattimore2020bandit",
+      "title": "Bandit Algorithms",
+      "author": "Lattimore, Tor and Szepesv{\\'a}ri, Csaba",
+      "year": "2020",
+      "venue": "Cambridge University Press",
+      "source": "https://www.cambridge.org/core/books/bandit-algorithms/8E39FD004E6CE036680F90DD0C6F09FC",
+      "dblp_record": null,
+      "changed_fields": [
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "mozannar2020consistent",
+      "title": "Consistent Estimators for Learning to Defer to an Expert",
+      "author": "Mozannar, Hussein and Sontag, David",
+      "year": "2020",
+      "venue": "Proceedings of the 37th International Conference on Machine Learning",
+      "source": "https://proceedings.mlr.press/v119/mozannar20b.html",
+      "dblp_record": "https://dblp.org/rec/conf/icml/MozannarS20",
+      "changed_fields": [
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "madras2018predict",
+      "title": "Predict Responsibly: Improving Fairness and Accuracy by Learning to Defer",
+      "author": "Madras, David and Pitassi, Toniann and Zemel, Richard",
+      "year": "2018",
+      "venue": "Advances in Neural Information Processing Systems",
+      "source": "https://proceedings.neurips.cc/paper/2018/hash/09d37c08f7b129e96277388757530c72-Abstract.html",
+      "dblp_record": "https://dblp.org/rec/conf/nips/MadrasPZ18",
+      "changed_fields": [
+        "url"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "du2023pypots",
+      "title": "{PyPOTS}: A Python Toolbox for Data Mining on Partially-Observed Time Series",
+      "author": "Du, Wenjie",
+      "year": "2023",
+      "venue": "arXiv preprint arXiv:2305.18811",
+      "source": "https://arxiv.org/abs/2305.18811",
+      "dblp_record": null,
+      "changed_fields": [],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "angelopoulos2024conformal",
+      "title": "Conformal Risk Control",
+      "author": "Angelopoulos, Anastasios N. and Bates, Stephen and Fisch, Adam and Lei, Lihua and Schuster, Tal",
+      "year": "2024",
+      "venue": "International Conference on Learning Representations",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/f3549ef9b5ff520a7e41ff3cc306ab2b-Abstract-Conference.html",
+      "dblp_record": "https://dblp.org/rec/conf/iclr/AngelopoulosBFL24",
+      "changed_fields": [],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "rice1976algorithm",
+      "title": "The Algorithm Selection Problem",
+      "author": "Rice, John R.",
+      "year": "1976",
+      "venue": "Advances in Computers",
+      "source": "https://doi.org/10.1016/S0065-2458(08)60520-3",
+      "dblp_record": "https://dblp.org/rec/journals/ac/Rice76",
+      "changed_fields": [
+        "doi"
+      ],
+      "status": "checked against visible bibliographic records"
+    },
+    {
+      "key": "xu2008satzilla",
+      "title": "{SATzilla}: Portfolio-Based Algorithm Selection for {SAT}",
+      "author": "Xu, Lin and Hutter, Frank and Hoos, Holger H. and Leyton-Brown, Kevin",
+      "year": "2008",
+      "venue": "Journal of Artificial Intelligence Research",
+      "source": "https://doi.org/10.1613/jair.2490",
+      "dblp_record": "https://dblp.org/rec/journals/jair/XuHHL08",
+      "changed_fields": [
+        "doi"
+      ],
+      "status": "checked against visible bibliographic records"
+    }
+  ],
+  "bib_sha256": "aee05c6aa3ae3c08a18fe62483b8062ba2e06c1e083bce109136144d431538fb"
+}

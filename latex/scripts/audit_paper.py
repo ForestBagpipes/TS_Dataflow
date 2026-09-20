@@ -12,7 +12,7 @@ from pypdf import PdfReader
 
 HERE = Path(__file__).resolve().parents[1]
 ROOT = HERE.parent
-NAME = 'IntroActTS_20260920_v50'
+NAME = 'IntroActTS_20260920_v51'
 tex = (HERE/(NAME+'.tex')).read_text(encoding='utf8')
 log = (HERE/'build'/(NAME+'.log')).read_text(encoding='utf8',errors='replace')
 labels = re.findall(r'\\label\{([^}]+)\}',tex)
@@ -57,9 +57,21 @@ graphic_refs=re.findall(r'\\includegraphics\[[^\]]*\]\{([^}]+)\}',tex)
 assert len(graphic_refs)==6 and all((HERE/p).exists() for p in graphic_refs)
 assert {Path(p).name for p in graphic_refs}=={p.name for p in (HERE/'figure').glob('*.eps')}
 pdf=PdfReader(HERE/(NAME+'.pdf'))
+aux=(HERE/'build'/(NAME+'.aux')).read_text(encoding='utf8')
+main_end=int(re.search(r'\\newlabel\{sec:main-end\}\{\{[^}]*\}\{(\d+)\}',aux).group(1))
+assert main_end<=9, 'Main text exceeds ICLR 2027 nine-page limit'
+assert tex.index(r'\section{Conclusion}') < tex.index(r'\section*{AI Use Statement}') < tex.index(r'\bibliography{references}')
+bib=(HERE/'references.bib').read_text(encoding='utf8')
+keys=set(re.findall(r'@\w+\{([^,]+),',bib))
+cited={k.strip() for c in re.findall(r'\\cite\w*\{([^}]+)\}',tex) for k in c.split(',')}
+assert cited<=keys, sorted(cited-keys)
+reference_audit=json.loads((ROOT/'docs/reference_audit_v51_20260920.json').read_text(encoding='utf8'))
+assert {r['key'] for r in reference_audit['records']}==cited
+assert reference_audit['bib_sha256']==hashlib.sha256((HERE/'references.bib').read_bytes()).hexdigest()
 report={
     'manuscript':NAME, 'pdf_pages':len(pdf.pages),
     'missing_references':missing, 'overfull_boxes':0,
+    'main_text_last_page':main_end, 'cited_entries_audited':len(cited),
     'figures':graphic_refs, 'bmp_eps_pixels':'exact match for both figures',
     'experimental_csv':'matches source table values at displayed precision',
     'new_experiments_run':False,

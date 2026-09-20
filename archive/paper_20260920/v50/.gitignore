@@ -1,0 +1,5 @@
+*
+!.gitignore
+!IntroActTS_20260920_v50.tex
+!references.bib
+!build_figures.py

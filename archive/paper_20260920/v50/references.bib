@@ -1,0 +1,490 @@
+% ===========================================================================
+% IntroAct-TS / ICLR 2027 —— 全项目唯一参考文献文件
+% ---------------------------------------------------------------------------
+% 约定（见 latex/README.md）：
+%   1. 全项目只维护这一个 .bib，所有版本（v4.4、v4.5 ...）的 .tex 共用它。
+%   2. 只增量追加，不因某版论文不引用就删除条目；被引用的条目由 bibtex 自动筛选。
+%   3. 每条都要有可核验来源（DOI / arXiv / OpenReview / 官方仓库 URL）。
+%      无法核实作者全名的条目一律写 `and others`，绝不编造作者或页码。
+%   4. 预印本用 misc 或 article + note 标注版本日期，不冒充已正式发表。
+%      注意：本文件是给 bibtex 读的，注释里不要出现 at 符号开头的词，否则会被当成新条目。
+% ===========================================================================
+
+% ---------------------------------------------------------------- 正式 baseline
+@inproceedings{cao2018brits,
+  title     = {{BRITS}: Bidirectional Recurrent Imputation for Time Series},
+  author    = {Cao, Wei and Wang, Dong and Li, Jian and Zhou, Hao and Li, Lei and Li, Yitan},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2018}
+}
+
+@inproceedings{tashiro2021csdi,
+  title     = {{CSDI}: Conditional Score-based Diffusion Models for Probabilistic Time Series Imputation},
+  author    = {Tashiro, Yusuke and Song, Jiaming and Song, Yang and Ermon, Stefano},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2021},
+  url       = {https://arxiv.org/abs/2107.03502}
+}
+
+% BiTGraph —— ICLR 2024。直接研究缺失值下的多变量预测，并讨论先插补再预测的误差累积。
+@inproceedings{chen2024bitgraph,
+  title     = {Biased Temporal Convolution Graph Network for Time Series Forecasting with Missing Values},
+  author    = {Chen, Xiaodan and Li, Xiucheng and Liu, Bo and Li, Zhijun},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2024},
+  url       = {https://openreview.net/forum?id=O9nZCwdGcG}
+}
+
+% S4M —— ICLR 2025。把缺失模式直接整合进预测模型，面向 block missing。
+@inproceedings{peng2025s4m,
+  title     = {{S4M}: S4 for Multivariate Time Series Forecasting with Missing Data},
+  author    = {Peng, Jing and Yang, Meiqi and Zhang, Qiong and Li, Xiaoxiao},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2025},
+  url       = {https://arxiv.org/abs/2503.00900}
+}
+
+% TOI —— 正文五个核心同定位 baseline 之一。作者列表取自 arXiv:2410.06652（NeurIPS 2024）。
+@inproceedings{wang2024taskoriented,
+  title     = {Task-oriented Time Series Imputation Evaluation via Generalized Representers},
+  author    = {Wang, Zhixian and Yang, Linxiao and Sun, Liang and Wen, Qingsong and Wang, Yi},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2410.06652}
+}
+
+% TOI-VSF —— 期刊版为 IEEE TKDE 37(11):6464-6477, 2025。作者取自 arXiv:2411.09928。
+@article{hao2025toivsf,
+  title   = {Is Precise Recovery Necessary? A Task-Oriented Imputation Approach for Time Series Forecasting on Variable Subset},
+  author  = {Hao, Qi and Liang, Runchang and Gao, Yue and Dong, Hao and Fan, Wei and Jiang, Lu and Wang, Pengyang},
+  journal = {IEEE Transactions on Knowledge and Data Engineering},
+  volume  = {37},
+  number  = {11},
+  pages   = {6464--6477},
+  year    = {2025},
+  doi     = {10.1109/TKDE.2025.3594032},
+  url     = {https://arxiv.org/abs/2411.09928}
+}
+
+% GIMCC —— KDD 2025。作者与 DOI 经 Semantic Scholar（DBLP key conf/kdd/00010L0W25）核验。
+@inproceedings{hao2025gimcc,
+  title     = {Generative Imputation with Multi-level Causal Consistency for Variable Subset Forecasting},
+  author    = {Hao, Qi and Gao, Yue and Liang, Runchang and Zhang, Yunhe and Wang, Pengyang},
+  booktitle = {Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining},
+  year      = {2025},
+  doi       = {10.1145/3711896.3736980}
+}
+
+% SRDI —— WWW 2026, pages 7366-7377。作者经 researchr（key XuHZZQJWZW26）核验。
+@inproceedings{xu2026srdi,
+  title     = {Shift-Resilient Diffusive Imputation for Variable Subset Forecasting},
+  author    = {Xu, Haihua and Hao, Qi and Zhang, He and Zhao, Jianpeng and Qiao, Ziyue and Jiang, Lu and Wang, Pengfei and Zhou, Yingjie and Wang, Pengyang},
+  booktitle = {Proceedings of the ACM Web Conference 2026},
+  pages     = {7366--7377},
+  year      = {2026},
+  doi       = {10.1145/3774904.3792511}
+}
+
+% ChannelTokenFormer —— ICLR 2026（arXiv:2506.08660 的 comments 字段确认接收）。
+@inproceedings{jang2026channeltokenformer,
+  title     = {Towards Robust Real-World Multivariate Time Series Forecasting: A Unified Framework for Dependency, Asynchrony, and Missingness},
+  author    = {Jang, Jinkwan and Park, Hyungjin and Choi, Jinmyeong and Kim, Taesup},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2026},
+  url       = {https://arxiv.org/abs/2506.08660}
+}
+
+% VIDA —— KDD 2025。作者与 DOI 经 Semantic Scholar（DBLP key conf/kdd/Liang0000WY25）核验。
+% 仅用于 Related Work 与附录扩展比较，不进正文五个核心 baseline 集合。
+@inproceedings{liang2025vida,
+  title     = {Imputation via Domain Adaptation: Rethinking Variable Subset Forecasting from Knowledge Transfer},
+  author    = {Liang, Runchang and Hao, Qi and Gao, Yue and Liu, Kunpeng and Jiang, Lu and Wang, Pengyang and Yin, Minghao},
+  booktitle = {Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining},
+  year      = {2025},
+  doi       = {10.1145/3711896.3737007}
+}
+
+@inproceedings{park2026t1,
+  title     = {{T1}: One-to-One Channel-Head Binding for Multivariate Time-Series Imputation},
+  author    = {Park, Dongik and Ryu, Hyunwoo and Bae, Suahn and Park, Keondo and Kim, Hyung-Sin},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2026},
+  url       = {https://openreview.net/forum?id=IAnIlFsPEW}
+}
+
+@inproceedings{qiu2026tato,
+  title     = {Adapt Data to Model: Adaptive Transformation Optimization for Domain-shared Time Series Foundation Models},
+  author    = {Qiu, Yunzhong and Cen, Zhiyao and Pei, Zhongyi and Wang, Chen and Wang, Jianmin},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2026},
+  url       = {https://openreview.net/forum?id=uTK1SNgi1N}
+}
+
+% ------------------------------------------------------------------- 基础模型
+@article{ansari2024chronos,
+  title   = {Chronos: Learning the Language of Time Series},
+  author  = {Ansari, Abdul Fatir and Stella, Lorenzo and Turkmen, Caner and Zhang, Xiyuan and Mercado, Pedro and Shen, Huibin and others},
+  journal = {Transactions on Machine Learning Research},
+  year    = {2024},
+  url     = {https://arxiv.org/abs/2403.07815}
+}
+
+@misc{chronosbolt2025,
+  title        = {Chronos-Bolt: Zero-shot forecasting that is faster and more accurate},
+  author       = {{Amazon Web Services}},
+  year         = {2025},
+  howpublished = {Model release and model card, \url{https://github.com/amazon-science/chronos-forecasting}},
+  note         = {A released model checkpoint rather than a peer-reviewed article; local runs pin the Hugging Face snapshot revision}
+}
+
+@inproceedings{das2024timesfm,
+  title     = {A Decoder-only Foundation Model for Time-series Forecasting},
+  author    = {Das, Abhimanyu and Kong, Weihao and Sen, Rajat and Zhou, Yichen},
+  booktitle = {International Conference on Machine Learning},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2310.10688}
+}
+
+@misc{chronos2_2025,
+  title        = {Chronos-2: A Native Multivariate Time Series Foundation Model},
+  author       = {{Amazon Web Services}},
+  year         = {2025},
+  howpublished = {Technical report and model release, \url{https://huggingface.co/amazon/chronos-2}},
+  note         = {Weights released under Apache-2.0; the revision used here is pinned in the experiment ledger}
+}
+
+@inproceedings{woo2024moirai,
+  title     = {Unified Training of Universal Time Series Forecasting Transformers},
+  author    = {Woo, Gerald and Liu, Chenghao and Kumar, Akshat and Xiong, Caiming and Savarese, Silvio and Sahoo, Doyen},
+  booktitle = {International Conference on Machine Learning},
+  year    = {2024},
+  url     = {https://arxiv.org/abs/2402.02592}
+}
+
+@article{rasul2023lagllama,
+  title   = {Lag-Llama: Towards Foundation Models for Probabilistic Time Series Forecasting},
+  author  = {Rasul, Kashif and Ashok, Arjun and Williams, Andrew Robert and Ghonia, Hena and Bhagwatkar, Rishika and others},
+  journal = {arXiv preprint arXiv:2310.08278},
+  year    = {2023}
+}
+
+@misc{tsicl2026,
+  title        = {{TS-ICL}: A Flexible Time-Indexed Foundation Model for Time Series via In-Context Learning},
+  author       = {Le Naour, Etienne and Nabil, Tahar and Petralia, Adrien},
+  year         = {2026},
+  howpublished = {arXiv preprint arXiv:2606.05878},
+  url          = {https://arxiv.org/abs/2606.05878},
+  note         = {Used here as the in-context regression backend of two catalog actions, not as a proposed method}
+}
+
+% ------------------------------------------------------------- 相关插补 / 预测
+@inproceedings{yoon2018gain,
+  title     = {{GAIN}: Missing Data Imputation using Generative Adversarial Nets},
+  author    = {Yoon, Jinsung and Jordon, James and van der Schaar, Mihaela},
+  booktitle = {International Conference on Machine Learning},
+  year      = {2018}
+}
+
+@article{du2023saits,
+  title   = {{SAITS}: Self-attention-based imputation for time series},
+  author  = {Du, Wenjie and C{\^o}t{\'e}, David and Liu, Yan},
+  journal = {Expert Systems with Applications},
+  volume  = {219},
+  pages   = {119619},
+  year    = {2023}
+}
+
+@inproceedings{zhou2021informer,
+  title     = {Informer: Beyond Efficient Transformer for Long Sequence Time-Series Forecasting},
+  author    = {Zhou, Haoyi and Zhang, Shanghang and Peng, Jieqi and Zhang, Shuai and Li, Jianxin and Xiong, Hui and Zhang, Wancai},
+  booktitle = {AAAI Conference on Artificial Intelligence},
+  year      = {2021}
+}
+
+@inproceedings{wu2021autoformer,
+  title     = {Autoformer: Decomposition Transformers with Auto-Correlation for Long-Term Series Forecasting},
+  author    = {Wu, Haixu and Xu, Jiehui and Wang, Jianmin and Long, Mingsheng},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2021}
+}
+
+@inproceedings{nie2023patchtst,
+  title     = {A Time Series is Worth 64 Words: Long-term Forecasting with Transformers},
+  author    = {Nie, Yuqi and Nguyen, Nam H. and Sinthong, Phanwadee and Kalagnanam, Jayant},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2023}
+}
+
+@inproceedings{liu2024itransformer,
+  title     = {{iTransformer}: Inverted Transformers Are Effective for Time Series Forecasting},
+  author    = {Liu, Yong and Hu, Tengge and Zhang, Haoran and Wu, Haixu and Wang, Shiyu and Ma, Lintao and Long, Mingsheng},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2024}
+}
+
+@inproceedings{lai2018lstnet,
+  title     = {Modeling Long- and Short-Term Temporal Patterns with Deep Neural Networks},
+  author    = {Lai, Guokun and Chang, Wei-Cheng and Yang, Yiming and Liu, Hanxiao},
+  booktitle = {ACM SIGIR Conference on Research and Development in Information Retrieval},
+  year      = {2018}
+}
+
+@misc{uci_electricity,
+  title        = {{ElectricityLoadDiagrams20112014} Data Set},
+  author       = {{UCI Machine Learning Repository}},
+  howpublished = {\url{https://archive.ics.uci.edu/dataset/321/electricityloaddiagrams20112014}},
+  year         = {2015}
+}
+
+@misc{pems,
+  title        = {{PeMS}: Caltrans Performance Measurement System},
+  author       = {{California Department of Transportation}},
+  howpublished = {\url{https://pems.dot.ca.gov/}},
+  year         = {2024}
+}
+
+% ------------------------------------------------------- 选择性预测 / 弃权
+@article{chow1970optimum,
+  title   = {On Optimum Recognition Error and Reject Tradeoff},
+  author  = {Chow, C. K.},
+  journal = {IEEE Transactions on Information Theory},
+  volume  = {16},
+  number  = {1},
+  pages   = {41--46},
+  year    = {1970}
+}
+
+@inproceedings{geifman2017selective,
+  title     = {Selective Classification for Deep Neural Networks},
+  author    = {Geifman, Yonatan and El-Yaniv, Ran},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2017}
+}
+
+@book{vovk2005algorithmic,
+  title     = {Algorithmic Learning in a Random World},
+  author    = {Vovk, Vladimir and Gammerman, Alexander and Shafer, Glenn},
+  publisher = {Springer},
+  year      = {2005}
+}
+
+@article{lei2018distribution,
+  title     = {Distribution-Free Predictive Inference for Regression},
+  author    = {Lei, Jing and G'Sell, Max and Rinaldo, Alessandro and Tibshirani, Ryan J. and Wasserman, Larry},
+  journal   = {Journal of the American Statistical Association},
+  volume    = {113},
+  number    = {523},
+  pages     = {1094--1111},
+  year      = {2018}
+}
+
+% ------------------------------------------------- 动态特征选择（相关，仅作边界说明）
+@inproceedings{he2024dime,
+  title     = {Estimating Conditional Mutual Information for Dynamic Feature Selection},
+  author    = {Gadgil, Soham and Covert, Ian and Lee, Su-In},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2024},
+  url       = {https://openreview.net/forum?id=Oju2Qu9jvn}
+}
+
+% --------------------------------------------------------- 方法学 / 统计工具
+@article{hyndman2006mase,
+  title   = {Another Look at Measures of Forecast Accuracy},
+  author  = {Hyndman, Rob J. and Koehler, Anne B.},
+  journal = {International Journal of Forecasting},
+  volume  = {22},
+  number  = {4},
+  pages   = {679--688},
+  year    = {2006}
+}
+
+@book{breiman1984cart,
+  title     = {Classification and Regression Trees},
+  author    = {Breiman, Leo and Friedman, Jerome H. and Olshen, Richard A. and Stone, Charles J.},
+  publisher = {Wadsworth},
+  year      = {1984}
+}
+
+@book{boyd2004convex,
+  title     = {Convex Optimization},
+  author    = {Boyd, Stephen and Vandenberghe, Lieven},
+  publisher = {Cambridge University Press},
+  year      = {2004}
+}
+
+@inproceedings{jaggi2013revisiting,
+  title     = {Revisiting Frank-Wolfe: Projection-Free Sparse Convex Optimization},
+  author    = {Jaggi, Martin},
+  booktitle = {International Conference on Machine Learning},
+  year    = {2013}
+}
+
+@article{cameron2008bootstrap,
+  title   = {Bootstrap-Based Improvements for Inference with Clustered Errors},
+  author  = {Cameron, A. Colin and Gelbach, Jonah B. and Miller, Douglas L.},
+  journal = {Review of Economics and Statistics},
+  volume  = {90},
+  number  = {3},
+  pages   = {414--427},
+  year    = {2008}
+}
+
+@article{holm1979simple,
+  title   = {A Simple Sequentially Rejective Multiple Test Procedure},
+  author  = {Holm, Sture},
+  journal = {Scandinavian Journal of Statistics},
+  volume  = {6},
+  number  = {2},
+  pages   = {65--70},
+  year    = {1979}
+}
+
+@article{spearman1904proof,
+  title   = {The Proof and Measurement of Association between Two Things},
+  author  = {Spearman, C.},
+  journal = {American Journal of Psychology},
+  volume  = {15},
+  number  = {1},
+  pages   = {72--101},
+  year    = {1904}
+}
+
+@book{hyndman2021forecasting,
+  title     = {Forecasting: Principles and Practice},
+  author    = {Hyndman, Rob J. and Athanasopoulos, George},
+  edition   = {3},
+  publisher = {OTexts},
+  year      = {2021}
+}
+
+% ---------------------------------------------------------------------------
+% 策略选择 / 离策略评估 / 选择性预测 这条线（用于与 contextual bandit 切割）
+% 注意：注释里不要出现以 at 符号开头的词，否则 bibtex 会误当成新条目。
+% ---------------------------------------------------------------------------
+
+@inproceedings{dudik2011doubly,
+  title     = {Doubly Robust Policy Evaluation and Learning},
+  author    = {Dud{\'i}k, Miroslav and Langford, John and Li, Lihong},
+  booktitle = {Proceedings of the 28th International Conference on Machine Learning},
+  year      = {2011}
+}
+
+@article{swaminathan2015counterfactual,
+  title   = {Counterfactual Risk Minimization: Learning from Logged Bandit Feedback},
+  author  = {Swaminathan, Adith and Joachims, Thorsten},
+  journal = {Journal of Machine Learning Research},
+  volume  = {16},
+  pages   = {1871--1937},
+  year    = {2015}
+}
+
+@inproceedings{strehl2010learning,
+  title     = {Learning from Logged Implicit Exploration Data},
+  author    = {Strehl, Alex and Langford, John and Li, Lihong and Kakade, Sham M.},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2010}
+}
+
+@inproceedings{jiang2016doubly,
+  title     = {Doubly Robust Off-policy Value Evaluation for Reinforcement Learning},
+  author    = {Jiang, Nan and Li, Lihong},
+  booktitle = {Proceedings of the 33rd International Conference on Machine Learning},
+  year      = {2016}
+}
+
+@inproceedings{thomas2016data,
+  title     = {Data-Efficient Off-Policy Policy Evaluation for Reinforcement Learning},
+  author    = {Thomas, Philip S. and Brunskill, Emma},
+  booktitle = {Proceedings of the 33rd International Conference on Machine Learning},
+  year      = {2016}
+}
+
+@inproceedings{abbasiyadkori2011improved,
+  title     = {Improved Algorithms for Linear Stochastic Bandits},
+  author    = {Abbasi-Yadkori, Yasin and P{\'a}l, D{\'a}vid and Szepesv{\'a}ri, Csaba},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2011}
+}
+
+@book{lattimore2020bandit,
+  title     = {Bandit Algorithms},
+  author    = {Lattimore, Tor and Szepesv{\'a}ri, Csaba},
+  publisher = {Cambridge University Press},
+  year      = {2020}
+}
+
+@inproceedings{mozannar2020consistent,
+  title     = {Consistent Estimators for Learning to Defer to an Expert},
+  author    = {Mozannar, Hussein and Sontag, David},
+  booktitle = {Proceedings of the 37th International Conference on Machine Learning},
+  year      = {2020}
+}
+
+@inproceedings{madras2018predict,
+  title     = {Predict Responsibly: Improving Fairness and Accuracy by Learning to Defer},
+  author    = {Madras, David and Pitassi, Toniann and Zemel, Richard},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2018}
+}
+
+@inproceedings{krishnan2016activeclean,
+  title     = {ActiveClean: Interactive Data Cleaning for Statistical Modeling},
+  author    = {Krishnan, Sanjay and Wang, Jiannan and Franklin, Michael J. and Goldberg, Ken and Kraska, Tim},
+  booktitle = {Proceedings of the VLDB Endowment},
+  volume    = {9},
+  number    = {12},
+  pages     = {948--959},
+  year      = {2016}
+}
+
+@book{little2019statistical,
+  title     = {Statistical Analysis with Missing Data},
+  author    = {Little, Roderick J. A. and Rubin, Donald B.},
+  edition   = {3},
+  publisher = {Wiley},
+  year      = {2019}
+}
+
+@book{vanbuuren2018flexible,
+  title     = {Flexible Imputation of Missing Data},
+  author    = {van Buuren, Stef},
+  edition   = {2},
+  publisher = {Chapman and Hall/CRC},
+  year      = {2018}
+}
+
+% PyPOTS —— SAITS 的官方工具箱，主表 reconstruction baseline 由它提供实现。
+@article{du2023pypots,
+  title   = {{PyPOTS}: A Python Toolbox for Data Mining on Partially-Observed Time Series},
+  author  = {Du, Wenjie},
+  journal = {arXiv preprint arXiv:2305.18811},
+  year    = {2023},
+  url     = {https://arxiv.org/abs/2305.18811}
+}
+
+% Conformal risk control —— 仅用于说明本文的 conservative score 不是校准风险控制。
+@inproceedings{angelopoulos2024conformal,
+  title     = {Conformal Risk Control},
+  author    = {Angelopoulos, Anastasios N. and Bates, Stephen and Fisch, Adam and Lei, Lihua and Schuster, Tal},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2208.02814}
+}
+
+@article{rice1976algorithm,
+  title = {The Algorithm Selection Problem},
+  author = {Rice, John R.},
+  journal = {Advances in Computers},
+  volume = {15},
+  pages = {65--118},
+  year = {1976}
+}
+
+@article{xu2008satzilla,
+  title = {{SATzilla}: Portfolio-Based Algorithm Selection for {SAT}},
+  author = {Xu, Lin and Hutter, Frank and Hoos, Holger H. and Leyton-Brown, Kevin},
+  journal = {Journal of Artificial Intelligence Research},
+  volume = {32},
+  pages = {565--606},
+  year = {2008}
+}

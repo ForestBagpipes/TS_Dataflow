@@ -24,7 +24,7 @@ HERE = Path(__file__).resolve().parents[1]
 FIG = HERE / 'figure'
 PREVIEW = HERE / 'build' / 'preview'
 PREVIEW.mkdir(parents=True, exist_ok=True)
-COLORS = ['#A5AFBD', '#699CC6', '#328C88', '#9A88B8', '#5576AB', '#193D68']
+COLORS = ['#9AAFC0', '#739BBF', '#368E9D', '#817BAA', '#526D94', '#173F68']
 METHODS = ['Native KEEP', 'Best Fixed', 'R2-CART', 'Fixed SAITS', 'TATO', 'IntroAct-TS']
 SHORT = ['KEEP', 'Fixed', 'CART', 'SAITS', 'TATO', 'Ours']
 TITLE_SIZE, AXIS_SIZE, TICK_SIZE, VALUE_SIZE, LEGEND_SIZE = 11, 11, 10, 9.5, 10
@@ -43,11 +43,12 @@ plt.rcParams.update({
 
 def save(fig, name):
     # Identical canvas widths preserve actual printed font sizes across main figures.
+    fig.align_xlabels()
+    fig.align_ylabels()
     fig.savefig(FIG / (name + '.eps'), format='eps')
     eps = FIG / (name + '.eps')
     eps.write_bytes(eps.read_bytes().replace(b'\r\n', b'\n'))
-    fig.savefig(PREVIEW / (name + '.png'), dpi=450)
-    fig.savefig(PREVIEW / (name + '.svg'), format='svg')
+    fig.savefig(PREVIEW / (name + '.png'), dpi=200)
     plt.close(fig)
 
 
@@ -82,53 +83,44 @@ def read(name):
 
 def bars(ax, vals, labels, colors, title, fmt='.1f'):
     x = np.arange(len(vals))
-    ax.bar(x, vals, color=colors, width=.64, edgecolor='white', linewidth=.6)
-    ax.set_xticks(x, labels, fontsize=TICK_SIZE)
-    ax.tick_params(axis='x', length=0, pad=7)
+    ax.bar(x, vals, color=colors, width=.72)
+    ax.set_xticks(x, labels, rotation=50, ha='right', fontsize=TICK_SIZE)
     ax.set_title(title, loc='left', weight='bold', fontsize=TITLE_SIZE, pad=8)
     low = min(0, min(vals)); high = max(vals)
     span = high-low or 1
-    ax.set_ylim(low-span*.25 if low<0 else 0, high+span*.24)
+    ax.set_ylim(low-span*.22 if low<0 else 0, high+span*(.42 if fmt in ['.3f','.4f'] and len(vals)>5 else .24))
     ax.yaxis.set_major_locator(MaxNLocator(nbins=4,steps=[1,2,2.5,5,10]))
     for xi,v in zip(x,vals):
         ax.text(xi,v+span*.03 if v>=0 else v-span*.025,format(v,fmt),
-                ha='center',va='bottom' if v>=0 else 'top',fontsize=VALUE_SIZE, color='#25384B')
+                ha='center',va='bottom' if v>=0 else 'top',fontsize=VALUE_SIZE,rotation=90 if len(vals)>5 and fmt in ['.3f','.4f'] else 0)
     if low<0: ax.axhline(0,color='#5B6C7B',lw=.7)
     ax.grid(False)
 
 
 def panels(count, legend=False, ratios=None):
-    height=3.0 if legend else 2.65
+    height=3.15 if legend else 2.8
     fig,axs=plt.subplots(1,count,figsize=(7.5,height),gridspec_kw={'width_ratios':ratios or [1]*count})
-    fig.subplots_adjust(left=.075,right=.985,bottom=.49/height,top=2.21/height,wspace=.32)
+    fig.subplots_adjust(left=.08,right=.985,bottom=.72/height,top=2.37/height,wspace=.36)
     return fig,axs
 
 
 def utility():
-    from matplotlib.patches import Patch
-    r=read('utility.csv'); fig,axs=panels(2,legend=True)
+    r=read('utility.csv'); fig,axs=panels(3)
     labels=['KEEP','Ffill','Single','Multi','Ridge','SAITS']
-    ax=axs[0]; x=np.arange(6)
-    for shift,field,filled in [(-.18,'best_share',True),(.18,'beneficial_share',False)]:
-        vals=[float(v[field]) if v[field] else np.nan for v in r]
-        ax.bar(x+shift,vals,width=.34,color=COLORS if filled else 'white',edgecolor=COLORS,linewidth=1,hatch=None if filled else '///')
-    ax.set_xticks(x,labels);ax.tick_params(axis='x',length=0,pad=7)
-    ax.set_ylim(0,65);ax.set_yticks([0,20,40,60])
-    ax.set_title('(a) Action frequency (%)',loc='left',weight='bold',pad=8)
-    bars(axs[1],[100*float(v['mean_utility']) for v in r],labels,COLORS,r'(b) Mean utility ($\times 10^{-2}$)','.1f')
-    axs[1].set_ylim(-13,15);axs[1].set_yticks([-10,-5,0,5,10])
-    fig.legend(handles=[Patch(facecolor='#699CC6',label='Oracle-best'),Patch(facecolor='white',edgecolor='#699CC6',hatch='///',label='Beneficial')],loc='upper center',bbox_to_anchor=(.53,.985),ncol=2,handlelength=1.5,columnspacing=2.5)
+    bars(axs[0],[float(x['best_share']) for x in r],labels,COLORS,'(a) Oracle-best (%)')
+    bars(axs[1],[float(x['beneficial_share']) for x in r[1:]],labels[1:],COLORS[1:],'(b) Beneficial (%)')
+    bars(axs[2],[float(x['mean_utility']) for x in r[1:]],labels[1:],COLORS[1:],'(c) Mean utility','.3f')
     save(fig,'fig3_action_utility')
 
 
 def harm():
     hr=read('harm.csv')
     fig,axes=panels(2,legend=True)
-    bars(axes[0],[100*float(v['harmful_loss']) for v in hr],SHORT,COLORS,r'(a) Harmful loss ($\times 10^{-2}$)','.2f')
+    bars(axes[0],[float(v['harmful_loss']) for v in hr],SHORT,COLORS,'(a) Harmful loss','.4f')
     ax=axes[1];x=np.arange(6)
     ax.bar(x-.18,[float(v['intervention_rate']) for v in hr],width=.36,color=COLORS)
     ax.bar(x+.18,[np.nan]+[float(v['conditional_hir']) for v in hr[1:]],width=.36,color='white',edgecolor=COLORS,hatch='///',linewidth=1)
-    ax.set_xticks(x,SHORT,fontsize=TICK_SIZE);ax.tick_params(axis='x',length=0,pad=7)
+    ax.set_xticks(x,SHORT,rotation=50,ha='right',fontsize=TICK_SIZE)
     ax.set_ylim(0,115);ax.set_yticks([0,25,50,75,100]);ax.grid(False)
     ax.set_title('(b) Intervention rates (%)',loc='left',weight='bold',fontsize=TITLE_SIZE,pad=8)
     from matplotlib.patches import Patch
@@ -138,22 +130,20 @@ def harm():
 
 def severity():
     rows = read('severity.csv')
-    fig, axes = panels(2,legend=True)
+    fig, axes = panels(2,legend=True,ratios=[1.6,1])
     ax=axes[0]
-    styles = [('o',(0,(4,2))), ('s',(0,(3,2))), ('^','-'), ('D',(0,(4,2,1,2))), ('v',(0,(1,2))), ('o','-')]
+    styles = [('o','--'), ('s','--'), ('^','-'), ('D','-.'), ('v',':'), ('o','-')]
     for row, color, (marker, ls) in zip(rows, COLORS, styles):
         vals = [float(row[k]) for k in ['s10','s30','s50']]
         ax.plot([10,30,50], vals, color=color, marker=marker, ls=ls,
-                markersize=6.5, markerfacecolor=color if row['method']=='IntroAct-TS' else 'white', markeredgewidth=1.4,
-                linewidth=2.4 if row['method']=='IntroAct-TS' else 1.7,
+                markersize=6, linewidth=2.4 if row['method']=='IntroAct-TS' else 1.5,
                 label=row['method'], zorder=5 if row['method']=='IntroAct-TS' else 2)
     ax.set(xlabel='Missingness (%)', xticks=[10,30,50], xlim=(7,53), ylim=(1.38,2.09))
-    ax.xaxis.labelpad=6
     ax.set_title('(a) Source-macro MASE',loc='left',weight='bold',fontsize=TITLE_SIZE,pad=8)
     ax.set_yticks([1.4,1.6,1.8,2.0])
     ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
     fig.legend(*ax.get_legend_handles_labels(),loc='upper center',bbox_to_anchor=(.53,.995),ncol=3,columnspacing=1.5,handlelength=1.8,fontsize=LEGEND_SIZE)
-    bars(axes[1],[100*float(r['worst_cell']) for r in rows],SHORT,COLORS,r'(b) Worst-cell increase ($\times 10^{-2}$)','.1f')
+    bars(axes[1],[float(r['worst_cell']) for r in rows],SHORT,COLORS,'(b) Worst-cell increase','.3f')
     ax.grid(False)
     save(fig, 'fig5_missingness_severity')
 
