@@ -1,0 +1,4122 @@
+{
+  "server_commit_reported_by_author": "e78f206",
+  "scope": "Recorded v52 server summaries. Post-hoc evaluation. No local statistical rerun.",
+  "records": {
+    "evaluation/test30_bolt.json": {
+      "source": "results/v52_ablation/evaluation/test30_bolt.json",
+      "sha256": "7827a274d2f0d4ed44f5c3e868a96c6e1292063466b77d6a461c52a7d10b3dbf",
+      "data": {
+        "backbone": "bolt",
+        "block": "test30",
+        "frozen": {
+          "k": 128,
+          "beta": 0.5,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_bolt.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.02159887245848853,
+            "ci_low": -0.05321046311294637,
+            "ci_high": 0.009213908733919774,
+            "excludes_zero": 0,
+            "p_value": 0.1822,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.012080266489292843,
+            "ci_low": -0.06533907611249165,
+            "ci_high": 0.04191823612873264,
+            "excludes_zero": 0,
+            "p_value": 0.5806,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": -0.014769761176607561,
+            "ci_low": -0.046637959384262656,
+            "ci_high": 0.02047153633202659,
+            "excludes_zero": 0,
+            "p_value": 0.4052,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.043633994520634704,
+            "ci_low": -0.16714682715600673,
+            "ci_high": 0.08093263196687259,
+            "excludes_zero": 0,
+            "p_value": 0.5404,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": -0.07305196898351321,
+            "ci_low": -0.0943485136853892,
+            "ci_high": -0.05180212963943072,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.008122177636128991,
+            "ci_low": -0.0031973112849898668,
+            "ci_high": 0.021309536453592057,
+            "excludes_zero": 0,
+            "p_value": 0.1864,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.06617792652889226,
+            "ci_low": -0.10354851692714549,
+            "ci_high": -0.02965779871623578,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": -0.012214012720077985,
+            "ci_low": -0.025729786943604505,
+            "ci_high": -0.0005975493022984914,
+            "excludes_zero": 1,
+            "p_value": 0.0374,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": -0.0007914535965813554,
+            "ci_low": -0.004117550605291059,
+            "ci_high": 0.0026129982546157903,
+            "excludes_zero": 0,
+            "p_value": 0.6454,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": -0.07004513201100421,
+            "ci_low": -0.12532826044459047,
+            "ci_high": -0.015029937251076549,
+            "excludes_zero": 1,
+            "p_value": 0.002,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.6843937402211342,
+            "rmsse": 1.3506251866001295,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.6748751342519386,
+            "rmsse": 1.343839879219915,
+            "intervention_rate": 0.7105263157894737,
+            "conditional_hir": 0.48703703703703705,
+            "harmful_loss": 0.07023605461204754
+          },
+          "R2_CART": {
+            "mase": 1.677564628939253,
+            "rmsse": 1.3532824650330815,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.45263157894736844,
+            "harmful_loss": 0.08593911039840736
+          },
+          "FIXED_SAITS": {
+            "mase": 1.7064288622832802,
+            "rmsse": 1.357018950577568,
+            "intervention_rate": 0.9671052631578947,
+            "conditional_hir": 0.47891156462585033,
+            "harmful_loss": 0.09204556045174703
+          },
+          "FULL_INTROACT": {
+            "mase": 1.6627948677626456,
+            "rmsse": 1.3308444252817266,
+            "intervention_rate": 0.8868421052631579,
+            "conditional_hir": 0.4362017804154303,
+            "harmful_loss": 0.07632570318660759
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.735846836746159,
+            "rmsse": 1.3777807633836625,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.49605263157894736,
+            "harmful_loss": 0.10256282158130682
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.6635863213592268,
+            "rmsse": 1.331932248373961,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.44605263157894737,
+            "harmful_loss": 0.08276989417657378
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.7328399997736499,
+            "rmsse": 1.3801464468081734,
+            "intervention_rate": 0.9131578947368421,
+            "conditional_hir": 0.4596541786743516,
+            "harmful_loss": 0.08566606371307874
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.406545195909574,
+            "rmsse": 1.1471796530119698,
+            "intervention_rate": 0.7973684210526316,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.6546726901265165,
+            "rmsse": 1.3255015588224972,
+            "intervention_rate": 0.8802631578947369,
+            "conditional_hir": 0.4304932735426009,
+            "harmful_loss": 0.07099870867597152
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.6750088804827235,
+            "rmsse": 1.3399968563900848,
+            "intervention_rate": 0.8907894736842106,
+            "conditional_hir": 0.45790251107828656,
+            "harmful_loss": 0.08040875963525403
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.728972794291538,
+            "rmsse": 1.3810889470099301,
+            "intervention_rate": 0.781578947368421,
+            "conditional_hir": 0.5033670033670034,
+            "harmful_loss": 0.07788109954591022
+          }
+        }
+      }
+    },
+    "evaluation/test30_chronos2.json": {
+      "source": "results/v52_ablation/evaluation/test30_chronos2.json",
+      "sha256": "0d58adea54b85f86fcea7c048d9ef0fd0b04cdc9245a7c8d09e403912c8bf753",
+      "data": {
+        "backbone": "chronos2",
+        "block": "test30",
+        "frozen": {
+          "k": 16,
+          "beta": 0.5,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_chronos2.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.14625165636570714,
+            "ci_low": -0.19760224632732398,
+            "ci_high": -0.09593536239364374,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.015780481726533294,
+            "ci_low": -0.044517938451883045,
+            "ci_high": 0.012108927665355677,
+            "excludes_zero": 0,
+            "p_value": 0.3086,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": 0.009299327011491028,
+            "ci_low": -0.04125344780666146,
+            "ci_high": 0.06333013532951165,
+            "excludes_zero": 0,
+            "p_value": 0.776,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.0005726113598720529,
+            "ci_low": -0.0759023395668502,
+            "ci_high": 0.0798997721620738,
+            "excludes_zero": 0,
+            "p_value": 0.9964,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": 0.03940542129837373,
+            "ci_low": 0.01445641408566573,
+            "ci_high": 0.06403453884973395,
+            "excludes_zero": 1,
+            "p_value": 0.0006,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.001846472759935574,
+            "ci_low": -0.004846670171900362,
+            "ci_high": 0.008757430786234002,
+            "excludes_zero": 0,
+            "p_value": 0.5956,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.022782853892494164,
+            "ci_low": -0.08686274249487061,
+            "ci_high": 0.04154016737836462,
+            "excludes_zero": 0,
+            "p_value": 0.5382,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": -0.011731986591212499,
+            "ci_low": -0.04123076640318997,
+            "ci_high": 0.017524495441712112,
+            "excludes_zero": 0,
+            "p_value": 0.4828,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": 0.015663172930053215,
+            "ci_low": 0.005451112036468195,
+            "ci_high": 0.026228153563970007,
+            "excludes_zero": 1,
+            "p_value": 0.0026,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": 0.011461747651355068,
+            "ci_low": -0.01115166552623818,
+            "ci_high": 0.03531630642586613,
+            "excludes_zero": 0,
+            "p_value": 0.3402,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.8330541597808852,
+            "rmsse": 1.4938743640681948,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.7025829851417111,
+            "rmsse": 1.3910340435670374,
+            "intervention_rate": 0.7105263157894737,
+            "conditional_hir": 0.42407407407407405,
+            "harmful_loss": 0.0575832100122737
+          },
+          "R2_CART": {
+            "mase": 1.677503176403687,
+            "rmsse": 1.3767954389590884,
+            "intervention_rate": 0.9776315789473684,
+            "conditional_hir": 0.4508748317631225,
+            "harmful_loss": 0.08223388489139671
+          },
+          "FIXED_SAITS": {
+            "mase": 1.6873751147750502,
+            "rmsse": 1.3848276042013197,
+            "intervention_rate": 0.9671052631578947,
+            "conditional_hir": 0.4448979591836735,
+            "harmful_loss": 0.08074552988927973
+          },
+          "FULL_INTROACT": {
+            "mase": 1.6868025034151781,
+            "rmsse": 1.3798873915235916,
+            "intervention_rate": 0.7105263157894737,
+            "conditional_hir": 0.4462962962962963,
+            "harmful_loss": 0.05492176095384513
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.6473970821168042,
+            "rmsse": 1.348558416694134,
+            "intervention_rate": 0.9973684210526316,
+            "conditional_hir": 0.4340369393139842,
+            "harmful_loss": 0.07671951056167758
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.6711393304851245,
+            "rmsse": 1.3685506007628225,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.45921052631578946,
+            "harmful_loss": 0.07799788264289056
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.675340755763823,
+            "rmsse": 1.3723662209230745,
+            "intervention_rate": 0.8802631578947369,
+            "conditional_hir": 0.4648729446935725,
+            "harmful_loss": 0.06935863800482037
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.4133993878408035,
+            "rmsse": 1.1724322598908041,
+            "intervention_rate": 0.8236842105263158,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.6849560306552425,
+            "rmsse": 1.3794191403788125,
+            "intervention_rate": 0.6907894736842105,
+            "conditional_hir": 0.44,
+            "harmful_loss": 0.04821517696926078
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.6985344900063906,
+            "rmsse": 1.3914368815058975,
+            "intervention_rate": 0.7026315789473684,
+            "conditional_hir": 0.43258426966292135,
+            "harmful_loss": 0.05459599091030562
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.709585357307672,
+            "rmsse": 1.4027848418576485,
+            "intervention_rate": 0.6447368421052632,
+            "conditional_hir": 0.42244897959183675,
+            "harmful_loss": 0.0490704278616985
+          }
+        }
+      }
+    },
+    "evaluation/test30_timesfm.json": {
+      "source": "results/v52_ablation/evaluation/test30_timesfm.json",
+      "sha256": "98bf9b1b25b27fd5798d17bad9bb0497442a7617b16eea16b68547b804a26473",
+      "data": {
+        "backbone": "timesfm",
+        "block": "test30",
+        "frozen": {
+          "k": 32,
+          "beta": 1.64,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_timesfm.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.12095446855199274,
+            "ci_low": -0.22370097427529712,
+            "ci_high": -0.02018121124742572,
+            "excludes_zero": 1,
+            "p_value": 0.0142,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": 0.013655765423638869,
+            "ci_low": -0.030621093804598206,
+            "ci_high": 0.05963630585687201,
+            "excludes_zero": 0,
+            "p_value": 0.5884,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": 0.06455513048059223,
+            "ci_low": -0.004206318182897931,
+            "ci_high": 0.13594621962600115,
+            "excludes_zero": 0,
+            "p_value": 0.0876,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.07824106699984461,
+            "ci_low": -0.20623755770506613,
+            "ci_high": 0.05192861677999117,
+            "excludes_zero": 0,
+            "p_value": 0.3298,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": 0.018017568868153845,
+            "ci_low": -0.02688715931004952,
+            "ci_high": 0.06430095320453164,
+            "excludes_zero": 0,
+            "p_value": 0.4908,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": -0.009288510354164118,
+            "ci_low": -0.01977869129238581,
+            "ci_high": 0.0015552848149646195,
+            "excludes_zero": 0,
+            "p_value": 0.0914,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": 0.010976330699024229,
+            "ci_low": -0.03296397188205351,
+            "ci_high": 0.057205832203881236,
+            "excludes_zero": 0,
+            "p_value": 0.6466,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": 0.006072553454371913,
+            "ci_low": -0.006901782801892221,
+            "ci_high": 0.0197737714979049,
+            "excludes_zero": 0,
+            "p_value": 0.3696,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": 0.03234728114371798,
+            "ci_low": -0.0013874792336803982,
+            "ci_high": 0.06634731416702094,
+            "excludes_zero": 0,
+            "p_value": 0.0848,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": 0.04249914240859463,
+            "ci_low": -0.013053168606263347,
+            "ci_high": 0.10216692392466696,
+            "excludes_zero": 0,
+            "p_value": 0.157,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.8638794480400271,
+            "rmsse": 1.4731055920991283,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.7292692140643957,
+            "rmsse": 1.3990752469342669,
+            "intervention_rate": 0.7105263157894737,
+            "conditional_hir": 0.3925925925925926,
+            "harmful_loss": 0.07820846923246944
+          },
+          "R2_CART": {
+            "mase": 1.6783698490074423,
+            "rmsse": 1.3731694387906426,
+            "intervention_rate": 0.9828947368421053,
+            "conditional_hir": 0.4002677376171352,
+            "harmful_loss": 0.08914262998657513
+          },
+          "FIXED_SAITS": {
+            "mase": 1.8211660464878796,
+            "rmsse": 1.457378002143928,
+            "intervention_rate": 0.9671052631578947,
+            "conditional_hir": 0.4108843537414966,
+            "harmful_loss": 0.11982221245029362
+          },
+          "FULL_INTROACT": {
+            "mase": 1.7429249794880346,
+            "rmsse": 1.4071143065372156,
+            "intervention_rate": 0.7723684210526316,
+            "conditional_hir": 0.35604770017035775,
+            "harmful_loss": 0.07808963684414684
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.724907410619881,
+            "rmsse": 1.396185789049003,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.41578947368421054,
+            "harmful_loss": 0.10772481487326105
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.7105776983443164,
+            "rmsse": 1.388293028402134,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.3763157894736842,
+            "harmful_loss": 0.09079925328739083
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.7004258370794396,
+            "rmsse": 1.3850931807864768,
+            "intervention_rate": 0.9342105263157895,
+            "conditional_hir": 0.4028169014084507,
+            "harmful_loss": 0.09536329677101298
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.4441706843240787,
+            "rmsse": 1.1955879993188379,
+            "intervention_rate": 0.8394736842105263,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.7522134898421986,
+            "rmsse": 1.4142090582721756,
+            "intervention_rate": 0.7539473684210526,
+            "conditional_hir": 0.37521815008726006,
+            "harmful_loss": 0.07740259732774336
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.7368524260336626,
+            "rmsse": 1.4042009975310532,
+            "intervention_rate": 0.7881578947368421,
+            "conditional_hir": 0.3639398998330551,
+            "harmful_loss": 0.08188080323431757
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.7319486487890103,
+            "rmsse": 1.4009563791377628,
+            "intervention_rate": 0.8065789473684211,
+            "conditional_hir": 0.4061990212071778,
+            "harmful_loss": 0.07445399745854739
+          }
+        }
+      }
+    },
+    "evaluation/test50_bolt.json": {
+      "source": "results/v52_ablation/evaluation/test50_bolt.json",
+      "sha256": "8616ebdc366eda94863e8a810273b1c364637f5c464c8b6786078a6b3885fbd1",
+      "data": {
+        "backbone": "bolt",
+        "block": "test50",
+        "frozen": {
+          "k": 128,
+          "beta": 0.5,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_bolt.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.12807349466610932,
+            "ci_low": -0.17690125983095586,
+            "ci_high": -0.07973981730031374,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.030956315180079783,
+            "ci_low": -0.059520530702913486,
+            "ci_high": -0.00182612839514376,
+            "excludes_zero": 1,
+            "p_value": 0.0382,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": -0.05435872510324138,
+            "ci_low": -0.1054546562541743,
+            "ci_high": -0.003507265897976959,
+            "excludes_zero": 1,
+            "p_value": 0.0286,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.07569324031384228,
+            "ci_low": -0.1295382523559535,
+            "ci_high": -0.01679996932512656,
+            "excludes_zero": 1,
+            "p_value": 0.0134,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": -0.05967049636776861,
+            "ci_low": -0.08070039974226326,
+            "ci_high": -0.037921598213543455,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.010538319653430038,
+            "ci_low": -0.002724615430710716,
+            "ci_high": 0.030557538115401787,
+            "excludes_zero": 0,
+            "p_value": 0.2042,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.0751400688073577,
+            "ci_low": -0.09850822523684681,
+            "ci_high": -0.051203660813818976,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": -0.03019315599707969,
+            "ci_low": -0.05877521550031055,
+            "ci_high": -0.00025358643763609396,
+            "excludes_zero": 1,
+            "p_value": 0.0474,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": -0.02096181567909396,
+            "ci_low": -0.047042805552207065,
+            "ci_high": 0.005096260550748578,
+            "excludes_zero": 0,
+            "p_value": 0.4668,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": -0.04649596350119395,
+            "ci_low": -0.06282711586270671,
+            "ci_high": -0.028139131391813874,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.792165652036848,
+            "rmsse": 1.4322568918819618,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.6950484725508184,
+            "rmsse": 1.3590711648294873,
+            "intervention_rate": 0.6736842105263158,
+            "conditional_hir": 0.46484375,
+            "harmful_loss": 0.061720319707993826
+          },
+          "R2_CART": {
+            "mase": 1.7184508824739804,
+            "rmsse": 1.377794119034557,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4355263157894737,
+            "harmful_loss": 0.08960185138543733
+          },
+          "FIXED_SAITS": {
+            "mase": 1.7397853976845812,
+            "rmsse": 1.3864928612943133,
+            "intervention_rate": 0.9052631578947369,
+            "conditional_hir": 0.48401162790697677,
+            "harmful_loss": 0.1080414421259704
+          },
+          "FULL_INTROACT": {
+            "mase": 1.6640921573707388,
+            "rmsse": 1.3456260311899428,
+            "intervention_rate": 0.9394736842105263,
+            "conditional_hir": 0.42997198879551823,
+            "harmful_loss": 0.07784695855315224
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.7237626537385076,
+            "rmsse": 1.3688795759052488,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.48289473684210527,
+            "harmful_loss": 0.10525369564332736
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.6850539730498326,
+            "rmsse": 1.3566186014388109,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.42894736842105263,
+            "harmful_loss": 0.08577242012496519
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.7105881208719327,
+            "rmsse": 1.3674147811366195,
+            "intervention_rate": 0.9578947368421052,
+            "conditional_hir": 0.4271978021978022,
+            "harmful_loss": 0.0880424707354954
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.4637525723176885,
+            "rmsse": 1.1910445715715636,
+            "intervention_rate": 0.8302631578947368,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.653553837717309,
+            "rmsse": 1.3397425807738814,
+            "intervention_rate": 0.9434210526315789,
+            "conditional_hir": 0.42398884239888424,
+            "harmful_loss": 0.07954440750051457
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.6942853133678186,
+            "rmsse": 1.3651569376745316,
+            "intervention_rate": 0.9526315789473684,
+            "conditional_hir": 0.4171270718232044,
+            "harmful_loss": 0.0814604526318157
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.7392322261780966,
+            "rmsse": 1.3970342313608528,
+            "intervention_rate": 0.7065789473684211,
+            "conditional_hir": 0.4823091247672253,
+            "harmful_loss": 0.06545278185122234
+          }
+        }
+      }
+    },
+    "evaluation/test50_chronos2.json": {
+      "source": "results/v52_ablation/evaluation/test50_chronos2.json",
+      "sha256": "5deb58d9fcb64bcfdf04810caeea67bf690a3d3c96bd0d58c0a846ba3417c43a",
+      "data": {
+        "backbone": "chronos2",
+        "block": "test50",
+        "frozen": {
+          "k": 16,
+          "beta": 0.5,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_chronos2.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.14838345982127424,
+            "ci_low": -0.24130586115354202,
+            "ci_high": -0.05858838689432755,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": 0.05598233712201663,
+            "ci_low": -0.001159636019059246,
+            "ci_high": 0.1142376974129825,
+            "excludes_zero": 0,
+            "p_value": 0.0572,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": 0.02939573040212912,
+            "ci_low": -0.019122436288891844,
+            "ci_high": 0.08004619273401312,
+            "excludes_zero": 0,
+            "p_value": 0.2704,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": 0.030825999516686547,
+            "ci_low": -0.05315381743883223,
+            "ci_high": 0.11888754445596461,
+            "excludes_zero": 0,
+            "p_value": 0.504,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": 0.052289621297969824,
+            "ci_low": -0.025712004540479467,
+            "ci_high": 0.13184521425910234,
+            "excludes_zero": 0,
+            "p_value": 0.3342,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.005009646961531622,
+            "ci_low": -0.01984620680334217,
+            "ci_high": 0.030098827214982034,
+            "excludes_zero": 0,
+            "p_value": 0.5492,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": 0.01117057759032395,
+            "ci_low": -0.06824523474147731,
+            "ci_high": 0.08886325183882497,
+            "excludes_zero": 0,
+            "p_value": 0.7664,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": 0.034532412801261916,
+            "ci_low": -0.011465409333675007,
+            "ci_high": 0.081734752794569,
+            "excludes_zero": 0,
+            "p_value": 0.1682,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": -0.02030746235765849,
+            "ci_low": -0.03786977897054439,
+            "ci_high": -0.005138870964704311,
+            "excludes_zero": 1,
+            "p_value": 0.005,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": 0.04648641196011276,
+            "ci_low": -0.02220896096974788,
+            "ci_high": 0.11629278428021311,
+            "excludes_zero": 0,
+            "p_value": 0.285,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.886910512240928,
+            "rmsse": 1.5235376834008418,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.6825447152976372,
+            "rmsse": 1.369397676473849,
+            "intervention_rate": 0.6736842105263158,
+            "conditional_hir": 0.41015625,
+            "harmful_loss": 0.053647709292802645
+          },
+          "R2_CART": {
+            "mase": 1.7091313220175244,
+            "rmsse": 1.390185326346371,
+            "intervention_rate": 0.9815789473684211,
+            "conditional_hir": 0.42091152815013405,
+            "harmful_loss": 0.0953639646522329
+          },
+          "FIXED_SAITS": {
+            "mase": 1.707701052902967,
+            "rmsse": 1.3915854763465354,
+            "intervention_rate": 0.9052631578947369,
+            "conditional_hir": 0.4738372093023256,
+            "harmful_loss": 0.1144930765731547
+          },
+          "FULL_INTROACT": {
+            "mase": 1.7385270524196539,
+            "rmsse": 1.4197944078665414,
+            "intervention_rate": 0.7092105263157895,
+            "conditional_hir": 0.4100185528756957,
+            "harmful_loss": 0.061796613663847755
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.686237431121684,
+            "rmsse": 1.3706724831381694,
+            "intervention_rate": 0.9947368421052631,
+            "conditional_hir": 0.45634920634920634,
+            "harmful_loss": 0.1073420107901704
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.7588345147773121,
+            "rmsse": 1.4353300255339065,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4394736842105263,
+            "harmful_loss": 0.09784007062575202
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.692040640459541,
+            "rmsse": 1.3824512392253068,
+            "intervention_rate": 0.9131578947368421,
+            "conditional_hir": 0.4423631123919308,
+            "harmful_loss": 0.09272177562477824
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.4738040627722027,
+            "rmsse": 1.2085535480981242,
+            "intervention_rate": 0.8013157894736842,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.7335174054581222,
+            "rmsse": 1.4080013045859618,
+            "intervention_rate": 0.7092105263157895,
+            "conditional_hir": 0.4137291280148423,
+            "harmful_loss": 0.06506215130001962
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.7039946396183918,
+            "rmsse": 1.4004957529106634,
+            "intervention_rate": 0.7171052631578947,
+            "conditional_hir": 0.3963302752293578,
+            "harmful_loss": 0.05943838803526857
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.7273564748293297,
+            "rmsse": 1.4062736161180946,
+            "intervention_rate": 0.5578947368421052,
+            "conditional_hir": 0.4410377358490566,
+            "harmful_loss": 0.05075138142408399
+          }
+        }
+      }
+    },
+    "evaluation/test50_timesfm.json": {
+      "source": "results/v52_ablation/evaluation/test50_timesfm.json",
+      "sha256": "1b93cf060fa1e5b9138855bf0ebe853c05168021e9785f514958085d4fa72fc7",
+      "data": {
+        "backbone": "timesfm",
+        "block": "test50",
+        "frozen": {
+          "k": 32,
+          "beta": 1.64,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_timesfm.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.1433256017657995,
+            "ci_low": -0.21452429499443784,
+            "ci_high": -0.07143617803042382,
+            "excludes_zero": 1,
+            "p_value": 0.0002,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.03190154601708152,
+            "ci_low": -0.07329028221672802,
+            "ci_high": 0.010762514164253913,
+            "excludes_zero": 0,
+            "p_value": 0.146,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": 0.0679601596659246,
+            "ci_low": -0.022737020088550018,
+            "ci_high": 0.16215216586379144,
+            "excludes_zero": 0,
+            "p_value": 0.2536,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.037361643507878926,
+            "ci_low": -0.10070420283220997,
+            "ci_high": 0.035297358720199755,
+            "excludes_zero": 0,
+            "p_value": 0.2876,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": 0.0030442712827495784,
+            "ci_low": -0.037234333269681334,
+            "ci_high": 0.045103772115212076,
+            "excludes_zero": 0,
+            "p_value": 0.8892,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": -0.019046517115318504,
+            "ci_low": -0.03839507948281663,
+            "ci_high": -0.00022186775640185984,
+            "excludes_zero": 1,
+            "p_value": 0.0452,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.06535468824044013,
+            "ci_low": -0.12600162035628548,
+            "ci_high": -0.00439607467957838,
+            "excludes_zero": 1,
+            "p_value": 0.0268,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": 0.04479099933135608,
+            "ci_low": -0.013381581832814446,
+            "ci_high": 0.1034700894353361,
+            "excludes_zero": 0,
+            "p_value": 0.4028,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": 0.002742552042834871,
+            "ci_low": -0.007361235658017109,
+            "ci_high": 0.01246369924826672,
+            "excludes_zero": 0,
+            "p_value": 0.5822,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": -0.015436569827437267,
+            "ci_low": -0.03576510359170464,
+            "ci_high": 0.004088717657347515,
+            "excludes_zero": 0,
+            "p_value": 0.1222,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.946541483904545,
+            "rmsse": 1.5020377292943785,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.8351174281558267,
+            "rmsse": 1.4627966834131856,
+            "intervention_rate": 0.6736842105263158,
+            "conditional_hir": 0.388671875,
+            "harmful_loss": 0.08448362686957067
+          },
+          "R2_CART": {
+            "mase": 1.7352557224728207,
+            "rmsse": 1.410762942349622,
+            "intervention_rate": 0.9644736842105263,
+            "conditional_hir": 0.4051841746248295,
+            "harmful_loss": 0.10898260798816492
+          },
+          "FIXED_SAITS": {
+            "mase": 1.8405775256466244,
+            "rmsse": 1.4475782299809818,
+            "intervention_rate": 0.9052631578947369,
+            "conditional_hir": 0.4491279069767442,
+            "harmful_loss": 0.13166689186625127
+          },
+          "FULL_INTROACT": {
+            "mase": 1.8032158821387454,
+            "rmsse": 1.4485779936699525,
+            "intervention_rate": 0.8092105263157895,
+            "conditional_hir": 0.383739837398374,
+            "harmful_loss": 0.09143746815503935
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.8001716108559958,
+            "rmsse": 1.4405418178638665,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.42105263157894735,
+            "harmful_loss": 0.12715647664554822
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.8004733300959104,
+            "rmsse": 1.4496552611911333,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.3815789473684211,
+            "harmful_loss": 0.10882122017617495
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.8186524519661826,
+            "rmsse": 1.4572354449278493,
+            "intervention_rate": 0.9368421052631579,
+            "conditional_hir": 0.41713483146067415,
+            "harmful_loss": 0.12013414160069653
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.4864157076274718,
+            "rmsse": 1.2118594954454895,
+            "intervention_rate": 0.8197368421052632,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.8222623992540636,
+            "rmsse": 1.4573523860588362,
+            "intervention_rate": 0.8052631578947368,
+            "conditional_hir": 0.38562091503267976,
+            "harmful_loss": 0.09711602293326023
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.7584248828073892,
+            "rmsse": 1.4252167465378929,
+            "intervention_rate": 0.8605263157894737,
+            "conditional_hir": 0.39755351681957185,
+            "harmful_loss": 0.09648484160746064
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.8685705703791857,
+            "rmsse": 1.4847661348117558,
+            "intervention_rate": 0.7789473684210526,
+            "conditional_hir": 0.4206081081081081,
+            "harmful_loss": 0.10001265096083893
+          }
+        }
+      }
+    },
+    "evaluation/test_bolt.json": {
+      "source": "results/v52_ablation/evaluation/test_bolt.json",
+      "sha256": "0095016a80820891a268c9de3e0b26e77582ddfc951e926a50f26b4760960837",
+      "data": {
+        "backbone": "bolt",
+        "block": "test",
+        "frozen": {
+          "k": 128,
+          "beta": 0.5,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_bolt.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.08812057399724846,
+            "ci_low": -0.1523727499053595,
+            "ci_high": -0.024034010440325923,
+            "excludes_zero": 1,
+            "p_value": 0.0002,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.04965343325695691,
+            "ci_low": -0.10098007941784008,
+            "ci_high": 0.0017531536250910528,
+            "excludes_zero": 0,
+            "p_value": 0.0758,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": -0.023910885589143453,
+            "ci_low": -0.04903671799504436,
+            "ci_high": 0.0008830370361743242,
+            "excludes_zero": 0,
+            "p_value": 0.0652,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.09083204860528697,
+            "ci_low": -0.2186758174305676,
+            "ci_high": 0.03302696371263611,
+            "excludes_zero": 0,
+            "p_value": 0.3362,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": -0.07103233123023167,
+            "ci_low": -0.14413655789718358,
+            "ci_high": 0.0020808302939806446,
+            "excludes_zero": 0,
+            "p_value": 0.0772,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.015988396707106525,
+            "ci_low": 0.0025250454094540697,
+            "ci_high": 0.029337440626462655,
+            "excludes_zero": 1,
+            "p_value": 0.0022,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.02515855822014562,
+            "ci_low": -0.04781141244790358,
+            "ci_high": -0.0025291121931159182,
+            "excludes_zero": 1,
+            "p_value": 0.0276,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": 0.008016271217024874,
+            "ci_low": -0.0005846046479527913,
+            "ci_high": 0.01670495440300108,
+            "excludes_zero": 0,
+            "p_value": 0.0684,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": 0.005245583049754987,
+            "ci_low": -0.006490258524848527,
+            "ci_high": 0.017246019362318125,
+            "excludes_zero": 0,
+            "p_value": 0.4462,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": -0.01854699560442237,
+            "ci_low": -0.044495152505645334,
+            "ci_high": 0.007221716248831238,
+            "excludes_zero": 0,
+            "p_value": 0.2224,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.4664295280814708,
+            "rmsse": 1.237121772373568,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.427962387341179,
+            "rmsse": 1.2079434376268179,
+            "intervention_rate": 0.7447368421052631,
+            "conditional_hir": 0.41519434628975266,
+            "harmful_loss": 0.04449977275962362
+          },
+          "R2_CART": {
+            "mase": 1.4022198396733656,
+            "rmsse": 1.1972373424151515,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4368421052631579,
+            "harmful_loss": 0.04783092119186279
+          },
+          "FIXED_SAITS": {
+            "mase": 1.469141002689509,
+            "rmsse": 1.2279559257020596,
+            "intervention_rate": 0.9828947368421053,
+            "conditional_hir": 0.4350736278447122,
+            "harmful_loss": 0.07649317062547918
+          },
+          "FULL_INTROACT": {
+            "mase": 1.3783089540842224,
+            "rmsse": 1.176575223004564,
+            "intervention_rate": 0.7460526315789474,
+            "conditional_hir": 0.42151675485008816,
+            "harmful_loss": 0.03768864517732076
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.4493412853144538,
+            "rmsse": 1.220382734045447,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4381578947368421,
+            "harmful_loss": 0.06795774401195384
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.3730633710344673,
+            "rmsse": 1.1751928843980322,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.42894736842105263,
+            "harmful_loss": 0.04665544678031961
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.3968559496886446,
+            "rmsse": 1.1910963420168705,
+            "intervention_rate": 0.8855263157894737,
+            "conditional_hir": 0.43833580980683506,
+            "harmful_loss": 0.05318067864205699
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.2342753236776591,
+            "rmsse": 1.065532470731652,
+            "intervention_rate": 0.7894736842105263,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.3623205573771155,
+            "rmsse": 1.1558245839467625,
+            "intervention_rate": 0.743421052631579,
+            "conditional_hir": 0.415929203539823,
+            "harmful_loss": 0.03439367487024443
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.3702926828671973,
+            "rmsse": 1.171660229229715,
+            "intervention_rate": 0.7828947368421053,
+            "conditional_hir": 0.4084033613445378,
+            "harmful_loss": 0.04010968862979454
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.4034675123043678,
+            "rmsse": 1.2004094176662021,
+            "intervention_rate": 0.8565789473684211,
+            "conditional_hir": 0.4608294930875576,
+            "harmful_loss": 0.04774124345622331
+          }
+        }
+      }
+    },
+    "evaluation/test_chronos2.json": {
+      "source": "results/v52_ablation/evaluation/test_chronos2.json",
+      "sha256": "b99a5a3d638013a722e3c5e86de4c695b3d21518f59fa5df2ba404c067732208",
+      "data": {
+        "backbone": "chronos2",
+        "block": "test",
+        "frozen": {
+          "k": 16,
+          "beta": 0.5,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_chronos2.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.20140811766375077,
+            "ci_low": -0.28720987728571473,
+            "ci_high": -0.11659249606782258,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.07851202370596669,
+            "ci_low": -0.16594262870531712,
+            "ci_high": 0.00843350287871632,
+            "excludes_zero": 0,
+            "p_value": 0.1536,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": -0.006677489710983782,
+            "ci_low": -0.04374644739085261,
+            "ci_high": 0.03156459622547961,
+            "excludes_zero": 0,
+            "p_value": 0.731,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.06312087239155431,
+            "ci_low": -0.11379309449044558,
+            "ci_high": -0.011672739615108143,
+            "excludes_zero": 1,
+            "p_value": 0.0034,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": -0.00256287344740002,
+            "ci_low": -0.02511054474610587,
+            "ci_high": 0.020201524841198325,
+            "excludes_zero": 0,
+            "p_value": 0.8194,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.0026999031772573286,
+            "ci_low": -0.0014276545229597018,
+            "ci_high": 0.007069705900123021,
+            "excludes_zero": 0,
+            "p_value": 0.2108,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.003977816287721462,
+            "ci_low": -0.033733809788068385,
+            "ci_high": 0.02653435709118454,
+            "excludes_zero": 0,
+            "p_value": 0.8246,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": 0.003020811078562882,
+            "ci_low": -0.01659548391914658,
+            "ci_high": 0.02297349114327106,
+            "excludes_zero": 0,
+            "p_value": 0.7716,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": -0.0031606434250362504,
+            "ci_low": -0.017145140520572793,
+            "ci_high": 0.01013779320222259,
+            "excludes_zero": 0,
+            "p_value": 0.6482,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": 0.013577511084641511,
+            "ci_low": -0.012634861281167097,
+            "ci_high": 0.039794874401550336,
+            "excludes_zero": 0,
+            "p_value": 0.3838,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.579341564151134,
+            "rmsse": 1.351737093651852,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.4564454701933498,
+            "rmsse": 1.2557290037995,
+            "intervention_rate": 0.7447368421052631,
+            "conditional_hir": 0.4275618374558304,
+            "harmful_loss": 0.04697165865015121
+          },
+          "R2_CART": {
+            "mase": 1.384610936198367,
+            "rmsse": 1.2132343382287196,
+            "intervention_rate": 0.9894736842105263,
+            "conditional_hir": 0.44148936170212766,
+            "harmful_loss": 0.060877982675478184
+          },
+          "FIXED_SAITS": {
+            "mase": 1.4410543188789375,
+            "rmsse": 1.2543556984123536,
+            "intervention_rate": 0.9828947368421053,
+            "conditional_hir": 0.4431057563587684,
+            "harmful_loss": 0.0691590855194376
+          },
+          "FULL_INTROACT": {
+            "mase": 1.3779334464873831,
+            "rmsse": 1.2135582009095165,
+            "intervention_rate": 0.6907894736842105,
+            "conditional_hir": 0.3961904761904762,
+            "harmful_loss": 0.03786254685632787
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.380496319934783,
+            "rmsse": 1.2103941248672796,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.44342105263157894,
+            "harmful_loss": 0.06546434225210167
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.3810940899124193,
+            "rmsse": 1.214874174831058,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.425,
+            "harmful_loss": 0.05796671191835894
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.3643559354027417,
+            "rmsse": 1.2076400187168976,
+            "intervention_rate": 0.8657894736842106,
+            "conditional_hir": 0.44376899696048633,
+            "harmful_loss": 0.05295409602436174
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.2257017088375544,
+            "rmsse": 1.0879142201211458,
+            "intervention_rate": 0.7907894736842105,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.375233543310126,
+            "rmsse": 1.2112610793047418,
+            "intervention_rate": 0.6526315789473685,
+            "conditional_hir": 0.3870967741935484,
+            "harmful_loss": 0.035914061220907394
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.3749126354088201,
+            "rmsse": 1.2146040487372014,
+            "intervention_rate": 0.6763157894736842,
+            "conditional_hir": 0.4182879377431907,
+            "harmful_loss": 0.03958489573032398
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.3819112627751045,
+            "rmsse": 1.2239427783177685,
+            "intervention_rate": 0.781578947368421,
+            "conditional_hir": 0.45791245791245794,
+            "harmful_loss": 0.03894307702432751
+          }
+        }
+      }
+    },
+    "evaluation/test_m2_bolt.json": {
+      "source": "results/v52_ablation/evaluation/test_m2_bolt.json",
+      "sha256": "26f887d2f1628d12d9a390bd081fea267703cc6da809316e35245224cd8ede2f",
+      "data": {
+        "backbone": "bolt",
+        "block": "test_m2",
+        "frozen": {
+          "k": 128,
+          "beta": 0.5,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_bolt.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.08038518957035706,
+            "ci_low": -0.14838934822007332,
+            "ci_high": -0.013062009188537208,
+            "excludes_zero": 1,
+            "p_value": 0.0036,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.05164050902906664,
+            "ci_low": -0.1085479869406207,
+            "ci_high": 0.005490303347084676,
+            "excludes_zero": 0,
+            "p_value": 0.152,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": -0.018318351819720424,
+            "ci_low": -0.04096953881632516,
+            "ci_high": 0.00456639993644417,
+            "excludes_zero": 0,
+            "p_value": 0.1424,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.017196490388858704,
+            "ci_low": -0.08076860613196667,
+            "ci_high": 0.045496029293387016,
+            "excludes_zero": 0,
+            "p_value": 0.6048,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": -0.01595102326188988,
+            "ci_low": -0.034329214369859834,
+            "ci_high": 0.002149468135221126,
+            "excludes_zero": 0,
+            "p_value": 0.0868,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.01718533980271084,
+            "ci_low": 0.00044075952035858504,
+            "ci_high": 0.03415849625211394,
+            "excludes_zero": 1,
+            "p_value": 0.0364,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.023997206249344243,
+            "ci_low": -0.04577147283568009,
+            "ci_high": -0.0024196108944355946,
+            "excludes_zero": 1,
+            "p_value": 0.031,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": 0.0037308457152109725,
+            "ci_low": -0.004598217820936837,
+            "ci_high": 0.012104029866305996,
+            "excludes_zero": 0,
+            "p_value": 0.4184,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": 0.0023439103705816698,
+            "ci_low": -0.00830757197759241,
+            "ci_high": 0.012982764954047628,
+            "excludes_zero": 0,
+            "p_value": 0.6672,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": -0.02822383120681897,
+            "ci_low": -0.054951635251643385,
+            "ci_high": -0.003305862783921789,
+            "excludes_zero": 1,
+            "p_value": 0.025,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.4609724287599395,
+            "rmsse": 1.2325275108078038,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.4322277482186492,
+            "rmsse": 1.2111441023963558,
+            "intervention_rate": 0.7473684210526316,
+            "conditional_hir": 0.43133802816901406,
+            "harmful_loss": 0.04636843581387075
+          },
+          "R2_CART": {
+            "mase": 1.3989055910093031,
+            "rmsse": 1.1949177702393337,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4513157894736842,
+            "harmful_loss": 0.04783307194061308
+          },
+          "FIXED_SAITS": {
+            "mase": 1.3977837295784412,
+            "rmsse": 1.1900863745784458,
+            "intervention_rate": 0.9881578947368421,
+            "conditional_hir": 0.440745672436751,
+            "harmful_loss": 0.06248329479591133
+          },
+          "FULL_INTROACT": {
+            "mase": 1.3805872391895826,
+            "rmsse": 1.177965496658813,
+            "intervention_rate": 0.7605263157894737,
+            "conditional_hir": 0.4186851211072664,
+            "harmful_loss": 0.03882293468389851
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.3965382624514724,
+            "rmsse": 1.1936999254732334,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.44342105263157894,
+            "harmful_loss": 0.060374669357232236
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.3782433288190008,
+            "rmsse": 1.1807102535778011,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4394736842105263,
+            "harmful_loss": 0.048103230881846426
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.4088110703964016,
+            "rmsse": 1.1999989005176457,
+            "intervention_rate": 0.868421052631579,
+            "conditional_hir": 0.4712121212121212,
+            "harmful_loss": 0.0556513368681507
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.2304228359987237,
+            "rmsse": 1.0648247552151036,
+            "intervention_rate": 0.7881578947368421,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.3634018993868717,
+            "rmsse": 1.1559888011074102,
+            "intervention_rate": 0.7421052631578947,
+            "conditional_hir": 0.42021276595744683,
+            "harmful_loss": 0.038202035242659894
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.3768563934743714,
+            "rmsse": 1.1755098068930097,
+            "intervention_rate": 0.7973684210526316,
+            "conditional_hir": 0.41089108910891087,
+            "harmful_loss": 0.04076470897149048
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.4045844454389267,
+            "rmsse": 1.199434136803136,
+            "intervention_rate": 0.8578947368421053,
+            "conditional_hir": 0.4616564417177914,
+            "harmful_loss": 0.04953653354993747
+          }
+        }
+      }
+    },
+    "evaluation/test_m2_chronos2.json": {
+      "source": "results/v52_ablation/evaluation/test_m2_chronos2.json",
+      "sha256": "39a4b12e7adf46750237c1a06841e9682335be7dbbd9b4b974ae779b11dc913a",
+      "data": {
+        "backbone": "chronos2",
+        "block": "test_m2",
+        "frozen": {
+          "k": 16,
+          "beta": 0.5,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_chronos2.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.20396291348200418,
+            "ci_low": -0.30097179497888504,
+            "ci_high": -0.10752447389195308,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.07744695973564122,
+            "ci_low": -0.1729630454245329,
+            "ci_high": 0.01813944969772913,
+            "excludes_zero": 0,
+            "p_value": 0.3462,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": 0.010659924782182521,
+            "ci_low": -0.021277096745090273,
+            "ci_high": 0.049672538151704325,
+            "excludes_zero": 0,
+            "p_value": 0.5922,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.06033848910085453,
+            "ci_low": -0.13636184601416632,
+            "ci_high": 0.0166752560052934,
+            "excludes_zero": 0,
+            "p_value": 0.1634,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": 0.02065244181668859,
+            "ci_low": -0.0014987840637403615,
+            "ci_high": 0.04414394707818204,
+            "excludes_zero": 0,
+            "p_value": 0.0696,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.002782071674226317,
+            "ci_low": -0.0006979001008757688,
+            "ci_high": 0.0064229465162911935,
+            "excludes_zero": 0,
+            "p_value": 0.1216,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.007836867277759493,
+            "ci_low": -0.027773703233448487,
+            "ci_high": 0.01340056248668547,
+            "excludes_zero": 0,
+            "p_value": 0.4662,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": 0.005239956778210374,
+            "ci_low": -0.008381690598021277,
+            "ci_high": 0.020307489876050046,
+            "excludes_zero": 0,
+            "p_value": 0.4636,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": -0.0542620846040059,
+            "ci_low": -0.11499987897873855,
+            "ci_high": 0.006743482315468932,
+            "excludes_zero": 0,
+            "p_value": 0.2002,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": 0.004221266973537771,
+            "ci_low": -0.025278371295682,
+            "ci_high": 0.03254111672980622,
+            "excludes_zero": 0,
+            "p_value": 0.7574,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.5767825887281308,
+            "rmsse": 1.3471382271602907,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.450266634981768,
+            "rmsse": 1.2493874665746136,
+            "intervention_rate": 0.7473684210526316,
+            "conditional_hir": 0.4471830985915493,
+            "harmful_loss": 0.04744393738415747
+          },
+          "R2_CART": {
+            "mase": 1.3621597504639442,
+            "rmsse": 1.203284269364472,
+            "intervention_rate": 0.9894736842105263,
+            "conditional_hir": 0.45345744680851063,
+            "harmful_loss": 0.05793109754756521
+          },
+          "FIXED_SAITS": {
+            "mase": 1.4331581643469815,
+            "rmsse": 1.2557030283383668,
+            "intervention_rate": 0.9881578947368421,
+            "conditional_hir": 0.4567243675099867,
+            "harmful_loss": 0.07495011893967415
+          },
+          "FULL_INTROACT": {
+            "mase": 1.372819675246127,
+            "rmsse": 1.211237399671118,
+            "intervention_rate": 0.6815789473684211,
+            "conditional_hir": 0.43243243243243246,
+            "harmful_loss": 0.04297769346339705
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.3521672334294381,
+            "rmsse": 1.1953671413015874,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4631578947368421,
+            "harmful_loss": 0.06281760144844434
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.4270817598501329,
+            "rmsse": 1.2448773789896714,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4394736842105263,
+            "harmful_loss": 0.07001897462814158
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.368598408272589,
+            "rmsse": 1.212078418034944,
+            "intervention_rate": 0.8657894736842106,
+            "conditional_hir": 0.46808510638297873,
+            "harmful_loss": 0.055774358397346194
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.213512277542395,
+            "rmsse": 1.078426141431823,
+            "intervention_rate": 0.775,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.3700376035719004,
+            "rmsse": 1.2092894200668787,
+            "intervention_rate": 0.6618421052631579,
+            "conditional_hir": 0.441351888667992,
+            "harmful_loss": 0.04237737900926354
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.3675797184679164,
+            "rmsse": 1.2087220540124206,
+            "intervention_rate": 0.6763157894736842,
+            "conditional_hir": 0.4474708171206226,
+            "harmful_loss": 0.04246432353784993
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.3806565425238864,
+            "rmsse": 1.2220617464846355,
+            "intervention_rate": 0.7828947368421053,
+            "conditional_hir": 0.4756302521008403,
+            "harmful_loss": 0.04179072723692141
+          }
+        }
+      }
+    },
+    "evaluation/test_m2_timesfm.json": {
+      "source": "results/v52_ablation/evaluation/test_m2_timesfm.json",
+      "sha256": "007f5fc5bf83115d20e64dd960de3fedf4145274e4ee29009c3fed4861f484e5",
+      "data": {
+        "backbone": "timesfm",
+        "block": "test_m2",
+        "frozen": {
+          "k": 32,
+          "beta": 1.64,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_timesfm.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.11288378125606119,
+            "ci_low": -0.18896078176050196,
+            "ci_high": -0.03657257899996399,
+            "excludes_zero": 1,
+            "p_value": 0.0012,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": 0.01704377030800194,
+            "ci_low": -0.01244499256902686,
+            "ci_high": 0.050383313371811386,
+            "excludes_zero": 0,
+            "p_value": 0.3058,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": 0.016791188289128497,
+            "ci_low": -0.025253083738064612,
+            "ci_high": 0.0614956898782275,
+            "excludes_zero": 0,
+            "p_value": 0.4848,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": 0.03703617555910717,
+            "ci_low": -0.03450610676548163,
+            "ci_high": 0.11182169402309697,
+            "excludes_zero": 0,
+            "p_value": 0.3728,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": 0.00441342149979217,
+            "ci_low": -0.033013687545989594,
+            "ci_high": 0.04329510289273453,
+            "excludes_zero": 0,
+            "p_value": 0.8438,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.019842413407373055,
+            "ci_low": 0.0019004710964184396,
+            "ci_high": 0.045337535058239044,
+            "excludes_zero": 1,
+            "p_value": 0.0134,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": 0.01343298499527612,
+            "ci_low": -0.0209755960491356,
+            "ci_high": 0.051021895779103016,
+            "excludes_zero": 0,
+            "p_value": 0.4678,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": 0.013404264363807412,
+            "ci_low": -0.004687955100097965,
+            "ci_high": 0.038926486295550684,
+            "excludes_zero": 0,
+            "p_value": 0.238,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": -0.003423078300438077,
+            "ci_low": -0.014888017146462113,
+            "ci_high": 0.008114151336343365,
+            "excludes_zero": 0,
+            "p_value": 0.5846,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": 0.053101234446114955,
+            "ci_low": 0.003340972456826113,
+            "ci_high": 0.10323317133751389,
+            "excludes_zero": 1,
+            "p_value": 0.017,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.6721229297069995,
+            "rmsse": 1.377081912825656,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.5421953781429365,
+            "rmsse": 1.299621311873906,
+            "intervention_rate": 0.7473684210526316,
+            "conditional_hir": 0.3961267605633803,
+            "harmful_loss": 0.061692481967861756
+          },
+          "R2_CART": {
+            "mase": 1.5424479601618097,
+            "rmsse": 1.3020592752592337,
+            "intervention_rate": 0.9921052631578947,
+            "conditional_hir": 0.4389920424403183,
+            "harmful_loss": 0.06333503108357678
+          },
+          "FIXED_SAITS": {
+            "mase": 1.5222029728918312,
+            "rmsse": 1.2901120049587202,
+            "intervention_rate": 0.9881578947368421,
+            "conditional_hir": 0.4474034620505992,
+            "harmful_loss": 0.0782890625664791
+          },
+          "FULL_INTROACT": {
+            "mase": 1.5592391484509385,
+            "rmsse": 1.3150060189130865,
+            "intervention_rate": 0.5184210526315789,
+            "conditional_hir": 0.39593908629441626,
+            "harmful_loss": 0.04314566692154505
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.5548257269511463,
+            "rmsse": 1.312007018366218,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4355263157894737,
+            "harmful_loss": 0.07408658155077312
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.5626622267513763,
+            "rmsse": 1.3179301308021847,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.42894736842105263,
+            "harmful_loss": 0.05767638048167917
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.5061379140048234,
+            "rmsse": 1.284468479546451,
+            "intervention_rate": 0.8460526315789474,
+            "conditional_hir": 0.432348367029549,
+            "harmful_loss": 0.061076462620966554
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.300939239324084,
+            "rmsse": 1.1334941529368505,
+            "intervention_rate": 0.8315789473684211,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.5393967350435653,
+            "rmsse": 1.3003499776876133,
+            "intervention_rate": 0.5118421052631579,
+            "conditional_hir": 0.37789203084832906,
+            "harmful_loss": 0.03258784976515346
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.545834884087131,
+            "rmsse": 1.3057322186848008,
+            "intervention_rate": 0.5407894736842105,
+            "conditional_hir": 0.39172749391727496,
+            "harmful_loss": 0.03911200552133166
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.5458061634556624,
+            "rmsse": 1.307253999304165,
+            "intervention_rate": 0.8302631578947368,
+            "conditional_hir": 0.40887480190174325,
+            "harmful_loss": 0.060147250078614274
+          }
+        }
+      }
+    },
+    "evaluation/test_m3_bolt.json": {
+      "source": "results/v52_ablation/evaluation/test_m3_bolt.json",
+      "sha256": "aad17063b229a630db42f445e70c0345b90f8cc3eadebd86d9cf93a37a383740",
+      "data": {
+        "backbone": "bolt",
+        "block": "test_m3",
+        "frozen": {
+          "k": 128,
+          "beta": 0.5,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_bolt.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.08665562462590079,
+            "ci_low": -0.1510278525680407,
+            "ci_high": -0.022505311830663035,
+            "excludes_zero": 1,
+            "p_value": 0.0002,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.056931689626957875,
+            "ci_low": -0.10874489931711974,
+            "ci_high": -0.005247110694326647,
+            "excludes_zero": 1,
+            "p_value": 0.0112,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": -0.08174345485215784,
+            "ci_low": -0.16155746158381898,
+            "ci_high": -0.002317366341991056,
+            "excludes_zero": 1,
+            "p_value": 0.0228,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.08217261243503632,
+            "ci_low": -0.19865146076216628,
+            "ci_high": 0.03239615891565371,
+            "excludes_zero": 0,
+            "p_value": 0.3098,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": -0.031936292974290154,
+            "ci_low": -0.05955752011596296,
+            "ci_high": -0.004484675859026105,
+            "excludes_zero": 1,
+            "p_value": 0.0144,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.015633712556199737,
+            "ci_low": -0.00021183689840157088,
+            "ci_high": 0.031601796247615034,
+            "excludes_zero": 0,
+            "p_value": 0.059,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.04227620499880629,
+            "ci_low": -0.06997173774209099,
+            "ci_high": -0.01458842920182679,
+            "excludes_zero": 1,
+            "p_value": 0.0018,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": -0.006101586026613798,
+            "ci_low": -0.016197453338345682,
+            "ci_high": 0.0036148643053693767,
+            "excludes_zero": 0,
+            "p_value": 0.241,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": -0.0004979057961479974,
+            "ci_low": -0.005512770353672979,
+            "ci_high": 0.004439135828610134,
+            "excludes_zero": 0,
+            "p_value": 0.875,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": -0.07499840395749512,
+            "ci_low": -0.16222963803203003,
+            "ci_high": 0.01169304919318688,
+            "excludes_zero": 0,
+            "p_value": 0.2794,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.4628597749592878,
+            "rmsse": 1.233751214843309,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.4331358399603449,
+            "rmsse": 1.2101617113240593,
+            "intervention_rate": 0.7473684210526316,
+            "conditional_hir": 0.4507042253521127,
+            "harmful_loss": 0.04800012175205142
+          },
+          "R2_CART": {
+            "mase": 1.4579476051855451,
+            "rmsse": 1.2284466021924878,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.475,
+            "harmful_loss": 0.05875505405870753
+          },
+          "FIXED_SAITS": {
+            "mase": 1.4583767627684234,
+            "rmsse": 1.2236369912857346,
+            "intervention_rate": 0.9868421052631579,
+            "conditional_hir": 0.472,
+            "harmful_loss": 0.08473028529379198
+          },
+          "FULL_INTROACT": {
+            "mase": 1.376204150333387,
+            "rmsse": 1.1760038107717634,
+            "intervention_rate": 0.7592105263157894,
+            "conditional_hir": 0.4558058925476603,
+            "harmful_loss": 0.04100948660404767
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.4081404433076772,
+            "rmsse": 1.1987176835515143,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.48157894736842105,
+            "harmful_loss": 0.06341794536487749
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.3767020561295351,
+            "rmsse": 1.1777752228700138,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.46842105263157896,
+            "harmful_loss": 0.05218930481494327
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.4512025542908824,
+            "rmsse": 1.220392802846611,
+            "intervention_rate": 0.8842105263157894,
+            "conditional_hir": 0.47767857142857145,
+            "harmful_loss": 0.0739251653087376
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.2382217184454059,
+            "rmsse": 1.067777401604309,
+            "intervention_rate": 0.7671052631578947,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.3605704377771874,
+            "rmsse": 1.155463317542547,
+            "intervention_rate": 0.75,
+            "conditional_hir": 0.4456140350877193,
+            "harmful_loss": 0.03858100202334889
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.3823057363600009,
+            "rmsse": 1.1818946068460527,
+            "intervention_rate": 0.7934210526315789,
+            "conditional_hir": 0.46102819237147596,
+            "harmful_loss": 0.05133160191645389
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.4184803553321934,
+            "rmsse": 1.2067153211791837,
+            "intervention_rate": 0.8539473684210527,
+            "conditional_hir": 0.50231124807396,
+            "harmful_loss": 0.052698160027398425
+          }
+        }
+      }
+    },
+    "evaluation/test_m3_chronos2.json": {
+      "source": "results/v52_ablation/evaluation/test_m3_chronos2.json",
+      "sha256": "7daf5947089154e874e61300f9da130155d29be4c1ebd41972d679131a38d919",
+      "data": {
+        "backbone": "chronos2",
+        "block": "test_m3",
+        "frozen": {
+          "k": 16,
+          "beta": 0.5,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_chronos2.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.2218120838634874,
+            "ci_low": -0.3294811299424797,
+            "ci_high": -0.11434448772613372,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.07767489303797136,
+            "ci_low": -0.17399575850465018,
+            "ci_high": 0.018814825515965385,
+            "excludes_zero": 0,
+            "p_value": 0.3446,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": 0.008994044920653758,
+            "ci_low": -0.019996060014664425,
+            "ci_high": 0.04374871104091361,
+            "excludes_zero": 0,
+            "p_value": 0.6316,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.07412151804736569,
+            "ci_low": -0.12356659992863055,
+            "ci_high": -0.02277977852791959,
+            "excludes_zero": 1,
+            "p_value": 0.0018,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": -0.008752099182917184,
+            "ci_low": -0.03503090924017117,
+            "ci_high": 0.01804409302793506,
+            "excludes_zero": 0,
+            "p_value": 0.5252,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.0026648802854638727,
+            "ci_low": -0.003696800923797094,
+            "ci_high": 0.011270552703499274,
+            "excludes_zero": 0,
+            "p_value": 0.5166,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.025463611195344075,
+            "ci_low": -0.05049366142090679,
+            "ci_high": 0.0004285358507910432,
+            "excludes_zero": 0,
+            "p_value": 0.0552,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": -0.023334389523914006,
+            "ci_low": -0.05842302437901793,
+            "ci_high": 0.0111139329783293,
+            "excludes_zero": 0,
+            "p_value": 0.2484,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": -0.02664454155944714,
+            "ci_low": -0.06181978951407177,
+            "ci_high": 0.008528101453214993,
+            "excludes_zero": 0,
+            "p_value": 0.3316,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": -0.016473076495315347,
+            "ci_low": -0.036558673809808984,
+            "ci_high": 0.0033991144805918193,
+            "excludes_zero": 0,
+            "p_value": 0.1072,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.6022772570155912,
+            "rmsse": 1.365722285822823,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.4581400661900752,
+            "rmsse": 1.253776733787491,
+            "intervention_rate": 0.7473684210526316,
+            "conditional_hir": 0.44014084507042256,
+            "harmful_loss": 0.04803248928577251
+          },
+          "R2_CART": {
+            "mase": 1.37147112823145,
+            "rmsse": 1.2077060628547227,
+            "intervention_rate": 0.9881578947368421,
+            "conditional_hir": 0.4434087882822903,
+            "harmful_loss": 0.057980382223527215
+          },
+          "FIXED_SAITS": {
+            "mase": 1.4545866911994698,
+            "rmsse": 1.267229540104487,
+            "intervention_rate": 0.9868421052631579,
+            "conditional_hir": 0.4706666666666667,
+            "harmful_loss": 0.08237296639484547
+          },
+          "FULL_INTROACT": {
+            "mase": 1.3804651731521038,
+            "rmsse": 1.2127081990559507,
+            "intervention_rate": 0.6907894736842105,
+            "conditional_hir": 0.43047619047619046,
+            "harmful_loss": 0.05128920054670618
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.3892172723350211,
+            "rmsse": 1.2158523653403637,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.45789473684210524,
+            "harmful_loss": 0.06595556436922898
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.407109714711551,
+            "rmsse": 1.2319043131566358,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4381578947368421,
+            "harmful_loss": 0.07332888173754352
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.3969382496474192,
+            "rmsse": 1.2268744449008453,
+            "intervention_rate": 0.8644736842105263,
+            "conditional_hir": 0.4672754946727549,
+            "harmful_loss": 0.05674660195205663
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.2235766287926422,
+            "rmsse": 1.0840041382909869,
+            "intervention_rate": 0.7855263157894737,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.37780029286664,
+            "rmsse": 1.209634230101988,
+            "intervention_rate": 0.6657894736842105,
+            "conditional_hir": 0.41304347826086957,
+            "harmful_loss": 0.04524348583269824
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.403799562676018,
+            "rmsse": 1.23391430142496,
+            "intervention_rate": 0.6789473684210526,
+            "conditional_hir": 0.44573643410852715,
+            "harmful_loss": 0.05003181301144272
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.4059287843474482,
+            "rmsse": 1.235050824604862,
+            "intervention_rate": 0.781578947368421,
+            "conditional_hir": 0.4764309764309764,
+            "harmful_loss": 0.04104429034801066
+          }
+        }
+      }
+    },
+    "evaluation/test_m3_timesfm.json": {
+      "source": "results/v52_ablation/evaluation/test_m3_timesfm.json",
+      "sha256": "518d6c0b162c534802353eac5fc8dd93e109f102109687132e992aa8c729d882",
+      "data": {
+        "backbone": "timesfm",
+        "block": "test_m3",
+        "frozen": {
+          "k": 32,
+          "beta": 1.64,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_timesfm.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.13827274200453815,
+            "ci_low": -0.20527032723732436,
+            "ci_high": -0.07194423441304632,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.04352467910853115,
+            "ci_low": -0.07817632945657202,
+            "ci_high": -0.00996473826231042,
+            "excludes_zero": 1,
+            "p_value": 0.0044,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": -0.041703242760400654,
+            "ci_low": -0.08571222252092082,
+            "ci_high": 0.0022493588962159312,
+            "excludes_zero": 0,
+            "p_value": 0.0732,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.029415440666963097,
+            "ci_low": -0.06103551390230159,
+            "ci_high": 0.007274614392426309,
+            "excludes_zero": 0,
+            "p_value": 0.1154,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": -0.04509034911133963,
+            "ci_low": -0.08665783966171833,
+            "ci_high": -0.004961865148802635,
+            "excludes_zero": 1,
+            "p_value": 0.0146,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.0023303751878694886,
+            "ci_low": -0.007783416170045773,
+            "ci_high": 0.011289093749476311,
+            "excludes_zero": 0,
+            "p_value": 0.6036,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.03577861911815108,
+            "ci_low": -0.0603329209942189,
+            "ci_high": -0.013824106982626113,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": -0.05992490114114662,
+            "ci_low": -0.11098553455979067,
+            "ci_high": -0.008673658362591765,
+            "excludes_zero": 1,
+            "p_value": 0.0004,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": -0.0003839414852667431,
+            "ci_low": -0.02002869298824862,
+            "ci_high": 0.01937080420881242,
+            "excludes_zero": 0,
+            "p_value": 0.9626,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": -0.011554570334882793,
+            "ci_low": -0.02802548191278669,
+            "ci_high": 0.004895639395117095,
+            "excludes_zero": 0,
+            "p_value": 0.1708,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.6657286757791758,
+            "rmsse": 1.377053280043976,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.5709806128831691,
+            "rmsse": 1.3179344132523743,
+            "intervention_rate": 0.7473684210526316,
+            "conditional_hir": 0.4154929577464789,
+            "harmful_loss": 0.0687274306164038
+          },
+          "R2_CART": {
+            "mase": 1.5691591765350386,
+            "rmsse": 1.3176249204919013,
+            "intervention_rate": 0.9921052631578947,
+            "conditional_hir": 0.4416445623342175,
+            "harmful_loss": 0.07381591669692111
+          },
+          "FIXED_SAITS": {
+            "mase": 1.556871374441601,
+            "rmsse": 1.309893311618568,
+            "intervention_rate": 0.9868421052631579,
+            "conditional_hir": 0.4573333333333333,
+            "harmful_loss": 0.08038768327726017
+          },
+          "FULL_INTROACT": {
+            "mase": 1.5274559337746378,
+            "rmsse": 1.29682732465885,
+            "intervention_rate": 0.5118421052631579,
+            "conditional_hir": 0.39588688946015427,
+            "harmful_loss": 0.031702669307656826
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.5725462828859773,
+            "rmsse": 1.3212125342002383,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.44342105263157894,
+            "harmful_loss": 0.08031544765418318
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.5278398752599047,
+            "rmsse": 1.298442823567815,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.42894736842105263,
+            "harmful_loss": 0.04800525127641823
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.5390105041095206,
+            "rmsse": 1.3003860506154736,
+            "intervention_rate": 0.85,
+            "conditional_hir": 0.41640866873065013,
+            "harmful_loss": 0.06320730195608883
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.3421576835370925,
+            "rmsse": 1.1601790061479769,
+            "intervention_rate": 0.8460526315789474,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.5251255585867685,
+            "rmsse": 1.2966530151324414,
+            "intervention_rate": 0.4986842105263158,
+            "conditional_hir": 0.38258575197889183,
+            "harmful_loss": 0.03227394830240584
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.5873808349157845,
+            "rmsse": 1.3321709651782723,
+            "intervention_rate": 0.5460526315789473,
+            "conditional_hir": 0.3855421686746988,
+            "harmful_loss": 0.04454814203684812
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.563234552892789,
+            "rmsse": 1.3189280247073065,
+            "intervention_rate": 0.8381578947368421,
+            "conditional_hir": 0.4364207221350079,
+            "harmful_loss": 0.0632285484064766
+          }
+        }
+      }
+    },
+    "evaluation/test_timesfm.json": {
+      "source": "results/v52_ablation/evaluation/test_timesfm.json",
+      "sha256": "db6e30852c7954e61e5d5f2a84ad6c7b9e447558a03891ee8d60d8db3d14c238",
+      "data": {
+        "backbone": "timesfm",
+        "block": "test",
+        "frozen": {
+          "k": 32,
+          "beta": 1.64,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_timesfm.json"
+        },
+        "episodes": 760,
+        "parents": 95,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.12833338337249386,
+            "ci_low": -0.20137472327755004,
+            "ci_high": -0.05535944303226577,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.02493441365119636,
+            "ci_low": -0.0715542365342649,
+            "ci_high": 0.021108013383656546,
+            "excludes_zero": 0,
+            "p_value": 0.3484,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": -0.034764532525555156,
+            "ci_low": -0.09209102061662004,
+            "ci_high": 0.02212411234040132,
+            "excludes_zero": 0,
+            "p_value": 0.4166,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": 0.08837910782244693,
+            "ci_low": -0.034893250727363,
+            "ci_high": 0.2134982095779537,
+            "excludes_zero": 0,
+            "p_value": 0.467,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": -0.04158400985877996,
+            "ci_low": -0.09974827572750347,
+            "ci_high": 0.01565939963935477,
+            "excludes_zero": 0,
+            "p_value": 0.2396,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.03584782178237249,
+            "ci_low": -0.004923524944451434,
+            "ci_high": 0.07718912319145797,
+            "excludes_zero": 0,
+            "p_value": 0.164,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.0018219272294301755,
+            "ci_low": -0.03352352567389811,
+            "ci_high": 0.031015182486627962,
+            "excludes_zero": 0,
+            "p_value": 0.8984,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": -0.03848015325964167,
+            "ci_low": -0.08497304462584798,
+            "ci_high": 0.00765845422117929,
+            "excludes_zero": 0,
+            "p_value": 0.2984,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": -0.03168817916813009,
+            "ci_low": -0.06556055315315315,
+            "ci_high": 0.0021831058377884513,
+            "excludes_zero": 0,
+            "p_value": 0.1332,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": 0.011969322536303825,
+            "ci_low": -0.007645986120951379,
+            "ci_high": 0.031460931155808156,
+            "excludes_zero": 0,
+            "p_value": 0.236,
+            "parents": 95,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.6820338933624308,
+            "rmsse": 1.3870017051242673,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.5786349236411334,
+            "rmsse": 1.3222541105435428,
+            "intervention_rate": 0.7447368421052631,
+            "conditional_hir": 0.4081272084805654,
+            "harmful_loss": 0.06241654168990566
+          },
+          "R2_CART": {
+            "mase": 1.5884650425154923,
+            "rmsse": 1.3279211272944824,
+            "intervention_rate": 0.9921052631578947,
+            "conditional_hir": 0.41379310344827586,
+            "harmful_loss": 0.06660429592765832
+          },
+          "FIXED_SAITS": {
+            "mase": 1.4653214021674903,
+            "rmsse": 1.2513256926267895,
+            "intervention_rate": 0.9828947368421053,
+            "conditional_hir": 0.40829986613119146,
+            "harmful_loss": 0.0639249500506539
+          },
+          "FULL_INTROACT": {
+            "mase": 1.553700509989937,
+            "rmsse": 1.3081695182050481,
+            "intervention_rate": 0.5236842105263158,
+            "conditional_hir": 0.3869346733668342,
+            "harmful_loss": 0.03701329362477807
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.5952845198487169,
+            "rmsse": 1.335714464676108,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4355263157894737,
+            "harmful_loss": 0.07561657689672963
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.585388689158067,
+            "rmsse": 1.3281947074264706,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4105263157894737,
+            "harmful_loss": 0.055253964562801176
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.541731187453633,
+            "rmsse": 1.3022448791771217,
+            "intervention_rate": 0.8486842105263158,
+            "conditional_hir": 0.4294573643410853,
+            "harmful_loss": 0.05843212318412473
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.3153476672210784,
+            "rmsse": 1.1428789865450608,
+            "intervention_rate": 0.8394736842105263,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.5178526882075647,
+            "rmsse": 1.2897988627249422,
+            "intervention_rate": 0.5052631578947369,
+            "conditional_hir": 0.3828125,
+            "harmful_loss": 0.028799158205579826
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.5921806632495787,
+            "rmsse": 1.3341744889906004,
+            "intervention_rate": 0.5618421052631579,
+            "conditional_hir": 0.3840749414519906,
+            "harmful_loss": 0.0459754294680088
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.5555224372193672,
+            "rmsse": 1.3131695558941514,
+            "intervention_rate": 0.8407894736842105,
+            "conditional_hir": 0.4131455399061033,
+            "harmful_loss": 0.056602255220832884
+          }
+        }
+      }
+    },
+    "evaluation/train_eval_bolt.json": {
+      "source": "results/v52_ablation/evaluation/train_eval_bolt.json",
+      "sha256": "16c6e4fdb662a29b829c0e5ecd1782099543aa552259b3f57179e20e53f463af",
+      "data": {
+        "backbone": "bolt",
+        "block": "train_eval",
+        "frozen": {
+          "k": 128,
+          "beta": 0.5,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_bolt.json"
+        },
+        "episodes": 424,
+        "parents": 53,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.031725737662347195,
+            "ci_low": -0.046087201503430486,
+            "ci_high": -0.01753716205152618,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.031647425305925396,
+            "ci_low": -0.07094643468258752,
+            "ci_high": -0.0033244020066220035,
+            "excludes_zero": 1,
+            "p_value": 0.0128,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": -0.03041508356335359,
+            "ci_low": -0.07833948918959535,
+            "ci_high": 0.0031618766775068524,
+            "excludes_zero": 0,
+            "p_value": 0.1166,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.041962050573792625,
+            "ci_low": -0.08662228151398918,
+            "ci_high": 0.0030772688433178047,
+            "excludes_zero": 0,
+            "p_value": 0.0712,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": -0.03007203854949777,
+            "ci_low": -0.06955614710625371,
+            "ci_high": -0.0026293296735679142,
+            "excludes_zero": 1,
+            "p_value": 0.0184,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": -0.019215973261345033,
+            "ci_low": -0.05752894277069589,
+            "ci_high": 0.0037712076956418275,
+            "excludes_zero": 0,
+            "p_value": 0.287,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.03824900728096921,
+            "ci_low": -0.07690535365160764,
+            "ci_high": -0.010296321898148462,
+            "excludes_zero": 1,
+            "p_value": 0.001,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": -0.05577170009222479,
+            "ci_low": -0.10213636872227401,
+            "ci_high": -0.01792534344585178,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": 0.006729473864533379,
+            "ci_low": 0.0024272811933841463,
+            "ci_high": 0.011289857628542864,
+            "excludes_zero": 1,
+            "p_value": 0.0018,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": -0.03712643431322184,
+            "ci_low": -0.07772051779748634,
+            "ci_high": -0.005685783777785644,
+            "excludes_zero": 1,
+            "p_value": 0.0096,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.1363596068427375,
+            "rmsse": 1.0620388025478729,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.1362812944863159,
+            "rmsse": 1.0576675201668628,
+            "intervention_rate": 0.7334905660377359,
+            "conditional_hir": 0.4405144694533762,
+            "harmful_loss": 0.05250725437648966
+          },
+          "R2_CART": {
+            "mase": 1.1350489527437442,
+            "rmsse": 1.0508721149767588,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.41745283018867924,
+            "harmful_loss": 0.058103074483192615
+          },
+          "FIXED_SAITS": {
+            "mase": 1.146595919754183,
+            "rmsse": 1.0633122881568278,
+            "intervention_rate": 0.9976415094339622,
+            "conditional_hir": 0.4515366430260047,
+            "harmful_loss": 0.08734858354433532
+          },
+          "FULL_INTROACT": {
+            "mase": 1.1046338691803905,
+            "rmsse": 1.0405645877696772,
+            "intervention_rate": 0.7405660377358491,
+            "conditional_hir": 0.3821656050955414,
+            "harmful_loss": 0.027940614490403953
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.1347059077298882,
+            "rmsse": 1.0552639412986438,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.45047169811320753,
+            "harmful_loss": 0.06752169180584063
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.0979043953158572,
+            "rmsse": 1.03509208286804,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.39622641509433965,
+            "harmful_loss": 0.035766836331181454
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.1417603034936121,
+            "rmsse": 1.0615161756873412,
+            "intervention_rate": 0.8938679245283019,
+            "conditional_hir": 0.46437994722955145,
+            "harmful_loss": 0.07501438184922089
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.0092415657457208,
+            "rmsse": 0.97118773292945,
+            "intervention_rate": 0.8254716981132075,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.1238498424417354,
+            "rmsse": 1.0498711721052127,
+            "intervention_rate": 0.7216981132075472,
+            "conditional_hir": 0.38562091503267976,
+            "harmful_loss": 0.03909761630524589
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.1604055692726152,
+            "rmsse": 1.0739739315250505,
+            "intervention_rate": 0.7594339622641509,
+            "conditional_hir": 0.4472049689440994,
+            "harmful_loss": 0.061573389809810725
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.1428828764613597,
+            "rmsse": 1.0662893771322084,
+            "intervention_rate": 0.8443396226415094,
+            "conditional_hir": 0.4441340782122905,
+            "harmful_loss": 0.05536735899998423
+          }
+        }
+      }
+    },
+    "evaluation/train_eval_chronos2.json": {
+      "source": "results/v52_ablation/evaluation/train_eval_chronos2.json",
+      "sha256": "4b0b62fd574cd3a0d76d403958bfbe290833834aee0a3fc2ef87c51505bbff43",
+      "data": {
+        "backbone": "chronos2",
+        "block": "train_eval",
+        "frozen": {
+          "k": 16,
+          "beta": 0.5,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_chronos2.json"
+        },
+        "episodes": 424,
+        "parents": 53,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": 0.029926666323632063,
+            "ci_low": 0.008128108010770354,
+            "ci_high": 0.05637500656173832,
+            "excludes_zero": 1,
+            "p_value": 0.0036,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.015951839943190393,
+            "ci_low": -0.05612745339467363,
+            "ci_high": 0.023832475949479293,
+            "excludes_zero": 0,
+            "p_value": 0.4458,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": -0.0347802860535034,
+            "ci_low": -0.07291490400120965,
+            "ci_high": 0.006244153407891728,
+            "excludes_zero": 0,
+            "p_value": 0.0942,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.06246751595005152,
+            "ci_low": -0.12413089671586394,
+            "ci_high": -0.0033759670962064474,
+            "excludes_zero": 1,
+            "p_value": 0.0388,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": -0.022840711977795844,
+            "ci_low": -0.06413603014811989,
+            "ci_high": 0.01777732162173012,
+            "excludes_zero": 0,
+            "p_value": 0.2834,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": 0.006499117111977297,
+            "ci_low": -0.010833604969239135,
+            "ci_high": 0.029545900880669676,
+            "excludes_zero": 0,
+            "p_value": 0.5828,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.015496653763432795,
+            "ci_low": -0.05535428558331812,
+            "ci_high": 0.022411353519773847,
+            "excludes_zero": 0,
+            "p_value": 0.4556,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": -0.01151231329836436,
+            "ci_low": -0.0326236227787336,
+            "ci_high": 0.006420355611046459,
+            "excludes_zero": 0,
+            "p_value": 0.2558,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": -0.001736555832191032,
+            "ci_low": -0.017963291941930228,
+            "ci_high": 0.013345897170988488,
+            "excludes_zero": 0,
+            "p_value": 0.8712,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": -0.05225873470877526,
+            "ci_low": -0.11259559663084212,
+            "ci_high": 0.0016796689277644437,
+            "excludes_zero": 0,
+            "p_value": 0.063,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.1066184862243598,
+            "rmsse": 1.0484277478797628,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.1524969924911823,
+            "rmsse": 1.0746784383142312,
+            "intervention_rate": 0.7334905660377359,
+            "conditional_hir": 0.45980707395498394,
+            "harmful_loss": 0.07186204853920418
+          },
+          "R2_CART": {
+            "mase": 1.171325438601495,
+            "rmsse": 1.088346355113179,
+            "intervention_rate": 0.9905660377358491,
+            "conditional_hir": 0.48095238095238096,
+            "harmful_loss": 0.0913149388548221
+          },
+          "FIXED_SAITS": {
+            "mase": 1.1990126684980433,
+            "rmsse": 1.1101545811379157,
+            "intervention_rate": 0.9976415094339622,
+            "conditional_hir": 0.49645390070921985,
+            "harmful_loss": 0.16273047652569497
+          },
+          "FULL_INTROACT": {
+            "mase": 1.136545152547992,
+            "rmsse": 1.069998680644068,
+            "intervention_rate": 0.7051886792452831,
+            "conditional_hir": 0.5050167224080268,
+            "harmful_loss": 0.07260513848487132
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.1593858645257877,
+            "rmsse": 1.081468286806712,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4882075471698113,
+            "harmful_loss": 0.08846477800288445
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.1382817083801828,
+            "rmsse": 1.0713249275382526,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.4811320754716981,
+            "harmful_loss": 0.08808891660341123
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.1888038872567672,
+            "rmsse": 1.1031169074550677,
+            "intervention_rate": 0.8561320754716981,
+            "conditional_hir": 0.4986225895316804,
+            "harmful_loss": 0.14413535250770695
+          },
+          "CATALOG_ORACLE": {
+            "mase": 0.9890210092605474,
+            "rmsse": 0.9602913952406094,
+            "intervention_rate": 0.8018867924528302,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.1300460354360147,
+            "rmsse": 1.063439824621448,
+            "intervention_rate": 0.6816037735849056,
+            "conditional_hir": 0.5121107266435986,
+            "harmful_loss": 0.06029282101201733
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.1480574658463563,
+            "rmsse": 1.077359244001527,
+            "intervention_rate": 0.6745283018867925,
+            "conditional_hir": 0.5104895104895105,
+            "harmful_loss": 0.09338115119337362
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.1520418063114246,
+            "rmsse": 1.0797401014026402,
+            "intervention_rate": 0.7429245283018868,
+            "conditional_hir": 0.4984126984126984,
+            "harmful_loss": 0.0655940141572089
+          }
+        }
+      }
+    },
+    "evaluation/train_eval_timesfm.json": {
+      "source": "results/v52_ablation/evaluation/train_eval_timesfm.json",
+      "sha256": "8772e13a410c0e30baf2a122f330c525e4b5062e72062e6bcea90ec72d7d0711",
+      "data": {
+        "backbone": "timesfm",
+        "block": "train_eval",
+        "frozen": {
+          "k": 32,
+          "beta": 1.64,
+          "best_fixed_action": "CONTEXT_RIDGE",
+          "selection_file": "results/v47/protocol/selection_timesfm.json"
+        },
+        "episodes": 424,
+        "parents": 53,
+        "comparisons": {
+          "FULL_INTROACT_vs_NATIVE_KEEP": {
+            "difference": -0.13575922699737003,
+            "ci_low": -0.17658709092224123,
+            "ci_high": -0.09848581294776465,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_BEST_FIXED": {
+            "difference": -0.04047910357129507,
+            "ci_low": -0.07742596437374717,
+            "ci_high": -0.013431834516684334,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_R2_CART": {
+            "difference": -0.046100848213287,
+            "ci_low": -0.09788655204109131,
+            "ci_high": -0.012919207927258444,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_FIXED_SAITS": {
+            "difference": -0.05457190565335158,
+            "ci_low": -0.10355341036601165,
+            "ci_high": -0.007245045644863475,
+            "excludes_zero": 1,
+            "p_value": 0.02,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A1_GLOBAL_UTILITY": {
+            "difference": -0.03926138460019264,
+            "ci_low": -0.07559940831997403,
+            "ci_high": -0.012779983259955203,
+            "excludes_zero": 1,
+            "p_value": 0.0002,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_INTERVENTION": {
+            "difference": -0.02737522708478573,
+            "ci_low": -0.05999939614070751,
+            "ci_high": -0.0010614938109077842,
+            "excludes_zero": 1,
+            "p_value": 0.0326,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A2_WO_ACTION_COND": {
+            "difference": -0.041035721782100604,
+            "ci_low": -0.07844014280908874,
+            "ci_high": -0.012538235633379845,
+            "excludes_zero": 1,
+            "p_value": 0.0001,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A3_WO_FORECAST": {
+            "difference": -0.007646118673572476,
+            "ci_low": -0.03610274038727376,
+            "ci_high": 0.013076972771494525,
+            "excludes_zero": 0,
+            "p_value": 0.6406,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A4_ALWAYS_ACT": {
+            "difference": 0.003052251830220399,
+            "ci_low": -0.0007847898730064638,
+            "ci_high": 0.007085866872709096,
+            "excludes_zero": 0,
+            "p_value": 0.1214,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          },
+          "FULL_INTROACT_vs_A5_PARAMETRIC_RIDGE": {
+            "difference": -0.05788367667980282,
+            "ci_low": -0.10776289868680565,
+            "ci_high": -0.012929412958240688,
+            "excludes_zero": 1,
+            "p_value": 0.0046,
+            "parents": 53,
+            "resamples": 10000,
+            "seed": 101
+          }
+        },
+        "rows": {
+          "NATIVE_KEEP": {
+            "mase": 1.2309187454532564,
+            "rmsse": 1.122534677514554,
+            "intervention_rate": 0.0,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "BEST_FIXED": {
+            "mase": 1.1356386220271815,
+            "rmsse": 1.0598312426280039,
+            "intervention_rate": 0.7334905660377359,
+            "conditional_hir": 0.39228295819935693,
+            "harmful_loss": 0.05092425878973036
+          },
+          "R2_CART": {
+            "mase": 1.1412603666691732,
+            "rmsse": 1.0634294608990136,
+            "intervention_rate": 0.9929245283018868,
+            "conditional_hir": 0.40380047505938244,
+            "harmful_loss": 0.05607455767813423
+          },
+          "FIXED_SAITS": {
+            "mase": 1.149731424109238,
+            "rmsse": 1.0646323644764824,
+            "intervention_rate": 0.9976415094339622,
+            "conditional_hir": 0.46099290780141844,
+            "harmful_loss": 0.0802945216672411
+          },
+          "FULL_INTROACT": {
+            "mase": 1.0951595184558864,
+            "rmsse": 1.0345235827450407,
+            "intervention_rate": 0.4669811320754717,
+            "conditional_hir": 0.26262626262626265,
+            "harmful_loss": 0.011131949123812325
+          },
+          "A1_GLOBAL_UTILITY": {
+            "mase": 1.134420903056079,
+            "rmsse": 1.0586272418519589,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.39858490566037735,
+            "harmful_loss": 0.058638808579742005
+          },
+          "A4_ALWAYS_ACT": {
+            "mase": 1.092107266625666,
+            "rmsse": 1.0324788334233999,
+            "intervention_rate": 1.0,
+            "conditional_hir": 0.3608490566037736,
+            "harmful_loss": 0.020988120886330546
+          },
+          "A5_PARAMETRIC_RIDGE": {
+            "mase": 1.1530431951356892,
+            "rmsse": 1.0726918550145768,
+            "intervention_rate": 0.910377358490566,
+            "conditional_hir": 0.4170984455958549,
+            "harmful_loss": 0.07082439154996141
+          },
+          "CATALOG_ORACLE": {
+            "mase": 1.0072443455362725,
+            "rmsse": 0.9645281800620255,
+            "intervention_rate": 0.8915094339622641,
+            "conditional_hir": 0.0,
+            "harmful_loss": 0.0
+          },
+          "A2_WO_INTERVENTION": {
+            "mase": 1.1225347455406722,
+            "rmsse": 1.0498658250234112,
+            "intervention_rate": 0.49056603773584906,
+            "conditional_hir": 0.2692307692307692,
+            "harmful_loss": 0.02952346294051848
+          },
+          "A3_WO_FORECAST": {
+            "mase": 1.1028056371294588,
+            "rmsse": 1.0374792758552065,
+            "intervention_rate": 0.5636792452830188,
+            "conditional_hir": 0.3179916317991632,
+            "harmful_loss": 0.03355590801065637
+          },
+          "A2_WO_ACTION_COND": {
+            "mase": 1.1361952402379871,
+            "rmsse": 1.0603881516102234,
+            "intervention_rate": 0.8537735849056604,
+            "conditional_hir": 0.4281767955801105,
+            "harmful_loss": 0.051709070569006456
+          }
+        }
+      }
+    },
+    "gate_controls/bolt.json": {
+      "source": "results/v52_ablation/gate_controls/bolt.json",
+      "sha256": "1ba0b669fefd32aeac7c0396904cf9f21a97203af13219ee77ad83e9ca99abd5",
+      "data": {
+        "calibration": {
+          "k": 128,
+          "beta": 0.5,
+          "dev_block": "train_eval",
+          "dev_full_intervention_rate": 0.7405660377358491,
+          "dev_candidate_rate": 1.0,
+          "theta_mean": 0.00538115206510302,
+          "theta_lin": 0.04409270257298791,
+          "random_act_probability": 0.7405660377358491,
+          "random_seed": 101
+        },
+        "backbone": "bolt",
+        "blocks": {
+          "train_eval": {
+            "comparisons": {
+              "GATE_DISPERSION_vs_GATE_MEAN_ONLY": {
+                "difference": -0.002258888230698223,
+                "ci_low": -0.005306095151318948,
+                "ci_high": 0.00020095654935651817,
+                "excludes_zero": 0,
+                "p_value": 0.0884,
+                "parents": 53,
+                "resamples": 10000,
+                "seed": 101
+              },
+              "GATE_DISPERSION_vs_GATE_LINEAR": {
+                "difference": -0.03704558910012361,
+                "ci_low": -0.07809960761306277,
+                "ci_high": -0.0062477654187561025,
+                "excludes_zero": 1,
+                "p_value": 0.0086,
+                "parents": 53,
+                "resamples": 10000,
+                "seed": 101
+              },
+              "GATE_DISPERSION_vs_GATE_RANDOM": {
+                "difference": -0.006293277517322025,
+                "ci_low": -0.012451263554042809,
+                "ci_high": -0.0004432703229657033,
+                "excludes_zero": 1,
+                "p_value": 0.0332,
+                "parents": 53,
+                "resamples": 10000,
+                "seed": 101
+              }
+            },
+            "rows": {
+              "GATE_DISPERSION": {
+                "mase": 1.1046338691803905,
+                "rmsse": 1.0405645877696772,
+                "intervention_rate": 0.7405660377358491,
+                "conditional_hir": 0.3821656050955414,
+                "harmful_loss": 0.027940614490403953
+              },
+              "GATE_MEAN_ONLY": {
+                "mase": 1.1068927574110887,
+                "rmsse": 1.042372294320466,
+                "intervention_rate": 0.7405660377358491,
+                "conditional_hir": 0.39490445859872614,
+                "harmful_loss": 0.029690863426611487
+              },
+              "GATE_LINEAR": {
+                "mase": 1.141679458280514,
+                "rmsse": 1.0613435838818384,
+                "intervention_rate": 0.7405660377358491,
+                "conditional_hir": 0.46496815286624205,
+                "harmful_loss": 0.0687392387459052
+              },
+              "GATE_RANDOM": {
+                "mase": 1.1109271466977124,
+                "rmsse": 1.0442935280483967,
+                "intervention_rate": 0.7594339622641509,
+                "conditional_hir": 0.40372670807453415,
+                "harmful_loss": 0.027742782446519634
+              }
+            }
+          },
+          "test": {
+            "comparisons": {
+              "GATE_DISPERSION_vs_GATE_MEAN_ONLY": {
+                "difference": 0.0017844421136605838,
+                "ci_low": -0.0014046349676972963,
+                "ci_high": 0.0049862452714031155,
+                "excludes_zero": 0,
+                "p_value": 0.2914,
+                "parents": 95,
+                "resamples": 10000,
+                "seed": 101
+              },
+              "GATE_DISPERSION_vs_GATE_LINEAR": {
+                "difference": -0.026280427120538644,
+                "ci_low": -0.05264294440661571,
+                "ci_high": -0.0003025380038210851,
+                "excludes_zero": 1,
+                "p_value": 0.0468,
+                "parents": 95,
+                "resamples": 10000,
+                "seed": 101
+              },
+              "GATE_DISPERSION_vs_GATE_RANDOM": {
+                "difference": -0.029228871774655725,
+                "ci_low": -0.05042278325668277,
+                "ci_high": -0.00807471184100093,
+                "excludes_zero": 1,
+                "p_value": 0.0001,
+                "parents": 95,
+                "resamples": 10000,
+                "seed": 101
+              }
+            },
+            "rows": {
+              "GATE_DISPERSION": {
+                "mase": 1.3783089540842224,
+                "rmsse": 1.176575223004564,
+                "intervention_rate": 0.7460526315789474,
+                "conditional_hir": 0.42151675485008816,
+                "harmful_loss": 0.03768864517732076
+              },
+              "GATE_MEAN_ONLY": {
+                "mase": 1.3765245119705616,
+                "rmsse": 1.175343398084371,
+                "intervention_rate": 0.756578947368421,
+                "conditional_hir": 0.4260869565217391,
+                "harmful_loss": 0.03985587090363372
+              },
+              "GATE_LINEAR": {
+                "mase": 1.4045893812047607,
+                "rmsse": 1.1977964543291173,
+                "intervention_rate": 0.7131578947368421,
+                "conditional_hir": 0.43357933579335795,
+                "harmful_loss": 0.04684609372317479
+              },
+              "GATE_RANDOM": {
+                "mase": 1.407537825858878,
+                "rmsse": 1.1982637557318112,
+                "intervention_rate": 0.7513157894736842,
+                "conditional_hir": 0.4185639229422067,
+                "harmful_loss": 0.03545035063101916
+              }
+            }
+          }
+        }
+      }
+    },
+    "gate_controls/chronos2.json": {
+      "source": "results/v52_ablation/gate_controls/chronos2.json",
+      "sha256": "acdb94bfdd97df9ac469bc352986263c332d4672992fe3d5464885c6666d3af1",
+      "data": {
+        "calibration": {
+          "k": 16,
+          "beta": 0.5,
+          "dev_block": "train_eval",
+          "dev_full_intervention_rate": 0.7051886792452831,
+          "dev_candidate_rate": 1.0,
+          "theta_mean": 0.013307463895146214,
+          "theta_lin": 0.05927804562530591,
+          "random_act_probability": 0.7051886792452831,
+          "random_seed": 101
+        },
+        "backbone": "chronos2",
+        "blocks": {
+          "train_eval": {
+            "comparisons": {
+              "GATE_DISPERSION_vs_GATE_MEAN_ONLY": {
+                "difference": -0.0026564184026992717,
+                "ci_low": -0.010974610714934236,
+                "ci_high": 0.003332281769791056,
+                "excludes_zero": 0,
+                "p_value": 0.5078,
+                "parents": 53,
+                "resamples": 10000,
+                "seed": 101
+              },
+              "GATE_DISPERSION_vs_GATE_LINEAR": {
+                "difference": -0.046569020822292986,
+                "ci_low": -0.10600372115989119,
+                "ci_high": 0.006747857775432303,
+                "excludes_zero": 0,
+                "p_value": 0.0966,
+                "parents": 53,
+                "resamples": 10000,
+                "seed": 101
+              },
+              "GATE_DISPERSION_vs_GATE_RANDOM": {
+                "difference": 0.0036458118379617396,
+                "ci_low": -0.006085728037334189,
+                "ci_high": 0.015345463184904021,
+                "excludes_zero": 0,
+                "p_value": 0.5178,
+                "parents": 53,
+                "resamples": 10000,
+                "seed": 101
+              }
+            },
+            "rows": {
+              "GATE_DISPERSION": {
+                "mase": 1.136545152547992,
+                "rmsse": 1.069998680644068,
+                "intervention_rate": 0.7051886792452831,
+                "conditional_hir": 0.5050167224080268,
+                "harmful_loss": 0.07260513848487132
+              },
+              "GATE_MEAN_ONLY": {
+                "mase": 1.139201570950691,
+                "rmsse": 1.0722694482624755,
+                "intervention_rate": 0.7051886792452831,
+                "conditional_hir": 0.5150501672240803,
+                "harmful_loss": 0.08211728266644387
+              },
+              "GATE_LINEAR": {
+                "mase": 1.183114173370285,
+                "rmsse": 1.0992419156693636,
+                "intervention_rate": 0.7051886792452831,
+                "conditional_hir": 0.4916387959866221,
+                "harmful_loss": 0.13538919305127473
+              },
+              "GATE_RANDOM": {
+                "mase": 1.13289934071003,
+                "rmsse": 1.069796779377043,
+                "intervention_rate": 0.7240566037735849,
+                "conditional_hir": 0.4820846905537459,
+                "harmful_loss": 0.06443111106343126
+              }
+            }
+          },
+          "test": {
+            "comparisons": {
+              "GATE_DISPERSION_vs_GATE_MEAN_ONLY": {
+                "difference": 0.0025977636903345576,
+                "ci_low": -0.0027747424096937943,
+                "ci_high": 0.010036728705800415,
+                "excludes_zero": 0,
+                "p_value": 0.5134,
+                "parents": 95,
+                "resamples": 10000,
+                "seed": 101
+              },
+              "GATE_DISPERSION_vs_GATE_LINEAR": {
+                "difference": 0.007358862073862063,
+                "ci_low": -0.024317705795578015,
+                "ci_high": 0.039040402190339524,
+                "excludes_zero": 0,
+                "p_value": 0.6228,
+                "parents": 95,
+                "resamples": 10000,
+                "seed": 101
+              },
+              "GATE_DISPERSION_vs_GATE_RANDOM": {
+                "difference": -0.06822841690008855,
+                "ci_low": -0.0959426102015299,
+                "ci_high": -0.04160818618317891,
+                "excludes_zero": 1,
+                "p_value": 0.0001,
+                "parents": 95,
+                "resamples": 10000,
+                "seed": 101
+              }
+            },
+            "rows": {
+              "GATE_DISPERSION": {
+                "mase": 1.3779334464873831,
+                "rmsse": 1.2135582009095165,
+                "intervention_rate": 0.6907894736842105,
+                "conditional_hir": 0.3961904761904762,
+                "harmful_loss": 0.03786254685632787
+              },
+              "GATE_MEAN_ONLY": {
+                "mase": 1.3753356827970484,
+                "rmsse": 1.212141372203234,
+                "intervention_rate": 0.6881578947368421,
+                "conditional_hir": 0.4072657743785851,
+                "harmful_loss": 0.03912323966235257
+              },
+              "GATE_LINEAR": {
+                "mase": 1.370574584413521,
+                "rmsse": 1.214148023605694,
+                "intervention_rate": 0.6960526315789474,
+                "conditional_hir": 0.444234404536862,
+                "harmful_loss": 0.04652683107458067
+              },
+              "GATE_RANDOM": {
+                "mase": 1.4461618633874718,
+                "rmsse": 1.2564542245324792,
+                "intervention_rate": 0.7157894736842105,
+                "conditional_hir": 0.41544117647058826,
+                "harmful_loss": 0.03504357469764576
+              }
+            }
+          }
+        }
+      }
+    },
+    "gate_controls/timesfm.json": {
+      "source": "results/v52_ablation/gate_controls/timesfm.json",
+      "sha256": "454d7c5d36ac4d21581d6f205c2c93121884a7c0b3b3da815e1516867ba05a3c",
+      "data": {
+        "calibration": {
+          "k": 32,
+          "beta": 1.64,
+          "dev_block": "train_eval",
+          "dev_full_intervention_rate": 0.4669811320754717,
+          "dev_candidate_rate": 1.0,
+          "theta_mean": 0.031071316982305794,
+          "theta_lin": 0.13992319399421957,
+          "random_act_probability": 0.4669811320754717,
+          "random_seed": 101
+        },
+        "backbone": "timesfm",
+        "blocks": {
+          "train_eval": {
+            "comparisons": {
+              "GATE_DISPERSION_vs_GATE_MEAN_ONLY": {
+                "difference": -0.02424796443096753,
+                "ci_low": -0.05966886345397347,
+                "ci_high": -0.0015183878925446727,
+                "excludes_zero": 1,
+                "p_value": 0.0166,
+                "parents": 53,
+                "resamples": 10000,
+                "seed": 101
+              },
+              "GATE_DISPERSION_vs_GATE_LINEAR": {
+                "difference": -0.07034333038199973,
+                "ci_low": -0.11777333119618398,
+                "ci_high": -0.02971291571689344,
+                "excludes_zero": 1,
+                "p_value": 0.0001,
+                "parents": 53,
+                "resamples": 10000,
+                "seed": 101
+              },
+              "GATE_DISPERSION_vs_GATE_RANDOM": {
+                "difference": -0.07073821286164947,
+                "ci_low": -0.10436106068782623,
+                "ci_high": -0.04081423131594608,
+                "excludes_zero": 1,
+                "p_value": 0.0001,
+                "parents": 53,
+                "resamples": 10000,
+                "seed": 101
+              }
+            },
+            "rows": {
+              "GATE_DISPERSION": {
+                "mase": 1.0951595184558864,
+                "rmsse": 1.0345235827450407,
+                "intervention_rate": 0.4669811320754717,
+                "conditional_hir": 0.26262626262626265,
+                "harmful_loss": 0.011131949123812325
+              },
+              "GATE_MEAN_ONLY": {
+                "mase": 1.1194074828868539,
+                "rmsse": 1.047888908427126,
+                "intervention_rate": 0.4669811320754717,
+                "conditional_hir": 0.2727272727272727,
+                "harmful_loss": 0.029576986810412893
+              },
+              "GATE_LINEAR": {
+                "mase": 1.1655028488378862,
+                "rmsse": 1.0829506391293757,
+                "intervention_rate": 0.4669811320754717,
+                "conditional_hir": 0.3939393939393939,
+                "harmful_loss": 0.06261087142019653
+              },
+              "GATE_RANDOM": {
+                "mase": 1.1658977313175356,
+                "rmsse": 1.0821075213523041,
+                "intervention_rate": 0.49528301886792453,
+                "conditional_hir": 0.3619047619047619,
+                "harmful_loss": 0.011971346863256358
+              }
+            }
+          },
+          "test": {
+            "comparisons": {
+              "GATE_DISPERSION_vs_GATE_MEAN_ONLY": {
+                "difference": -0.05411364051152354,
+                "ci_low": -0.10353247296203033,
+                "ci_high": -0.0055545908183633865,
+                "excludes_zero": 1,
+                "p_value": 0.0012,
+                "parents": 95,
+                "resamples": 10000,
+                "seed": 101
+              },
+              "GATE_DISPERSION_vs_GATE_LINEAR": {
+                "difference": 0.01478794924673144,
+                "ci_low": -0.0049765587736800895,
+                "ci_high": 0.034648849535241166,
+                "excludes_zero": 0,
+                "p_value": 0.1494,
+                "parents": 95,
+                "resamples": 10000,
+                "seed": 101
+              },
+              "GATE_DISPERSION_vs_GATE_RANDOM": {
+                "difference": -0.11815475427788391,
+                "ci_low": -0.16281825319848825,
+                "ci_high": -0.0752587347867525,
+                "excludes_zero": 1,
+                "p_value": 0.0001,
+                "parents": 95,
+                "resamples": 10000,
+                "seed": 101
+              }
+            },
+            "rows": {
+              "GATE_DISPERSION": {
+                "mase": 1.553700509989937,
+                "rmsse": 1.3081695182050481,
+                "intervention_rate": 0.5236842105263158,
+                "conditional_hir": 0.3869346733668342,
+                "harmful_loss": 0.03701329362477807
+              },
+              "GATE_MEAN_ONLY": {
+                "mase": 1.6078141505014605,
+                "rmsse": 1.343203162730188,
+                "intervention_rate": 0.5210526315789473,
+                "conditional_hir": 0.39646464646464646,
+                "harmful_loss": 0.052700400783356284
+              },
+              "GATE_LINEAR": {
+                "mase": 1.5389125607432055,
+                "rmsse": 1.2994615277957997,
+                "intervention_rate": 0.5144736842105263,
+                "conditional_hir": 0.36828644501278773,
+                "harmful_loss": 0.04334521385221153
+              },
+              "GATE_RANDOM": {
+                "mase": 1.6718552642678208,
+                "rmsse": 1.378958031037949,
+                "intervention_rate": 0.47368421052631576,
+                "conditional_hir": 0.4361111111111111,
+                "harmful_loss": 0.029126332076365554
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

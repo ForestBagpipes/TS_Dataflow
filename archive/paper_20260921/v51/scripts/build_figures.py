@@ -24,7 +24,7 @@ HERE = Path(__file__).resolve().parents[1]
 FIG = HERE / 'figure'
 PREVIEW = HERE / 'build' / 'preview'
 PREVIEW.mkdir(parents=True, exist_ok=True)
-COLORS = ['#A1A9B3', '#6D9FC4', '#389B93', '#9B85B4', '#637DB3', '#163F69']
+COLORS = ['#A5AFBD', '#699CC6', '#328C88', '#9A88B8', '#5576AB', '#193D68']
 ACTION_COLORS = [COLORS[i] for i in [0, 1, 2, 4, 5, 3]]
 BAR_WIDTH, BAR_EDGE, BAR_HATCH = .64, .8, '///'
 METHODS = ['Native KEEP', 'Best Fixed', 'R2-CART', 'Fixed SAITS', 'TATO', 'IntroAct-TS']
@@ -36,9 +36,7 @@ plt.rcParams.update({
     'xtick.labelsize': TICK_SIZE, 'ytick.labelsize': TICK_SIZE, 'legend.fontsize': LEGEND_SIZE,
     'xtick.major.size': 3, 'ytick.major.size': 3,
     'xtick.major.pad': 4, 'ytick.major.pad': 4,
-    'axes.spines.top': True, 'axes.spines.right': True,
-    'xtick.direction': 'in', 'ytick.direction': 'in',
-    'xtick.top': True, 'ytick.right': True,
+    'axes.spines.top': False, 'axes.spines.right': False,
     'axes.grid': False, 'axes.linewidth': .8, 'legend.frameon': False,
     'pdf.fonttype': 42, 'ps.fonttype': 3, 'figure.facecolor': 'white',
     'savefig.facecolor': 'white', 'axes.unicode_minus': False,
@@ -88,7 +86,7 @@ def bar_axis(ax, labels, title):
     ax.set_xticks(np.arange(len(labels)), labels, fontsize=TICK_SIZE)
     ax.set_xlim(-.6, len(labels)-.4)
     ax.tick_params(axis='x', length=0, pad=7)
-    ax.set_title(title, loc='left', fontsize=TITLE_SIZE, pad=7)
+    ax.set_title(title, loc='left', weight='bold', fontsize=TITLE_SIZE, pad=8)
     ax.grid(False)
 
 
@@ -139,7 +137,7 @@ def utility():
                 [float(v['beneficial_share']) if v['beneficial_share'] else np.nan for v in r],
                 labels, ACTION_COLORS, '(a) Action frequency (%)')
     ax.set_ylim(0,65);ax.set_yticks([0,20,40,60])
-    ax.set_title('(a) Action frequency (%)',loc='left',weight='normal',pad=8)
+    ax.set_title('(a) Action frequency (%)',loc='left',weight='bold',pad=8)
     bars(axs[1],[100*float(v['mean_utility']) for v in r],labels,ACTION_COLORS,r'(b) Mean utility ($\times 10^{-2}$)','.1f')
     axs[1].set_ylim(-13,15);axs[1].set_yticks([-10,-5,0,5,10])
     bar_legend(fig, 'Oracle-best', 'Beneficial')
@@ -155,7 +153,7 @@ def harm():
                 [np.nan]+[float(v['conditional_hir']) for v in hr[1:]],
                 SHORT, COLORS, '(b) Intervention rates (%)')
     ax.set_ylim(0,115);ax.set_yticks([0,25,50,75,100]);ax.grid(False)
-    ax.set_title('(b) Intervention rates (%)',loc='left',weight='normal',fontsize=TITLE_SIZE,pad=8)
+    ax.set_title('(b) Intervention rates (%)',loc='left',weight='bold',fontsize=TITLE_SIZE,pad=8)
     bar_legend(fig, 'Intervention frequency', 'Harmful rate among interventions')
     save(fig,'fig4_intervention_harm')
 
@@ -173,53 +171,13 @@ def severity():
                 label=row['method'], zorder=5 if row['method']=='IntroAct-TS' else 2)
     ax.set(xlabel='Missingness (%)', xticks=[10,30,50], xlim=(7,53), ylim=(1.38,2.09))
     ax.xaxis.labelpad=6
-    ax.set_title('(a) Source-macro MASE',loc='left',weight='normal',fontsize=TITLE_SIZE,pad=8)
+    ax.set_title('(a) Source-macro MASE',loc='left',weight='bold',fontsize=TITLE_SIZE,pad=8)
     ax.set_yticks([1.4,1.6,1.8,2.0])
     ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
     fig.legend(*ax.get_legend_handles_labels(),loc='upper center',bbox_to_anchor=(.53,.995),ncol=3,columnspacing=1.5,handlelength=1.8,fontsize=LEGEND_SIZE)
     bars(axes[1],[100*float(r['worst_cell']) for r in rows],SHORT,COLORS,r'(b) Worst-cell increase ($\times 10^{-2}$)','.1f')
     ax.grid(False)
     save(fig, 'fig5_missingness_severity')
-
-
-def gate_controls():
-    from matplotlib.lines import Line2D
-    evidence = json.loads((FIG/'data/v52_evidence.json').read_text())['records']
-    backbones = ['bolt', 'timesfm', 'chronos2']
-    methods = ['GATE_DISPERSION', 'GATE_MEAN_ONLY', 'GATE_LINEAR', 'GATE_RANDOM']
-    labels = ['FULL', 'Mean', 'Linear', 'Random']
-    colors = [COLORS[5], COLORS[1], COLORS[2], COLORS[3]]
-    markers = ['*', 'o', 's', 'D']
-    fig, axes = panels(3, legend=True)
-    fig.subplots_adjust(left=.075, right=.985, wspace=.40)
-    for j, bb in enumerate(backbones):
-        result = evidence[f'gate_controls/{bb}.json']['data']['blocks']['test']
-        for i, method in enumerate(methods[1:], 1):
-            rec = result['comparisons']['GATE_DISPERSION_vs_' + method]
-            y = 100*rec['difference']
-            axes[0].errorbar(j+(i-2)*.19, y, yerr=[[100*(rec['difference']-rec['ci_low'])], [100*(rec['ci_high']-rec['difference'])]],
-                            fmt=markers[i], color=colors[i], markersize=5, capsize=2, linewidth=1.1)
-        for i, method in enumerate(methods):
-            for ax, metric, scale in [(axes[1], 'intervention_rate', 100), (axes[2], 'harmful_loss', 100)]:
-                ax.bar(j+(i-1.5)*.19, scale*result['rows'][method][metric], width=.17,
-                       facecolor=colors[i] if i != 3 else 'white', edgecolor=colors[i],
-                       linewidth=BAR_EDGE, hatch=BAR_HATCH if i == 3 else None)
-    titles = [r'(a) $\Delta$MASE ($\times 10^{-2}$)', '(b) Interventions (%)', r'(c) Harm ($\times 10^{-2}$)']
-    for ax, title in zip(axes, titles):
-        bar_axis(ax, ['Bolt', 'TF-2.5', 'C-2'], title)
-    axes[0].axhline(0, color='#7D8791', lw=.9, ls='--')
-    axes[0].set_ylim(-18, 6)
-    axes[0].set_yticks([-15, -10, -5, 0, 5])
-    axes[1].set_ylim(0, 100)
-    axes[1].set_yticks([0, 25, 50, 75, 100])
-    axes[2].set_ylim(0, 6)
-    axes[2].set_yticks([0, 2, 4, 6])
-    from matplotlib.patches import Patch
-    handles = [Patch(facecolor=colors[0], edgecolor=colors[0])]
-    handles += [Line2D([], [], color=c, marker=m, linestyle='none', markersize=7) for c, m in zip(colors[1:], markers[1:])]
-    fig.legend(handles, labels,
-               loc='upper center', bbox_to_anchor=(.53, .985), ncol=4, columnspacing=1.6, handletextpad=.35)
-    save(fig, 'fig7_gate_controls')
 
 
 def ranks():
@@ -243,8 +201,8 @@ def ranks():
 
 if __name__ == '__main__':
     for name in ['fig1_example', 'fig2_Architecture']: bmp_eps(name)
-    utility(); harm(); severity(); ranks(); gate_controls()
+    utility(); harm(); severity(); ranks()
     files = sorted(FIG.glob('*.eps')) + sorted((FIG/'data').glob('*.csv')) + sorted(FIG.glob('*.bmp'))
     manifest = {str(p.relative_to(HERE)): hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
     (HERE/'build/figure_manifest.json').write_text(json.dumps(manifest, indent=2)+'\n')
-    print('Built 2 lossless raster EPS figures and 5 vector experimental EPS figures.')
+    print('Built 2 lossless raster EPS figures and 4 vector experimental EPS figures.')

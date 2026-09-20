@@ -12,7 +12,7 @@ from pypdf import PdfReader
 
 HERE = Path(__file__).resolve().parents[1]
 ROOT = HERE.parent
-NAME = 'IntroActTS_20260921_v52'
+NAME = 'IntroActTS_20260920_v51'
 tex = (HERE/(NAME+'.tex')).read_text(encoding='utf8')
 log = (HERE/'build'/(NAME+'.log')).read_text(encoding='utf8',errors='replace')
 labels = re.findall(r'\\label\{([^}]+)\}',tex)
@@ -54,7 +54,7 @@ for name in ['fig1_example','fig2_Architecture']:
     assert pixels==bmp.tobytes(), name+' pixel mismatch'
 
 graphic_refs=re.findall(r'\\includegraphics\[[^\]]*\]\{([^}]+)\}',tex)
-assert len(graphic_refs)==7 and all((HERE/p).exists() for p in graphic_refs)
+assert len(graphic_refs)==6 and all((HERE/p).exists() for p in graphic_refs)
 assert {Path(p).name for p in graphic_refs}=={p.name for p in (HERE/'figure').glob('*.eps')}
 pdf=PdfReader(HERE/(NAME+'.pdf'))
 aux=(HERE/'build'/(NAME+'.aux')).read_text(encoding='utf8')
@@ -78,16 +78,5 @@ report={
     'scope':'Document and asset consistency only. No acceptance of v47_verified or independent replication.',
     'pdf_sha256':hashlib.sha256((HERE/(NAME+'.pdf')).read_bytes()).hexdigest(),
 }
-evidence=json.loads((HERE/'figure/data/v52_evidence.json').read_text())
-assert len(evidence['records'])==21
-available_sources=0
-for record in evidence['records'].values():
-    path=ROOT/record['source']
-    if path.exists():
-        assert hashlib.sha256(path.read_bytes()).hexdigest()==record['sha256'], str(path)
-        available_sources+=1
-report['v52_recorded_summaries']=len(evidence['records'])
-report['v52_source_hashes_checked']=available_sources
-report['v52_intervals']='Recorded nominal parent-bootstrap intervals, 10000 resamples, no local recomputation'
 (HERE/'build/audit.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(report,indent=2))
