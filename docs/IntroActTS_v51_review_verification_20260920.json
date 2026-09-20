@@ -1,0 +1,21 @@
+{
+  "review_date": "2026-09-20",
+  "run": ".academic-collab\\runs\\v51_review_20260920",
+  "paper_assets_checked": 20,
+  "changed_paper_assets": [],
+  "vendor_files_checked": 97,
+  "vendor_hash_mismatches": [],
+  "formal_ledger_bytes": 0,
+  "formal_protocol_executed": false,
+  "reason": "SSH authentication failed",
+  "findings_drafted": 22,
+  "experiments_run": false,
+  "paper_sha256": "f222972db7046fc94dd858cfea07a1a4f7ba8ab8187b2e6966566913577e8643",
+  "material_hashes": {
+    "src/introact_ts/v44/state.py": "42946aec2741464d992ee6de7bd775a4a05aff0ae5db0db7cdaf05d1652e97ed",
+    "src/introact_ts/v44/catalog.py": "004e712e04de1538e0755e9fdaa7a28bcf2aaf729b43f9f35795553995ac5971",
+    "results/v47/diagnostics/transfer_test_timesfm.json": "3e165dc76e5676f3535548bc1a93d00a2ce1bc17a2e903108b8f6650069e94fa",
+    "results/v47/cost_audit/latency_test_timesfm.json": "18372b3c8ca6427214761c69dd01675ad3742ba6abe9bfb061d474c5de004526",
+    "docs/reference_audit_v51_20260920.json": "786dbacc150cd1f822fdab5b79ec8b06b55f60af5be5f00fad0aa200696922cf"
+  }
+}
