@@ -39,6 +39,8 @@ plt.rcParams.update({
 
 def save(fig, name):
     fig.savefig(FIG / (name + '.eps'), format='eps', bbox_inches='tight', pad_inches=.06)
+    eps = FIG / (name + '.eps')
+    eps.write_bytes(eps.read_bytes().replace(b'\r\n', b'\n'))
     fig.savefig(PREVIEW / (name + '.png'), dpi=200, bbox_inches='tight', pad_inches=.06)
     plt.close(fig)
 
@@ -62,7 +64,7 @@ gsave
 /Decode [0 1 0 1 0 1] /ImageMatrix [{w} 0 0 -{h} 0 {h}]
 /DataSource currentfile /ASCII85Decode filter /FlateDecode filter >> image
 '''
-    (FIG / (name + '.eps')).write_text(header + '\n'.join(textwrap.wrap(payload, 100, break_on_hyphens=False)) + '\n~>\ngrestore\nshowpage\n%%EOF\n', encoding='ascii')
+    (FIG / (name + '.eps')).write_text(header + '\n'.join(textwrap.wrap(payload, 100, break_on_hyphens=False)) + '\n~>\ngrestore\nshowpage\n%%EOF\n', encoding='ascii', newline='\n')
     im.thumbnail((1800, 1100))
     im.save(PREVIEW / (name + '.png'))
 
