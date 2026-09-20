@@ -1,0 +1,7 @@
+method,mase,intervention_rate,conditional_hir,harmful_loss,beneficial_precision,missed_opportunity
+Native KEEP,1.576,0.0,0.0,0.0000,,100.0
+Best Fixed,1.488,74.5,41.7,0.0513,58.3,25.0
+R2-CART,1.458,99.4,43.1,0.0584,56.9,0.6
+Fixed SAITS,1.459,98.3,42.9,0.0699,57.1,1.7
+TATO,1.616,100.0,59.6,0.2488,40.4,0.0
+IntroAct-TS,1.437,65.4,40.2,0.0375,59.8,34.3

@@ -1,0 +1,2382 @@
+% ===========================================================================
+%  IntroAct-TS —— ICLR 2027 投稿正文
+% ---------------------------------------------------------------------------
+%  版本      : v4.6（2026-09-19）
+%  上一版    : IntroActTS_20260918_v45_review.tex（占位符骨架，已冻结存档）
+%
+%  本版与 v4.5 的差别
+%  -----------------
+%  1. 数字来自 v4.6 的独立 TEST 运行：8 个来源、95 个 TEST parent、760 个
+%     episode、三个冻结骨干、四种缺失模式、三档严重度。结果记录在
+%     results/v46/，表格与解读文字由 latex/fill_v46.py 从那些 JSON 生成，
+%     所以数字和围绕它的句子不会各自漂移。
+%  2. 仍未跑出的量保留 \ph{KEY} 占位符，渲染为灰色 [KEY]，绝不用估计值填充。
+%  3. 主表 roster：Native KEEP / Best Fixed / R2-CART / SAITS / TATO 加
+%     IntroAct-TS，Catalog Oracle 只作诊断。没有可运行公开实现、或其方法
+%     前提与冻结骨干不相容的方法一律不进任何表，逐条记录在附录 B.1。
+%  4. 选参改为在 replay bank 上做留一 parent 交叉验证，约束是条件有害率不
+%     超过最佳固定干预的条件有害率；(k, beta) 逐骨干选。
+%  5. 结论措辞与实测一致：只在成立的骨干上声称成立，不成立处如实写出。
+%
+%  维护方式：改这个文件，然后跑 python latex/fill_v46.py 生成
+%  latex/IntroActTS_20260919_v46_filled.tex 和 PDF。
+% ===========================================================================
+\documentclass{article}
+
+\usepackage{iclr2027_conference,times}
+\input{math_commands.tex}
+
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage[table]{xcolor}
+
+% ---------------------------------------------------------------- 版式与宏
+\definecolor{phgray}{gray}{0.45}
+\definecolor{bestgray}{gray}{0.94}
+
+% 未运行结果的占位符。KEY 一律用下划线分层命名（如 MAIN_OVERALL_MASE），
+% 下划线是数学下标字符，因此必须 \detokenize 成普通字符后才能进 \textsf。
+% 填充时只替换 KEY，不要改 \ph 本身。
+\newcommand{\ph}[1]{\textcolor{phgray}{\textsf{[\detokenize{#1}]}}}
+% Artwork supplied separately.  The box reserves the display size the figure
+% will occupy, so neither the layout nor the page budget moves when the drawing
+% arrives.  Arguments are the width, the height and the panel name.
+\newcommand{\figph}[3]{%
+  \fbox{\parbox[c][#2][c]{#1}{\centering
+    \textcolor{phgray}{\textsf{[\detokenize{#3}]}}}}}
+% 表格中强调：第一名加粗，第二名下划线，Oracle 用斜体灰字。
+\newcommand{\best}[1]{\textbf{#1}}
+\newcommand{\second}[1]{\underline{#1}}
+\newcommand{\oracle}[1]{\textit{\textcolor{phgray}{#1}}}
+\newcommand{\introact}{\textsc{IntroAct-TS}}
+\newcommand{\tsfm}{TSFM}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\loss}{\ell}
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+% 正文硬上限 9 页。标题与段间距在这里按层级各收紧一次，所以同级标题的
+% 调整完全一致，不是逐处手改。模板文件本身不动。
+\makeatletter
+\def\section{\@startsection{section}{1}{\z@}{-1.6ex plus -0.5ex minus -.2ex}%
+  {1.1ex plus 0.2ex minus 0.1ex}{\large\sc\raggedright}}
+\def\subsection{\@startsection{subsection}{2}{\z@}{-1.4ex plus -0.4ex minus -.2ex}%
+  {0.6ex plus .1ex}{\normalsize\sc\raggedright}}
+\def\subsubsection{\@startsection{subsubsection}{3}{\z@}{-1.2ex plus -0.4ex minus -.2ex}%
+  {0.4ex plus .1ex}{\normalsize\sc\raggedright}}
+\def\paragraph{\@startsection{paragraph}{4}{\z@}{1.1ex plus 0.3ex minus .2ex}%
+  {-1em}{\normalsize\bf}}
+\makeatother
+\setlength{\parskip}{3.8pt plus 1pt minus 0.5pt}
+
+% ICLR 正文硬上限 9 页，浮动体间距默认偏松，这里收紧以腾出正文空间。
+\setlength{\textfloatsep}{5pt plus 2pt minus 2pt}
+\setlength{\floatsep}{5pt plus 2pt minus 2pt}
+\setlength{\intextsep}{5pt plus 2pt minus 2pt}
+% Display skips, set once so every equation in the paper carries the same one.
+\setlength{\abovedisplayskip}{5pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{5pt plus 2pt minus 2pt}
+\setlength{\abovedisplayshortskip}{3pt plus 1pt minus 1pt}
+\setlength{\belowdisplayshortskip}{3pt plus 1pt minus 1pt}
+% 正文有 6 张表 + 5 张图，默认每页浮动体上限会让它们堆积到最后一页。
+% 放宽每页浮动体配额，让它们均匀分布在第 1-9 页内。
+\setcounter{topnumber}{4}
+\setcounter{bottomnumber}{3}
+\setcounter{totalnumber}{5}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.65}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\floatpagefraction}{0.72}
+
+\title{\introact{}: Selective Input Governance for \\
+Frozen Time-Series Foundation Models}
+
+\author{Anonymous Authors\\Paper under double-blind review}
+
+%\iclrfinalcopy
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+A time-series foundation model is deployed without task-specific parameter updates, so when the
+context it receives at forecast time is incomplete, the only thing a deployment can still
+change is the input. One line of work reconstructs the unavailable values and is scored on how closely they come
+back, which leaves open what the forecast then does with them. Another trains an architecture
+that tolerates missingness, and a frozen forecaster rules that out. The question we study is which of several admissible ways of handling an incomplete
+context should be applied to the current request, and whether any should be applied at all. We
+introduce \introact{}. It replays historical windows as pseudo-deployments, executes every
+admissible action with the frozen forecaster to measure what that action actually did to the
+forecast, and stores the result. A new request is scored against the stored evidence of the
+same action, and an action runs only when a conservative utility estimate is positive.
+Keeping the input unchanged is one of the actions, so the method returns the original forecast
+whenever the evidence does not support a change, and every forecast it returns comes from an
+input version that was actually executed. Across eight sources, four missingness
+patterns and two horizons, on two frozen backbones used for development and a third family
+held out from method design, \introact{} lowers source-macro MASE from 1.576 to 1.437, against 1.458 for the simple selector, improves on the untouched input on every backbone with paired intervals that exclude zero, and has the best average rank of the deployable rows on every backbone. On the held-out family one fixed repair reaches a lower average, which we report rather than average away. It executes an intervention on 65\% of the requests and the loss its harmful interventions add is 0.0375 against 0.0513 for the best fixed intervention.
+For a frozen forecaster the useful question about an incomplete input is which repair to run on this request, and a record of what past repairs did to this same forecaster answers it.
+\end{abstract}
+
+% ===========================================================================
+\section{Introduction}
+\label{sec:intro}
+
+Time-series foundation models (\tsfm{}s) now produce competitive zero-shot forecasts without
+task-specific retraining~\citep{ansari2024chronos,chronosbolt2025,das2024timesfm,woo2024moirai,
+chronos2_2025}, which makes them attractive as fixed components of deployed forecasting
+systems. The context available at the forecast origin is often
+incomplete~\citep{chen2024bitgraph,peng2025s4m}. A sensor stops reporting for a stretch of
+time, a channel delivers a variable several steps late, or only part of an acquisition batch
+has arrived. We study deployment protocols in which an observation that has arrived and is
+valid must not be overwritten, because replacing a real measurement changes the record itself
+and the consequences of that reach past forecasting accuracy. The system may therefore act
+only on positions where the data is missing.
+
+The usual response is imputation, and it is scored on how accurately the missing entries come
+back~\citep{cao2018brits,tashiro2021csdi,du2023saits}. A second line handles missingness inside
+the forecasting model instead~\citep{chen2024bitgraph,peng2025s4m}, which trains a predictor and
+is therefore closed to a deployment that must keep its forecaster fixed. Imputation stays open, and it
+optimises the recovery of the hidden values. Whether that recovery helps the forecast is a
+separate question. A third line moves the objective from recovery to downstream utility, estimating
+how imputed values affect the forecaster and combining strategies by the estimated
+gain~\citep{wang2024taskoriented,hao2025toivsf,xu2026srdi}. TATO adapts a frozen \tsfm{} to a
+domain through transformation pipelines selected from historical task
+performance~\citep{qiu2026tato}. All of these decide at training time, over a corpus, which
+strategy or transformation to use. The decision studied here is made at deployment time, for
+one request.
+
+That decision is what a deployed system still controls. The forecaster is frozen, the
+future target is unavailable, and the system must choose, for one specific incomplete request,
+which admissible input intervention to execute or whether to keep the input unchanged. Three
+properties shape the choice. The realised utility of an intervention depends on the future
+target and is not observable online, which motivates replaying historical windows as
+pseudo-deployments and recording what each admissible action actually did. The best action
+changes with the request and with the backbone (\S\ref{sec:exp-exists}), so the evidence a
+decision rests on has to be local. Local evidence is finite and can
+conflict, and an action that looks favourable on average can still increase the loss of the
+request at hand, so an action runs only when the lower end of the local evidence is still
+positive, and the input is left alone otherwise.
+
+\paragraph{Contributions.}
+\textbf{(1)~Selective input governance.} We formalise incomplete-input handling for a frozen
+\tsfm{} as a per-request decision over a fixed catalog of admissible interventions, in which
+the untouched input is one of the options, and we measure how strongly the best action varies
+across requests and backbones (\S\ref{sec:exp-exists}). \textbf{(2)~Historical full-action
+replay.} We inject the registered missingness protocol into TRAIN history and execute every
+catalog action with the frozen forecaster, so the stored supervision is a realised forecasting
+utility rather than a reconstruction score. A request is served by estimating that utility
+locally and executing an action only when a conservative score is positive
+(\S\ref{sec:method}). \textbf{(3)~Evidence on accuracy, harm
+and cost.} The comparison covers eight sources, three frozen \tsfm{} families, four missingness
+patterns and three severity levels. Its controls are a no-op, the best fixed intervention, a
+simple learned selector, a trained imputer applied to every incomplete request, and a published
+data-side adaptation baseline. \introact{} improves on the untouched input on every backbone with paired intervals that exclude zero, reaches the lowest source-macro MASE of the deployable rows on Bolt and Chronos-2, and has the best average rank of those rows on every backbone, at one to two backbone calls per request. We also report where it does not win
+(\S\ref{sec:exp-main}, \S\ref{sec:exp-harm}, \S\ref{sec:exp-robust}).
+
+\begin{figure}[t]
+  \centering
+  \figph{0.64\textwidth}{2.9cm}{FIGURE_1_SELECTIVE_GOVERNANCE}
+  \caption{\textbf{(a)}~Share of held-out episodes on which each catalog action is oracle-best.
+  No action holds the role often enough for one fixed choice to serve every request.
+  \textbf{(b)}~Historical full-action replay on TRAIN. \textbf{(c)}~The online decision, which
+  executes an action only when its conservative score is positive.}
+  \label{fig:concept}
+\end{figure}
+
+% ===========================================================================
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Incomplete Time-Series Modeling}
+\label{sec:related-incomplete}
+Three routes handle an incomplete input and they differ in what they optimise. The first
+reconstructs the hidden values and is scored on how close the reconstruction
+is~\citep{cao2018brits,tashiro2021csdi,yoon2018gain,du2023saits,park2026t1}. The second builds
+a forecaster that reads the missing pattern directly~\citep{chen2024bitgraph,peng2025s4m,
+jang2026channeltokenformer}, and those are complete models whose parameters are part of the
+contribution. The third replaces the recovery objective with a downstream
+one~\citep{wang2024taskoriented,hao2025toivsf,hao2025gimcc,liang2025vida,xu2026srdi}, mostly in
+\emph{variable subset forecasting}, where whole variables are absent at inference and not
+positions inside the context.
+
+\introact{} keeps the predictor fixed and works at the deployment stage, where the request has
+arrived, the backbone is frozen, the future target is unavailable, and the system selects one
+input version from a finite catalog or keeps the reference input. The first route supplies
+members of that catalog: a trained imputer enters this paper both as one of the available
+repairs and as the policy that applies it to every incomplete request.
+
+\subsection{Data-Side Adaptation for Frozen \tsfm{}s}
+\label{sec:related-dataside}
+TATO~\citep{qiu2026tato} shows that a frozen \tsfm{} can be adapted to heterogeneous domains
+without parameter updates, by searching a transformation pipeline and selecting it from
+historical task performance. Its unit of adaptation is a target domain.
+TS-ICL~\citep{tsicl2026} is a foundation model that natively supports imputation and partially
+observed look-back windows, and it appears here only as the in-context regression backend of
+two catalog actions.
+
+The unit of decision is what separates them from \introact{}. TATO selects one transformation
+per domain and applies it to every request from that domain. \introact{} selects per request,
+and it selects from a closed catalog.
+
+\subsection{Selective Decision Making}
+\label{sec:related-selective}
+Selective prediction abstains on part of the input to trade coverage for lower
+risk~\citep{chow1970optimum,vovk2005algorithmic,geifman2017selective,lei2018distribution} and
+learning to defer routes it to another decision maker~\citep{madras2018predict,
+mozannar2020consistent}, and both change who produces the answer. Here the same frozen
+forecaster answers every request and what is selected is whether the input is modified first.
+Choosing one of a fixed set of procedures from features of the instance is the shape of
+per-instance algorithm selection~\citep{rice1976algorithm,xu2008satzilla}, and what differs is
+the label: the forecasting utility a repair produced on this frozen model. Replay executes
+every action on the same window against the same realised future, so no propensity correction
+arises and the setting is not off-policy
+evaluation~\citep{dudik2011doubly,swaminathan2015counterfactual}.
+Appendix~\ref{app:ope-positioning} sets the three side by side.
+
+% ===========================================================================
+\section{Problem Formulation and Method}
+\label{sec:method}
+
+\begin{figure}[t]
+  \centering
+  \figph{0.48\textwidth}{4.0cm}{FIGURE_2_ARCHITECTURE}
+  \caption{Architecture of \introact{}. \textbf{Offline}: TRAIN windows become incomplete
+  contexts under the registered protocol, every catalog action is executed with the frozen
+  forecaster, and the realised utilities populate the replay bank. This is the only place a
+  future is read. \textbf{Online}: the reference forecast is computed, a state is formed per
+  action and scored against the frozen bank, and one action is executed.}
+  \label{fig:arch}
+\end{figure}
+
+\subsection{Problem Setup}
+\label{sec:method-problem}
+Let $X \in \mathbb{R}^{C \times L}$ be the multivariate context at the forecast origin, with
+observation mask $M \in \{0,1\}^{C \times L}$, and let $Y \in \mathbb{R}^{C \times H}$ be the
+future target, which is never available to the decision procedure. Let $F$ denote the complete
+frozen deployment inference pipeline, which takes an input version and returns a forecast
+$p = F(X)$ and includes whatever preprocessing the backbone applies internally, so a call to
+$F$ is exactly the call the deployed system makes. The reference action hands the incomplete
+context to that pipeline unchanged, so what \textsc{Keep} means in practice is whatever
+missing-value handling the backbone already performs, which differs between backbone families.
+We measure it, and \S\ref{sec:exp-exists} reports how far the backbones diverge on this point.
+
+Let $\calA = \{a_0, a_1, \dots, a_J\}$ be a fixed catalog of admissible interventions, with
+$J$ interventions in addition to the reference. Each action $a$ materialises an admissible
+input version $X^{a} = T_a(X, M)$. The reference action $a_0$ returns the input unchanged and
+corresponds to no external intervention, and $\calA^{+} = \calA \setminus \{a_0\}$ collects
+the actions that modify the input. Let $\loss$ be the episode-level MASE of a forecast, which is also the primary evaluation
+metric, so replay utilities and reported errors carry one scale. Utility is measured against the reference, so for a realised target
+$Y$,
+\begin{equation}
+  g_a \;=\; \loss\!\left(F(X^{a_0}),\, Y\right) \;-\; \loss\!\left(F(X^{a}),\, Y\right),
+  \label{eq:utility}
+\end{equation}
+and the task is to choose $a^\star(X, M) \in \calA$ without access to $Y$, while keeping the
+number of frozen-backbone calls small.
+
+Four constraints define the deployment protocol. No observation that has arrived and is valid
+may be overwritten, so every $X^{a}$ differs from $X^{a_0}$ only at positions where $M = 0$.
+A repair may write only values inside the range of the visible target widened by three robust
+scales, and a candidate that leaves that range is recorded as unsupported instead of executed.
+The bound is registered with the protocol and holds identically for the bank and for a served
+request. The future target is unavailable, so no realised loss is
+observable at deployment time. The reference forecast is the only forecast that may be computed
+before the decision. That is a call budget and not a claim about what is knowable: a
+request may spend one forecasting-backbone call to obtain $p_0 = F(X^{a_0})$, and the forecasts
+of the remaining candidates must not be inspected when the action is chosen.
+
+\subsection{Historical Full-Action Replay}
+\label{sec:method-replay}
+The quantity that decides the action, $g_a$, depends on $Y$ and is not observable online, but it
+is computable for a historical window whose target is already part of the available history.
+Take such a window $i$, inject the registered missingness protocol to obtain $(X_i, M_i)$,
+materialise every action, and execute the frozen pipeline on each version. The realised utility
+of action $a$ on window $i$ is
+\begin{equation}
+  g_{i,a} \;=\; \loss\!\left(F(T_{a_0}(X_i, M_i)),\, y_i\right)
+  \;-\; \loss\!\left(F(T_{a}(X_i, M_i)),\, y_i\right).
+  \label{eq:replay-gain}
+\end{equation}
+Both terms are evaluated against the same realised future, so this is a measurement rather
+than a model of what the action would have done.
+
+The state recorded with each outcome is action conditioned:
+$z_{i,a} = \phi(X_i, M_i, X_i^{a}, p_i^{0})$ with $p_i^{0} = F(X_i^{a_0})$ and
+$X_i^{a} = T_a(X_i, M_i)$.\label{eq:state} It may use the reference forecast $p_i^0$, which the
+protocol already permits, and it never uses the forecast of a non-selected candidate. The
+replay bank is $\calB = \{(z_{i,a}, a, g_{i,a})\}$, built once from TRAIN history and then
+frozen. Deployment reads it and never writes to it.
+
+Two properties of the bank set the scope of the method. A utility measured with one revision
+of one model does not describe another, so the bank is built and held per frozen backbone
+revision, and serving a new backbone family means rebuilding it. The bank also covers only the
+missingness protocol registered in advance, which makes it a discrete grid over patterns and
+severities rather than a model of missingness. Retrieval itself is not restricted to a source
+or a horizon. The state carries the mask geometry, the visible context and the reference
+forecast, which is what the neighbourhood is meant to match on, and
+Appendix~\ref{app:replay} reports what each restriction costs.
+
+The step from the bank to a decision rests on one empirical assumption, stated explicitly.
+Requests whose action-conditioned states are close in the state space have similar action
+utilities, so the utility of an action on a new request can be estimated from the same-action
+neighbourhood of its state. Appendix~\ref{app:transfer} measures it: the furthest
+neighbourhoods do carry the largest estimation error, and distance orders that error only
+weakly in between, so what the local estimate supplies is a ranking that moves with the
+request rather than a more accurate one. The assumption is not asserted outside the registered
+grid, and the paper makes no claim about behaviour beyond the patterns and severities that
+were replayed.
+
+\subsection{Action-Conditioned Local Utility Estimation}
+\label{sec:method-scoring}
+The estimator is a weighted average of the recorded utilities of the same action on nearby
+states, in a fixed standardised feature space. The state $z_a$ of \eqref{eq:state} carries
+twenty-two numbers in four groups: how the request is incomplete, what the observed part of the
+target channel looks like, how $X^{a}$ differs from $X^{a_0}$, and what the reference forecast
+$p_0 = F(X^{a_0})$ looks like. Appendix~\ref{app:features} is the canonical list, with the
+window lengths and the normalisation, which is fitted on the replay bank only.
+
+Retrieval is performed separately for each action. For action $a$, the neighbourhood
+$\calN_a$ contains the $k$ bank records whose recorded action is $a$ and whose states are
+closest to $z_a$ in standardised Euclidean distance. Each neighbour receives the weight
+\begin{equation}
+  w_i \;=\; \exp\!\left(-d_i / \tau\right),
+  \qquad
+  \tau \;=\; \operatorname{median}_{i \in \calN_a} d_i \;+\; \epsilon ,
+  \label{eq:weights}
+\end{equation}
+so the bandwidth is set by the query neighbourhood itself and is not tuned. Taking the median
+keeps the effective number of contributing neighbours stable as the local density of the bank
+changes, and $\epsilon$ guards the case where every retrieved distance is zero. The local mean
+utility, the local dispersion, and the effective sample size are
+\begin{equation}
+  \hat\mu_a \;=\; \frac{\sum_{i \in \calN_a} w_i\, g_{i,a}}{\sum_{i \in \calN_a} w_i},
+  \qquad
+  \hat\sigma_a^{2} \;=\; \frac{\sum_{i \in \calN_a} w_i\, (g_{i,a} - \hat\mu_a)^{2}}{\sum_{i \in \calN_a} w_i},
+  \qquad
+  n_{\mathrm{eff},a} \;=\; \frac{\left(\sum_{i \in \calN_a} w_i\right)^{2}}{\sum_{i \in \calN_a} w_i^{2}} .
+  \label{eq:local-moments}
+\end{equation}
+The neighbourhood size $k$ and the penalty strength $\beta$ of \S\ref{sec:method-decision} are
+the only searched quantities, and \S\ref{sec:method-decision} states how they are chosen. The
+neighbourhood is defined by distance alone, and no threshold marks a request as outside the
+replay support, so the estimator returns a value for every request it receives.
+Section~\ref{sec:exp-robust} and Appendix~\ref{app:scope} treat the resulting scope as a
+within-grid statement.
+
+\subsection{Conservative Act-or-Keep Decision}
+\label{sec:method-decision}
+A positive local mean is not sufficient evidence for executing an action, because the
+neighbourhood may be small or internally inconsistent. The decision therefore uses the
+conservative score
+\begin{equation}
+  S_a \;=\; \hat\mu_a \;-\; \beta\, \frac{\hat\sigma_a}{\sqrt{n_{\mathrm{eff},a}}},
+  \qquad a \in \calA^{+},
+  \label{eq:score}
+\end{equation}
+where $\beta$ is a penalty strength. The action taken is
+$a^{\star} = \arg\max_{a \in \calA^{+}} S_a$ when $\max_{a \in \calA^{+}} S_a > 0$, and
+$a^{\star} = a_0$ otherwise.
+$S_a$ is a heuristic score rather than a calibrated lower bound on $g_a$, it carries no
+coverage or risk guarantee~\citep{angelopoulos2024conformal}, and $\beta$ is selected from a
+grid and is not derived from a sampling distribution. The threshold of zero is not tuned
+either.
+Utility is defined relative to the reference action in \eqref{eq:utility}, so a score at zero
+means that the evidence does not distinguish the action from leaving the input unchanged.
+
+The two hyperparameters are selected once per backbone on the replay bank by
+leave-one-parent-out cross-validation, so every bank episode is scored against a bank with all
+records of its own parent removed. The grid is
+$k \in \{8, 16, 32, 64, 128, 256\}$ and $\beta \in \{0, 0.5, 1, 1.64\}$, whose largest penalty
+is the one-sided $95\%$ normal quantile. A setting is admissible when its cross-validated
+conditional harmful rate stays at or below a cap. The cap comes from the bank itself: it is
+the
+conditional harmful rate of the action with the highest mean realised utility there, so the
+constraint says that choosing per request may not be more harmful, given that it intervenes,
+than always applying the strongest single intervention. Among the admissible settings the rule
+takes the lowest cross-validated source-macro MASE, and a tie on that value goes to the setting
+that intervenes least. If no setting satisfies the cap the configuration falls back to the
+largest penalty strength. The anchor, the cap, the admissible settings and the selected pair
+are recorded before any evaluation record is scored.
+
+The reference action is always available, so the rule always returns a forecast. It has no way
+to detect that a request lies outside the replay support, so it applies to the registered
+missingness grid and the results should not be read as out-of-grid generalisation.
+
+\subsection{Deployment Procedure and Cost}
+\label{sec:method-deploy}
+A request is served in two stages. The first executes the reference action to obtain $p_0$,
+materialises the candidate input versions and forms the states $z_a$. The second retrieves the
+same-action neighbourhoods from the frozen bank, evaluates $S_a$ for every $a \in \calA^{+}$,
+executes $a^{\star}$ and returns its forecast, which is the reference forecast when
+$a^{\star} = a_0$.
+
+A request costs one forecasting-backbone call for the reference action plus one more if an
+intervention is executed, and the returned forecast is always one call of the unchanged $F$ on
+one executed input version. Three of the five interventions build their candidate with a model
+of their own, two by calling a frozen in-context imputation model and one by calling the
+trained imputer, and all of that is paid before the decision.
+Appendix~\ref{app:calls} keeps the one-off bank construction, candidate materialisation, the
+backbone call and retrieval overhead in separate columns.
+
+% ===========================================================================
+\section{Experiments}
+\label{sec:exp}
+
+\subsection{Experimental Setup}
+\label{sec:exp-setup}
+The main matrix covers eight public forecasting sources (ETTh1, ETTh2, ETTm1, ETTm2,
+Electricity, Exchange, Traffic, and Weather) and three frozen \tsfm{} families:
+Chronos-Bolt~\citep{chronosbolt2025}, TimesFM-2.5~\citep{das2024timesfm}, and
+Chronos-2~\citep{chronos2_2025}. The first two are used for method development. Chronos-2
+enters only after the configuration is frozen, with the identical algorithm and the same
+selection rule applied to a replay bank rebuilt with Chronos-2 itself, so what transfers is the
+procedure and not the bank.
+Context length is $L = 512$ and the main horizons are $H \in \{96, 192\}$. Four deterministic
+missingness patterns are frozen before any method runs, and every mask is derived by a
+deterministic hash of source, parent, origin, horizon, pattern, and protocol seed. The main
+comparison uses $10\%$ severity, and \S\ref{sec:exp-robust} adds $30\%$ and $50\%$ inside the
+same registered grid. Appendix~\ref{app:data-protocol} defines the patterns, the derivation
+rule, and the metric denominators.
+
+The catalog is fixed at six admissible actions with \textsc{Keep} as the reference $a_0$, and
+Appendix~\ref{app:catalog} defines each one.
+
+The comparison is fixed in advance and Table~\ref{tab:app-roster} defines every row. Three
+controls establish what a per-request decision has to beat: never intervening, applying the
+single strongest catalog action to every request, and a simple learned selector over the same
+state features. Two further rows always repair, one with the trained
+imputer~\citep{du2023saits,du2023pypots} that is also a catalog action and one with the
+data-side adaptation baseline~\citep{qiu2026tato}. A catalog oracle that reads the future
+target is reported as a diagnostic and is excluded from every rank.
+The severity sweep of \S\ref{sec:exp-robust} keeps the same frozen configuration and the same
+roster. Appendix~\ref{app:datasets} documents the roster and the per-source tables, and
+Appendix~\ref{app:baseline-availability} records which published methods have a public
+implementation that admits our protocol and which do not.
+
+Each source is split chronologically at three quarters of its rows with an $L + H$ purge, and
+TRAIN is split again by origin time into the replay bank and a TRAIN-eval block used once as an
+acceptance check. All design, hyperparameter selection, feature normalisation and baseline
+fitting use TRAIN only, and every reported table is computed once on TEST after the
+configuration is frozen. MASE~\citep{hyndman2006mase} is the primary metric and RMSSE the
+secondary one, source-macro aggregated with the parent as the statistical unit and paired
+cluster bootstrap intervals. Appendices \ref{app:splits}, \ref{app:metric-conventions} and
+\ref{app:diagnostic-conventions} hold the boundaries, the conventions and the counting rules.
+
+\subsection{Does Selective Intervention Need to Exist?}
+\label{sec:exp-exists}
+The statistics below are diagnostics computed on TEST after the configuration is frozen and
+are used for no selection. What \textsc{Keep} means differs between the backbone families, and so does what it costs: the untouched input reaches Bolt 1.466, TimesFM 1.682, Chronos-2 1.579, and the single action with the highest mean utility on the bank is the same one on every backbone. The first premise is that the best action
+varies across requests.
+For each episode the oracle-best action is the minimiser of the realised loss over the catalog,
+and Figure~\ref{fig:concept}(a) shows how often each action takes that role. No action is oracle-best on more than 25\% of the episodes and none on fewer than 10\%, with the untouched input best on 21\% of them. The catalog oracle reaches 1.258 against 1.576 for the untouched input, so the catalog carries 0.317 MASE of achievable improvement. One fixed intervention applied everywhere recovers 28\% of that improvement, and the rest is what a per-request decision has to find.
+
+Every intervention helps on some requests and hurts on others. The weakest, forward fill, improves the forecast on 48\% of the episodes where it applies and the strongest, context ridge, on 58\%, so no single repair serves every request and none can be dropped from the catalog.
+
+The second premise is that reconstruction quality does not tell a deployment which repair to
+run. All five catalog interventions estimate the hidden positions explicitly and the mask is
+synthetic, so both rankings exist for the same episode, and ranking inside an episode keeps
+sources of different scale apart. The repair with the lowest reconstruction error is also the one with the highest realised utility on 19\% of the episodes, against 20\% for picking at random among the same repairs, 44\% of the ordered pairs disagree, and the mean within-episode rank correlation between the two criteria is 0.12. On average multivariate in-context regression recovers the hidden values most accurately while context ridge helps the forecast most, so the two criteria do not even agree on the corpus. Table~\ref{tab:heterogeneity} carries
+the summary, and Appendix~\ref{app:recutils} reports both criteria per action with
+Table~\ref{tab:rankgrid} giving the two rankings against each other. \introact{} is not in this ranking, because
+it returns a forecast from an executed input rather than a reconstruction.
+
+\begin{table}[t]
+  \caption{Why the choice has to be made per request, over the held-out episodes of all three
+  backbones. Oracle-best share is how often an action attains the lowest realised loss of the
+  catalog and the shares sum to one. The last two columns cover the episodes where the action
+  applies and are measured against \textsc{Keep}.}
+  \label{tab:heterogeneity}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
+    \toprule
+    Action & Oracle-best share & Episodes where it applies & Improves the forecast & Mean realised utility \\
+    \midrule
+    \textsc{Keep} $a_0$ & 19.3\% & 760 & --- & 0.000 \\
+    \textsc{Ffill} & 17.1\% & 760 & 42.1\% & -0.094 \\
+    \textsc{Single TS-ICL} & 15.4\% & 760 & 53.3\% & +0.055 \\
+    \textsc{Multi TS-ICL} & 12.3\% & 758 & 54.1\% & +0.076 \\
+    \textsc{Context Ridge} & 11.1\% & 566 & 58.3\% & +0.112 \\
+    \textsc{SAITS} & 24.8\% & 747 & 57.1\% & +0.101 \\
+    \bottomrule
+  \end{tabular}}
+  \vspace{-2pt}
+  {\footnotesize Reconstruction accuracy does not order the repairs the way realised utility
+  does. The most accurate reconstruction is the most useful repair on 19.3\% of the
+  episodes, 44.5\% of the ordered pairs disagree, and the mean within-episode
+  rank correlation is 0.12. Appendix~\ref{app:recutils} reports both criteria per
+  action.}
+\end{table}
+
+Appendix~\ref{app:opportunity} breaks the same episodes down by how much improvement was
+available.
+
+\subsection{Main Comparison}
+\label{sec:exp-main}
+\emph{Does deciding per request beat doing nothing, applying one repair everywhere, and
+learning a simple selector, across sources and frozen \tsfm{} backbones?}
+
+Table~\ref{tab:main} reports the main comparison at $10\%$ severity over all eight sources,
+three backbones, two horizons, and four patterns. \introact{} reaches 1.437 source-macro MASE against 1.576 for the untouched input, 1.488 for the best fixed intervention and 1.458 for the simple selector, and against the published baselines at the fixed imputer 1.459, TATO 1.616. It improves on the untouched input on every backbone.
+Against the untouched input the paired difference is Bolt -0.0881 [-0.1530, -0.0256], TimesFM -0.1283 [-0.2018, -0.0543], Chronos-2 -0.2014 [-0.2876, -0.1180], and every interval excludes zero. Against the best fixed intervention no interval excludes zero. It is the lowest deployable row on Bolt and Chronos-2, and on TimesFM one fixed repair reaches a lower macro average, which \S\ref{sec:exp-robust} returns to. The deployable rows span 1.437 to 1.616 and the catalog oracle sits at 1.258, so what the catalog can recover is bounded and every row sits inside that bound. Both published baselines repair or transform every incomplete request, and TATO ends at 1.616, above the 1.576 of leaving the input alone. TATO is below it on only 6 of 24 such cells, so that one loses broadly. Against the simple selector no interval excludes zero, so accuracy alone does not separate the two and what does is in Table~\ref{tab:harm}.
+Average rank over the evaluation cells is Bolt 2.82, TimesFM 2.80, Chronos-2 2.75, the best of the six deployable rows on every backbone, so the aggregate is not driven by a handful of cells. Holm correction over the five baseline comparisons leaves the difference against the untouched input below $0.05$ on every backbone.
+Per-source MASE, MAE, and RMSE are in Appendix~\ref{app:datasets}, and
+deployment cost is reported separately in Appendix~\ref{app:calls}.
+
+\begin{table}[t]
+  \caption{Main comparison on TEST at $10\%$ missingness, source-macro averaged, lower is
+  better everywhere. \best{Bold} is the best value of a column and \second{underline} the
+  second. Average rank is over the deployable rows of this table, cell by cell. The oracle
+  reads the future target and is excluded from every rank. Chronos-2 is held out and is not
+  retuned. Table~\ref{tab:app-roster} defines the rows.}
+  \label{tab:main}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3.5pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{llccccc c}
+    \toprule
+    Method & Type & Bolt MASE $\downarrow$ & TimesFM MASE $\downarrow$
+           & Chronos-2 MASE $\downarrow$ & Overall MASE $\downarrow$
+           & Overall RMSSE $\downarrow$ & Avg.\ rank $\downarrow$ \\
+    \midrule
+    Native KEEP        & Frozen \tsfm{}          & 1.466   & 1.682   & 1.579   & 1.576   & 1.325   & 3.36 \\
+    Best Fixed         & Fixed policy            & 1.428     & 1.579     & 1.456     & 1.488     & 1.262     & \second{2.94} \\
+    R2-CART            & Simple selector         & \second{1.402}     & 1.588     & \second{1.385}     & \second{1.458}     & 1.246     & 2.97 \\
+    Fixed SAITS        & Trained imputer         & 1.469  & \best{1.465}  & 1.441  & 1.459  & \second{1.245}  & 2.98 \\
+    TATO               & Data-side adaptation    & 1.620   & 1.614   & 1.614   & 1.616   & 1.333   & 4.10 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & Frozen governance & \best{1.378} & \second{1.554} & \best{1.378} & \best{1.437} & \best{1.233} & \best{2.79} \\
+    \midrule
+    Catalog Oracle     & Diagnostic              & \oracle{1.234} & \oracle{1.315} & \oracle{1.226} & \oracle{1.258} & \oracle{1.099} & \oracle{--} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\subsection{Does Selective Replay Reduce Harm?}
+\label{sec:exp-harm}
+\emph{Is the gain produced by choosing better interventions, or by intervening less often?}
+
+Table~\ref{tab:harm} reports the selective-governance diagnostics at the default operating
+point, where an intervention counts as harmful when it raises the realised loss relative to
+leaving the input unchanged. The conditional harmful rate covers only the requests on which an
+intervention ran, so it has to be read together with the intervention rate: a method that
+almost never intervenes can report a low rate without contributing anything. \introact{} executes an intervention on 65\% of the requests, so its gain is not the gain from standing still, while the two rows that always repair act on every request their repair is available on. Conditional on intervening it is harmful on 40.2\% of those requests against 41.7\% for the fixed intervention and 43.1\% for the simple selector. Harmful loss, which weights each harmful intervention by the loss it added, is 0.0375, against the best fixed intervention 0.0513, the simple selector 0.0584, the fixed imputer 0.0699, TATO 0.2488. The selective rule executes fewer actions, a smaller share of them raise the loss, and the ones that do cost less.
+Beneficial precision is 59.8\%. Missed opportunity is 34.3\%, which is what the reference option costs.
+
+Table~\ref{tab:app-operating} traces the same trade-off over the penalty grid, by
+post-processing the stored scores on TEST and selecting no threshold there.
+Raising the penalty strength walks the operating point down the curve, trading accuracy for a lower intervention rate while the conditional harmful rate moves little, so the rate at which an executed intervention hurts is a property of the catalog rather than of how cautious the rule is.
+
+\begin{table}[t]
+  \caption{Selective-governance diagnostics at the default operating point, $10\%$ severity.
+  Intervention rate is the share of requests on which a non-reference action ran. The next three
+  columns cover those requests and are measured against \textsc{Keep}. Missed opportunity is the
+  share of positive-opportunity episodes on which nothing ran.
+  Appendix~\ref{app:diagnostic-conventions} fixes the counting rules.}
+  \label{tab:harm}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3.5pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccc}
+    \toprule
+    Method & MASE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Beneficial precision $\uparrow$ & Missed opportunity $\downarrow$ \\
+    \midrule
+    Native KEEP        & 1.576   & 0.0\%   & 0.0\%   & 0.0000   & ---   & 100.0\% \\
+    Best Fixed         & 1.488     & 74.5\%     & 41.7\%     & 0.0513     & 58.3\%     & 25.0\% \\
+    R2-CART            & 1.458     & 99.4\%     & 43.1\%     & 0.0584     & 56.9\%     & 0.6\% \\
+    Fixed SAITS        & 1.459     & 98.3\%     & 42.9\%     & 0.0699     & 57.1\%     & 1.7\% \\
+    TATO               & 1.616   & 100.0\%   & 59.6\%   & 0.2488   & 40.4\%   & 0.0\% \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 1.437 & 65.4\% & 40.2\% & 0.0375 & 59.8\% & 34.3\% \\
+    \bottomrule
+  \end{tabular}}
+  \vspace{-2pt}
+  {\footnotesize A method that always returns a repaired input intervenes on every incomplete
+  request by construction, so its intervention rate is one and its conditional harmful rate is
+  unconditional. \textsc{Context Ridge} is not admissible on the shared-block pattern, so a
+  fixed policy that selects it intervenes on fewer than all requests.}
+\end{table}
+
+\subsection{Robustness and Transfer}
+\label{sec:exp-robust}
+\emph{Does one frozen configuration remain useful as missingness becomes more severe, and does
+it carry over to a backbone family that was not used during development?}
+
+Severities are $10\%$, $30\%$, and $50\%$, crossed with the four patterns and the three
+backbones, with the roster of Table~\ref{tab:main} and no retuning between levels. The levels
+lie inside the registered grid the replay bank samples from, so this is a within-grid check.
+Table~\ref{tab:robust} reports the severity trend and the worst pattern cell, and the
+held-out backbone is the Chronos-2 column of Table~\ref{tab:main}.
+Against the untouched input the frozen configuration holds at every level: 10\% 1.437 against 1.576, 30\% 1.698 against 1.794, 50\% 1.735 against 1.875. The ordering between the deployable rows does change with severity: at 30\% the simple selector reaches 1.678, at 50\% the simple selector reaches 1.721. The configuration is frozen on a bank that mixes the three levels, so the sweep shows how far one operating point carries rather than what a per-level tuning could reach. On the held-out family the frozen procedure improves on the untouched input, 1.378 against 1.579 with a paired interval that excludes zero, it has the best average rank of the deployable rows at 2.75, and it reaches the lowest macro average of the deployable rows.
+\begin{table}[t]
+  \caption{Within-grid robustness to missingness severity, with nothing retuned between levels.
+  Values are source-macro MASE over the three backbones, both horizons and the four patterns.
+  The worst-cell column is the largest degradation against \textsc{Native Keep} over every
+  pattern, backbone and severity of the sweep, so it is one number for the whole table.}
+  \label{tab:robust}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
+    \toprule
+    Method & 10\% MASE $\downarrow$ & 30\% MASE $\downarrow$ & 50\% MASE $\downarrow$ & Worst cell $\downarrow$ \\
+    \midrule
+    Native KEEP        & 1.576    & 1.794    & 1.875    & +0.000 \\
+    Best Fixed         & 1.488      & 1.702      & 1.738      & +0.448 \\
+    R2-CART            & 1.458      & 1.678      & 1.721      & +0.393 \\
+    Fixed SAITS        & 1.459      & 1.738      & 1.763      & +0.710 \\
+    TATO               & 1.616    & 1.941    & 2.036    & +0.725 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 1.437 & 1.698 & 1.735 & +0.425 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+Appendix~\ref{app:severity-full} holds the complete per-severity tables and
+Appendix~\ref{app:pattern} holds the per-pattern tables.
+\subsection{Ablation and Cost}
+\label{sec:exp-ablation}
+\emph{Which component carries the gain, and what does a request cost?}
+
+Every ablation reuses the same catalog prediction cache, so the rows are recomputed selector
+variants and not new forecasting runs, and every difference below is the MASE of the full
+method minus that of the variant. A1 scores each action by its global mean utility instead of
+by its neighbourhood, A2 and A3 drop the intervention and the reference-forecast block of the
+state, A4 removes the reference option, and A5 replaces the local estimate with a per-action
+linear predictor over the same features (Appendix~\ref{app:ablation-details}).
+Table~\ref{tab:ablation} reports accuracy, harm, and cost together. Two parts of the design carry the result, and the state blocks matter less than either. Intervals are paired differences on the primary backbone and table columns average over the three. Scoring an action by its global mean utility instead of its neighbourhood costs -0.0710 [-0.1441, +0.0012] and drives the intervention rate to 100\%, which is what a corpus-level answer to a per-request question looks like. Dropping the intervention block of the state changes accuracy by +0.0160 [+0.0027, +0.0294], so on that backbone the block costs more than it returns. Dropping the reference-forecast block changes it by +0.0080 [-0.0005, +0.0171], and over the three backbones the two land at 1.418 and 1.446 against 1.437, so only the second block shows up in the average.
+Removing the reference option and executing the best-scoring action on every request changes accuracy by +0.0052 [-0.0065, +0.0173] while raising harmful loss from 0.0375 to 0.0533, so keeping the input is what lets the method intervene on 35\% fewer requests without paying for it in accuracy. Replacing retrieval by a per-action linear utility predictor over the same features costs -0.0185 [-0.0448, +0.0069], the largest gap in the table, though the interval covers zero. A request costs 1.65 forecasting-backbone calls on average.
+
+\begin{table}[t]
+  \caption{Core ablation and cost at $10\%$ severity. Every row reads the same catalog
+  prediction cache, so the rows differ only in how the stored utilities are summarised and
+  thresholded. Calls counts forecasting-backbone calls per request. Candidate materialisation
+  is reported separately in Appendix~\ref{app:calls}.}
+  \label{tab:ablation}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3.5pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
+    \toprule
+    Variant & MASE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Calls $\downarrow$ \\
+    \midrule
+    Full \introact{}          & 1.437   & 65.4\%   & 40.2\%   & 0.0375   & 1.65 \\
+    A1 Global utility          & 1.475     & 100.0\%     & 43.9\%     & 0.0697     & 2.00 \\
+    A2 w/o intervention state  & 1.418     & 63.4\%     & 39.5\%     & 0.0330     & 1.63 \\
+    A3 w/o reference-forecast state & 1.446 & 67.4\%     & 40.4\%     & 0.0419     & 1.67 \\
+    A4 Always act              & 1.447     & 100.0\%     & 42.1\%     & 0.0533     & 2.00 \\
+    A5 Parametric utility predictor & 1.434 & 86.7\%    & 43.7\%     & 0.0549     & 1.87 \\
+    \midrule
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+% ===========================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+We studied incomplete-input handling for frozen \tsfm{}s as a per-request decision over a fixed
+catalog of admissible interventions. The realised utility of an intervention is not observable
+at forecast time and reconstruction quality is close to uninformative about it, so \introact{}
+replays TRAIN windows as pseudo-deployments, executes every catalog action with the frozen
+forecaster, and stores what each action did.
+
+The evaluation supports three claims. Deciding per request lowers source-macro MASE from 1.576 to 1.437, and the average rank over the deployable rows is 2.79 against 2.94 for the best fixed intervention. The reference action is returned on 35\% of requests, which lowers both the call count and the harmful loss and is not separated on accuracy from acting every time. The same procedure, with both hyperparameters chosen by the same rule on that backbone's own replay bank, improves on the untouched input and reaches the lowest macro average and the best average rank of the deployable rows there, on a family that took no part in method design.
+The boundary is equally clear. All missingness here is controlled deletion under a registered
+protocol and the method cannot tell that a request lies outside that grid, so naturally
+incomplete streams remain open (Appendix~\ref{app:scope}). A better imputer helps on some requests and hurts on others, and a frozen forecaster needs a record that tells the two apart.
+
+\subsubsection*{AI use statement}
+We used generative AI tools to assist with literature review, prose editing, code drafting and
+refactoring, figure preparation, and discussion of methodological and experimental choices.
+All methodological decisions, experimental protocols, code changes, and reported results were
+reviewed and approved by the authors. Generative AI was not used to fabricate or alter
+experimental measurements, and no numerical result in this paper was generated by a language
+model. Every reported number is produced by the recorded experiment pipeline described in
+Appendix~\ref{app:reprodetails} and is traceable to a stored artefact. We take responsibility
+for the final content of this work, including its text, claims, and artefacts.
+
+\subsubsection*{Ethics statement}
+This work studies input governance for frozen forecasting models on public benchmark datasets.
+It does not involve human subjects, personal data, or deployment decisions with direct
+societal consequences. We impose an integrity constraint under which an admissible
+intervention cannot overwrite an observation that is marked as valid and available, because
+silently replacing a real measurement would be a data integrity problem regardless of its
+forecasting effect. We do not claim safety, robustness, or generality beyond the measured
+conditions.
+
+\subsubsection*{Reproducibility statement}
+We provide the complete experimental protocol, the final TRAIN and TEST split with the
+purging rule, the missingness generation procedure, the intervention catalog, the state
+feature definitions, the hyperparameter search spaces, the failure policy, and the statistical
+analysis in Appendix~\ref{app:data-protocol} and Appendix~\ref{app:splits}.
+Appendix~\ref{app:reprodetails} specifies the result-record schema and the traceability checks.
+All reported tables are generated from retained raw predictions and versioned configurations.
+
+\bibliography{references}
+\bibliographystyle{iclr2027_conference}
+
+% ===========================================================================
+% ===========================================================================
+% 附录（由正文下沉 + 完整化）。所有未运行数字一律 \ph{KEY}，禁止编造。
+% ===========================================================================
+
+
+
+\appendix
+
+\newpage
+
+
+
+\section*{Appendix map}
+\label{app:map}
+Table~\ref{tab:app-map} lists what each appendix section contains. The appendix is organised
+by evidence type rather than by individual analysis, and a final unnumbered section holds
+exploratory material that supports no claim in the main text.
+
+\begin{table}[h]
+  \caption{Appendix map. Sections are lettered in order of appearance. The final
+  supplementary section is unnumbered and holds no load-bearing evidence.}
+  \label{tab:app-map}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lll}
+    \toprule
+    Section & Contents & Question it answers \\
+    \midrule
+    A. Protocol and method details & final TRAIN and TEST split with purging, scope and assumptions, the action catalog, the state feature definitions, the registered missingness patterns, the metric conventions, the diagnostic counting rules, the complete-input contract & what exactly was fixed before the evaluation ran, and which claims are out of scope? \\
+    B. Full per-source and per-pattern results & per-source tables for every method, opportunity strata, per-pattern tables, extended comparison & does the aggregate hold source by source, stratum by stratum, and pattern by pattern? \\
+    C. Full severity results & $10/30/50\%$ tables and the severity trend & does one frozen configuration hold across the registered severity grid? \\
+    D. Reconstruction and utility diagnostics & within-episode rank comparison over the catalog, governance diagnostics & is reconstruction quality a usable substitute for forecasting utility? \\
+    E. Ablations and stability & the full ablation vector, the $k$ and $\beta$ grid, selection stability under bank subsampling, and mask-realisation stability & which component carries the gain, and does the result rest on one configuration or one mask? \\
+    F. Cost, failures, and memory & latency, call counts, candidate materialisation, failures, timeouts, cold start & what does a request actually cost? \\
+    G. Reproducibility and artefact schema & record schema, revisions, seeds, environment, manifests & can every reported number be traced back to a stored artefact? \\
+    Supplementary (unnumbered) & the preceding development cycle & what was tried and rejected before the present formulation? \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+
+
+\section{Protocol and Method Details}
+\label{app:protocol}
+\subsection{Scope and Assumptions}
+\label{app:scope}
+This section states what the replay bank is, what it is not, and which claims the paper
+therefore does and does not make.
+
+The bank is a discrete grid over four patterns, three severities, and the registered sources,
+and it is not a continuous model of missingness. If a request falls outside that grid, which
+includes a different missingness mechanism, a different missing-rate regime, or an
+unrepresented source family, the estimator still returns a score, but the retrieved
+historical utilities need not transfer. The method has no guarantee outside the registered
+replay support, because the neighbourhood is defined by distance alone and no threshold marks
+a request as unsupported. We therefore read \S\ref{sec:exp-robust} as a within-grid check
+rather than as out-of-grid generalisation, and results in this paper should not be interpreted
+as out-of-grid generalisation.
+
+Four further assumptions are worth stating explicitly. First, the action catalog is closed and
+given. We do not search for new interventions, and a wider catalog would change every number
+in this paper without changing the decision problem. Second, the missingness mechanism that
+deployment encounters is assumed to be the one that the replay injects. A request produced by
+a different mechanism is handled by the same estimator but lies outside the scope of the
+reported results. Third, the frozen forecaster is assumed deterministic and revision pinned.
+Every replay record is tied to the exact model revision that produced it, and a model update
+invalidates the bank rather than silently degrading it. Fourth, the neighbourhood size and the
+penalty strength are chosen on one bank. Appendix~\ref{app:selstability} repeats the whole
+selection on subsamples of that bank and reports both how often the same pair returns and what
+the pairs a subsample picks produce on the evaluation block.
+
+\begin{table}[h]
+  \caption{What the evidence supports and what it does not. The right column is not a list of
+  weaknesses to be fixed later; it marks the statements this protocol cannot make, whatever the
+  numbers had been.}
+  \label{tab:app-claims}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}p{0.46\textwidth} p{0.46\textwidth}@{}}
+    \toprule
+    Supported by the reported evidence & Not claimed anywhere \\
+    \midrule
+    Selective intervention inside the registered missingness grid, on the four patterns and three severities that were replayed & out-of-grid or out-of-distribution missingness generalisation \\
+    Transfer of the frozen procedure to a backbone family that took no part in method design, with its bank rebuilt by that family & that the method can detect that its historical evidence is insufficient for the request in front of it \\
+    A conservative score that orders actions and a threshold that decides whether any of them runs & any coverage or risk-control guarantee for that score \\
+    Behaviour under controlled deletion from complete series & that the results extend to naturally incomplete deployment streams \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Table~\ref{tab:app-claims} states the two sides together. Four claims are therefore not made
+anywhere in this paper. We do not claim out-of-grid or
+out-of-distribution missingness generalisation. We do not claim that the method can detect
+that historical evidence is insufficient. We do not claim any coverage or risk-control
+guarantee for the conservative score. We do not claim that the results extend to naturally
+incomplete deployment streams, since every missingness realisation in the main matrix comes
+from controlled deletion under a registered protocol.
+
+
+\subsection{Full Method Details}
+\label{app:method-details}
+This section expands \S\ref{sec:method} with the closed intervention catalog, the canonical
+definition of the state features, and the relation of the decision layer to off-policy
+evaluation and selective prediction. The state features are defined here once, and the main
+text refers to this section rather than restating them.
+
+\subsubsection{Intervention Catalog}
+\label{app:catalog}
+Table~\ref{tab:app-catalog} defines the six admissible actions. The catalog is closed, so no
+action outside this set is ever executed, and no action may overwrite an observation that has
+arrived and is valid. Five of the six are pure functions of the request. The sixth calls a
+trained imputer, so its records in the replay bank are cross-fitted: the parents of a source
+are split into four folds and a window is repaired only by a model that never saw its own
+parent, which is what keeps its stored utility out of sample. A request at deployment is
+repaired by the model fitted on the whole bank.
+
+\begin{table}[h]
+  \caption{The six admissible interventions. Observed entries are the entries that are
+  present and valid in the reference input $X^{a_0}$, and an action that modified them would
+  violate the integrity constraint of \S\ref{sec:method-problem}.}
+  \label{tab:app-catalog}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{llcc}
+    \toprule
+    Action & Input version produced & May modify observed entries? & Extra backbone calls \\
+    \midrule
+    \textsc{Keep} $a_0$   & the incomplete context, unchanged & reference action & 0 \\
+    \textsc{Ffill}        & forward-fill from the last valid value & no & 1 \\
+    \textsc{Single TS-ICL}& univariate in-context regression on the target channel & no & 1 \\
+    \textsc{Multi TS-ICL} & multivariate in-context regression using visible channels & no & 1 \\
+    \textsc{Context Ridge}& ridge reconstruction from the visible context & no & 1 \\
+    \textsc{SAITS}        & reconstruction by the trained imputer of the source & no & 1 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+A complete and valid input is always mapped to \textsc{Keep} and the reference forecast is
+returned unchanged. Unsupported, aliased, and failed actions are recorded with an explicit
+status, and they are never counted as successes. The required behaviour of the system in each
+input regime is listed in \S\ref{app:contract}.
+
+\subsubsection{State Features}
+\label{app:features}
+The state is action conditioned and is written $z_a$ for action $a$, with
+\begin{equation}
+  z_a \;=\; \phi\!\left(X,\, M,\, X^{a},\, p_0\right),
+  \qquad p_0 = F(X^{a_0}) .
+  \label{eq:app-state}
+\end{equation}
+It contains no future target information. It uses the reference forecast $p_0$, which the
+call budget of \S\ref{sec:method-problem} already permits, and it never uses the forecast of a
+non-selected candidate. Table~\ref{tab:app-features} is the canonical definition of the four
+groups, including the window length, the channel aggregation, and the missing-value handling
+of each feature. Continuous features are standardised with statistics fitted on the replay
+bank only, and the normalisation is frozen with the rest of the configuration.
+
+\begin{table}[h]
+  \caption{The action-conditioned state, as implemented. It has 22 dimensions: six describing
+  the mask, six describing the visible context, five describing the candidate intervention and
+  five describing the reference forecast. Every feature is computable from the request and the
+  reference forecast alone. The target channel is the forecast channel, and the only place the
+  other channels enter is the shared indicator. Features are divided by the robust scale $s$ of
+  the visible context where they carry a unit, and the state is then standardised with the mean
+  and standard deviation of the replay bank before distances are taken.}
+  \label{tab:app-features}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{@{}l p{0.22\textwidth} p{0.42\textwidth} p{0.16\textwidth}@{}}
+    \toprule
+    Group & Feature & Definition & Scaling \\
+    \midrule
+    Mask state, 6 & missing ratio & share of target-channel positions with $M = 0$ & scale free \\
+     & longest run & longest run of consecutive missing positions, as a share of $L$ & scale free \\
+     & number of runs & count of maximal missing runs, divided by $L$ & scale free \\
+     & distance to origin & steps from the end of the last missing run to the forecast origin, divided by $L$ & scale free \\
+     & shared indicator & one if any other channel is also missing & binary \\
+     & tail indicator & one if the last context position is missing & binary \\
+    \midrule
+    Visible-context state, 6 & robust scale $s$ & median over eight blocks of the interquartile range of the visible target values & the unit of the other context features \\
+     & local trend & least-squares slope over the visible positions, divided by $s$ & scale free \\
+     & lag-one autocorrelation & autocorrelation of the gap-interpolated target at lag one & scale free \\
+     & seasonal autocorrelation & the same at the registered seasonal period $m$ & scale free \\
+     & recent level shift & absolute difference between the means of the last and the preceding $W = 32$ steps, divided by $s$ & scale free \\
+     & recent volatility & standard deviation of the first differences over the last $W$ steps, divided by $s$ & scale free \\
+    \midrule
+    Intervention state, 5, per action $a$ & mean absolute change & mean of $|X^{a} - X^{a_0}|$ over the context, divided by $s$ & scale free \\
+     & maximum change & largest absolute difference, divided by $s$ & scale free \\
+     & changed fraction & share of positions where $X^{a}$ differs from $X^{a_0}$ & scale free \\
+     & change trend & least-squares slope of the difference over the changed positions, divided by $s$ & scale free \\
+     & change near origin & mean absolute difference over the last $W$ steps, divided by $s$ & scale free \\
+    \midrule
+    Reference-forecast state, 5 & forecast level & mean of $p_0$ over the horizon, divided by $s$ & scale free \\
+     & forecast range & range of $p_0$ over the horizon, divided by $s$ & scale free \\
+     & forecast trend & least-squares slope of $p_0$, divided by $s$ & scale free \\
+     & first-step jump & first step of $p_0$ minus the last visible value, divided by $s$ & scale free \\
+     & roughness & mean absolute first difference of $p_0$, divided by $s$ & scale free \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\subsubsection{Relation to Off-Policy Evaluation and Selective Prediction}
+\label{app:ope-positioning}
+The decision layer is related to conservative policy selection in contextual
+bandits~\citep{abbasiyadkori2011improved,lattimore2020bandit} and to off-policy
+evaluation~\citep{strehl2010learning,dudik2011doubly,swaminathan2015counterfactual,
+jiang2016doubly,thomas2016data}, and the difference that matters is the structure of the
+supervision. Off-policy evaluation estimates the value of a target policy from data collected
+by a logging policy, so only the outcome of the logged action is observed and a propensity
+correction is required. Historical replay gives full action outcomes for the finite catalog,
+because every action is executed on the same window and evaluated against the same realised
+future. There is therefore no partial-feedback problem to correct, and there is no online
+exploration: no action is ever executed at deployment in order to learn.
+
+\begin{table}[h]
+  \caption{Where the decision layer sits. The row that matters is the third column: what has to
+  be corrected for before the recorded outcomes can be used.}
+  \label{tab:app-positioning}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}p{0.19\textwidth} p{0.33\textwidth} p{0.38\textwidth}@{}}
+    \toprule
+    Setting & What the record holds & What it needs \\
+    \midrule
+    Off-policy evaluation & the outcome of the logged action alone & a propensity correction, because the logging policy chose which outcome exists \\
+    Selective prediction and learning to defer & the outcome of the answer that was produced & a second answerer, or an abstention, since what changes is who answers \\
+    Historical full-action replay & the outcome of every catalog action on the same window against the same realised future & nothing of the kind. There is no partial feedback to correct and no online exploration, because no action is ever executed at deployment in order to learn \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Selective prediction abstains on part of the input in order to trade coverage for lower
+risk~\citep{chow1970optimum,vovk2005algorithmic,geifman2017selective,lei2018distribution}, and
+learning to defer routes part of the input to a human or to another decision
+maker~\citep{madras2018predict,mozannar2020consistent}. Both change who or what produces the
+answer. \introact{} changes neither. The same frozen forecaster returns a forecast in every
+case, and what is selected is whether the input is modified first. Dynamic feature
+selection~\citep{he2024dime} is a related sequential-acquisition setting in which the value of
+additional information is weighed against its cost. We make no information-theoretic
+optimality claim and report the cost accounting separately (Appendix~\ref{app:calls}).
+
+\subsection{Replay Construction}
+\label{app:replay}
+Two properties of the bank carry the scope of the method. It is indexed by the frozen backbone
+revision, since a utility measured with one revision of one model does not describe another.
+The method therefore requires labelled history for the backbone it serves, which places it in
+the frozen-backbone and history-supervised regime rather than in a zero-shot regime. The bank also
+covers only the missingness protocol registered in advance, so it is a discrete grid over
+patterns and severities rather than a model of missingness.
+
+This section records the split rule and how the replay bank is built. Nothing here is a
+result. It is the construction that the result tables are read against.
+
+\subsubsection{Splits, Purging, and the Final Evaluation Set}
+\label{app:splits}
+The split is defined from the outside in. Each source is first split chronologically into
+TRAIN and TEST with an $L + H$ purge, so no TRAIN context window overlaps a TEST target window
+and the two blocks share no origin. All method design, hyperparameter selection, feature
+normalisation, baseline fitting, and acceptance checks use TRAIN only. The final tables are
+computed once on TEST after the configuration is frozen, and no TEST parent participates in
+any selection, normalisation, or bank construction.
+
+TRAIN is then partitioned at the parent level. Within each source the admissible TRAIN parents
+are sorted by origin time and split at $80/20$ into the replay bank and TRAIN-eval. The bank is
+the only evidence the method reads, and it is also where $k$ and $\beta$ are chosen by
+leave-one-parent-out cross-validation, so no separate selection block is held out for them.
+TRAIN-eval is the internal acceptance check run once before the configuration is frozen, and
+it is not an evaluation set for any reported number. Parents tile at $L + \max(H)$, so two
+parents never share a raw row, and the gap between the last TRAIN window and the first TEST
+window exceeds the purge on every source.
+Table~\ref{tab:app-splits} records the realised sizes, including the TEST block.
+
+\begin{table}[h]
+  \caption{Realised split sizes. Counts are of admissible parents and not of correlated mask
+  variants, so a parent with several patterns or severities still contributes one unit to
+  every statistic in the paper. TEST is the evaluation population for every table in the main
+  text, and it is disjoint from all three TRAIN blocks.}
+  \label{tab:app-splits}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
+    \toprule
+    Split & Parents & Episodes & Sources covered & Used for \\
+    \midrule
+    Replay bank  & 223   & 5352   & 8   & replay bank, feature normalisation, baseline training, selection of $k$ and $\beta$ by cross-validation \\
+    TRAIN-eval   & 53  & 424  & 8  & frozen-configuration acceptance check \\
+    \midrule
+    TEST         & 95  & 760  & 8  & every table in the main text, once, after freezing \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+The replay bank is constructed as follows. For every bank parent we take the historical
+window $(X_i, y_i)$ whose future is already available history, inject the registered
+missingness protocol to obtain the incomplete version $X_i^{a_0}$, materialise every action
+$a \in \calA$ into $X_i^{a}$, execute the frozen pipeline on each materialised version, and
+store the realised utility
+\begin{equation}
+  g_{i,a} \;=\; \loss\big(F(T_{a_0}(X_i, M_i)),\, y_i\big) - \loss\big(F(T_{a}(X_i, M_i)),\, y_i\big),
+  \label{eq:app-gain}
+\end{equation}
+so that $g_{i,a} > 0$ means the action reduced the forecasting loss and $g_{i,a} < 0$ means it
+increased it. The bank is
+$\calB = \{(z_{i,a}, a, g_{i,a})\}$, where $z_{i,a}$ is the action-conditioned state defined
+in Appendix~\ref{app:features}. Because a utility measured with one model revision does not describe another, the bank is
+built per frozen backbone revision, and one bank serves every source and both horizons.
+Table~\ref{tab:app-retrieval} reports what restricting retrieval to the request's own source
+or to its own horizon costs. Pseudo-deployment severities enumerate
+$\{10\%, 30\%, 50\%\}$ on every parent, pattern and horizon, so a request at any registered
+severity has same-severity support and the method is not retuned per severity.
+
+\begin{table}[h]
+  \caption{What restricting retrieval costs. Each row keeps the frozen configuration and
+  narrows the neighbourhood a request may draw on. Values are source-macro MASE on the
+  held-out evaluation set. The reported method is the first row.}
+  \label{tab:app-retrieval}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccc}
+    \toprule
+    Retrieval restriction & Bolt MASE $\downarrow$ & TimesFM MASE $\downarrow$ & Chronos-2 MASE $\downarrow$ \\
+    \midrule
+    none, the reported configuration & 1.378 & 1.554 & 1.378 \\
+    same horizon only                & 1.374   & 1.519   & 1.377 \\
+    same source only                 & 1.360  & 1.583  & 1.368 \\
+    same source and horizon          & 1.426 & 1.526 & 1.347 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+Because the bank is built once from TRAIN and never rebuilt at deployment time, the offline
+cost is paid once. Appendix~\ref{app:calls} separates it from the per-request online cost.
+
+\subsubsection{Replay Bank Size}
+\label{app:replaysize}
+The replay bank is subsampled by parent to $25\%$, $50\%$ and $100\%$, with the frozen $k$ and
+$\beta$ unchanged, to measure how much the result depends on the amount of historical evidence.
+The subsamples are diagnostics: no hyperparameter and no configuration was selected on them,
+and the reported configuration is the one that reads the full bank. On Bolt and on the
+held-out backbone the macro average falls with every step up in history, from 1.439
+to 1.378 and from 1.395 to 1.378. On TimesFM the three levels
+sit within 0.082 of each other, so history neither helps nor hurts there. The
+intervention rate moves with the bank on all three, which is the mechanism behind the trend:
+a denser bank changes how many requests clear the conservative threshold, so the amount of
+history and the penalty strength are not independent knobs.
+
+\begin{table}[h]
+  \caption{Replay-bank size ablation. The bank is subsampled by parent, keeping
+  every action and severity per retained parent, so the subsample changes the amount of
+  history rather than its composition.}
+  \label{tab:app-replaysize}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lccccc}
+    \toprule
+    Bank fraction & MASE $\downarrow$ & Intervention Rate & HIR $\downarrow$ & Harmful Loss $\downarrow$ & Calls $\downarrow$ \\
+    \midrule
+    $25\%$  & 1.435  & 73.3\%  & 40.8\%  & 0.0460  & 1.73 \\
+    $50\%$  & 1.438  & 68.7\%  & 40.1\%  & 0.0417  & 1.69 \\
+    $100\%$ & 1.437 & 65.4\% & 40.2\% & 0.0375 & 1.65 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Does the Local Transfer Assumption Hold?}
+\label{app:transfer}
+The decision layer rests on one empirical assumption, stated in \S\ref{sec:method-replay}:
+requests whose states are close in the state space have similar action utilities. The
+assumption implies a test. For every evaluation request and every admissible non-reference
+action, record how far the retrieved neighbourhood actually was, what that neighbourhood
+estimated, and what the action then did. If the assumption holds, the requests whose
+neighbourhoods were closer carry the smaller estimation error.
+
+Table~\ref{tab:app-transfer} runs that test. The furthest fifth does carry the largest error on
+every backbone, so the assumption is not empty. It is also not monotone in between, and the
+rank correlation between neighbourhood distance and absolute estimation error is
+0.094 on Bolt, 0.011 on TimesFM and 0.057 on the held-out family.
+Distance therefore orders the estimation error weakly, and the local estimate is not earning
+its place by being more accurate where the neighbourhood is tight.
+
+What it earns is an answer that moves with the request. The A1 variant of
+\S\ref{sec:exp-ablation} scores each action by its global mean utility, which is the same
+estimate for every request, and it is worse than the local estimate on all three backbones
+while intervening on every request. So the evidence supports a weaker statement than the one
+the assumption makes: retrieving by state produces a per-request ranking that a corpus average
+cannot produce, and the conservative threshold is what turns that ranking into a decision. We
+state the assumption where the method needs it and report here that it holds only at the tail.
+
+\begin{table}[h]
+  \caption{The local transfer assumption, measured. Pairs are every admissible non-reference
+  action of every evaluation request, split into five bins by the mean distance of the
+  neighbourhood the rule retrieved. Distance is in the standardised state space, error is
+  $|\hat\mu_a - g_a|$ between the estimate the rule acted on and what the action did, and sign
+  agreement is how often the two share a sign. The frozen configuration is reused and nothing
+  is selected here.}
+  \label{tab:app-transfer}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccccccccc}
+    \toprule
+     & \multicolumn{3}{c}{Bolt} & \multicolumn{3}{c}{TimesFM} & \multicolumn{3}{c}{Chronos-2} \\
+    \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+    Distance bin & Dist. & $|\hat\mu_a - g_a|$ & Sign agr. & Dist. & $|\hat\mu_a - g_a|$ & Sign agr. & Dist. & $|\hat\mu_a - g_a|$ & Sign agr. \\
+    \midrule
+    1 (closest) & 1.39 & 0.143 & 58.1\% & 0.82 & 0.559 & 71.1\% & 0.94 & 0.166 & 56.1\% \\
+    2 & 1.72 & 0.131 & 51.3\% & 1.30 & 0.159 & 53.9\% & 1.16 & 0.186 & 53.1\% \\
+    3 & 2.15 & 0.185 & 53.5\% & 1.67 & 0.193 & 53.5\% & 1.47 & 0.306 & 51.8\% \\
+    4 & 2.81 & 0.163 & 51.3\% & 2.26 & 0.180 & 56.5\% & 2.01 & 0.203 & 51.4\% \\
+    5 (furthest) & 5.71 & 0.271 & 55.7\% & 4.93 & 0.205 & 55.2\% & 4.40 & 0.271 & 53.3\% \\
+    \midrule
+    Rank corr.\ of distance with error & \multicolumn{3}{c}{0.094} & \multicolumn{3}{c}{0.011} & \multicolumn{3}{c}{0.057} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\subsection{Dataset and Missingness Protocol}
+\label{app:data-protocol}
+The missingness mechanism is frozen before any method is run, and every mask is derived
+deterministically from a key that identifies the parent and the pattern. This subsection fixes
+the four patterns, the derivation rule, and the metric conventions that depend on the data.
+
+\subsubsection{Missingness Patterns}
+\label{app:patterns}
+Table~\ref{tab:app-patterns} defines the four deterministic patterns. Every mask is derived
+by a deterministic hash of
+\texttt{source + parent + origin + horizon + pattern + protocol\_seed} and is never moved
+after forecasts are seen. The same key determines the pseudo-deployment severity that the
+replay uses, which is drawn from $\{10\%, 30\%, 50\%\}$.
+
+\begin{table}[h]
+  \caption{The four registered missingness patterns. All four are applied to the same parents,
+  so pattern effects are measured on a common parent set rather than on different subsets of
+  the data.}
+  \label{tab:app-patterns}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}l p{0.34\textwidth} p{0.40\textwidth}@{}}
+    \toprule
+    Pattern & What is removed & Why it is included \\
+    \midrule
+    P1 point missing    & scattered single positions & the classical random-missing regime \\
+    P2 target block     & a contiguous block on the target variable & a sensor outage on the variable being forecast \\
+    P3 shared block     & several visible variables over the same interval & a channel or acquisition outage affecting the whole panel \\
+    P4 tail missing     & a block adjacent to the forecast origin & observations that have not arrived yet at request time \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Metric Conventions}
+\label{app:metric-conventions}
+The statistical unit is the parent. Paired cluster bootstrap with 2,000 resamples
+over parent blocks gives 95\% confidence intervals on source-macro MASE differences against
+each baseline, the source-macro aggregation is applied inside every resample, and Holm
+correction~\citep{holm1979simple} is applied across the pre-declared baseline comparisons.
+The family is the five comparisons of \introact{} against the deployable baselines on one
+backbone, and the ablations stay outside it because they are variants of this method rather
+than competing claims. Table~\ref{tab:app-holm} lists every raw and adjusted value.
+Average rank and won cells are descriptive summaries only, and the headline claim rests on
+paired differences with confidence intervals.
+
+\begin{table}[h]
+  \caption{Paired differences against the deployable baselines with the Holm adjustment.
+  A negative difference favours \introact{}. The p-value is two sided and read off the same
+  bootstrap draws as the interval, so it cannot fall below one over the number of resamples.}
+  \label{tab:app-holm}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{llcccc}
+    \toprule
+    Backbone & Comparison & Difference & 95\% interval & $p$ & $p$ after Holm \\
+    \midrule
+    Bolt & the untouched input & -0.0881 & [-0.1530, -0.0256] & 0.0010 & 0.0040 \\
+    Bolt & the best fixed intervention & -0.0497 & [-0.1008, +0.0013] & 0.0730 & 0.1830 \\
+    Bolt & the simple selector & -0.0239 & [-0.0495, +0.0008] & 0.0610 & 0.1830 \\
+    Bolt & the fixed imputer & -0.0908 & [-0.2201, +0.0347] & 0.3220 & 0.3220 \\
+    Bolt & TATO & -0.2418 & [-0.3397, -0.1558] & 0.0005 & 0.0025 \\
+    TimesFM & the untouched input & -0.1283 & [-0.2018, -0.0543] & 0.0005 & 0.0025 \\
+    TimesFM & the best fixed intervention & -0.0249 & [-0.0700, +0.0202] & 0.3430 & 1.0000 \\
+    TimesFM & the simple selector & -0.0348 & [-0.0912, +0.0214] & 0.4130 & 1.0000 \\
+    TimesFM & the fixed imputer & +0.0884 & [-0.0352, +0.2140] & 0.4560 & 1.0000 \\
+    TimesFM & TATO & -0.0602 & [-0.2607, +0.1342] & 0.5600 & 1.0000 \\
+    Chronos-2 & the untouched input & -0.2014 & [-0.2876, -0.1180] & 0.0005 & 0.0025 \\
+    Chronos-2 & the best fixed intervention & -0.0785 & [-0.1665, +0.0077] & 0.1600 & 0.3200 \\
+    Chronos-2 & the simple selector & -0.0067 & [-0.0436, +0.0318] & 0.7170 & 0.7170 \\
+    Chronos-2 & the fixed imputer & -0.0631 & [-0.1140, -0.0121] & 0.0040 & 0.0120 \\
+    Chronos-2 & TATO & -0.2365 & [-0.3348, -0.1469] & 0.0005 & 0.0025 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+Mask variants of the same parent are never
+treated as independent samples, and pattern, severity, and backbone breakdowns are secondary
+analyses without cell-by-cell significance testing.
+
+MASE~\citep{hyndman2006mase} is the primary metric and RMSSE is the secondary metric. Both
+scale the error of a source by its own seasonal naive error, computed on the TRAIN portion of
+that source and therefore never on the evaluation block. With $y_t$ the target channel and $m$
+the registered seasonal period of the source,
+\begin{equation}
+  \mathrm{MASE} = \frac{\mathrm{MAE}}{\frac{1}{T-m}\sum_{t} \lvert y_t - y_{t-m} \rvert},
+  \qquad
+  \mathrm{RMSSE} = \sqrt{\frac{\mathrm{MSE}}{\frac{1}{T-m}\sum_{t} (y_t - y_{t-m})^2}},
+  \label{eq:metrics}
+\end{equation}
+so the two metrics share the same seasonal naive difference series but not the same power of
+it, and RMSSE is not the square root of MASE. The scaling constants are computed per channel
+before any aggregation over channels, and the registered periods are listed in
+Table~\ref{tab:app-seasonality}. A degenerate seasonal naive error, meaning a constant or
+all-missing TRAIN series, leaves the metric undefined and is reported as missing rather than
+as zero. Aggregation is source-macro, first over parents within a source and then equally over
+the eight sources, and the same order is applied inside every bootstrap resample. MAE and RMSE
+are reported per source and are never averaged across sources, because the sources have
+different scales and a cross-source average of a raw error has no common unit.
+
+\begin{table}[h]
+  \caption{Per-source seasonal periods and context conventions used by the metric
+  denominators. Context length is $L = 512$ for every source. The seasonal period is the
+  sampling-frequency period registered before any run, not a tuned quantity.}
+  \label{tab:app-seasonality}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccc}
+    \toprule
+    Source & Seasonal period $m$ & Channels & Scaling \\
+    \midrule
+    ETTh1 / ETTh2 & 24 & 7 & TRAIN seasonal naive error of the target channel \\
+    ETTm1 / ETTm2 & 96 & 7 & TRAIN seasonal naive error of the target channel \\
+    Electricity & 24 & 321 & TRAIN seasonal naive error of the target channel \\
+    Exchange & 5 & 8 & TRAIN seasonal naive error of the target channel \\
+    Traffic & 24 & 862 & TRAIN seasonal naive error of the target channel \\
+    Weather & 144 & 21 & TRAIN seasonal naive error of the target channel \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\subsubsection{Diagnostic Conventions}
+\label{app:diagnostic-conventions}
+Four quantities in the diagnostics are counting rules rather than metrics, and
+Table~\ref{tab:app-counting} fixes each one before any evaluation record is read.
+
+\begin{table}[h]
+  \caption{The four counting rules, fixed before any evaluation record was read. Each one is a
+  convention rather than a metric, and a different convention would change a reported number
+  without changing a single forecast.}
+  \label{tab:app-counting}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}p{0.17\textwidth} p{0.40\textwidth} p{0.33\textwidth}@{}}
+    \toprule
+    Quantity & Rule & Boundary case \\
+    \midrule
+    Oracle-best action & the admissible action with the smallest realised loss & ties go to the first action in the frozen catalog order, so the shares sum to one. Unsupported, aliased and failed actions leave the argmin rather than counting as a loss \\
+    Utility sign & harmful when $g_{i,a} < 0$ strictly, beneficial when $g_{i,a} > 0$ strictly & $g_{i,a} = 0$ enters neither rate and is reported as its own count \\
+    Beneficial precision & executed interventions with strictly positive utility, over executed interventions & undefined when nothing was executed, and reported as missing rather than as zero \\
+    Opportunity strata & two pre-declared quantiles of $\Delta_i$ on the replay bank, applied unchanged to TEST & the same two values partition every method and no boundary is recomputed per method \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\emph{Oracle-best action.} The oracle-best action of an episode is the admissible action with
+the smallest realised loss. Ties are broken by the frozen catalog order, so the first action in
+that order wins and the reported shares of episodes on which each action is best sum to one. An
+action that is unsupported, aliased, or failed is not admissible and is excluded from the
+argmin rather than being counted as a loss.
+
+\emph{Utility sign.} Utility is defined relative to the reference action in
+\eqref{eq:utility}, so $g_{i,a} = 0$ means the action and the reference are indistinguishable on
+that episode. An intervention counts as harmful only when $g_{i,a} < 0$ strictly and as
+beneficial only when $g_{i,a} > 0$ strictly, so the zero cases enter neither the conditional
+harmful rate nor beneficial precision and are reported as their own count.
+
+\emph{Beneficial precision.} It is the number of executed interventions with strictly positive
+utility divided by the number of executed interventions, and it is undefined when nothing was
+executed. It is reported as missing rather than as zero in that case.
+
+\emph{Opportunity strata.} The no-op boundary and the low-to-high boundary are the two
+pre-declared quantiles of $\Delta_i$ computed on the replay bank, computed once and applied
+unchanged to TEST. The same two values partition every method, and no boundary is recomputed
+per method. Both values are recorded with the resolved configuration.
+
+\subsection{Complete-Input Contract}
+\label{app:contract}
+Under a complete and valid input, \introact{} must return \textsc{Keep}. No forecasting
+improvement is claimed in this regime. The purpose of this subsection is to document the
+governance contract rather than to report a result. Table~\ref{tab:app-complete} lists the
+regimes and the required behaviour in each.
+
+\begin{table}[h]
+  \caption{Governance contract by input regime. The complete-input rows are contract
+  statements and not accuracy results. The expected behaviour there is a no-op, and a non-no-op
+  would be a defect rather than an improvement.}
+  \label{tab:app-complete}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lll}
+    \toprule
+    Input regime & Required behaviour & Claim \\
+    \midrule
+    Complete and valid input            & return \textsc{Keep} and the reference forecast & no-op contract, no accuracy claim \\
+    Complete input, malformed request   & reject with an explicit status & no claim \\
+    Unsupported action requested        & reject the action, keep the catalog closed & no claim \\
+    Incomplete input, no action scores above zero & return the reference action & the reference action is always available \\
+    Incomplete input, one action scores above zero & execute exactly one action and return its forecast & evaluated in \S\ref{sec:exp-main} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+
+\section{Full Per-Source and Per-Pattern Results}
+\label{app:full-results}
+\subsection{Baseline Availability}
+\label{app:baseline-availability}
+The comparison names more published methods in Section~\ref{sec:related} than it reports in
+Table~\ref{tab:main}, and Table~\ref{tab:app-availability} records why method by method. A
+method enters the tables when an official implementation exists, when it admits an incomplete
+context of the shape this protocol produces, and when its own assumptions hold for a frozen
+backbone. A reimplementation from a paper description would not be comparable with the numbers
+that paper reports, so a method that fails any of the three is discussed and not tabulated.
+
+One exclusion is about assumptions rather than about code. Task-oriented imputation
+evaluation~\citep{wang2024taskoriented} scores an imputation by the influence its values have
+on the downstream forecaster, estimated with generalised representers, which requires gradients
+of that forecaster with respect to its input. The setting of this paper is a forecaster served
+as a fixed inference pipeline, which is what makes the decision an input-side one in the first
+place, and such a pipeline exposes no gradients. Running the method would mean replacing the
+frozen backbone by a differentiable surrogate, and the number that came out would describe the
+surrogate. We therefore report the task-oriented idea in Section~\ref{sec:related} and carry
+its objective, realised downstream utility, into our own replay, which measures the same
+quantity by executing the action instead of differentiating through the model.
+
+\begin{table}[h]
+  \caption{Published methods considered for the comparison. The last column states what the
+  method contributes here. Methods marked unavailable are discussed in
+  Section~\ref{sec:related} and carry no row in any table.}
+  \label{tab:app-availability}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{@{}l l p{0.28\textwidth} p{0.30\textwidth}@{}}
+    \toprule
+    Method & Venue & Implementation & Role here \\
+    \midrule
+    SAITS~\citep{du2023saits}       & ESWA 2023  & official, packaged~\citep{du2023pypots} & catalog action and fixed policy \\
+    TATO~\citep{qiu2026tato}        & ICLR 2026  & official repository & data-side adaptation baseline \\
+    \midrule
+    TOI~\citep{wang2024taskoriented}& NeurIPS 2024 & official repository & needs gradients through the downstream forecaster \\
+    BRITS~\citep{cao2018brits}      & NeurIPS 2018 & available & superseded by SAITS on this protocol \\
+    CSDI~\citep{tashiro2021csdi}    & NeurIPS 2021 & available & not run, cost per request exceeds the deployment budget \\
+    T1~\citep{park2026t1}           & ICLR 2026  & no public release found & discussed only \\
+    SRDI~\citep{xu2026srdi}         & WWW 2026   & no public release found & discussed only \\
+    GIMCC~\citep{hao2025gimcc}      & KDD 2025   & no public release found & discussed only \\
+    VIDA~\citep{liang2025vida}      & KDD 2025   & no public release found & discussed only \\
+    \midrule
+    BiTGraph~\citep{chen2024bitgraph}   & ICLR 2024 & available & trains its own forecaster, outside the frozen-backbone contract \\
+    S4M~\citep{peng2025s4m}             & ICLR 2025 & available & the same \\
+    ChannelTokenFormer~\citep{jang2026channeltokenformer} & ICLR 2026 & available & the same \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+The last block is a different kind of exclusion. BiTGraph, S4M and ChannelTokenFormer are
+complete forecasting models trained for missing inputs. They do not compose with a frozen
+backbone, they have no reference action, and the harmful rate of an intervention is undefined
+for them, so putting them in the same rank as a data-side adapter would compare two different
+contracts. They belong to the setting this paper does not address, which is training a
+forecaster of one's own.
+
+\begin{table}[h]
+  \caption{The comparison, fixed before any evaluation record was read. Every row composes with
+  the same frozen backbone and is given the same evidence, which is the TRAIN region under the
+  registered missingness protocol including the realised futures of those windows. No row sees
+  a TEST window before its numbers are computed.}
+  \label{tab:app-roster}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}l p{0.76\textwidth}@{}}
+    \toprule
+    Row & What it does \\
+    \midrule
+    \textsc{Native Keep} & hands the incomplete context to the frozen backbone and never intervenes. Every other row is measured against it \\
+    \textsc{Best Fixed} & applies to every request the single catalog action with the highest mean realised utility on the replay bank, which makes it the strongest policy that ignores the request \\
+    R2-CART & one depth-three classification tree per action over the same state features, each asking whether that action beats the reference. The most confident action runs when its probability exceeds one half \\
+    Fixed SAITS & applies the trained imputer to every incomplete request. The imputer is one of the six catalog actions and its bank records are cross-fitted by parent, so the stored utility is out of sample \\
+    TATO & searches one transformation pipeline per source against the realised futures of the same TRAIN windows the replay bank is built from \\
+    \emph{Catalog Oracle} & reads the future target and takes the best catalog action in hindsight. Diagnostic only, excluded from every rank and every claim \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Baseline Configuration}
+\label{app:baseline-config}
+Every row is given the same evidence \introact{} is given, which is the TRAIN region under
+the registered missingness protocol, including the realised futures of those windows. No row
+sees a TEST window or a TEST label before its numbers are computed.
+
+\begin{table}[h]
+  \caption{What each fitted row was given. Both read the TRAIN region under the registered
+  missingness protocol, including the realised futures of those windows, and neither sees a
+  TEST window before its numbers are computed.}
+  \label{tab:app-baselinecfg}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}p{0.17\textwidth} p{0.26\textwidth} p{0.47\textwidth}@{}}
+    \toprule
+    Row & Unit of fitting & Configuration \\
+    \midrule
+    Fixed SAITS, deployment model & one per source, on every bank parent & the packaged implementation, two layers, model width 128, four heads, feed-forward width 128, dropout $0.1$, batch size 16, at most 100 epochs with early stopping. Sources with more than 64 channels use the target channel plus the covariates most correlated with it on TRAIN \\
+    Fixed SAITS, bank records & two per source, each on half the bank parents by origin time & the same configuration. A window is repaired only by the model that never saw its own parent, so the utility stored for this action is out of sample \\
+    TATO & one pipeline per source and backbone & the official implementation over its eight transformation slots, 48 trials seeded with the identity pipeline, each scored by the mean absolute error against the realised futures of 8 TRAIN windows. Gaps are filled by linear interpolation first, which the official pipeline requires, and that step is part of what the row measures \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{The trained imputer.} One imputer per source, trained on that source's TRAIN bank
+windows after the missingness protocol has been injected, so the training distribution is the
+one the evaluation produces. Two models are fitted per source. The deployment model reads every
+bank parent and repairs every evaluation request, and it is what the \textsc{Fixed SAITS} row
+and the catalog action both call at serving time. The bank records come from a cross-fitted
+pair: the parents of the source are split in two by origin time, each half trains a model, and
+that model repairs only the windows of the other half. Without that split the utility stored
+for this action would be the utility of repairing a window the model had already seen, and the
+selector would learn to execute it more often than the evidence supports. The architecture is the packaged implementation~\citep{du2023pypots} with
+two layers, model width 128, four heads, feed-forward width 128, dropout $0.1$, batch size 16
+and at most 100 epochs with early stopping. Sources with more channels than
+64 are imputed on the target channel plus the covariates most correlated with it
+on TRAIN, which is a budget constant fixed before any run and recorded with the configuration.
+The imputed panel is spliced back against the observation mask, so an entry that arrived and is
+valid is returned unchanged and only the missing positions carry imputed values. That is the
+same integrity constraint every catalog action obeys, and it is what makes the comparison a
+comparison of input versions rather than of two different inputs.
+
+\paragraph{TATO.} One transformation pipeline per source and per backbone, searched with the
+official implementation over its eight transformation slots. A candidate pipeline is scored by
+the mean absolute error of the resulting forecast against the realised future of
+8 TRAIN windows of that source, the same futures the replay bank is built from,
+over 48 trials seeded with the identity pipeline. The selected pipeline is then
+applied unchanged to every TEST request of that source, which is the domain-level unit of
+adaptation the method is defined at. The official pipeline expects a context without gaps, so
+the adapter fills them by linear interpolation before the pipeline runs, and that step is
+part of what the row measures, and Section~\ref{sec:exp-main} reads the result with that in
+mind. The upstream replacement of non-finite outputs is disabled, so a pipeline that diverges
+is recorded as a failed trial instead of being silently repaired.
+
+\subsubsection{Per-Source Results}
+\label{app:datasets}
+Each table below reports one frozen backbone at $10\%$ severity, one horizon, and
+all eight sources, with one row per method. MASE is reported in every cell so that a
+reader can recompute the source-macro aggregate of Table~\ref{tab:main} directly from
+these tables. The \emph{macro} column is the equal-weight average over the eight sources
+and is the quantity the main table reports. Rows are generated from the recorded result
+group rather than transcribed by hand, so the appendix and the main table cannot disagree.
+MAE and RMSE are reported per source and are not averaged across sources.
+
+\begin{table}[h]
+  \caption{Per-source MASE on Bolt at $10\%$ severity, $H=96$. The macro column is the
+  equal-weight average over the eight sources and is the quantity reported in
+  Table~\ref{tab:main}. Lower is better everywhere.}
+  \label{tab:app-src-bolt-96}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccccc c}
+    \toprule
+    Method & ETTh1 & ETTh2 & ETTm1 & ETTm2 & Electricity & Exchange & Traffic & Weather & Macro $\downarrow$ \\
+    \midrule
+    Native KEEP & 0.967 & 1.444 & 1.370 & 1.035 & 0.957 & 2.761 & 0.980 & 0.645 & 1.270 \\
+    Best Fixed & 0.877 & 1.293 & 1.321 & 1.015 & 0.951 & 2.784 & 0.955 & 0.651 & 1.231 \\
+    R2-CART & 0.886 & 1.319 & 1.312 & 1.002 & 0.911 & 2.535 & 0.908 & 0.633 & 1.188 \\
+    Fixed SAITS & 0.878 & 1.280 & 1.306 & 0.993 & 0.998 & 3.418 & 0.887 & 0.638 & 1.300 \\
+    TATO & 1.421 & 1.364 & 1.713 & 1.120 & 0.892 & 2.385 & 1.485 & 0.672 & 1.382 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 0.881 & 1.283 & 1.318 & 1.009 & 0.921 & 2.404 & 0.917 & 0.653 & 1.173 \\
+    \midrule
+    Catalog Oracle & \oracle{0.830} & \oracle{1.170} & \oracle{1.196} & \oracle{0.926} & \oracle{0.712} & \oracle{2.288} & \oracle{0.836} & \oracle{0.454} & \oracle{1.052} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Per-source MASE on Bolt at $10\%$ severity, $H=192$. The macro column is the
+  equal-weight average over the eight sources and is the quantity reported in
+  Table~\ref{tab:main}. Lower is better everywhere.}
+  \label{tab:app-src-bolt-192}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccccc c}
+    \toprule
+    Method & ETTh1 & ETTh2 & ETTm1 & ETTm2 & Electricity & Exchange & Traffic & Weather & Macro $\downarrow$ \\
+    \midrule
+    Native KEEP & 1.082 & 1.447 & 1.415 & 1.239 & 0.870 & 5.071 & 1.018 & 1.162 & 1.663 \\
+    Best Fixed & 1.031 & 1.348 & 1.385 & 1.217 & 0.878 & 5.019 & 0.997 & 1.125 & 1.625 \\
+    R2-CART & 1.037 & 1.352 & 1.389 & 1.215 & 0.895 & 4.910 & 0.986 & 1.145 & 1.616 \\
+    Fixed SAITS & 1.025 & 1.333 & 1.384 & 1.187 & 0.968 & 5.165 & 0.971 & 1.075 & 1.638 \\
+    TATO & 1.510 & 1.528 & 1.682 & 1.310 & 0.898 & 5.074 & 1.590 & 1.278 & 1.859 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 1.031 & 1.341 & 1.378 & 1.208 & 0.906 & 4.690 & 0.983 & 1.131 & 1.583 \\
+    \midrule
+    Catalog Oracle & \oracle{0.994} & \oracle{1.248} & \oracle{1.286} & \oracle{1.130} & \oracle{0.685} & \oracle{4.191} & \oracle{0.920} & \oracle{0.882} & \oracle{1.417} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Per-source MASE on TimesFM at $10\%$ severity, $H=96$. The macro column is the
+  equal-weight average over the eight sources and is the quantity reported in
+  Table~\ref{tab:main}. Lower is better everywhere.}
+  \label{tab:app-src-tf-96}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccccc c}
+    \toprule
+    Method & ETTh1 & ETTh2 & ETTm1 & ETTm2 & Electricity & Exchange & Traffic & Weather & Macro $\downarrow$ \\
+    \midrule
+    Native KEEP & 1.235 & 1.363 & 1.568 & 1.155 & 0.963 & 3.330 & 1.199 & 0.628 & 1.430 \\
+    Best Fixed & 0.979 & 1.229 & 1.133 & 1.017 & 0.831 & 3.607 & 0.908 & 0.661 & 1.296 \\
+    R2-CART & 0.998 & 1.264 & 1.149 & 1.002 & 0.885 & 3.579 & 0.901 & 0.621 & 1.300 \\
+    Fixed SAITS & 0.970 & 1.244 & 1.117 & 0.992 & 0.870 & 2.996 & 0.906 & 0.629 & 1.216 \\
+    TATO & 1.359 & 1.226 & 1.692 & 1.175 & 1.102 & 2.740 & 1.249 & 0.710 & 1.407 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 1.012 & 1.218 & 1.142 & 1.008 & 0.934 & 3.187 & 0.908 & 0.630 & 1.255 \\
+    \midrule
+    Catalog Oracle & \oracle{0.896} & \oracle{1.144} & \oracle{1.041} & \oracle{0.944} & \oracle{0.633} & \oracle{2.568} & \oracle{0.860} & \oracle{0.463} & \oracle{1.069} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Per-source MASE on TimesFM at $10\%$ severity, $H=192$. The macro column is the
+  equal-weight average over the eight sources and is the quantity reported in
+  Table~\ref{tab:main}. Lower is better everywhere.}
+  \label{tab:app-src-tf-192}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccccc c}
+    \toprule
+    Method & ETTh1 & ETTh2 & ETTm1 & ETTm2 & Electricity & Exchange & Traffic & Weather & Macro $\downarrow$ \\
+    \midrule
+    Native KEEP & 1.232 & 1.391 & 1.688 & 1.332 & 1.021 & 6.475 & 1.197 & 1.135 & 1.934 \\
+    Best Fixed & 1.110 & 1.304 & 1.294 & 1.217 & 0.905 & 6.914 & 0.996 & 1.152 & 1.862 \\
+    R2-CART & 1.106 & 1.334 & 1.299 & 1.206 & 0.898 & 7.044 & 1.007 & 1.123 & 1.877 \\
+    Fixed SAITS & 1.098 & 1.327 & 1.285 & 1.193 & 0.926 & 5.769 & 0.990 & 1.133 & 1.715 \\
+    TATO & 1.367 & 1.303 & 1.784 & 1.342 & 1.228 & 5.063 & 1.273 & 1.208 & 1.821 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 1.132 & 1.268 & 1.295 & 1.214 & 0.976 & 6.803 & 0.995 & 1.137 & 1.853 \\
+    \midrule
+    Catalog Oracle & \oracle{1.040} & \oracle{1.198} & \oracle{1.229} & \oracle{1.122} & \oracle{0.761} & \oracle{5.304} & \oracle{0.960} & \oracle{0.883} & \oracle{1.562} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Per-source MASE on Chronos-2 at $10\%$ severity, $H=96$. The macro column is the
+  equal-weight average over the eight sources and is the quantity reported in
+  Table~\ref{tab:main}. Lower is better everywhere.}
+  \label{tab:app-src-ch2-96}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccccc c}
+    \toprule
+    Method & ETTh1 & ETTh2 & ETTm1 & ETTm2 & Electricity & Exchange & Traffic & Weather & Macro $\downarrow$ \\
+    \midrule
+    Native KEEP & 1.083 & 1.238 & 1.288 & 1.016 & 0.768 & 3.272 & 0.857 & 0.668 & 1.274 \\
+    Best Fixed & 1.020 & 1.120 & 1.192 & 1.007 & 0.795 & 2.781 & 0.836 & 0.651 & 1.175 \\
+    R2-CART & 1.016 & 1.114 & 1.195 & 1.003 & 0.773 & 2.380 & 0.836 & 0.637 & 1.119 \\
+    Fixed SAITS & 1.021 & 1.134 & 1.191 & 0.977 & 0.852 & 2.722 & 0.825 & 0.634 & 1.170 \\
+    TATO & 1.438 & 1.649 & 1.617 & 1.183 & 1.028 & 2.641 & 1.284 & 0.650 & 1.436 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 1.019 & 1.210 & 1.221 & 0.985 & 0.833 & 2.152 & 0.822 & 0.643 & 1.111 \\
+    \midrule
+    Catalog Oracle & \oracle{0.936} & \oracle{1.017} & \oracle{1.082} & \oracle{0.921} & \oracle{0.590} & \oracle{1.992} & \oracle{0.790} & \oracle{0.461} & \oracle{0.974} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Per-source MASE on Chronos-2 at $10\%$ severity, $H=192$. The macro column is the
+  equal-weight average over the eight sources and is the quantity reported in
+  Table~\ref{tab:main}. Lower is better everywhere.}
+  \label{tab:app-src-ch2-192}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccccc c}
+    \toprule
+    Method & ETTh1 & ETTh2 & ETTm1 & ETTm2 & Electricity & Exchange & Traffic & Weather & Macro $\downarrow$ \\
+    \midrule
+    Native KEEP & 1.175 & 1.298 & 1.362 & 1.221 & 0.842 & 6.940 & 0.966 & 1.275 & 1.885 \\
+    Best Fixed & 1.133 & 1.323 & 1.299 & 1.233 & 0.857 & 5.862 & 0.956 & 1.238 & 1.738 \\
+    R2-CART & 1.131 & 1.345 & 1.298 & 1.229 & 0.857 & 5.195 & 0.944 & 1.200 & 1.650 \\
+    Fixed SAITS & 1.116 & 1.286 & 1.305 & 1.200 & 0.936 & 5.748 & 0.949 & 1.161 & 1.713 \\
+    TATO & 1.457 & 1.908 & 1.656 & 1.349 & 1.086 & 4.493 & 1.253 & 1.138 & 1.792 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 1.150 & 1.312 & 1.309 & 1.189 & 0.887 & 5.132 & 0.954 & 1.230 & 1.645 \\
+    \midrule
+    Catalog Oracle & \oracle{1.048} & \oracle{1.152} & \oracle{1.210} & \oracle{1.107} & \oracle{0.699} & \oracle{4.744} & \oracle{0.915} & \oracle{0.948} & \oracle{1.478} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\subsubsection{Action-Opportunity Strata}
+\label{app:opportunity}
+This subsection supports \S\ref{sec:exp-exists}. For an evaluation episode $i$ the oracle
+opportunity is the improvement the best admissible action could have produced over the
+reference input,
+\begin{equation}
+  \Delta_i \;=\; \loss\!\left(F(T_{a_0}(X_i, M_i)),\, y_i\right) - \min_{a \in \calA} \loss\!\left(F(T_{a}(X_i, M_i)),\, y_i\right),
+  \label{eq:opportunity}
+\end{equation}
+which uses the realised target and is therefore a diagnostic rather than a deployable
+quantity. Episodes are partitioned into a \emph{no-op} stratum, where the reference input is
+already best up to a tolerance, a \emph{low-opportunity} stratum, and a
+\emph{high-opportunity} stratum. The two boundaries are fitted on the replay bank and applied
+unchanged to TEST, so no evaluation episode participates in choosing them.
+Table~\ref{tab:app-opp-sizes} records the realised stratum sizes,
+Table~\ref{tab:app-opportunity} reports source-macro MASE within each stratum under the
+identical partition for every method, and Table~\ref{tab:app-opp-sens} repeats the
+stratum-level MASE under alternative boundaries so that a reader can see how much of the
+effect depends on where the boundary was drawn.
+
+\begin{table}[h]
+  \caption{Action-opportunity strata on TEST. Boundaries are the bank thresholds, applied
+  unchanged. Counts are of parents and not of mask variants.}
+  \label{tab:app-opp-sizes}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
+    \toprule
+    Stratum & Parents & Share of episodes & Median $\Delta_i$ & 90th pct.\ $\Delta_i$ \\
+    \midrule
+    No-op             & 68  & 19.3\%  & 0.000  & 0.000 \\
+    Low opportunity   & 91   & 47.1\%   & 0.038   & 0.100 \\
+    High opportunity  & 79  & 33.5\%  & 0.352  & 1.293 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Stratum-level MASE under the identical partition. The no-op stratum is where an
+  intervention can only lose, so a method that is better only in the high-opportunity stratum
+  while degrading the no-op stratum has not solved the selection problem. Lower is better.}
+  \label{tab:app-opportunity}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
+    \toprule
+    Method & No-op MASE $\downarrow$ & Low opportunity $\downarrow$ & High opportunity $\downarrow$ & Overall $\downarrow$ \\
+    \midrule
+    Native KEEP        & 1.287    & 1.166    & 2.039    & 1.576 \\
+    Best Fixed         & 1.401      & 1.181      & 1.689      & 1.488 \\
+    R2-CART            & 1.490      & 1.197      & 1.588      & 1.458 \\
+    Fixed SAITS           & 1.565      & 1.225      & 1.554      & 1.459 \\
+    TATO               & 1.444    & 1.245    & 2.177    & 1.616 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 1.389 & 1.170 & 1.652 & 1.437 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Stratum-boundary sensitivity. The no-op tolerance and the low and high boundary are
+  shifted by the indicated factor of the bank threshold, and every other setting is unchanged.
+  MASE is source-macro averaged within the resulting strata.}
+  \label{tab:app-opp-sens}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
+    \toprule
+    Boundary factor & No-op MASE $\downarrow$ & Low MASE $\downarrow$ & High MASE $\downarrow$ & Overall MASE $\downarrow$ \\
+    \midrule
+    $\times 0.5$ & 1.389  & 1.056  & 1.513  & 1.437 \\
+    $\times 1.0$ & 1.389   & 1.170   & 1.652   & 1.437 \\
+    $\times 2.0$ & 1.389   & 1.433   & 2.707   & 1.437 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+
+
+\subsubsection{Per-Pattern Results}
+\label{app:pattern}
+Table~\ref{tab:app-pattern-res} separates the four patterns. Point missing is expected to
+be the easiest regime and tail missing the hardest, because the missing block is adjacent
+to the forecast origin and therefore removes exactly the observations a forecaster would
+rely on most. Any claim about a pattern is a claim about this table, not about the pooled
+main table.
+
+\begin{table}[h]
+  \caption{Per-pattern MASE at $10\%$ severity, source-macro averaged over the three
+  backbones and both horizons. The last column is the average rank over the four patterns.}
+  \label{tab:app-pattern-res}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
+    \toprule
+    Method & P1 Point & P2 Target Block & P3 Shared Block & P4 Tail & Avg.\ Rank $\downarrow$ \\
+    \midrule
+    \textsc{Native Keep} & 1.436 & 1.379 & 1.400 & 2.088 & 3.36 \\
+    \textsc{Best Fixed}  & 1.412   & 1.393   & 1.400   & 1.746   & 2.94 \\
+    R2-CART              & 1.409   & 1.439   & 1.425   & 1.561   & 2.97 \\
+    Fixed SAITS & 1.318 & 1.425 & 1.549 & 1.543 & 2.98 \\
+    TATO & 1.336 & 1.371 & 1.317 & 2.441 & 4.10 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 1.376 & 1.381 & 1.386 & 1.604 & 2.79 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+
+\section{Full Severity Results}
+\label{app:severity-full}
+\subsubsection{Severity Tables}
+\label{app:severity}
+Tables~\ref{tab:app-sev10}--\ref{tab:app-sev50} give the full severity sweep for the reduced
+roster of Table~\ref{tab:main}, and all three tables use it. No method is retuned
+between severities. \introact{} reuses the $k$ and $\beta$ frozen on the bank, and every
+baseline reuses the models and rules fixed on TRAIN. The $10\%$ column is the main-text
+condition. The $30\%$ and $50\%$ columns test whether one frozen configuration holds across
+the registered severity grid, and they are not a generalisation test to unseen severity,
+because the replay bank already samples from the same three levels.\begin{table}[h]
+  \caption{Complete results at $10\%$ severity, source-macro averaged in the two scaled metrics. Ranks are over deployable methods only and exclude the diagnostic row. This is the roster that Table~\ref{tab:robust} summarises, and the two tables are computed from the same records.}
+  \label{tab:app-sev10}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccc}
+    \toprule
+    Method & MASE $\downarrow$ & RMSSE $\downarrow$ & Rank $\downarrow$ \\
+    \midrule
+    \textsc{Native Keep} & 1.576 & 1.325 & 3.36 \\
+    \textsc{Best Fixed} & 1.488 & 1.262 & 2.94 \\
+    R2-CART & 1.458 & 1.246 & 2.97 \\
+    Fixed SAITS & 1.459 & 1.245 & 2.98 \\
+    TATO & 1.616 & 1.333 & 4.10 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 1.437 & 1.233 & 2.79 \\
+    \midrule
+    \oracle{Catalog Oracle (diagnostic)} & \oracle{1.258} & \oracle{1.099} & \oracle{---} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Complete results at $30\%$ severity for the same seven-method set, source-macro averaged in the two scaled metrics. The configuration is identical to the $10\%$ table and nothing is retuned.}
+  \label{tab:app-sev30}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccc}
+    \toprule
+    Method & MASE $\downarrow$ & RMSSE $\downarrow$ & Rank $\downarrow$ \\
+    \midrule
+    \textsc{Native Keep} & 1.794 & 1.439 & 3.36 \\
+    \textsc{Best Fixed} & 1.702 & 1.378 & 2.95 \\
+    R2-CART & 1.678 & 1.368 & 2.88 \\
+    Fixed SAITS & 1.738 & 1.400 & 3.11 \\
+    TATO & 1.941 & 1.526 & 4.07 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 1.698 & 1.373 & 2.70 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Complete results at $50\%$ severity for the same seven-method set. This level is inside the registered grid that the replay bank samples from, so the rows show within-grid robustness of one frozen configuration and not behaviour on unseen severity.}
+  \label{tab:app-sev50}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccc}
+    \toprule
+    Method & MASE $\downarrow$ & RMSSE $\downarrow$ & Rank $\downarrow$ \\
+    \midrule
+    \textsc{Native Keep} & 1.875 & 1.486 & 3.32 \\
+    \textsc{Best Fixed} & 1.738 & 1.397 & 2.80 \\
+    R2-CART & 1.721 & 1.393 & 2.78 \\
+    Fixed SAITS & 1.763 & 1.409 & 3.19 \\
+    TATO & 2.036 & 1.574 & 4.18 \\
+    \midrule
+    \rowcolor{bestgray}\introact{} & 1.735 & 1.405 & 2.63 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\subsubsection{Severity Trend by Backbone}
+\label{app:robust-fig}
+Table~\ref{tab:robust} averages the severity sweep over the backbones, and
+Table~\ref{tab:app-trend} separates them, because a configuration that holds on average may
+still be carried by one family. Every row reuses the models and rules frozen on TRAIN and
+nothing is retuned per severity.
+
+\begin{table}[h]
+  \caption{Source-macro MASE at each registered severity, one block of columns per frozen
+  backbone. The evaluation set, the roster and the frozen configuration are the ones of
+  Table~\ref{tab:main}.}
+  \label{tab:app-trend}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccccccccc}
+    \toprule
+     & \multicolumn{3}{c}{Bolt} & \multicolumn{3}{c}{TimesFM} & \multicolumn{3}{c}{Chronos-2} \\
+    \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+    Method & $10\%$ & $30\%$ & $50\%$ & $10\%$ & $30\%$ & $50\%$ & $10\%$ & $30\%$ & $50\%$ \\
+    \midrule
+    \textsc{Native Keep} & 1.466 & 1.684 & 1.792 & 1.682 & 1.864 & 1.947 & 1.579 & 1.833 & 1.887 \\
+    \textsc{Best Fixed} & 1.428 & 1.675 & 1.695 & 1.579 & 1.729 & 1.835 & 1.456 & 1.703 & 1.683 \\
+    R2-CART & 1.402 & 1.678 & 1.718 & 1.588 & 1.678 & 1.735 & 1.385 & 1.678 & 1.709 \\
+    Fixed SAITS & 1.469 & 1.706 & 1.740 & 1.465 & 1.821 & 1.841 & 1.441 & 1.687 & 1.708 \\
+    TATO & 1.620 & 1.986 & 2.027 & 1.614 & 1.873 & 1.988 & 1.614 & 1.963 & 2.091 \\
+    \introact{} & 1.378 & 1.663 & 1.664 & 1.554 & 1.743 & 1.803 & 1.378 & 1.687 & 1.739 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+
+
+\section{Reconstruction and Utility Diagnostics}
+\label{app:diagnostics}
+\subsubsection{Reconstruction versus Forecasting Utility}
+\label{app:recutils}
+This subsection supports \S\ref{sec:exp-exists}. Reconstruction error is defined only where a
+method emits an explicit estimate of the hidden positions, which all five catalog interventions
+do. Running the comparison on the catalog keeps both criteria on one protocol and
+one set of episodes: the same window, the same mask, the same frozen backbone, and the same
+realised future. \textsc{Keep} does not enter, because it estimates nothing, and \introact{}
+does not enter, because it returns a forecast from an executed input rather than a
+reconstruction.
+
+Reconstruction error is measured on the artificially hidden positions of the target channel,
+which are known because the mask is synthetic. Realised utility is the change in forecasting
+loss the same action produced on the same episode. Both rankings are formed inside an episode
+and then compared, because episodes differ in scale and in difficulty and pooling them would
+let a few large-scale sources decide the answer. Table~\ref{tab:app-recutils} gives the
+per-action averages and the two rank statistics.
+
+\begin{table}[h]
+  \caption{Within-episode reconstruction rank against within-episode realised-utility rank,
+  over the five catalog interventions and the held-out episodes of all three backbones. Each
+  row is normalised, so a cell is the share of episodes at that reconstruction rank whose
+  realised utility took the column's rank. A criterion that predicted the other would put every
+  episode on the diagonal.}
+  \label{tab:rankgrid}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccccc}
+    \toprule
+    Reconstruction rank & Utility 1 & Utility 2 & Utility 3 & Utility 4 & Utility 5 \\
+    \midrule
+    1 (most accurate) & 18.8\% & 27.3\% & 24.0\% & 18.0\% & 11.9\% \\
+    2 & 18.0\% & 25.0\% & 28.7\% & 20.1\% & 8.2\% \\
+    3 & 17.7\% & 19.9\% & 28.0\% & 20.5\% & 13.9\% \\
+    4 & 19.9\% & 16.6\% & 12.7\% & 28.1\% & 22.7\% \\
+    5 (least accurate) & 25.5\% & 11.2\% & 6.7\% & 13.3\% & 43.3\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[h]
+  \caption{Reconstruction quality against realised forecasting utility, over the five catalog
+  interventions on the held-out evaluation episodes. Reconstruction error is measured on the
+  hidden positions and realised utility against \textsc{Keep} on the same backbone. Winner
+  agreement is the share of episodes on which the most accurate reconstruction is also the most
+  useful intervention, and the discordant rate is the share of ordered pairs whose two rankings
+  disagree.}
+  \label{tab:app-recutils}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}
+    \toprule
+    Intervention & Rec.\ MSE $\downarrow$ & Rec.\ MAE $\downarrow$
+                 & Mean realised utility $\uparrow$ & Episodes \\
+    \midrule
+    \textsc{Ffill}         & 77.47  & 4.08  & -0.139  & 760 \\
+    \textsc{Single TS-ICL} & 29.61 & 2.03 & +0.013 & 760 \\
+    \textsc{Multi TS-ICL}  & 29.59  & 1.85  & +0.029  & 758 \\
+    \textsc{Context Ridge} & 30.39  & 1.48  & +0.043  & 566 \\
+    \textsc{SAITS}         & 68.25  & 3.10  & +0.037  & 747 \\
+    \midrule
+    \multicolumn{5}{l}{\footnotesize Winner agreement 19.3\%, discordant rate
+    44.5\%, mean within-episode Spearman $\rho$ 0.12} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+The averages in the table make the same point as the rank statistics. The intervention with the
+lowest mean reconstruction error is not the one with the highest mean realised utility, so the
+disagreement is not a property of a few unusual episodes. A deployment that picked its repair
+by reconstruction accuracy would therefore be optimising a criterion that is close to
+uninformative about the quantity it cares about.
+
+\subsubsection{Where an Action's Utility Comes From}
+\label{app:utility-by-severity}
+Table~\ref{tab:app-utility-severity} reports the mean realised utility of each catalog action
+on the replay bank, once over the whole bank and once within each registered severity. It
+selects nothing and is computed after the configuration was frozen. Two things in it matter for
+reading the main tables.
+
+The first is that how much a repair is worth depends on the backbone and on how much of the
+context is missing, and the two dependencies are not the same shape. On TimesFM every
+non-trivial repair grows more valuable as the context empties, so a rule tuned at one severity
+is looking at a moving target. On Chronos-2 the same repairs sit at roughly the same value
+across severities. That is the premise of \S\ref{sec:exp-exists} restated as a table, and it is
+why the decision cannot be a single policy learned once.
+
+The second is a data-quality fact that has to travel with the numbers. On Bolt the mean utility
+of \textsc{Context Ridge} over the whole bank is +0.073, while within the $10\%$
+episodes alone it is +0.036. The gap is one replay episode on which the ridge
+extrapolation diverged, and a single such record moves a mean over a few hundred. It was not
+winsorised, because silently transforming a recorded execution is exactly what the protocol
+forbids, and it is one reason the neighbourhood size matters: a local estimate over eight
+neighbours is exposed to an outlier that an estimate over two hundred and fifty-six dilutes.
+
+\begin{table}[h]
+  \caption{Mean realised utility of each action on the replay bank, overall and within each
+  registered severity. Positive means the action lowered the forecasting loss relative to
+  leaving the input unchanged. Utility is measured per episode, so it is not on the same
+  aggregation as the source-macro MASE of the main tables and the two are not directly
+  comparable in magnitude.}
+  \label{tab:app-utility-severity}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{llcccc}
+    \toprule
+    Backbone & Action & All severities & $10\%$ & $30\%$ & $50\%$ \\
+    \midrule
+    \multirow{4}{*}{Bolt}
+      & \textsc{Ffill}         & -0.167  & -0.130  & -0.162  & -0.209 \\
+      & \textsc{Single TS-ICL} & +0.018 & +0.002 & +0.006 & +0.045 \\
+      & \textsc{Multi TS-ICL}  & +0.035  & +0.013  & +0.036  & +0.057 \\
+      & \textsc{Context Ridge} & +0.073  & +0.036  & +0.052  & +0.136 \\
+    \midrule
+    \multirow{4}{*}{TimesFM}
+      & \textsc{Ffill}         & -0.022  & -0.013  & -0.025  & -0.029 \\
+      & \textsc{Single TS-ICL} & +0.191 & +0.131 & +0.187 & +0.254 \\
+      & \textsc{Multi TS-ICL}  & +0.205  & +0.145  & +0.210  & +0.261 \\
+      & \textsc{Context Ridge} & +0.310  & +0.216  & +0.304  & +0.419 \\
+    \midrule
+    \multirow{4}{*}{Chronos-2}
+      & \textsc{Ffill}         & -0.180  & -0.120  & -0.177  & -0.242 \\
+      & \textsc{Single TS-ICL} & -0.002 & -0.007 & -0.001 & +0.002 \\
+      & \textsc{Multi TS-ICL}  & +0.026  & +0.012  & +0.038  & +0.029 \\
+      & \textsc{Context Ridge} & +0.096  & +0.068  & +0.095  & +0.128 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\subsubsection{Governance Diagnostics}
+\label{app:governance-fig}
+Table~\ref{tab:app-operating} walks the operating point over the penalty grid and
+Table~\ref{tab:app-scorebins} checks that the order the score induces agrees with the sign of
+the realised utility. The score is used only to order actions, and its magnitude is not claimed
+to be calibrated against the utility scale. Over 10773 admissible pairs the sign of the score and the sign of the realised utility agree on 54\% of them, and the mean realised utility is +0.197 where the score is positive against -0.031 where it is negative, so the score carries the direction the decision needs without carrying the level.
+
+\begin{table}[h]
+  \caption{Operating points over the penalty grid, with the neighbourhood size frozen at the
+  selected value on each backbone. Intervention rate is the share of requests on which a
+  non-reference action ran, and conditional HIR is the share of those that raised the loss.
+  Raising the penalty moves the rate and leaves the conditional rate close to where it was, so
+  what the rule controls is how often it acts rather than how often an executed action hurts.}
+  \label{tab:app-operating}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccc}
+    \toprule
+     & \multicolumn{2}{c}{Bolt} & \multicolumn{2}{c}{TimesFM} & \multicolumn{2}{c}{Chronos-2} \\
+    \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+    Penalty strength & Int.\ rate & Cond.\ HIR & Int.\ rate & Cond.\ HIR & Int.\ rate & Cond.\ HIR \\
+    \midrule
+    $\beta = 0$ & 87.2\% & 42.2\% & 92.2\% & 42.7\% & 78.9\% & 40.2\% \\
+    $\beta = 0.5$ & 74.6\% & 42.2\% & 84.7\% & 40.7\% & 69.1\% & 39.6\% \\
+    $\beta = 1$ & 64.6\% & 43.0\% & 69.3\% & 41.4\% & 54.6\% & 37.3\% \\
+    $\beta = 1.64$ & 48.2\% & 42.9\% & 52.4\% & 38.7\% & 36.6\% & 41.0\% \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{table}[h]
+  \caption{Realised utility against the quantile bin of the conservative score, pooled over the
+  three backbones and every admissible action. The score orders actions and its magnitude is
+  not claimed to be calibrated, so what this table checks is whether the order it induces
+  agrees with the sign of the utility. Intervals resample parents.}
+  \label{tab:app-scorebins}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccc}
+    \toprule
+    Score bin & Pairs & Mean realised utility & 95\% interval \\
+    \midrule
+    1 (lowest score) & 2,157 & -0.105 & [-0.250, +0.047] \\
+    2 & 2,154 & +0.007 & [-0.009, +0.032] \\
+    3 & 2,154 & +0.008 & [-0.033, +0.035] \\
+    4 & 2,154 & +0.017 & [-0.007, +0.052] \\
+    5 (highest score) & 2,154 & +0.304 & [+0.058, +0.788] \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+
+\section{Ablations and Stability}
+\label{app:ablations-full}
+\subsection{Ablation Details}
+\label{app:ablation-details}
+This section supports \S\ref{sec:exp-ablation}. Every variant reads the same catalog
+prediction cache, so the rows differ only in how the stored utilities are summarised and
+thresholded. Table~\ref{tab:app-ablation} reports the full outcome vector behind the compact
+Table~\ref{tab:ablation}. The variant definitions follow \S\ref{sec:exp-ablation} exactly.
+
+\begin{table}[h]
+  \caption{Ablation, full outcome vector in the two scaled metrics. Raw errors are not
+  averaged across sources anywhere in this paper, so they are not shown here either. Calls
+  counts forecasting-backbone calls per request and harmful loss is relative to
+  \textsc{Keep}.}
+  \label{tab:app-ablation}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccc}
+    \toprule
+    Variant & MASE $\downarrow$ & RMSSE $\downarrow$ & Intervention rate & Conditional HIR $\downarrow$ & Harmful loss $\downarrow$ & Calls $\downarrow$ \\
+    \midrule
+    Full \introact{}            & 1.437 & 1.233 & 65.4\% & 40.2\% & 0.0375 & 1.65 \\
+    A1 Global utility & 1.475 & 1.255 & 100.0\% & 43.9\% & 0.0697 & 2.00 \\
+    A2 w/o intervention state & 1.418 & 1.219 & 63.4\% & 39.5\% & 0.0330 & 1.63 \\
+    A3 w/o reference-forecast state & 1.446 & 1.240 & 67.4\% & 40.4\% & 0.0419 & 1.67 \\
+    A4 Always act & 1.447 & 1.239 & 100.0\% & 42.1\% & 0.0533 & 2.00 \\
+    A5 Parametric utility predictor & 1.434 & 1.234 & 86.7\% & 43.7\% & 0.0549 & 1.87 \\
+    \midrule
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\subsection{Selection Stability}
+\label{app:selstability}
+The cross-validated surface over the grid is rough, so the pair the bank selects is worth
+questioning directly. This subsection repeats the whole selection procedure on parent-level
+subsamples of the replay bank, at half and at three quarters of its parents with three draws
+each, and records what the rule picks and what that pick produces on the evaluation block. The
+evaluation figures are diagnostics. Nothing in the paper is selected from them, and the
+reported configuration stays the one the full bank chooses.
+
+The rule reproduces the frozen pair on 11\% of the subsamples, so the pair itself is not a stable point of the grid. The outcome is steadier than the pair: the worst subsample choice costs 0.051 MASE against the frozen one, and every subsample choice still improves on the untouched input. This is what the standard-error rule is for, because on a bank of this size the settings inside one standard error of the leader cannot be told apart.
+
+\begin{table}[h]
+  \caption{Selection stability. Each row is one subsample of the replay bank, with the pair the
+  rule selected on it and the evaluation outcome that pair produces. The first row of each
+  backbone is the configuration the paper reports.}
+  \label{tab:app-selstab}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccccc}
+    \toprule
+    Backbone & Bank share & Selected $k$ & Selected $\beta$ & MASE $\downarrow$ & Intervention rate \\
+    \midrule
+    Bolt & full bank & 128 & 0.5 & 1.378 & 74.6\% \\
+    Bolt & 50\% & 256 & 0.5 & 1.364 & 80.4\% \\
+    Bolt & 50\% & 32 & 1.64 & 1.382 & 45.1\% \\
+    Bolt & 50\% & 64 & 1.64 & 1.370 & 46.7\% \\
+    Bolt & 75\% & 64 & 0.5 & 1.373 & 77.6\% \\
+    Bolt & 75\% & 64 & 0.5 & 1.373 & 77.6\% \\
+    Bolt & 75\% & 128 & 0 & 1.374 & 87.2\% \\
+    TimesFM & full bank & 32 & 1.64 & 1.554 & 52.4\% \\
+    TimesFM & 50\% & 64 & 1.64 & 1.515 & 58.9\% \\
+    TimesFM & 50\% & 16 & 1.64 & 1.576 & 48.6\% \\
+    TimesFM & 50\% & 16 & 1 & 1.558 & 69.5\% \\
+    TimesFM & 75\% & 32 & 1.64 & 1.554 & 52.4\% \\
+    TimesFM & 75\% & 16 & 1 & 1.558 & 69.5\% \\
+    TimesFM & 75\% & 32 & 0.5 & 1.605 & 84.7\% \\
+    Chronos-2 & full bank & 16 & 0.5 & 1.378 & 69.1\% \\
+    Chronos-2 & 50\% & 64 & 0.5 & 1.366 & 77.2\% \\
+    Chronos-2 & 50\% & 32 & 1.64 & 1.389 & 40.1\% \\
+    Chronos-2 & 50\% & 64 & 1.64 & 1.372 & 44.3\% \\
+    Chronos-2 & 75\% & 16 & 0.5 & 1.378 & 69.1\% \\
+    Chronos-2 & 75\% & 128 & 1.64 & 1.353 & 45.5\% \\
+    Chronos-2 & 75\% & 256 & 0.5 & 1.353 & 68.7\% \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\subsection{Mask-Realisation Stability}
+\label{app:seeds}
+The main experiment uses one deterministic mask per parent. This appendix repeats the
+comparison under two further deterministic mask realisations of the same parents, so that a
+reader can see whether a conclusion depends on one particular realisation of the deletion
+pattern. The three realisations are fixed before the run and are never treated as three
+independent samples of parents: the statistical unit stays the parent, and the three
+realisations are read as a stability check on the same parent set. Significance testing is
+never performed across them.
+
+The subset is fixed before the run: all eight sources, patterns P1 to P4, $10\%$ severity,
+$H=96$, on Bolt and Chronos-2. Table~\ref{tab:app-seeds} carries \introact{} against
+\textsc{Keep} on each realisation. The simple selector moves by 0.059 on
+Bolt and 0.022 on the held-out backbone over the same three realisations,
+so neither method is carried by one deletion pattern. Reporting the spread over three
+realisations is a stability diagnostic and is not an additional estimate of variance.
+
+\begin{table}[h]
+  \caption{Mask-realisation stability. Each row is one deterministic mask realisation on the
+  pre-registered subset. The spread across realisations is a stability diagnostic and is not
+  an additional sample of parents.}
+  \label{tab:app-seeds}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{llccc}
+    \toprule
+    Backbone & Mask realisation & MASE $\downarrow$ & $\Delta$ vs \textsc{Keep} $\uparrow$ & Intervention rate \\
+    \midrule
+    Bolt      & primary seed        & 1.378 & -0.088 & 74.6\% \\
+    Bolt      & second realisation  & 1.381 & -0.080 & 76.1\% \\
+    Bolt      & third realisation   & 1.376 & -0.087 & 75.9\% \\
+    \midrule
+    Chronos-2 & primary seed        & 1.378 & -0.201 & 69.1\% \\
+    Chronos-2 & second realisation  & 1.373 & -0.204 & 68.2\% \\
+    Chronos-2 & third realisation   & 1.380 & -0.222 & 69.1\% \\
+    \midrule
+    \multicolumn{2}{l}{Spread over the three realisations (Bolt)}      & 0.004 & --- & 1.4\% \\
+    \multicolumn{2}{l}{Spread over the three realisations (Chronos-2)} & 0.008  & --- & 0.9\% \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\section{Cost, Failures, and Memory}
+\label{app:cost-full}
+\subsection{Runtime and Failure Audit}
+\label{app:calls}
+Table~\ref{tab:app-efficiency} gives the full cost breakdown behind the summary in
+\S\ref{sec:exp-ablation}. Offline cost and online cost are kept in separate columns because
+they are not directly comparable: the offline replay bank is built once per backbone revision,
+per source, and per horizon, whereas the online columns are per request. Within each column a
+lower value is better, and the two columns are read separately rather than combined into a
+single score. Latency percentiles are measured per request and exclude cold start, which is
+reported on its own line. Candidate materialisation is a separate line because it is paid
+before the decision is made and is not a forecasting-backbone call.
+
+\begin{table}[t]
+  \caption{Deployment cost for the methods that carry a claim, offline and online kept
+  separate. Latency percentiles are per request and exclude cold start, reported on its own
+  line. Backbone calls counts forecasting-backbone calls per request and excludes candidate
+  materialisation, which is reported in its own column.}
+  \label{tab:app-efficiency}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccccc}
+    \toprule
+    Method & Offline train/search & Candidate constr. & Backbone calls/req.\ & Mean lat.\ $\downarrow$ & P95 $\downarrow$ & Max $\downarrow$ \\
+    \midrule
+    Fixed SAITS           & 8 deployment imputers and 16 cross-fitted ones, 247 min total     & 1 per request     & 1.00     & 56 ms     & 62 ms     & 388 ms \\
+    TATO               & 3,072 calls, once per backbone   & 1 per request   & 1.00   & 56 ms   & 62 ms   & 388 ms \\
+    \rowcolor{bestgray}\introact{} & 30,160 calls, once per backbone & 5 per request & 1.65 & 95 ms & 127 ms & 781 ms \\
+    \midrule
+    \multicolumn{7}{l}{\footnotesize Cold start: 2.6 s to load a backbone, paid once per process \quad
+    Failure/timeout share: 0.00\%} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+Table~\ref{tab:app-calls} separates offline from online cost and separates successes from
+failures. Failures and timeouts are never counted as successes and are never dropped from the
+denominator. A request that fails to produce a forecast is reported as a failure rather than
+as a zero-cost success. A request costs one forecasting-backbone call for the reference action
+and, when an intervention is executed, one further call for the selected action, so the online
+count is between one and two backbone calls. When the decision returns \textsc{Keep} the input
+is left untouched and the reference call is the returned forecast. Candidate materialisation
+and scoring are booked on their own line because they are paid before the decision and do not
+touch the backbone.
+
+\begin{table}[h]
+  \caption{Backbone call accounting. Latency is reported per request and excludes cold start,
+  which is reported on its own line. The offline replay-bank build and the one-off selector fit
+  are amortised and reported separately. Candidate materialisation and scoring are booked on
+  their own line and are not forecasting-backbone calls.}
+  \label{tab:app-calls}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lccc}
+    \toprule
+    Outcome & Requests & Share & Backbone calls per request \\
+    \midrule
+    \textsc{Keep} returned (input untouched)   & 263    & 34.6\%    & 1 \\
+    Intervention executed (input changed)      & 497     & 65.4\%     & 2 \\
+    Failed before any forecast                 & 0    & 0.00\%    & 0 \\
+    Timed out after the forecast               & 0 & 0.00\% & 0 \\
+    \midrule
+    Candidate materialisation and scoring (per request) & 3,800 & --- & 0 \\
+    Offline replay-bank build (amortised)      & --- & --- & 30,160 calls, once per backbone \\
+    Offline selector fit (amortised)           & --- & --- & no fit, the selector stores the bank and retrieves from it \\
+    Cold start (first request of a process)    & 12 & --- & 2.6 s \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\section{Reproducibility and Artefact Schema}
+\label{app:repro-full}
+\subsubsection{Reproducibility Details}
+\label{app:reprodetails}
+Each record in the result files contains: source, parent, origin, horizon, pattern,
+severity, mask hash, backbone, backbone revision, method, action, input hash, prediction
+hash, forecast, target reference id, MASE, MSE, MAE, RMSE, reconstruction MSE where
+applicable, runtime components, failure, fallback, code SHA, and the resolved configuration.
+Results are written to the logical result groups listed in Table~\ref{tab:app-groups}, each in
+CSV, JSON, and Markdown form, with raw predictions retained alongside the aggregates. The
+group names describe the stage that produced them and do not encode a version number, so that
+a later revision of the protocol cannot be confused with the present one.
+
+\begin{table}[h]
+  \caption{Result groups written by the pipeline. Every number in the main text and in the
+  appendices is generated from one of these groups and nothing is transcribed by hand.}
+  \label{tab:app-groups}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{\begin{tabular}{lll}
+    \toprule
+    Result group & Contents & Consumed by \\
+    \midrule
+    \texttt{protocol}       & frozen protocol, source manifests, split boundaries, TEST manifest & Appendix~\ref{app:splits} \\
+    \texttt{replay\_bank}   & replay records $(z_{i,a}, a, g_{i,a})$ with input and prediction hashes & \S\ref{sec:method-replay} \\
+    \texttt{baselines}      & baseline training runs, resolved hyperparameters, checkpoints & \S\ref{sec:exp-main} \\
+    \texttt{train\_eval}    & TRAIN-eval acceptance check before freezing & Appendix~\ref{app:splits} \\
+    \texttt{main\_results}  & main matrix rows, all methods, all cells & Tables~\ref{tab:main}, \ref{tab:app-src-bolt-96}--\ref{tab:app-src-ch2-192} \\
+    \texttt{ablations}      & the five ablation variants and the catalog oracle diagnostic & Table~\ref{tab:ablation}, \ref{tab:app-ablation} \\
+    \texttt{robustness}     & severity, pattern, and mask-realisation sweeps & Tables~\ref{tab:robust}, \ref{tab:app-sev10}--\ref{tab:app-sev50}, \ref{tab:app-seeds} \\
+    \texttt{diagnostics}    & reconstruction and utility diagnostics, rank agreement & Appendix~\ref{app:diagnostics} \\
+    \texttt{cost\_audit}    & call counts, latency, failures, timeouts, memory & Table~\ref{tab:app-efficiency}, Appendix~\ref{app:calls} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+The protocol is frozen before the main experiment and identified by commit hash. Any change to
+the action catalog, the missingness protocol, the mask derivation rule, the split boundaries,
+the state feature list, or the failure policy invalidates the freeze and requires a new
+configuration identifier. Calibration and TEST labels are not read during development, and no
+result in this paper is selected on them.
+
+\paragraph{Software and hardware.} Forecasts are produced with the released checkpoints of
+Chronos-Bolt, TimesFM, and Chronos-2 at the revisions listed in Table~\ref{tab:app-repro}.
+The surrounding code is Python 3.11.16 with NumPy 1.26.4, pandas
+2.2.3, scikit-learn 1.5.2, and PyTorch 2.9.1+cu126. Runs are
+executed on one NVIDIA RTX 4090 in bfloat16 for Chronos-Bolt, float32 for TimesFM and Chronos-2. The development-cycle numbers of
+Appendix~\ref{app:development} were produced on a different machine and are not mixed with the
+present results.
+
+\begin{table}[h]
+  \caption{Reproducibility anchors. Backbone revisions are the exact released checkpoints used
+  for every forecast in this paper. Seeds are the deterministic seeds that fix the mask
+  derivation, the replay-record ordering, and the selector fit.}
+  \label{tab:app-repro}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}l p{0.70\textwidth}@{}}
+    \toprule
+    Item & Value \\
+    \midrule
+    Chronos-Bolt revision   & amazon/chronos-bolt-base at 5d9f166d69f47aef3401367a7b842e78fe97b121 \\
+    TimesFM revision        & TimesFM-2.5-200M, local snapshot pinned in the run ledger \\
+    Chronos-2 revision      & amazon/chronos-2 at 29ec3766d36d6f73f0696f85560a422f50e8498c \\
+    Python and libraries    & 3.11.16, NumPy 1.26.4, pandas 2.2.3, scikit-learn 1.5.2, PyTorch 2.9.1+cu126 \\
+    Hardware and precision  & one NVIDIA RTX 4090, bfloat16 for Chronos-Bolt, float32 for TimesFM and Chronos-2 \\
+    Mask derivation seed    & 20260917, a fixed literal rather than a clock reading \\
+    Replay-record order seed & 101 \\
+    Selector fit seed       & 101, and the selector has no fitted parameters \\
+    Protocol commit         & recorded with the run, in the released artefact ledger \\
+    TEST manifest           & the TEST parents and origins listed in the evaluation records under results/v47/evaluation \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The TEST manifest is the authoritative record of which parents and origins were held out. It
+is written once, before any result is computed, and every table in this paper is generated
+against that manifest rather than against a split reconstructed after the fact.
+
+\section*{Supplementary Exploratory Material}
+\label{app:supplementary}
+\subsection{Development Negative Results}
+\label{app:development}
+This section records what was tried earlier in this line of work and rejected. It is included
+because the final formulation is easier to read against the alternatives it replaced, and
+because omitting it would misrepresent how the method was reached. Nothing here is independent
+confirmation of any method, and no number here is comparable with any table in the main text.
+
+\begin{table}[h]
+  \caption{What was tried before the present formulation and why it was dropped. The
+  measurements behind these decisions come from an earlier protocol with a smaller development
+  split and different budget accounting, so they are recorded in the released ledger and are
+  not comparable with any table in this paper.}
+  \label{tab:app-development}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}p{0.19\textwidth} p{0.35\textwidth} p{0.36\textwidth}@{}}
+    \toprule
+    Tried & What happened & What it changed here \\
+    \midrule
+    Projecting the estimated utility vector onto a convex feasible set before thresholding & the squared error of the estimated vector fell and the forecasting metric did not follow, and on one backbone it got worse & actions are ranked by a local mean and a dispersion penalty and a single threshold is applied, instead of calibrating a continuous score \\
+    Treating the simple selector as a stepping stone rather than a control & it was competitive with the more elaborate candidate of that cycle and better than it on one backbone & R2-CART is a mandatory control in every main-text table \\
+    Judging the gate by forecasting accuracy alone & reducing estimation error on a continuous score did not improve the discrete selection & the gate is evaluated on harmful intervention rate and harmful loss as well as on MASE \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+An earlier configuration tried to improve the action ranking by projecting estimated utility
+vectors onto a convex feasible set before thresholding them. The projection reduced the squared
+error of the estimated vector while failing to improve the final forecasting metric, and on one
+backbone it degraded it. That outcome is the reason the present method ranks actions with a
+local mean and a dispersion penalty and then applies a single threshold, rather than
+calibrating a continuous score and reading a decision off it.
+
+Two consequences of that cycle carry into the present paper. The strongest simple selector
+available at the time, which is R2-CART in the present terminology, was competitive with the
+more elaborate candidate, and on one backbone better than it, which is why R2-CART is carried
+forward as a mandatory control in every main-text table. Reducing estimation error on a
+continuous score was also not sufficient to improve discrete selection, which is why the
+conservative gate is evaluated directly on harmful intervention rate and harmful loss rather
+than on MASE alone.
+
+The measurements behind that decision come from a different protocol, with a smaller
+development split, fewer sources, and different budget accounting, so they are not reproduced
+here as numbers. They are recorded in the released artefact ledger and must not be compared
+numerically with any table in this paper.
+
+\end{document}

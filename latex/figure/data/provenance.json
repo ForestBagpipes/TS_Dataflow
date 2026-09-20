@@ -1,0 +1,11 @@
+{
+  "source_manuscript": "archive\\paper_20260920\\source\\IntroActTS_20260919_v47_filled.tex",
+  "sha256": "8c6474896d1c17fb82b3a1f619ed0d1dc800b372a219554914d17522226a4dba",
+  "tables": {
+    "harm.csv": "tab:harm",
+    "severity.csv": "tab:robust",
+    "rank_agreement.csv": "tab:rankgrid"
+  },
+  "precision": "Exact displayed table values. No new experimental evaluation or statistical estimation.",
+  "status": "Existing v47 post-hoc results, not v47_verified acceptance."
+}
