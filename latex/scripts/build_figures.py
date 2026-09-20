@@ -25,6 +25,8 @@ FIG = HERE / 'figure'
 PREVIEW = HERE / 'build' / 'preview'
 PREVIEW.mkdir(parents=True, exist_ok=True)
 COLORS = ['#A5AFBD', '#699CC6', '#328C88', '#9A88B8', '#5576AB', '#193D68']
+ACTION_COLORS = [COLORS[i] for i in [0, 1, 2, 4, 5, 3]]
+BAR_WIDTH, BAR_EDGE, BAR_HATCH = .64, .8, '///'
 METHODS = ['Native KEEP', 'Best Fixed', 'R2-CART', 'Fixed SAITS', 'TATO', 'IntroAct-TS']
 SHORT = ['KEEP', 'Fixed', 'CART', 'SAITS', 'TATO', 'Ours']
 TITLE_SIZE, AXIS_SIZE, TICK_SIZE, VALUE_SIZE, LEGEND_SIZE = 11, 11, 10, 9.5, 10
@@ -80,18 +82,41 @@ def read(name):
         return list(csv.DictReader(f))
 
 
-def bars(ax, vals, labels, colors, title, fmt='.1f'):
-    x = np.arange(len(vals))
-    ax.bar(x, vals, color=colors, width=.64, edgecolor='white', linewidth=.6)
-    ax.set_xticks(x, labels, fontsize=TICK_SIZE)
+def bar_axis(ax, labels, title):
+    ax.set_xticks(np.arange(len(labels)), labels, fontsize=TICK_SIZE)
+    ax.set_xlim(-.6, len(labels)-.4)
     ax.tick_params(axis='x', length=0, pad=7)
     ax.set_title(title, loc='left', weight='bold', fontsize=TITLE_SIZE, pad=8)
+    ax.grid(False)
+
+
+def paired_bars(ax, first, second, labels, colors, title):
+    x = np.arange(len(labels))
+    for shift, vals, filled in [(-.17, first, True), (.17, second, False)]:
+        ax.bar(x+shift, vals, width=.30, color=colors if filled else 'white',
+               edgecolor=colors, linewidth=BAR_EDGE, hatch=None if filled else BAR_HATCH)
+    bar_axis(ax, labels, title)
+
+
+def bar_legend(fig, first, second):
+    from matplotlib.patches import Patch
+    color = '#64758A'
+    handles = [Patch(facecolor=color, edgecolor=color, linewidth=BAR_EDGE, label=first),
+               Patch(facecolor='white', edgecolor=color, linewidth=BAR_EDGE, hatch=BAR_HATCH, label=second)]
+    fig.legend(handles=handles, loc='upper center', bbox_to_anchor=(.53,.985),
+               ncol=2, fontsize=LEGEND_SIZE, handlelength=1.5, columnspacing=1.8)
+
+
+def bars(ax, vals, labels, colors, title, fmt='.1f'):
+    x = np.arange(len(vals))
+    ax.bar(x, vals, color=colors, width=BAR_WIDTH, edgecolor=colors, linewidth=BAR_EDGE)
+    bar_axis(ax, labels, title)
     low = min(0, min(vals)); high = max(vals)
     span = high-low or 1
     ax.set_ylim(low-span*.25 if low<0 else 0, high+span*.24)
     ax.yaxis.set_major_locator(MaxNLocator(nbins=4,steps=[1,2,2.5,5,10]))
     for xi,v in zip(x,vals):
-        ax.text(xi,v+span*.03 if v>=0 else v-span*.025,format(v,fmt),
+        ax.annotate(format(v,fmt), (xi,v), xytext=(0,3 if v>=0 else -3), textcoords='offset points',
                 ha='center',va='bottom' if v>=0 else 'top',fontsize=VALUE_SIZE, color='#25384B')
     if low<0: ax.axhline(0,color='#5B6C7B',lw=.7)
     ax.grid(False)
@@ -105,19 +130,17 @@ def panels(count, legend=False, ratios=None):
 
 
 def utility():
-    from matplotlib.patches import Patch
     r=read('utility.csv'); fig,axs=panels(2,legend=True)
     labels=['KEEP','Ffill','Single','Multi','Ridge','SAITS']
-    ax=axs[0]; x=np.arange(6)
-    for shift,field,filled in [(-.18,'best_share',True),(.18,'beneficial_share',False)]:
-        vals=[float(v[field]) if v[field] else np.nan for v in r]
-        ax.bar(x+shift,vals,width=.34,color=COLORS if filled else 'white',edgecolor=COLORS,linewidth=1,hatch=None if filled else '///')
-    ax.set_xticks(x,labels);ax.tick_params(axis='x',length=0,pad=7)
+    ax=axs[0]
+    paired_bars(ax, [float(v['best_share']) for v in r],
+                [float(v['beneficial_share']) if v['beneficial_share'] else np.nan for v in r],
+                labels, ACTION_COLORS, '(a) Action frequency (%)')
     ax.set_ylim(0,65);ax.set_yticks([0,20,40,60])
     ax.set_title('(a) Action frequency (%)',loc='left',weight='bold',pad=8)
-    bars(axs[1],[100*float(v['mean_utility']) for v in r],labels,COLORS,r'(b) Mean utility ($\times 10^{-2}$)','.1f')
+    bars(axs[1],[100*float(v['mean_utility']) for v in r],labels,ACTION_COLORS,r'(b) Mean utility ($\times 10^{-2}$)','.1f')
     axs[1].set_ylim(-13,15);axs[1].set_yticks([-10,-5,0,5,10])
-    fig.legend(handles=[Patch(facecolor='#699CC6',label='Oracle-best'),Patch(facecolor='white',edgecolor='#699CC6',hatch='///',label='Beneficial')],loc='upper center',bbox_to_anchor=(.53,.985),ncol=2,handlelength=1.5,columnspacing=2.5)
+    bar_legend(fig, 'Oracle-best', 'Beneficial')
     save(fig,'fig3_action_utility')
 
 
@@ -125,14 +148,13 @@ def harm():
     hr=read('harm.csv')
     fig,axes=panels(2,legend=True)
     bars(axes[0],[100*float(v['harmful_loss']) for v in hr],SHORT,COLORS,r'(a) Harmful loss ($\times 10^{-2}$)','.2f')
-    ax=axes[1];x=np.arange(6)
-    ax.bar(x-.18,[float(v['intervention_rate']) for v in hr],width=.36,color=COLORS)
-    ax.bar(x+.18,[np.nan]+[float(v['conditional_hir']) for v in hr[1:]],width=.36,color='white',edgecolor=COLORS,hatch='///',linewidth=1)
-    ax.set_xticks(x,SHORT,fontsize=TICK_SIZE);ax.tick_params(axis='x',length=0,pad=7)
+    ax=axes[1]
+    paired_bars(ax, [float(v['intervention_rate']) for v in hr],
+                [np.nan]+[float(v['conditional_hir']) for v in hr[1:]],
+                SHORT, COLORS, '(b) Intervention rates (%)')
     ax.set_ylim(0,115);ax.set_yticks([0,25,50,75,100]);ax.grid(False)
     ax.set_title('(b) Intervention rates (%)',loc='left',weight='bold',fontsize=TITLE_SIZE,pad=8)
-    from matplotlib.patches import Patch
-    fig.legend(handles=[Patch(facecolor='#526D94',label='Intervention frequency'),Patch(facecolor='white',edgecolor='#526D94',hatch='///',label='Harmful rate among interventions')],loc='upper center',bbox_to_anchor=(.53,.985),ncol=2,fontsize=LEGEND_SIZE,handlelength=1.4,columnspacing=1.5)
+    bar_legend(fig, 'Intervention frequency', 'Harmful rate among interventions')
     save(fig,'fig4_intervention_harm')
 
 
