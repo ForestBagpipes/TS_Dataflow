@@ -1,0 +1,249 @@
+paragraph_id,sentence_id,sentence_function,depends_on,new_information,evidence_or_definition,problem,revision
+AB,s1,范围限定,全文主题:部署场景,部署中 TSFM 可能收到含缺失观测的上下文,none,none,none
+AB,s2,原因,s1 的 missing observations,repair 效用逐请求变化→系统必须在候选修复与不变输入之间选择,none,none,none
+AB,s3,操作,s2 的 this choice,引入 IntroAct-TS:逐请求做此选择且保留观测值与模型参数,none,none,none
+AB,s4,操作,s3 的 IntroAct-TS,在历史窗口执行固定修复目录并记录相对不变输入的 forecasting utility,none,none,none
+AB,s5,操作,s4 的 utilities,部署时从相似历史状态估计各动作效用;dispersion-penalised score>0 才干预否则返回参考预测,none,none,none
+AB,s6,范围限定,s3-s5 的方法,评估覆盖 8 源/3 冻结骨干/4 缺失模式/2 horizon 且使用此前已检查过的测试数据,E11,none,none
+AB,s7,结果,s6 的 evaluation,10% 缺失下 source-macro MASE 1.437 vs 1.576 配对区间三骨干均不含零;harmful loss 0.0375 vs 最佳固定修复 0.0513,E31/E32/E41 与 tab:main,指代不明(harmful loss 在摘要使用但主文无定义),在 harmful loss 首次主文出现处补一句定义
+AB,s8,结果,s7 的 margins,对更强简单对照的优势集中于一个来源;来源级固定策略在 2/3 骨干上至少同等准确;频率匹配对照显示 accuracy-harm 权衡,E34/E35/E44,none,none
+AB,s9,范围限定,s6 的 previously examined test data,结论为探索性需独立确认,E14,none,none
+I1,s1,衔接,段落主题:部署场景与约束,TSFM 免任务重训练支持预测但部署上下文可能因传感器故障/延迟含缺失观测,引用 ansari2024chronos 等,none,none
+I1,s2,定义,s1 的 fixed predictor 设定,研究约束:保留每个有效观测,none,none,none
+I1,s3,解释,s2 的 constraint,修复可填补未观测位置;是否采用修复输入须按其对未来预测的影响判断,none,none,none
+I1,s4,衔接,s3 的判断标准,研究问题:不完整请求应得到哪个修复以及何时保持输入不变,none,none,none
+I2,s1,衔接,I1 的 missing inputs,缺失输入已在不同处理阶段被处理,none,none,none
+I2,s2,对比,s1 的 stages,imputation 从时间/跨通道结构重构缺失值;missingness-aware forecaster 在训练中利用不完整上下文,引用 cao2018brits 等,none,none
+I2,s3,对比,s2 的两类方法,task-oriented imputation 以下游效果评价修复;TATO 为冻结预测器按历史任务表现选择变换流水线,引用 wang2024taskoriented/qiu2026tato,none,none
+I2,s4,范围限定,s3 的 downstream criterion,本文采用下游预测表现为准则但决策更细:固定目录内不同请求可得不同修复或不修复,none,none,none
+I3,s1,定义,I2 s4 的 repair decision,修复价值=相对不变输入的预测损失变化且随请求与冻结骨干变化,none,none,none
+I3,s2,原因,s1 的 varies,修复可恢复局部模式却增大预测损失;骨干自带缺失处理可能已足够,none,none,none
+I3,s3,原因,s1 的 utility,部署时未来目标不可得→决策时刻无法实测效用,none,none,none
+I3,s4,操作,s3 的 unavailable target,历史窗口目标已观测→可在同一窗口执行全部可行动作并与不变输入成对比较,none,none,none
+I3,s5,衔接,s4 的 utility labels,所得效用标签提供修复选择所需监督;剩下的是从标签估计各动作对新请求的作用,none,none,none
+I4,s1,衔接,I3 s5 的 utility labels,IntroAct-TS 用这些历史效用标签做逐请求修复决策,none,none,none
+I4,s2,操作,s1 的 decision,离线:存储各动作实现的效用与检索用状态,none,none,none
+I4,s3,操作,s2 的 records,在线:按动作检索邻近历史记录并计算局部均值效用与离散度,none,none,none
+I4,s4,操作,s3 的 mean/dispersion,均值减离散惩罚;最高分>0 才执行修复否则返回缓存参考预测,none,none,none
+I4,s5,结果,s4 的 procedure,过程用 1 次骨干调用做参考加至多 1 次修复调用,none,none,none
+I4,s6,范围限定,s5 的 calls,候选输入在选择前构建其成本单独记账,none,none,none
+I5,s1,衔接,I1-I4 的问题与方法,本文三点贡献,none,none,none
+I5,s2,定义,s1 的 contributions,贡献1:把冻结预测器的缺失输入处理形式化为逐请求动作选择且不变输入在决策空间内,none,none,none
+I5,s3,操作,s1 的 contributions,贡献2:历史全动作回放:相对 Keep 的效用标签+动作条件局部估计器+离散惩罚决策规则,none,none,none
+I5,s4,结果,s1 的 contributions,贡献3:8 源 3 骨干对固定修复与简单选择策略的评估报告误差/干预损害/成本并保留不利比较,none,none,none
+I6,s1,范围限定,I5 s4 的 evaluation,评估边界:早期在同一测试数据上的结果影响了当前设计,none,none,none
+I6,s2,范围限定,s1 的 boundary,报告比较为探索性而非独立确认;§4.1 精确陈述边界,E14,none,none
+R21,s1,对比,小节主题:不完整时间序列建模,imputation 用时间或跨通道结构重构不可得值,引用 cao2018brits 等,none,none
+R21,s2,对比,s1 的 imputation,missingness-aware forecasting 改为将观测模式纳入训练好的预测器,引用 chen2024bitgraph 等,none,none
+R21,s3,对比,s2,task-oriented 方法把插补连接到下游目标,引用 wang2024taskoriented 等,none,none
+R21,s4,衔接,s1-s3 的已有工作,两个区别定位本文设定,none,none,none
+R21,s5,对比,s4 的 distinctions,输入侧:variable subset forecasting 推理时移除整个变量而本文请求是上下文内部缺口,none,none,none
+R21,s6,对比,s4 的 distinctions,模型侧:missingness-aware 需控制预测器训练而本文预测器保持冻结,none,none,none
+R21,s7,结果,s5-s6 的两点区别,因此训练的 imputer 可提供候选修复而决策层决定该修复是否用于当前请求,none,none,none
+R22,s1,解释,小节主题:冻结 TSFM 的数据侧适配,TATO 不更新参数:搜索变换流水线并按历史任务表现选择,qiu2026tato,none,none
+R22,s2,解释,s1 的 TATO,其适配单元是目标域:一条流水线服务多个请求,none,none,none
+R22,s3,对比,s2 的 domain unit,IntroAct-TS 在固定目录上逐请求单独决策并用该骨干记录的预测结果,none,none,none
+R22,s4,范围限定,小节主题,TS-ICL 原生支持插补与部分观测回看窗;在本文仅作为两个目录动作的 in-context 回归后端,tsicl2026,none,none
+R23,s1,对比,小节主题:选择性决策,selective prediction 以覆盖率换低风险;learning to defer 把请求路由给另一决策者,引用 chow1970optimum/madras2018predict 等,none,none
+R23,s2,对比,s1 的两类工作,IntroAct-TS 对每个请求保留同一预测器只选择是否修改其输入,none,none,none
+R23,s3,范围限定,s2 的 keep input,保持输入仍返回预测;不是拒绝回答,none,none,none
+R23,s4,解释,s2 的选择机制,这是逐实例算法选择的一种由各修复的预测效用监督,引用 rice1976algorithm/xu2008satzilla,none,none
+R23,s5,操作,s4 的监督,在历史窗口执行全部可行动作给出全动作反馈,none,none,none
+R23,s6,对比,s5 的 full action feedback,off-policy evaluation 通常只观测已记录动作的结果,引用 dudik2011doubly/swaminathan2015counterfactual,none,none
+R23,s7,衔接,s6,附录详述与 off-policy evaluation 的关系,app:ope-positioning,none,none
+R23,s8,衔接,s5 的 full action feedback,§3 相应把决策对象限定为固定动作目录并用历史窗口记录的全动作反馈监督选择,none,none,none
+M11,s1,定义,小节主题:问题设定,X∈R^{C×L} 为 C 通道长 L 的上下文;M 为观测掩码,none,none,none
+M11,s2,定义,s1 的上下文,未来目标 Y 对决策过程不可得,none,none,none
+M11,s3,定义,s1,冻结流水线 F 含骨干内部预处理并返回 p=F(X),none,none,none
+M11,s4,解释,s3 的 F,参考动作把不完整上下文原样送入 F;其缺失处理是骨干自带的故跨骨干不同(§4.2 度量);逐骨干适配行为见附录,§4.2 与 app:method-details,交叉引用不当(§4.2 报告的是动作级效用变化与重构排序诊断并未给出跨骨干原生缺失处理的度量),把引用指向实际量化逐骨干 Keep 行为差异的表或附录
+M12,s1,定义,M11 的 input,系统只能通过固定目录 A={a_0..a_J} 修改输入:参考动作之外有 J 个干预,none,none,none
+M12,s2,定义,s1 的 catalog,"每个动作 a 物化一个可行输入版本 X^a=T_a(X,M)",none,none,none
+M12,s3,定义,s2 的 action,参考动作 a_0 原样返回输入对应无外部干预;A^+ 收集修改输入的动作,none,none,none
+M12,s4,衔接,s3 的 reference,修复是否值得执行对照此参考度量,none,none,none
+M12,s5,定义,s4 的度量,ℓ=episode 级 MASE 兼作主评估指标使回放效用与报告误差同一尺度,none,none,none
+M12,s6,定义,s5 的 ℓ,对实现目标 Y 动作 a 的 forecasting utility=参考损失减修复损失(式1),eq:utility,none,none
+M12,s7,解释,s6 的 g_a,g_a>0 表示修复相对不变输入改善了预测;<0 表示恶化,eq:utility,none,none
+M12,s8,定义,s6-s7,"任务:在无 Y 访问下选择 a*(X,M)∈A 且保持冻结骨干调用次数少",none,none,none
+M13,s1,衔接,M12 的任务定义,四条约束定义部署协议,none,none,none
+M13,s2,定义,s1 的 constraints,已到达且有效的观测不得覆盖:X^a 仅在 M=0 处与 X^a0 不同,none,none,none
+M13,s3,定义,s1 的 constraints,修复只能写可见目标范围加三个稳健尺度内的值;越界候选记为 unsupported 而不执行,none,指代不明(visible target 与 M11 s2 定义的不可得未来目标 Y 字面冲突易误读),改为"上下文中目标通道可见部分的范围"或首次出现处加注
+M13,s4,定义,s3 的 bound,该界随协议注册对 bank 与服务请求一致成立,none,指代不明(the bank 在 §3.2 定义回放库之前出现),改为"§3.2 构建的回放库"或把该句移到回放库定义之后
+M13,s5,定义,s1 的 constraints,未来目标不可得→部署时无可观测的实现损失,none,none,none
+M13,s6,定义,s1 的 constraints,参考预测是决策前唯一可计算的预测,none,none,none
+M13,s7,操作,s6 的 call budget,请求可花 1 次骨干调用得 p_0=F(X^a0);选择动作时不得查看其余候选的预测,none,none,none
+M21,s1,原因,M12 的 g_a,g_a 依赖 Y 在线不可观测但对目标已在可用历史中的历史窗口可计算,eq:utility,none,none
+M21,s2,操作,s1 的历史窗口,"取窗口 i 注入注册缺失协议得 (X_i,M_i) 物化每个动作并在各版本上执行冻结流水线",none,none,none
+M21,s3,定义,s2 的执行,"动作 a 在窗口 i 的实现效用 g_{i,a}(式2)",eq:replay-gain,none,none
+M21,s4,解释,s3 的式2,两个预测对同一实现未来评估,eq:replay-gain,none,none
+M21,s5,结果,s4,损失差记录该动作在该历史窗口的预测效应,none,none,none
+M22,s1,原因,M21 的 utility label,效用标签只有在历史窗口能匹配到部署请求时才有用→每个结果与检索状态一起存储,none,none,none
+M22,s2,定义,s1 的 retrieval state,"状态动作条件化:z_{i,a}=φ(X_i,M_i,X_i^a,p_i^0) 其中 p_i^0 与 X_i^a 已定义",none,排版/交叉引用(label eq:state 位于正文行内而非公式环境 eqref 将渲染为小节号 3.2),把状态定义放入 equation 环境或改用文字式引用
+M22,s3,范围限定,s2 的 state,状态可用协议已允许的 p_i^0;绝不使用未选中候选的预测,M13 s6-s7,none,none
+M22,s4,定义,s1 的存储,"回放库 B={(z_{i,a},a,g_{i,a})} 由 TRAIN 历史构建一次后冻结",none,none,none
+M22,s5,操作,s4 的 bank,部署读库而从不写库,none,none,none
+M23,s1,衔接,M22 的 bank,回放库的两个性质设定方法适用范围,none,none,none
+M23,s2,范围限定,s1 的 properties,一个模型一个版本测得的效用不描述另一个→库按冻结骨干版本构建;服务新骨干族需重建,none,none,none
+M23,s3,范围限定,s1 的 properties,库只覆盖预先注册的缺失协议→模式与严重度上的离散网格,none,none,none
+M23,s4,衔接,s2-s3,附录报告各项限制的代价,app:replay,none,none
+M24,s1,定义,M22 的 records,用这些记录服务新请求依赖一个假设:邻近动作条件状态有足够相似的效用来指导选择,none,none,none
+M24,s2,衔接,s1 的 assumption,§4.5 与附录检验该假设;估计器本身在下节定义,sec:exp-ablation 与 app:transfer,none,none
+M31,s1,定义,M24 s2 的 estimator,估计器=固定标准化特征空间中同动作邻近状态记录效用的加权平均,none,none,none
+M31,s2,定义,s1 的特征空间,z_a 含 22 个数分四组:缺失方式/目标通道可见部分形态/X^a 与 X^a0 的差异/参考预测 p_0 形态,eq:state(引用目标有缺陷),交叉引用(同 M22 s2:eqref eq:state 渲染错误),同 M22 s2 的修改方向
+M31,s3,范围限定,s2 的第三组特征,现目录下第三组 5 个坐标中 4 个恒零→变化的干预信息只剩修复改变位置的比例,app:features,none,none
+M31,s4,范围限定,s1 的 retrieval,检索不限定来源或 horizon;邻域按掩码几何/可见上下文/参考预测匹配,none,none,none
+M31,s5,衔接,s2 的特征,附录为规范特征表含窗口长度与仅在回放库上拟合的归一化,app:features,none,none
+M32,s1,操作,M31 的 retrieval,检索按动作分别进行,none,none,none
+M32,s2,定义,s1,N_a=记录动作为 a 且状态在标准化欧氏距离下最接近 z_a 的 k 条库记录,none,none,none
+M32,s3,定义,s2 的 neighbourhood,每个邻居权重 w_i=exp(-d_i/τ) 且 τ=邻域距离中位数+ε(式3),eq:weights,none,none
+M32,s4,解释,s3 的权重,越近的记录贡献越大;带宽由查询邻域自身设定而非调参,eq:weights,none,none
+M32,s5,解释,s3,常数 ε 处理零距离,eq:weights,none,none
+M32,s6,定义,s3 的加权记录,由加权记录计算三个量:局部均值效用/局部离散度/有效样本量(式4),eq:local-moments,none,none
+M32,s7,范围限定,s6,k 与 §3.4 的 β 是仅有的搜索量;§3.4 说明选法,none,none,none
+M32,s8,范围限定,s2 的 neighbourhood,邻域仅由距离定义且无阈值标记回放支撑外请求→估计器对收到的每个请求都返回值,none,none,none
+M32,s9,衔接,s8 的 scope,§4.6 与附录把由此产生的适用范围作为网格内陈述处理,sec:exp-robust 与 app:scope,none,none
+M41,s1,原因,M32 的局部均值,正局部均值不是执行动作的充分证据:邻域可能小或内部不一致,none,none,none
+M41,s2,定义,s1,决策因此使用保守分数 S_a=μ̂_a-β·σ̂_a/√n_eff(式5),eq:score,none,none
+M41,s3,解释,s2,β 为惩罚强度,eq:score,none,none
+M41,s4,操作,s2,当 max S_a>0 时取 argmax 动作否则 a*=a_0,eq:score,none,none
+M41,s5,范围限定,s2 的 score,该分数是经验决策规则,none,none,none
+M41,s6,范围限定,s5,它没有校准的覆盖率或风险保证,angelopoulos2024conformal,none,none
+M41,s7,操作,s2 的 β,β 从有限网格选取且决策阈值保持为零,none,none,none
+M41,s8,范围限定,s7 的零阈值,因效用相对参考动作定义零阈值要求正的惩罚后估计才让修复取代 Keep;这是决策约定不是显著性陈述,eq:utility,none,none
+M42,s1,操作,M32 s7 的两个超参,两个超参每骨干在回放库上以 leave-one-parent-out 交叉验证选一次;每个 bank episode 对移除其 parent 全部记录的库评分,none,指代不明(parent 为主文首次使用且全文未定义;附录才说明统计单位),在首次出现处补一句定义(如 parent=同一原始序列段的监督单位)
+M42,s2,操作,s1 的选择,"网格 k∈{8..256} 与 β∈{0,0.5,1,1.64};最大惩罚约为单侧 95% 正态分位数仅作网格值",none,none,none
+M42,s3,定义,s1,设置可采纳条件:交叉验证条件损害率不超过上限,none,指代不明(conditional harmful rate 主文未定义仅在附录图表注中解释),首次出现处补一句定义
+M42,s4,定义,s3 的 cap,上限来自库本身:库中平均实现效用最高动作的条件损害率→逐请求选择在干预前提下不得比总用最强单一干预更有害,none,none,none
+M42,s5,操作,s3 的可采纳设置,可采纳设置中取交叉验证 source-macro MASE 最低者;并列时取干预最少者,none,none,none
+M42,s6,范围限定,s3-s5,无设置满足上限时记录的流水线回退到最大惩罚;该回退不重检上限故该分支上限不保证且触发它的运行不满足所述标准,none,none,none
+M42,s7,结果,s6 的 fallback,该分支在任何记录的选择中从未触发,none,none,none
+M42,s8,范围限定,s1-s7,锚点/上限/可采纳设置/所选参数对对记录的运行固定,none,none,none
+M43,s1,范围限定,M41 的 decision rule,参考动作总可用故规则总返回预测,none,none,none
+M43,s2,范围限定,M32 s8 的支撑外问题,规则无法检测回放支撑外请求→只适用于注册缺失网格;结果不应读作网格外泛化,none,none,none
+M51,s1,操作,小节主题:部署流程,请求分两阶段服务,none,none,none
+M51,s2,操作,s1 的第一阶段,第一阶段执行参考动作得 p_0 物化候选输入版本并形成状态 z_a,M13 与 M22,none,none
+M51,s3,操作,s1 的第二阶段,第二阶段从冻结库检索同动作邻域对每个 a∈A^+ 评估 S_a 执行 a* 并返回其预测(a*=a_0 时为参考预测),M32 与 M41,none,none
+M52,s1,结果,M51 的两阶段,请求成本=参考动作 1 次骨干调用加若干预执行再 1 次;返回的预测始终是未改 F 在一个执行版本上的一次调用,none,none,none
+M52,s2,操作,s1 的候选构建,5 个干预中 3 个用自有模型构建候选(2 个冻结 in-context 插补模型 1 个训练的 imputer)且全部在决策前支付,none,none,none
+M52,s3,衔接,s1-s2,附录把一次性建库/候选物化/骨干调用/检索开销分列,app:calls,none,none
+E11,s1,操作,小节主题:评估协议,记录的评估覆盖 8 个来源(ETTh1..Weather)与 3 个冻结骨干,none,none,none
+E11,s2,定义,s1 的 backbones,骨干为 Chronos-Bolt/TimesFM-2.5/Chronos-2,引用 chronosbolt2025/das2024timesfm/chronos2_2025,none,none
+E11,s3,操作,s1,每个骨干用同一选择程序构建独立回放库,M42,none,none
+E11,s4,操作,s1,"上下文长 L=512;horizon H∈{96,192}",none,none,none
+E11,s5,操作,s1,主比较用 10% 缺失跨 4 个确定性模式,none,none,none
+E11,s6,操作,s5,附加评估用 30% 与 50% 缺失且不重调,none,none,none
+E11,s7,衔接,s4-s6,附录定义掩码与指标,app:data-protocol,none,none
+E12,s1,定义,小节主题:比较对象,目录含 Keep 与 5 个修复,M12,衔接(本段主题是比较伙伴首句却回到目录构成与后文不直接相关),删除该句或并入 E11;以"每个比较伙伴回答一个问题"开篇
+E12,s2,衔接,s1,每个比较伙伴回答关于决策的一个不同问题,none,none,none
+E12,s3,对比,s2,不变输入:是否根本不需要外部修复,none,none,none
+E12,s4,对比,s2,TRAIN 上选出的最佳固定修复:选择是否必须逐请求做出,none,none,none
+E12,s5,对比,s2,R2-CART(同一状态特征上的简单选择器):更复杂的估计带来什么,none,none,none
+E12,s6,对比,s2,Fixed SAITS 提供强单修复参照;TATO 适配覆盖域级流水线选择,none,none,none
+E12,s7,衔接,s3-s6,附录给出它们的实现,app:baseline-config,none,none
+E12,s8,范围限定,s2,目录 oracle 使用未来目标仅作诊断,none,none,none
+E13,s1,操作,小节主题:数据切分,每个来源按时间切分并做 L+H purge,none,none,none
+E13,s2,操作,s1 的 TRAIN,TRAIN 分为回放库与内部评估块,M22,none,none
+E13,s3,结果,s1,报告的评估含每骨干每严重度 95 个 parent 与 760 个 episode,none,指代不明(parent 未定义同 M42 s1),同 M42 s1
+E13,s4,定义,s3 的评估,MASE 跨来源等权聚合;RMSSE 为次级指标,M12 s5,none,none
+E13,s5,操作,s4,记录的配对 bootstrap 区间以 parent 为聚类单位,none,指代不明(parent 未定义),同 M42 s1
+E13,s6,衔接,s1-s5,附录给出分区与聚合定义,app:splits 与 app:metric-conventions,none,none
+E14,s1,范围限定,E13 的 TEST block,当前设计吸收了对本 TEST 块早期评估的观察(含 Chronos-2),none,none,none
+E14,s2,范围限定,s1,因此报告的比较是 post-hoc 且 Chronos-2 是附加骨干比较,none,none,none
+E14,s3,范围限定,s1,在该块上的重复评估与报告的 bootstrap 区间都不构成新的独立确认,none,none,none
+E21,s1,结果,小节主题:修复效用变化,记录的诊断显示没有单一动作对每个请求都最优,fig:utility,none,none
+E21,s2,证据,s1,oracle-best 份额从 11.1% 到 24.8%;Keep 在 19.3% episode 上最优,fig:utility,指代不明(份额范围未说明沿哪个维度变化:动作还是骨干),补一句说明该范围的取值维度
+E21,s3,证据,s1,目录 oracle 达 1.258 source-macro MASE 对 Keep 的 1.576→存在更好动作选择的空间,fig:utility 与 tab:main,none,none
+E21,s4,结果,s1,每个修复都既帮助又损害单个预测,fig:utility,none,none
+E21,s5,衔接,s4,附录按可用改进量分解同一批 episode,app:opportunity,none,none
+E21,s6,范围限定,s1-s5,这些观察确立逐请求选择的潜在收益存在;其本身不表明可部署规则能实现这些收益,none,none,none
+E22,s1,结果,E21 的 decision,重构质量对该决策提供的指导有限,none,none,none
+E22,s2,证据,s1,在记录的 Bolt episode 上重构误差最低的修复仅在 19.3% episode 上同时具有最高预测效用,app:recutils,衔接(此 19.3% 与 E21 s2 的 Keep 最优份额同值但统计量不同相邻出现易混淆),强调两处 19.3% 的分母与统计量不同
+E22,s3,证据,s1,排序在 44.5% 有序对上一致;episode 内 Spearman 相关均值 0.12,app:recutils,none,none
+E22,s4,解释,s3 的统计,这些统计在 episode 内比较动作避免跨来源尺度差异,none,none,none
+E22,s5,衔接,s2-s4,附录报告完整比较,app:recutils,none,none
+E22,s6,衔接,E21-E22 的诊断,图1 示意历史预测结果如何指导选择,fig:concept,衔接(段末悬挂的图1 引用与前句附录指针并列且归属不清),移到段首或 §3 方法处或删除
+E23,s1,衔接,E21 与 E22 两个诊断,两个诊断共同支持用预测效用而非重构质量监督选择,none,none,none
+E23,s2,衔接,s1,剩余问题是可部署决策规则能否把观察到的变化转化为更好预测→下一节考察,none,none,none
+E31,s1,衔接,小节主题:预测性能,表1 比较 10% 缺失下各方法,tab:main,none,none
+E31,s2,结果,s1,IntroAct-TS 达 1.437 对 Keep 1.576/Best Fixed 1.488/R2-CART 1.458,tab:main,none,none
+E31,s3,结果,s1,Fixed SAITS 1.459;TATO 1.616,tab:main,none,none
+E31,s4,结果,s2-s3,最低可部署 MASE 在 Bolt 与 Chronos-2 上由 IntroAct-TS 取得在 TimesFM 上由 Fixed SAITS 取得,tab:main,none,none
+E31,s5,范围限定,s4,聚合优势不意味着每个骨干都获胜,none,none,none
+E32,s1,结果,E31 的比较,对 Keep 的配对差:Bolt -0.0881/TimesFM -0.1283/Chronos-2 -0.2014,tab:main,none,none
+E32,s2,证据,s1,"记录的 95% 区间分别为 [-0.1530,-0.0256]/[-0.2018,-0.0543]/[-0.2876,-0.1180]",E13 s5 的 bootstrap 协议,none,none
+E32,s3,结果,s2,三个区间均不含零,none,none,none
+E32,s4,范围限定,s2,对 Best Fixed 与 R2-CART 的区间含零→这些比较不确立对任一对照的精度优势,none,none,none
+E32,s5,范围限定,s3,Holm 校正后对 Keep 的比较每骨干仍低于 0.05 且受上文 post-hoc 评估边界约束,E14,none,none
+E33,s1,结果,E31-E32,该方法在 6 个可部署方法中每个骨干平均秩最低,tab:main,none,none
+E33,s2,范围限定,s1,秩是描述性汇总不确立每个 cell 的一致改进,none,none,none
+E33,s3,范围限定,E31 s3 的 TATO,TATO 结果适用于附录规定的适配与搜索预算,app:baseline-config,none,none
+E33,s4,衔接,s1,逐来源结果与成本见附录,app:datasets 与 app:calls,none,none
+E34,s1,衔接,E31 的 aggregate advantage,两个来源级诊断定位该优势来自哪里,none,none,none
+E34,s2,操作,s1,诊断一:收益来自识别适合某来源的修复还是适合某请求的修复,none,none,none
+E34,s3,定义,s2,来源级固定策略:每来源应用库上平均实现效用最高的单一动作不支持处回退 Keep 全部在 TRAIN 固定,none,none,none
+E34,s4,结果,s3,"该策略达 1.360/1.527/1.448:Bolt(+0.0181[0.0061,0.0296])与 TimesFM(+0.0269[0.0035,0.0526])优于完整规则 Chronos-2 更差(-0.0704 区间含零)聚合接近(1.445 对 1.437)",tab:main,none,none
+E34,s5,结果,s4,逐请求选择在 3 个骨干中的 2 个上不优于按来源的固定选择,none,none,none
+E35,s1,操作,E34 s1 的第二个诊断,诊断二:在 TEST 的每个七来源子集上重算 source-macro 配对差,none,none,none
+E35,s2,结果,s1,对不变输入与 TATO 的边际在每个子集每个骨干上保号,app:source-diagnostics,none,none
+E35,s3,结果,s1,对更强对照不保号:移除 Exchange 使 Bolt 上对 Best Fixed 的配对差由 -0.0497 降至 -0.0061 并在 TimesFM 与 Chronos-2 上反号(+0.0095/+0.0073);对简单选择器同样集中,app:source-diagnostics,none,none
+E35,s4,结果,s2-s3,对 Best Fixed 与 R2-CART 的聚合优势很大程度上依赖一个来源;对不变输入的优势是 broad-based 的,none,none,none
+E35,s5,衔接,s1-s4,附录报告完整表,app:source-diagnostics,none,none
+E36,s1,衔接,§4.3 的平均误差结果,平均误差也不区分帮助与损害的修复→下一节考察干预频率与已执行干预的代价,none,none,none
+E41,s1,结果,小节主题:干预频率与损害,默认工作点 IntroAct-TS 在 65.4% 请求上干预其中 40.2% 增大损失,tab:ablation,none,none
+E41,s2,结果,s1,其 harmful loss 为 0.0375 对 Best Fixed 0.0513 与 R2-CART 0.0584,fig:harm,指代不明(harmful loss 主文未给定义仅在附录解释),首次主文出现处补一句定义
+E41,s3,衔接,s1-s2,这些聚合诊断保留在附录图中,fig:harm,none,none
+E42,s1,原因,E41 的 lower harm,较低损害原则上可能来自更少干预而非更好选择→评估引入干预频率可比的对照,none,none,none
+E42,s2,衔接,s1,三种不同设计回答三个不同问题并分别报告,none,none,none
+E42,s3,定义,s2,随机门控保留完整规则推荐的修复只随机化是否执行,none,none,none
+E42,s4,定义,s2,mean-only 与 linear 对照保留各自打分规则但重校准接受阈值,none,none,none
+E42,s5,定义,s2,Best Fixed 的 random-Keep 变体保留固定修复并随机化是否执行,none,none,none
+E42,s6,操作,s3-s5,所有阈值与概率在开发块对完整方法的开发干预率校准后冻结;开发匹配不保证 TEST 频率相等→图报告实际 TEST 率连同精度与损害,fig:gate-controls,none,none
+E43,s1,结果,E42 s3 的随机门控,对随机门控完整规则 MASE 改善 0.0292/0.1182/0.0682 且三个名义区间均不含零,fig:gate-controls,none,none
+E43,s2,结果,E42 s4 的两个对照,对 mean-only 的优势仅 TimesFM 不含零对 linear 仅 Bolt;这两个对照也改变推荐的修复故不隔离接受决策,fig:gate-controls,none,none
+E43,s3,结果,s1,随机门控用单一记录种子但其 harmful loss 在三骨干上均低于完整规则,fig:gate-controls,none,none
+E43,s4,结果,E42 s5 的 random-Keep 变体,对频率匹配伙伴:random-Keep 固定策略三骨干均差于完整规则(-0.0640/-0.0852/-0.1183 区间均不含零)实际 TEST 率 52.2%/33.7%/49.6% 低于开发目标(固定修复部分请求不支持且未重匹配),fig:gate-controls,none,none
+E43,s5,结果,E42 s4 的简单选择器,"阈值匹配简单选择器达 1.404/1.590/1.412;其对完整规则的配对差仅 Bolt 不含零(-0.0252[-0.0495,-0.0011])",fig:gate-controls,none,none
+E43,s6,衔接,s1-s5,附录记录精确值与这些 post-hoc 比较的局限,app:gate-controls 与 app:matched-partners,none,none
+E44,s1,范围限定,E43 的比较,这些比较界定而非隔离机制,none,none,none
+E44,s2,结果,E43,更少干预本身不复现完整规则的精度;对频率匹配简单选择器的边际仍依赖骨干,none,none,none
+E44,s3,结果,E43,对照联合支持 accuracy-harm 权衡:完整规则比频率匹配替代更有效地把干预转化为更低误差但 harmful loss 在每骨干高于随机门控,none,none,none
+E51,s1,衔接,小节主题:效用估计与状态表示,表2 改变选择器使用历史效用的方式,tab:ablation,none,none
+E51,s2,定义,s1,A1 用逐动作全局均值替换局部估计,tab:ablation,none,none
+E51,s3,定义,s1,A2-M 跨修复动作池化局部邻居只保留全局动作先验,tab:ablation,none,none
+E51,s4,定义,s1,A5 从同一状态线性预测效用,tab:ablation,none,none
+E51,s5,操作,s2-s4,"三者复用完整方法冻结的 (k,β) 不重调",M42,none,none
+E51,s6,结果,s3 的 A2-M,"池化动作效用使 MASE 由 1.4366 升至 1.4470 干预率由 65.4% 升至 82.6%;Bolt 配对差 -0.0252(名义区间 [-0.0478,-0.0025])TimesFM 与 Chronos-2 区间含零",tab:ablation,none,none
+E51,s7,结果,s4 的 A5,线性估计器达 1.4343,tab:ablation,none,none
+E51,s8,范围限定,s6-s7,池化也改变局部证据与全局先验的平衡故非单因素消融;所测设计内比较支持动作条件局部估计但不确立局部估计优于线性预测,none,超证据风险(支持"动作条件局部估计"最直接的证据是 A1 但正文未报告 A1 的数字仅见于表2),补一句 A1 的结果(1.475/100% 干预)作为该结论的正文证据
+E51,s9,结果,小节主题:决策侧,总是行动(A4)使 harmful loss 由 0.0375 升至 0.0533=移除 Keep 分支的记录代价,tab:ablation,none,none
+E52,s1,衔接,E51 的估计侧消融,第二组消融改变状态,tab:ablation,none,none
+E52,s2,结果,s1,A3 删除参考预测特征达 1.446 接近完整方法,tab:ablation,none,none
+E52,s3,结果,s1,A2-F 在同一冻结配置下删除 5 个干预特征聚合 MASE 改善至 1.4185 且 Bolt 区间支持缩减状态,none,证据缺口(A2-F 在正文有结果讨论但不在表2 中读者无法在表中对照该行),表2 增加 A2-F 行或在表注指明其数值出处
+E52,s4,解释,s3,5 个特征中 4 个在现目录下恒零→A2-F 实际删除 1 个变化坐标连同该特征组诱导的选择;其更优误差按记录保留不改述为反对机制的证据,M31 s3 与 app:features,none,none
+E53,s1,解释,E52 s3 的 A2-F,A2-F 是固定配置消融:回答其他都不变时该特征组贡献什么,none,none,none
+E53,s2,对比,s1,另一个比较问缩减表示是否应替换完整表示这需要自己的参数,none,none,none
+E53,s3,操作,s2,在相同网格/上限/交叉验证下做自己的 TRAIN 侧选择后 17 维缩减状态处处选出更弱惩罚,M42 与 app:compact-selection,none,none
+E53,s4,结果,s3,开发块上 TimesFM 显著变差(MASE 1.0952→1.1182 harmful loss 0.0111→0.0351 干预率 46.7%→81.6%)Bolt 精度不变但 harmful loss 上升 Chronos-2 改善(1.1365→1.1131),app:compact-selection,因果无据/术语(significantly 未给出检验或区间支撑),改为描述性措辞(如明显)或补配对区间
+E53,s5,结果,s4,按修订周期的采纳规则(开发误差下降且不升损害且无单骨干回归才采纳)混合证据下保留完整 22 维状态,none,none,none
+E53,s6,范围限定,s5,重调缩减状态的 TEST 聚合(1.4280 对 1.4366)仅备案;选择与评估表见附录,app:compact-selection,none,none
+E61,s1,衔接,小节主题:缺失与回放支撑敏感性,主比较只覆盖一个主严重度→评估扩展到其他注册水平与模式,none,none,none
+E61,s2,操作,s1,图比较三个注册严重度下的相同配置,fig:robust,none,none
+E61,s3,结果,s2,IntroAct-TS 在每个水平的 MASE 都低于 Keep,fig:robust,none,none
+E61,s4,证据,s3,其值为 1.437/1.698/1.735 对不变输入的 1.576/1.794/1.875,fig:robust,none,none
+E61,s5,结果,s4,R2-CART 在两个更高严重度达 1.678 与 1.721→默认方法不在整个扫描中保持最低聚合误差,fig:robust,none,none
+E61,s6,范围限定,s2,三个严重度都在回放构建中出现→扫描度量采样缺失网格内的性能;每骨干用自有预测构建的库,M23,none,none
+E61,s7,衔接,s1-s6,附录报告完整分解,app:severity-full 与 app:pattern,none,none
+E62,s1,衔接,M22 的回放库依赖,方法也依赖回放库作为历史支撑;三个记录的检查以不同方式改变该支撑,none,none,none
+E62,s2,操作,s1,子采样库问选择需要多少历史,app:replaysize,none,none
+E62,s3,操作,s1,"在库子样本下重复 TRAIN 侧选择问所选 (k,β) 的稳定性",app:selstability,none,none
+E62,s4,操作,s1,重新生成同一批 parent 的缺失掩码问结果对具体掩码实现的依赖,app:seeds,指代不明(parent 未定义),同 M42 s1
+E62,s5,范围限定,s2-s4,这些检查分别改变历史支撑/所选配置/同一批 parent 的掩码实现;没有一个是独立泛化测试,none,none,none
+E71,s1,衔接,小节主题:部署成本,服务遵循 §3.5 的两阶段顺序;记录的成本按组件保留,M51,none,none
+E71,s2,结果,s1,完整方法平均每请求 1.65 次骨干调用:参考 1 次加干预执行时再 1 次,M52 与 tab:ablation,none,none
+E71,s3,操作,s2,候选构建在选择前支付;5 个修复中 3 个用自有模型构建候选,M52,none,none
+E71,s4,结果,s2,检索与打分增加与骨干调用分开度量的开销;一次性建库是冷启动成本,app:calls,none,none
+E71,s5,范围限定,s1-s4,附录报告实测调用数/失败审计/合成延迟核算;本配置下未测端到端请求延迟故不声称延迟分位数,app:calls,none,none
+E71,s6,衔接,s1-s5,这些数字回答一个问题:逐请求选择在参考预测之外增加了哪些计算,none,none,none
+C1,s1,衔接,全文研究问题(I1 s4),本文研究了冻结模型预测前是否及如何修复不完整上下文并把不变输入作为显式选项,none,none,none
+C1,s2,解释,s1,IntroAct-TS 把历史动作结果变成预测效用监督并结合动作条件局部估计与离散惩罚决定是否干预,I4 与 M32/M41,none,none
+C1,s3,结果,§4 的结果汇总,记录的评估显示对不变输入的 broad-based 改进;对更强简单策略的优势集中于一个来源;来源级固定选择在 2/3 骨干至少同等准确;更低误差与高于随机门控的 harmful loss 并存=accuracy-harm 权衡而非全赢,E34/E35/E44,none,none
+C1,s4,范围限定,s3,因早期测试观察影响了设计独立评估仍然必要;并需自然缺失数据与回放网格外请求的测试,E14,none,none

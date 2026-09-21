@@ -49,3 +49,19 @@
 - 若存在明显权衡 → 保留 Full-22，删除干预特征必要性强主张。
 - 原 TEST 上 A2 结果只作为提出候选的动机，不作为选择依据；该方向受旧评估启发需如实记录。
 - 方法变更在隔离分支交付，作者审阅，不自动合并。
+
+## 第二轮：全文结构重写与附录重组（2026-09-21 晚，作者规划执行）
+
+执行依据：作者"论文修订执行"规划（段落职责→反向提纲→方法→实验→引言→相关工作→结论→摘要→附录的写作顺序；三次连贯性通读；逐句依赖审计）。本轮不改任何数值、不新增实验、不生成新图。
+
+| 编号 | 问题位置 | 内容 | 证据来源 | 是否改预测 | 是否重算 | 状态 |
+|---|---|---|---|---|---|---|
+| R25 | 全文 | 段落清点与反向提纲 | docs/logic_inventory.md、docs/logic_outline.md | — | — | VERIFIED |
+| R26 | §1/§2/§5/摘要 | 引言重写为 6 段（场景→已有工作→困难→方法信息流→三层贡献→评估边界）；相关工作三小节内部重排（TATO 叙述连续、KEEP≠拒绝回答、结尾引向 §3）；结论压缩为四步逻辑；摘要按 A1–A8 重写（删除 Compact 选参史、逐项消融与门控机制归因，预测/风险优势分别限定比较对象） | 作者规划 | 否 | 否 | VERIFIED |
+| R27 | §3 | M11 骨干适配器细节移附录 B；M22 先用途后定义；M24 诊断结果移出；M31 补四个恒零干预坐标注记；M41 删除"零分=证据不可区分"的无据解释；M42 分离记录行为与规范注记、删段末 TEST 披露；状态定义移入正式公式环境（修 eq:state 引用返回小节号的 CRITICAL） | coherence_pass_report | 否 | 否 | VERIFIED |
+| R28 | §4 | 重组为 7 小节：4.1 Evaluation Protocol（删"separate implementation verification"内部状态句；对照各自检验的问题）；4.2 结尾架桥；4.3 Forecasting Performance（迁入来源固定策略+留一来源，结尾引出干预问题）；4.4 四段（默认工作点→机制问题与三类对照区分→结果→准确率-损害权衡；harmful loss/HIR 补定义）；4.5 Effects of Utility Estimation and State Representation（A2-M/A2-F 改名消除同名冲突；固定配置消融与重新选参表示比较分段）；4.6 Sensitivity（严重度+历史支持三类检查，声明非独立泛化）；4.7 Deployment Cost（只答"增加哪些计算"，不报延迟分位数） | 作者规划 | 否 | 否 | VERIFIED |
+| R29 | 附录 | 按问题重组为 A Evaluation Protocol / B Method and Implementation Details / C Forecasting Results / D Intervention Frequency and Harm / E Estimation and State Analyses / F Sensitivity Analyses / G Cost and Reproducibility；app:v52/app:v53 节解散、内容迁入 D/E/C/F，表 label 保留，附录地图重写；新标签 app:source-diagnostics/app:gate-controls/app:matched-partners/app:compact-selection/app:estimation-analyses | 作者规划+子代理执行（约 30 块移动） | 否 | 否 | VERIFIED |
+| R30 | 全文 | 三次连贯性通读+逐句依赖审计：docs/sentence_logic_audit.csv（248 句）、docs/coherence_pass_report.md；1 CRITICAL+3 MAJOR+8 MINOR 全部修复闭环（见报告末尾） | 子代理审计+主代理修复 | 否 | 否 | VERIFIED |
+| R31 | 编译核验 | latexmk 零错误、零未定义引用、38 页；PDF 已刷新至 latex/ 顶层 | build 日志 | — | — | VERIFIED |
+
+未解决登记（保持不变）：E-001 独立确认无合格数据（BLOCKED，保留披露）；R17 端到端每请求延迟未实测（UNFINISHED，tex 已如实标注合成口径）；留一来源全行见附录 C 表注与结果文件。
