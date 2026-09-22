@@ -139,9 +139,7 @@
       "CATALOG_ORACLE"
     ],
     "external_methods": [
-      "TATO",
-      "FIXED_BRITS",
-      "FIXED_CSDI"
+      "TATO"
     ],
     "discussed_not_run": [
       "TOI",
@@ -152,7 +150,11 @@
       "BiTGraph",
       "S4M",
       "CTF"
-    ]
+    ],
+    "dropped_20260922": {
+      "FIXED_BRITS": "training cost at frozen equal-capacity config exceeds budget; SAITS covers the trained-imputer class",
+      "FIXED_CSDI": "same"
+    }
   },
   "state_version": "v54-full22",
   "state_fix": "intervention features computed against interpolate_gaps(reference); KEEP intervention block all-zero",

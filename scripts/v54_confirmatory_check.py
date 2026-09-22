@@ -32,7 +32,10 @@ from introact_ts.v54 import confirmatory as PL
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "results/v54/confirmatory"
 
-EXT_ACTIONS = ("BRITS", "CSDI")
+# BRITS/CSDI dropped by decision 2026-09-22 (training cost at the frozen
+#: equal-capacity config exceeds the remaining budget); tuple kept empty so
+#: forecast/check treat them as absent.
+EXT_ACTIONS: tuple[str, ...] = ()
 
 
 def expected_counts(root: Path) -> dict:

@@ -41,7 +41,10 @@ OUT = ROOT / "results/v54/confirmatory/replay"
 BASELINES = ROOT / "scripts/v431_baselines"
 
 #: External imputer actions, read from the confirmatory external archives.
-EXT_ACTIONS = ("BRITS", "CSDI")
+# BRITS/CSDI dropped by decision 2026-09-22 (training cost at the frozen
+#: equal-capacity config exceeds the remaining budget); tuple kept empty so
+#: forecast/check treat them as absent.
+EXT_ACTIONS: tuple[str, ...] = ()
 STAGE_ACTIONS = tuple(P.ACTIONS) + EXT_ACTIONS
 
 

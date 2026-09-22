@@ -69,13 +69,16 @@ SINGLE_TSICL/MULTI_TSICL/SAITS（候选由各自阶段归档提供，单一写�
 2. **简单选择器与消融**：R2_CART、A5_PARAMETRIC_RIDGE、A1_GLOBAL_UTILITY、
    A2_M（A2_WO_ACTION_COND，机制级）、A2_F（A2_WO_INTERVENTION，按 §5 新
    状态定义重算）、A3_WO_FORECAST、A4_ALWAYS_ACT、CATALOG_ORACLE（上限）。
-3. **外部方法**：TATO（官方实现，48 trials×8 TRAIN 窗口搜索，先线性插值）、
-   FIXED_BRITS、FIXED_CSDI（PyPOTS 1.5，w2-baseline 环境，与 SAITS 相同的
-   交叉拟合/部署拟合协议与可信度守卫）。TOI/T1/SRDI/GIMCC/VIDA/BiTGraph/
-   S4M/CTF 不运行，理由与检索日期写入附录 availability 表（TOI 需要预测器
-   梯度、与冻结推理管线设定不符；其余无公开实现或自训预测器超出冻结骨干
-   契约）。BRITS/CSDI 旧稿"超出预算/被取代"的未证实表述作废，以本轮实测
-   为准。
+3. **外部方法**：TATO（官方实现，48 trials×8 TRAIN 窗口搜索，先线性插值）。
+   TOI/T1/SRDI/GIMCC/VIDA/BiTGraph/S4M/CTF 不运行，理由与检索日期写入附录
+   availability 表（TOI 需要预测器梯度、与冻结推理管线设定不符；其余无公开
+   实现或自训预测器超出冻结骨干契约）。
+   **2026-09-22 决策登记（冻结变更）**：BRITS/CSDI 移出比较。原因：在与
+   SAITS 等容量的冻结配置下，两者的训练成本（BRITS 单分片 35–50 分钟/epoch、
+   全矩阵预估 10–30 GPU 小时）超出剩余预算，且既有 SAITS 已覆盖"训练型
+   插补器"这一类外部方法。附录 availability 表按"已实现并部分运行、因
+   预算移出比较"如实登记，不得写成从未尝试。主集分片产物
+   （results/v54/replay/external/）封存备查，不进入任何表格。
 
 ## 4. 指标与统计
 

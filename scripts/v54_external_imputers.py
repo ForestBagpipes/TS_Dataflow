@@ -120,6 +120,11 @@ def fit_and_impute(method: str, train_panels, query_panels, epochs: int):
     Y_raw = np.stack(query_panels)
     Y = ((Y_raw - centre) / scale).astype(np.float32)
     imputed = np.asarray(model.impute({"X": Y}), dtype=np.float64)
+    if imputed.ndim == 4:
+        # CSDI returns (n, n_sampling_times, n_steps, n_features); the
+        # point estimate is the median over the sampling axis, as in the
+        # original paper.
+        imputed = np.median(imputed, axis=1)
     imputed = imputed * scale + centre
     del model, X, raw
     return Y_raw, imputed
