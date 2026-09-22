@@ -33,13 +33,15 @@ from introact_ts.v44.splits import ParentWindow
 #: ``test`` is the held-out region every reported table is computed on, and
 #: ``test30`` / ``test50`` are the same TEST parents at the two higher
 #: registered severities, used for the within-grid robustness sweep.
-BLOCKS = ("bank", "train_eval", "test", "test30", "test50", "test_m2", "test_m3")
+BLOCKS = ("bank", "bankx", "bankx2", "train_eval", "test", "test30", "test50",
+          "test_m2", "test_m3")
 
 #: Mask realisation of a block.  Every block uses the registered protocol seed
 #: except the two stability blocks, which re-derive the masks of the same TEST
 #: parents from a different seed.  Nothing else about them differs, so a
 #: difference between them is a difference in the deletion pattern alone.
-MASK_SEED = {"test_m2": P.PROTOCOL_SEED + 1, "test_m3": P.PROTOCOL_SEED + 2}
+MASK_SEED = {"test_m2": P.PROTOCOL_SEED + 1, "test_m3": P.PROTOCOL_SEED + 2,
+             "bankx2": P.PROTOCOL_SEED + 1}
 
 
 def mask_seed_of(block: str) -> int:
@@ -54,6 +56,11 @@ BANK_FRACTION = 0.80
 #: main severity; the robustness sweep adds 30 % and 50 % on TEST separately.
 BLOCK_SEVERITIES = {
     "bank": None,                       # None means hash-mixed
+    #: v4.7 enumerates the ladder instead of drawing one level per episode, so
+    #: every parent, pattern and horizon carries support at every registered
+    #: severity rather than at a hash-chosen one.
+    "bankx": P.SEVERITIES,
+    "bankx2": P.SEVERITIES,
     "train_eval": (P.MAIN_SEVERITY,),
     "test": (P.MAIN_SEVERITY,),
     "test30": (0.30,),
@@ -131,12 +138,16 @@ def test_parents(root: str | Path, *, stride: int = P.PARENT_STRIDE) -> list[Par
     return out
 
 
+#: The densified bank blocks draw the same TRAIN parents as ``bank``.
+BANK_ALIAS = {"bankx": "bank", "bankx2": "bank"}
+
+
 def parents_of(root: str | Path, block: str) -> list[ParentWindow]:
     if block.startswith("test"):
         return test_parents(root)
     train = train_parents(root)
     assignment = assign_train(train)
-    return [p for p in train if assignment[p.parent] == block]
+    return [p for p in train if assignment[p.parent] == BANK_ALIAS.get(block, block)]
 
 
 def assign_train(parents: list[ParentWindow]) -> dict[str, str]:
@@ -210,10 +221,15 @@ def episode_specs(root: str | Path, block: str, *, horizons=P.HORIZONS,
                                            parent.origin, horizon, pattern,
                                            protocol_seed=mask_seed_of(block))
                           if mixed else None)
+                realisation = ("" if mask_seed_of(block) == P.PROTOCOL_SEED
+                               else f"|r{mask_seed_of(block) - P.PROTOCOL_SEED}")
                 for severity in ([chosen] if mixed else levels):
+                    # A block that re-derives its masks from another seed is a
+                    # different request set, so its episode ids must not
+                    # collide with the primary realisation of the same window.
                     specs.append(EpisodeSpec(
                         episode_id=episode_id(parent.source, parent.parent,
-                                              horizon, pattern, severity),
+                                              horizon, pattern, severity) + realisation,
                         source=parent.source, parent=parent.parent,
                         origin=int(parent.origin), read_start=int(parent.read_start),
                         horizon=int(horizon), pattern=pattern,

@@ -53,7 +53,14 @@ ACTIONS = (
     "SINGLE_TSICL",
     "MULTI_TSICL",
     "CONTEXT_RIDGE",
+    "SAITS",
 )
+
+#: Actions whose candidate input is produced by a separate model stage rather
+#: than by a pure function of the context.  ``apply_action`` refuses them and
+#: the pipeline reads their candidate from that stage's archive, which keeps
+#: one writer per input version.
+EXTERNAL_ACTIONS = ("SINGLE_TSICL", "MULTI_TSICL", "SAITS")
 
 #: The reference action ``a_0`` used to define utility.
 REFERENCE_ACTION = "KEEP"
@@ -62,8 +69,15 @@ ACTION_INDEX = {name: i for i, name in enumerate(ACTIONS)}
 
 # -- the only searchable hyper-parameters (§4) ------------------------------
 
-K_GRID = (8, 16, 32)
-BETA_GRID = (0.0, 1.0, 1.64)
+K_GRID = (8, 16, 32, 64, 128, 256)
+BETA_GRID = (0.0, 0.5, 1.0, 1.64)
+
+#: Plausibility guard.  A candidate may only write values inside the range of
+#: the visible target widened by this many robust scales on each side.  A
+#: repair that leaves it is recorded as unsupported instead of executed, so a
+#: diverging extrapolation never reaches the bank or the deployment path.  The
+#: constant is registered here before any evaluation record is scored.
+PLAUSIBILITY_SCALES = 3.0
 
 #: Small positive constant added to ``median(d)`` when forming ``tau`` so a
 #: degenerate (all-zero distance) neighbourhood does not divide by zero.

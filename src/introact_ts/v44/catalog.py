@@ -116,13 +116,20 @@ def load_catalog(root: str | Path, block: str, backbone: str) -> list[EpisodeCat
     plan = {(p["episode"], p["action"]): p for p in status["plan"]}
 
     catalogs: list[EpisodeCatalog] = []
+    saits_path = replay / "saits" / f"{block}.npz"
+    saits_store = (np.load(saits_path, allow_pickle=False)
+                   if saits_path.exists() else None)
+
     with np.load(replay / "inputs" / f"{block}.npz", allow_pickle=False) as store, \
             np.load(replay / "tsicl" / f"{block}.npz", allow_pickle=False) as tsicl, \
             np.load(forecast_dir / "predictions.npz", allow_pickle=False) as predictions:
 
+        stores = ((store, tsicl) if saits_store is None
+                  else (store, tsicl, saits_store))
+
         def candidate(key: str, action: str) -> np.ndarray | None:
             name = f"{key}|{action}"
-            for source in (store, tsicl):
+            for source in stores:
                 if name in source.files:
                     return source[name]
             return None

@@ -19,7 +19,7 @@ from typing import Protocol, Sequence
 import numpy as np
 
 from .hashing import array_hash, require
-from .protocol import ACTIONS, REFERENCE_ACTION
+from .protocol import ACTIONS, PLAUSIBILITY_SCALES, REFERENCE_ACTION
 
 #: Minimum observed rows before the context ridge is allowed to fit.
 RIDGE_MIN_ROWS = 32
@@ -162,6 +162,44 @@ def _ridge_impute(target: np.ndarray, covariates: np.ndarray, *,
     return filled
 
 
+def plausibility_bounds(reference: np.ndarray) -> tuple[float, float]:
+    """The admissible value range of any repair of ``reference``.
+
+    The range is the visible target's own range widened by
+    ``PLAUSIBILITY_SCALES`` robust scales on each side.  It depends on the
+    request alone, so the same bound holds when a record is written to the bank
+    and when a request is served.
+    """
+    from .state import robust_scale
+
+    reference = np.asarray(reference, dtype=np.float64)
+    observed = reference[np.isfinite(reference)]
+    if observed.size == 0:
+        return (float("-inf"), float("inf"))
+    width = PLAUSIBILITY_SCALES * float(robust_scale(reference))
+    return (float(observed.min()) - width, float(observed.max()) + width)
+
+
+def implausible_reason(filled: np.ndarray, reference: np.ndarray) -> str | None:
+    """``None`` when the candidate is admissible, otherwise why it is not."""
+    filled = np.asarray(filled, dtype=np.float64)
+    reference = np.asarray(reference, dtype=np.float64)
+    if filled.shape != reference.shape:
+        return "candidate length differs from the reference"
+    written = ~np.isfinite(reference)
+    if not written.any():
+        return None
+    values = filled[written]
+    if not np.isfinite(values).all():
+        return "repair left a hidden position unfilled"
+    lo, hi = plausibility_bounds(reference)
+    excess = float(np.max(np.abs(values - np.clip(values, lo, hi))))
+    if excess > 0.0:
+        return (f"repair leaves the plausible range by {excess:.4g} "
+                f"outside [{lo:.4g}, {hi:.4g}]")
+    return None
+
+
 def _guard(name: str, filled: np.ndarray, reference: np.ndarray) -> np.ndarray:
     """Sanity gate every action must pass before it may be executed."""
     filled = np.asarray(filled, dtype=np.float64)
@@ -171,6 +209,8 @@ def _guard(name: str, filled: np.ndarray, reference: np.ndarray) -> np.ndarray:
     require(np.array_equal(filled[observed], reference[observed]),
             f"{name}: rewrote an observed value")
     require(np.isfinite(filled).all(), f"{name}: left a gap unfilled")
+    reason = implausible_reason(filled, reference)
+    require(reason is None, f"{name}: {reason}")
     return filled
 
 
@@ -250,6 +290,13 @@ def apply_action(name: str, panel: np.ndarray, *, imputer: Imputer | None = None
             return outcome(reference_target, applicable=False,
                            reason=f"{type(exc).__name__}: {exc}")
         return outcome(filled, metadata={"strategy": "context_ridge"})
+
+    if name == "SAITS":
+        # The trained imputer is a model stage rather than a pure function of
+        # the context, so its candidate is built once per block and read from
+        # that stage's archive.
+        return outcome(reference_target, applicable=False,
+                       reason="SAITS candidates come from the imputer stage")
 
     raise AssertionError("unreachable")  # pragma: no cover
 
