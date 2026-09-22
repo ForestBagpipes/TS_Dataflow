@@ -1,0 +1,69 @@
+{
+  "version": "v54",
+  "frozen_at": "2026-09-22",
+  "supersedes": "v52 exploratory (archived)",
+  "human_readable": "docs/protocol_freeze_v54_20260922.md",
+  "context": 512,
+  "horizons": [96, 192],
+  "parent_stride": 704,
+  "purge": 704,
+  "patterns": ["P1_point", "P2_target_block", "P3_shared_block", "P4_tail"],
+  "severities": [0.10, 0.30, 0.50],
+  "main_severity": 0.10,
+  "split_bounds_source": "configs/v431-r5/main_protocol_v2.json",
+  "train_region": "train+dev rows",
+  "test_region": "calibration+test rows",
+  "train_internal_split": {"bank": 0.80, "train_eval": 0.20},
+  "deprecated_splits": "v44 replay_fit/gate/train_eval 60/20/20",
+  "parents": {"train_total": 276, "bank": 223, "train_eval": 53, "test": 95},
+  "blocks": {
+    "bankx":      {"seed": 20260917, "severities": [0.10, 0.30, 0.50], "episodes": 5352, "role": "replay_bank"},
+    "bankx2":     {"seed": 20260918, "severities": [0.10, 0.30, 0.50], "episodes": 5352, "role": "replay_bank_robustness"},
+    "train_eval": {"seed": 20260917, "severities": [0.10], "episodes": 424, "role": "selection"},
+    "test":       {"seed": 20260917, "severities": [0.10], "episodes": 760, "role": "exploratory_main"},
+    "test30":     {"seed": 20260917, "severities": [0.30], "episodes": 760, "role": "exploratory_severity"},
+    "test50":     {"seed": 20260917, "severities": [0.50], "episodes": 760, "role": "exploratory_severity"},
+    "test_m2":    {"seed": 20260918, "severities": [0.10], "episodes": 760, "role": "exploratory_mask_repeat_2"},
+    "test_m3":    {"seed": 20260919, "severities": [0.10], "episodes": 760, "role": "exploratory_mask_repeat_3"}
+  },
+  "actions": ["KEEP", "FFILL", "SINGLE_TSICL", "MULTI_TSICL", "CONTEXT_RIDGE", "SAITS"],
+  "external_actions": ["SINGLE_TSICL", "MULTI_TSICL", "SAITS"],
+  "reference_action": "KEEP",
+  "comparison_rows": {
+    "catalog_strategies": ["NATIVE_KEEP", "FIXED_SAITS", "BEST_FIXED", "SOURCE_FIXED", "FULL_INTROACT"],
+    "simple_selectors_and_ablations": ["R2_CART", "A5_PARAMETRIC_RIDGE", "A1_GLOBAL_UTILITY", "A2_WO_ACTION_COND", "A2_WO_INTERVENTION", "A3_WO_FORECAST", "A4_ALWAYS_ACT", "CATALOG_ORACLE"],
+    "external_methods": ["TATO", "FIXED_BRITS", "FIXED_CSDI"],
+    "discussed_not_run": ["TOI", "T1", "SRDI", "GIMCC", "VIDA", "BiTGraph", "S4M", "CTF"]
+  },
+  "state_version": "v54-full22",
+  "state_fix": "intervention features computed against interpolate_gaps(reference); KEEP intervention block all-zero",
+  "scoring": {
+    "formula": "s = mu - beta * sigma / sqrt(n_eff)",
+    "clustering": "parent-level: variants of one parent collapse to a parent mean before mu/sigma; n_eff = distinct parents",
+    "k_grid": [8, 16, 32, 64, 128, 256],
+    "beta_grid": [0.0, 0.5, 1.0, 1.64],
+    "selection": "LOPO, one-standard-error rule, ties to least intervention",
+    "harm_cap_anchor": "CONTEXT_RIDGE conditional harm rate on bank",
+    "infeasible_fallback": "KEEP-only, recorded"
+  },
+  "metrics": {
+    "primary": "source-macro MASE (variant->parent->source->macro)",
+    "bootstrap": {"resamples": 2000, "seed": 101, "ci": 0.95, "cluster": "parent", "paired": true},
+    "multiple_comparison": "Holm"
+  },
+  "failure_handling": {
+    "plausibility_scales": 3.0,
+    "keep_exempt_from_finiteness_guard": true,
+    "complete_input": "KEEP only, selector abstains",
+    "missing_prediction": "error, counted by reason, never zero-filled",
+    "heldout_labels_read": 0
+  },
+  "contamination": {
+    "exploratory": ["test", "test30", "test50", "test_m2", "test_m3"],
+    "reason": "TEST region repeatedly read since v46 including Chronos-2 observations (E-001)",
+    "confirmatory_candidates": ["Solar", "Crypto", "Oil_Price"],
+    "confirmatory_rule": "one-shot evaluation after freeze, no look-back, no re-tuning"
+  },
+  "selector_module": "src/introact_ts/v47/select.py",
+  "selector_module_sha256_pre_fix": "6f92048d (recorded in docs/v53_state_compact_report_20260922.md)"
+}
