@@ -47,7 +47,11 @@ def main() -> None:
     began = time.perf_counter()
     frozen = json.loads(
         (ROOT / f"results/v47/protocol/selection_{args.backbone}.json").read_text())
-    k = int(frozen["selection"]["selected"]["k"])
+    config = SEL.frozen_config(frozen)
+    if config is None:
+        raise SystemExit(f"selection for {args.backbone} is KEEP-only; "
+                         "no frozen k exists to transfer")
+    k = config[0]
 
     bank_catalogs = []
     for name in args.bank_blocks.split(","):

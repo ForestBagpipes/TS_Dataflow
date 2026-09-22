@@ -296,7 +296,8 @@ def test_forecast_block_is_a_function_of_the_reference_prediction_only():
 
 
 def test_intervention_features_read_inputs_only():
-    reference = panel(3)[:, 0]
+    reference = panel(3)[:, 0].copy()
+    reference[100:140] = np.nan  # a target gap for the candidate to repair
     masked = A._fill_forward(reference)
     scale = ST.robust_scale(reference)
     a = ST.intervention_features(masked, reference, scale)
@@ -305,9 +306,11 @@ def test_intervention_features_read_inputs_only():
     # KEEP must be exactly zero-intervention.
     zero = ST.intervention_features(reference.copy(), reference, scale)
     assert np.allclose(zero, 0.0)
-    # A larger edit must move the magnitude features upward.
+    # A larger repair of the same gap must move the magnitude features upward.
+    # (v54 §5: only repairs of reference gaps count; editing observed
+    # positions is not an intervention the state describes.)
     bigger = masked.copy()
-    bigger[:200] += 5.0 * scale
+    bigger[100:140] = ST.interpolate_gaps(reference)[100:140] + 10.0 * scale
     c = ST.intervention_features(bigger, reference, scale)
     assert c[0] > a[0] and c[1] > a[1]
 

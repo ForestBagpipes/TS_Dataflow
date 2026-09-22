@@ -46,8 +46,11 @@ def main() -> None:
     began = time.perf_counter()
     root = Path(args.root)
     frozen = json.loads((root / f"results/v47/protocol/selection_{args.backbone}.json").read_text())
-    k = int(frozen["selection"]["selected"]["k"])
-    beta = float(frozen["selection"]["selected"]["beta"])
+    config = SEL.frozen_config(frozen)
+    if config is None:
+        raise SystemExit(f"selection for {args.backbone} is KEEP-only; "
+                         "no frozen (k, beta) exists to evaluate")
+    k, beta = config
 
     bank_catalogs = C.load_catalog(root, "bankx", args.backbone)
     eval_catalogs = C.load_catalog(root, args.block, args.backbone)

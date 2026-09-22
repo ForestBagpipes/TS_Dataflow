@@ -51,6 +51,9 @@ def main() -> None:
 
     frozen = json.loads(
         (ROOT / f"results/v47/protocol/selection_{args.backbone}.json").read_text())
+    if SEL.frozen_config(frozen) is None:
+        raise SystemExit(f"selection for {args.backbone} is KEEP-only; there is "
+                         "no frozen configuration whose stability to measure")
     reference = frozen["selection"]["selected"]
 
     full_bank = SEL.Bank(bank_catalogs, blocks=blocks)
@@ -73,6 +76,19 @@ def main() -> None:
             bank_queries = SEL.Queries(subset, blocks=blocks)
             cap = SEL.harm_cap(bank, bank_queries)
             chosen = SEL.select_hyperparameters(bank, bank_queries, cap=cap["cap"])
+            if chosen["selected"] is None:
+                # KEEP-only fallback on this subsample (freeze §4): record the
+                # refusal and evaluate the all-KEEP decision it deploys.
+                out = SEL.outcomes(queries, np.full(len(queries.episode),
+                                                    SEL.REFERENCE, dtype=object))
+                rows.append({"fraction": fraction, "seed": seed, "k": None,
+                             "beta": None, "keep_only": True,
+                             "parents": int(len({c.parent for c in subset})),
+                             "same_as_frozen": False,
+                             "mase": SEL.source_macro(queries, out["mase"]),
+                             "intervention_rate": out["intervention_rate"],
+                             "conditional_hir": out["conditional_hir"]})
+                continue
             k = int(chosen["selected"]["k"])
             beta = float(chosen["selected"]["beta"])
             rows.append({"fraction": fraction, "seed": seed, "k": k, "beta": beta,

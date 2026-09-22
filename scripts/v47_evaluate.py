@@ -268,8 +268,9 @@ def main() -> None:
     if not freeze.exists():
         raise SystemExit(f"configuration is not frozen for {args.backbone}: {freeze} missing")
     selection = json.loads(freeze.read_text())
-    k = int(selection["selection"]["selected"]["k"])
-    beta = float(selection["selection"]["selected"]["beta"])
+    config = SEL.frozen_config(selection)
+    keep_only = config is None
+    k, beta = config if config is not None else (None, None)
 
     bank_catalogs = []
     for name in args.bank_blocks.split(","):
@@ -291,21 +292,32 @@ def main() -> None:
     # action, so it is computed here rather than read from a separate file and
     # it is accounted exactly like every other row.
     decisions["FIXED_SAITS"] = SEL.apply_fixed(queries, "SAITS")
-    scores = SEL.score_grid(bank, queries, D, k, beta)
-    decisions["FULL_INTROACT"] = SEL.decide(queries, scores)
-    decisions["A1_GLOBAL_UTILITY"] = SEL.decide(
-        queries, SEL.score_grid(bank, queries, D, k, beta, local=False))
-    decisions["A4_ALWAYS_ACT"] = SEL.decide(queries, scores, act_or_keep=False)
+    if keep_only:
+        # Freeze §4 fallback: the harm cap admitted no (k, beta), so the
+        # selector abstains to the reference on every request.  The ablations
+        # that need a frozen (k, beta) have no configuration to run and are
+        # recorded as skipped rather than silently filled with a default.
+        decisions["FULL_INTROACT"] = np.full(n, SEL.REFERENCE, dtype=object)
+        skipped = ["A1_GLOBAL_UTILITY", "A4_ALWAYS_ACT",
+                   "A2_WO_INTERVENTION", "A3_WO_FORECAST"]
+    else:
+        scores = SEL.score_grid(bank, queries, D, k, beta)
+        decisions["FULL_INTROACT"] = SEL.decide(queries, scores)
+        decisions["A1_GLOBAL_UTILITY"] = SEL.decide(
+            queries, SEL.score_grid(bank, queries, D, k, beta, local=False))
+        decisions["A4_ALWAYS_ACT"] = SEL.decide(queries, scores, act_or_keep=False)
+        skipped = []
     decisions["A5_PARAMETRIC_RIDGE"] = SEL.parametric(bank, queries, kind="ridge")
     decisions["CATALOG_ORACLE"] = SEL.oracle(queries)
 
-    for label, kwargs in (("A2_WO_INTERVENTION", {"use_intervention": False}),
-                          ("A3_WO_FORECAST", {"use_forecast": False})):
-        blocks = SEL.blocks_of(**kwargs)
-        b2 = SEL.Bank(bank_catalogs, blocks=blocks)
-        q2 = SEL.Queries(eval_catalogs, blocks=blocks)
-        D2 = SEL.distance_matrices(b2, q2, lopo=False)
-        decisions[label] = SEL.decide(q2, SEL.score_grid(b2, q2, D2, k, beta))
+    if not keep_only:
+        for label, kwargs in (("A2_WO_INTERVENTION", {"use_intervention": False}),
+                              ("A3_WO_FORECAST", {"use_forecast": False})):
+            blocks = SEL.blocks_of(**kwargs)
+            b2 = SEL.Bank(bank_catalogs, blocks=blocks)
+            q2 = SEL.Queries(eval_catalogs, blocks=blocks)
+            D2 = SEL.distance_matrices(b2, q2, lopo=False)
+            decisions[label] = SEL.decide(q2, SEL.score_grid(b2, q2, D2, k, beta))
 
     rows = {name: summarise(queries, sel, name) for name, sel in decisions.items()}
     threshold = 1e-9
@@ -332,6 +344,8 @@ def main() -> None:
     for reference in (("NATIVE_KEEP", "BEST_FIXED", "R2_CART", "FIXED_SAITS",
                        "A1_GLOBAL_UTILITY", "A4_ALWAYS_ACT", "A5_PARAMETRIC_RIDGE",
                        "A2_WO_INTERVENTION", "A3_WO_FORECAST") + tuple(external)):
+        if reference not in mase_of:
+            continue  # ablation skipped under the KEEP-only fallback
         comparisons[f"FULL_INTROACT_vs_{reference}"] = SEL.paired_cluster_bootstrap(
             queries, mase_of["FULL_INTROACT"], mase_of[reference],
             resamples=args.resamples)
@@ -388,7 +402,9 @@ def main() -> None:
         "stage": "v47-evaluation",
         "backbone": args.backbone,
         "block": args.block,
-        "frozen": {"k": k, "beta": beta, "best_fixed_action": fixed,
+        "frozen": {"k": k, "beta": beta, "keep_only": keep_only,
+                   "skipped_ablations": skipped,
+                   "best_fixed_action": fixed,
                    "selection_file": str(freeze.relative_to(root))},
         "episodes": n,
         "external_baselines": external,

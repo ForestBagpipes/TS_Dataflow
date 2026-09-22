@@ -6,6 +6,16 @@ how the neighbourhood is computed (as one distance matrix per action rather
 than one Python scan per query, so leave-one-parent-out over the whole bank is
 affordable) and how (k, beta) are chosen.
 
+v54 protocol freeze (docs/protocol_freeze_v54_20260922.md):
+
+* §6 / M-001 -- neighbourhood scoring is parent-clustered: variants of one
+  parent merge into a single parent-level entity before mu/sigma are computed,
+  and ``n_eff`` counts distinct parents, so repeated variants of one parent no
+  longer inflate the effective sample size.
+* §4 -- when no (k, beta) respects the harm cap the selector falls back to
+  KEEP-only as a whole and records the refusal; there is no max-beta retreat
+  that skips the cap check.
+
 Every function in this module reads the per-action state vector and the
 recorded realised utility.  None of them reads a future target, a candidate's
 forecast, or a TEST record during selection.
@@ -183,7 +193,38 @@ def distance_matrices(bank: Bank, queries: Queries, *, lopo: bool,
 
 def score_grid(bank: Bank, queries: Queries, D: dict[str, np.ndarray], k: int,
                beta: float, *, local: bool = True) -> dict[str, np.ndarray]:
-    """The conservative score of every action on every query."""
+    """The conservative score of every action on every query.
+
+    Parent-clustered neighbourhood scoring (protocol freeze §6, M-001): the
+    ``k`` nearest same-action records are first merged into one entity per
+    distinct parent -- the parent's utility is the plain mean of its variants'
+    realised utilities and its distance is the nearest variant's distance --
+    and mu/sigma are the distance-weighted mean and standard deviation over
+    those parent entities.  ``n_eff`` is the number of *distinct parents* in
+    the neighbourhood, not a weight-based record count.  The score formula is
+    unchanged: ``s = mu - beta * sigma / sqrt(n_eff)``.  The A1 global branch
+    (``local=False``) drops retrieval and distance weighting but keeps the
+    same parent-level mu/sigma and parent-count ``n_eff`` over the action's
+    whole support, so the ablation isolates retrieval as the single changed
+    variable.
+
+    Branch semantics (any branch whose prerequisites cannot be computed scores
+    ``-inf`` on every non-reference action, and ``decide`` then keeps the
+    reference):
+
+    * **empty neighbourhood** -- no finite distance at all: the action scores
+      ``-inf`` on that query;
+    * **fewer parents than k** -- the neighbourhood is simply smaller:
+      ``ke = min(k, support)`` and ``n_eff`` counts the parents actually
+      present, with no padding and no fallback;
+    * **every candidate unavailable** -- ``decide`` masks illegal actions, so
+      the request keeps the reference;
+    * **zero-distance neighbourhood** -- ``tau = median(d) + TAU_EPSILON``
+      stays positive and every parent receives weight ~1;
+    * **tied top scores** -- ``decide`` keeps the reference on any
+      non-positive or exactly tied score (least intervention first), and
+      otherwise the earliest action in the frozen catalogue order wins.
+    """
     n = len(queries.episode)
     scores = {}
     for action in ACTIONS:
@@ -192,10 +233,18 @@ def score_grid(bank: Bank, queries: Queries, D: dict[str, np.ndarray], k: int,
             scores[action] = np.full(n, -np.inf)
             continue
         if not local:
-            mu = np.full(n, float(b.g.mean()))
-            sigma = np.full(n, float(b.g.std()))
-            n_eff = np.full(n, float(len(b.g)))
-            scores[action] = mu - beta * sigma / np.sqrt(np.maximum(n_eff, 1.0))
+            # A1 Global Replay: no retrieval and no distance weighting -- that
+            # is the only difference from the full method.  mu/sigma are still
+            # computed at the parent level and n_eff still counts distinct
+            # parents (freeze §6), so FULL vs A1 isolates the retrieval
+            # mechanism as the single changed variable.
+            uniq, inv = np.unique(b.parent, return_inverse=True)
+            count = np.bincount(inv, minlength=len(uniq)).astype(np.float64)
+            g_parent = np.bincount(inv, weights=b.g, minlength=len(uniq)) / count
+            mu = np.full(n, float(g_parent.mean()))
+            sigma = np.full(n, float(g_parent.std()))
+            n_eff = float(len(uniq))
+            scores[action] = mu - beta * sigma / np.sqrt(max(n_eff, 1.0))
             continue
         d = D[action]
         ke = min(k, d.shape[1])
@@ -205,20 +254,30 @@ def score_grid(bank: Bank, queries: Queries, D: dict[str, np.ndarray], k: int,
         idx = np.take_along_axis(idx, order, axis=1)
         dd = np.take_along_axis(dd, order, axis=1)
         gg = b.g[idx]
-        bad = ~np.isfinite(dd)
-        dd = np.where(bad, 0.0, dd)
-        tau = np.median(dd, axis=1)[:, None] + TAU_EPSILON
-        w = np.exp(-dd / tau)
-        w = np.where(bad, 0.0, w)
-        wsum = w.sum(1)
-        degenerate = wsum <= 0
-        w[degenerate] = 1.0
-        wsum = w.sum(1)
-        mu = (w * gg).sum(1) / wsum
-        sigma = np.sqrt((w * (gg - mu[:, None]) ** 2).sum(1) / wsum)
-        n_eff = np.clip(wsum ** 2 / (w ** 2).sum(1), 1.0, ke)
-        s = mu - beta * sigma / np.sqrt(n_eff)
-        s[np.all(bad, axis=1)] = -np.inf
+        pp = b.parent[idx]
+        s = np.full(n, -np.inf)
+        for i in range(n):
+            finite = np.isfinite(dd[i])
+            if not finite.any():
+                continue  # empty neighbourhood: this action abstains
+            dist = dd[i][finite]
+            util = gg[i][finite]
+            parents = pp[i][finite]
+            tau = float(np.median(dist)) + TAU_EPSILON
+            uniq, inv = np.unique(parents, return_inverse=True)
+            d_parent = np.full(len(uniq), np.inf)
+            np.minimum.at(d_parent, inv, dist)
+            count = np.bincount(inv, minlength=len(uniq)).astype(np.float64)
+            g_parent = np.bincount(inv, weights=util, minlength=len(uniq)) / count
+            w = np.exp(-d_parent / tau)
+            wsum = float(w.sum())
+            if not np.isfinite(wsum) or wsum <= 0.0:
+                w = np.ones(len(uniq))
+                wsum = float(len(uniq))
+            mu = float((w * g_parent).sum() / wsum)
+            sigma = float(np.sqrt((w * (g_parent - mu) ** 2).sum() / wsum))
+            n_eff = float(len(uniq))
+            s[i] = mu - beta * sigma / np.sqrt(n_eff)
         scores[action] = s
     return scores
 
@@ -226,6 +285,13 @@ def score_grid(bank: Bank, queries: Queries, D: dict[str, np.ndarray], k: int,
 def decide(queries: Queries, scores: dict[str, np.ndarray], *,
            act_or_keep: bool = True) -> np.ndarray:
     """Return the selected action of every request.
+
+    The reference is the default and wins every tie: an action is taken only
+    when its score is strictly positive and strictly above every other legal
+    action's score, scanning the frozen catalogue order, so a tie between
+    actions resolves to the earliest one (least intervention first, then
+    action order -- freeze §6).  A request whose legal set is KEEP alone
+    (complete input) therefore always keeps the reference.
 
     ``act_or_keep`` False is the A4 ablation: the reference option is removed
     and the highest-scoring admissible action is always executed.
@@ -429,7 +495,13 @@ def macro_difference(queries: Queries, mase_a: np.ndarray,
 def select_hyperparameters(bank: Bank, queries: Queries, *, k_grid=K_GRID,
                            beta_grid=BETA_GRID, cap: float | None = None,
                            same_horizon: bool = False) -> dict:
-    """Leave-one-parent-out choice of (k, beta) under the harm cap."""
+    """Leave-one-parent-out choice of (k, beta) under the harm cap.
+
+    Fallback (freeze §4): when no grid setting respects the cap there is no
+    max-beta retreat.  The selector as a whole falls back to KEEP-only --
+    ``selected`` is ``None`` and ``fallback_to_keep_only`` is True -- and the
+    refusal is recorded so the deployment path can abstain on every request.
+    """
     D = distance_matrices(bank, queries, lopo=True, same_horizon=same_horizon)
     rows = []
     for k in k_grid:
@@ -445,9 +517,19 @@ def select_hyperparameters(bank: Bank, queries: Queries, *, k_grid=K_GRID,
                          "harmful_loss": out["harmful_loss"],
                          "beneficial_precision": out["beneficial_precision"]})
     feasible = [r for r in rows if cap is None or r["conditional_hir"] <= cap]
-    fallback = not feasible
-    if fallback:
-        feasible = [r for r in rows if r["beta"] == max(beta_grid)]
+    if not feasible:
+        for r in rows:
+            r.pop("mase", None)
+        return {"selected": None,
+                "keep_only": True,
+                "cap": cap,
+                "fallback_to_keep_only": True,
+                "fallback_to_most_conservative": False,
+                "rule": "no grid setting respects the harm cap; the selector "
+                        "abstains to KEEP-only on every request",
+                "leader": None,
+                "feasible_settings": 0,
+                "grid": sorted(rows, key=lambda r: r["lopo_mase"])}
     # Among the settings the cap admits, take the lowest cross-validated macro.
     # Ties on that value are broken towards the setting that intervenes least,
     # which is the same reasoning the cap itself rests on.
@@ -462,13 +544,31 @@ def select_hyperparameters(bank: Bank, queries: Queries, *, k_grid=K_GRID,
     for r in rows:
         r.pop("mase", None)
     return {"selected": {"k": best["k"], "beta": best["beta"]},
-            "cap": cap, "fallback_to_most_conservative": fallback,
+            "keep_only": False,
+            "cap": cap, "fallback_to_keep_only": False,
+            "fallback_to_most_conservative": False,
             "rule": "lowest leave-one-parent-out source-macro MASE among the "
                     "settings whose conditional harmful rate respects the cap",
             "leader": {"k": best["k"], "beta": best["beta"],
                        "lopo_mase": best["lopo_mase"]},
             "feasible_settings": len(feasible),
             "grid": sorted(rows, key=lambda r: r["lopo_mase"])}
+
+
+def frozen_config(selection: dict) -> tuple[int, float] | None:
+    """The frozen ``(k, beta)`` of a selection payload, or ``None`` on KEEP-only.
+
+    Accepts either the dict returned by :func:`select_hyperparameters` or the
+    JSON payload written by ``scripts/v47_select.py`` (which nests that dict
+    under ``"selection"``).  ``None`` means the harm cap admitted no grid
+    setting and the selector fell back to KEEP-only (freeze §4): no
+    configuration exists, and the deployment path must abstain to the
+    reference on every request rather than subscript ``selected``.
+    """
+    result = selection.get("selection", selection)
+    if result.get("keep_only") or result.get("selected") is None:
+        return None
+    return int(result["selected"]["k"]), float(result["selected"]["beta"])
 
 
 # -------------------------------------------------------------------- baselines

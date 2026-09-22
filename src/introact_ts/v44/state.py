@@ -4,8 +4,9 @@ Four blocks, and the split between them is the whole point of the method:
 
 * **mask state**      -- what is missing, where, and how far from the origin.
 * **visible context** -- what the observed past looks like.
-* **intervention state** -- how the candidate input differs from the reference
-  input.  This is a function of *inputs only*.
+* **intervention state** -- how the candidate input repairs the reference
+  input, measured against the interpolated baseline at the repair positions
+  (v54 freeze §5).  This is a function of *inputs only*.
 * **reference forecast state** -- five summaries of the single reference TSFM
   prediction.
 
@@ -52,6 +53,14 @@ REFERENCE_FORECAST_FEATURES = (
     "fc_first_jump",
     "fc_roughness",
 )
+
+#: State definition version.  "v54-full22" is the protocol freeze of
+#: 2026-09-22 (docs/protocol_freeze_v54_20260922.md §5): the intervention
+#: block measures the candidate against the interpolated baseline at the
+#: repair positions only.  States built under "v44-full22" (which zeroed the
+#: four magnitude features whenever the reference had gaps) must never be
+#: mixed into the same replay bank as v54 states.
+STATE_VERSION = "v54-full22"
 
 #: Window used by the "recent" summaries, in context steps.
 RECENT_WINDOW = 32
@@ -197,7 +206,20 @@ def context_features(reference_target: np.ndarray, period: int) -> np.ndarray:
 def intervention_features(candidate_target: np.ndarray,
                           reference_target: np.ndarray,
                           scale: float) -> np.ndarray:
-    """How the candidate input differs from the reference input.
+    """How the candidate input repairs the reference input.
+
+    v54 definition (protocol freeze §5): the baseline is
+    ``interpolate_gaps(reference_target)`` -- a pure function of the visible
+    reference, no model, no future label.  A *repair position* is one where
+    the reference is NaN and the candidate is finite, and ``delta =
+    candidate - baseline`` is evaluated on the repair positions only, divided
+    by ``scale``.  KEEP hands the reference through unchanged (gaps stay
+    NaN), so its repair set is empty and all five features are exactly zero,
+    including ``fraction_changed``; the same holds whenever nothing was
+    repaired.  ``fraction_changed`` is the share of window positions that
+    were repaired; ``near_origin_change`` averages |delta| over the repair
+    positions inside the last ``RECENT_WINDOW`` steps and is zero when no
+    repair lies there.
 
     Input-only by construction: no forecast of the candidate exists at this
     point, and none is passed in.
@@ -207,23 +229,28 @@ def intervention_features(candidate_target: np.ndarray,
     if candidate.shape != reference.shape:
         raise ValueError("candidate/reference shape mismatch")
     scale = max(float(scale), SCALE_FLOOR)
-    changed = ~np.isclose(candidate, reference, rtol=0.0, atol=0.0, equal_nan=True)
-    delta = np.where(changed, candidate - reference, 0.0)
-    delta = np.nan_to_num(delta, nan=0.0, posinf=0.0, neginf=0.0)
+
+    n = len(reference)
+    repaired = ~np.isfinite(reference) & np.isfinite(candidate)
+    fraction = float(repaired.sum()) / n if n else 0.0
+    if not repaired.any():
+        return np.zeros(len(INTERVENTION_FEATURES), dtype=np.float64)
+
+    baseline = interpolate_gaps(reference)
+    idx = np.flatnonzero(repaired)
+    delta = candidate[idx] - baseline[idx]
 
     mean_abs = float(np.mean(np.abs(delta))) / scale
-    max_abs = float(np.max(np.abs(delta))) / scale if delta.size else 0.0
-    fraction = float(changed.mean())
+    max_abs = float(np.max(np.abs(delta))) / scale
 
-    idx = np.flatnonzero(changed)
     if len(idx) >= 3:
-        slope = float(np.polyfit(idx.astype(np.float64), delta[idx], 1)[0])
+        slope = float(np.polyfit(idx.astype(np.float64), delta, 1)[0])
     else:
         slope = 0.0
     change_trend = slope / scale
 
-    window = min(RECENT_WINDOW, len(delta))
-    near_origin = float(np.mean(np.abs(delta[-window:]))) / scale
+    near = idx >= n - min(RECENT_WINDOW, n)
+    near_origin = float(np.mean(np.abs(delta[near]))) / scale if near.any() else 0.0
     return np.array([mean_abs, max_abs, fraction, change_trend, near_origin],
                     dtype=np.float64)
 
