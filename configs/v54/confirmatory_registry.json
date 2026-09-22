@@ -1,0 +1,44 @@
+{
+  "version": "v54-confirmatory-1",
+  "created": "2026-09-22",
+  "basis": "docs/protocol_freeze_v54_20260922.md section 7 (confirmatory evaluation)",
+  "scope": "Confirmatory sources only. The main eight-source registry (configs/v431-r5/main_protocol_v2.json) is untouched; these two sources never participated in any development or selection.",
+  "split_ratio": "60/15/10/15 by row count with floor rounding, identical to main_protocol_v2.json; TRAIN region = train+dev, TEST region = calibration+test, mirroring src/introact_ts/v46/grid.py",
+  "grid": {
+    "context": 512,
+    "horizons": [96, 192],
+    "parent_stride": 704,
+    "purge_rows": 704,
+    "bank_fraction": 0.8,
+    "blocks": ["bankx", "train_eval", "test", "test_m2", "test_m3"],
+    "severities": {"bankx": [0.1, 0.3, 0.5], "train_eval": [0.1], "test": [0.1], "test_m2": [0.1], "test_m3": [0.1]},
+    "mask_seeds": {"default": 20260917, "test_m2": 20260918, "test_m3": 20260919},
+    "note": "test30/test50/bankx2 are not run on the confirmatory set; train parents are tiled per segment at stride 704 from the segment start and the latest parent of each source is dropped as a purge buffer, mirroring v46/grid.py"
+  },
+  "sources": [
+    {
+      "source": "Solar",
+      "path": "data/solar.txt.gz",
+      "format": "gzip text, no header, no timestamp column (2006 Alabama 137-channel 10-minute photovoltaic; absolute calendar not recovered, per docs/data_provenance_contract.md)",
+      "columns": 137,
+      "target_channel": 0,
+      "rows": 52560,
+      "frequency": "10min",
+      "seasonal_period": 144,
+      "split_bounds": {"train": [0, 31536], "dev": [31536, 39420], "calibration": [39420, 44676], "test": [44676, 52560]},
+      "file_sha256": "1ae9329c3e1032acbb8dd080bfc397c44507006812a715d2788f172820489a1c"
+    },
+    {
+      "source": "US_Term_Structure",
+      "path": "data/time_US_Term_Structure.npz",
+      "format": "npz key 'values', float64 (9326, 40); channel 0 = FwdRate_Fitted_1Y; native missingness preserved (finite_fraction 0.9568), masks overlay native NaN cells, no prefilling",
+      "columns": 40,
+      "target_channel": 0,
+      "rows": 9326,
+      "frequency": "business-day",
+      "seasonal_period": 5,
+      "split_bounds": {"train": [0, 5595], "dev": [5595, 6994], "calibration": [6994, 7927], "test": [7927, 9326]},
+      "file_sha256": "7496e780f67da7da90073e0d7dcee5b445a4d54d9b568ef58f9938bbf6f76511"
+    }
+  ]
+}
