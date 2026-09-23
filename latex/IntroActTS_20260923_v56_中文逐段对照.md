@@ -2,9 +2,9 @@
 
 唯一论文入口：`IntroActTS_20260923_v56.tex`。本文件为阅读对照附件。
 
-标题直译：IntroAct-TS：为冻结时间序列基础模型选择输入修复。
+标题直译：IntroAct-TS：冻结时间序列基础模型的选择性输入治理。
 
-源文件 SHA-256：`497d000e6cb65b1fba195b6d29b693e2bbb88d9bbde5b63e9183958067a7c73a`
+源文件 SHA-256：`7244335ca5384615ec444d593cbcae8a091124334a7f82b9d6ea3ca15840a878`
 
 表内方法名、数据源名、指标缩写、参数符号与数字原样保留，以下给出数值表所用的完整中文读法。
 
@@ -317,6 +317,37 @@ net accuracy from degradation caused by executed repairs. Keeping the input has 
 ## 对照 021
 
 ```latex
+\introact{} uses completed historical windows to estimate how each repair will affect a new
+forecast. Replay pairs request states with realised action utilities. A local estimator then
+combines nearby outcomes with the source's average utility for that action. An execution
+rule uses this estimate and its dispersion to choose between the recommended repair and
+the reference forecast. Figure~\ref{fig:arch} shows the information flow. Algorithm~\ref{alg:selection} gives
+the serving procedure. Its Candidates routine constructs repairs, applies the admissibility
+checks and returns only valid non-reference actions with their inputs.
+```
+
+**中文直译**
+
+IntroAct-TS 使用已完成的历史窗口估计每种修复对新预测的影响。回放将请求状态与已实现的动作效用配对。局部估计器随后结合邻近结果和该数据源上该动作的平均效用。执行判据利用此估计及其离散程度，在推荐修复与参考预测之间选择。图 \ref{fig:arch} 展示信息流。算法 \ref{alg:selection} 给出服务过程。其中 Candidates 例程构造修复，应用可用性检查，仅返回有效的非参考动作及其输入。
+
+## 对照 022
+
+```latex
+\caption{Architecture of \introact{}. Historical replay stores observable action states
+and realised forecasting utilities. For a new request, the reference forecast and candidate
+inputs supply the states used for same-action retrieval. Local utility estimates are
+combined with source-level means before the execution rule selects a repair or returns
+the reference forecast. Future targets are used only for historical supervision and
+subsequent evaluation.}
+```
+
+**中文直译**
+
+IntroAct-TS 架构。历史回放保存可观测的动作状态和已实现的预测效用。对于新请求，参考预测与候选输入提供同动作检索所需的状态。局部效用估计与数据源层面均值结合后，执行判据选择修复或返回参考预测。未来目标仅用于历史监督和后续评估。
+
+## 对照 023
+
+```latex
 \caption{Forecast-aware repair selection for one request}
 ```
 
@@ -349,37 +380,6 @@ net accuracy from degradation caused by executed repairs. Keeping the input has 
 **中文步骤**
 
 输入上下文、掩码、冻结预测器、动作目录、历史库及固定参数。输出保持预测器不变时的一次预测。先计算参考预测。输入完整且有效时返回参考预测。构造通过可用性检查的候选集合，集合为空时也返回参考预测。对每个候选构造状态，检索 k 个同动作记录并按父窗口合并，按对应公式计算局部矩、有效样本量、汇聚均值与得分。选择最高得分动作。仅在其得分超过阈值时返回修复后的预测，否则返回参考预测。
-
-## 对照 022
-
-```latex
-\introact{} uses completed historical windows to estimate how each repair will affect a new
-forecast. Replay pairs request states with realised action utilities. A local estimator then
-combines nearby outcomes with the source's average utility for that action. An execution
-rule uses this estimate and its dispersion to choose between the recommended repair and
-the reference forecast. Figure~\ref{fig:arch} shows the information flow. Algorithm~\ref{alg:selection} gives
-the serving procedure. Its Candidates routine constructs repairs, applies the admissibility
-checks and returns only valid non-reference actions with their inputs.
-```
-
-**中文直译**
-
-IntroAct-TS 使用已完成的历史窗口估计每种修复对新预测的影响。回放将请求状态与已实现的动作效用配对。局部估计器随后结合邻近结果和该数据源上该动作的平均效用。执行判据利用此估计及其离散程度，在推荐修复与参考预测之间选择。图 \ref{fig:arch} 展示信息流。算法 \ref{alg:selection} 给出服务过程。其中 Candidates 例程构造修复，应用可用性检查，仅返回有效的非参考动作及其输入。
-
-## 对照 023
-
-```latex
-\caption{Architecture of \introact{}. Historical replay stores observable action states
-and realised forecasting utilities. For a new request, the reference forecast and candidate
-inputs supply the states used for same-action retrieval. Local utility estimates are
-combined with source-level means before the execution rule selects a repair or returns
-the reference forecast. Future targets are used only for historical supervision and
-subsequent evaluation.}
-```
-
-**中文直译**
-
-IntroAct-TS 架构。历史回放保存可观测的动作状态和已实现的预测效用。对于新请求，参考预测与候选输入提供同动作检索所需的状态。局部效用估计与数据源层面均值结合后，执行判据选择修复或返回参考预测。未来目标仅用于历史监督和后续评估。
 
 ## 对照 024
 
@@ -4154,6 +4154,18 @@ would violate the input-preservation requirement.}
 ## 对照 236
 
 ```latex
+These requirements delimit the decision evaluated here. The selector changes only admissible
+missing entries and retains the reference forecast when no repair is accepted. They do not
+extend the accuracy claims to complete or malformed requests.
+```
+
+**中文直译**
+
+这些要求限定了本文评价的决策。选择器仅修改允许的缺失位置，并在没有修复被接受时保留参考预测。它们并不将精度主张扩展到完整或格式错误的请求。
+
+## 对照 237
+
+```latex
 \section{Selection Rule and Historical Configuration Record}
 ```
 
@@ -4161,7 +4173,7 @@ would violate the input-preservation requirement.}
 
 选择规则与历史配置记录
 
-## 对照 237
+## 对照 238
 
 ```latex
 This section records two aspects of configuration selection. \textbf{(1)} It reports the admissible one-standard-error bands on the three backbones. \textbf{(2)} It compares the minimum-error and selected rules and discloses when their TEST results were inspected.
@@ -4171,7 +4183,7 @@ This section records two aspects of configuration selection. \textbf{(1)} It rep
 
 本节记录配置选择的两个方面。**（1）** 报告三个骨干上允许的一个标准误差范围。**（2）** 比较最小误差规则和所选规则，并披露何时查看了它们的 TEST 结果。
 
-## 对照 238
+## 对照 239
 
 ```latex
 The saved selection records contain eleven, six and twenty-nine admissible settings within
@@ -4186,7 +4198,7 @@ the strict minimum overfits.
 
 保存的选择记录中，Bolt、TimesFM 和 Chronos-2 分别有十一、六和二十九个可用设置，位于最低交叉验证数据源宏平均误差的一个配对标准误内。选定规则在此范围内选择干预最少者，仍并列时选择较小邻域。这一标准在交叉验证误差相近的配置中偏好较少修复，不能证明严格最小值过拟合。
 
-## 对照 239
+## 对照 240
 
 ```latex
 The strict-minimum configurations are $(8,1.0,0)$, $(32,1.0,64)$ and $(16,0,0)$ on Bolt,
@@ -4204,7 +4216,7 @@ the server evaluation archive and its local synchronisation bundle.
 
 Bolt、TimesFM 和 Chronos-2 的严格最小值配置分别为 (8,1.0,0)、(32,1.0,64)、(16,0,0)，当前一个标准误配置分别为 (256,1.64,0)、(32,1.64,64)、(64,1.64,0)。最小值规则总体 MASE 为 1.431，修复率为 76.5%，伤害损失为 0.0430，当前规则对应 1.425、55.2%、0.0340。两套评价均保留。在采用一个标准误规则之前，已经查看过最小值规则的 TEST 结果。虽然前者曾在较早开发版本登记，这一顺序使当前 TEST 比较不能作为独立确认。最小值规则记录保留于服务器评价档案及其本地同步包。
 
-## 对照 240
+## 对照 241
 
 ```latex
 \section{Calibration and Additional Diagnostics}
@@ -4214,7 +4226,7 @@ Bolt、TimesFM 和 Chronos-2 的严格最小值配置分别为 (8,1.0,0)、(32,1
 
 校准与补充诊断。
 
-## 对照 241
+## 对照 242
 
 ```latex
 This section adds two forms of interpretation. \textbf{(1)} Two retrospective requests and source-level comparisons show when repairs help and where aggregate gains concentrate. \textbf{(2)} Four harm targets define alternative execution thresholds, with their empirical outcomes and the assumptions needed for a risk bound.
@@ -4224,7 +4236,7 @@ This section adds two forms of interpretation. \textbf{(1)} Two retrospective re
 
 本节提供两类解释。**（1）** 两个回顾性请求和数据源层面的比较展示修复何时有益，以及总体增益集中在哪里。**（2）** 四个伤害目标定义替代执行阈值，并给出其实测结果和风险界所需假设。
 
-## 对照 242
+## 对照 243
 
 ```latex
 \subsection{Illustrative Requests}
@@ -4234,7 +4246,7 @@ This section adds two forms of interpretation. \textbf{(1)} Two retrospective re
 
 请求案例
 
-## 对照 243
+## 对照 244
 
 ```latex
 \caption{Two actual Bolt TEST requests with a tail gap and horizon 96. The upper request
@@ -4249,7 +4261,7 @@ rule are recorded in \texttt{results/v55/case\_figure.json}.}
 
 两个真实 Bolt TEST 请求，均为尾部缺口、预测长度 96。六个目录动作中，上方请求偏好 KEEP，下方偏好 SAITS。对每个优胜动作，选择 KEEP 与 SAITS 的 MASE 差距最接近其第 75 百分位的合格请求。图中展示最后 128 个上下文步和未来目标。TEST 结果仅用于这一回顾性示例选择。确切样例标识和选择规则见 results/v55/case_figure.json。
 
-## 对照 244
+## 对照 245
 
 ```latex
 Two source-level diagnostics locate where this advantage comes from. The first asks whether
@@ -4268,7 +4280,7 @@ input unchanged, but not a consistent advantage over choosing one repair per sou
 
 两个数据源诊断定位优势来源。第一个检验收益是否来自识别适合数据源的修复，而非适合单个请求的修复。数据源级固定策略对每个源应用回放库平均已实现效用最高的单一动作，不支持时按登记规则回退到 KEEP，全部在 TRAIN 上固定。其数据源宏平均 MASE 为 1.360、1.527、1.448，在 Bolt 上优于完整规则，FULL 减该策略为 +0.0223，区间 [+0.0044,+0.0432]。TimesFM 差值为 +0.0017，区间含零。Chronos-2 数值较差，差值 −0.0834，区间 [−0.1861,+0.0205]。总体值为 Source Fixed 的 1.445 与 IntroAct-TS 的 1.425。比较支持相对于保持输入不变的一致优势，但不支持相对于每源选择单一修复的一致优势。
 
-## 对照 245
+## 对照 246
 
 ```latex
 Leaving out one source at a time preserves the margin over the unchanged input on every
@@ -4284,7 +4296,7 @@ in the evaluation archive.
 
 每次移除一个源后，各骨干每个七源子集上相对于保持输入不变的差值仍保留。更强对照的比较更集中，排除 Exchange 后，相对于 Best Fixed 的差值在 Bolt 从 −0.0454 变为 +0.0187，在 TimesFM 从 −0.0502 变为 +0.0015，在 Chronos-2 从 −0.0915 变为 +0.0077。因此，尽管相对于保持输入不变的优势较广，相对于 Best Fixed 的平均优势并未广泛分布于数据源。完整敏感性表保留在评价档案中。
 
-## 对照 246
+## 对照 247
 
 ```latex
 The threshold itself can be set to a stated level of clipped harm. Calibrating it on the
@@ -4303,7 +4315,7 @@ the $\alpha=0.05$ rule repairs $36.2\%$, illustrating the operating curve. The m
 
 阈值可设为指定的截断伤害水平。在内部评价块校准后原样用于 TEST，Chronos-2 的四个单元均满足目标，Bolt 和 TimesFM 仅 α=0.05 时满足。α=0.01 时，后二者实际截断伤害分别为 0.0165、0.0260。保形保证要求校准与未来请求可交换，这些时间块未确立该条件。TEST 内回顾性交叉拟合在十二个单元中的八个满足目标，但使用其他 TEST 父窗口的标签，不是前瞻性保证。Chronos-2 上内部校准的 α=0.01 规则修复 4.7% TEST 请求，α=0.05 修复 36.2%，展示工作曲线。主 IntroAct-TS 行阈值为零，校准行属于次要分析。
 
-## 对照 247
+## 对照 248
 
 ```latex
 \caption{Retrospective TEST cross-fit of the execution threshold: each half of the parents
@@ -4336,7 +4348,7 @@ clipped value, and repair rate is the executed share.}
 
 本表为数值结果表，表头、动作名与变体名按文首词汇对应表读取，全部数值、公式、排序标记及分组原样保留。对应图表说明的中文直译紧邻本表。
 
-## 对照 248
+## 对照 249
 
 ```latex
 The threshold $\tau$ sets the execution operating point. The primary accuracy comparison
@@ -4365,7 +4377,7 @@ level $\alpha$ and $n$ calibration requests, the rule takes
 \end{equation}
 ```
 
-## 对照 249
+## 对照 250
 
 ```latex
 which bounds expected clipped harm for an exchangeable further request by $\alpha$ under
@@ -4380,7 +4392,7 @@ threshold meets a tolerance, the rule uses $\tau=\infty$ and keeps every input.
 
 在保形风险控制假设下，该规则使可交换后续请求的期望截断伤害不超过 α。校准块不参与 k、β、λ 的选择。按时间排序的预测请求未必满足可交换性，超过 B 的伤害也不在截断界限内。因此，第 \ref{sec:exp-harm} 节同时报告 TEST 上截断和未截断的实际伤害。若没有有限阈值满足容忍度，规则采用 τ=∞，保持每个输入不变。
 
-## 对照 250
+## 对照 251
 
 ```latex
 \subsection{Selection, Sensitivity, and Cost Details}
@@ -4390,7 +4402,7 @@ threshold meets a tolerance, the rule uses $\tau=\infty$ and keeps every input.
 
 选择、敏感性与成本细节
 
-## 对照 251
+## 对照 252
 
 ```latex
 The three hyperparameters are selected once per backbone on the replay bank by
@@ -4412,7 +4424,7 @@ are saved with each run.
 
 每个骨干在回放库上通过留一父窗口交叉验证选择一次三个超参数，因此每个库内样例评分时，都从库中移除其父窗口的所有记录。父窗口是不重叠的起点窗口，由其生成样例。附录 \ref{app:splits} 给出平铺规则。网格为 k∈{8,16,32,64,128,256}，β∈{0,0.5,1,1.64}，λ∈{0,4,16,64,∞}。上限取回放库平均效用最高的固定修复的条件伤害率。留一父窗口伤害率不超过上限的配置可用。先找数据源宏平均 MASE 最低的可用配置，再采用一个标准误规则，在与该最小值的配对差位于估计标准误内的配置中，选择干预最少者。若无可用配置，整个选择器返回 KEEP。每次运行保存基准、上限、选定配置与回退情况。
 
-## 对照 252
+## 对照 253
 
 ```latex
 Repair frequency rises from $55.2\%$ to $64.0\%$ and $71.9\%$ as missingness increases.
@@ -4426,7 +4438,7 @@ Recalibrating for heavier missingness would require a separate evaluation.
 
 随缺失增加，修复频率从 55.2% 升至 64.0% 和 71.9%。较高严重度下，Source Fixed 总体 MASE 低于完整规则。这些观测识别了所选工作点的限制，但不能说明更多请求需要修复，也不能分离相对表现变化的原因。针对更重缺失重新校准需要独立评价。
 
-## 对照 253
+## 对照 254
 
 ```latex
 Two further checks vary the evidence the rule stands on rather than the requests it serves.
@@ -4443,7 +4455,7 @@ scope. Appendices~\ref{app:severity-full}, \ref{app:pattern}, \ref{app:replaysiz
 
 另外两项检查改变规则依据的证据，而不改变所服务请求。按父窗口对子采样回放库，测量汇聚估计需要多少历史。用另两个种子重建同一父窗口掩码，衡量结果对特定掩码的依赖。三个种子的数据源宏平均误差为 1.425、1.409、1.427，保持输入不变为 1.576、1.570、1.577。二者均复用相同源和父窗口集，因此限定敏感性，不扩展适用范围。附录 \ref{app:severity-full}、\ref{app:pattern}、\ref{app:replaysize}、\ref{app:seeds} 给出完整细分。
 
-## 对照 254
+## 对照 255
 
 ```latex
 \section{Cost and Reproducibility}
@@ -4453,7 +4465,7 @@ scope. Appendices~\ref{app:severity-full}, \ref{app:pattern}, \ref{app:replaysiz
 
 成本与可复现性
 
-## 对照 255
+## 对照 256
 
 ```latex
 This section documents serving cost and traceability. \textbf{(1)} Measurements on 80 requests per backbone separate candidate construction, decision computation and forecasting, with cold start reported separately. \textbf{(2)} Result schemas, model revisions and configuration records connect the tables to stored outputs. Older cost estimates appear in Appendix~\ref{app:history}.
@@ -4463,7 +4475,7 @@ This section documents serving cost and traceability. \textbf{(1)} Measurements 
 
 本节说明服务成本和可追溯性。**（1）** 每个骨干上 80 个请求的测量区分候选构造、决策计算和预测，另行报告冷启动。**（2）** 结果格式、模型版本和配置记录将表格连接到存储输出。较早的成本估计见附录 \ref{app:history}。
 
-## 对照 256
+## 对照 257
 
 ```latex
 This section supports \S\ref{sec:exp-cost} and records the artefact traceability and the
@@ -4474,7 +4486,7 @@ development record that the main text relies on.
 
 本节支持第 \ref{sec:exp-cost} 节，并记录正文依赖的产物可追溯性和开发历史。
 
-## 对照 257
+## 对照 258
 
 ```latex
 \subsection{Measured Serving Cost}
@@ -4484,7 +4496,7 @@ development record that the main text relies on.
 
 实测服务成本
 
-## 对照 258
+## 对照 259
 
 ```latex
 Every number here is a wall clock measurement of a served request on a GPU with nothing else
@@ -4503,7 +4515,7 @@ computation, but is not a fresh end-to-end reproduction of the original SAITS ou
 
 此处每个值都是批量一、无其他任务占用 GPU 时，服务请求的实际时钟测量。关闭部署时不存在的工作进程缓存，每个阶段前后 CUDA 同步。请求集取主评价块每个源前十个样例，每骨干八十个请求，各行计时使用同一集合。重新构造动作集与冻结目录的合法性检查在八十个请求上全部通过。SAITS 计时来自重新拟合部署模型的实时批量一前向，但服务链使用归档的 SAITS 候选值。原始运行没有保留 SAITS 检查点，重新拟合无法复现精确约束检查结果。因此，测量在保留冻结决策的同时计时真实计算，但不是重新端到端复现原始 SAITS 输出。
 
-## 对照 259
+## 对照 260
 
 ```latex
 \caption{Serving cost per request, measured at batch one on an idle card. The upper block
@@ -4548,7 +4560,7 @@ separately below.}
 
 本表为数值结果表，表头、动作名与变体名按文首词汇对应表读取，全部数值、公式、排序标记及分组原样保留。对应图表说明的中文直译紧邻本表。
 
-## 对照 260
+## 对照 261
 
 ```latex
 Three readings follow from the table. The decision layer proper, which is retrieval and
@@ -4564,7 +4576,7 @@ require none. The timings alone do not isolate every cause of this variation.
 
 表中有三点。决策层本身，即对冻结回放库检索和评分，在每个骨干上都不足 3.1 毫秒，除合理性检查外是最小阶段。主要成本是候选构造，其中仅两个上下文修复就占 77 毫秒，在三个骨干中的两个上超过参考预测。最大值为中位数的三至五倍。候选构造取决于动作可用性，目标完整的请求不需要构造候选。计时本身未分离这些变化的所有原因。
 
-## 对照 261
+## 对照 262
 
 ```latex
 Cold start is separate and is paid once per process. Loading a frozen backbone takes 3.2 to
@@ -4577,7 +4589,7 @@ itself is built offline once per backbone revision and is not part of serving.
 
 冷启动单独核算，每个进程支付一次。加载冻结骨干需要 3.2 至 3.8 秒，加载上下文模型需要 1.8 秒，启动整个服务需要 68 至 71 秒，包含读取回放库和标准化。回放库本身按骨干版本离线构建一次，不属于服务过程。
 
-## 对照 262
+## 对照 263
 
 ```latex
 \subsection{Reproducibility Details}
@@ -4587,7 +4599,7 @@ itself is built offline once per backbone revision and is not part of serving.
 
 可复现性细节
 
-## 对照 263
+## 对照 264
 
 ```latex
 Each record in the result files contains: source, parent, origin, horizon, pattern,
@@ -4604,7 +4616,7 @@ a later revision of the setup cannot be confused with the present one.
 
 结果文件的每条记录包含数据源、父窗口、起点、预测长度、模式、严重度、掩码哈希、骨干及版本、方法、动作、输入哈希、预测哈希、预测、目标引用标识、MASE、MSE、MAE、RMSE、适用时的重建 MSE、运行时间组成、失败、回退、代码 SHA 和解析后配置。结果写入表 \ref{tab:app-groups} 的逻辑结果组，提供 CSV、JSON 和 Markdown，并与聚合结果一起保留原始预测。组名描述生成阶段，不编码版本号，以免混淆后续协议与当前协议。
 
-## 对照 264
+## 对照 265
 
 ```latex
 \caption{Result groups written by the pipeline. Every number in the main text and in the
@@ -4639,7 +4651,7 @@ appendices is generated from one of these groups and nothing is transcribed by h
 
 列为结果组、内容、使用位置。protocol 保存冻结协议、源清单、划分边界、TEST 清单，供附录划分使用。replay_bank 保存 (zᵢ,ₐ,a,gᵢ,ₐ) 及输入与预测哈希，供方法回放部分使用。baselines 保存训练运行、解析超参数、检查点，供主结果使用。train_eval 保存冻结前内部验收。main_results 保存所有方法及单元的主矩阵行，供主表及分源表使用。ablations 保存六个消融变体和目录 oracle，供消融表使用。robustness 保存严重度、模式、掩码扫描，供稳健图及各敏感性表使用。diagnostics 保存重建、效用和排名一致性，供相关诊断附录使用。cost_audit 保存调用数、延迟、失败、超时、内存，供成本表与附录使用。
 
-## 对照 265
+## 对照 266
 
 ```latex
 Each evaluation configuration should identify the catalog, masks, split boundaries, feature
@@ -4655,7 +4667,7 @@ outputs do not verify the original checkpoints. Forecast-level validation remain
 
 每个评价配置应标识目录、掩码、划分边界、特征定义和失败策略，任何变化都需要新标识。当前版本在 v55 结果旁保留历史汇总，并披露设计时复用 TEST 观测。不报告独立核验流程已完成。硬件事件检查将确定性的 PSW-I 路径复现到 float32 舍入量级。T1 和 TimesNet 检查从新的随机初始化重新训练，因此非相同输出并不能核验原始检查点。预测层面的验证仍未完成。
 
-## 对照 266
+## 对照 267
 
 ```latex
 \paragraph{Software and hardware.} Forecasts are produced with the released checkpoints of
@@ -4665,7 +4677,7 @@ outputs do not verify the original checkpoints. Forecast-level validation remain
 
 软件与硬件。预测由发布的 Chronos-Bolt、TimesFM 和 Chronos-2 检查点产生。
 
-## 对照 267
+## 对照 268
 
 ```latex
 Chronos-Bolt, TimesFM, and Chronos-2 at the revisions listed in Table~\ref{tab:app-repro}.
@@ -4680,7 +4692,7 @@ present results.
 
 具体版本列于表 \ref{tab:app-repro}。周边代码使用 Python 3.11.16、NumPy 1.26.4、pandas 2.2.3、scikit-learn 1.5.2、PyTorch 2.9.1+cu126。运行使用一张 NVIDIA RTX 4090，Chronos-Bolt 为 bfloat16，TimesFM 与 Chronos-2 为 float32。附录 \ref{app:development} 的开发周期数值在另一台机器产生，不与当前结果混合。
 
-## 对照 268
+## 对照 269
 
 ```latex
 \caption{Reproducibility anchors. Backbone revisions are the exact released checkpoints used
@@ -4717,7 +4729,7 @@ derivation, the replay-record ordering, and the selector fit.}
 
 列为项目、值。检查点标识和版本哈希原样保留。TimesFM 本地快照固定于运行台账。Python 与库版本及硬件精度按原表，Chronos-Bolt 使用 bfloat16，TimesFM 与 Chronos-2 使用 float32。掩码生成种子为固定协议种子 20260917，回放记录顺序种子 101，选择器种子 101。不训练参数化效用模型，特征缩放及 (k,β) 按 TRAIN 侧流程固定。协议提交保存在发布产物台账的运行记录中，TEST 清单记录 results/v47/evaluation 的父窗口与起点。
 
-## 对照 269
+## 对照 270
 
 ```latex
 The TEST manifest is the authoritative record of which parents and origins were held out. It
@@ -4729,7 +4741,7 @@ against that manifest.
 
 TEST 清单是保留哪些父窗口和起点的权威记录，在任何结果计算前写入一次，本文各表均依据该清单生成。
 
-## 对照 270
+## 对照 271
 
 ```latex
 \section{Historical Analyses}
@@ -4739,7 +4751,7 @@ TEST 清单是保留哪些父窗口和起点的权威记录，在任何结果计
 
 历史分析。
 
-## 对照 271
+## 对照 272
 
 ```latex
 This section preserves four earlier analyses without pooling them with current results. \textbf{(1)} Score and frequency diagnostics describe an earlier selector. \textbf{(2)} Opportunity strata retain its retrospective outcomes. \textbf{(3)} Historical cost accounting records its operating point. \textbf{(4)} Negative results explain design changes. These records provide development context, not new confirmation of the current method.
@@ -4749,7 +4761,7 @@ This section preserves four earlier analyses without pooling them with current r
 
 本节保留四类早期分析，不与当前结果汇总。**（1）** 得分与频率诊断描述早期选择器。**（2）** 机会分层保留其回顾性结果。**（3）** 历史成本核算记录其工作点。**（4）** 负面结果解释设计变化。这些记录提供开发背景，不构成当前方法的新确认。
 
-## 对照 272
+## 对照 273
 
 ```latex
 \subsection{Historical Repair Decision Diagnostics}
@@ -4759,7 +4771,7 @@ This section preserves four earlier analyses without pooling them with current r
 
 历史治理诊断
 
-## 对照 273
+## 对照 274
 
 ```latex
 Tables~\ref{tab:app-operating} and \ref{tab:app-scorebins} retain diagnostics from the earlier selector, not the current v55 configuration. The first reports operating points across the penalty grid and
@@ -4772,7 +4784,7 @@ to be calibrated against the utility scale. Over 10773 admissible pairs the sign
 
 表 \ref{tab:app-operating} 和 \ref{tab:app-scorebins} 保留早期选择器的诊断，不是当前 v55 配置。第一张表报告惩罚网格上的工作点，第二张表检查得分顺序是否与已实现效用符号一致。得分用于排列动作，不主张其数值已对效用尺度校准。10,773 个可用配对中，得分与效用符号在 54% 上一致。正得分处平均效用为 +0.197，负得分处为 −0.031。因此得分只有有限方向一致性，不是校准后的效用估计。
 
-## 对照 274
+## 对照 275
 
 ```latex
 \caption{Historical operating points over the penalty grid, with the neighbourhood size frozen at the
@@ -4807,7 +4819,7 @@ the largest change is in intervention frequency.}
 
 本表为数值结果表，表头、动作名与变体名按文首词汇对应表读取，全部数值、公式、排序标记及分组原样保留。对应图表说明的中文直译紧邻本表。
 
-## 对照 275
+## 对照 276
 
 ```latex
 \caption{Historical realised utility against the quantile bin of the conservative score, pooled over the
@@ -4840,7 +4852,7 @@ agrees with the sign of the utility. Intervals resample parents.}
 
 本表为数值结果表，表头、动作名与变体名按文首词汇对应表读取，全部数值、公式、排序标记及分组原样保留。对应图表说明的中文直译紧邻本表。
 
-## 对照 276
+## 对照 277
 
 ```latex
 \subsection{Action-Opportunity Strata}
@@ -4850,7 +4862,7 @@ agrees with the sign of the utility. Intervals resample parents.}
 
 动作机会分层
 
-## 对照 277
+## 对照 278
 
 ```latex
 This subsection supports \S\ref{sec:exp-exists}. For an evaluation episode $i$ the oracle
@@ -4871,7 +4883,7 @@ reference input,
 \end{equation}
 ```
 
-## 对照 278
+## 对照 279
 
 ```latex
 which uses the realised target and is therefore a retrospective diagnostic. Episodes are partitioned into a \emph{no-op} stratum, where the reference input is
@@ -4888,7 +4900,7 @@ historical stratum-level MASE under alternative boundaries. These two tables ret
 
 该量使用已实现目标，因此是回顾性诊断。样例划分为不操作、低机会和高机会层，不操作层指在容忍度范围内参考输入已最佳。两个边界在回放库上拟合，原样应用于 TEST，没有评价样例参与选择。表 \ref{tab:app-opp-sizes} 记录实际层规模。表 \ref{tab:app-opportunity} 在所有方法共同分层下报告层内数据源宏平均 MASE，表 \ref{tab:app-opp-sens} 用其他边界重复历史层内 MASE。后两表保留早期选择器结果，不评价当前 v55 规则。
 
-## 对照 279
+## 对照 280
 
 ```latex
 \caption{Action-opportunity strata on TEST. Boundaries are the bank thresholds, applied
@@ -4917,7 +4929,7 @@ TEST 上的动作机会分层。边界采用回放库阈值，原样应用。计
 
 本表为数值结果表，表头、动作名与变体名按文首词汇对应表读取，全部数值、公式、排序标记及分组原样保留。对应图表说明的中文直译紧邻本表。
 
-## 对照 280
+## 对照 281
 
 ```latex
 \caption{Historical stratum-level MASE under the identical partition, retained from the earlier selector. The FULL aggregate here is not the current main result. The no-op stratum is where an
@@ -4951,7 +4963,7 @@ while degrading the no-op stratum has not solved the selection problem. Lower is
 
 本表为数值结果表，表头、动作名与变体名按文首词汇对应表读取，全部数值、公式、排序标记及分组原样保留。对应图表说明的中文直译紧邻本表。
 
-## 对照 281
+## 对照 282
 
 ```latex
 \caption{Historical stratum-boundary sensitivity for the same earlier selector. The no-op tolerance and the low and high boundary are
@@ -4981,7 +4993,7 @@ MASE is source-macro averaged within the resulting strata.}
 
 本表为数值结果表，表头、动作名与变体名按文首词汇对应表读取，全部数值、公式、排序标记及分组原样保留。对应图表说明的中文直译紧邻本表。
 
-## 对照 282
+## 对照 283
 
 ```latex
 \subsection{Runtime and Failure Audit}
@@ -4991,7 +5003,7 @@ MASE is source-macro averaged within the resulting strata.}
 
 运行时间与失败审计
 
-## 对照 283
+## 对照 284
 
 ```latex
 Tables~\ref{tab:app-efficiency} and \ref{tab:app-calls} retain historical cost accounting
@@ -5011,7 +5023,7 @@ before the decision is made and is not a forecasting-backbone call.
 
 表 \ref{tab:app-efficiency} 和 \ref{tab:app-calls} 保留早期工作点的历史成本核算，不描述当前 55.2% 修复率。当前测量见附录 \ref{app:calls-measured}。离线与在线成本分列，因为不能直接比较。离线回放库按骨干版本、源和预测长度构建一次，在线列按请求计。各列越低越好，应分别解读。记录的请求延迟包含预测骨干调用，以及 IntroAct-TS 的检索测量开销。记录运行未单独测量方法侧服务计算，因此表中延迟格据此标注。冷启动单列，候选构造也单列，因为在决策前支付，不属于预测骨干调用。
 
-## 对照 284
+## 对照 285
 
 ```latex
 \caption{Historical deployment-cost accounting, offline and online kept
@@ -5050,7 +5062,7 @@ calls for the tail columns. It is an accounting estimate, not a single timed ser
 
 列为方法、离线工作、候选数、每请求调用数、平均延迟、P95、最大值。Fixed SAITS 为 8 个部署插补器和 16 个交叉拟合模型，共 247 分钟，每请求 1 个候选、1.00 次调用，56、62、388 毫秒。TATO 每骨干一次 3,072 次离线调用，每请求 1 个候选、1.00 次调用，56、62、388 毫秒。IntroAct-TS 每骨干一次 30,160 次离线调用，每请求 5 个候选、1.65 次调用，95、127、781 毫秒。三个骨干记录的每进程一次冷启动为 3.7–7.3 秒，失败或超时占比 0.00%。这是历史核算，不是当前工作点。
 
-## 对照 285
+## 对照 286
 
 ```latex
 Table~\ref{tab:app-calls} separates offline from online cost and separates successes from
@@ -5067,7 +5079,7 @@ touch the backbone.
 
 表 \ref{tab:app-calls} 区分离线与在线、成功与失败。失败和超时不计为成功，也不从分母移除。无法产生预测的请求报告失败状态和已发生成本。每个请求为参考动作调用骨干一次，执行干预时为所选动作再调用一次，因此在线计数为一至两次。返回 KEEP 时输入不变，返回参考调用的预测。候选构造和评分在决策前支付，不调用骨干，单独核算。
 
-## 对照 286
+## 对照 287
 
 ```latex
 \caption{Historical backbone-call accounting at the earlier $65.4\%$ repair rate.
@@ -5105,7 +5117,7 @@ their own line and are not forecasting-backbone calls.}
 
 历史调用表列为结果、请求数、比例、每请求骨干调用。返回 KEEP 且输入不变为 263、34.6%、1。执行干预且输入改变为 497、65.4%、2。预测前失败和预测后超时均为 0。每请求候选构造与评分记录 3,800、不适用、0。离线回放构建一次每骨干 30,160 次调用。离线选择器配置无参数化拟合，包含库拟合的特征缩放及一次 (k,β) 网格选择。冷启动为三个骨干，每进程一次，记录加载时间 3.7–7.3 秒。
 
-## 对照 287
+## 对照 288
 
 ```latex
 \subsection{Development Negative Results}
@@ -5115,7 +5127,7 @@ their own line and are not forecasting-backbone calls.}
 
 开发阶段负面结果
 
-## 对照 288
+## 对照 289
 
 ```latex
 This section records what was tried earlier in this line of work and rejected. It is included
@@ -5128,7 +5140,7 @@ confirmation of any method, and these historical values must not be pooled with 
 
 本节记录此前尝试并放弃的方案。保留这些记录有助于通过被替代方案理解最终形式，也避免歪曲方法的形成过程。这里没有任何独立确认，历史值不能与主结果混合。
 
-## 对照 289
+## 对照 290
 
 ```latex
 \caption{What was tried before the present formulation and why it was dropped. The
@@ -5159,7 +5171,7 @@ not comparable with any table in this paper.}
 
 列为尝试、发生的结果、对本文的影响。阈值前投影效用向量到凸可行集，降低向量平方误差但未改善预测，一个骨干反而更差，因此改为局部均值、离散惩罚和单阈值。低估简单选择器时，它与复杂候选具有竞争力且在一个骨干更好，因此 R2-CART 成为正文必要对照。仅用预测精度评价执行判据时，连续得分估计误差减少未改善离散选择，因此执行判据同时评价有害干预率、伤害损失与 MASE。
 
-## 对照 290
+## 对照 291
 
 ```latex
 An earlier configuration tried to improve the action ranking by projecting estimated utility
@@ -5173,7 +5185,7 @@ local mean and a dispersion penalty and applies a threshold to select an action.
 
 早期配置尝试在阈值处理前，将估计效用向量投影到凸可行集，以改善动作排名。投影降低了估计向量平方误差，却未改善最终预测指标，并在一个骨干上造成退化。因此当前方法以局部均值和离散惩罚排序，再以阈值选择动作。
 
-## 对照 291
+## 对照 292
 
 ```latex
 Two consequences of that cycle carry into the present paper. The strongest simple selector
@@ -5189,7 +5201,7 @@ than on MASE alone.
 
 该周期有两个影响延续至本文。当时最强简单选择器，即当前称为 R2-CART 的方法，与更复杂候选具有竞争力，在一个骨干上更好，因此成为正文各主表的必要对照。降低连续得分估计误差也不足以改善离散选择，因此保守执行判据直接通过有害干预率和伤害损失评价，不仅看 MASE。
 
-## 对照 292
+## 对照 293
 
 ```latex
 The measurements behind that decision come from a different setup, with a smaller
@@ -5202,7 +5214,7 @@ numerically with any table in this paper.
 
 该决策背后的测量来自不同协议，开发划分更小、数据源更少、预算核算不同，因此不在此重列数值。它们保留于发布产物台账，不能与本文各表进行数值比较。
 
-## 对照 293
+## 对照 294
 
 ```latex
 These statements describe the earlier development stage. The present revision includes
@@ -5215,7 +5227,7 @@ remains outside the current fixed-configuration ablations.
 
 这些陈述描述早期开发阶段。当前版本包含父窗口聚合检索、附录 \ref{app:confirmatory} 的额外评价，以及附录 \ref{app:calls-measured} 的实测服务成本。精简状态重新调参仍不属于当前固定配置消融。
 
-## 对照 294
+## 对照 295
 
 ```latex
 \section{Related Work}
@@ -5225,7 +5237,7 @@ remains outside the current fixed-configuration ablations.
 
 相关工作。
 
-## 对照 295
+## 对照 296
 
 ```latex
 Three strands of work frame the decision studied here. \textbf{(1)} Incomplete-series modelling supplies repair methods and forecasting objectives. \textbf{(2)} Input adaptation changes what a frozen forecaster receives. \textbf{(3)} Selective prediction and algorithm selection clarify the choice to retain the original input.
@@ -5235,7 +5247,7 @@ Three strands of work frame the decision studied here. \textbf{(1)} Incomplete-s
 
 三类工作构成本文决策问题的背景。**（1）** 不完整序列建模提供修复方法和预测目标。**（2）** 输入适配改变冻结预测器接收的内容。**（3）** 选择性预测和算法选择帮助界定保留原始输入这一选项。
 
-## 对照 296
+## 对照 297
 
 ```latex
 \subsection{Incomplete Time-Series Modeling}
@@ -5245,7 +5257,7 @@ Three strands of work frame the decision studied here. \textbf{(1)} Incomplete-s
 
 不完整时间序列建模
 
-## 对照 297
+## 对照 298
 
 ```latex
 Imputation reconstructs unavailable values using temporal or cross-channel
@@ -5263,7 +5275,7 @@ and the decision layer chooses whether to use them for each request.
 
 插补利用时间或跨通道结构重建不可用值。缺失感知预测将观测模式纳入训练后的预测器。任务导向方法将插补连接到下游目标。我们的请求在上下文内部含有缺口，而变量子集预测移除整个变量。我们的预测器保持冻结，因此训练后的插补器提供候选修复，决策层为每个请求选择是否使用这些修复。
 
-## 对照 298
+## 对照 299
 
 ```latex
 \subsection{Data-Side Adaptation for Frozen \tsfm{}s}
@@ -5273,7 +5285,7 @@ and the decision layer chooses whether to use them for each request.
 
 冻结时间序列基础模型的数据侧适配
 
-## 对照 299
+## 对照 300
 
 ```latex
 TATO~\citep{qiu2026tato} shows that a frozen \tsfm{} can be adapted to heterogeneous domains
@@ -5289,7 +5301,7 @@ and it appears here only as the in-context regression backend of two catalog act
 
 TATO 表明，可以根据历史任务表现搜索并选择变换流程，在不更新参数的情况下适配冻结时间序列基础模型到异质领域。其适配单位是目标领域，一条流程服务多个请求。IntroAct-TS 在固定目录上为每个请求单独决策，使用该骨干记录的预测结果。TS-ICL 是原生支持插补和部分观测回看窗口的基础模型，本文仅将其作为两个目录动作的上下文回归后端。
 
-## 对照 300
+## 对照 301
 
 ```latex
 \subsection{Selective Decision Making}
@@ -5299,7 +5311,7 @@ TATO 表明，可以根据历史任务表现搜索并选择变换流程，在不
 
 选择性决策
 
-## 对照 301
+## 对照 302
 
 ```latex
 Selective prediction trades coverage for lower risk~\citep{chow1970optimum,vovk2005algorithmic,geifman2017selective,lei2018distribution},

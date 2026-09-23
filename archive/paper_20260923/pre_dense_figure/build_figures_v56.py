@@ -250,10 +250,9 @@ def ranks():
 def diagnostics():
     """Six complementary diagnostics, aligned on a two-by-three full-width grid."""
     from matplotlib.lines import Line2D
-    plt.rcParams.update({'font.size': 12, 'axes.labelsize': 12, 'legend.fontsize': 12})
     fig, axes = plt.subplots(2, 3, figsize=(7.5, 4.95))
-    fig.subplots_adjust(left=.065, right=.995, bottom=.085, top=.835,
-                        wspace=.25, hspace=.43)
+    fig.subplots_adjust(left=.065, right=.995, bottom=.09, top=.81,
+                        wspace=.30, hspace=.66)
     a,b,c,d,e,f = axes.flat
     utility_rows=read('utility.csv'); harm_rows=read('harm.csv'); severity_rows=read('severity.csv')
     action_labels=['KEEP','Ffill','Single','Multi','Ridge','SAITS']
@@ -285,22 +284,16 @@ def diagnostics():
          r'(f) Worst cell ($\times 10^{-2}$)')
     f.set(ylim=(0,91),yticks=[0,25,50,75])
     for ax in axes.flat:
-        ax.tick_params(axis='both',labelsize=11.5)
-        ax.tick_params(axis='x',pad=3)
-        ax.set_title(ax.get_title(loc='left'), loc='left', fontsize=12, pad=4)
-        for label in ax.texts: label.set_fontsize(11)
+        ax.tick_params(axis='both',labelsize=10)
+        ax.tick_params(axis='x',pad=5)
         ax.grid(False)
-    # Separate adjacent value labels without moving their data marks.
-    for ax, pair in [(b, (4, 5)), (f, (3, 4))]:
-        ax.texts[pair[0]].set_position((-2, 3))
-        ax.texts[pair[1]].set_position((2, 3))
     # Dense labels are abbreviated consistently instead of rotated or reduced further.
     for ax in [a,b]: ax.set_xticklabels(['K','F','S','M','R','A'])
     for ax in [c,d,f]: ax.set_xticklabels(['K','BF','C','A','T','IA'])
     order=[0,3,1,4,2,5]
     fig.legend([handles[i] for i in order],[METHODS[i] for i in order],
-               loc='upper left',bbox_to_anchor=(.065,.997,.93,0),mode='expand',
-               ncol=3,borderaxespad=0,handlelength=1.7,handletextpad=.4,labelspacing=.2,fontsize=12)
+               loc='lower left',bbox_to_anchor=(.065,.89,.93,.09),mode='expand',
+               ncol=3,borderaxespad=0,handlelength=2,labelspacing=.4,fontsize=11)
     save(fig,'fig8_diagnostics')
 
 

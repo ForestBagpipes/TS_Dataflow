@@ -1,0 +1,60 @@
+﻿citation_key,title,cited_in_manuscript,status
+cao2018brits,{BRITS}: Bidirectional Recurrent Imputation for Time Series,True,Pending original Google Scholar BibTeX export
+tashiro2021csdi,{CSDI}: Conditional Score-based Diffusion Models for Probabilistic Time Series Imputation,True,Pending original Google Scholar BibTeX export
+chen2024bitgraph,Biased Temporal Convolution Graph Network for Time Series Forecasting with Missing Values,True,Pending original Google Scholar BibTeX export
+peng2025s4m,{S4M}: S4 for Multivariate Time Series Forecasting with Missing Values,True,Pending original Google Scholar BibTeX export
+wang2024taskoriented,Task-oriented Time Series Imputation Evaluation via Generalized Representers,True,Pending original Google Scholar BibTeX export
+hao2025toivsf,Is Precise Recovery Necessary? A Task-Oriented Imputation Approach for Time Series Forecasting on Variable Subset,True,Pending original Google Scholar BibTeX export
+hao2025gimcc,Generative Imputation with Multi-level Causal Consistency for Variable Subset Forecasting,True,Pending original Google Scholar BibTeX export
+xu2026srdi,Shift-Resilient Diffusive Imputation for Variable Subset Forecasting,True,Pending original Google Scholar BibTeX export
+jang2026channeltokenformer,"Towards Robust Real-World Multivariate Time Series Forecasting: A Unified Framework for Dependency, Asynchrony, and Missingness",True,Pending original Google Scholar BibTeX export
+liang2025vida,Imputation via Domain Adaptation: Rethinking Variable Subset Forecasting from Knowledge Transfer,True,Pending original Google Scholar BibTeX export
+park2026t1,{T1}: One-to-One Channel-Head Binding for Multivariate Time-Series Imputation,True,Pending original Google Scholar BibTeX export
+qiu2026tato,Adapt Data to Model: Adaptive Transformation Optimization for Domain-shared Time Series Foundation Models,True,Pending original Google Scholar BibTeX export
+ansari2024chronos,Chronos: Learning the Language of Time Series,True,Pending original Google Scholar BibTeX export
+chronosbolt2025,Fast and Accurate Zero-Shot Forecasting with {Chronos-Bolt} and {AutoGluon},True,Pending original Google Scholar BibTeX export
+das2024timesfm,A Decoder-only Foundation Model for Time-series Forecasting,True,Pending original Google Scholar BibTeX export
+chronos2_2025,{Chronos-2}: From Univariate to Universal Forecasting,True,Pending original Google Scholar BibTeX export
+woo2024moirai,Unified Training of Universal Time Series Forecasting Transformers,True,Pending original Google Scholar BibTeX export
+rasul2023lagllama,Lag-Llama: Towards Foundation Models for Probabilistic Time Series Forecasting,False,Pending original Google Scholar BibTeX export
+tsicl2026,{TS-ICL}: A Flexible Time-Indexed Foundation Model for Time Series via In-Context Learning,True,Pending original Google Scholar BibTeX export
+yoon2018gain,{GAIN}: Missing Data Imputation using Generative Adversarial Nets,True,Pending original Google Scholar BibTeX export
+du2023saits,{SAITS}: Self-attention-based imputation for time series,True,Pending original Google Scholar BibTeX export
+wu2023timesnet,{TimesNet}: Temporal 2{D}-variation modeling for general time series analysis,True,Pending original Google Scholar BibTeX export
+wang2025pswi,Optimal Transport for Time Series Imputation,True,Pending original Google Scholar BibTeX export
+zhou2021informer,Informer: Beyond Efficient Transformer for Long Sequence Time-Series Forecasting,False,Pending original Google Scholar BibTeX export
+wu2021autoformer,Autoformer: Decomposition Transformers with Auto-Correlation for Long-Term Series Forecasting,False,Pending original Google Scholar BibTeX export
+nie2023patchtst,A Time Series is Worth 64 Words: Long-term Forecasting with Transformers,False,Pending original Google Scholar BibTeX export
+liu2024itransformer,{iTransformer}: Inverted Transformers Are Effective for Time Series Forecasting,False,Pending original Google Scholar BibTeX export
+lai2018lstnet,Modeling Long- and Short-Term Temporal Patterns with Deep Neural Networks,False,Pending original Google Scholar BibTeX export
+uci_electricity,{ElectricityLoadDiagrams20112014} Data Set,False,Pending original Google Scholar BibTeX export
+pems,{PeMS}: Caltrans Performance Measurement System,False,Pending original Google Scholar BibTeX export
+chow1970optimum,On Optimum Recognition Error and Reject Tradeoff,True,Pending original Google Scholar BibTeX export
+geifman2017selective,Selective Classification for Deep Neural Networks,True,Pending original Google Scholar BibTeX export
+vovk2005algorithmic,Algorithmic Learning in a Random World,True,Pending original Google Scholar BibTeX export
+lei2018distribution,Distribution-Free Predictive Inference for Regression,True,Pending original Google Scholar BibTeX export
+he2024dime,Estimating Conditional Mutual Information for Dynamic Feature Selection,True,Pending original Google Scholar BibTeX export
+hyndman2006mase,Another Look at Measures of Forecast Accuracy,True,Pending original Google Scholar BibTeX export
+breiman1984cart,Classification and Regression Trees,False,Pending original Google Scholar BibTeX export
+boyd2004convex,Convex Optimization,False,Pending original Google Scholar BibTeX export
+jaggi2013revisiting,Revisiting Frank-Wolfe: Projection-Free Sparse Convex Optimization,False,Pending original Google Scholar BibTeX export
+cameron2008bootstrap,Bootstrap-Based Improvements for Inference with Clustered Errors,False,Pending original Google Scholar BibTeX export
+holm1979simple,A Simple Sequentially Rejective Multiple Test Procedure,True,Pending original Google Scholar BibTeX export
+spearman1904proof,The Proof and Measurement of Association between Two Things,False,Pending original Google Scholar BibTeX export
+hyndman2021forecasting,Forecasting: Principles and Practice,False,Pending original Google Scholar BibTeX export
+dudik2011doubly,Doubly Robust Policy Evaluation and Learning,True,Pending original Google Scholar BibTeX export
+swaminathan2015counterfactual,Counterfactual Risk Minimization: Learning from Logged Bandit Feedback,True,Pending original Google Scholar BibTeX export
+strehl2010learning,Learning from Logged Implicit Exploration Data,True,Pending original Google Scholar BibTeX export
+jiang2016doubly,Doubly Robust Off-policy Value Evaluation for Reinforcement Learning,True,Pending original Google Scholar BibTeX export
+thomas2016data,Data-Efficient Off-Policy Policy Evaluation for Reinforcement Learning,True,Pending original Google Scholar BibTeX export
+abbasiyadkori2011improved,Improved Algorithms for Linear Stochastic Bandits,True,Pending original Google Scholar BibTeX export
+lattimore2020bandit,Bandit Algorithms,True,Pending original Google Scholar BibTeX export
+mozannar2020consistent,Consistent Estimators for Learning to Defer to an Expert,True,Pending original Google Scholar BibTeX export
+madras2018predict,Predict Responsibly: Improving Fairness and Accuracy by Learning to Defer,True,Pending original Google Scholar BibTeX export
+krishnan2016activeclean,ActiveClean: Interactive Data Cleaning for Statistical Modeling,False,Pending original Google Scholar BibTeX export
+little2019statistical,Statistical Analysis with Missing Data,False,Pending original Google Scholar BibTeX export
+vanbuuren2018flexible,Flexible Imputation of Missing Data,False,Pending original Google Scholar BibTeX export
+du2023pypots,{PyPOTS}: A Python Toolbox for Data Mining on Partially-Observed Time Series,True,Pending original Google Scholar BibTeX export
+angelopoulos2024conformal,Conformal Risk Control,True,Pending original Google Scholar BibTeX export
+rice1976algorithm,The Algorithm Selection Problem,True,Pending original Google Scholar BibTeX export
+xu2008satzilla,{SATzilla}: Portfolio-Based Algorithm Selection for {SAT},True,Pending original Google Scholar BibTeX export

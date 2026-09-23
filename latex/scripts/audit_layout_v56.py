@@ -50,12 +50,12 @@ assert all((HERE/name).exists() for name in figures)
 report={'manuscript':NAME,'main_text_last_page':page,'pdf_pages':len(PdfReader(HERE/(NAME+'.pdf')).pages),
         'tables_with_numeric_cells_preserved':len(new),
         'holm_rows_checked_against_saved_results':27, 'missing_labels':[],
-        'overfull_boxes':0,'figures':'Unchanged in this text-only revision',
-        'new_experiments':False,'scope':'Text layout and preservation of existing table values. No figures changed, no new citation audit or experimental rerun.'}
+        'overfull_boxes':0,'figures':'Six aligned panels with enlarged axes and type; original figure data unchanged',
+        'new_experiments':False,'scope':'Dense figure styling and caption spacing, with stored data and table values preserved. No new citation audit or experimental rerun.'}
 translation=(HERE/(NAME+'_中文逐段对照.md')).read_text(encoding='utf8')
 assert hashlib.sha256((HERE/(NAME+'.tex')).read_bytes()).hexdigest() in translation
-assert len(re.findall(r'^## 对照 \d+',translation,re.M))==301
+assert len(re.findall(r'^## 对照 \d+',translation,re.M))==302
 assert len(re.findall(r'^### 共用数值表 \d+',translation,re.M))==49
-report['bilingual_text_blocks']=301
+report['bilingual_text_blocks']=302
 (HERE/'build/layout_audit_v56.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(report,indent=2))
