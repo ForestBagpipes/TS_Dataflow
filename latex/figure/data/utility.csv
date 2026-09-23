@@ -1,0 +1,7 @@
+action,best_share,episodes,beneficial_share,mean_utility
+KEEP,19.3,760,,0.000
+Ffill,17.1,760,42.1,-0.094
+Single TS-ICL,15.4,760,53.3,+0.055
+Multi TS-ICL,12.3,758,54.1,+0.076
+Context Ridge,11.1,566,58.3,+0.112
+SAITS,24.8,747,57.1,+0.101

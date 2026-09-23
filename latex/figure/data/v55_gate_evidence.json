@@ -1,0 +1,170 @@
+{
+ "bolt": {
+  "rows": {
+   "GATE_DISPERSION": {
+    "mase": 1.382575063162674,
+    "intervention_rate": 0.36447368421052634,
+    "harmful_loss": 0.035683493835794805
+   },
+   "GATE_MEAN_ONLY": {
+    "mase": 1.384376525181998,
+    "intervention_rate": 0.36973684210526314,
+    "harmful_loss": 0.041669553260056044
+   },
+   "GATE_LINEAR": {
+    "mase": 1.4244173402801779,
+    "intervention_rate": 0.3,
+    "harmful_loss": 0.024925901800809804
+   },
+   "GATE_RANDOM": {
+    "mase": 1.4359663180676043,
+    "intervention_rate": 0.3157894736842105,
+    "harmful_loss": 0.0182566514414245
+   }
+  },
+  "comparisons": {
+   "GATE_DISPERSION_vs_GATE_MEAN_ONLY": {
+    "difference": -0.0018014620193240582,
+    "ci_low": -0.02134537931215887,
+    "ci_high": 0.020305186918038676,
+    "excludes_zero": 0,
+    "p_value": 0.803,
+    "parents": 95,
+    "resamples": 2000,
+    "seed": 101
+   },
+   "GATE_DISPERSION_vs_GATE_LINEAR": {
+    "difference": -0.04184227711750389,
+    "ci_low": -0.06383522555070435,
+    "ci_high": -0.020174889517368122,
+    "excludes_zero": 1,
+    "p_value": 0.0005,
+    "parents": 95,
+    "resamples": 2000,
+    "seed": 101
+   },
+   "GATE_DISPERSION_vs_GATE_RANDOM": {
+    "difference": -0.05339125490493059,
+    "ci_low": -0.07506240232430254,
+    "ci_high": -0.03357470229787524,
+    "excludes_zero": 1,
+    "p_value": 0.0005,
+    "parents": 95,
+    "resamples": 2000,
+    "seed": 101
+   }
+  }
+ },
+ "timesfm": {
+  "rows": {
+   "GATE_DISPERSION": {
+    "mase": 1.5284433244081748,
+    "intervention_rate": 0.9289473684210526,
+    "harmful_loss": 0.0393472246469474
+   },
+   "GATE_MEAN_ONLY": {
+    "mase": 1.513647493058368,
+    "intervention_rate": 0.9355263157894737,
+    "harmful_loss": 0.054150218279350036
+   },
+   "GATE_LINEAR": {
+    "mase": 1.4641930843805715,
+    "intervention_rate": 0.9263157894736842,
+    "harmful_loss": 0.06711434150165708
+   },
+   "GATE_RANDOM": {
+    "mase": 1.5425959576826784,
+    "intervention_rate": 0.95,
+    "harmful_loss": 0.03936662973044495
+   }
+  },
+  "comparisons": {
+   "GATE_DISPERSION_vs_GATE_MEAN_ONLY": {
+    "difference": 0.014795831349806329,
+    "ci_low": -0.0025857417085794056,
+    "ci_high": 0.03510516355870701,
+    "excludes_zero": 0,
+    "p_value": 0.112,
+    "parents": 95,
+    "resamples": 2000,
+    "seed": 101
+   },
+   "GATE_DISPERSION_vs_GATE_LINEAR": {
+    "difference": 0.06425024002760321,
+    "ci_low": -0.03585604659767098,
+    "ci_high": 0.16298115364419488,
+    "excludes_zero": 0,
+    "p_value": 0.435,
+    "parents": 95,
+    "resamples": 2000,
+    "seed": 101
+   },
+   "GATE_DISPERSION_vs_GATE_RANDOM": {
+    "difference": -0.014152633274503768,
+    "ci_low": -0.02812380642642924,
+    "ci_high": -0.00014547872621519187,
+    "excludes_zero": 1,
+    "p_value": 0.041,
+    "parents": 95,
+    "resamples": 2000,
+    "seed": 101
+   }
+  }
+ },
+ "chronos2": {
+  "rows": {
+   "GATE_DISPERSION": {
+    "mase": 1.3649593805256823,
+    "intervention_rate": 0.3618421052631579,
+    "harmful_loss": 0.026997790104906806
+   },
+   "GATE_MEAN_ONLY": {
+    "mase": 1.384458300410624,
+    "intervention_rate": 0.3736842105263158,
+    "harmful_loss": 0.03750039344961297
+   },
+   "GATE_LINEAR": {
+    "mase": 1.3883364970548349,
+    "intervention_rate": 0.35789473684210527,
+    "harmful_loss": 0.021880888532767925
+   },
+   "GATE_RANDOM": {
+    "mase": 1.477588257824275,
+    "intervention_rate": 0.40657894736842104,
+    "harmful_loss": 0.019909061140240977
+   }
+  },
+  "comparisons": {
+   "GATE_DISPERSION_vs_GATE_MEAN_ONLY": {
+    "difference": -0.01949891988494163,
+    "ci_low": -0.050164755551114264,
+    "ci_high": 0.010188605519892062,
+    "excludes_zero": 0,
+    "p_value": 0.272,
+    "parents": 95,
+    "resamples": 2000,
+    "seed": 101
+   },
+   "GATE_DISPERSION_vs_GATE_LINEAR": {
+    "difference": -0.023377116529152205,
+    "ci_low": -0.04122061023726395,
+    "ci_high": -0.005681109639332605,
+    "excludes_zero": 1,
+    "p_value": 0.012,
+    "parents": 95,
+    "resamples": 2000,
+    "seed": 101
+   },
+   "GATE_DISPERSION_vs_GATE_RANDOM": {
+    "difference": -0.11262887729859249,
+    "ci_low": -0.18175091547183228,
+    "ci_high": -0.044832557542568284,
+    "excludes_zero": 1,
+    "p_value": 0.0005,
+    "parents": 95,
+    "resamples": 2000,
+    "seed": 101
+   }
+  }
+ }
+}
