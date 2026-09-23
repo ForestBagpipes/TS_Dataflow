@@ -1,0 +1,3 @@
+*.tex -text -whitespace
+*.bib -text -whitespace
+*.py -text -whitespace

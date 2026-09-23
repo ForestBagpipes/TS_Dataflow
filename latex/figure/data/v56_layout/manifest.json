@@ -1,0 +1,17 @@
+{
+  "utility.csv": {
+    "source": "latex/figure/data/utility.csv",
+    "sha256": "52c925f49ad6e8de4d26e67a9de3170159a9c43916edcd31d1034a74b0214a58",
+    "scope": "Author-provided working-tree values captured on 2026-09-23. Plotting only, no statistical recomputation."
+  },
+  "harm.csv": {
+    "source": "latex/figure/data/harm.csv",
+    "sha256": "0d88a6402d0f9d92d3e6a8e5c57e8ba0e53f330aa656d43c9807f738f6f22a45",
+    "scope": "Author-provided working-tree values captured on 2026-09-23. Plotting only, no statistical recomputation."
+  },
+  "severity.csv": {
+    "source": "latex/figure/data/severity.csv",
+    "sha256": "f5c839a89b8c61b54bada166c4b300543168494dd8ae58b9759e0f2d21a03a30",
+    "scope": "Author-provided working-tree values captured on 2026-09-23. Plotting only, no statistical recomputation."
+  }
+}

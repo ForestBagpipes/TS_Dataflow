@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 HERE = Path(__file__).resolve().parents[1]
-NAME = 'IntroActTS_20260921_v52'
+NAME = 'IntroActTS_20260923_v56'
 BUILD = HERE / 'build'
 BUILD.mkdir(exist_ok=True)
 env = dict(os.environ)
@@ -19,7 +19,7 @@ def run(cmd, log):
         subprocess.run(cmd, cwd=HERE, env=env, stdout=out, stderr=subprocess.STDOUT, check=True)
 
 
-run([sys.executable, str(HERE/'scripts/build_figures.py')], 'figures.log')
+run([sys.executable, str(HERE/'scripts/build_figures_v56.py')], 'figures.log')
 gs = shutil.which('gswin64c') or shutil.which('gs')
 if not gs and Path('D:/texlive/2025/tlpkg/tlgs/bin/gswin64c.exe').exists():
     gs = 'D:/texlive/2025/tlpkg/tlgs/bin/gswin64c.exe'
@@ -30,8 +30,7 @@ if not gs and Path('D:/texlive/2025/tlpkg/tlgs/bin/gswin64c.exe').exists():
          'Resource/SubstCID','Resource/CIDFont','Resource/CIDFSubst','Resource/IdiomSet'])
 if not gs:
     raise SystemExit('Ghostscript is required for EPS compilation.')
-for name in ['fig1_example','fig2_Architecture','fig3_action_utility','fig4_intervention_harm',
-             'fig5_missingness_severity','fig6_rank_agreement','fig7_gate_controls']:
+for name in ['fig1_example','fig2_Architecture','fig6_rank_agreement','fig8_diagnostics']:
     run([gs, '-q', '-dBATCH', '-dNOPAUSE', '-dSAFER', '-dEPSCrop',
          '-sDEVICE=pdfwrite', '-dAutoRotatePages=/None',
          '-dDownsampleColorImages=false', '-dDownsampleGrayImages=false',
