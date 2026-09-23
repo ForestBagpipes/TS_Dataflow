@@ -28,3 +28,16 @@ def test_code_drift_is_rejected_before_loading_test(tmp_path, monkeypatch):
         "confirmation TEST was read before the code hash check"))
     with pytest.raises(SystemExit, match="TEST remains closed"):
         confirm.evaluate(tmp_path, "bolt")
+
+
+def test_failed_audit_is_rejected_before_loading_test(tmp_path, monkeypatch):
+    out = tmp_path / "results/v55/confirmatory"
+    out.mkdir(parents=True)
+    (out / "check_report.json").write_text(json.dumps({
+        "status": "completed", "all_passed": False,
+    }))
+    monkeypatch.setattr(confirm, "OUT", out)
+    monkeypatch.setattr(confirm, "catalogs", lambda *_args: pytest.fail(
+        "confirmation TEST was read despite failed audit"))
+    with pytest.raises(SystemExit, match="audit did not pass"):
+        confirm.evaluate(tmp_path, "bolt")

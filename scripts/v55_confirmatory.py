@@ -191,7 +191,7 @@ def evaluate(root: Path, backbone: str) -> None:
     if not check.exists():
         raise SystemExit("confirmatory stage audit is missing")
     audit = json.loads(check.read_text())
-    if audit.get("status") != "completed" and not audit.get("all_passed"):
+    if not audit.get("all_passed"):
         raise SystemExit("confirmatory stage audit did not pass")
     frozen = json.loads((OUT / f"freeze_{backbone}.json").read_text())
     if frozen.get("test_records_read") != 0:
