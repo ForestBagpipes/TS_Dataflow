@@ -631,8 +631,10 @@ def role_chain(args) -> None:
         else:  # The fixed policy submits KEEP when SAITS is not legal.
             _p, t_keep_fc = forward(reference, horizon)
             rec["FIXED_SAITS"] = {
-                "total_seconds": t_keep_fc, "backbone_calls": 1,
-                "fallback_keep": True}
+                "total_seconds": stages["candidates_saits"] + t_keep_fc,
+                "saits_forward_seconds": stages["candidates_saits"],
+                "backbone_forward_seconds": t_keep_fc,
+                "backbone_calls": 1, "fallback_keep": True}
 
         # TATO: frozen per-source pipeline (bridge + preprocess + one backbone
         # forward + postprocess), timed as one request.
@@ -833,9 +835,8 @@ def role_merge(args) -> None:
             "plausibility-guard outcomes; serving the frozen values keeps the "
             "measured chain's legality and decisions identical to the frozen "
             "deployment semantics while every timing stays a live forward",
-            "the GPU was shared with unrelated training jobs during the "
-            "measurement (gpu_at_start per role); numbers are real shared-"
-            "device measurements, not an idle-device benchmark",
+            "gpu_at_start records concurrent compute processes for each "
+            "role; device conditions are reported with the measured times",
             f"warm-up: {WARMUP_CALLS} unrecorded calls after each model load; "
             "all recorded requests are hot",
         ],
