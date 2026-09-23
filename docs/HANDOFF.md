@@ -823,3 +823,11 @@ A1仍为blocked_adapter：`experiments/v39_phase0_replay.py:321` 强依赖771个
 ## 2026-09-16 23:00 计划关机
 
 用户于 22:16（UTC+8）通知 23:00 关机。22:17 核验时 HEAD 与远端均为 `acd9f3f2dea880e542b7031ae5a9a30cf8ec7c30`，tracked working tree clean；没有 work2 tmux、Python/实验进程或 GPU 占用，`gpu.lock` 可获取。所有已授权 r5 补跑、审计、报告、GitHub 发布和本地精简包保存均已完成，因此不在截止前启动新的重任务。完整资源快照、包哈希和开机恢复顺序见 [shutdown_readiness_20260916_2300.md](shutdown_readiness_20260916_2300.md)。周期巡检已暂停，开机复核后再恢复；助手不执行关机。
+
+## 2026-09-23 v55 CPU 修订完成，GPU 与确认集仍在运行
+
+入口为 `docs/v55_plan_20260923.md` 和 `docs/v55_deviation_20260923.md`。本轮在服务器 `/home/vipuser/work/work2` 对来源均值权重与保形门小样本回退做了登记修正，保存首次 v55 结果于 `results/v55/archive_parent_mean_20260923/`。修订后在独立 tmux `v55-cpu` 完成三骨干选参、校准、六块评估和门控对照，状态 `results/v55/cpu_rebuild_status.json` 为 completed，18 个评估 JSON 的 v55 代码哈希一致，`tests/v55 tests/v54` 共 27 项通过。
+
+主集 TEST 仍是探索性。冻结 λ 为 Bolt 0、TimesFM 64、Chronos-2 0。三骨干 Full 的来源宏平均 MASE 分别为 1.382575、1.528443、1.364959，平均约 1.425326；Source Fixed 为 1.360247、1.526775、1.448380，平均约 1.445134。Bolt Full 对 Source Fixed 的配对差为 +0.022328，95% CI [+0.004429,+0.043174]。池化只在 TimesFM 被选中，且相对纯局部的配对区间跨零。主集校准门较严格的 α 档在部分骨干 TEST 上未达标，不得声称无条件风险保证。未更新 incumbent，也不宣称 SOTA 或确认成功。
+
+既有 GPU 队列仍在补 T1/PSW-I、确认集 SAITS、旧卡抽样复算和 E3。下一步依次核验原始分片状态、合并并预测外部行、重生成主表，比较三份复算原始数组；确认集训练侧冻结后才一次性打开其 TEST；最后更新图表与 LaTeX 并编译。确认集 Solar/USTS 曾在 v43 DEV 出现，本文只能核实新 TEST 时间区间未用于 v55 选参，不称两个来源从未参与开发。

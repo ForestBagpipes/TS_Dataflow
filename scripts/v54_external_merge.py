@@ -45,6 +45,13 @@ BLOCKS = {"crossfit": ["bankx"],
                    "test_m2", "test_m3"]}
 
 
+def main_shard(path: Path) -> bool:
+    """Keep hardware verification and smoke shards outside the paper merge."""
+    return (path.suffix == ".npz" and "__" in path.stem
+            and "__smoke" not in path.stem
+            and "-verify" not in path.stem)
+
+
 def write(path: Path, payload) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=1, ensure_ascii=False,
@@ -53,22 +60,24 @@ def write(path: Path, payload) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--method", required=True, choices=["BRITS", "CSDI"])
+    parser.add_argument("--method", required=True,
+                        choices=["BRITS", "CSDI", "PSW_I", "T1"])
     args = parser.parse_args()
 
     from introact_ts.v44 import actions as A
 
     method = args.method
-    out = ROOT / f"results/v54/replay/external/{method.lower()}"
+    out = ROOT / ("results/v54/replay/external/"
+                  + {"PSW_I": "pswi"}.get(method, method.lower()))
     began = time.perf_counter()
 
     blocks = sorted({p.name.split("__")[0] for p in out.glob("*__*.npz")
-                     if "__smoke" not in p.name})
+                     if main_shard(p)})
     report: dict[str, dict] = {}
     totals = collections.Counter()
     for block in blocks:
         shards = sorted(p for p in out.glob(f"{block}__*.npz")
-                        if "__smoke" not in p.name)
+                        if main_shard(p))
         merged: dict[str, np.ndarray] = {}
         owner: dict[str, str] = {}
         for path in shards:
@@ -150,7 +159,7 @@ def main() -> None:
     failures = collections.Counter()
     runtimes = {}
     for path in sorted(out.glob("report_*.json")):
-        if path.stem == "merge_report":
+        if path.stem == "merge_report" or "-verify" in path.stem:
             continue
         payload = json.loads(path.read_text())
         shard_reports[path.name] = {

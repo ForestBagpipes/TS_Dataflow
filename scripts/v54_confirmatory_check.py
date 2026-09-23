@@ -134,11 +134,15 @@ def main() -> None:
             with np.load(pred_npz, allow_pickle=False) as store:
                 check(f"forecast[{block}/{backbone}]",
                       status["status"] == "completed"
-                      and status["failed_rows"] == 0
+                      and not status["failures"]
+                      and all(not row["applicable"] or row.get("prediction_hash")
+                              for row in status["plan"])
                       and len(store.files) == status["unique_predictions"],
                       f"status {status['status']}, applicable {status['applicable_rows']}"
                       f"/{status['plan_rows']}, unique_predictions "
-                      f"{status['unique_predictions']}, failures {len(status['failures'])}")
+                      f"{status['unique_predictions']}, model failures "
+                      f"{len(status['failures'])}, unsupported rows "
+                      f"{status['failed_rows']}")
 
     report = {
         "stage": "v54-confirmatory-check",
